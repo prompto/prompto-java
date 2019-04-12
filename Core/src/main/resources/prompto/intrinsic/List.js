@@ -148,7 +148,14 @@ List.prototype.collectStorables = function(storablesToAdd) {
     this.forEach(function(item) {
         if(item && item.collectStorables)
             item.collectStorables(storablesToAdd);
-    });
+    }, this);
+};
+
+
+List.prototype.collectDbIds = function(idsToDelete) {
+	this.forEach(function(item) {
+		item.collectDbIds(idsToDelete);
+	}, this);
 };
 
 

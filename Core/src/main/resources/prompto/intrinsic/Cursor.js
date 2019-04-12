@@ -47,6 +47,10 @@ Cursor.prototype.toList = function() {
 	return list;
 };
 
+Cursor.prototype.collectDbIds = function(idsToDelete) {
+	this.toList().collectDbIds(idsToDelete);
+};
+
 Cursor.prototype.iterator = function() {
     var Iterator = function(cursor) {
         this.iterable = cursor.iterable;
