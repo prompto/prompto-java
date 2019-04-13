@@ -50,8 +50,8 @@ define showReactModal as native method receiving Html w doing:
 	JavaScript: ReactUtils.showModal(w);
 
 
-define closeReactModal as native method doing:
-	JavaScript: ReactUtils.closeModal();
+define hideReactModal as native method doing:
+	JavaScript: ReactUtils.hideModal();
 
 
 define ReactWidget as widget with methods:
