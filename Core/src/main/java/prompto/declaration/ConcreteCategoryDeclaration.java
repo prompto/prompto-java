@@ -1030,8 +1030,10 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	        });
 	    } else
 	    	declareRoot(transpiler);
-	    if(this.storable)
+	    if(this.storable) {
 	        transpiler.require("DataStore");
+	        transpiler.require("Remote");
+	    }
 	    this.declareMethods(transpiler);
 	}
 	

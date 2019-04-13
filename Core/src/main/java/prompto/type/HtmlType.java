@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 
 public class HtmlType extends NativeType {
 
@@ -30,6 +31,11 @@ public class HtmlType extends NativeType {
 	public Type getJavaType(Context context) {
 		// just need an opaque instance 
 		return Object.class;
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to to
 	}
 
 }

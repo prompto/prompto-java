@@ -82,6 +82,8 @@ $Root.prototype.collectStorables = function(storablesToAdd) {
 };
 
 $Root.prototype.collectDbIds = function(idsToDelete) {
-    if(this.dbId)
-        idsToDelete.add(this.dbId);
+    if(this.dbId) {
+    	var dbId = typeof(this.dbId) === "object" ? this.dbId.toString() : this.dbId;
+    	idsToDelete.add(dbId);
+    }
 };

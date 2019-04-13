@@ -1,7 +1,9 @@
 package prompto.transpiler;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -42,15 +44,15 @@ public class MemStoreMirror {
 		return new StorableMirror(storable);
 	}
 	
-	public void store(JSSet toDelete, JSSet toStore) {
-		Set<Object> del = toDelete==null ? null : toDelete.getSet();
-		Set<IStorable> add = toStore==null ? null : toStore.getSet().stream().map(item->((StorableMirror)item).getStorable()).collect(Collectors.toSet());
+	public void store(Collection<Object> toDelete, Collection<Object> toStore) {
+		Set<Object> del = toDelete==null ? null : toDelete.stream().map(dbId->store.convertToDbId(dbId)).collect(Collectors.toSet());
+		Set<IStorable> add = toStore==null ? null : toStore.stream().map(item->((StorableMirror)item).getStorable()).collect(Collectors.toSet());
 		store.store(del, add);
 	}
 	
-	public void storeAsync(JSSet toDelete, JSSet toStore, ScriptObjectMirror andThen) {
-		Set<Object> del = toDelete==null ? null : toDelete.getSet();
-		Set<IStorable> add = toStore==null ? null : toStore.getSet().stream().map(item->((StorableMirror)item).getStorable()).collect(Collectors.toSet());
+	public void storeAsync(Collection<Object> toDelete, Collection<Object> toStore, ScriptObjectMirror andThen) {
+		Set<Object> del = toDelete==null ? null : new HashSet<>(toDelete);
+		Set<IStorable> add = toStore==null ? null : toStore.stream().map(item->((StorableMirror)item).getStorable()).collect(Collectors.toSet());
 		store.store(del, add);
 		andThen.call(null);
 	}

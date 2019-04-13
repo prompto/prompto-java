@@ -154,3 +154,10 @@ StrictSet.prototype.filtered = function(filterFunction) {
     var filtered = Array.from(this.set).filter(filterFunction);
     return new StrictSet(filtered);
 };
+
+
+StrictSet.prototype.collectDbIds = function(idsToDelete) {
+	this.forEach(function(item) {
+		item.collectDbIds(idsToDelete);
+	}, this);
+};
