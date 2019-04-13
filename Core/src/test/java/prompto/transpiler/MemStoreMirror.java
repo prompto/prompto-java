@@ -45,7 +45,7 @@ public class MemStoreMirror {
 	}
 	
 	public void store(Collection<Object> toDelete, Collection<Object> toStore) {
-		Set<Object> del = toDelete==null ? null : new HashSet<>(toDelete);
+		Set<Object> del = toDelete==null ? null : toDelete.stream().map(dbId->store.convertToDbId(dbId)).collect(Collectors.toSet());
 		Set<IStorable> add = toStore==null ? null : toStore.stream().map(item->((StorableMirror)item).getStorable()).collect(Collectors.toSet());
 		store.store(del, add);
 	}
