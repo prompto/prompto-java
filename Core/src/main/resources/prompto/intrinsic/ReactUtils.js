@@ -6,7 +6,7 @@ var ReactUtils = {
 		ReactDOM.render(ReactDOM.createPortal(modal, holder), container);
 	},
 	hideModal: function() { 
-	    const container = document.getElementById("modal");
+		var container = document.getElementById("modal");
 	    while(container.children.length) {
 	        container.removeChild(container.children[0]);
 	    }
