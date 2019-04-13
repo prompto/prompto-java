@@ -46,6 +46,7 @@ public class Transpiler {
 	    this.setterName = null;
 	    // load polyfills
 		this.require("Utils");
+		this.require("ReactUtils");
 		engine.getPolyfills().forEach(poly->this.require(poly));
  	}
 	

@@ -46,6 +46,14 @@ define forceReactWidgetRender as native method receiving ReactWidget w doing:
 	JavaScript: w.forceUpdate();
 
 
+define showReactModal as native method receiving Html w doing:
+	JavaScript: ReactUtils.showModal(w);
+
+
+define closeReactModal as native method doing:
+	JavaScript: ReactUtils.closeModal();
+
+
 define ReactWidget as widget with methods:
 	
 	@Static
@@ -92,6 +100,7 @@ define ReactWidget as widget with methods:
 
 	define forceRender as method doing:
 		forceReactWidgetRender self
+
 define alert as native method receiving Text text doing:
 	JavaScript: alert(text);
 
