@@ -67,11 +67,11 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
-	public void store(Collection<?> dbIds, Collection<IStorable> storables) throws PromptoError {
-		if(dbIds!=null) 
-			delete(dbIds);
-		if(storables!=null)
-			store(storables);
+	public void store(Collection<?> toDelete, Collection<IStorable> toStore) throws PromptoError {
+		if(toDelete!=null) 
+			delete(toDelete);
+		if(toStore!=null)
+			store(toStore);
 	}
 
 	@Override
