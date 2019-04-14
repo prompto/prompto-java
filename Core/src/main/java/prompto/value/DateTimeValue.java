@@ -144,6 +144,10 @@ public class DateTimeValue extends BaseValue implements Comparable<DateTimeValue
 			return new IntegerValue(this.value.getNativeTzOffset());
 		else if ("tzName".equals(name))
 			return new TextValue(this.value.getTzName());
+		else if ("date".equals(name))
+			return new DateValue(this.value.getDate());
+		else if ("time".equals(name))
+			return new TimeValue(this.value.getTime());
 		else
 			return super.getMember(context, id, autoCreate);
 	}

@@ -224,3 +224,12 @@ DateTime.prototype.getTzOffset = function(value) {
 DateTime.prototype.getTzName = function(value) {
     return "Z";
 };
+
+DateTime.prototype.getDate = function(value) {
+    return new LocalDate(this.date);
+};
+
+
+DateTime.prototype.getTime = function(value) {
+    return new LocalTime(this.date);
+};

@@ -119,6 +119,13 @@ public class PromptoDateTime implements Comparable<PromptoDateTime> {
 		return wrapped.getZone().toTimeZone().getID();
 	}
 
+	public PromptoDate getDate() {
+		return new PromptoDate(wrapped.toLocalDate());
+	}
+
+	public PromptoTime getTime() {
+		return new PromptoTime(wrapped.toLocalTime());
+	}
 
 	public PromptoDateTime plusDays(long count) {
 		return new PromptoDateTime(wrapped.plusDays((int)count));
@@ -161,8 +168,6 @@ public class PromptoDateTime implements Comparable<PromptoDateTime> {
 	public boolean isEqual(PromptoDateTime actual) {
 		return wrapped.isEqual(actual.wrapped);
 	}
-
-
 
 
 	

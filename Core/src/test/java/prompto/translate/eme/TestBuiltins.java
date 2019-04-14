@@ -52,6 +52,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testDateTimeDate() throws Exception {
+		compareResourceEME("builtins/dateTimeDate.pec");
+	}
+
+	@Test
 	public void testDateTimeDayOfMonth() throws Exception {
 		compareResourceEME("builtins/dateTimeDayOfMonth.pec");
 	}
@@ -99,6 +104,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testDateTimeText() throws Exception {
 		compareResourceEME("builtins/dateTimeText.pec");
+	}
+
+	@Test
+	public void testDateTimeTime() throws Exception {
+		compareResourceEME("builtins/dateTimeTime.pec");
 	}
 
 	@Test

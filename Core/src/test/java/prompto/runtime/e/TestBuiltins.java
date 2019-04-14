@@ -155,6 +155,21 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedDateTimeDate() throws Exception {
+		checkInterpretedOutput("builtins/dateTimeDate.pec");
+	}
+
+	@Test
+	public void testCompiledDateTimeDate() throws Exception {
+		checkCompiledOutput("builtins/dateTimeDate.pec");
+	}
+
+	@Test
+	public void testTranspiledDateTimeDate() throws Exception {
+		checkTranspiledOutput("builtins/dateTimeDate.pec");
+	}
+
+	@Test
 	public void testInterpretedDateTimeDayOfMonth() throws Exception {
 		checkInterpretedOutput("builtins/dateTimeDayOfMonth.pec");
 	}
@@ -272,6 +287,21 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testTranspiledDateTimeText() throws Exception {
 		checkTranspiledOutput("builtins/dateTimeText.pec");
+	}
+
+	@Test
+	public void testInterpretedDateTimeTime() throws Exception {
+		checkInterpretedOutput("builtins/dateTimeTime.pec");
+	}
+
+	@Test
+	public void testCompiledDateTimeTime() throws Exception {
+		checkCompiledOutput("builtins/dateTimeTime.pec");
+	}
+
+	@Test
+	public void testTranspiledDateTimeTime() throws Exception {
+		checkTranspiledOutput("builtins/dateTimeTime.pec");
 	}
 
 	@Test

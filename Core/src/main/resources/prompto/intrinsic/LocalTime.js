@@ -16,7 +16,7 @@ LocalTime.parse = function(text) {
 LocalTime.prototype.__proto__ = Date.prototype;
 
 LocalTime.prototype.toString = function() {
-    return this.toISOString().substring(11, 23)
+    return this.toISOString().substring(11, 23);
 };
 
 

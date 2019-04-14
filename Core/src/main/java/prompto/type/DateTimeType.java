@@ -97,6 +97,10 @@ public class DateTimeType extends NativeType {
 			return IntegerType.instance();
 		else if ("tzName".equals(name))
 			return TextType.instance();
+		else if ("date".equals(name))
+			return DateType.instance();
+		else if ("time".equals(name))
+			return TimeType.instance();
 		else
 			return super.checkMember(context, id);
 	}
@@ -199,6 +203,12 @@ public class DateTimeType extends NativeType {
 		case "tzOffset":
 		case "tzName":
 			break;
+		case "date":
+			transpiler.require("LocalDate");
+			break;
+		case "time":
+			transpiler.require("LocalTime");
+			break;
 		default:
 			super.declareMember(transpiler, name);
 	    }
@@ -236,6 +246,12 @@ public class DateTimeType extends NativeType {
 			break;
 		case "tzName":
 	        transpiler.append("getTzName()");
+			break;
+		case "date":
+	        transpiler.append("getDate()");
+			break;
+		case "time":
+	        transpiler.append("getTime()");
 			break;
 		default:
 			super.transpileMember(transpiler, name);
