@@ -26,6 +26,13 @@ public class JavaScriptModule {
 		writer.trimLast(1);
 	}
 
+	public void declare(Transpiler transpiler) {
+		if(isPromptoIntrinsic()) {
+			String[] ids = identifiers.toArray(new String[identifiers.size()]);
+			transpiler.require(ids[2]);
+		}
+	}
+
 	public void transpile(Transpiler transpiler) {
 		for(String id : identifiers) {
 			if("js".equals(id)) {
@@ -37,5 +44,11 @@ public class JavaScriptModule {
 		}
 		transpiler.trimLast(1);
 	}
+
+	public boolean isPromptoIntrinsic() {
+		String[] ids = identifiers.toArray(new String[identifiers.size()]);
+		return ids.length >= 2 && "prompto".equals(ids[0]) &&  "intrinsic".equals(ids[1]);
+	}
+
 
 }
