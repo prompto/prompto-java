@@ -5,6 +5,11 @@ function DateTime(date, tzOffset) {
     return this;
 }
 
+DateTime.now = function() {
+    var now = new Date();
+    return new DateTime(now, now.getTimezoneOffset());
+};
+
 DateTime.parse = function(text) {
     var year = parseInt(text.substring(0,4));
     text = text.substring(4);
