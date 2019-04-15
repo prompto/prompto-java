@@ -231,6 +231,14 @@ define "now is a DateTime" as test method doing:
 and verifying: 
 	a is a DateTime 
 
+define today as method returning Date doing:
+	return now.date
+
+define "today is a Date" as test method doing: 
+	a = today
+and verifying: 
+	a is a Date 
+
 // returns a random UUID as defined by http://www.ietf.org/rfc/rfc4122.txt
 define randomUuid as native method returning Uuid doing:
 	Java: return java.util.UUID.randomUUID();
