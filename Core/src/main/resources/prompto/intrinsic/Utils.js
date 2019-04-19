@@ -21,10 +21,11 @@ function equalObjects(o1, o2) {
 TypeError.prototype.getText = function() { return 'Null reference!'; };
 ReferenceError.prototype.getText = function() { return 'Null reference!'; };
 RangeError.prototype.getText = function() { return 'Index out of range!'; };
+
 if(!Object.values) { 
 	Object.values = function(o) {
 	    var values = [];
-	    for(name in o) { values.push(o[name]); }
+	    for(var name in o) { values.push(o[name]); }
 	    return values;
 	}; 
 }

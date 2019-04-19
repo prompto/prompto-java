@@ -57,7 +57,7 @@ StrictSet.prototype.addAll = function(items) {
 
 StrictSet.prototype.remove = function(items) {
 	var excluded = (items instanceof StrictSet) ? items : new Set(items);
-	var items = Array.from(this.set.values());
+	items = Array.from(this.set.values());
     var remaining = items.filter(function(item) { return !excluded.has(item); });
     return new StrictSet(remaining);
 };
@@ -121,7 +121,7 @@ StrictSet.prototype.hasAny = function(items, noCheckEquals) {
 StrictSet.prototype.equals = function(other) {
     if(!(other instanceof StrictSet))
         return false;
-    else if(this.length!=other.length)
+    else if(this.length !== other.length)
         return false;
     else {
         var iter = this.set.values();

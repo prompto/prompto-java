@@ -4,7 +4,6 @@ import prompto.expression.IExpression;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
-import prompto.type.IterableType;
 import prompto.type.JsxType;
 import prompto.utils.CodeWriter;
 
@@ -39,8 +38,7 @@ public class JsxCode implements IJsxExpression {
 	public boolean transpile(Transpiler transpiler) {
 		IType type = expression.check(transpiler.getContext());
 		this.expression.transpile(transpiler);
-		if(type instanceof IterableType)
-			transpiler.append(".toArray()");
+		type.transpileCode(transpiler);
 		return false;
 	}
 

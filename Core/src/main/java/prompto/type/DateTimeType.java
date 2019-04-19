@@ -272,4 +272,9 @@ public class DateTimeType extends NativeType {
 	    right.transpile(transpiler);
 	    transpiler.append(")");
 	}
+	
+	@Override
+	public void transpileCode(Transpiler transpiler) {
+		transpiler.append(".toString()");
+	}
 }

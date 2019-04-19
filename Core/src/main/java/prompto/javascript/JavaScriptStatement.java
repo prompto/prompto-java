@@ -36,11 +36,13 @@ public class JavaScriptStatement {
 	}
 
 	public void declare(Transpiler transpiler) {
+		if(this.module!=null)
+			this.module.declare(transpiler);
 		this.expression.declare(transpiler);
 	}
 
 	public boolean transpile(Transpiler transpiler) {
-	    if(this.module!=null) {
+	    if(this.module!=null && !this.module.isPromptoIntrinsic()) {
 	    	transpiler.append("var ");
 	    	expression.transpileRoot(transpiler);
 	    	if(transpiler.getEngine().isTestEngine()) {

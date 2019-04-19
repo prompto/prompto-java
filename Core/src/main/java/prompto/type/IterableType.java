@@ -2,6 +2,7 @@ package prompto.type;
 
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 
 public abstract class IterableType extends NativeType {
 
@@ -46,6 +47,11 @@ public abstract class IterableType extends NativeType {
 			&& itemType.isMoreSpecificThan(context, ((IterableType)other).itemType);
 	}
 
-	public abstract IterableType withItemType(IType itemType) ;
+	public abstract IterableType withItemType(IType itemType);
+	
+	@Override
+	public void transpileCode(Transpiler transpiler) {
+		transpiler.append(".toArray()");
+	}
 	
 }

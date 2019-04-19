@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 import prompto.value.IValue;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -35,5 +36,10 @@ public class UuidType extends NativeType {
 	@Override
 	public IValue convertJavaValueToIValue(Context context, Object value) {
 		return new prompto.value.UuidValue((UUID)value);
+	}
+	
+	@Override
+	public void transpileCode(Transpiler transpiler) {
+		transpiler.append(".toString()");
 	}
 }
