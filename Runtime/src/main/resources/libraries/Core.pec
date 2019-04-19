@@ -1,3 +1,5 @@
+define Callback as abstract method
+
 define Any as native category with attributes id and text, and bindings:
 
 	define category bindings as:

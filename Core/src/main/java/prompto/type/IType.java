@@ -278,5 +278,9 @@ public interface IType extends ISection {
 		throw new UnsupportedOperationException("transpileIterator " + this.getClass().getName());
 	}
 
+	default void transpileCode(Transpiler transpiler) {
+		// nothing to do
+	}
+
 }
  

@@ -139,4 +139,9 @@ public class PeriodType extends NativeType {
 	    } else
 	        super.transpileSubtract(transpiler, other, left, right);
 	}
+	
+	@Override
+	public void transpileCode(Transpiler transpiler) {
+		transpiler.append(".toString()");
+	}
 }
