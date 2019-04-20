@@ -1,5 +1,10 @@
 package prompto.expression;
 
+import java.lang.reflect.Type;
+
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.parser.Section;
 import prompto.runtime.Context;
@@ -82,6 +87,10 @@ public class ArrowExpression extends Section implements IExpression {
 
 	public StatementList getStatements() {
 		return statements;
+	}
+
+	public ResultInfo compileKey(Context context, MethodInfo method, Flags flags, Type paramType, String paramName) {
+		throw new UnsupportedOperationException();
 	}
 	
 }
