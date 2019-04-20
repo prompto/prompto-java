@@ -41,21 +41,8 @@ public class PromptoSet<V> extends HashSet<V> implements Filterable<PromptoSet<V
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public PromptoList<V> sort(boolean descending) {
 		Comparator<V> cmp = descending ?
-				new Comparator<V>() {
-
-					@Override
-					public int compare(V o1, V o2) {
-						return ((Comparable)o2).compareTo(o1);
-					}
-			
-				} : 
-				new Comparator<V>() {
-					
-					@Override
-					public int compare(V o1, V o2) {
-						return ((Comparable)o1).compareTo(o2);
-					}
-				};
+				(o1, o2) -> ((Comparable)o2).compareTo(o1) :
+				(o1, o2) -> ((Comparable)o1).compareTo(o2);
 		TreeSet<V> sorted = new TreeSet<>(cmp);
 		sorted.addAll(this);
 		return new PromptoList<>(sorted, false);

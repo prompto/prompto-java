@@ -30,7 +30,7 @@ public class BooleanType extends NativeType {
 	}
 	
 	@Override
-	public Comparator<? extends IValue> getComparator(boolean descending) {
+	public Comparator<? extends IValue> getNativeComparator(boolean descending) {
 		return descending ?
 				new Comparator<BooleanValue>() {
 					@Override

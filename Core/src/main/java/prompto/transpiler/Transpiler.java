@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.IDeclaration;
+import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.type.CategoryType;
 import prompto.utils.Logger;
@@ -132,6 +133,11 @@ public class Transpiler {
 	    return transpiler;
 	}
 	
+	public Transpiler append(Identifier value) {
+		this.line.append(value.toString());
+		return this;
+	}
+
 	public Transpiler append(String value) {
 		this.line.append(value);
 		return this;

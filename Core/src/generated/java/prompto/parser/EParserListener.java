@@ -906,6 +906,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitAndExpression(EParser.AndExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code ArrowExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrowExpression(EParser.ArrowExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ArrowExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrowExpression(EParser.ArrowExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code MethodCallExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
@@ -1790,15 +1802,15 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitLfp(EParser.LfpContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link EParser#jsx_ws}.
+	 * Enter a parse tree produced by {@link EParser#ws_plus}.
 	 * @param ctx the parse tree
 	 */
-	void enterJsx_ws(EParser.Jsx_wsContext ctx);
+	void enterWs_plus(EParser.Ws_plusContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link EParser#jsx_ws}.
+	 * Exit a parse tree produced by {@link EParser#ws_plus}.
 	 * @param ctx the parse tree
 	 */
-	void exitJsx_ws(EParser.Jsx_wsContext ctx);
+	void exitWs_plus(EParser.Ws_plusContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link EParser#indent}.
 	 * @param ctx the parse tree
@@ -3409,6 +3421,74 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIsOtherExpression(EParser.IsOtherExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ArrowExpressionBody}
+	 * labeled alternative in {@link EParser#arrow_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrowExpressionBody(EParser.ArrowExpressionBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ArrowExpressionBody}
+	 * labeled alternative in {@link EParser#arrow_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrowExpressionBody(EParser.ArrowExpressionBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ArrowStatementsBody}
+	 * labeled alternative in {@link EParser#arrow_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrowStatementsBody(EParser.ArrowStatementsBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ArrowStatementsBody}
+	 * labeled alternative in {@link EParser#arrow_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrowStatementsBody(EParser.ArrowStatementsBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link EParser#arrow_prefix}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrow_prefix(EParser.Arrow_prefixContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#arrow_prefix}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrow_prefix(EParser.Arrow_prefixContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ArrowSingleArg}
+	 * labeled alternative in {@link EParser#arrow_args}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrowSingleArg(EParser.ArrowSingleArgContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ArrowSingleArg}
+	 * labeled alternative in {@link EParser#arrow_args}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrowSingleArg(EParser.ArrowSingleArgContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ArrowListArg}
+	 * labeled alternative in {@link EParser#arrow_args}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrowListArg(EParser.ArrowListArgContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ArrowListArg}
+	 * labeled alternative in {@link EParser#arrow_args}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrowListArg(EParser.ArrowListArgContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link EParser#sorted_key}.
+	 * @param ctx the parse tree
+	 */
+	void enterSorted_key(EParser.Sorted_keyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#sorted_key}.
+	 * @param ctx the parse tree
+	 */
+	void exitSorted_key(EParser.Sorted_keyContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link EParser#read_all_expression}.
 	 * @param ctx the parse tree

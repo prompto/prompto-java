@@ -612,7 +612,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public void transpileSorted(Transpiler transpiler, boolean descending, IExpression key) {
+	public void transpileSorted(Transpiler transpiler, IExpression key, boolean descending) {
 	    String keyname = key!=null ? key.toString() : "key";
 	    IDeclaration decl = this.getDeclaration(transpiler.getContext());
 	    if(decl instanceof CategoryDeclaration) {
@@ -835,6 +835,7 @@ public class CategoryType extends BaseType {
 	    transpiler.append(")");
 	}
 
+	@Override
 	public Comparator<? extends IValue> getComparator(Context context, IExpression key, boolean descending) {
 		if(key==null)
 			key = new UnresolvedIdentifier(new Identifier("key"));
@@ -944,6 +945,7 @@ public class CategoryType extends BaseType {
 		};
 	}
 
+	@Override
 	public ResultInfo compileSorted(Context context, MethodInfo method, Flags flags, ResultInfo srcInfo, IExpression key, boolean descending) {
 		if(key==null)
 			key = new UnresolvedIdentifier(new Identifier("key"));

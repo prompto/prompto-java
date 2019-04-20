@@ -60,21 +60,8 @@ public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoLi
 	public PromptoList<V> sort(boolean descending) {
 		PromptoList<V> sorted = new PromptoList<>(this, false);
 		Comparator<V> cmp = descending ?
-				new Comparator<V>() {
-
-					@Override
-					public int compare(V o1, V o2) {
-						return ((Comparable)o2).compareTo(o1);
-					}
-			
-				} : 
-				new Comparator<V>() {
-					
-					@Override
-					public int compare(V o1, V o2) {
-						return ((Comparable)o1).compareTo(o2);
-					}
-				};
+				(o1, o2) -> ((Comparable)o2).compareTo(o1) :
+				(o1, o2) -> ((Comparable)o1).compareTo(o2);
 		sorted.sort(cmp);
 		return sorted;
 	}

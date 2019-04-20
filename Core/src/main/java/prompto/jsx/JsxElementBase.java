@@ -4,12 +4,13 @@ import java.util.List;
 
 import prompto.declaration.IDeclaration;
 import prompto.grammar.Identifier;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.JsxType;
 
-public abstract class JsxElementBase implements IJsxExpression {
+public abstract class JsxElementBase extends Section implements IJsxExpression {
 
 	Identifier id;
 	List<JsxAttribute> attributes;

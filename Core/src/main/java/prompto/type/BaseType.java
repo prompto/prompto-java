@@ -10,6 +10,7 @@ import java.util.function.BiFunction;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.parser.ISection;
 import prompto.parser.Section;
@@ -197,7 +198,7 @@ public abstract class BaseType extends Section implements IType {
 	}
 
 	@Override
-	public Comparator<? extends IValue> getComparator(boolean descending) {
+	public Comparator<? extends IValue> getComparator(Context context, IExpression key, boolean descending) {
 		throw new RuntimeException("Unsupported!");
 	}
 

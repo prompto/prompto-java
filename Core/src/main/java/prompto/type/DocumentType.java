@@ -18,9 +18,9 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
-import prompto.compiler.StringConstant;
 import prompto.compiler.comparator.ComparatorCompiler;
 import prompto.compiler.comparator.ComparatorCompilerBase;
+import prompto.compiler.comparator.EntryComparatorCompiler;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
@@ -207,7 +207,7 @@ public class DocumentType extends NativeType {
 
 	
 	@Override
-	public void transpileSorted(Transpiler transpiler, boolean descending, IExpression key) {
+	public void transpileSorted(Transpiler transpiler, IExpression key, boolean descending) {
 		if(key==null)
 			key = new TextLiteral("\"key\"");
 		Identifier id = new Identifier(key.toString());
@@ -279,10 +279,16 @@ public class DocumentType extends NativeType {
 		else
 			return null;
 	}
-
+	
+	@Override
 	public Comparator<? extends IValue> getComparator(Context context, IExpression key, boolean descending) {
 		if(key==null)
 			key = new TextLiteral("\"key\"");
+		return super.getComparator(context, key, descending);
+	}
+
+	@Override
+	public Comparator<? extends IValue> getExpressionComparator(Context context, IExpression key, boolean descending) {
 		Identifier id = new Identifier(key.toString());
 		IMethodDeclaration method = findGlobalMethod(context, id);
 		if(method!=null)
@@ -358,6 +364,7 @@ public class DocumentType extends NativeType {
 		};
 	}
 
+	@Override
 	public ResultInfo compileSorted(Context context, MethodInfo method, Flags flags, ResultInfo srcInfo, IExpression key, boolean descending) {
 		if(key==null)
 			key = new TextLiteral("\"key\"");
@@ -392,7 +399,7 @@ public class DocumentType extends NativeType {
 	}
 
 	
-	class GlobalMethodComparatorCompiler extends ComparatorCompilerBase {
+	static class GlobalMethodComparatorCompiler extends ComparatorCompilerBase {
 		
 		MethodCall call;
 		
@@ -417,26 +424,9 @@ public class DocumentType extends NativeType {
 		}
 	}
 	
-	class EntryComparatorCompiler extends ComparatorCompilerBase {
+	
 
-		@Override
-		protected void compileMethodBody(Context context, MethodInfo method, Type paramType, IExpression key) {
-			String keyName = ((TextLiteral)key).getValue().getStorableData();
-			MethodConstant getter = new MethodConstant(paramType, "get", Object.class, Object.class);
-			method.addInstruction(Opcode.ALOAD_1, new ClassConstant(paramType));
-			method.addInstruction(Opcode.LDC, new StringConstant(keyName));
-			method.addInstruction(Opcode.INVOKEVIRTUAL, getter);
-			method.addInstruction(Opcode.ALOAD_2, new ClassConstant(paramType));
-			method.addInstruction(Opcode.LDC, new StringConstant(keyName));
-			method.addInstruction(Opcode.INVOKEVIRTUAL, getter);
-			MethodConstant compare = new MethodConstant(ObjectUtils.class, "safeCompare", Object.class, Object.class, int.class);
-			method.addInstruction(Opcode.INVOKESTATIC, compare);
-			method.addInstruction(Opcode.IRETURN);
-		}
-
-	}
-
-	class ExpressionComparatorCompiler extends ComparatorCompilerBase {
+	static class ExpressionComparatorCompiler extends ComparatorCompilerBase {
 		
 		
 		@Override
