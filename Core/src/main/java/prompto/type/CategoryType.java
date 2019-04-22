@@ -85,6 +85,12 @@ public class CategoryType extends BaseType {
 		this.typeNameId = typeNameId;
 	}
 	
+	public CategoryType(CategoryType copyFrom, boolean mutable) {
+		super(copyFrom.family);
+		this.typeNameId = copyFrom.typeNameId;
+		this.mutable = mutable;
+	}
+	
 	protected CategoryType(Family family, Identifier typeNameId) {
 		super(family);
 		this.typeNameId = typeNameId;

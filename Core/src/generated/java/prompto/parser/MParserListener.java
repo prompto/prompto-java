@@ -1140,6 +1140,18 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitInstanceExpression(MParser.InstanceExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code MutableInstanceExpression}
+	 * labeled alternative in {@link MParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterMutableInstanceExpression(MParser.MutableInstanceExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code MutableInstanceExpression}
+	 * labeled alternative in {@link MParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitMutableInstanceExpression(MParser.MutableInstanceExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code CssExpression}
 	 * labeled alternative in {@link MParser#expression}.
 	 * @param ctx the parse tree
@@ -1293,6 +1305,30 @@ public interface MParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSelectableExpression(MParser.SelectableExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code MutableSelectableExpression}
+	 * labeled alternative in {@link MParser#mutable_instance_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterMutableSelectableExpression(MParser.MutableSelectableExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code MutableSelectableExpression}
+	 * labeled alternative in {@link MParser#mutable_instance_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitMutableSelectableExpression(MParser.MutableSelectableExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code MutableSelectorExpression}
+	 * labeled alternative in {@link MParser#mutable_instance_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterMutableSelectorExpression(MParser.MutableSelectorExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code MutableSelectorExpression}
+	 * labeled alternative in {@link MParser#mutable_instance_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitMutableSelectorExpression(MParser.MutableSelectorExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MParser#method_expression}.
 	 * @param ctx the parse tree

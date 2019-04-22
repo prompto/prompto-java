@@ -47,8 +47,18 @@ public class TestMutability extends BaseEParserTest {
 	}
 
 	@Test
+	public void testMutableChild() throws Exception {
+		compareResourceEME("mutability/mutableChild.pec");
+	}
+
+	@Test
 	public void testMutableDict() throws Exception {
 		compareResourceEME("mutability/mutableDict.pec");
+	}
+
+	@Test
+	public void testMutableInstance() throws Exception {
+		compareResourceEME("mutability/mutableInstance.pec");
 	}
 
 	@Test
