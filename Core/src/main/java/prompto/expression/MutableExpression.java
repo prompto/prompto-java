@@ -31,8 +31,12 @@ public class MutableExpression extends Section implements IExpression {
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		CategoryType type = check(context);
-		ConstructorExpression ctor = new ConstructorExpression(type, source, null, true);
+		IValue value = source.interpret(context);
+		IType sourceType = value.getType();
+		if(!(sourceType instanceof CategoryType))
+			 throw new SyntaxError("Expected a category instance, got:" + sourceType.toString());
+		sourceType = new CategoryType((CategoryType)sourceType, true);
+		ConstructorExpression ctor = new ConstructorExpression((CategoryType)sourceType, new ValueExpression(sourceType, value), null, true);
 		ctor.setFrom(this);
 		return ctor.interpret(context);
 	}
@@ -47,6 +51,7 @@ public class MutableExpression extends Section implements IExpression {
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
+		// TODO transpile to actual type
 		CategoryType type = check(transpiler.getContext());
 		ConstructorExpression ctor = new ConstructorExpression(type, source, null, true);
 		ctor.setFrom(this);
@@ -55,6 +60,7 @@ public class MutableExpression extends Section implements IExpression {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		// TODO compile to actual type
 		CategoryType type = check(context);
 		ConstructorExpression ctor = new ConstructorExpression(type, source, null, true);
 		ctor.setFrom(this);
