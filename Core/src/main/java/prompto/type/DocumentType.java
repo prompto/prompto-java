@@ -119,7 +119,10 @@ public class DocumentType extends NativeType {
 		else if(fieldData.isArray()) {
 			throw new UnsupportedOperationException();
 		} else if(fieldData.isObject()) {
-			throw new UnsupportedOperationException();
+			String typeName = fieldData.get("type").asText();
+			IType fieldType = IType.fromTypeName(context, typeName);
+			JsonNode value = fieldData.get("value");
+			return fieldType.readJSONValue(context, value, parts);
 		} else
 			throw new UnsupportedOperationException();
 	}
