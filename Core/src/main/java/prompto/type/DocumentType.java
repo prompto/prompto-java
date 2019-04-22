@@ -25,6 +25,7 @@ import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.expression.DocumentExpression;
+import prompto.expression.ValueExpression;
 import prompto.expression.IExpression;
 import prompto.expression.MethodSelector;
 import prompto.expression.UnresolvedIdentifier;
@@ -42,7 +43,6 @@ import prompto.store.Family;
 import prompto.transpiler.Transpiler;
 import prompto.utils.ObjectUtils;
 import prompto.value.DocumentValue;
-import prompto.value.ExpressionValue;
 import prompto.value.IValue;
 import prompto.value.NullValue;
 
@@ -314,7 +314,7 @@ public class DocumentType extends NativeType {
 
 			private IValue interpret(DocumentValue o) throws PromptoError {
 				ArgumentAssignment assignment = call.getAssignments().getFirst();
-				assignment.setExpression(new ExpressionValue(DocumentType.instance(), o));
+				assignment.setExpression(new ValueExpression(DocumentType.instance(), o));
 				return call.interpret(context);
 			}
 		};

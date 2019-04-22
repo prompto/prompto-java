@@ -12,6 +12,7 @@ import prompto.argument.CategoryArgument;
 import prompto.argument.IArgument;
 import prompto.declaration.AttributeDeclaration;
 import prompto.error.PromptoError;
+import prompto.expression.ValueExpression;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
@@ -19,7 +20,6 @@ import prompto.store.DataStore;
 import prompto.store.IStore;
 import prompto.type.IType;
 import prompto.utils.TypeUtils;
-import prompto.value.ExpressionValue;
 import prompto.value.IValue;
 
 public class Parameter {
@@ -50,7 +50,7 @@ public class Parameter {
 		field = jsonParam.get("value");
 		if(field==null)
 			throw new InvalidParameterException("Expecting a 'value' field!");
-		param.setValue(new ExpressionValue(param.getType(), param.getType().readJSONValue(context, field, parts)));
+		param.setValue(new ValueExpression(param.getType(), param.getType().readJSONValue(context, field, parts)));
 		return param;
 	}
 
@@ -100,7 +100,7 @@ public class Parameter {
 	
 	public ArgumentAssignment toAssignment(Context context) {
 		IArgument argument = new CategoryArgument(type, new Identifier(name));
-		return new ArgumentAssignment(argument, new ExpressionValue(type, value));
+		return new ArgumentAssignment(argument, new ValueExpression(type, value));
 	}
 
 	public void toJson(Context context, JsonGenerator generator) throws IOException, PromptoError {

@@ -39,6 +39,7 @@ import prompto.declaration.NativeCategoryDeclaration;
 import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.ValueExpression;
 import prompto.expression.IExpression;
 import prompto.expression.InstanceExpression;
 import prompto.expression.MethodSelector;
@@ -65,7 +66,6 @@ import prompto.utils.CodeWriter;
 import prompto.utils.Logger;
 import prompto.utils.ObjectUtils;
 import prompto.utils.TypeUtils;
-import prompto.value.ExpressionValue;
 import prompto.value.IInstance;
 import prompto.value.IValue;
 import prompto.value.NullValue;
@@ -683,7 +683,7 @@ public class CategoryType extends BaseType {
 
 	private IDeclaration findGlobalMethod(Context context, String name) {
 		try {
-			IExpression exp = new ExpressionValue(this, this.newInstance(context));
+			IExpression exp = new ValueExpression(this, this.newInstance(context));
 			ArgumentAssignment arg = new ArgumentAssignment(null, exp);
 			ArgumentAssignmentList args = new ArgumentAssignmentList(Collections.singletonList(arg));
 			MethodCall proto = new MethodCall(new MethodSelector(null, new Identifier(name)), args);
@@ -872,7 +872,7 @@ public class CategoryType extends BaseType {
 
 	public MethodCall createGlobalMethodCallIfExists(Context context, Identifier methodName) {
 		try {
-			IExpression exp = new ExpressionValue(this, newInstance(context));
+			IExpression exp = new ValueExpression(this, newInstance(context));
 			ArgumentAssignment arg = new ArgumentAssignment(null, exp); // MethodCall supports first anonymous argument
 			ArgumentAssignmentList args = new ArgumentAssignmentList(Collections.singletonList(arg));
 			MethodCall call = new MethodCall(new MethodSelector(methodName), args);
@@ -922,7 +922,7 @@ public class CategoryType extends BaseType {
 
 			private IValue interpret(IInstance o) throws PromptoError {
 				ArgumentAssignment assignment = call.getAssignments().getFirst();
-				assignment.setExpression(new ExpressionValue(CategoryType.this, o));
+				assignment.setExpression(new ValueExpression(CategoryType.this, o));
 				return call.interpret(context);
 			}
 		};
