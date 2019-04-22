@@ -2143,8 +2143,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitMutableSelectableExpression(MutableSelectableExpressionContext ctx) {
-		Identifier name = this.<Identifier>getNodeValue(ctx.exp);
-		setNodeValue(ctx, new InstanceExpression(name));
+		setNodeValue(ctx, this.<IExpression>getNodeValue(ctx.exp));
 	}
 	
 	
