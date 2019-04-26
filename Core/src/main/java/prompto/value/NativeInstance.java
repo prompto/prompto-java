@@ -307,4 +307,9 @@ public class NativeInstance extends BaseValue implements IInstance {
 			throw new ReadWriteError(e.getMessage());
 		}
 	}
+	
+	@Override
+	public IValue toMutable() {
+		throw new UnsupportedOperationException();
+	}
 }

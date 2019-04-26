@@ -14,7 +14,7 @@ import prompto.compiler.Opcode;
 import prompto.compiler.Tags;
 
 /* producing valid stack frames is a challenging task */
-/* the JVM verifier raises inconsistent stack fram exceptions, but not with enough details */
+/* the JVM verifier raises inconsistent stack frame exceptions, but not with enough details */
 /* this Verifier class mimics the JVM verifier to help diagnose issues */
 /* the corresponding stack frame verifier code is transcribed from the jdk C++ file */
 /* http://hg.openjdk.java.net/jdk8/jdk8/hotspot/file/87ee5ee27509/src/share/vm/classfile/verifier.cpp */

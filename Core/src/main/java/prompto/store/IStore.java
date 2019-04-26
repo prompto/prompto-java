@@ -24,7 +24,9 @@ public interface IStore {
 	default IStorable newStorable(String[] categories, IDbIdListener listener) {
 		return newStorable(Arrays.asList(categories), listener);
 	}
-	IStorable newStorable(List<String> categories, IDbIdListener listener);
+	default IStorable newStorable(List<String> categories, IDbIdListener listener) {
+		return newStorable(categories.toArray(new String[0]), listener);
+	}
 	
 	void store(Collection<?> deletables, Collection<IStorable> storables) throws PromptoError;
 	default void store(Collection<IStorable> storables) throws PromptoError {

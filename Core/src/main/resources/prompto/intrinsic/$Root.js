@@ -6,6 +6,12 @@ function $Root() {
     return this;
 }
 
+$Root.prototype.toMutable = function() {
+	var result = Object.create(this);
+	result.mutable = true;
+	return result;
+};
+
 $Root.prototype.instanceOf = function(type) {
     return this.category.indexOf(type)>=0;
 };

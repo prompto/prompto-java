@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -39,11 +38,11 @@ import prompto.declaration.NativeCategoryDeclaration;
 import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.expression.ValueExpression;
 import prompto.expression.IExpression;
 import prompto.expression.InstanceExpression;
 import prompto.expression.MethodSelector;
 import prompto.expression.UnresolvedIdentifier;
+import prompto.expression.ValueExpression;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
@@ -531,9 +530,9 @@ public class CategoryType extends BaseType {
 	}
 	
 	private IValue convertStoredToPromptoValue(Context context, CategoryDeclaration decl, IStored stored) {
-		List<String> categories = stored.getCategories();
+		String[] categories = stored.getCategories();
 		// TODO walk up the list until we find an implemented declaration (not just the actual/last)
-		String actualTypeName = categories.get(categories.size()-1);
+		String actualTypeName = categories[categories.length-1];
 		if(!actualTypeName.equals(this.typeNameId.toString()))
 			decl = (CategoryDeclaration)getDeclaration(context, new Identifier(actualTypeName));
 		return decl.newInstance(context, stored);

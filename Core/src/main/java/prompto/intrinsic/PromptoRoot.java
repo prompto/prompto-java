@@ -186,6 +186,25 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 		if(this.mutable) 
 			PromptoException.throwEnumeratedException("NOT_MUTABLE");
 	}
+	
+	@Override
+	public PromptoRoot toMutable() {
+		try {
+			Constructor<?> cons = this.getClass().getConstructor();
+			PromptoRoot instance = (PromptoRoot)cons.newInstance();
+			instance.mutable = true;
+			List<Field> fields = collectFields();
+			for(Field field: fields) {
+				field.setAccessible(true);
+				Object value = field.get(this);
+				field.set(instance, value);
+			}
+			return instance;
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+
+	}
 
 	@Override
 	public String toString() {
@@ -195,7 +214,7 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 		// sb.append(System.identityHashCode(this));
 		// sb.append(", ");
 		List<Field> fields = collectFields();
-		fields.forEach((field)-> {
+		fields.forEach(field-> {
 			sb.append(field.getName());
 			sb.append(':');
 			try {

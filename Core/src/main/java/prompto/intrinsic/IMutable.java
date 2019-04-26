@@ -6,5 +6,5 @@ public interface IMutable {
 	void setMutable(boolean set);
 	void checkMutable();
 	void checkImmutable();
-	
+	IMutable toMutable();
 }
