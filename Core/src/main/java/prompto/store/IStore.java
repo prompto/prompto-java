@@ -21,9 +21,7 @@ public interface IStore {
 	AttributeInfo getAttributeInfo(String name) throws PromptoError;
 	void createOrUpdateAttributes(Collection<AttributeInfo> attributes) throws PromptoError;
 	
-	default IStorable newStorable(String[] categories, IDbIdListener listener) {
-		return newStorable(Arrays.asList(categories), listener);
-	}
+	IStorable newStorable(String[] categories, IDbIdListener listener);
 	default IStorable newStorable(List<String> categories, IDbIdListener listener) {
 		return newStorable(categories.toArray(new String[0]), listener);
 	}

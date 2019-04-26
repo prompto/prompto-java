@@ -1,14 +1,9 @@
 package prompto.expression;
 
-import java.lang.reflect.Type;
-
 import prompto.compiler.ClassConstant;
-import prompto.compiler.CompilerUtils;
-import prompto.compiler.Descriptor;
 import prompto.compiler.Flags;
 import prompto.compiler.IOperand;
 import prompto.compiler.InterfaceConstant;
-import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
@@ -16,7 +11,6 @@ import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.intrinsic.IMutable;
-import prompto.intrinsic.PromptoRoot;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
