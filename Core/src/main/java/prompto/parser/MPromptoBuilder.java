@@ -934,7 +934,8 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitCssExpression(CssExpressionContext ctx) {
-		setNodeValue(ctx, getNodeValue(ctx.exp));
+		CssExpression exp = getNodeValue(ctx.exp);
+		setNodeValue(ctx, exp);
 	}
 	
 	@Override
@@ -1659,7 +1660,8 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitJavaScriptCategoryBinding(JavaScriptCategoryBindingContext ctx) {
-		setNodeValue(ctx, getNodeValue(ctx.binding));
+		JavaScriptNativeCategoryBinding binding = getNodeValue(ctx.binding);
+		setNodeValue(ctx, binding);
 	}
 	
 	@Override
@@ -1752,7 +1754,8 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitJsxChild(JsxChildContext ctx) {
-		setNodeValue(ctx, getNodeValue(ctx.jsx));
+		Object jsx = getNodeValue(ctx.jsx);
+		setNodeValue(ctx, jsx);
 	}
 	
 	
@@ -1776,13 +1779,15 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitJsxExpression(JsxExpressionContext ctx) {
-		setNodeValue(ctx, getNodeValue(ctx.exp));
+		Object jsx = getNodeValue(ctx.exp);
+		setNodeValue(ctx, jsx);
 	}
 	
 	
 	@Override
 	public void exitJsxSelfClosing(JsxSelfClosingContext ctx) {
-		setNodeValue(ctx, getNodeValue(ctx.jsx));
+		JsxSelfClosing jsx = getNodeValue(ctx.jsx);
+		setNodeValue(ctx, jsx);
 	}
 	
 	
@@ -1826,7 +1831,8 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitJsx_expression(Jsx_expressionContext ctx) {
-		setNodeValue(ctx, getNodeValue(ctx.getChild(0)));
+		Object jsx = getNodeValue(ctx.getChild(0));
+		setNodeValue(ctx, jsx);
 	}
 	
 	@Override
@@ -2235,12 +2241,14 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitNativeCategoryDeclaration(NativeCategoryDeclarationContext ctx) {
-		setNodeValue(ctx, getNodeValue(ctx.decl));
+		NativeCategoryDeclaration decl = getNodeValue(ctx.decl);
+		setNodeValue(ctx, decl);
 	}
 	
 	@Override
 	public void exitNativeWidgetDeclaration(NativeWidgetDeclarationContext ctx) {
-		setNodeValue(ctx, getNodeValue(ctx.decl));
+		NativeWidgetDeclaration decl = getNodeValue(ctx.decl);
+		setNodeValue(ctx, decl);
 	}
 	
 	@Override

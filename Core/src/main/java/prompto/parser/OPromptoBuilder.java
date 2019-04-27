@@ -908,7 +908,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitCssExpression(CssExpressionContext ctx) {
-		setNodeValue(ctx, getNodeValue(ctx.exp));
+		setNodeValue(ctx, (CssExpression)getNodeValue(ctx.exp));
 	}
 	
 	@Override
@@ -1675,7 +1675,8 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitJavaScriptCategoryBinding(JavaScriptCategoryBindingContext ctx) {
-		setNodeValue(ctx, getNodeValue(ctx.binding));
+		JavaScriptNativeCategoryBinding binding = getNodeValue(ctx.binding);
+		setNodeValue(ctx, binding);
 	}
 	
 	@Override
@@ -1774,7 +1775,8 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitJsxChild(JsxChildContext ctx) {
-		setNodeValue(ctx, getNodeValue(ctx.jsx));
+		Object jsx = getNodeValue(ctx.jsx);
+		setNodeValue(ctx, jsx);
 	}
 	
 	
@@ -1787,7 +1789,8 @@ public class OPromptoBuilder extends OParserBaseListener {
 
 	@Override
 	public void exitJsxExpression(JsxExpressionContext ctx) {
-		setNodeValue(ctx, getNodeValue(ctx.exp));
+		Object exp = getNodeValue(ctx.exp);
+		setNodeValue(ctx, exp);
 	}
 	
 	
@@ -1803,7 +1806,8 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitJsxSelfClosing(JsxSelfClosingContext ctx) {
-		setNodeValue(ctx, getNodeValue(ctx.jsx));
+		JsxSelfClosing jsx = getNodeValue(ctx.jsx);
+		setNodeValue(ctx, jsx);
 	}
 	
 	
@@ -1846,7 +1850,8 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitJsx_expression(Jsx_expressionContext ctx) {
-		setNodeValue(ctx, getNodeValue(ctx.getChild(0)));
+		Object jsx = getNodeValue(ctx.getChild(0));
+		setNodeValue(ctx, jsx);
 	}
 	
 	@Override
