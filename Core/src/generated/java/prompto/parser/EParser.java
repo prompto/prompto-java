@@ -8358,19 +8358,19 @@ public class EParser extends AbstractParser {
 
 	public static class Sorted_expressionContext extends ParserRuleContext {
 		public Instance_expressionContext source;
-		public Instance_expressionContext key;
+		public Sorted_keyContext key;
 		public TerminalNode SORTED() { return getToken(EParser.SORTED, 0); }
-		public List<Instance_expressionContext> instance_expression() {
-			return getRuleContexts(Instance_expressionContext.class);
-		}
-		public Instance_expressionContext instance_expression(int i) {
-			return getRuleContext(Instance_expressionContext.class,i);
+		public Instance_expressionContext instance_expression() {
+			return getRuleContext(Instance_expressionContext.class,0);
 		}
 		public TerminalNode DESC() { return getToken(EParser.DESC, 0); }
 		public TerminalNode WITH() { return getToken(EParser.WITH, 0); }
 		public TerminalNode AS() { return getToken(EParser.AS, 0); }
 		public Key_tokenContext key_token() {
 			return getRuleContext(Key_tokenContext.class,0);
+		}
+		public Sorted_keyContext sorted_key() {
+			return getRuleContext(Sorted_keyContext.class,0);
 		}
 		public Sorted_expressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -8415,7 +8415,7 @@ public class EParser extends AbstractParser {
 				setState(1521);
 				match(WITH);
 				setState(1522);
-				((Sorted_expressionContext)_localctx).key = instance_expression(0);
+				((Sorted_expressionContext)_localctx).key = sorted_key();
 				setState(1523);
 				match(AS);
 				setState(1524);
@@ -24701,13 +24701,13 @@ public class EParser extends AbstractParser {
 		"\2\u05ea\u05eb\5\u0094K\2\u05eb\u05ed\3\2\2\2\u05ec\u05b8\3\2\2\2\u05ec"+
 		"\u05c7\3\2\2\2\u05ed}\3\2\2\2\u05ee\u05f0\7\u0094\2\2\u05ef\u05f1\7`\2"+
 		"\2\u05f0\u05ef\3\2\2\2\u05f0\u05f1\3\2\2\2\u05f1\u05f2\3\2\2\2\u05f2\u05f8"+
-		"\5h\65\2\u05f3\u05f4\7\u00a0\2\2\u05f4\u05f5\5h\65\2\u05f5\u05f6\7N\2"+
-		"\2\u05f6\u05f7\5\u014e\u00a8\2\u05f7\u05f9\3\2\2\2\u05f8\u05f3\3\2\2\2"+
-		"\u05f8\u05f9\3\2\2\2\u05f9\177\3\2\2\2\u05fa\u05fb\6A*\3\u05fb\u0601\5"+
-		"\\/\2\u05fc\u05ff\5\u0082B\2\u05fd\u05fe\7L\2\2\u05fe\u0600\5\u0084C\2"+
-		"\u05ff\u05fd\3\2\2\2\u05ff\u0600\3\2\2\2\u0600\u0602\3\2\2\2\u0601\u05fc"+
-		"\3\2\2\2\u0601\u0602\3\2\2\2\u0602\u0609\3\2\2\2\u0603\u0606\5\u0082B"+
-		"\2\u0604\u0605\7L\2\2\u0605\u0607\5\u0084C\2\u0606\u0604\3\2\2\2\u0606"+
+		"\5h\65\2\u05f3\u05f4\7\u00a0\2\2\u05f4\u05f5\5\u013e\u00a0\2\u05f5\u05f6"+
+		"\7N\2\2\u05f6\u05f7\5\u014e\u00a8\2\u05f7\u05f9\3\2\2\2\u05f8\u05f3\3"+
+		"\2\2\2\u05f8\u05f9\3\2\2\2\u05f9\177\3\2\2\2\u05fa\u05fb\6A*\3\u05fb\u0601"+
+		"\5\\/\2\u05fc\u05ff\5\u0082B\2\u05fd\u05fe\7L\2\2\u05fe\u0600\5\u0084"+
+		"C\2\u05ff\u05fd\3\2\2\2\u05ff\u0600\3\2\2\2\u0600\u0602\3\2\2\2\u0601"+
+		"\u05fc\3\2\2\2\u0601\u0602\3\2\2\2\u0602\u0609\3\2\2\2\u0603\u0606\5\u0082"+
+		"B\2\u0604\u0605\7L\2\2\u0605\u0607\5\u0084C\2\u0606\u0604\3\2\2\2\u0606"+
 		"\u0607\3\2\2\2\u0607\u0609\3\2\2\2\u0608\u05fa\3\2\2\2\u0608\u0603\3\2"+
 		"\2\2\u0609\u0081\3\2\2\2\u060a\u060b\bB\1\2\u060b\u060c\7\u00a0\2\2\u060c"+
 		"\u060d\5\u0084C\2\u060d\u0613\3\2\2\2\u060e\u060f\f\3\2\2\u060f\u0610"+

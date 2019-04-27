@@ -1925,7 +1925,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitJsx_attribute(Jsx_attributeContext ctx) {
 		Identifier name = getNodeValue(ctx.name);
 		IJsxValue value = getNodeValue(ctx.value);
-		String suite = getJsxWhiteSpace(ctx.jsx_ws());
+		String suite = getWhiteSpacePlus(ctx.ws_plus());
 		setNodeValue(ctx, new JsxAttribute(name, value, suite));
 	}
 	
