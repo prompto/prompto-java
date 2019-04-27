@@ -1,15 +1,14 @@
 package prompto.transpiler;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
@@ -39,21 +38,21 @@ public class MemStoreMirror {
 		this.converter = new ValueConverter();
 	}
 
-	public StorableMirror newStorableDocument(List<String> categories, ScriptObjectMirror dbIdListener) {
+	public StorableMirror newStorableDocument(String[] categories, ScriptObjectMirror dbIdListener) {
 		IDbIdListener listener = dbIdListener==null ? null : dbId->dbIdListener.call(null, dbId);
 		IStorable storable = store.newStorable(categories, listener);
 		return new StorableMirror(storable);
 	}
 	
-	public void store(Collection<Object> toDelete, Collection<Object> toStore) {
-		Set<Object> del = toDelete==null ? null : toDelete.stream().map(dbId->store.convertToDbId(dbId)).collect(Collectors.toSet());
-		Set<IStorable> add = toStore==null ? null : toStore.stream().map(item->((StorableMirror)item).getStorable()).collect(Collectors.toSet());
+	public void store(Object[] toDelete, Object[] toStore) {
+		Set<Object> del = toDelete==null ? null : Stream.of(toDelete).map(dbId->store.convertToDbId(dbId)).collect(Collectors.toSet());
+		Set<IStorable> add = toStore==null ? null : Stream.of(toStore).map(item->((StorableMirror)item).getStorable()).collect(Collectors.toSet());
 		store.store(del, add);
 	}
 	
-	public void storeAsync(Collection<Object> toDelete, Collection<Object> toStore, ScriptObjectMirror andThen) {
-		Set<Object> del = toDelete==null ? null : new HashSet<>(toDelete);
-		Set<IStorable> add = toStore==null ? null : toStore.stream().map(item->((StorableMirror)item).getStorable()).collect(Collectors.toSet());
+	public void storeAsync(Object[] toDelete, Object[] toStore, ScriptObjectMirror andThen) {
+		Set<Object> del = toDelete==null ? null : Stream.of(toDelete).collect(Collectors.toSet());
+		Set<IStorable> add = toStore==null ? null : Stream.of(toStore).map(item->((StorableMirror)item).getStorable()).collect(Collectors.toSet());
 		store.store(del, add);
 		andThen.call(null);
 	}
