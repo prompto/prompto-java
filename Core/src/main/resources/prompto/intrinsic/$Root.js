@@ -44,7 +44,12 @@ $Root.prototype.toString = function() {
     return "{" + vals.join(", ") + "}";
 };
 
-$Root.prototype.getText = $Root.prototype.toString;
+$Root.prototype.getText = function() {
+    if(this.hasOwnProperty("text"))
+        return this.text;
+    else
+        return this.toString();
+};
 
 
 $Root.prototype.setMember = function(name, value, mutable, isEnum) {

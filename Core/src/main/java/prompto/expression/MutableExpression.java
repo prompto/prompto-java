@@ -50,7 +50,7 @@ public class MutableExpression extends Section implements IExpression {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-		// nothing to do
+		source.declare(transpiler);
 	}
 	
 	@Override
