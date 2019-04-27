@@ -10,12 +10,14 @@ import prompto.compiler.StringConstant;
 import prompto.expression.IExpression;
 import prompto.literal.TextLiteral;
 import prompto.runtime.Context;
+import prompto.type.IType;
 import prompto.utils.ObjectUtils;
 
 public class EntryComparatorCompiler extends ComparatorCompilerBase {
 
 	@Override
-	protected void compileMethodBody(Context context, MethodInfo method, Type paramType, IExpression key) {
+	protected void compileMethodBody(Context context, MethodInfo method, IType paramIType, IExpression key) {
+		Type paramType = paramIType.getJavaType(context);
 		String keyName = ((TextLiteral)key).getValue().getStorableData();
 		MethodConstant getter = new MethodConstant(paramType, "get", Object.class, Object.class);
 		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(paramType));

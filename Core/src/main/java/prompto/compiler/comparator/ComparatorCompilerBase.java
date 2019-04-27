@@ -29,23 +29,27 @@ public abstract class ComparatorCompilerBase implements ComparatorCompiler {
 		classFile.addInterface(new ClassConstant(Comparator.class));
 		CompilerUtils.compileEmptyConstructor(classFile);
 		compileBridge(context, classFile, itemType.getJavaType(context), descending);
-		compileMethod(context, classFile, itemType.getJavaType(context), key);
+		compileMethods(context, classFile, itemType, key);
 		parentClass.addInnerClass(classFile);
 		return innerClassType;
 	}
 
-	private void compileMethod(Context context, ClassFile classFile, Type paramType, IExpression key) {
+	private void compileCompareMethod(Context context, ClassFile classFile, IType paramIType, IExpression key) {
+		Type paramType = paramIType.getJavaType(context);
 		Descriptor.Method proto = new Descriptor.Method(paramType, paramType, int.class);
 		MethodInfo method = classFile.newMethod("compare", proto);
 		// use a dummy '$this', since we never use it, and we need 'this' for compiling expressions
 		method.registerLocal("$this", VerifierType.ITEM_Object, classFile.getThisClass());
 		method.registerLocal("o1", VerifierType.ITEM_Object, new ClassConstant(paramType));
 		method.registerLocal("o2", VerifierType.ITEM_Object, new ClassConstant(paramType));
-		compileMethodBody(context, method, paramType, key);
-	
+		compileMethodBody(context, method, paramIType, key);
 	}
 	
-	protected abstract void compileMethodBody(Context context, MethodInfo method, Type paramType, IExpression key);
+	protected abstract void compileMethodBody(Context context, MethodInfo method, IType paramIType, IExpression key);
+
+	protected void compileMethods(Context context, ClassFile classFile, IType paramIType, IExpression key) {
+		compileCompareMethod(context, classFile, paramIType, key);
+	}
 
 	private void compileBridge(Context context, ClassFile classFile, Type paramType, boolean descending) {
 		// create a bridge "compare" method to convert Object -> paramType

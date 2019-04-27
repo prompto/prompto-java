@@ -3,8 +3,6 @@ package prompto.type;
 import java.lang.reflect.Type;
 import java.util.Comparator;
 
-import prompto.compiler.ByteOperand;
-import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -12,10 +10,8 @@ import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
-import prompto.compiler.StackLocal;
-import prompto.compiler.IVerifierEntry.VerifierType;
+import prompto.compiler.comparator.ArrowKeyComparatorCompiler;
 import prompto.compiler.comparator.ComparatorCompiler;
-import prompto.compiler.comparator.ComparatorCompilerBase;
 import prompto.error.SyntaxError;
 import prompto.expression.ArrowExpression;
 import prompto.expression.IExpression;
@@ -26,7 +22,6 @@ import prompto.runtime.Variable;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
 import prompto.utils.IdentifierList;
-import prompto.utils.ObjectUtils;
 import prompto.value.IValue;
 import prompto.value.IntegerValue;
 
@@ -223,36 +218,6 @@ public abstract class NativeType extends BaseType {
 	private Type compileComparatorClass(Context context, ClassFile parentClass, ArrowExpression key, boolean descending) {
 		ComparatorCompiler compiler = new ArrowKeyComparatorCompiler();
 		return compiler.compile(context, parentClass, this, key, descending);
-	}
-	
-	static class ArrowKeyComparatorCompiler extends ComparatorCompilerBase {
-		
-		
-		@Override
-		protected void compileMethodBody(Context context, MethodInfo method, Type paramType, IExpression key) {
-			ArrowExpression arrow = (ArrowExpression)key;
-			if(arrow.getArgs().size()==1)
-				compileMethodBody1Arg(context, method, paramType, arrow);
-			else
-				throw new UnsupportedOperationException(); // compileMethodBody2Args(context, method, paramType, arrow);
-		}
-		
-		private void compileMethodBody1Arg(Context context, MethodInfo method, Type paramType, ArrowExpression arrow) {
-			StackLocal tmpThis = method.registerLocal("this", VerifierType.ITEM_Object, new ClassConstant(paramType));
-			compileValue1Arg(context, method, paramType, arrow, tmpThis, "o1");
-			compileValue1Arg(context, method, paramType, arrow, tmpThis, "o2");
-			MethodConstant compare = new MethodConstant(ObjectUtils.class, "safeCompare", Object.class, Object.class, int.class);
-			method.addInstruction(Opcode.INVOKESTATIC, compare);
-			method.addInstruction(Opcode.IRETURN);
-		}
-
-		private ResultInfo compileValue1Arg(Context context, MethodInfo method, Type paramType, ArrowExpression arrow, StackLocal tmpThis, String paramName) {
-			StackLocal param = method.getRegisteredLocal(paramName);
-			Opcode opcode = Opcode.values()[Opcode.ALOAD_0.ordinal() + param.getIndex()];
-			method.addInstruction(opcode, new ClassConstant(paramType));
-			method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)tmpThis.getIndex()));
-			return arrow.compileKey(context, method, new Flags(), paramType, paramName);
-		}
 	}
 
 		

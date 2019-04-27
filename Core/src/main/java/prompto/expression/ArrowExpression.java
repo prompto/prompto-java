@@ -2,12 +2,17 @@ package prompto.expression;
 
 import java.lang.reflect.Type;
 
+import prompto.compiler.ClassConstant;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
-import prompto.compiler.ResultInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.StackLocal;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.error.PromptoError;
+import prompto.grammar.Identifier;
 import prompto.parser.Section;
 import prompto.runtime.Context;
+import prompto.runtime.Variable;
 import prompto.statement.IStatement;
 import prompto.statement.ReturnStatement;
 import prompto.statement.StatementList;
@@ -89,8 +94,13 @@ public class ArrowExpression extends Section implements IExpression {
 		return statements;
 	}
 
-	public ResultInfo compileKey(Context context, MethodInfo method, Flags flags, Type paramType, String paramName) {
-		throw new UnsupportedOperationException();
+	public void compileKey(Context context, MethodInfo method, Flags flags, IType paramIType) {
+		Type paramType = paramIType.getJavaType(context);
+		Identifier arg = args.get(0);
+		context = context.newChildContext();
+		context.registerValue(new Variable(arg, paramIType));
+		method.registerLocal(arg.toString(), VerifierType.ITEM_Object, new ClassConstant(paramType));
+		statements.compile(context, method, flags);
 	}
 	
 }
