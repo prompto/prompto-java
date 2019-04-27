@@ -1110,6 +1110,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitInstanceExpression(EParser.InstanceExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code MutableInstanceExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterMutableInstanceExpression(EParser.MutableInstanceExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code MutableInstanceExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitMutableInstanceExpression(EParser.MutableInstanceExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code ReadAllExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
@@ -1547,6 +1559,30 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitItemSelector(EParser.ItemSelectorContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code MutableSelectableExpression}
+	 * labeled alternative in {@link EParser#mutable_instance_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterMutableSelectableExpression(EParser.MutableSelectableExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code MutableSelectableExpression}
+	 * labeled alternative in {@link EParser#mutable_instance_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitMutableSelectableExpression(EParser.MutableSelectableExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code MutableSelectorExpression}
+	 * labeled alternative in {@link EParser#mutable_instance_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterMutableSelectorExpression(EParser.MutableSelectorExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code MutableSelectorExpression}
+	 * labeled alternative in {@link EParser#mutable_instance_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitMutableSelectorExpression(EParser.MutableSelectorExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link EParser#document_expression}.
 	 * @param ctx the parse tree
