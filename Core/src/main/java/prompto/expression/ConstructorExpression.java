@@ -29,6 +29,7 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.IMutable;
 import prompto.intrinsic.PromptoDocument;
 import prompto.parser.Dialect;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.store.IStore;
 import prompto.transpiler.Transpiler;
@@ -41,7 +42,7 @@ import prompto.value.IInstance;
 import prompto.value.IValue;
 import prompto.value.NullValue;
 
-public class ConstructorExpression implements IExpression {
+public class ConstructorExpression extends Section implements IExpression {
 	
 	CategoryType type;
 	boolean checked; // if coming from UnresolvedCall, need to check homonyms

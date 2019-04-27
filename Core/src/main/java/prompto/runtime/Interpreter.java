@@ -9,6 +9,7 @@ import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.ValueExpression;
 import prompto.expression.IExpression;
 import prompto.expression.MethodSelector;
 import prompto.grammar.ArgumentAssignment;
@@ -22,7 +23,6 @@ import prompto.type.IType;
 import prompto.type.TextType;
 import prompto.utils.CmdLineParser;
 import prompto.value.DictionaryValue;
-import prompto.value.ExpressionValue;
 import prompto.value.IValue;
 import prompto.value.TextValue;
 
@@ -113,7 +113,7 @@ public class Interpreter {
 			valueArgs.put(new TextValue(entry.getKey()), new TextValue(entry.getValue()));
 		valueArgs.setMutable(false);
 		DictionaryValue dict = new DictionaryValue(TextType.instance(), valueArgs);
-		return new ExpressionValue(argsType, dict);
+		return new ValueExpression(argsType, dict);
 	}
 
 	

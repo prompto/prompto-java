@@ -18,6 +18,7 @@ import prompto.transpiler.Transpiler;
 import prompto.type.DocumentType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
+import prompto.utils.Logger;
 import prompto.value.BlobValue;
 import prompto.value.DocumentValue;
 import prompto.value.IValue;
@@ -26,6 +27,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class DocumentExpression implements IExpression {
 
+	private static Logger logger = new Logger();
+	
 	IExpression source;
 	
 	public DocumentExpression(IExpression source) {
@@ -72,8 +75,9 @@ public class DocumentExpression implements IExpression {
 			if(field==null)
 				throw new InvalidParameterException("Expecting a 'value' field!");
 			return (DocumentValue)type.readJSONValue(context, field, parts);
-		} catch(Exception e) {
-			throw new ReadWriteError(e.getMessage());
+		} catch(Throwable t) {
+			logger.error(()->"While parsing blob data", t);
+			throw new ReadWriteError(t.getMessage());
 		}
 	}
 

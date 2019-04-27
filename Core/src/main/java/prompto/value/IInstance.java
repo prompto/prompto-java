@@ -16,5 +16,6 @@ public interface IInstance extends IValue {
 	boolean setMutable(boolean set);
 	ConcreteCategoryDeclaration getDeclaration();
 	IStorable getStorable();
+	IValue toMutable();
 	
 }

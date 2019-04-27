@@ -14,6 +14,7 @@ public interface IStorable {
 	boolean isDirty();
 	
 	void setCategories(String[] categories) throws PromptoError;
+	String[] getCategories();
 	
 	default void setData(String name, Object value) throws PromptoError {
 		setData(name, value, null);
@@ -26,4 +27,5 @@ public interface IStorable {
 	
 	@FunctionalInterface
 	public static interface IDbIdListener extends Consumer<Object> {}
+
 }

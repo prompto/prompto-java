@@ -88,6 +88,7 @@ import prompto.expression.MethodExpression;
 import prompto.expression.MinusExpression;
 import prompto.expression.ModuloExpression;
 import prompto.expression.MultiplyExpression;
+import prompto.expression.MutableExpression;
 import prompto.expression.NativeSymbol;
 import prompto.expression.NotExpression;
 import prompto.expression.OrExpression;
@@ -197,7 +198,7 @@ import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
 import prompto.literal.UuidLiteral;
 import prompto.literal.VersionLiteral;
-import prompto.parser.OParser.*;
+import static prompto.parser.OParser.*;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -1887,7 +1888,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	@Override
 	public void exitJsx_children(Jsx_childrenContext ctx) {
 		List<IJsxExpression> list = ctx.jsx_child().stream()
-				.map(cx -> this.<IJsxExpression>getNodeValue(cx))
+				.map(cx -> (IJsxExpression)getNodeValue(cx))
 				.collect(Collectors.toList());
 		setNodeValue(ctx, list);
 	}
@@ -1920,7 +1921,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 		Identifier name = getNodeValue(ctx.name);
 		String nameSuite = getHiddenTokensAfter(ctx.name.getStop());
 		List<JsxAttribute> attributes = ctx.jsx_attribute().stream()
-				.map(cx->this.<JsxAttribute>getNodeValue(cx))
+				.map(cx->(JsxAttribute)getNodeValue(cx))
 				.collect(Collectors.toList());
 		String openingSuite = getHiddenTokensAfter(ctx.GT());
 		setNodeValue(ctx, new JsxElement(name, nameSuite, attributes, openingSuite));
@@ -1938,7 +1939,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 		Identifier name = getNodeValue(ctx.name);
 		String nameSuite = getHiddenTokensAfter(ctx.name.getStop());
 		List<JsxAttribute> attributes = ctx.jsx_attribute().stream()
-				.map(cx->this.<JsxAttribute>getNodeValue(cx))
+				.map(cx->(JsxAttribute)getNodeValue(cx))
 				.collect(Collectors.toList());
 		String openingSuite = getHiddenTokensAfter(ctx.GT());
 		setNodeValue(ctx, new JsxSelfClosing(name, nameSuite, attributes, openingSuite));
@@ -2188,6 +2189,26 @@ public class OPromptoBuilder extends OParserBaseListener {
 		setNodeValue(ctx, typ);
 	}
 	
+	@Override
+	public void exitMutableInstanceExpression(MutableInstanceExpressionContext ctx) {
+		IExpression source = getNodeValue(ctx.exp);
+		setNodeValue(ctx, new MutableExpression(source));
+	}
+	
+	
+	@Override
+	public void exitMutableSelectableExpression(MutableSelectableExpressionContext ctx) {
+		setNodeValue(ctx, getNodeValue(ctx.exp));
+	}
+	
+	
+	@Override
+	public void exitMutableSelectorExpression(MutableSelectorExpressionContext ctx) {
+		IExpression parent = getNodeValue(ctx.parent);
+		SelectorExpression selector = getNodeValue(ctx.selector);
+		selector.setParent(parent);
+		setNodeValue(ctx, selector);
+	}
 
 	@Override
 	public void exitNamed_argument(Named_argumentContext ctx) {

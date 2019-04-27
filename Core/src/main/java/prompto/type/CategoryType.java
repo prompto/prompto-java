@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -43,6 +42,7 @@ import prompto.expression.IExpression;
 import prompto.expression.InstanceExpression;
 import prompto.expression.MethodSelector;
 import prompto.expression.UnresolvedIdentifier;
+import prompto.expression.ValueExpression;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.Identifier;
@@ -65,7 +65,6 @@ import prompto.utils.CodeWriter;
 import prompto.utils.Logger;
 import prompto.utils.ObjectUtils;
 import prompto.utils.TypeUtils;
-import prompto.value.ExpressionValue;
 import prompto.value.IInstance;
 import prompto.value.IValue;
 import prompto.value.NullValue;
@@ -83,6 +82,12 @@ public class CategoryType extends BaseType {
 	public CategoryType(Identifier typeNameId) {
 		super(Family.CATEGORY);
 		this.typeNameId = typeNameId;
+	}
+	
+	public CategoryType(CategoryType copyFrom, boolean mutable) {
+		super(copyFrom.family);
+		this.typeNameId = copyFrom.typeNameId;
+		this.mutable = mutable;
 	}
 	
 	protected CategoryType(Family family, Identifier typeNameId) {
@@ -525,9 +530,9 @@ public class CategoryType extends BaseType {
 	}
 	
 	private IValue convertStoredToPromptoValue(Context context, CategoryDeclaration decl, IStored stored) {
-		List<String> categories = stored.getCategories();
+		String[] categories = stored.getCategories();
 		// TODO walk up the list until we find an implemented declaration (not just the actual/last)
-		String actualTypeName = categories.get(categories.size()-1);
+		String actualTypeName = categories[categories.length-1];
 		if(!actualTypeName.equals(this.typeNameId.toString()))
 			decl = (CategoryDeclaration)getDeclaration(context, new Identifier(actualTypeName));
 		return decl.newInstance(context, stored);
@@ -677,7 +682,7 @@ public class CategoryType extends BaseType {
 
 	private IDeclaration findGlobalMethod(Context context, String name) {
 		try {
-			IExpression exp = new ExpressionValue(this, this.newInstance(context));
+			IExpression exp = new ValueExpression(this, this.newInstance(context));
 			ArgumentAssignment arg = new ArgumentAssignment(null, exp);
 			ArgumentAssignmentList args = new ArgumentAssignmentList(Collections.singletonList(arg));
 			MethodCall proto = new MethodCall(new MethodSelector(null, new Identifier(name)), args);
@@ -867,7 +872,7 @@ public class CategoryType extends BaseType {
 
 	public MethodCall createGlobalMethodCallIfExists(Context context, Identifier methodName) {
 		try {
-			IExpression exp = new ExpressionValue(this, newInstance(context));
+			IExpression exp = new ValueExpression(this, newInstance(context));
 			ArgumentAssignment arg = new ArgumentAssignment(null, exp); // MethodCall supports first anonymous argument
 			ArgumentAssignmentList args = new ArgumentAssignmentList(Collections.singletonList(arg));
 			MethodCall call = new MethodCall(new MethodSelector(methodName), args);
@@ -917,7 +922,7 @@ public class CategoryType extends BaseType {
 
 			private IValue interpret(IInstance o) throws PromptoError {
 				ArgumentAssignment assignment = call.getAssignments().getFirst();
-				assignment.setExpression(new ExpressionValue(CategoryType.this, o));
+				assignment.setExpression(new ValueExpression(CategoryType.this, o));
 				return call.interpret(context);
 			}
 		};

@@ -1,7 +1,6 @@
 package prompto.store.memory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -221,7 +220,7 @@ public final class MemStore implements IStore {
 
 	
 	@Override
-	public IStorable newStorable(List<String> categories, IDbIdListener listener) {
+	public IStorable newStorable(String[] categories, IDbIdListener listener) {
 		return new StorableDocument(categories, listener);
 	}
 	
@@ -235,9 +234,9 @@ public final class MemStore implements IStore {
 
 		Map<String, Object> document = null;
 		IDbIdListener listener;
-		List<String> categories;
+		String[] categories;
 		
-		public StorableDocument(List<String> categories, IDbIdListener listener) {
+		public StorableDocument(String[] categories, IDbIdListener listener) {
 			this.categories = categories;
 			this.listener = listener;
 		}
@@ -251,11 +250,11 @@ public final class MemStore implements IStore {
 		
 		@Override
 		public void setCategories(String[] categories) throws PromptoError {
-			this.categories = Arrays.asList(categories);
+			this.categories = categories;
 		}
 		
 		@Override
-		public List<String> getCategories() {
+		public String[] getCategories() {
 			return categories;
 		}
 

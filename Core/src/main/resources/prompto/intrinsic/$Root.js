@@ -6,6 +6,12 @@ function $Root() {
     return this;
 }
 
+$Root.prototype.toMutable = function() {
+	var result = Object.create(this);
+	result.mutable = true;
+	return result;
+};
+
 $Root.prototype.instanceOf = function(type) {
     return this.category.indexOf(type)>=0;
 };
@@ -38,7 +44,12 @@ $Root.prototype.toString = function() {
     return "{" + vals.join(", ") + "}";
 };
 
-$Root.prototype.getText = $Root.prototype.toString;
+$Root.prototype.getText = function() {
+    if(this.hasOwnProperty("text"))
+        return this.text;
+    else
+        return this.toString();
+};
 
 
 $Root.prototype.setMember = function(name, value, mutable, isEnum) {

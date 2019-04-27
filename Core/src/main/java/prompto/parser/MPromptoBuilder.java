@@ -80,6 +80,7 @@ import prompto.expression.FetchManyExpression;
 import prompto.expression.FetchOneExpression;
 import prompto.expression.FilteredExpression;
 import prompto.expression.IExpression;
+import prompto.expression.InstanceExpression;
 import prompto.expression.IntDivideExpression;
 import prompto.expression.ItemSelector;
 import prompto.expression.IteratorExpression;
@@ -88,6 +89,7 @@ import prompto.expression.MethodExpression;
 import prompto.expression.MinusExpression;
 import prompto.expression.ModuloExpression;
 import prompto.expression.MultiplyExpression;
+import prompto.expression.MutableExpression;
 import prompto.expression.NativeSymbol;
 import prompto.expression.NotExpression;
 import prompto.expression.OrExpression;
@@ -195,7 +197,7 @@ import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
 import prompto.literal.UuidLiteral;
 import prompto.literal.VersionLiteral;
-import prompto.parser.MParser.*;
+import static prompto.parser.MParser.*;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -1855,7 +1857,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	@Override
 	public void exitJsx_children(Jsx_childrenContext ctx) {
 		List<IJsxExpression> list = ctx.jsx_child().stream()
-				.map(cx -> this.<IJsxExpression>getNodeValue(cx))
+				.map(cx -> (IJsxExpression)getNodeValue(cx))
 				.collect(Collectors.toList());
 		setNodeValue(ctx, list);
 	}
@@ -1890,7 +1892,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 		Identifier name = getNodeValue(ctx.name);
 		String nameSuite = getWhiteSpacePlus(ctx.ws_plus());
 		List<JsxAttribute> attributes = ctx.jsx_attribute().stream()
-				.map(cx->this.<JsxAttribute>getNodeValue(cx))
+				.map(cx->(JsxAttribute)getNodeValue(cx))
 				.collect(Collectors.toList());
 		setNodeValue(ctx, new JsxElement(name, nameSuite, attributes, null));
 	}
@@ -1907,7 +1909,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 		Identifier name = getNodeValue(ctx.name);
 		String nameSuite = getWhiteSpacePlus(ctx.ws_plus());
 		List<JsxAttribute> attributes = ctx.jsx_attribute().stream()
-				.map(cx->this.<JsxAttribute>getNodeValue(cx))
+				.map(cx->(JsxAttribute)getNodeValue(cx))
 				.collect(Collectors.toList());
 		setNodeValue(ctx, new JsxSelfClosing(name, nameSuite, attributes, null));
 	}
@@ -2158,6 +2160,28 @@ public class MPromptoBuilder extends MParserBaseListener {
 		setNodeValue(ctx, typ);
 	}
 	
+	@Override
+	public void exitMutableInstanceExpression(MutableInstanceExpressionContext ctx) {
+		IExpression source = getNodeValue(ctx.exp);
+		setNodeValue(ctx, new MutableExpression(source));
+	}
+	
+	
+	@Override
+	public void exitMutableSelectableExpression(MutableSelectableExpressionContext ctx) {
+		Identifier name = getNodeValue(ctx.exp);
+		setNodeValue(ctx, new InstanceExpression(name));
+	}
+	
+	
+	@Override
+	public void exitMutableSelectorExpression(MutableSelectorExpressionContext ctx) {
+		IExpression parent = getNodeValue(ctx.parent);
+		SelectorExpression selector = getNodeValue(ctx.selector);
+		selector.setParent(parent);
+		setNodeValue(ctx, selector);
+	}
+
 	@Override
 	public void exitNamed_argument(Named_argumentContext ctx) {
 		Identifier name = getNodeValue(ctx.variable_identifier());

@@ -169,8 +169,8 @@ public class QueryableCodeStore extends BaseCodeStore {
 			IStored stored = fetchOneNamedInStore(new CategoryType(new Identifier("Module")), version, name, false);
 			if(stored==null)
 				return null;
-			List<String> categories = stored.getCategories();
-			String category = categories.get(categories.size()-1);
+			String[] categories = stored.getCategories();
+			String category = categories[categories.length-1];
 			ModuleType type = ModuleType.valueOf(category.toUpperCase());
 			Module module = type.getModuleClass().newInstance();
 			module.fromStored(store, stored);

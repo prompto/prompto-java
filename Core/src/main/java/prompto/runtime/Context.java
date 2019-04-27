@@ -28,6 +28,7 @@ import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.ValueExpression;
 import prompto.expression.Symbol;
 import prompto.grammar.Annotation;
 import prompto.grammar.INamed;
@@ -53,7 +54,6 @@ import prompto.value.ClosureValue;
 import prompto.value.ConcreteInstance;
 import prompto.value.DecimalValue;
 import prompto.value.DocumentValue;
-import prompto.value.ExpressionValue;
 import prompto.value.IInstance;
 import prompto.value.IValue;
 
@@ -783,8 +783,8 @@ public class Context implements IContext {
 
 	private IValue autocast(Identifier name, IValue value) {
 		if(value!=null) {
-			if(value instanceof ExpressionValue)
-				value = ((ExpressionValue)value).getValue();
+			if(value instanceof ValueExpression)
+				value = ((ValueExpression)value).getValue();
 			if(value instanceof prompto.value.IntegerValue) {
 				INamed actual = instances.get(name);
 				if(actual.getType(this)==DecimalType.instance())

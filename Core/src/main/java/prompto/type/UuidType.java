@@ -8,6 +8,7 @@ import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
 import prompto.value.IValue;
+import prompto.value.NullValue;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -30,7 +31,10 @@ public class UuidType extends NativeType {
 	
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
-		return new prompto.value.UuidValue(value.asText());
+		if(value.isNull())
+			return NullValue.instance();
+		else
+			return new prompto.value.UuidValue(value.asText());
 	}
 	
 	@Override

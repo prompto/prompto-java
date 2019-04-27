@@ -9,10 +9,12 @@ import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
 import prompto.declaration.IMethodDeclaration;
+import prompto.error.InternalError;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
+import prompto.parser.ECleverParser;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
@@ -31,6 +33,15 @@ public interface IType extends ISection {
 			return AnyType.instance();	
 		else
 			return type;
+	}
+	
+	static IType fromTypeName(Context context, String typeName) throws PromptoError {
+		if(Character.isUpperCase(typeName.charAt(0))) try {
+			return new ECleverParser(typeName).parse_standalone_type();
+		} catch(Throwable t) {
+			throw new InternalError(t);
+		} else
+			return context.findAttribute(typeName).getType();
 	}
 
 	Family getFamily();

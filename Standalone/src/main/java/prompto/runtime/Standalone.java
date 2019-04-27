@@ -41,6 +41,7 @@ import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.TerminatedError;
+import prompto.expression.ValueExpression;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDict;
@@ -61,7 +62,6 @@ import prompto.utils.IdentifierList;
 import prompto.utils.Logger;
 import prompto.utils.TypeUtils;
 import prompto.value.DictionaryValue;
-import prompto.value.ExpressionValue;
 import prompto.value.IValue;
 import prompto.value.TextValue;
 
@@ -295,7 +295,7 @@ public abstract class Standalone {
 		PromptoDict<TextValue, IValue> dict = new PromptoDict<>(true);
 		for(Map.Entry<String, String> e : args.entrySet())
 			dict.put(new TextValue(e.getKey()),new TextValue(e.getValue()));
-		return new ExpressionValue(new DictType(TextType.instance()), new DictionaryValue(TextType.instance(), dict));
+		return new ValueExpression(new DictType(TextType.instance()), new DictionaryValue(TextType.instance(), dict));
 	}
 
 	public static void showHelp(String application, String test, PromptoVersion version) {

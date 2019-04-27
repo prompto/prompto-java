@@ -1,17 +1,19 @@
-package prompto.value;
+package prompto.expression;
 
 import prompto.error.PromptoError;
-import prompto.expression.IExpression;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
+import prompto.value.BaseValue;
+import prompto.value.ISliceable;
+import prompto.value.IValue;
 
 /* a value which can be used as an expression in a check/interpret scenario */
-public class ExpressionValue extends BaseValue implements IExpression {
+public class ValueExpression extends BaseValue implements IExpression {
 
 	IValue value;
 	
-	public ExpressionValue(IType type, IValue value) {
+	public ValueExpression(IType type, IValue value) {
 		super(type);
 		this.value = value;
 	}
@@ -22,7 +24,7 @@ public class ExpressionValue extends BaseValue implements IExpression {
 	
 	@Override
 	public IType check(Context context) {
-		return type;
+		return this.getType();
 	}
 
 	@Override

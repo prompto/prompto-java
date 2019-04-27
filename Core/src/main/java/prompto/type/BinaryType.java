@@ -45,9 +45,16 @@ public abstract class BinaryType extends NativeType {
 		if(value.isNull())
 			return NullValue.instance();
 		// if this an object received from the browser, use reverse logic from BinaryValue::toJson
-		if(value.isTextual() && value.asText().startsWith("/ws/bin/data?"))
+		if(value.isTextual() && value.asText().startsWith("/ws/bin/data?")) {
 			return null; // TODO ok for storing an updated instance (attribute will not be overwritten), but might need a lazy loading BinaryRef value for other situations ? 
-		else {
+		} else if(value.isTextual() && value.asText().startsWith("@")) {
+			byte[] bytes = parts.get(value.asText());
+			if(bytes==null)
+				return NullValue.instance(); // TODO throw ?
+			String[] segments = value.asText().split("/");
+			String mimeType = segments[segments.length-1].replaceAll("\\.", "/");
+			return newInstance(new PromptoBinary(mimeType, bytes));
+		} else {
 			String partName = value.get("partName").asText();
 			byte[] bytes = parts.get(partName);
 			if(bytes==null)

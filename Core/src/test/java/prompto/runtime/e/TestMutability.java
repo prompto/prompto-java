@@ -140,6 +140,21 @@ public class TestMutability extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedMutableChild() throws Exception {
+		checkInterpretedOutput("mutability/mutableChild.pec");
+	}
+
+	@Test
+	public void testCompiledMutableChild() throws Exception {
+		checkCompiledOutput("mutability/mutableChild.pec");
+	}
+
+	@Test
+	public void testTranspiledMutableChild() throws Exception {
+		checkTranspiledOutput("mutability/mutableChild.pec");
+	}
+
+	@Test
 	public void testInterpretedMutableDict() throws Exception {
 		checkInterpretedOutput("mutability/mutableDict.pec");
 	}
@@ -152,6 +167,21 @@ public class TestMutability extends BaseEParserTest {
 	@Test
 	public void testTranspiledMutableDict() throws Exception {
 		checkTranspiledOutput("mutability/mutableDict.pec");
+	}
+
+	@Test
+	public void testInterpretedMutableInstance() throws Exception {
+		checkInterpretedOutput("mutability/mutableInstance.pec");
+	}
+
+	@Test
+	public void testCompiledMutableInstance() throws Exception {
+		checkCompiledOutput("mutability/mutableInstance.pec");
+	}
+
+	@Test
+	public void testTranspiledMutableInstance() throws Exception {
+		checkTranspiledOutput("mutability/mutableInstance.pec");
 	}
 
 	@Test
