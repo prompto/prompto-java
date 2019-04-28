@@ -1,6 +1,7 @@
 package prompto.expression;
 
 import java.lang.reflect.Type;
+import java.util.Comparator;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
@@ -9,6 +10,7 @@ import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.error.PromptoError;
+import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.parser.Section;
 import prompto.runtime.Context;
@@ -16,10 +18,13 @@ import prompto.runtime.Variable;
 import prompto.statement.IStatement;
 import prompto.statement.ReturnStatement;
 import prompto.statement.StatementList;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
+import prompto.type.NativeType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 import prompto.value.IValue;
+import prompto.value.IntegerValue;
 
 public class ArrowExpression extends Section implements IExpression {
 
@@ -45,7 +50,7 @@ public class ArrowExpression extends Section implements IExpression {
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		return this.statements.interpret(context);
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -113,6 +118,101 @@ public class ArrowExpression extends Section implements IExpression {
 		statements.compile(context, method, new Flags().withReturnType(int.class));
 	}
 
+	public Comparator<? extends IValue> getNativeComparator(Context context, NativeType itemType, boolean descending) {
+		switch(args.size()) {
+		case 1:
+			return getNativeComparator1Arg(context, itemType, descending);
+		case 2:
+			return getNativeComparator2Args(context, itemType, descending);
+		default:
+			throw new SyntaxError("Expecting 1 or 2 parameters only!"); 			
+		}
+	}
 
+	private Comparator<? extends IValue> getNativeComparator1Arg(Context context, NativeType itemType, boolean descending) {
+		return (o1, o2) -> {
+			Context local = registerArrowArgs(context.newLocalContext(), itemType);
+			local.setValue(args.get(0), o1);
+			IValue key1 = statements.interpret(local);
+			local.setValue(args.get(0), o2);
+			IValue key2 = statements.interpret(local);
+			int result = key1.compareTo(context, key2);
+			return descending ? -result : result;
+		};
+	}
+	
+	private Comparator<? extends IValue> getNativeComparator2Args(Context context, NativeType itemType, boolean descending) {
+		return (o1, o2) -> {
+			Context local = registerArrowArgs(context.newLocalContext(), itemType);
+			local.setValue(args.get(0), o1);
+			local.setValue(args.get(1), o2);
+			IValue value = statements.interpret(local);
+			if(!(value instanceof IntegerValue))
+				throw new SyntaxError("Expecting an Integer as result of key body!");
+			long result = ((IntegerValue)value).longValue();
+			return (int)(descending ? -result : result);
+		};
+	}
+
+	private Context registerArrowArgs(Context context, IType itemType) {
+		args.forEach(arg->{
+			Variable param = new Variable(arg, itemType);
+			context.registerValue(param);
+		});
+		return context;
+	}
+
+	public void transpileSortedNative(Transpiler transpiler, NativeType itemType, boolean descending) {
+		switch(args.size()) {
+		case 1:
+			transpileSortedNative1Arg(transpiler, itemType, descending);
+			break;
+		case 2:
+			transpileSortedNative2Args(transpiler, itemType, descending);
+			break;
+		default:
+			throw new SyntaxError("Expecting 1 or 2 parameters only!"); 			
+		}
+	}
+	
+	private void transpileSortedNative1Arg(Transpiler transpiler, NativeType itemType, boolean descending) {
+		transpiler = transpiler.newLocalTranspiler();
+		registerArrowArgs(transpiler.getContext(), itemType);
+		transpiler.append("function(o1, o2) { ");
+		transpiler.append("var $key = function(");
+		transpiler.append(args.getFirst());
+		transpiler.append(") { ");
+		statements.transpile(transpiler);
+		transpiler.append(" }; ");
+		transpiler.append("o1 = $key(o1); ");
+		transpiler.append("o2 = $key(o2); ");
+		if(descending)
+			transpiler.append("return o1 === o2 ? 0 : o1 > o2 ? -1 : 1;");
+		else
+			transpiler.append("return o1 === o2 ? 0 : o1 > o2 ? 1 : -1;");
+		transpiler.append(" }");
+		transpiler.flush();
+	}
+
+	private void transpileSortedNative2Args(Transpiler transpiler, NativeType itemType, boolean descending) {
+		transpiler = transpiler.newLocalTranspiler();
+		registerArrowArgs(transpiler.getContext(), itemType);
+		if(descending) {
+			transpiler.append("function(");
+			args.transpile(transpiler);
+			transpiler.append(") { return -(");
+		}
+		transpiler.append("function(");
+		args.transpile(transpiler);
+		transpiler.append(") {");
+		statements.transpile(transpiler);
+		transpiler.append("}");
+		if(descending) {
+			transpiler.append(")(");
+			args.transpile(transpiler);
+			transpiler.append("); }");
+		}
+		transpiler.flush();
+	}
 	
 }

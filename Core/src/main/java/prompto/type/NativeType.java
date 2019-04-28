@@ -12,18 +12,14 @@ import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.comparator.ArrowKeyComparatorCompiler;
 import prompto.compiler.comparator.ComparatorCompiler;
-import prompto.error.SyntaxError;
 import prompto.expression.ArrowExpression;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
-import prompto.runtime.Variable;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
-import prompto.utils.IdentifierList;
 import prompto.value.IValue;
-import prompto.value.IntegerValue;
 
 public abstract class NativeType extends BaseType {
 
@@ -65,48 +61,11 @@ public abstract class NativeType extends BaseType {
 	
 	public Comparator<? extends IValue> getExpressionComparator(Context context, IExpression key, boolean descending) {
 		if(key instanceof ArrowExpression)
-			return getArrowExpressionComparator(context, (ArrowExpression)key, descending);
+			return ((ArrowExpression)key).getNativeComparator(context, this, descending);
 		else
 			throw new UnsupportedOperationException("Comparing native types with non-arrow key is not supported!");
 	}
 	
-	public Comparator<? extends IValue> getArrowExpressionComparator(Context context, ArrowExpression key, boolean descending) {
-		IdentifierList args = key.getArgs();
-		switch(args.size()) {
-			case 1:
-				return (o1, o2) -> {
-					Context local = registerArrowArgs(context.newLocalContext(), args);
-					local.setValue(args.get(0), o1);
-					IValue key1 = key.interpret(local);
-					local.setValue(args.get(0), o2);
-					IValue key2 = key.interpret(local);
-					int result = key1.compareTo(context, key2);
-					return descending ? -result : result;
-				};
-			case 2:
-				return (o1, o2) -> {
-					Context local = registerArrowArgs(context.newLocalContext(), args);
-					local.setValue(args.get(0), o1);
-					local.setValue(args.get(1), o2);
-					IValue value = key.interpret(local);
-					if(!(value instanceof IntegerValue))
-						throw new SyntaxError("Expecting an Integer as result of key body!");
-					long result = ((IntegerValue)value).longValue();
-					return (int)(descending ? -result : result);
-				};
-			default:
-				throw new SyntaxError("Expecting 1 or 2 parameters!"); 
-		}
-	}
-
-	private Context registerArrowArgs(Context context, IdentifierList args) {
-		args.forEach(arg->{
-			Variable param = new Variable(arg, this);
-			context.registerValue(param);
-		});
-		return context;
-	}
-
 	public Comparator<? extends IValue> getNativeComparator(boolean descending) {
 		throw new RuntimeException("Missing native comparator for " + this.getTypeName() + "!");
 	}
@@ -142,54 +101,11 @@ public abstract class NativeType extends BaseType {
 	@Override
 	public void transpileSorted(Transpiler transpiler, IExpression key, boolean descending) {
 		if(key instanceof ArrowExpression)
-			transpileSorted(transpiler, (ArrowExpression)key, descending);
+			((ArrowExpression)key).transpileSortedNative(transpiler, this, descending);
 		else if(descending)
 	        transpiler.append("function(o1, o2) { return o1 === o2 ? 0 : o1 > o2 ? -1 : 1; }");
 	}
 
-	public void transpileSorted(Transpiler transpiler, ArrowExpression key, boolean descending) {
-		IdentifierList args = key.getArgs();
-		transpiler = transpiler.newLocalTranspiler();
-		registerArrowArgs(transpiler.getContext(), args);
-		switch(args.size()) {
-		case 1:
-			transpiler.append("function(o1, o2) { ");
-			transpiler.append("var $key = function(");
-			transpiler.append(args.getFirst());
-			transpiler.append(") { ");
-			key.getStatements().transpile(transpiler);
-			transpiler.append(" }; ");
-			transpiler.append("o1 = $key(o1); ");
-			transpiler.append("o2 = $key(o2); ");
-			if(descending)
-				transpiler.append("return o1 === o2 ? 0 : o1 > o2 ? -1 : 1;");
-			else
-				transpiler.append("return o1 === o2 ? 0 : o1 > o2 ? 1 : -1;");
-			transpiler.append(" }");
-			break;
-		case 2:
-			if(descending) {
-				transpiler.append("function(");
-				args.transpile(transpiler);
-				transpiler.append(") { return -(");
-			}
-			transpiler.append("function(");
-			args.transpile(transpiler);
-			transpiler.append(") {");
-			key.getStatements().transpile(transpiler);
-			transpiler.append("}");
-			if(descending) {
-				transpiler.append(")(");
-				args.transpile(transpiler);
-				transpiler.append("); }");
-			}
-			break;
-		default:
-			throw new SyntaxError("Expecting 1 or 2 parameters!");
-		}
-		transpiler.flush();
-	}
-	
 	@Override
 	public ResultInfo compileSorted(Context context, MethodInfo method, Flags flags, ResultInfo srcInfo, IExpression key, boolean descending) {
 		if(key==null) {
