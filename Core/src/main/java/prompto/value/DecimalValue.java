@@ -127,8 +127,7 @@ public class DecimalValue extends BaseValue implements INumber, Comparable<INumb
 			throw new SyntaxError("Illegal: Decimal / " + value.getClass().getSimpleName());
 	}
 	
-	public static ResultInfo compileDivide(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) {
+	public static ResultInfo compileDivide(Context context, MethodInfo method, Flags flags, ResultInfo left, IExpression exp) {
 		return compileOperation(context, method, flags.withDecimal(true).withOpcode(Opcode.DDIV), left, exp);
 	}
 

@@ -4,12 +4,10 @@ import java.lang.reflect.Type;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
-import prompto.compiler.Descriptor;
-import prompto.compiler.Flags;
+import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.expression.ArrowExpression;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
@@ -18,15 +16,46 @@ import prompto.utils.ObjectUtils;
 
 public class ArrowKeyComparatorCompiler extends ComparatorCompilerBase {
 	
+	@Override
+	protected void registerLocals(Context context, MethodInfo method, Type paramType, IExpression key) {
+		ArrowExpression arrow = (ArrowExpression)key;
+		switch(arrow.getArgs().size()) {
+			case 1:
+				super.registerLocals(context, method, paramType, key);
+				break;
+			case 2:
+				method.registerLocal(arrow.getArgs().get(0).toString(), VerifierType.ITEM_Object, new ClassConstant(paramType));
+				method.registerLocal(arrow.getArgs().get(1).toString(), VerifierType.ITEM_Object, new ClassConstant(paramType));
+				break;
+			default:
+				throw new UnsupportedOperationException(); 
+		}
+	}
+
+	@Override
+	protected void compileMethods(Context context, ClassFile classFile, IType itemType, IExpression key) {
+		super.compileMethods(context, classFile, itemType, key);
+		ArrowExpression arrow = (ArrowExpression)key;
+		if(arrow.getArgs().size()==1)
+			arrow.compileGetKeyMethod(context, classFile, itemType);
+	}
+
 	
 	@Override
 	protected void compileMethodBody(Context context, MethodInfo method, IType paramIType, IExpression key) {
 		ArrowExpression arrow = (ArrowExpression)key;
-		if(arrow.getArgs().size()==1)
-			compileMethodBody1Arg(context, method, paramIType, arrow);
-		else
-			throw new UnsupportedOperationException(); // compileMethodBody2Args(context, method, paramType, arrow);
+		switch(arrow.getArgs().size()) {
+			case 1:
+				compileMethodBody1Arg(context, method, paramIType, arrow);
+				break;
+			case 2:
+				arrow.compileComparatorMethodBody(context, method, paramIType);
+				break;
+			default:
+				throw new UnsupportedOperationException(); 
+		}
 	}
+	
 	
 	private void compileMethodBody1Arg(Context context, MethodInfo method, IType paramIType, ArrowExpression arrow) {
 		Type paramType = paramIType.getJavaType(context);
@@ -43,18 +72,4 @@ public class ArrowKeyComparatorCompiler extends ComparatorCompilerBase {
 		method.addInstruction(Opcode.IRETURN);
 	}
 	
-	@Override
-	protected void compileMethods(Context context, ClassFile classFile, IType itemType, IExpression key) {
-		super.compileMethods(context, classFile, itemType, key);
-		compileGetKeyMethod(context, classFile, itemType, (ArrowExpression)key);
-	}
-
-	private void compileGetKeyMethod(Context context, ClassFile classFile, IType paramIType, ArrowExpression arrow) {
-		Type paramType = paramIType.getJavaType(context);
-		Descriptor.Method proto = new Descriptor.Method(paramType, Object.class);
-		MethodInfo method = classFile.newMethod("getKey", proto);
-		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
-		arrow.compileKey(context, method, new Flags(), paramIType);
-	}
-
 }

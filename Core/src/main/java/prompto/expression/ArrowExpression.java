@@ -3,10 +3,10 @@ package prompto.expression;
 import java.lang.reflect.Type;
 
 import prompto.compiler.ClassConstant;
+import prompto.compiler.ClassFile;
+import prompto.compiler.Descriptor;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
-import prompto.compiler.Opcode;
-import prompto.compiler.StackLocal;
 import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
@@ -94,13 +94,25 @@ public class ArrowExpression extends Section implements IExpression {
 		return statements;
 	}
 
-	public void compileKey(Context context, MethodInfo method, Flags flags, IType paramIType) {
-		Type paramType = paramIType.getJavaType(context);
+	public void compileGetKeyMethod(Context context, ClassFile classFile, IType paramIType) {
 		Identifier arg = args.get(0);
+		Type paramType = paramIType.getJavaType(context);
+		Descriptor.Method proto = new Descriptor.Method(paramType, Object.class);
+		MethodInfo method = classFile.newMethod("getKey", proto);
+		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
 		context = context.newChildContext();
 		context.registerValue(new Variable(arg, paramIType));
 		method.registerLocal(arg.toString(), VerifierType.ITEM_Object, new ClassConstant(paramType));
-		statements.compile(context, method, flags);
+		statements.compile(context, method, new Flags());
 	}
+	
+	public void compileComparatorMethodBody(Context context, MethodInfo method, IType paramIType) {
+		context = context.newChildContext();
+		context.registerValue(new Variable(args.get(0), paramIType));
+		context.registerValue(new Variable(args.get(1), paramIType));
+		statements.compile(context, method, new Flags().withReturnType(int.class));
+	}
+
+
 	
 }

@@ -40,11 +40,15 @@ public abstract class ComparatorCompilerBase implements ComparatorCompiler {
 		MethodInfo method = classFile.newMethod("compare", proto);
 		// use a dummy '$this', since we never use it, and we need 'this' for compiling expressions
 		method.registerLocal("$this", VerifierType.ITEM_Object, classFile.getThisClass());
-		method.registerLocal("o1", VerifierType.ITEM_Object, new ClassConstant(paramType));
-		method.registerLocal("o2", VerifierType.ITEM_Object, new ClassConstant(paramType));
+		registerLocals(context, method, paramType, key);
 		compileMethodBody(context, method, paramIType, key);
 	}
 	
+	protected void registerLocals(Context context, MethodInfo method, Type paramType, IExpression key) {
+		method.registerLocal("o1", VerifierType.ITEM_Object, new ClassConstant(paramType));
+		method.registerLocal("o2", VerifierType.ITEM_Object, new ClassConstant(paramType));
+	}
+
 	protected abstract void compileMethodBody(Context context, MethodInfo method, IType paramIType, IExpression key);
 
 	protected void compileMethods(Context context, ClassFile classFile, IType paramIType, IExpression key) {
