@@ -277,7 +277,7 @@ public interface IType extends ISection {
 		throw new UnsupportedOperationException("declareSorted " + this.getClass().getName());
 	}
 
-	default void transpileSorted(Transpiler transpiler, IExpression key, boolean descending) {
+	default void transpileSortedComparator(Transpiler transpiler, IExpression key, boolean descending) {
 		throw new UnsupportedOperationException("transpileSorted " + this.getClass().getName());
 	}
 

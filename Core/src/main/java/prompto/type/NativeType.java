@@ -99,9 +99,9 @@ public abstract class NativeType extends BaseType {
 	}
 
 	@Override
-	public void transpileSorted(Transpiler transpiler, IExpression key, boolean descending) {
+	public void transpileSortedComparator(Transpiler transpiler, IExpression key, boolean descending) {
 		if(key instanceof ArrowExpression)
-			((ArrowExpression)key).transpileSortedNative(transpiler, this, descending);
+			((ArrowExpression)key).transpileSortedNativeComparator(transpiler, this, descending);
 		else if(descending)
 	        transpiler.append("function(o1, o2) { return o1 === o2 ? 0 : o1 > o2 ? -1 : 1; }");
 	}

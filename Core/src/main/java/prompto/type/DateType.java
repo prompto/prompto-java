@@ -259,7 +259,7 @@ public class DateType extends NativeType {
 	}
 	
 	@Override
-	public void transpileSorted(Transpiler transpiler, IExpression key, boolean descending) {
+	public void transpileSortedComparator(Transpiler transpiler, IExpression key, boolean descending) {
 	    if(descending)
 	        transpiler.append("function(o1, o2) { return o1.equals(o2) ? 0 : o1.gt(o2) ? -1 : 1; }");
 	    else

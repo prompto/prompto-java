@@ -162,20 +162,20 @@ public class ArrowExpression extends Section implements IExpression {
 		return context;
 	}
 
-	public void transpileSortedNative(Transpiler transpiler, NativeType itemType, boolean descending) {
+	public void transpileSortedNativeComparator(Transpiler transpiler, NativeType itemType, boolean descending) {
 		switch(args.size()) {
 		case 1:
-			transpileSortedNative1Arg(transpiler, itemType, descending);
+			transpileSortedNativeComparator1Arg(transpiler, itemType, descending);
 			break;
 		case 2:
-			transpileSortedNative2Args(transpiler, itemType, descending);
+			transpileSortedNativeComparator2Args(transpiler, itemType, descending);
 			break;
 		default:
 			throw new SyntaxError("Expecting 1 or 2 parameters only!"); 			
 		}
 	}
 	
-	private void transpileSortedNative1Arg(Transpiler transpiler, NativeType itemType, boolean descending) {
+	private void transpileSortedNativeComparator1Arg(Transpiler transpiler, NativeType itemType, boolean descending) {
 		transpiler = transpiler.newLocalTranspiler();
 		registerArrowArgs(transpiler.getContext(), itemType);
 		transpiler.append("function(o1, o2) { ");
@@ -194,7 +194,7 @@ public class ArrowExpression extends Section implements IExpression {
 		transpiler.flush();
 	}
 
-	private void transpileSortedNative2Args(Transpiler transpiler, NativeType itemType, boolean descending) {
+	private void transpileSortedNativeComparator2Args(Transpiler transpiler, NativeType itemType, boolean descending) {
 		transpiler = transpiler.newLocalTranspiler();
 		registerArrowArgs(transpiler.getContext(), itemType);
 		if(descending) {

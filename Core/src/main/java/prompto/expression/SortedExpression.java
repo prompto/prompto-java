@@ -184,7 +184,7 @@ public class SortedExpression implements IExpression {
 	    this.source.transpile(transpiler);
 	    transpiler.append(".sorted(");
 	    IType itemType = ((ContainerType)type).getItemType();
-	    itemType.transpileSorted(transpiler, this.key, this.descending);
+	    itemType.transpileSortedComparator(transpiler, this.key, this.descending);
 	    transpiler.append(")");
 		return false;
 	}
