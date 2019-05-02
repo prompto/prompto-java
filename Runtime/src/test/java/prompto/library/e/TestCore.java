@@ -59,12 +59,12 @@ public class TestCore extends BaseEParserTest {
 	public void testCompiledAttribute() throws Exception {
 		runCompiledTests("core/attribute.pec");
 	}
-	/*
+
 	@Test
 	public void testTranspiledAttribute() throws Exception {
 		runTranspiledTests("core/attribute.pec");
 	}
-	*/
+
 	@Test
 	public void testInterpretedAttributes() throws Exception {
 		runInterpretedTests("core/attributes.pec");

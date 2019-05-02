@@ -14,7 +14,7 @@ import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.ObjectUtils;
 
-public class ArrowKeyComparatorCompiler extends ComparatorCompilerBase {
+public class ArrowExpressionComparatorCompiler extends ComparatorCompilerBase {
 	
 	@Override
 	protected void registerLocals(Context context, MethodInfo method, Type paramType, IExpression key) {

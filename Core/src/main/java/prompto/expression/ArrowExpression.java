@@ -7,8 +7,8 @@ import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
 import prompto.compiler.Descriptor;
 import prompto.compiler.Flags;
-import prompto.compiler.MethodInfo;
 import prompto.compiler.IVerifierEntry.VerifierType;
+import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
@@ -20,7 +20,6 @@ import prompto.statement.ReturnStatement;
 import prompto.statement.StatementList;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
-import prompto.type.NativeType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 import prompto.value.IValue;
@@ -117,19 +116,19 @@ public class ArrowExpression extends Section implements IExpression {
 		context.registerValue(new Variable(args.get(1), paramIType));
 		statements.compile(context, method, new Flags().withReturnType(int.class));
 	}
-
-	public Comparator<? extends IValue> getNativeComparator(Context context, NativeType itemType, boolean descending) {
+	
+	public Comparator<? extends IValue> getComparator(Context context, IType itemType, boolean descending) {
 		switch(args.size()) {
 		case 1:
-			return getNativeComparator1Arg(context, itemType, descending);
+			return getComparator1Arg(context, itemType, descending);
 		case 2:
-			return getNativeComparator2Args(context, itemType, descending);
+			return getComparator2Args(context, itemType, descending);
 		default:
 			throw new SyntaxError("Expecting 1 or 2 parameters only!"); 			
 		}
 	}
 
-	private Comparator<? extends IValue> getNativeComparator1Arg(Context context, NativeType itemType, boolean descending) {
+	private Comparator<? extends IValue> getComparator1Arg(Context context, IType itemType, boolean descending) {
 		return (o1, o2) -> {
 			Context local = registerArrowArgs(context.newLocalContext(), itemType);
 			local.setValue(args.get(0), o1);
@@ -141,7 +140,7 @@ public class ArrowExpression extends Section implements IExpression {
 		};
 	}
 	
-	private Comparator<? extends IValue> getNativeComparator2Args(Context context, NativeType itemType, boolean descending) {
+	private Comparator<? extends IValue> getComparator2Args(Context context, IType itemType, boolean descending) {
 		return (o1, o2) -> {
 			Context local = registerArrowArgs(context.newLocalContext(), itemType);
 			local.setValue(args.get(0), o1);
@@ -162,20 +161,20 @@ public class ArrowExpression extends Section implements IExpression {
 		return context;
 	}
 
-	public void transpileSortedNativeComparator(Transpiler transpiler, NativeType itemType, boolean descending) {
+	public void transpileSortedComparator(Transpiler transpiler, IType itemType, boolean descending) {
 		switch(args.size()) {
 		case 1:
-			transpileSortedNativeComparator1Arg(transpiler, itemType, descending);
+			transpileSortedComparator1Arg(transpiler, itemType, descending);
 			break;
 		case 2:
-			transpileSortedNativeComparator2Args(transpiler, itemType, descending);
+			transpileSortedComparator2Args(transpiler, itemType, descending);
 			break;
 		default:
 			throw new SyntaxError("Expecting 1 or 2 parameters only!"); 			
 		}
 	}
 	
-	private void transpileSortedNativeComparator1Arg(Transpiler transpiler, NativeType itemType, boolean descending) {
+	private void transpileSortedComparator1Arg(Transpiler transpiler, IType itemType, boolean descending) {
 		transpiler = transpiler.newLocalTranspiler();
 		registerArrowArgs(transpiler.getContext(), itemType);
 		transpiler.append("function(o1, o2) { ");
@@ -194,7 +193,7 @@ public class ArrowExpression extends Section implements IExpression {
 		transpiler.flush();
 	}
 
-	private void transpileSortedNativeComparator2Args(Transpiler transpiler, NativeType itemType, boolean descending) {
+	private void transpileSortedComparator2Args(Transpiler transpiler, IType itemType, boolean descending) {
 		transpiler = transpiler.newLocalTranspiler();
 		registerArrowArgs(transpiler.getContext(), itemType);
 		if(descending) {
@@ -214,5 +213,5 @@ public class ArrowExpression extends Section implements IExpression {
 		}
 		transpiler.flush();
 	}
-	
+
 }

@@ -7,23 +7,33 @@ import prompto.parser.o.BaseOParserTest;
 public class TestArrow extends BaseOParserTest {
 
 	@Test
-	public void testSort1() throws Exception {
-		compareResourceOEO("arrow/sort1.poc");
+	public void testSortCategory1Arg() throws Exception {
+		compareResourceOEO("arrow/sortCategory1Arg.poc");
 	}
 
 	@Test
-	public void testSort1_desc() throws Exception {
-		compareResourceOEO("arrow/sort1_desc.poc");
+	public void testSortCategory2Args() throws Exception {
+		compareResourceOEO("arrow/sortCategory2Args.poc");
 	}
 
 	@Test
-	public void testSort2() throws Exception {
-		compareResourceOEO("arrow/sort2.poc");
+	public void testSortText1Arg() throws Exception {
+		compareResourceOEO("arrow/sortText1Arg.poc");
 	}
 
 	@Test
-	public void testSort2_desc() throws Exception {
-		compareResourceOEO("arrow/sort2_desc.poc");
+	public void testSortText1ArgDesc() throws Exception {
+		compareResourceOEO("arrow/sortText1ArgDesc.poc");
+	}
+
+	@Test
+	public void testSortText2Args() throws Exception {
+		compareResourceOEO("arrow/sortText2Args.poc");
+	}
+
+	@Test
+	public void testSortText2ArgsDesc() throws Exception {
+		compareResourceOEO("arrow/sortText2ArgsDesc.poc");
 	}
 
 }

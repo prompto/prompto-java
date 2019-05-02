@@ -20,63 +20,93 @@ public class TestArrow extends BaseOParserTest {
 	}
 
 	@Test
-	public void testInterpretedSort1() throws Exception {
-		checkInterpretedOutput("arrow/sort1.poc");
+	public void testInterpretedSortCategory1Arg() throws Exception {
+		checkInterpretedOutput("arrow/sortCategory1Arg.poc");
 	}
 
 	@Test
-	public void testCompiledSort1() throws Exception {
-		checkCompiledOutput("arrow/sort1.poc");
+	public void testCompiledSortCategory1Arg() throws Exception {
+		checkCompiledOutput("arrow/sortCategory1Arg.poc");
 	}
 
 	@Test
-	public void testTranspiledSort1() throws Exception {
-		checkTranspiledOutput("arrow/sort1.poc");
+	public void testTranspiledSortCategory1Arg() throws Exception {
+		checkTranspiledOutput("arrow/sortCategory1Arg.poc");
 	}
 
 	@Test
-	public void testInterpretedSort1_desc() throws Exception {
-		checkInterpretedOutput("arrow/sort1_desc.poc");
+	public void testInterpretedSortCategory2Args() throws Exception {
+		checkInterpretedOutput("arrow/sortCategory2Args.poc");
 	}
 
 	@Test
-	public void testCompiledSort1_desc() throws Exception {
-		checkCompiledOutput("arrow/sort1_desc.poc");
+	public void testCompiledSortCategory2Args() throws Exception {
+		checkCompiledOutput("arrow/sortCategory2Args.poc");
 	}
 
 	@Test
-	public void testTranspiledSort1_desc() throws Exception {
-		checkTranspiledOutput("arrow/sort1_desc.poc");
+	public void testTranspiledSortCategory2Args() throws Exception {
+		checkTranspiledOutput("arrow/sortCategory2Args.poc");
 	}
 
 	@Test
-	public void testInterpretedSort2() throws Exception {
-		checkInterpretedOutput("arrow/sort2.poc");
+	public void testInterpretedSortText1Arg() throws Exception {
+		checkInterpretedOutput("arrow/sortText1Arg.poc");
 	}
 
 	@Test
-	public void testCompiledSort2() throws Exception {
-		checkCompiledOutput("arrow/sort2.poc");
+	public void testCompiledSortText1Arg() throws Exception {
+		checkCompiledOutput("arrow/sortText1Arg.poc");
 	}
 
 	@Test
-	public void testTranspiledSort2() throws Exception {
-		checkTranspiledOutput("arrow/sort2.poc");
+	public void testTranspiledSortText1Arg() throws Exception {
+		checkTranspiledOutput("arrow/sortText1Arg.poc");
 	}
 
 	@Test
-	public void testInterpretedSort2_desc() throws Exception {
-		checkInterpretedOutput("arrow/sort2_desc.poc");
+	public void testInterpretedSortText1ArgDesc() throws Exception {
+		checkInterpretedOutput("arrow/sortText1ArgDesc.poc");
 	}
 
 	@Test
-	public void testCompiledSort2_desc() throws Exception {
-		checkCompiledOutput("arrow/sort2_desc.poc");
+	public void testCompiledSortText1ArgDesc() throws Exception {
+		checkCompiledOutput("arrow/sortText1ArgDesc.poc");
 	}
 
 	@Test
-	public void testTranspiledSort2_desc() throws Exception {
-		checkTranspiledOutput("arrow/sort2_desc.poc");
+	public void testTranspiledSortText1ArgDesc() throws Exception {
+		checkTranspiledOutput("arrow/sortText1ArgDesc.poc");
+	}
+
+	@Test
+	public void testInterpretedSortText2Args() throws Exception {
+		checkInterpretedOutput("arrow/sortText2Args.poc");
+	}
+
+	@Test
+	public void testCompiledSortText2Args() throws Exception {
+		checkCompiledOutput("arrow/sortText2Args.poc");
+	}
+
+	@Test
+	public void testTranspiledSortText2Args() throws Exception {
+		checkTranspiledOutput("arrow/sortText2Args.poc");
+	}
+
+	@Test
+	public void testInterpretedSortText2ArgsDesc() throws Exception {
+		checkInterpretedOutput("arrow/sortText2ArgsDesc.poc");
+	}
+
+	@Test
+	public void testCompiledSortText2ArgsDesc() throws Exception {
+		checkCompiledOutput("arrow/sortText2ArgsDesc.poc");
+	}
+
+	@Test
+	public void testTranspiledSortText2ArgsDesc() throws Exception {
+		checkTranspiledOutput("arrow/sortText2ArgsDesc.poc");
 	}
 
 }

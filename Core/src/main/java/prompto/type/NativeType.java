@@ -10,7 +10,7 @@ import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
-import prompto.compiler.comparator.ArrowKeyComparatorCompiler;
+import prompto.compiler.comparator.ArrowExpressionComparatorCompiler;
 import prompto.compiler.comparator.ComparatorCompiler;
 import prompto.expression.ArrowExpression;
 import prompto.expression.IExpression;
@@ -61,7 +61,7 @@ public abstract class NativeType extends BaseType {
 	
 	public Comparator<? extends IValue> getExpressionComparator(Context context, IExpression key, boolean descending) {
 		if(key instanceof ArrowExpression)
-			return ((ArrowExpression)key).getNativeComparator(context, this, descending);
+			return ((ArrowExpression)key).getComparator(context, this, descending);
 		else
 			throw new UnsupportedOperationException("Comparing native types with non-arrow key is not supported!");
 	}
@@ -101,7 +101,7 @@ public abstract class NativeType extends BaseType {
 	@Override
 	public void transpileSortedComparator(Transpiler transpiler, IExpression key, boolean descending) {
 		if(key instanceof ArrowExpression)
-			((ArrowExpression)key).transpileSortedNativeComparator(transpiler, this, descending);
+			((ArrowExpression)key).transpileSortedComparator(transpiler, this, descending);
 		else if(descending)
 	        transpiler.append("function(o1, o2) { return o1 === o2 ? 0 : o1 > o2 ? -1 : 1; }");
 	}
@@ -132,7 +132,7 @@ public abstract class NativeType extends BaseType {
 	}
 
 	private Type compileComparatorClass(Context context, ClassFile parentClass, ArrowExpression key, boolean descending) {
-		ComparatorCompiler compiler = new ArrowKeyComparatorCompiler();
+		ComparatorCompiler compiler = new ArrowExpressionComparatorCompiler();
 		return compiler.compile(context, parentClass, this, key, descending);
 	}
 
