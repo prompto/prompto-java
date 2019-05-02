@@ -2,6 +2,7 @@ package prompto.expression;
 
 import java.lang.reflect.Type;
 import java.util.Comparator;
+import java.util.function.Predicate;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
@@ -20,8 +21,10 @@ import prompto.statement.ReturnStatement;
 import prompto.statement.StatementList;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
+import prompto.type.IterableType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
+import prompto.value.BooleanValue;
 import prompto.value.IValue;
 import prompto.value.IntegerValue;
 
@@ -98,25 +101,77 @@ public class ArrowExpression extends Section implements IExpression {
 		return statements;
 	}
 
-	public void compileGetKeyMethod(Context context, ClassFile classFile, IType paramIType) {
-		Identifier arg = args.get(0);
-		Type paramType = paramIType.getJavaType(context);
-		Descriptor.Method proto = new Descriptor.Method(paramType, Object.class);
-		MethodInfo method = classFile.newMethod("getKey", proto);
-		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
-		context = context.newChildContext();
-		context.registerValue(new Variable(arg, paramIType));
-		method.registerLocal(arg.toString(), VerifierType.ITEM_Object, new ClassConstant(paramType));
-		statements.compile(context, method, new Flags());
+	public Predicate<IValue> getFilter(Context context, IType itemType) {
+		if(args.size()!=1)
+			throw new SyntaxError("Expecting 1 parameter only!");
+		return o -> {
+			Context local = registerArrowArgs(context.newLocalContext(), itemType);
+			local.setValue(args.get(0), o);
+			IValue result = statements.interpret(local);
+			if(result instanceof BooleanValue)
+				return ((BooleanValue)result).getValue();
+			else
+				throw new SyntaxError("Expecting a Boolean result!");
+		};
 	}
+
 	
-	public void compileComparatorMethodBody(Context context, MethodInfo method, IType paramIType) {
+	public void declareFilter(Transpiler transpiler, IType itemType) {
+		if(args.size()!=1)
+			throw new SyntaxError("Expecting 1 parameter only!");
+	    transpiler = transpiler.newChildTranspiler(null);
+	    transpiler.getContext().registerValue(new Variable(args.get(0), itemType));
+	    this.statements.declare(transpiler);
+	}
+
+	
+	public void transpileFilter(Transpiler transpiler, IType itemType) {
+		if(args.size()!=1)
+			throw new SyntaxError("Expecting 1 parameter only!");
+	    transpiler = transpiler.newChildTranspiler(null);
+		transpiler.getContext().registerValue(new Variable(args.get(0), itemType));
+    	transpiler.append("function(").append(args.get(0)).append(") { ");
+    	statements.transpile(transpiler);
+    	transpiler.append(" }");
+    	transpiler.flush();
+	}
+
+	public void compileFilter(Context context, ClassFile classFile, IType paramIType, Type paramType) {
+		if(args.size()!=1)
+			throw new SyntaxError("Expecting 1 parameter only!");
 		context = context.newChildContext();
 		context.registerValue(new Variable(args.get(0), paramIType));
-		context.registerValue(new Variable(args.get(1), paramIType));
-		statements.compile(context, method, new Flags().withReturnType(int.class));
+		Descriptor.Method proto = new Descriptor.Method(paramType, boolean.class);
+		MethodInfo method = classFile.newMethod("test", proto);
+		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
+		method.registerLocal(args.get(0).toString(), VerifierType.ITEM_Object, new ClassConstant(paramType));
+		statements.compile(context, method, new Flags().withPrimitive(true));
 	}
-	
+
+	public void filterToDialect(CodeWriter writer, IExpression source) {
+		if(args.size()!=1)
+			throw new SyntaxError("Expecting 1 parameter only!");
+		IType sourceType = source.check(writer.getContext());
+		IType itemType = ((IterableType)sourceType).getItemType();
+		writer = writer.newChildWriter();
+		writer.getContext().registerValue(new Variable(args.get(0), itemType));
+		switch(writer.getDialect()) {
+		case E:
+		case M:
+			source.toDialect(writer);
+			writer.append(" filtered where ");
+			this.toDialect(writer);
+			break;
+		case O:
+			writer.append("filtered (");
+			source.toDialect(writer);
+			writer.append(") where (");
+			this.toDialect(writer);
+			writer.append(")");
+			break;
+		}
+	}
+
 	public Comparator<? extends IValue> getComparator(Context context, IType itemType, boolean descending) {
 		switch(args.size()) {
 		case 1:
@@ -213,5 +268,26 @@ public class ArrowExpression extends Section implements IExpression {
 		}
 		transpiler.flush();
 	}
+
+	public void compileGetKeyMethod(Context context, ClassFile classFile, IType paramIType) {
+		Identifier arg = args.get(0);
+		Type paramType = paramIType.getJavaType(context);
+		Descriptor.Method proto = new Descriptor.Method(paramType, Object.class);
+		MethodInfo method = classFile.newMethod("getKey", proto);
+		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
+		context = context.newChildContext();
+		context.registerValue(new Variable(arg, paramIType));
+		method.registerLocal(arg.toString(), VerifierType.ITEM_Object, new ClassConstant(paramType));
+		statements.compile(context, method, new Flags());
+	}
+	
+	public void compileComparatorMethodBody(Context context, MethodInfo method, IType paramIType) {
+		context = context.newChildContext();
+		context.registerValue(new Variable(args.get(0), paramIType));
+		context.registerValue(new Variable(args.get(1), paramIType));
+		statements.compile(context, method, new Flags().withReturnType(int.class));
+	}
+
+
 
 }

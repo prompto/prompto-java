@@ -20,6 +20,36 @@ public class TestArrow extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedFilterFromList() throws Exception {
+		checkInterpretedOutput("arrow/filterFromList.poc");
+	}
+
+	@Test
+	public void testCompiledFilterFromList() throws Exception {
+		checkCompiledOutput("arrow/filterFromList.poc");
+	}
+
+	@Test
+	public void testTranspiledFilterFromList() throws Exception {
+		checkTranspiledOutput("arrow/filterFromList.poc");
+	}
+
+	@Test
+	public void testInterpretedFilterFromSet() throws Exception {
+		checkInterpretedOutput("arrow/filterFromSet.poc");
+	}
+
+	@Test
+	public void testCompiledFilterFromSet() throws Exception {
+		checkCompiledOutput("arrow/filterFromSet.poc");
+	}
+
+	@Test
+	public void testTranspiledFilterFromSet() throws Exception {
+		checkTranspiledOutput("arrow/filterFromSet.poc");
+	}
+
+	@Test
 	public void testInterpretedSortCategory1Arg() throws Exception {
 		checkInterpretedOutput("arrow/sortCategory1Arg.poc");
 	}

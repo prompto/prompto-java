@@ -25,7 +25,6 @@ import prompto.intrinsic.IterableWithCounts;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
-import prompto.statement.ReturnStatement;
 import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.ContainerType;
@@ -34,7 +33,7 @@ import prompto.type.IType;
 import prompto.type.IterableType;
 import prompto.type.ListType;
 import prompto.utils.CodeWriter;
-import prompto.value.BooleanValue;
+import prompto.utils.IdentifierList;
 import prompto.value.IFilterable;
 import prompto.value.IValue;
 
@@ -65,6 +64,15 @@ public class FilteredExpression extends Section implements IExpression {
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
+		if(itemId!=null)
+			toDialectExplicit(writer);
+		else if(predicate instanceof ArrowExpression)
+			((ArrowExpression)predicate).filterToDialect(writer, source);
+		else
+			throw new SyntaxError("Expecting an arrow expression!");
+	}
+	
+	private void toDialectExplicit(CodeWriter writer) {
 		writer = writer.newChildWriter();
 		IType sourceType = source.check(writer.getContext());
 		IType itemType = ((IterableType)sourceType).getItemType();
@@ -94,13 +102,18 @@ public class FilteredExpression extends Section implements IExpression {
 	public IType check(Context context) {
 		IType sourceType = source.check(context);
 		if(!(sourceType instanceof IterableType))
-			throw new SyntaxError("Expecting a list, set or tuple as data source !");
+			throw new SyntaxError("Expecting a list, set or tuple as data source!");
 		Context child = context.newChildContext();
 		IType itemType = ((IterableType)sourceType).getItemType();
-		child.registerValue(new Variable(itemId, itemType));
-		IType filterType = predicate.check(child);
-		if(filterType!=BooleanType.instance())
-			throw new SyntaxError("Filtering expression must return a boolean !");
+		if(itemId!=null) {
+			child.registerValue(new Variable(itemId, itemType));
+			IType filterType = predicate.check(child);
+			if(filterType!=BooleanType.instance())
+				throw new SyntaxError("Filtering expression must return a boolean!");
+		} else if(predicate instanceof ArrowExpression) {
+			// TODO
+		} else
+			throw new SyntaxError("Expecting an arrow expression!");
 		return new ListType(itemType);
 	}
 	
@@ -112,8 +125,6 @@ public class FilteredExpression extends Section implements IExpression {
 			throw new InternalError("Illegal source type: " + sourceType.getTypeName());
 		IType itemType = ((IterableType)sourceType).getItemType();
 		Context local = context.newChildContext();
-		Variable item = new Variable(itemId, itemType);
-		local.registerValue(item);
 		// fetch and check source
 		IValue src = source.interpret(context);
 		if(src==null)
@@ -121,22 +132,10 @@ public class FilteredExpression extends Section implements IExpression {
 		if(!(src instanceof IFilterable))
 			throw new InternalError("Illegal fetch source: " + source);
 		Filterable<IValue,IValue> filterable = ((IFilterable)src).getFilterable(context);
+		ArrowExpression arrow = toArrowExpression();
+		Predicate<IValue> filter = arrow.getFilter(local, itemType);
 		try {
-			return filterable.filter(new Predicate<IValue>() {
-	
-				@Override
-				public boolean test(IValue value) {
-					try {
-						local.setValue(itemId, value);
-						IValue test = predicate.interpret(local);
-						if(!(test instanceof BooleanValue))
-							throw new InternalError("Illegal test result: " + test);
-						return ((BooleanValue)test).getValue();
-					} catch(PromptoError e) {
-						throw new InternalError(e);
-					}
-				}
-			});
+			return filterable.filter(filter);
 		} catch (InternalError e) {
 			if(e.getCause() instanceof PromptoError)
 				throw (PromptoError)e.getCause();
@@ -145,10 +144,21 @@ public class FilteredExpression extends Section implements IExpression {
 		}
 	}
 	
+	private ArrowExpression toArrowExpression() {
+		if(itemId!=null) {
+			ArrowExpression arrow = new ArrowExpression(new IdentifierList(itemId), null, null);
+			arrow.setExpression(predicate);
+			return arrow;
+		} else if(predicate instanceof ArrowExpression)
+			return (ArrowExpression)predicate;
+		else
+			throw new SyntaxError("Not a valid filter!");
+	}
+
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		// create inner class for filter
-		String innerClassName = compileInnerClass(context, method.getClassFile());
+		String innerClassName = compileInnerFilterClass(context, method.getClassFile());
 		// get iterable
 		ResultInfo srcinfo = source.compile(context, method, flags);
 		// instantiate filter
@@ -176,7 +186,7 @@ public class FilteredExpression extends Section implements IExpression {
 	}
 
 
-	private String compileInnerClass(Context context, ClassFile parentClass) {
+	private String compileInnerFilterClass(Context context, ClassFile parentClass) {
 		int innerClassIndex = 1 + parentClass.getInnerClasses().size();
 		String innerClassName = parentClass.getThisClass().getType().getTypeName() + '$' + innerClassIndex;
 		ClassFile classFile = new ClassFile(new PromptoType(innerClassName));
@@ -190,21 +200,10 @@ public class FilteredExpression extends Section implements IExpression {
 
 	private void compileInnerClassExpression(Context context, ClassFile classFile) {
 		IType paramIType = source.check(context).checkIterator(context);
-		context = context.newChildContext();
-		context.registerValue(new Variable(itemId, paramIType));
 		Type paramType = paramIType.getJavaType(context);
 		compileInnerClassBridgeMethod(classFile, paramType);
-		compileInnerClassTestMethod(context, classFile, paramType);
-	}
-
-	private void compileInnerClassTestMethod(Context context, ClassFile classFile, Type paramType) {
-		// create the "apply" method itself
-		Descriptor.Method proto = new Descriptor.Method(paramType, boolean.class);
-		MethodInfo method = classFile.newMethod("test", proto);
-		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
-		method.registerLocal(itemId.toString(), VerifierType.ITEM_Object, new ClassConstant(paramType));
-		ReturnStatement stmt = new ReturnStatement(predicate);
-		stmt.compile(context, method, new Flags().withPrimitive(true));
+		ArrowExpression arrow = toArrowExpression();
+		arrow.compileFilter(context, classFile, paramIType, paramType);
 	}
 
 	private void compileInnerClassBridgeMethod(ClassFile classFile, Type paramType) {
@@ -213,7 +212,8 @@ public class FilteredExpression extends Section implements IExpression {
 		MethodInfo method = classFile.newMethod("test", proto);
 		method.addModifier(Tags.ACC_BRIDGE | Tags.ACC_SYNTHETIC);
 		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
-		method.registerLocal(itemId.toString(), VerifierType.ITEM_Object, new ClassConstant(Object.class));
+		Identifier arg = itemId != null ? itemId : ((ArrowExpression)predicate).getArgs().getFirst();
+		method.registerLocal(arg.toString(), VerifierType.ITEM_Object, new ClassConstant(Object.class));
 		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Object.class));
 		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(paramType));
@@ -228,9 +228,8 @@ public class FilteredExpression extends Section implements IExpression {
 	    this.source.declare(transpiler);
 	    IType manyType = this.source.check(transpiler.getContext());
 	    IType itemType = manyType instanceof ContainerType ? ((ContainerType)manyType).getItemType() : ((CursorType)manyType).getItemType();
-	    transpiler = transpiler.newChildTranspiler(null);
-	    transpiler.getContext().registerValue(new Variable(this.itemId, itemType));
-	    this.predicate.declare(transpiler);
+	    ArrowExpression arrow = toArrowExpression();
+	    arrow.declareFilter(transpiler, itemType);
 	}
 	
 	@Override
@@ -238,11 +237,10 @@ public class FilteredExpression extends Section implements IExpression {
 	    IType manyType = this.source.check(transpiler.getContext());
 	    IType itemType = manyType instanceof ContainerType ? ((ContainerType)manyType).getItemType() : ((CursorType)manyType).getItemType();
 	    this.source.transpile(transpiler);
-	    transpiler.append(".filtered(function(").append(this.itemId.toString()).append(") { return ");
-	    transpiler = transpiler.newChildTranspiler(null);
-	    transpiler.getContext().registerValue(new Variable(this.itemId, itemType));
-	    this.predicate.transpile(transpiler);
-	    transpiler.append("; })");
+	    transpiler.append(".filtered(");
+	    ArrowExpression arrow = toArrowExpression();
+	    arrow.transpileFilter(transpiler, itemType);
+	    transpiler.append(")");
 	    transpiler.flush();
 		return false;
 	}
