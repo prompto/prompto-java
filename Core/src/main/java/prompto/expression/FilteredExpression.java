@@ -103,9 +103,9 @@ public class FilteredExpression extends Section implements IExpression {
 		IType sourceType = source.check(context);
 		if(!(sourceType instanceof IterableType))
 			throw new SyntaxError("Expecting a list, set or tuple as data source!");
-		Context child = context.newChildContext();
 		IType itemType = ((IterableType)sourceType).getItemType();
 		if(itemId!=null) {
+			Context child = context.newChildContext();
 			child.registerValue(new Variable(itemId, itemType));
 			IType filterType = predicate.check(child);
 			if(filterType!=BooleanType.instance())
@@ -124,7 +124,6 @@ public class FilteredExpression extends Section implements IExpression {
 		if(!(sourceType instanceof IterableType))
 			throw new InternalError("Illegal source type: " + sourceType.getTypeName());
 		IType itemType = ((IterableType)sourceType).getItemType();
-		Context local = context.newChildContext();
 		// fetch and check source
 		IValue src = source.interpret(context);
 		if(src==null)
@@ -133,7 +132,7 @@ public class FilteredExpression extends Section implements IExpression {
 			throw new InternalError("Illegal fetch source: " + source);
 		Filterable<IValue,IValue> filterable = ((IFilterable)src).getFilterable(context);
 		ArrowExpression arrow = toArrowExpression();
-		Predicate<IValue> filter = arrow.getFilter(local, itemType);
+		Predicate<IValue> filter = arrow.getFilter(context, itemType);
 		try {
 			return filterable.filter(filter);
 		} catch (InternalError e) {

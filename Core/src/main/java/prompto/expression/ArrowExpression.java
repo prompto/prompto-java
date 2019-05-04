@@ -104,8 +104,8 @@ public class ArrowExpression extends Section implements IExpression {
 	public Predicate<IValue> getFilter(Context context, IType itemType) {
 		if(args.size()!=1)
 			throw new SyntaxError("Expecting 1 parameter only!");
+		Context local = registerArrowArgs(context.newLocalContext(), itemType);
 		return o -> {
-			Context local = registerArrowArgs(context.newLocalContext(), itemType);
 			local.setValue(args.get(0), o);
 			IValue result = statements.interpret(local);
 			if(result instanceof BooleanValue)
