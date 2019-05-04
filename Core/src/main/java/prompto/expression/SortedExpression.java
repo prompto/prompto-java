@@ -3,15 +3,14 @@ package prompto.expression;
 import java.util.Comparator;
 
 import prompto.compiler.Flags;
-import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
-import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
+import prompto.runtime.Variable;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.ContainerType;
@@ -62,25 +61,31 @@ public class SortedExpression implements IExpression {
 			writer.append("descending ");
 		source.toDialect(writer);
 		if(key!=null) {
-			writer = contextualizeWriter(writer);
-			writer.append(" with ");
+			IType type = source.check(writer.getContext());
+			IType itemType = ((ContainerType)type).getItemType();
+			CodeWriter local = contextualizeWriter(writer, itemType);
+			local.append(" with ");
 			IExpression keyExp = key;
 			if(keyExp instanceof UnresolvedIdentifier) try {
 				keyExp = ((UnresolvedIdentifier)keyExp).resolve(writer.getContext(), false, false);
 			} catch (SyntaxError e) {
 				// TODO add warning 
 			}
-			if(keyExp instanceof InstanceExpression)
-				((InstanceExpression)keyExp).toDialect(writer, false);
+			if(keyExp instanceof ArrowExpression) {
+				((ArrowExpression)keyExp).getArgs().forEach(arg->{
+					Variable param = new Variable(arg, itemType);
+					local.getContext().registerValue(param);
+				});
+				keyExp.toDialect(local);
+			} else if(keyExp instanceof InstanceExpression)
+				((InstanceExpression)keyExp).toDialect(local, false);
 			else
-				keyExp.toDialect(writer);
-			writer.append(" as key");
+				keyExp.toDialect(local);
+			local.append(" as key");
 		}
 	}	
 
-	private CodeWriter contextualizeWriter(CodeWriter writer) {
-		IType type = source.check(writer.getContext());
-		IType itemType = ((ContainerType)type).getItemType();
+	private CodeWriter contextualizeWriter(CodeWriter writer, IType itemType) {
 		if (itemType instanceof CategoryType)
 			return writer.newInstanceWriter((CategoryType)itemType);
 		else if (itemType instanceof DocumentType)
@@ -96,7 +101,9 @@ public class SortedExpression implements IExpression {
 		writer.append("(");
 		source.toDialect(writer);
 		if(key!=null) {
-			writer = contextualizeWriter(writer);
+			IType type = source.check(writer.getContext());
+			IType itemType = ((ContainerType)type).getItemType();
+			writer = contextualizeWriter(writer, itemType);
 			writer.append(", key = ");
 			key.toDialect(writer);
 		}
@@ -135,7 +142,7 @@ public class SortedExpression implements IExpression {
 		if(!(value instanceof SetValue))
 			throw new InternalError("Unexpected type:" + value.getClass().getName());
 		IType itemType = type.getItemType();
-		Comparator<? extends IValue> cmp = getInterpretedComparator(context, itemType, value);
+		Comparator<? extends IValue> cmp = itemType.getComparator(context, key, descending);
 		PromptoList<? extends IValue> sorted = ((SetValue)value).getItems().sortUsing(cmp);
 		return new ListValue(itemType, sorted);
 	}
@@ -147,43 +154,20 @@ public class SortedExpression implements IExpression {
 		if(!(value instanceof ListValue))
 			throw new InternalError("Unexpected type:" + value.getClass().getName());
 		IType itemType = type.getItemType();
-		Comparator<? extends IValue> cmp = getInterpretedComparator(context, itemType, value);
+		Comparator<? extends IValue> cmp = itemType.getComparator(context, key, descending);
 		PromptoList<? extends IValue> sorted = ((ListValue)value).getItems().sortUsing(cmp);
 		return new ListValue(itemType, sorted);
 	}
-
-	private Comparator<? extends IValue> getInterpretedComparator(Context context, IType itemType, IValue value) throws PromptoError {
-		if(itemType instanceof CategoryType)
-			return ((CategoryType)itemType).getComparator(context, key, descending);
-		else if(itemType==DocumentType.instance())
-			return DocumentType.instance().getComparator(context, key, descending);
-		else
-			return itemType.getComparator(descending);	
-	}
-
 
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		IType type = source.check(context);
 		ResultInfo info = source.compile(context, method, flags);
 		IType itemType = ((ContainerType)type).getItemType();
-		if(itemType instanceof CategoryType) 
-			return ((CategoryType)itemType).compileSorted(context, method, flags, info, key, descending);
-		else if(itemType instanceof DocumentType) 
-			return ((DocumentType)itemType).compileSorted(context, method, flags, info, key, descending);
-		else
-			return compileSortNative(context, method, flags, info);
+		return itemType.compileSorted(context, method, flags, info, key, descending);
 	}
 
 
-	private ResultInfo compileSortNative(Context context, MethodInfo method, Flags flags, ResultInfo info) {
-		method.addInstruction(descending ? Opcode.ICONST_1 : Opcode.ICONST_0);
-		MethodConstant m = new MethodConstant(info.getType(), "sort", boolean.class, PromptoList.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
-		return new ResultInfo(PromptoList.class);
-	}
-
-	
 	@Override
 	public void declare(Transpiler transpiler) {
 	    transpiler.require("List");
@@ -200,7 +184,7 @@ public class SortedExpression implements IExpression {
 	    this.source.transpile(transpiler);
 	    transpiler.append(".sorted(");
 	    IType itemType = ((ContainerType)type).getItemType();
-	    itemType.transpileSorted(transpiler, this.descending, this.key);
+	    itemType.transpileSortedComparator(transpiler, this.key, this.descending);
 	    transpiler.append(")");
 		return false;
 	}

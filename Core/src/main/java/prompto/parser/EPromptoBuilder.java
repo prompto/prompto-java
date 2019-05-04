@@ -65,6 +65,7 @@ import prompto.declaration.SetterMethodDeclaration;
 import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.expression.AndExpression;
+import prompto.expression.ArrowExpression;
 import prompto.expression.BlobExpression;
 import prompto.expression.CastExpression;
 import prompto.expression.CategorySymbol;
@@ -312,7 +313,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 					.collect(Collectors.joining());
 	}
 
-	private String getJsxWhiteSpace(ParserRuleContext ctx) {
+	private String getWhiteSpacePlus(ParserRuleContext ctx) {
 		String within = ctx.children==null ? null : ctx.children.stream()
 				.filter(child->isNotIndent(child))
 				.map(child->child.getText())
@@ -465,6 +466,53 @@ public class EPromptoBuilder extends EParserBaseListener {
 		else
 			items.checkLastAnd();
 		setNodeValue(ctx, items);
+	}
+	
+
+	@Override
+	public void exitArrow_prefix(Arrow_prefixContext ctx) {
+		IdentifierList args = getNodeValue(ctx.arrow_args());
+		String argsSuite = getWhiteSpacePlus(ctx.s1);
+		if(argsSuite==null) // happens when only WS
+			argsSuite = getHiddenTokensBefore(ctx.EGT().getSymbol());
+		String arrowSuite = getWhiteSpacePlus(ctx.s2);
+		if(arrowSuite==null) // happens when only WS
+			arrowSuite = getHiddenTokensAfter(ctx.EGT().getSymbol());
+		setNodeValue(ctx, new ArrowExpression(args, argsSuite, arrowSuite));
+	}
+	
+	@Override
+	public void exitArrowExpression(ArrowExpressionContext ctx) {
+		setNodeValue(ctx, getNodeValue(ctx.exp));
+	}
+	
+	@Override
+	public void exitArrowExpressionBody(ArrowExpressionBodyContext ctx) {
+		ArrowExpression arrow = getNodeValue(ctx.arrow_prefix());
+		IExpression exp = getNodeValue(ctx.expression());
+		arrow.setExpression(exp);
+		setNodeValue(ctx, arrow);
+	}
+	
+	@Override
+	public void exitArrowListArg(ArrowListArgContext ctx) {
+		IdentifierList list = getNodeValue(ctx.variable_identifier_list());
+		setNodeValue(ctx, list);
+	}
+	
+	@Override
+	public void exitArrowSingleArg(ArrowSingleArgContext ctx) {
+		Identifier arg = getNodeValue(ctx.variable_identifier());
+		setNodeValue(ctx, new IdentifierList(arg));
+	}
+	
+	
+	@Override
+	public void exitArrowStatementsBody(ArrowStatementsBodyContext ctx) {
+		ArrowExpression arrow = getNodeValue(ctx.arrow_prefix());
+		StatementList stmts = getNodeValue(ctx.statement_list());
+		arrow.setStatements(stmts);
+		setNodeValue(ctx, arrow);
 	}
 	
 	@Override
@@ -1880,7 +1928,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitJsx_attribute(Jsx_attributeContext ctx) {
 		Identifier name = getNodeValue(ctx.name);
 		IJsxValue value = getNodeValue(ctx.value);
-		String suite = getJsxWhiteSpace(ctx.jsx_ws());
+		String suite = getWhiteSpacePlus(ctx.ws_plus());
 		setNodeValue(ctx, new JsxAttribute(name, value, suite));
 	}
 	
@@ -1920,7 +1968,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitJsx_opening(Jsx_openingContext ctx) {
 		Identifier name = getNodeValue(ctx.name);
-		String nameSuite = getJsxWhiteSpace(ctx.jsx_ws());
+		String nameSuite = getWhiteSpacePlus(ctx.ws_plus());
 		List<JsxAttribute> attributes = ctx.jsx_attribute().stream()
 				.map(cx->(JsxAttribute)getNodeValue(cx))
 				.collect(Collectors.toList());
@@ -1937,7 +1985,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitJsx_self_closing(Jsx_self_closingContext ctx) {
 		Identifier name = getNodeValue(ctx.name);
-		String nameSuite = getJsxWhiteSpace(ctx.jsx_ws());
+		String nameSuite = getWhiteSpacePlus(ctx.ws_plus());
 		List<JsxAttribute> attributes = ctx.jsx_attribute().stream()
 				.map(cx->(JsxAttribute)getNodeValue(cx))
 				.collect(Collectors.toList());
@@ -2099,8 +2147,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitMethod_identifier(Method_identifierContext ctx) {
-		Object id = getNodeValue(ctx.getChild(0));
-		setNodeValue(ctx, id);
+		setNodeValue(ctx, (Object)getNodeValue(ctx.getChild(0)));
 	}
 	
 	@Override
@@ -2853,10 +2900,16 @@ public class EPromptoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, new SortedExpression(source, descending, key));
 	}
 	
+	
+	@Override
+	public void exitSorted_key(Sorted_keyContext ctx) {
+		setNodeValue(ctx, (Object)getNodeValue(ctx.getChild(0)));
+	}
+
+	
 	@Override
 	public void exitSortedExpression(SortedExpressionContext ctx) {
-		IExpression exp = getNodeValue(ctx.exp);
-		setNodeValue(ctx, exp);
+		setNodeValue(ctx, (Object)getNodeValue(ctx.exp));
 	}
 	
 	
@@ -3239,6 +3292,8 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	public void setNodeValue(ParseTree node, Object value) {
 		nodeValues.put(node, value);
+		if(node instanceof ParserRuleContext && value instanceof Section)
+			buildSection((ParserRuleContext)node, (Section)value);
 	}
 	
 }

@@ -13,6 +13,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.CssType;
@@ -21,7 +22,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.CssValue;
 import prompto.value.IValue;
 
-public class CssExpression implements IExpression {
+public class CssExpression extends Section implements IExpression {
 
 	List<CssField> fields = new ArrayList<>();
 	

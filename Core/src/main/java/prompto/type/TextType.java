@@ -549,20 +549,10 @@ public class TextType extends NativeType {
 	};
 	
 	@Override
-	public Comparator<TextValue> getComparator(boolean descending) {
+	public Comparator<TextValue> getNativeComparator(boolean descending) {
 		return descending ? 
-				new Comparator<TextValue>() {
-					@Override
-					public int compare(TextValue o1, TextValue o2) {
-						return o2.getStorableData().compareTo(o1.getStorableData());
-					}
-				} :
-				new Comparator<TextValue>() {
-					@Override
-					public int compare(TextValue o1, TextValue o2) {
-						return o1.getStorableData().compareTo(o2.getStorableData());
-					}
-				};
+				(o1, o2) -> o2.getStorableData().compareTo(o1.getStorableData()) :
+				(o1, o2) -> o1.getStorableData().compareTo(o2.getStorableData());
 	}
 
 	@Override

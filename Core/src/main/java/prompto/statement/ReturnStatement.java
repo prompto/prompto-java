@@ -132,43 +132,70 @@ public class ReturnStatement extends SimpleStatement {
 			return new ResultInfo(void.class, Flag.RETURN);
 		} else {
 			ResultInfo info = expression.compile(context, method, flags);
-			if(flags.toPrimitive()) {
-				if(boolean.class==info.getType()) {
-					method.addInstruction(Opcode.IRETURN);
-					return new ResultInfo(info.getType(), Flag.RETURN);
-				} else if(int.class==info.getType()) {
-					method.addInstruction(Opcode.IRETURN);
-					return new ResultInfo(info.getType(), Flag.RETURN);
-				} else if(char.class==info.getType()) {
-					method.addInstruction(Opcode.IRETURN);
-					return new ResultInfo(info.getType(), Flag.RETURN);
-				} else if(long.class==info.getType()) {
-					method.addInstruction(Opcode.LRETURN);
-					return new ResultInfo(info.getType(), Flag.RETURN);
-				} else if(double.class==info.getType()) {
-					method.addInstruction(Opcode.DRETURN);
-					return new ResultInfo(info.getType(), Flag.RETURN);
-				} else {
-					method.addInstruction(Opcode.ARETURN);
-					return new ResultInfo(info.getType(), Flag.RETURN);
-				}
-			} else {
-				if(boolean.class==info.getType())
-					info = CompilerUtils.booleanToBoolean(method);
-				 else if(int.class==info.getType())
-				 	info = CompilerUtils.intTolong(method);
-				else if(char.class==info.getType())
-					info = CompilerUtils.charToCharacter(method);
-				else if(long.class==info.getType())
-					info = CompilerUtils.longToLong(method);
-				else if(double.class==info.getType())
-					info = CompilerUtils.doubleToDouble(method);
-				method.addInstruction(Opcode.ARETURN);
-				return new ResultInfo(info.getType(), Flag.RETURN);
-			}
+			return compileReturn(context, method, flags, info);
 		}
 	}
 	
+	private ResultInfo compileReturn(Context context, MethodInfo method, Flags flags, ResultInfo info) {
+		if(flags.toReturnType()!=null)
+			return compileReturnType(context, method, flags, info);
+		else if(flags.toPrimitive())
+			return compileReturnPrimitive(context, method, flags, info);
+		else
+			return compileReturnInstance(context, method, flags, info);
+	}
+	
+	private ResultInfo compileReturnType(Context context, MethodInfo method, Flags flags, ResultInfo info) {
+		if(flags.toReturnType()==int.class && info.getType()!=int.class) {
+			if(info.getType()==Long.class)
+				CompilerUtils.LongToint(method);
+			else if(info.getType()==long.class)
+				CompilerUtils.longToint(method);
+			else
+				throw new UnsupportedOperationException();
+			flags = flags.withReturnType(null).withPrimitive(true);
+			info = new ResultInfo(int.class);
+		}
+		return compileReturn(context, method, flags, info);
+	}
+
+	private ResultInfo compileReturnPrimitive(Context context, MethodInfo method, Flags flags, ResultInfo info) {
+		if(boolean.class==info.getType()) {
+			method.addInstruction(Opcode.IRETURN);
+			return new ResultInfo(info.getType(), Flag.RETURN);
+		} else if(int.class==info.getType()) {
+			method.addInstruction(Opcode.IRETURN);
+			return new ResultInfo(info.getType(), Flag.RETURN);
+		} else if(char.class==info.getType()) {
+			method.addInstruction(Opcode.IRETURN);
+			return new ResultInfo(info.getType(), Flag.RETURN);
+		} else if(long.class==info.getType()) {
+			method.addInstruction(Opcode.LRETURN);
+			return new ResultInfo(info.getType(), Flag.RETURN);
+		} else if(double.class==info.getType()) {
+			method.addInstruction(Opcode.DRETURN);
+			return new ResultInfo(info.getType(), Flag.RETURN);
+		} else {
+			method.addInstruction(Opcode.ARETURN);
+			return new ResultInfo(info.getType(), Flag.RETURN);
+		}
+	}
+
+	private ResultInfo compileReturnInstance(Context context, MethodInfo method, Flags flags, ResultInfo info) {
+		if(boolean.class==info.getType())
+			info = CompilerUtils.booleanToBoolean(method);
+		 else if(int.class==info.getType())
+		 	info = CompilerUtils.intTolong(method);
+		else if(char.class==info.getType())
+			info = CompilerUtils.charToCharacter(method);
+		else if(long.class==info.getType())
+			info = CompilerUtils.longToLong(method);
+		else if(double.class==info.getType())
+			info = CompilerUtils.doubleToDouble(method);
+		method.addInstruction(Opcode.ARETURN);
+		return new ResultInfo(info.getType(), Flag.RETURN);
+	}
+
 	@Override
 	public void declare(Transpiler transpiler) {
 		if(this.expression!=null)

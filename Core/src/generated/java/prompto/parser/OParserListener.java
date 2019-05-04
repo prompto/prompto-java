@@ -986,6 +986,18 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitAndExpression(OParser.AndExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code ArrowExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrowExpression(OParser.ArrowExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ArrowExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrowExpression(OParser.ArrowExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code NotHasExpression}
 	 * labeled alternative in {@link OParser#expression}.
 	 * @param ctx the parse tree
@@ -1704,15 +1716,15 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitNull_literal(OParser.Null_literalContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link OParser#jsx_ws}.
+	 * Enter a parse tree produced by {@link OParser#ws_plus}.
 	 * @param ctx the parse tree
 	 */
-	void enterJsx_ws(OParser.Jsx_wsContext ctx);
+	void enterWs_plus(OParser.Ws_plusContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link OParser#jsx_ws}.
+	 * Exit a parse tree produced by {@link OParser#ws_plus}.
 	 * @param ctx the parse tree
 	 */
-	void exitJsx_ws(OParser.Jsx_wsContext ctx);
+	void exitWs_plus(OParser.Ws_plusContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code FullDeclarationList}
 	 * labeled alternative in {@link OParser#declaration_list}.
@@ -3293,6 +3305,74 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIsOtherExpression(OParser.IsOtherExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ArrowExpressionBody}
+	 * labeled alternative in {@link OParser#arrow_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrowExpressionBody(OParser.ArrowExpressionBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ArrowExpressionBody}
+	 * labeled alternative in {@link OParser#arrow_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrowExpressionBody(OParser.ArrowExpressionBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ArrowStatementsBody}
+	 * labeled alternative in {@link OParser#arrow_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrowStatementsBody(OParser.ArrowStatementsBodyContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ArrowStatementsBody}
+	 * labeled alternative in {@link OParser#arrow_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrowStatementsBody(OParser.ArrowStatementsBodyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#arrow_prefix}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrow_prefix(OParser.Arrow_prefixContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#arrow_prefix}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrow_prefix(OParser.Arrow_prefixContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ArrowSingleArg}
+	 * labeled alternative in {@link OParser#arrow_args}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrowSingleArg(OParser.ArrowSingleArgContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ArrowSingleArg}
+	 * labeled alternative in {@link OParser#arrow_args}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrowSingleArg(OParser.ArrowSingleArgContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ArrowListArg}
+	 * labeled alternative in {@link OParser#arrow_args}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrowListArg(OParser.ArrowListArgContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ArrowListArg}
+	 * labeled alternative in {@link OParser#arrow_args}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrowListArg(OParser.ArrowListArgContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#sorted_key}.
+	 * @param ctx the parse tree
+	 */
+	void enterSorted_key(OParser.Sorted_keyContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#sorted_key}.
+	 * @param ctx the parse tree
+	 */
+	void exitSorted_key(OParser.Sorted_keyContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#read_all_expression}.
 	 * @param ctx the parse tree

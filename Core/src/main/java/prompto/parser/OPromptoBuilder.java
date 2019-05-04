@@ -3,6 +3,7 @@ package prompto.parser;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.antlr.v4.runtime.BufferedTokenStream;
@@ -62,6 +63,7 @@ import prompto.declaration.SetterMethodDeclaration;
 import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.expression.AndExpression;
+import prompto.expression.ArrowExpression;
 import prompto.expression.BlobExpression;
 import prompto.expression.CastExpression;
 import prompto.expression.CategorySymbol;
@@ -293,7 +295,11 @@ public class OPromptoBuilder extends OParserBaseListener {
 	}
 	
 	protected String getHiddenTokensAfter(Token token) {
-		List<Token> hidden = input.getHiddenTokensToRight(token.getTokenIndex());
+		return getHiddenTokens(token, input::getHiddenTokensToRight);
+	}
+	
+	protected String getHiddenTokens(Token token, Function<Integer, List<Token>> reader) {
+		List<Token> hidden = reader.apply(token.getTokenIndex());
 		if(hidden==null || hidden.isEmpty())
 			return null;
 		else
@@ -302,6 +308,14 @@ public class OPromptoBuilder extends OParserBaseListener {
 					.collect(Collectors.joining());
 	}
 	
+	protected String getHiddenTokensBefore(TerminalNode node) {
+		return getHiddenTokensBefore(node.getSymbol());
+	}
+	
+	protected String getHiddenTokensBefore(Token token) {
+		return getHiddenTokens(token, input::getHiddenTokensToLeft);
+	}
+
 	public void buildSection(ParserRuleContext node, Section section) {
 		Token first = findFirstValidToken(node.start.getTokenIndex());
 		Token last = findLastValidToken(node.stop.getTokenIndex());
@@ -416,6 +430,49 @@ public class OPromptoBuilder extends OParserBaseListener {
 		ArgumentAssignmentList items = getNodeValue(ctx.items);
 		items.add(item);
 		setNodeValue(ctx, items);
+	}
+	
+	
+	@Override
+	public void exitArrow_prefix(Arrow_prefixContext ctx) {
+		IdentifierList args = getNodeValue(ctx.arrow_args());
+		String argsSuite = getHiddenTokensBefore(ctx.EGT());
+		String arrowSuite = getHiddenTokensAfter(ctx.EGT());
+		setNodeValue(ctx, new ArrowExpression(args, argsSuite, arrowSuite));
+	}
+	
+	@Override
+	public void exitArrowExpression(ArrowExpressionContext ctx) {
+		setNodeValue(ctx, getNodeValue(ctx.exp));
+	}
+	
+	@Override
+	public void exitArrowExpressionBody(ArrowExpressionBodyContext ctx) {
+		ArrowExpression arrow = getNodeValue(ctx.arrow_prefix());
+		IExpression exp = getNodeValue(ctx.expression());
+		arrow.setExpression(exp);
+		setNodeValue(ctx, arrow);
+	}
+	
+	@Override
+	public void exitArrowListArg(ArrowListArgContext ctx) {
+		IdentifierList list = getNodeValue(ctx.variable_identifier_list());
+		setNodeValue(ctx, list);
+	}
+	
+	@Override
+	public void exitArrowSingleArg(ArrowSingleArgContext ctx) {
+		Identifier arg = getNodeValue(ctx.variable_identifier());
+		setNodeValue(ctx, new IdentifierList(arg));
+	}
+	
+	
+	@Override
+	public void exitArrowStatementsBody(ArrowStatementsBodyContext ctx) {
+		ArrowExpression arrow = getNodeValue(ctx.arrow_prefix());
+		StatementList stmts = getNodeValue(ctx.statement_list());
+		arrow.setStatements(stmts);
+		setNodeValue(ctx, arrow);
 	}
 	
 	@Override
@@ -950,8 +1007,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitCurlyStatementList(CurlyStatementListContext ctx) {
-		StatementList items = getNodeValue(ctx.items);
-		setNodeValue(ctx, items);
+		setNodeValue(ctx, (Object)getNodeValue(ctx.items));
 	}
 	
 	@Override
@@ -1344,8 +1400,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitIfStatement(IfStatementContext ctx) {
-		IStatement stmt = getNodeValue(ctx.stmt);
-		setNodeValue(ctx, stmt);
+		setNodeValue(ctx, (Object)getNodeValue(ctx.stmt));
 	}
 	
 	@Override
@@ -2844,6 +2899,11 @@ public class OPromptoBuilder extends OParserBaseListener {
 	}
 	
 	@Override
+	public void exitSorted_key(Sorted_keyContext ctx) {
+		setNodeValue(ctx, (Object)getNodeValue(ctx.getChild(0)));
+	}
+	
+	@Override
 	public void exitStatement_list(Statement_listContext ctx) {
 		StatementList items = new StatementList();
 		ctx.statement().forEach((s)->{
@@ -3070,8 +3130,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitWhileStatement(WhileStatementContext ctx) {
-		IStatement stmt = getNodeValue(ctx.stmt);
-		setNodeValue(ctx, stmt);
+		setNodeValue(ctx, (Object)getNodeValue(ctx.stmt));
 	}
 	
 	@Override

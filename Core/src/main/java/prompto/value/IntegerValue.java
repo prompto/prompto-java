@@ -329,8 +329,7 @@ public class IntegerValue extends BaseValue implements INumber, Comparable<INumb
 
 	}
 
-	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) {
+	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, ResultInfo left, IExpression exp) {
 		boolean isDecimal = isDecimal(context, exp);
 		CompilerUtils.numberToPrimitive(method, left, isDecimal);
 		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true).withDecimal(isDecimal));

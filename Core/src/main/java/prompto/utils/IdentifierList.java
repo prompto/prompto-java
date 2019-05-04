@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import prompto.grammar.Identifier;
+import prompto.transpiler.Transpiler;
 
 
 public class IdentifierList extends ObjectList<Identifier> {
@@ -85,5 +86,15 @@ public class IdentifierList extends ObjectList<Identifier> {
 
 	private void toMDialect(CodeWriter writer) {
 		toODialect(writer);
+	}
+
+	public void transpile(Transpiler transpiler) {
+		if(this.size()>0) {
+			for(Identifier s : this) {
+				transpiler.append(s);
+				transpiler.append(", ");
+			}
+			transpiler.trimLast(2);
+		}
 	}
 }

@@ -1,5 +1,6 @@
 package prompto.compiler;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,15 @@ public class Flags {
 	public Flags withPrimitive(boolean set) {
 		return clone("primitive", set);
 	}
+	
+	public Type toReturnType() {
+		return (Type)values.get("returnType");
+	}
+	
+	public Flags withReturnType(Type type) {
+		return clone("returnType", type);
+	}
+
 
 	public boolean isReverse() {
 		return (boolean)values.get("reverse");
@@ -135,6 +145,7 @@ public class Flags {
 	public void addBreakLoopListener(IInstructionListener listener) {
 		getBreakLoopListeners().add(listener);
 	}
+
 
 
 }

@@ -78,7 +78,7 @@ public interface IType extends ISection {
 	boolean isMoreSpecificThan(Context context, IType other);
 	
 	RangeBase<?> newRange(Object first,Object last);
-	Comparator<? extends IValue> getComparator(boolean descending);
+	Comparator<? extends IValue> getComparator(Context context, IExpression key, boolean descending);
 	IValue getMemberValue(Context context, Identifier name) throws PromptoError;
 	Set<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError;
 
@@ -277,7 +277,7 @@ public interface IType extends ISection {
 		throw new UnsupportedOperationException("declareSorted " + this.getClass().getName());
 	}
 
-	default void transpileSorted(Transpiler transpiler, boolean descending, IExpression key) {
+	default void transpileSortedComparator(Transpiler transpiler, IExpression key, boolean descending) {
 		throw new UnsupportedOperationException("transpileSorted " + this.getClass().getName());
 	}
 
@@ -291,6 +291,10 @@ public interface IType extends ISection {
 
 	default void transpileCode(Transpiler transpiler) {
 		// nothing to do
+	}
+
+	default ResultInfo compileSorted(Context context, MethodInfo method, Flags flags, ResultInfo srcInfo, IExpression key, boolean descending) {
+		throw new UnsupportedOperationException("compileSorted " + this.getClass().getName());
 	}
 
 }

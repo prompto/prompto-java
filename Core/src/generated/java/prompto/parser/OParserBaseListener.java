@@ -1072,6 +1072,18 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterArrowExpression(OParser.ArrowExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArrowExpression(OParser.ArrowExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterNotHasExpression(OParser.NotHasExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1816,13 +1828,13 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJsx_ws(OParser.Jsx_wsContext ctx) { }
+	@Override public void enterWs_plus(OParser.Ws_plusContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJsx_ws(OParser.Jsx_wsContext ctx) { }
+	@Override public void exitWs_plus(OParser.Ws_plusContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -3527,6 +3539,78 @@ public class OParserBaseListener implements OParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitIsOtherExpression(OParser.IsOtherExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArrowExpressionBody(OParser.ArrowExpressionBodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArrowExpressionBody(OParser.ArrowExpressionBodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArrowStatementsBody(OParser.ArrowStatementsBodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArrowStatementsBody(OParser.ArrowStatementsBodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArrow_prefix(OParser.Arrow_prefixContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArrow_prefix(OParser.Arrow_prefixContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArrowSingleArg(OParser.ArrowSingleArgContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArrowSingleArg(OParser.ArrowSingleArgContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArrowListArg(OParser.ArrowListArgContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArrowListArg(OParser.ArrowListArgContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSorted_key(OParser.Sorted_keyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSorted_key(OParser.Sorted_keyContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

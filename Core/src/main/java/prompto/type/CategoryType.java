@@ -24,6 +24,7 @@ import prompto.compiler.Opcode;
 import prompto.compiler.PromptoType;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
+import prompto.compiler.comparator.ArrowExpressionComparatorCompiler;
 import prompto.compiler.comparator.ComparatorCompiler;
 import prompto.compiler.comparator.ComparatorCompilerBase;
 import prompto.declaration.AttributeDeclaration;
@@ -38,6 +39,7 @@ import prompto.declaration.NativeCategoryDeclaration;
 import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.ArrowExpression;
 import prompto.expression.IExpression;
 import prompto.expression.InstanceExpression;
 import prompto.expression.MethodSelector;
@@ -597,8 +599,6 @@ public class CategoryType extends BaseType {
 		transpiler.append(this.getTypeName());
 	}
 	
-	
-
 	@Override
 	public void declareSorted(Transpiler transpiler, IExpression key) {
 	    String keyname = key!=null ? key.toString() : "key";
@@ -612,12 +612,15 @@ public class CategoryType extends BaseType {
         if (decl != null) {
             decl.declare(transpiler);
         } else {
-            key.declare(transpiler);
+            if(key instanceof ArrowExpression)
+            	; // TODO
+            else
+            	key.declare(transpiler);
         }
 	}
 	
 	@Override
-	public void transpileSorted(Transpiler transpiler, boolean descending, IExpression key) {
+	public void transpileSortedComparator(Transpiler transpiler, IExpression key, boolean descending) {
 	    String keyname = key!=null ? key.toString() : "key";
 	    IDeclaration decl = this.getDeclaration(transpiler.getContext());
 	    if(decl instanceof CategoryDeclaration) {
@@ -636,7 +639,10 @@ public class CategoryType extends BaseType {
             this.transpileSortedByGlobalMethod(transpiler, descending, decl.getTranspiledName(transpiler.getContext()));
 	    	return;
         }
-        this.transpileSortedByExpression(transpiler, descending, key);
+        if(key instanceof ArrowExpression)
+        	((ArrowExpression)key).transpileSortedComparator(transpiler, this, descending);
+        else
+        	this.transpileSortedByExpression(transpiler, descending, key);
 	}
 
 	private void transpileSortedByGlobalMethod(Transpiler transpiler, boolean descending, String name) {
@@ -840,6 +846,7 @@ public class CategoryType extends BaseType {
 	    transpiler.append(")");
 	}
 
+	@Override
 	public Comparator<? extends IValue> getComparator(Context context, IExpression key, boolean descending) {
 		if(key==null)
 			key = new UnresolvedIdentifier(new Identifier("key"));
@@ -855,6 +862,8 @@ public class CategoryType extends BaseType {
 				MethodCall call = createGlobalMethodCallIfExists(context, keyAsId);
 				if(call!=null)
 					return newGlobalMethodComparator(context, call, descending);
+				else if(key instanceof ArrowExpression)
+					return ((ArrowExpression)key).getComparator(context, this, descending);
 				else
 					return newExpressionComparator(context, key, descending);
 			}
@@ -949,6 +958,7 @@ public class CategoryType extends BaseType {
 		};
 	}
 
+	@Override
 	public ResultInfo compileSorted(Context context, MethodInfo method, Flags flags, ResultInfo srcInfo, IExpression key, boolean descending) {
 		if(key==null)
 			key = new UnresolvedIdentifier(new Identifier("key"));
@@ -982,6 +992,8 @@ public class CategoryType extends BaseType {
 			MethodCall call = createGlobalMethodCallIfExists(context, keyAsId);
 			if(call!=null)
 				return new GlobalMethodComparatorCompiler(call);
+			else if(key instanceof ArrowExpression)
+				return new ArrowExpressionComparatorCompiler();
 			else
 				return new ExpressionComparatorCompiler();
 		}
@@ -990,7 +1002,8 @@ public class CategoryType extends BaseType {
 	class AttributeComparatorCompiler extends ComparatorCompilerBase {
 
 		@Override
-		protected void compileMethodBody(Context context, MethodInfo method, Type paramType, IExpression key) {
+		protected void compileMethodBody(Context context, MethodInfo method, IType paramIType, IExpression key) {
+			Type paramType = paramIType.getJavaType(context);
 			method.addInstruction(Opcode.ALOAD_1, new ClassConstant(paramType));
 			Type fieldType = context.findAttribute(key.toString()).getType().getJavaType(context);
 			String getterName = CompilerUtils.getterName(key.toString());
@@ -1009,7 +1022,8 @@ public class CategoryType extends BaseType {
 		
 	
 		@Override
-		protected void compileMethodBody(Context context, MethodInfo method, Type paramType, IExpression key) {
+		protected void compileMethodBody(Context context, MethodInfo method, IType paramIType, IExpression key) {
+			Type paramType = paramIType.getJavaType(context);
 			StackLocal tmpThis = method.registerLocal("this", VerifierType.ITEM_Object, new ClassConstant(paramType));
 			compileValue(context, method, paramType, key, tmpThis, "o1");
 			compileValue(context, method, paramType, key, tmpThis, "o2");
@@ -1029,7 +1043,7 @@ public class CategoryType extends BaseType {
 
 	class MemberMethodComparatorCompiler extends ComparatorCompilerBase {
 		@Override
-		protected void compileMethodBody(Context context, MethodInfo method, Type paramType, IExpression key) {
+		protected void compileMethodBody(Context context, MethodInfo method, IType paramIType, IExpression key) {
 			throw new UnsupportedOperationException();
 		}
 	}
@@ -1043,7 +1057,8 @@ public class CategoryType extends BaseType {
 		}
 
 		@Override
-		protected void compileMethodBody(Context context, MethodInfo method, Type paramType, IExpression key) {
+		protected void compileMethodBody(Context context, MethodInfo method, IType paramIType, IExpression key) {
+			Type paramType = paramIType.getJavaType(context);
 			compileValue(context, method, paramType, "o1");
 			compileValue(context, method, paramType, "o2");
 			MethodConstant compare = new MethodConstant(ObjectUtils.class, "safeCompare", Object.class, Object.class, int.class);
@@ -1058,12 +1073,6 @@ public class CategoryType extends BaseType {
 			return call.compile(context, method, new Flags());
 		}
 	}
-
-	
-
-	
-
-
 
 
 }
