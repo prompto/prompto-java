@@ -1726,6 +1726,16 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitWs_plus(OParser.Ws_plusContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link OParser#repl}.
+	 * @param ctx the parse tree
+	 */
+	void enterRepl(OParser.ReplContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#repl}.
+	 * @param ctx the parse tree
+	 */
+	void exitRepl(OParser.ReplContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code FullDeclarationList}
 	 * labeled alternative in {@link OParser#declaration_list}.
 	 * @param ctx the parse tree

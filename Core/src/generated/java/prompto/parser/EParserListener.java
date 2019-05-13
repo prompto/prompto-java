@@ -1878,6 +1878,16 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitNull_literal(EParser.Null_literalContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link EParser#repl}.
+	 * @param ctx the parse tree
+	 */
+	void enterRepl(EParser.ReplContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#repl}.
+	 * @param ctx the parse tree
+	 */
+	void exitRepl(EParser.ReplContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code FullDeclarationList}
 	 * labeled alternative in {@link EParser#declaration_list}.
 	 * @param ctx the parse tree

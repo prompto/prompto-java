@@ -1682,6 +1682,16 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitNull_literal(MParser.Null_literalContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MParser#repl}.
+	 * @param ctx the parse tree
+	 */
+	void enterRepl(MParser.ReplContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MParser#repl}.
+	 * @param ctx the parse tree
+	 */
+	void exitRepl(MParser.ReplContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code FullDeclarationList}
 	 * labeled alternative in {@link MParser#declaration_list}.
 	 * @param ctx the parse tree
