@@ -77,20 +77,16 @@ public class AndExpression implements IPredicateExpression, IAssertion {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		IValue lval = left.interpret(context);
+		if(!(lval instanceof BooleanValue))
+			throw new SyntaxError("Illegal: " + lval.getClass().getSimpleName() + " and ..., expected a Boolean" );
+		if(!((BooleanValue)lval).getValue())	
+			return lval;
 		IValue rval = right.interpret(context);
-		return interpret(lval, rval);
+		if(!(rval instanceof BooleanValue))
+			throw new SyntaxError("Illegal: Boolean and " + rval.getClass().getSimpleName());
+		return rval;
 	}
 	
-	private IValue interpret(IValue lval, IValue rval) throws PromptoError {
-		if(lval instanceof BooleanValue) {
-			if(rval instanceof BooleanValue)
-				return BooleanValue.valueOf(((BooleanValue)lval).getValue() && ((BooleanValue)rval).getValue());
-			else
-				throw new SyntaxError("Illegal: Boolean and " + rval.getClass().getSimpleName());
-		} else
-			throw new SyntaxError("Illegal: " + lval.getClass().getSimpleName() + " and " + rval.getClass().getSimpleName());
-	}
-
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		ResultInfo li = left.compile(context, method, flags.withPrimitive(true));
@@ -130,10 +126,16 @@ public class AndExpression implements IPredicateExpression, IAssertion {
 	@Override
 	public boolean interpretAssert(Context context, TestMethodDeclaration test) throws PromptoError {
 		IValue lval = left.interpret(context);
-		IValue rval = right.interpret(context);
-		IValue result = interpret(lval, rval);
-		if(result==BooleanValue.TRUE) 
-			return true;
+		if(!(lval instanceof BooleanValue))
+			throw new SyntaxError("Illegal: " + lval.getClass().getSimpleName() + " and ..., expected a Boolean" );
+		IValue rval = BooleanValue.FALSE; 
+		if(((BooleanValue)lval).getValue())	{
+			rval = right.interpret(context);
+			if(!(rval instanceof BooleanValue))
+				throw new SyntaxError("Illegal: Boolean and " + rval.getClass().getSimpleName());
+			if(rval==BooleanValue.TRUE) 
+				return true;
+		}
 		String expected = buildExpectedMessage(context, test);
 		String actual = lval.toString() + operatorToDialect(test.getDialect()) + rval.toString();
 		test.printFailedAssertion(context, expected, actual);
