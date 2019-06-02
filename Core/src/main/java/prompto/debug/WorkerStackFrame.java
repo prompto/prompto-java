@@ -38,10 +38,10 @@ public class WorkerStackFrame extends LeanStackFrame {
 		this.methodName = methodName;
 		this.methodProto = methodProto;
 		this.methodLine = methodLine;
-		this.statementLine = section.getStart().getLine();
+		this.statementLine = section.getStartLine();
 		this.index = index;
-		this.startCharIndex = section.getStart().getTokenIndex();
-		this.endCharIndex = section.getEnd().getTokenIndex();
+		this.startCharIndex = section.getStartTokenIndex();
+		this.endCharIndex = section.getEndTokenIndex();
 	}
 	
 	@Override

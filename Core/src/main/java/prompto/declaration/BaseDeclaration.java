@@ -92,8 +92,8 @@ public abstract class BaseDeclaration extends Section implements IDeclaration {
 			return comments.iterator().next().getStart().getLine();
 		else if(annotations!=null && !annotations.isEmpty())
 			return annotations.iterator().next().getStart().getLine();
-		else
-			return this.getStart().getLine();
+		else 
+			return super.getStartLine();
 	}
 	
 }
