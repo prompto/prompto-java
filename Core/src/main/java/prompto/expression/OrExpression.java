@@ -77,18 +77,14 @@ public class OrExpression implements IPredicateExpression, IAssertion {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		IValue lval = left.interpret(context);
+		if(!(lval instanceof BooleanValue))
+			throw new SyntaxError("Illegal: " + lval.getClass().getSimpleName() + " or ..., expecting a Boolean");
+		if(((BooleanValue)lval).getValue())
+			return lval;
 		IValue rval = right.interpret(context);
-		return interpret(lval, rval);
-	}
-	
-	private IValue interpret(IValue lval, IValue rval) throws PromptoError {
-		if(lval instanceof BooleanValue) {
-			if(rval instanceof BooleanValue)
-				return BooleanValue.valueOf(((BooleanValue)lval).getValue() || ((BooleanValue)rval).getValue());
-			else
-				throw new SyntaxError("Illegal: Boolean and " + rval.getClass().getSimpleName());
-		} else
-			throw new SyntaxError("Illegal: " + lval.getClass().getSimpleName() + " + " + rval.getClass().getSimpleName());
+		if(!(rval instanceof BooleanValue))
+			throw new SyntaxError("Illegal: Boolean or " + rval.getClass().getSimpleName());
+		return rval;
 	}
 	
 	@Override
@@ -140,9 +136,14 @@ public class OrExpression implements IPredicateExpression, IAssertion {
 	@Override
 	public boolean interpretAssert(Context context, TestMethodDeclaration test) throws PromptoError {
 		IValue lval = left.interpret(context);
+		if(!(lval instanceof BooleanValue))
+			throw new SyntaxError("Illegal: " + lval.getClass().getSimpleName() + " or ..., expecting a Boolean");
+		if(((BooleanValue)lval).getValue())
+			return true;
 		IValue rval = right.interpret(context);
-		IValue result = interpret(lval, rval);
-		if(result==BooleanValue.TRUE) 
+		if(!(rval instanceof BooleanValue))
+			throw new SyntaxError("Illegal: Boolean or " + rval.getClass().getSimpleName());
+		if(((BooleanValue)rval).getValue())
 			return true;
 		String expected = buildExpectedMessage(context, test);
 		String actual = lval.toString() + operatorToDialect(test.getDialect()) + rval.toString();
