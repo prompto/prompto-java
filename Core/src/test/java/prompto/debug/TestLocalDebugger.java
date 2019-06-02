@@ -61,6 +61,7 @@ public class TestLocalDebugger extends TestDebuggerVariablesBase {
 		WorkerDebugger threadDebugger = new WorkerDebugger();
 		final Context local = context.newLocalContext();
 		local.setDebugger(threadDebugger);
+		threadDebugger.stepInto();
 		thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
