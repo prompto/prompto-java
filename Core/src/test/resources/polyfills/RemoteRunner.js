@@ -2,8 +2,9 @@
 /* in polyfills to ensure actual RemoteRunner is loaded */
 var RemoteRunner = {
 		
-	run: function(name, params, andThen, bindTo) {
-		andThen.bind(bindTo)(null);
+	run: function(body, andThen, bindTo) {
+		var result = body.bind(bindTo)();
+		andThen.bind(bindTo)(result);
 	}
 
 };
