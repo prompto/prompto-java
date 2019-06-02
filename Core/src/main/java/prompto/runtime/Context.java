@@ -620,7 +620,7 @@ public class Context implements IContext {
 		}
 		
 		@Override
-		public int getStartLine() {
+		public int computeStartLine() {
 			throw new RuntimeException("Should never get there!");
 		}
 

@@ -87,13 +87,13 @@ public abstract class BaseDeclaration extends Section implements IDeclaration {
 	}
 	
 	@Override
-	public int getStartLine() {
+	public int computeStartLine() {
 		if(comments!=null && !comments.isEmpty())
 			return comments.iterator().next().getStart().getLine();
 		else if(annotations!=null && !annotations.isEmpty())
 			return annotations.iterator().next().getStart().getLine();
 		else 
-			return super.getStartLine();
+			return super.computeStartLine();
 	}
 	
 }

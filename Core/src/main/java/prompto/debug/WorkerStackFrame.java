@@ -17,7 +17,7 @@ public class WorkerStackFrame extends LeanStackFrame {
 	Context context;
 	
 	public WorkerStackFrame(Context context, String categoryName, String methodName, String methodProto, int index, IDeclaration method) {
-		this(context, categoryName, methodName, methodProto, method.getStartLine(), index, (ISection)method);
+		this(context, categoryName, methodName, methodProto, method.computeStartLine(), index, (ISection)method);
 		if(method instanceof ConcreteMethodDeclaration) {
 			IStatement stmt = ((ConcreteMethodDeclaration)method).getStatements().getFirst();
 			this.endCharIndex = stmt.getStart().getTokenIndex() - 1;
@@ -38,10 +38,10 @@ public class WorkerStackFrame extends LeanStackFrame {
 		this.methodName = methodName;
 		this.methodProto = methodProto;
 		this.methodLine = methodLine;
-		this.statementLine = section.getStartLine();
+		this.statementLine = section.computeStartLine();
 		this.index = index;
-		this.startCharIndex = section.getStartTokenIndex();
-		this.endCharIndex = section.getEndTokenIndex();
+		this.startCharIndex = section.computeStartTokenIndex();
+		this.endCharIndex = section.computeEndTokenIndex();
 	}
 	
 	@Override

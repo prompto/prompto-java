@@ -9,16 +9,16 @@ public interface ISection {
 	void setAsBreakpoint(boolean set);
 	boolean isBreakpoint();
 	boolean isOrContains(ISection section);
-	default int getStartLine() {
+	default int computeStartLine() {
 		return getStart()==null ? 0 : getStart().getLine();
 	}
-	default int getStartTokenIndex() {
+	default int computeStartTokenIndex() {
 		return getStart()==null ? 0 : getStart().getTokenIndex();
 	}
-	default int getEndLine() {
+	default int computeEndLine() {
 		return getEnd()==null ? 0 : getEnd().getLine();
 	}
-	default int getEndTokenIndex() {
+	default int computeEndTokenIndex() {
 		return getEnd()==null ? 0 : getEnd().getTokenIndex();
 	}
 }
