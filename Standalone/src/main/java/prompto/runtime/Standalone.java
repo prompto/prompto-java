@@ -250,8 +250,11 @@ public abstract class Standalone {
 		debugEventAdapter.handleConnectedEvent(connected);
 		// wire local context to debugger
 		Context local = getGlobalContext().newLocalContext();
-		startWorkerDebugger(Thread.currentThread(), local);
+		WorkerDebugger workerDebugger = startWorkerDebugger(Thread.currentThread(), local);
 		processDebugger.setProcessStatus(Status.RUNNING);
+		// step in start method by default
+		// TODO: make this configurable
+		workerDebugger.stepInto();
 		return local;
 
 	}
@@ -266,13 +269,14 @@ public abstract class Standalone {
 
 
 
-	public static void startWorkerDebugger(Thread thread, Context context) {
+	public static WorkerDebugger startWorkerDebugger(Thread thread, Context context) {
 		WorkerDebugger workerDebugger = new WorkerDebugger();
 		ProcessDebugger.getInstance().register(Thread.currentThread(), workerDebugger);
 		debugEventAdapter.handleStartedEvent(DebuggedWorker.wrap(Thread.currentThread()));
 		workerDebugger.setListener(debugEventAdapter);
 		context.setDebugger(workerDebugger);
 		workerDebugger.setStatus(Status.RUNNING);
+		return workerDebugger;
 	}
 
 

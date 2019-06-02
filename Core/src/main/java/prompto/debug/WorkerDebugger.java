@@ -25,7 +25,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 	ResumeReason resumeReason;
 	IDebugEventListener listener;
 	Context context;
-	int stepDepth = 1;
+	int stepDepth = 0;
 	/* 
 	 stepDepth represents the stack depth at which we should be stepping 
 	 it is normally positive, except when user requests stepOut
@@ -33,7 +33,6 @@ public class WorkerDebugger implements IWorkerDebugger {
 	 on stepOver we don't increase the depth such that only the next statement in the current method whill suspend
 	 on StepOut we invert the value such that leaving the method will suspend
 	 on resume we simply zero the depth
-	 initial value is 1 such that we step on every start method, TODO make this optional
 	*/
 	
 	
