@@ -21,5 +21,10 @@ public class TestLogic extends BaseOParserTest {
 		compareResourceOMO("logic/orBoolean.poc");
 	}
 
+	@Test
+	public void testRightSkipped() throws Exception {
+		compareResourceOMO("logic/rightSkipped.poc");
+	}
+
 }
 

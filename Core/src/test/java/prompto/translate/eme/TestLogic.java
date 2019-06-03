@@ -21,5 +21,10 @@ public class TestLogic extends BaseEParserTest {
 		compareResourceEME("logic/orBoolean.pec");
 	}
 
+	@Test
+	public void testRightSkipped() throws Exception {
+		compareResourceEME("logic/rightSkipped.pec");
+	}
+
 }
 

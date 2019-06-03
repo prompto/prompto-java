@@ -64,5 +64,20 @@ public class TestLogic extends BaseOParserTest {
 		checkTranspiledOutput("logic/orBoolean.poc");
 	}
 
+	@Test
+	public void testInterpretedRightSkipped() throws Exception {
+		checkInterpretedOutput("logic/rightSkipped.poc");
+	}
+
+	@Test
+	public void testCompiledRightSkipped() throws Exception {
+		checkCompiledOutput("logic/rightSkipped.poc");
+	}
+
+	@Test
+	public void testTranspiledRightSkipped() throws Exception {
+		checkTranspiledOutput("logic/rightSkipped.poc");
+	}
+
 }
 
