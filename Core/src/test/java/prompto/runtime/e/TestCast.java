@@ -215,18 +215,18 @@ public class TestCast extends BaseEParserTest {
 	}
 
 	@Test
-	public void testInterpretedNullisNotAText() throws Exception {
-		checkInterpretedOutput("cast/nullisNotAText.pec");
+	public void testInterpretedNullIsNotAText() throws Exception {
+		checkInterpretedOutput("cast/nullIsNotAText.pec");
 	}
 
 	@Test
-	public void testCompiledNullisNotAText() throws Exception {
-		checkCompiledOutput("cast/nullisNotAText.pec");
+	public void testCompiledNullIsNotAText() throws Exception {
+		checkCompiledOutput("cast/nullIsNotAText.pec");
 	}
 
 	@Test
-	public void testTranspiledNullisNotAText() throws Exception {
-		checkTranspiledOutput("cast/nullisNotAText.pec");
+	public void testTranspiledNullIsNotAText() throws Exception {
+		checkTranspiledOutput("cast/nullIsNotAText.pec");
 	}
 
 }

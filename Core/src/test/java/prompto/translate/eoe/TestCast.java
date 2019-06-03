@@ -72,8 +72,8 @@ public class TestCast extends BaseEParserTest {
 	}
 
 	@Test
-	public void testNullisNotAText() throws Exception {
-		compareResourceEOE("cast/nullisNotAText.pec");
+	public void testNullIsNotAText() throws Exception {
+		compareResourceEOE("cast/nullIsNotAText.pec");
 	}
 
 }
