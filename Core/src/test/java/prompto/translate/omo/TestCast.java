@@ -41,5 +41,10 @@ public class TestCast extends BaseOParserTest {
 		compareResourceOMO("cast/isAText.poc");
 	}
 
+	@Test
+	public void testNullIsNotAText() throws Exception {
+		compareResourceOMO("cast/nullIsNotAText.poc");
+	}
+
 }
 

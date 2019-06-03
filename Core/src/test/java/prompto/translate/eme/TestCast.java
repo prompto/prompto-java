@@ -71,5 +71,10 @@ public class TestCast extends BaseEParserTest {
 		compareResourceEME("cast/isAText.pec");
 	}
 
+	@Test
+	public void testNullisNotAText() throws Exception {
+		compareResourceEME("cast/nullisNotAText.pec");
+	}
+
 }
 

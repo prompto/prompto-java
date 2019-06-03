@@ -55,6 +55,7 @@ import prompto.type.ContainerType;
 import prompto.type.DecimalType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
+import prompto.type.NullType;
 import prompto.type.TextType;
 import prompto.utils.CodeWriter;
 import prompto.value.BooleanValue;
@@ -175,6 +176,8 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 
 	private boolean interpretIsA(Context context, IValue lval, IValue rval) throws PromptoError {
 		IType actual = lval.getType();
+		if(actual==NullType.instance())
+			return false;
 		IType expected = ((TypeValue)rval).getValue();
 		return expected.isAssignableFrom(context, actual);
 	}

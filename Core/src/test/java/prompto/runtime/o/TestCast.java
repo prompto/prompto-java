@@ -124,5 +124,20 @@ public class TestCast extends BaseOParserTest {
 		checkTranspiledOutput("cast/isAText.poc");
 	}
 
+	@Test
+	public void testInterpretedNullIsNotAText() throws Exception {
+		checkInterpretedOutput("cast/nullIsNotAText.poc");
+	}
+
+	@Test
+	public void testCompiledNullIsNotAText() throws Exception {
+		checkCompiledOutput("cast/nullIsNotAText.poc");
+	}
+
+	@Test
+	public void testTranspiledNullIsNotAText() throws Exception {
+		checkTranspiledOutput("cast/nullIsNotAText.poc");
+	}
+
 }
 
