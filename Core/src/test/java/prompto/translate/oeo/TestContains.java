@@ -82,6 +82,11 @@ public class TestContains extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInTextEnum() throws Exception {
+		compareResourceOEO("contains/inTextEnum.poc");
+	}
+
+	@Test
 	public void testInTimeRange() throws Exception {
 		compareResourceOEO("contains/inTimeRange.poc");
 	}
