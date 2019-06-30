@@ -1,5 +1,6 @@
 package prompto.libraries;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
@@ -29,6 +30,8 @@ public abstract class Libraries {
 			URL parentUrl = new URL(thisResourceName.substring(0, thisResourceName.indexOf(thisClassName)));
 			URL url = new URL(parentUrl.toExternalForm() + "libraries/");
 			return ResourceUtils.listResourcesAt(url, ResourceUtils::isPromptoLibrary);
+		} catch(FileNotFoundException e) {
+			return null;
 		} catch(IOException e) {
 			throw new RuntimeException(e);
 		}
