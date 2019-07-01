@@ -5,15 +5,20 @@ import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.TextType;
 import prompto.utils.CodeWriter;
+import prompto.utils.HtmlUtils;
 import prompto.utils.StringUtils;
 
 public class JsxText implements IJsxExpression {
 
 	String text;
 	
-	
 	public JsxText(String text) {
 		this.text = text;
+	}
+	
+	@Override
+	public String toString() {
+		return text;
 	}
 
 	@Override
@@ -33,7 +38,7 @@ public class JsxText implements IJsxExpression {
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-		String text = StringUtils.escape(this.text);
+		String text = HtmlUtils.htmlEntitiesToUtf8(StringUtils.escape(this.text));
 		transpiler.append('"').append(text).append('"');
 		return false;
 	}
