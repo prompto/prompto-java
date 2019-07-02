@@ -54,6 +54,14 @@ define hideReactModal as native method doing:
 	JavaScript: ReactUtils.hideModal();
 
 
+define showReactContextMenu as native method receiving ClickEvent e and Html w doing:
+	JavaScript: ReactUtils.showContextMenu(e, w);
+
+
+define hideReactContextMenu as native method doing:
+	JavaScript: ReactUtils.hideContextMenu();
+
+
 define ReactWidget as widget with methods:
 	
 	@Static
