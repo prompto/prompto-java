@@ -46,20 +46,21 @@ define forceReactWidgetRender as native method receiving ReactWidget w doing:
 	JavaScript: w.forceUpdate();
 
 
-define showReactModal as native method receiving Html w doing:
-	JavaScript: ReactUtils.showModal(w);
+define showReactModal as native method receiving Html dialog doing:
+	JavaScript: ReactUtils.showModal(dialog);
 
 
 define hideReactModal as native method doing:
 	JavaScript: ReactUtils.hideModal();
 
 
-define showReactContextMenu as native method receiving ClickEvent e and Html w doing:
-	JavaScript: ReactUtils.showContextMenu(e, w);
+define showReactContextMenu as native method receiving ClickEvent event and Html menu doing:
+	JavaScript: ReactUtils.showContextMenu(event, menu);
 
 
 define hideReactContextMenu as native method doing:
 	JavaScript: ReactUtils.hideContextMenu();
+
 
 
 define ReactWidget as widget with methods:
