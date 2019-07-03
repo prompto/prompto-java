@@ -8,8 +8,8 @@ function contains(elem, child) {
 }
 
 function handleDocumentClick(e) {
-    const wrapper = document.getElementById("context-menu-wrapper");
-    const inside = contains(wrapper, e.target);
+    var wrapper = document.getElementById("context-menu-wrapper");
+    var inside = contains(wrapper, e.target);
     // only bubble up useful clicks
     if(!inside || e.target.href==="#")
         e.stopPropagation();
@@ -19,7 +19,7 @@ function handleDocumentClick(e) {
 function closeContextMenu() {
     document.removeEventListener("contextmenu", handleDocumentClick);
     document.removeEventListener("click", handleDocumentClick);
-    const container = document.getElementById("context");
+    var container = document.getElementById("context");
     while(container.children.length) {
         container.removeChild(container.children[0]);
     }
