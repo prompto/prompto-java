@@ -16,30 +16,33 @@ function handleDocumentClick(e) {
     closeContextMenu();
 }
 
-function closeContextMenu() {
-    document.removeEventListener("contextmenu", handleDocumentClick);
-    document.removeEventListener("click", handleDocumentClick);
-    var container = document.getElementById("context");
+function removeChildren(nodeId) {
+    var container = document.getElementById(nodeId);
     while(container.children.length) {
         container.removeChild(container.children[0]);
     }
+}
+
+function closeContextMenu() {
+    document.removeEventListener("contextmenu", handleDocumentClick);
+    document.removeEventListener("click", handleDocumentClick);
+    removeChildren("context");
 }
 
 
 var ReactUtils = {
 	showModal: function(modal) {
 		var container = document.getElementById("modal"); 
-		var holder = document.createElement("div");
-		container.appendChild(holder);
-		ReactDOM.render(ReactDOM.createPortal(modal, holder), container);
+		var wrapper = document.createElement("div");
+		container.appendChild(wrapper);
+		var portal = ReactDOM.createPortal(modal, wrapper);
+		ReactDOM.render(portal, wrapper);
 	},
 	hideModal: function() { 
-		var container = document.getElementById("modal");
-	    while(container.children.length) {
-	        container.removeChild(container.children[0]);
-	    }
+		removeChildren("modal");
 	},
 	showContextMenu: function(event, menu) {
+		console.log("showContextMenu");
 		event.preventDefault();
 	    document.addEventListener("click", handleDocumentClick );
 	    document.addEventListener("contextmenu", handleDocumentClick );
@@ -52,7 +55,8 @@ var ReactUtils = {
 	    wrapper.style.top = (event.pageY - window.scrollY) + "px";
 	    wrapper.style.zIndex = 999999;
 	    container.appendChild(wrapper);
-	    ReactDOM.render(ReactDOM.createPortal(menu, wrapper), container);
+	    var portal = ReactDOM.createPortal(menu, wrapper);
+	    ReactDOM.render(portal, wrapper);
 	},
 	hideContextMenu: function() {
 		closeContextMenu();
