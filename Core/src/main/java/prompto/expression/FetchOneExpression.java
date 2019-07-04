@@ -218,6 +218,7 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 	    transpiler.require("DataStore");
 	    transpiler.require("AttributeInfo");
 	    transpiler.require("TypeFamily");
+	    transpiler.require("NativeError"); // for NotMutableError
 	    if (this.type != null)
 	        this.type.declare(transpiler);
 	    if (this.predicate != null)
