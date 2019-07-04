@@ -229,7 +229,7 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 	public boolean transpile(Transpiler transpiler) {
 	    transpiler.append("(function() {").indent();
 	    transpileQuery(transpiler);
-	    transpiler.append("var stored = DataStore.instance.fetchOne(builder.build());").newLine();
+	    transpiler.append("var $stored = DataStore.instance.fetchOne(builder.build());").newLine();
 	    transpileConvert(transpiler, "result");
 	    transpiler.append("return result;").dedent();
 	    transpiler.append("})()");
@@ -237,11 +237,11 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 	}
 
 	protected void transpileConvert(Transpiler transpiler, String varName) {
-	    transpiler.append("if(stored===null)").indent().append("return null;").dedent();
-	    transpiler.append("var name = stored.getData('category').slice(-1)[0];").newLine();
-	    transpiler.append("var type = eval(name);").newLine();
-	    transpiler.append("var ").append(varName).append(" = new type(null, {}, ").append(this.type!=null && this.type.isMutable()).append(");").newLine();
-	    transpiler.append(varName).append(".fromStored(stored);").newLine();
+	    transpiler.append("if($stored===null)").indent().append("return null;").dedent();
+	    transpiler.append("var $name = $stored.getData('category').slice(-1)[0];").newLine();
+	    transpiler.append("var $type = eval($name);").newLine();
+	    transpiler.append("var ").append(varName).append(" = new $type(null, {}, ").append(this.type!=null && this.type.isMutable()).append(");").newLine();
+	    transpiler.append(varName).append(".fromStored($stored);").newLine();
 	}
 
 	protected void transpileQuery(Transpiler transpiler) {
