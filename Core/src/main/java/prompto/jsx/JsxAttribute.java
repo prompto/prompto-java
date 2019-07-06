@@ -44,7 +44,10 @@ public class JsxAttribute {
 
 
 	public void transpile(Transpiler transpiler) {
-	    transpiler.append(this.id.toString());
+		String name = this.id.toString();
+		if(name.contains("-"))
+			name = "\"" + name + "\"";
+	    transpiler.append(name);
 	    transpiler.append(": ");
 	    if(this.value!=null)
 	        this.value.transpile(transpiler);
