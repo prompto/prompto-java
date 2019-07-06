@@ -16,6 +16,7 @@ import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.compiler.StackState;
 import prompto.compiler.StringConstant;
+import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
 import prompto.declaration.NativeGetterMethodDeclaration;
@@ -208,8 +209,8 @@ public class MemberSelector extends SelectorExpression {
 		else if(PromptoDocument.class==info.getType())
 			return compileGetOrCreate(context, method, flags, info, resultType);		
 		// special case for o.text which translates to toString
-		else if("text".equals(getName()))
-			return compileObjectText(method, flags);
+		else if(shouldCompileToObjectToString(context, parent))
+			return compileObjectToString(method, flags);
 		else {
 			String getterName = CompilerUtils.getterName(getName());
 			if(isCompilingGetter(context, method, info, getterName))
@@ -228,6 +229,20 @@ public class MemberSelector extends SelectorExpression {
 		}
 	}
 		
+	private boolean shouldCompileToObjectToString(Context context, IExpression parent) {
+		if(!"text".equals(getName()))
+			return false;
+		IType parentType = parent.check(context);
+		if(parentType instanceof CategoryType) {
+			IDeclaration decl = ((CategoryType)parentType).getDeclaration(context);
+			if(decl instanceof CategoryDeclaration) {
+				if(((CategoryDeclaration)decl).hasAttribute(context, new Identifier("text")))
+					return false;
+			}
+		}
+		return true;
+	}
+
 	private void compileNativeGetter(Context context, MethodInfo method, Flags flags, String getterName, ResultInfo info, Type resultType) {
 		NativeGetterMethodDeclaration getter = getNativeGetter(context);
 		if(getter!=null) {
@@ -312,7 +327,7 @@ public class MemberSelector extends SelectorExpression {
 			return CompilerUtils.intToLong(method);
 	}
 	
-	private ResultInfo compileObjectText(MethodInfo method, Flags flags) {
+	private ResultInfo compileObjectToString(MethodInfo method, Flags flags) {
 		IOperand oper = new MethodConstant(Object.class, "toString", String.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		return new ResultInfo(String.class);

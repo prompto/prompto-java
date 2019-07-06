@@ -674,7 +674,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			classFile.addInterface(interFace);
 	}
 
-	private ClassConstant getInterface(Context context) {
+	protected ClassConstant getInterface(Context context) {
 		return new ClassConstant(CompilerUtils.getCategoryInterfaceType(getId()));
 	}
 

@@ -1,11 +1,21 @@
 package prompto.type;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+import prompto.argument.CategoryArgument;
+import prompto.argument.IArgument;
+import prompto.declaration.BuiltInMethodDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IEnumeratedDeclaration;
+import prompto.declaration.IMethodDeclaration;
+import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 import prompto.value.IValue;
 
 
@@ -37,5 +47,39 @@ public class EnumeratedCategoryType extends CategoryType {
 		else
 			throw new SyntaxError("No such member:" + name);
 	}
+	
+	@Override
+	public Set<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError {
+		if(name.toString().equals("symbolOf"))
+			return new HashSet<>(Collections.singletonList(SYMBOL_OF_METHOD));
+		else
+			return super.getMemberMethods(context, name);
+	}
+
+	static IArgument NAME_ARGUMENT = new CategoryArgument(TextType.instance(), new Identifier("name"));
+
+	final IMethodDeclaration SYMBOL_OF_METHOD = new BuiltInMethodDeclaration("symbolOf", NAME_ARGUMENT) {
+		
+		@Override
+		public IValue interpret(Context context) throws PromptoError {
+			IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
+			if(!(decl instanceof IEnumeratedDeclaration))
+				throw new SyntaxError(typeNameId + " is not an enumerated type!");
+			String name = (String)context.getValue(new Identifier("name")).getStorableData();
+			return ((IEnumeratedDeclaration<?>)decl).getSymbol(name);
+		};
+		
+		@Override
+		public IType check(Context context, boolean isStart) {
+			return EnumeratedCategoryType.this;
+		}
+
+		@Override
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+	      transpiler.append("symbolOf(");
+	      assignments.get(0).transpile(transpiler);
+	      transpiler.append(")");
+		}
+	};
 
 }
