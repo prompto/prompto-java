@@ -57,7 +57,7 @@ public class FlushStatement extends SimpleStatement {
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-		transpiler.append("DataStore.instance.flush()");
+		transpiler.append("$DataStore.instance.flush()");
 		return false;
 	}
 

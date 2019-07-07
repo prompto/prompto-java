@@ -674,7 +674,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			classFile.addInterface(interFace);
 	}
 
-	private ClassConstant getInterface(Context context) {
+	protected ClassConstant getInterface(Context context) {
 		return new ClassConstant(CompilerUtils.getCategoryInterfaceType(getId()));
 	}
 
@@ -1058,7 +1058,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    transpiler.indent();
 	    List<String> categories = this.collectCategories(transpiler.getContext());
 	    if(this.storable)
-	        transpiler.append("this.storable = DataStore.instance.newStorableDocument(['").append(categories.stream().collect(Collectors.joining("', '"))).append("'], this.dbIdListener.bind(this));").newLine();
+	        transpiler.append("this.storable = $DataStore.instance.newStorableDocument(['").append(categories.stream().collect(Collectors.joining("', '"))).append("'], this.dbIdListener.bind(this));").newLine();
 	    this.transpileGetterSetterAttributes(transpiler);
 	    this.transpileSuperConstructor(transpiler);
 	    transpiler.append("this.category = [").append(categories.stream().collect(Collectors.joining(", "))).append("];").newLine();

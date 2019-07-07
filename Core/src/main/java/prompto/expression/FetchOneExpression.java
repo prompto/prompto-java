@@ -229,7 +229,7 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 	public boolean transpile(Transpiler transpiler) {
 	    transpiler.append("(function() {").indent();
 	    transpileQuery(transpiler);
-	    transpiler.append("var $stored = DataStore.instance.fetchOne(builder.build());").newLine();
+	    transpiler.append("var $stored = $DataStore.instance.fetchOne(builder.build());").newLine();
 	    transpileConvert(transpiler, "result");
 	    transpiler.append("return result;").dedent();
 	    transpiler.append("})()");
@@ -245,7 +245,7 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 	}
 
 	protected void transpileQuery(Transpiler transpiler) {
-	    transpiler.append("var builder = DataStore.instance.newQueryBuilder();").newLine();
+	    transpiler.append("var builder = $DataStore.instance.newQueryBuilder();").newLine();
 	    if (this.type != null)
 	        transpiler.append("builder.verify(new AttributeInfo('category', TypeFamily.TEXT, true, null), MatchOp.CONTAINS, '").append(this.type.getTypeName()).append("');").newLine();
 	    if (this.predicate != null)

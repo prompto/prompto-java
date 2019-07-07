@@ -5,7 +5,6 @@ import java.util.Objects;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
-import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
@@ -116,8 +115,8 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 
 	@Override
 	public void register(Context context) {
-		INamed actual = context.getRegisteredValue(INamed.class, id);
-		if(actual!=null)
+		Context actual = context.contextForValue(id);
+		if(actual==context)
 			throw new SyntaxError("Duplicate argument: \"" + id + "\"");
 		context.registerValue(this);
 		if(defaultExpression!=null) try {

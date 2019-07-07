@@ -716,6 +716,10 @@ public class CategoryType extends BaseType {
 	public void transpileAssignMemberValue(Transpiler transpiler, String name, IExpression expression) {
 	    transpiler.append(".setMember('").append(name).append("', ");
 	    expression.transpile(transpiler);
+	    IType type = expression.check(transpiler.getContext());
+	    if(type instanceof EnumeratedCategoryType || type instanceof EnumeratedNativeType) {
+	    	transpiler.append(", false, true"); // set isEnum flag
+	    }
 	    transpiler.append(")");
 	}
 	
