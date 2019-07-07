@@ -1,3 +1,3 @@
-var DataStore = {
+var $DataStore = {
 	instance: null
 };

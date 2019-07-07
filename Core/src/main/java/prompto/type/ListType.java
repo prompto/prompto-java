@@ -301,6 +301,7 @@ public class ListType extends ContainerType {
 	@Override
 	public void declareItem(Transpiler transpiler, IType itemType, IExpression item) {
 	    if(itemType==IntegerType.instance()) {
+	    	this.itemType.declare(transpiler);
 	        item.declare(transpiler);
 	    } else {
 	        super.declareItem(transpiler, itemType, item);

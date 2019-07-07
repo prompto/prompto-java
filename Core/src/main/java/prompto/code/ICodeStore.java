@@ -131,6 +131,7 @@ public interface ICodeStore {
 	}
 	
 	<T extends Module> T fetchModule(ModuleType type, String name, PromptoVersion version) throws PromptoError;
+	Object fetchModuleDbId(String name, PromptoVersion version) throws PromptoError;
 	void storeModule(Module module) throws PromptoError;
 	
 	void setMainModule(String name, PromptoVersion version);

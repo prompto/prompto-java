@@ -245,6 +245,21 @@ public class TestContains extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedInTextEnum() throws Exception {
+		checkInterpretedOutput("contains/inTextEnum.poc");
+	}
+
+	@Test
+	public void testCompiledInTextEnum() throws Exception {
+		checkCompiledOutput("contains/inTextEnum.poc");
+	}
+
+	@Test
+	public void testTranspiledInTextEnum() throws Exception {
+		checkTranspiledOutput("contains/inTextEnum.poc");
+	}
+
+	@Test
 	public void testInterpretedInTimeRange() throws Exception {
 		checkInterpretedOutput("contains/inTimeRange.poc");
 	}

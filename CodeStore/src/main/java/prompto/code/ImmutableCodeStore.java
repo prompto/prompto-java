@@ -110,6 +110,11 @@ public class ImmutableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
+	public Object fetchModuleDbId(String name, PromptoVersion version) throws PromptoError {
+		return null;
+	}
+	
+	@Override
 	public Resource fetchSpecificResource(String path, PromptoVersion version) {
 		if(this.resource.toString().endsWith(path))
 			return new URLResource(this.resource);

@@ -181,6 +181,18 @@ public class QueryableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
+	public Object fetchModuleDbId(String name, PromptoVersion version) throws PromptoError {
+		try {
+			// could be optimized by only fetching dbId but not worth it...
+			IStored stored = fetchOneNamedInStore(new CategoryType(new Identifier("Module")), version, name, false);
+			return stored==null ? null : stored.getDbId();
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	
+	@Override
 	public Resource fetchSpecificResource(String name, PromptoVersion version) {
 		try {
 			IStored stored = fetchOneInStore(new CategoryType(new Identifier("Resource")), version, "name", name, true);

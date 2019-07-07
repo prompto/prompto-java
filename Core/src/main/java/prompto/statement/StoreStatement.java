@@ -162,7 +162,7 @@ public class StoreStatement extends BaseStatement {
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    transpiler.append("DataStore.instance.store").append(andThen==null?"":"Async").append("(");
+	    transpiler.append("$DataStore.instance.store").append(andThen==null?"":"Async").append("(");
 	    this.transpileIdsToDelete(transpiler);
 	    transpiler.append(", ");
 	    this.transpileStorablesToAdd(transpiler);

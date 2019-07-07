@@ -88,7 +88,7 @@ public class FetchOneStatement extends FetchOneExpression implements IStatement 
 	public boolean transpile(Transpiler transpiler) {
 	    transpiler.append("(function() {").indent();
 	    transpileQuery(transpiler);
-	    transpiler.append("DataStore.instance.fetchOneAsync(builder.build(), function(stored) {").indent();
+	    transpiler.append("$DataStore.instance.fetchOneAsync(builder.build(), function($stored) {").indent();
 	    transpileConvert(transpiler, name.toString());
 		transpiler = transpiler.newChildTranspiler(transpiler.getContext());
 		transpiler.getContext().registerValue(new Variable(name, type));

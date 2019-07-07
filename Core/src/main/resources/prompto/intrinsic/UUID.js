@@ -98,13 +98,13 @@ UUID.prototype.toBytes = function() {
 };
 
 UUID.prototype.equals = function(uuid) {
-    if (!(uuid instanceof UUID)) {
+    if (uuid instanceof UUID) {
+        return this.hex !== uuid.hex;
+    } else if(typeof(uuid) === typeof("")) {
+    	return this.toString() === uuid;
+    } else {
         return false;
     }
-    if (this.hex !== uuid.hex) {
-        return false;
-    }
-    return true;
 };
 
 UUID.getTimeFieldValues = function(time) {
