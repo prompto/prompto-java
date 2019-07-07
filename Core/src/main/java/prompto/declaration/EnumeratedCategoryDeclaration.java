@@ -29,8 +29,8 @@ import prompto.expression.IExpression;
 import prompto.expression.Symbol;
 import prompto.grammar.CategorySymbolList;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoCategorySymbol;
 import prompto.intrinsic.PromptoEnum;
-import prompto.intrinsic.PromptoSymbol;
 import prompto.runtime.Context;
 import prompto.transpiler.ITranspilable;
 import prompto.transpiler.Transpiler;
@@ -219,7 +219,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 		MethodInfo method = classFile.newMethod("toString", new Descriptor.Method(String.class));
 		StackLocal local = method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
 		CompilerUtils.compileALOAD(method, local);
-		MethodConstant mc = new MethodConstant(classFile.getThisClass(), "getText", String.class);
+		MethodConstant mc = new MethodConstant(classFile.getThisClass(), "getName", String.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, mc);
 		method.addInstruction(Opcode.ARETURN);
 	}
@@ -268,6 +268,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 	@Override
 	protected void compileMethods(Context context, ClassFile classFile, Flags flags) {
 		compileGetSymbolsMethod(context, classFile, new Flags());
+		compileSymbolOfMethod(context, classFile, new Flags());
 		super.compileMethods(context, classFile, flags);
 	}
 	
@@ -283,9 +284,22 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 		MethodInfo method = classFile.newMethod("getSymbols", new Descriptor.Method(List.class));
 		method.addModifier(Modifier.STATIC);
 		method.addInstruction(Opcode.LDC, classFile.getThisClass());
-		MethodConstant m = new MethodConstant(PromptoSymbol.class, "getSymbols", 
+		MethodConstant m = new MethodConstant(PromptoCategorySymbol.class, "getCategorySymbols", 
 				new Descriptor.Method(Class.class, List.class));
 		method.addInstruction(Opcode.INVOKESTATIC, m);
+		method.addInstruction(Opcode.ARETURN);
+	}
+
+	
+	private void compileSymbolOfMethod(Context context, ClassFile classFile, Flags flags) {
+		MethodInfo method = classFile.newMethod("symbolOf", new Descriptor.Method(String.class, getInterface(context).getType()));
+		method.addModifier(Modifier.STATIC);
+		method.addInstruction(Opcode.LDC, classFile.getThisClass());
+		method.addInstruction(Opcode.ALOAD_0, new ClassConstant(String.class));
+		MethodConstant m = new MethodConstant(PromptoCategorySymbol.class, "categorySymbolOf", 
+				new Descriptor.Method(Class.class, String.class, Object.class));
+		method.addInstruction(Opcode.INVOKESTATIC, m);
+		method.addInstruction(Opcode.CHECKCAST, classFile.getThisClass());
 		method.addInstruction(Opcode.ARETURN);
 	}
 
@@ -428,6 +442,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 	private void transpileSymbols(Transpiler transpiler) {
 	    Stream<String> names = this.symbolsList.stream().map(symbol ->symbol.getName());
 	    transpiler.append(this.getName()).append(".symbols = new List(false, [").append(names.collect(Collectors.joining(", "))).append("]);").newLine();
+	    transpiler.append(this.getName()).append(".symbolOf = eval").newLine();
 	}
 
 

@@ -33,6 +33,7 @@ import prompto.compiler.StackState;
 import prompto.declaration.BuiltInMethodDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
+import prompto.declaration.EnumeratedCategoryDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.NativeMethodDeclaration;
 import prompto.declaration.SingletonCategoryDeclaration;
@@ -42,12 +43,16 @@ import prompto.error.SyntaxError;
 import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoNativeSymbol;
+import prompto.java.JavaClassType;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.runtime.Variable;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
+import prompto.type.EnumeratedCategoryType;
+import prompto.type.EnumeratedNativeType;
 import prompto.type.IType;
 import prompto.type.NativeType;
 import prompto.utils.CodeWriter;
@@ -340,6 +345,8 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		declaration.compileAssignments(context, method, flags, assignments);
 		// call static method
 		IType returnType = declaration.check(context, false);
+		if(returnType instanceof EnumeratedNativeType)
+			returnType = new JavaClassType(PromptoNativeSymbol.class);
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);
 		MethodConstant constant = new MethodConstant(parentClass, declaration.getName(), descriptor);
 		method.addInstruction(Opcode.INVOKESTATIC, constant);
@@ -347,10 +354,23 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 
 	private Type getSingletonType(Context context, IExpression parent) {
-		if(!(((TypeExpression)parent).getType() instanceof CategoryType))
+		IType parentType = ((TypeExpression)parent).getType();
+		if(parentType instanceof CategoryType)
+			return getSingletonCategoryType(context, (CategoryType)parentType);
+		else if(parentType instanceof EnumeratedNativeType)
+			return getSingletonEnumeratedType(context, (EnumeratedNativeType)parentType);
+		else
 			throw new SyntaxError("Expecting a category type!");
-		CategoryType type = (CategoryType)((TypeExpression)parent).getType();
+	}
+
+	private Type getSingletonEnumeratedType(Context context, EnumeratedNativeType type) {
+		return CompilerUtils.getNativeEnumType(type.getTypeNameId());
+	}
+
+	private Type getSingletonCategoryType(Context context, CategoryType type) {
 		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
+		if(decl instanceof EnumeratedCategoryDeclaration)
+			return CompilerUtils.getCategoryEnumConcreteType(type.getTypeNameId());
 		if(decl instanceof SingletonCategoryDeclaration)
 			return CompilerUtils.getCategorySingletonType(type.getTypeNameId());
 		else
@@ -429,8 +449,12 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		IValue value = parent.interpret(context);
 		if(value==null || value==NullValue.instance())
 			throw new NullReferenceError();
-		if(value instanceof TypeValue && ((TypeValue)value).getValue() instanceof CategoryType)
-			value = context.loadSingleton(context, (CategoryType)((TypeValue)value).getValue());
+		if(value instanceof TypeValue) {
+			IType type = ((TypeValue)value).getValue();
+			if(type instanceof CategoryType && !(type instanceof EnumeratedCategoryType)) {
+				value = context.loadSingleton(context, (CategoryType)type);
+			}
+		}
 		if(value instanceof IInstance) {
 			context = context.newInstanceContext((IInstance)value, false);
 			return context.newChildContext();

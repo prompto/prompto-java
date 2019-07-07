@@ -102,6 +102,11 @@ public class TestContains extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInTextEnum() throws Exception {
+		compareResourceEOE("contains/inTextEnum.pec");
+	}
+
+	@Test
 	public void testInTimeRange() throws Exception {
 		compareResourceEOE("contains/inTimeRange.pec");
 	}

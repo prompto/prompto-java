@@ -315,14 +315,14 @@ public class FetchManyExpression extends FetchOneExpression {
 	    transpiler.append("(function() {").indent();
 	    this.transpileQuery(transpiler);
 	    boolean mutable = this.type!=null ? this.type.isMutable() : false;
-	    transpiler.append("return DataStore.instance.fetchMany(builder.build(),").append(mutable).append(");").newLine();
+	    transpiler.append("return $DataStore.instance.fetchMany(builder.build(),").append(mutable).append(");").newLine();
 	    transpiler.append("})()");
 	    return false;
 	}
 	
 	@Override
 	protected void transpileQuery(Transpiler transpiler) {
-	    transpiler.append("var builder = DataStore.instance.newQueryBuilder();").newLine();
+	    transpiler.append("var builder = $DataStore.instance.newQueryBuilder();").newLine();
 	    if (this.type != null)
 	        transpiler.append("builder.verify(new AttributeInfo('category', TypeFamily.TEXT, true, null), MatchOp.CONTAINS, '").append(this.type.getTypeName()).append("');").newLine();
 	    if (this.predicate != null)

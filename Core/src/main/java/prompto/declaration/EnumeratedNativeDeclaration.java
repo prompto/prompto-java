@@ -29,7 +29,7 @@ import prompto.expression.NativeSymbol;
 import prompto.expression.Symbol;
 import prompto.grammar.Identifier;
 import prompto.grammar.NativeSymbolList;
-import prompto.intrinsic.PromptoSymbol;
+import prompto.intrinsic.PromptoNativeSymbol;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.EnumeratedNativeType;
@@ -168,7 +168,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 	public ClassFile compile(Context context, String fullName) {
 		try {
 			ClassFile classFile = new ClassFile(new PromptoType(fullName));
-			classFile.setSuperClass(new ClassConstant(PromptoSymbol.class));
+			classFile.setSuperClass(new ClassConstant(PromptoNativeSymbol.class));
 			compileSymbolFields(context, classFile, new Flags());
 			compileNameField(context, classFile, new Flags());
 			compileValueField(context, classFile, new Flags());
@@ -176,6 +176,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 			compileFieldGetters(context, classFile, new Flags());
 			compileClassConstructor(context, classFile, new Flags());
 			compileGetSymbolsMethod(context, classFile, new Flags());
+			compileSymbolOfMethod(context, classFile, new Flags());
 			return classFile;
 		} catch(SyntaxError e) {
 			throw new CompilerException(e);
@@ -263,8 +264,19 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 		MethodInfo method = classFile.newMethod("getSymbols", new Descriptor.Method(List.class));
 		method.addModifier(Modifier.STATIC);
 		method.addInstruction(Opcode.LDC, classFile.getThisClass());
-		MethodConstant m = new MethodConstant(PromptoSymbol.class, "getSymbols", 
+		MethodConstant m = new MethodConstant(PromptoNativeSymbol.class, "getNativeSymbols", 
 				new Descriptor.Method(Class.class, List.class));
+		method.addInstruction(Opcode.INVOKESTATIC, m);
+		method.addInstruction(Opcode.ARETURN);
+	}
+
+	private void compileSymbolOfMethod(Context context, ClassFile classFile, Flags flags) {
+		MethodInfo method = classFile.newMethod("symbolOf", new Descriptor.Method(String.class, PromptoNativeSymbol.class));
+		method.addModifier(Modifier.STATIC);
+		method.addInstruction(Opcode.LDC, classFile.getThisClass());
+		method.addInstruction(Opcode.ALOAD_0, new ClassConstant(String.class));
+		MethodConstant m = new MethodConstant(PromptoNativeSymbol.class, "nativeSymbolOf", 
+				new Descriptor.Method(Class.class, String.class, PromptoNativeSymbol.class));
 		method.addInstruction(Opcode.INVOKESTATIC, m);
 		method.addInstruction(Opcode.ARETURN);
 	}
@@ -282,7 +294,8 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 	    transpiler.newLine();
 	    this.symbolsList.forEach(symbol->symbol.initialize(transpiler));
 	    List<String> names = this.symbolsList.stream().map(Symbol::getName).collect(Collectors.toList());
-	    transpiler.append(this.getName()).append(".symbols = new List(false, [").append(names.stream().collect(Collectors.joining(", "))).append("]);");
+	    transpiler.append(this.getName()).append(".symbols = new List(false, [").append(names.stream().collect(Collectors.joining(", "))).append("]);").newLine();
+	    transpiler.append(this.getName()).append(".symbolOf = eval;");
 	    return true;
 	}
 

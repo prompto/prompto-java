@@ -23,6 +23,8 @@ public interface IRuntimeConfiguration {
 	boolean isLoadRuntime();
 	
 	<T extends IRuntimeConfiguration> T withRuntimeLibs(Supplier<Collection<URL>> supplier);
+	<T extends IRuntimeConfiguration> T withCodeStoreConfiguration(IStoreConfiguration supplier);
+	<T extends IRuntimeConfiguration> T withDataStoreConfiguration(IStoreConfiguration supplier);
 	<T extends IRuntimeConfiguration> T withAddOnURLs(URL[] addOnURLS);
 	<T extends IRuntimeConfiguration> T withApplicationName(String name);
 	<T extends IRuntimeConfiguration> T withApplicationVersion(PromptoVersion version);
@@ -62,6 +64,18 @@ public interface IRuntimeConfiguration {
 		@Override 
 		public <T extends IRuntimeConfiguration> T withRuntimeLibs(Supplier<Collection<URL>> runtimeLibs) {
 			this.runtimeLibs = runtimeLibs;
+			return (T)this;
+		}
+		
+		@Override
+		public <T extends IRuntimeConfiguration> T withCodeStoreConfiguration(IStoreConfiguration storeConfig) {
+			this.codeStoreConfiguration = ()->storeConfig;
+			return (T)this;
+		}
+		
+		@Override
+		public <T extends IRuntimeConfiguration> T withDataStoreConfiguration(IStoreConfiguration storeConfig) {
+			this.dataStoreConfiguration = ()->storeConfig;
 			return (T)this;
 		}
 		
