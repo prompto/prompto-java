@@ -1940,6 +1940,16 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitAnnotation_identifier(EParser.Annotation_identifierContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link EParser#annotation_argument}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotation_argument(EParser.Annotation_argumentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#annotation_argument}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotation_argument(EParser.Annotation_argumentContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link EParser#resource_declaration}.
 	 * @param ctx the parse tree
 	 */

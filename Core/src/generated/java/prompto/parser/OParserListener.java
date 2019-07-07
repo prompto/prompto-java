@@ -1788,6 +1788,16 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitAnnotation_identifier(OParser.Annotation_identifierContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link OParser#annotation_argument}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotation_argument(OParser.Annotation_argumentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#annotation_argument}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotation_argument(OParser.Annotation_argumentContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link OParser#resource_declaration}.
 	 * @param ctx the parse tree
 	 */
