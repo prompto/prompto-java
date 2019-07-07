@@ -91,7 +91,7 @@ public class FetchManyStatement extends FetchManyExpression implements IStatemen
 	    transpiler.append("(function() {").indent();
 	    transpileQuery(transpiler);
 	    boolean mutable = this.type!=null ? this.type.isMutable() : false;
-	    transpiler.append("DataStore.instance.fetchManyAsync(builder.build(), ").append(mutable).append(", function(").append(name.toString()).append(") {").indent();
+	    transpiler.append("$DataStore.instance.fetchManyAsync(builder.build(), ").append(mutable).append(", function(").append(name.toString()).append(") {").indent();
 	    transpiler = transpiler.newChildTranspiler(transpiler.getContext());
 		transpiler.getContext().registerValue(new Variable(name, new CursorType(type)));
 		stmts.transpile(transpiler);

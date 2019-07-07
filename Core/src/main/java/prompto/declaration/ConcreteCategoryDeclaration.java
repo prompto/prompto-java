@@ -1058,7 +1058,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    transpiler.indent();
 	    List<String> categories = this.collectCategories(transpiler.getContext());
 	    if(this.storable)
-	        transpiler.append("this.storable = DataStore.instance.newStorableDocument(['").append(categories.stream().collect(Collectors.joining("', '"))).append("'], this.dbIdListener.bind(this));").newLine();
+	        transpiler.append("this.storable = $DataStore.instance.newStorableDocument(['").append(categories.stream().collect(Collectors.joining("', '"))).append("'], this.dbIdListener.bind(this));").newLine();
 	    this.transpileGetterSetterAttributes(transpiler);
 	    this.transpileSuperConstructor(transpiler);
 	    transpiler.append("this.category = [").append(categories.stream().collect(Collectors.joining(", "))).append("];").newLine();

@@ -71,7 +71,7 @@ public class Nashorn8Engine implements IJSEngine {
 		ScriptEngine nashorn = new ScriptEngineManager().getEngineByName("nashorn");
 		Require.enable((NashornScriptEngine)nashorn, new ResourceFolder(""));
 		nashorn.eval(js);
-		Object dataStore = nashorn.getBindings(ScriptContext.ENGINE_SCOPE).get("DataStore");
+		Object dataStore = nashorn.getBindings(ScriptContext.ENGINE_SCOPE).get("$DataStore");
 		if(dataStore instanceof ScriptObjectMirror)
 			((ScriptObjectMirror)dataStore).setMember("instance", new MemStoreMirror(nashorn));
 		return (Invocable)nashorn;
