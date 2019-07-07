@@ -369,17 +369,46 @@ public class OPromptoBuilder extends OParserBaseListener {
 	@Override
 	public void exitAnnotation_constructor(Annotation_constructorContext ctx) {
 		Identifier name = getNodeValue(ctx.name);
+		DictEntryList args = new DictEntryList();
 		IExpression exp = getNodeValue(ctx.exp);
-		setNodeValue(ctx, new Annotation(name, exp));
+		if(exp!=null)
+			args.add(new DictEntry(null, exp));
+		ctx.annotation_argument().forEach(argCtx->{
+			DictEntry arg = getNodeValue(argCtx);
+			args.add(arg);
+		});
+		setNodeValue(ctx, new Annotation(name, args));
 	}
 
+	@Override
+	public void exitAnnotation_argument(Annotation_argumentContext ctx) {
+		Identifier name = getNodeValue(ctx.name);
+		IExpression exp = getNodeValue(ctx.exp);
+		setNodeValue(ctx, new DictEntry(new DictIdentifierKey(name), exp));
+	}
 	
 	@Override
 	public void exitAnnotation_identifier(Annotation_identifierContext ctx) {
-		String name = ctx.getText();
-		setNodeValue(ctx, new Identifier(name));
+		setNodeValue(ctx, new Identifier(ctx.getText()));
 	}
 	
+	@Override
+	public void exitAnnotation_argument_name(Annotation_argument_nameContext ctx) {
+		setNodeValue(ctx, new Identifier(ctx.getText()));
+	}
+	
+	@Override
+	public void exitAnnotationLiteralValue(AnnotationLiteralValueContext ctx) {
+		IExpression exp = getNodeValue(ctx.exp);
+		setNodeValue(ctx, exp);
+	}
+	
+	@Override
+	public void exitAnnotationTypeValue(AnnotationTypeValueContext ctx) {
+		IType type = getNodeValue(ctx.typ);
+		setNodeValue(ctx, new TypeExpression(type));
+	}
+
 	@Override
 	public void exitAnyDictType(AnyDictTypeContext ctx) {
 		IType type = getNodeValue(ctx.any_type());

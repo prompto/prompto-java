@@ -1754,6 +1754,40 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitAnnotation_argument(MParser.Annotation_argumentContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MParser#annotation_argument_name}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotation_argument_name(MParser.Annotation_argument_nameContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MParser#annotation_argument_name}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotation_argument_name(MParser.Annotation_argument_nameContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code AnnotationLiteralValue}
+	 * labeled alternative in {@link MParser#annotation_argument_value}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotationLiteralValue(MParser.AnnotationLiteralValueContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code AnnotationLiteralValue}
+	 * labeled alternative in {@link MParser#annotation_argument_value}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotationLiteralValue(MParser.AnnotationLiteralValueContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code AnnotationTypeValue}
+	 * labeled alternative in {@link MParser#annotation_argument_value}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnnotationTypeValue(MParser.AnnotationTypeValueContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code AnnotationTypeValue}
+	 * labeled alternative in {@link MParser#annotation_argument_value}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnnotationTypeValue(MParser.AnnotationTypeValueContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MParser#resource_declaration}.
 	 * @param ctx the parse tree
 	 */

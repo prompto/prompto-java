@@ -1,17 +1,17 @@
 package prompto.grammar;
 
-import prompto.expression.IExpression;
+import prompto.literal.DictEntryList;
 import prompto.parser.Section;
 import prompto.utils.CodeWriter;
 
 public class Annotation extends Section {
 
 	Identifier name;
-	IExpression expression;
+	DictEntryList arguments;
 	
-	public Annotation(Identifier name, IExpression expression) {
+	public Annotation(Identifier name, DictEntryList arguments) {
 		this.name = name;
-		this.expression = expression;
+		this.arguments = arguments;
 	}
 	
 	public boolean isNamed(String name) {
@@ -20,9 +20,17 @@ public class Annotation extends Section {
 
 	public void toDialect(CodeWriter writer) {
 		writer.append(name.toString());
-		if(expression!=null) {
+		if(arguments!=null && !arguments.isEmpty()) {
 			writer.append("(");
-			expression.toDialect(writer);
+			arguments.forEach(arg->{
+				if(arg.getKey()!=null) {
+					arg.getKey().toDialect(writer);
+					writer.append(" = ");
+				}
+				arg.getValue().toDialect(writer);
+				writer.append(", ");
+			});
+			writer.trimLast(", ".length());
 			writer.append(")");
 		}
 		writer.newLine();

@@ -7,6 +7,11 @@ import prompto.parser.o.BaseOParserTest;
 public class TestAnnotations extends BaseOParserTest {
 
 	@Test
+	public void testWidgetField() throws Exception {
+		compareResourceOMO("annotations/WidgetField.poc");
+	}
+
+	@Test
 	public void testCallback() throws Exception {
 		compareResourceOMO("annotations/callback.poc");
 	}
