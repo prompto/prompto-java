@@ -179,6 +179,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	@Override
 	public void toDialect(CodeWriter writer) {
 		writer = writer.newInstanceWriter(getType(writer.getContext()));
+		processAnnotations(writer.getContext(), true);
 		switch(writer.getDialect()) {
 		case E:
 			toEDialect(writer);
@@ -192,6 +193,20 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		}
 	}
 
+	protected void processAnnotations(Context context, boolean processDerivedFrom) {
+		if(processDerivedFrom) {
+			IdentifierList derivedFrom = getDerivedFrom();
+			if(derivedFrom!=null) {
+				derivedFrom.forEach(id->{
+					CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, id);
+					decl.processAnnotations(context, true);
+				});
+			}
+		}
+		if(annotations!=null)
+			annotations.forEach(a->a.processCategory(context, this));
+	}
+	
 	protected abstract void toEDialect(CodeWriter writer);
 
 	protected void protoToEDialect(CodeWriter writer, boolean hasMethods, boolean hasMappings) {

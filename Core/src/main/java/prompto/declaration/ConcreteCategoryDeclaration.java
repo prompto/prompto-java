@@ -127,7 +127,10 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	protected void categoryTypeToODialect(CodeWriter writer) {
 		if(storable)
 			writer.append("storable ");
-		writer.append("category");
+		if(this.isAWidget(writer.getContext()))
+			writer.append("widget");
+		else
+			writer.append("category");
 	}
 	
 	@Override
@@ -172,7 +175,6 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		}
 		writer.dedent();
 	}
-
 
 	@Override
 	public Set<Identifier> getAllAttributes(Context context) {
@@ -258,6 +260,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	@Override
 	public IType check(Context context, boolean isStart) {
 		checkDerived(context);
+		processAnnotations(context, false);
 		checkMethods(context);
 		return super.check(context, isStart);
 	}
@@ -1042,6 +1045,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	        return !(decl instanceof SetterMethodDeclaration || decl instanceof GetterMethodDeclaration);
 	    }).forEach(method -> {
 			Transpiler t = transpiler.newMemberTranspiler(getType(transpiler.getContext()));
+			// processAnnotations(t.getContext());
 	        method.declare(t);
 	        t.flush();
 	    });
@@ -1142,6 +1146,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	        return !(decl instanceof SetterMethodDeclaration || decl instanceof GetterMethodDeclaration);
 	    }).forEach(method -> {
 	    	Transpiler t = transpiler.newMemberTranspiler(getType(transpiler.getContext()));
+			// processAnnotations(t.getContext());
 	        method.transpile(t);
 	        t.flush();
 	    });

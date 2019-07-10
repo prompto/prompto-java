@@ -18,5 +18,6 @@ public interface IProblemListener {
 	void reportIllegalOperation(String message, ISection section);
 	void reportIllegalRemoteCall(String message, ISection section);
 	void reportAmbiguousIdentifier(String name, ISection section);
+	void reportIllegalAnnotation(String message, ISection section);
 
 }
