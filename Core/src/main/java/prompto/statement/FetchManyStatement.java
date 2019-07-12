@@ -36,7 +36,7 @@ public class FetchManyStatement extends FetchManyExpression implements IStatemen
 		super.check(context);
 		context = context.newChildContext();
 		context.registerValue(new Variable(name, new CursorType(type)));
-		stmts.check(context, null);
+		stmts.check(context, VoidType.instance());
 		return VoidType.instance();
 	}
 	
