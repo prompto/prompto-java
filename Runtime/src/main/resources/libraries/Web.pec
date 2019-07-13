@@ -63,7 +63,7 @@ define hideReactContextMenu as native method doing:
 
 
 
-@WidgetField(name="name", type=Document)
+@WidgetField(name="state", type=Document)
 @WidgetField(name="props", type=Document)
 define ReactWidget as widget with methods:
 	
