@@ -11,6 +11,7 @@ import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.runtime.Context.BuiltInContext;
 import prompto.transpiler.Transpiler;
+import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
@@ -38,11 +39,6 @@ public abstract class BuiltInMethodDeclaration extends BaseMethodDeclaration {
 		return false;
 	}
 
-	@Override
-	public void check(ConcreteCategoryDeclaration declaration, Context context) {
-		// nothing to do
-	}
-	
 	@Override
 	public void compile(Context context, boolean isStart, ClassFile classFile) {
 		throw new UnsupportedOperationException("Should never get there!");
@@ -77,6 +73,11 @@ public abstract class BuiltInMethodDeclaration extends BaseMethodDeclaration {
 
 	public void declareCall(Transpiler transpiler) {
 		// override only of required
+	}
+	
+	@Override
+	public IType checkChild(Context context) {
+		throw new UnsupportedOperationException("Should never get there!");
 	}
 
 	public abstract void transpileCall(Transpiler transpiler, ArgumentAssignmentList assignments);

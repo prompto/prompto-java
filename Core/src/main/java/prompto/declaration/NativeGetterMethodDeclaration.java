@@ -10,6 +10,7 @@ import prompto.java.JavaNativeCall;
 import prompto.runtime.Context;
 import prompto.statement.IStatement;
 import prompto.statement.StatementList;
+import prompto.type.IType;
 import prompto.value.IValue;
 
 public class NativeGetterMethodDeclaration extends GetterMethodDeclaration {
@@ -27,6 +28,11 @@ public class NativeGetterMethodDeclaration extends GetterMethodDeclaration {
 				return (JavaNativeCall)statement;
 		}
 		return null;
+	}
+	
+	@Override
+	public IType checkChild(Context context) {
+		return check(context);
 	}
 
 	@Override

@@ -259,6 +259,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 
 	@Override
 	public IType check(Context context, boolean isStart) {
+		context = context.newInstanceContext(getType(context), false);
 		checkDerived(context);
 		processAnnotations(context, false);
 		checkMethods(context);
@@ -268,7 +269,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	private void checkMethods(Context context) {
 		registerMethods(context);
 		for(IMethodDeclaration method : methods)
-			method.check(this, context);
+			method.checkChild(context);
 	}
 			
 			

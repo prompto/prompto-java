@@ -63,11 +63,6 @@ public class GetterMethodDeclaration extends ConcreteMethodDeclaration implement
 		writer.dedent();
 	}
 
-	@Override
-	public void check(ConcreteCategoryDeclaration declaration, Context context) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public IType check(Context context) {

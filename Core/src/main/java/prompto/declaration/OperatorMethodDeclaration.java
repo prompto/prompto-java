@@ -36,12 +36,6 @@ public class OperatorMethodDeclaration extends ConcreteMethodDeclaration impleme
 	}
 	
 	@Override
-	public void check(ConcreteCategoryDeclaration declaration, Context context) {
-		// TODO Auto-generated method stub
-		
-	}	
-
-	@Override
 	protected void toMDialect(CodeWriter writer) {
 		writer.append("def operator ");
 		writer.append(operator.getToken());

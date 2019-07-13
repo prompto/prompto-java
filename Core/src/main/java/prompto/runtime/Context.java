@@ -179,8 +179,6 @@ public class Context implements IContext {
 	public InstanceContext getClosestInstanceContext() {
 		if(parent==null)
 			return null;
-		else if(parent instanceof InstanceContext)
-			return (InstanceContext)parent;
 		else
 			return parent.getClosestInstanceContext();
 	}
@@ -1072,6 +1070,7 @@ public class Context implements IContext {
 		
 		IInstance instance;
 		IType type;
+		Map<Identifier, WidgetField> widgetFields; // only used for widgets at this point
 		
 		InstanceContext(IInstance instance) {
 			this.instance = instance;
@@ -1080,6 +1079,11 @@ public class Context implements IContext {
 		
 		InstanceContext(IType type) {
 			this.type = type;
+		}
+		
+		@Override
+		public InstanceContext getClosestInstanceContext() {
+			return this;
 		}
 
 		public IInstance getInstance() {
@@ -1092,6 +1096,11 @@ public class Context implements IContext {
 		
 		@Override
 		public INamed getRegistered(Identifier id) {
+			if(widgetFields!=null) {
+				WidgetField field = widgetFields.get(id);
+				if(field!=null)
+					return field;
+			}
 			INamed actual = super.getRegistered(id);
 			if(actual!=null) 
 				return actual;
@@ -1136,16 +1145,18 @@ public class Context implements IContext {
 		}
 		
 		@Override
-		public Context contextForValue(Identifier name) {
-			if("this".equals(name.toString()))
+		public Context contextForValue(Identifier id) {
+			if("this".equals(id.toString()))
+				return this;
+			else if(widgetFields!=null && widgetFields.containsKey(id))
 				return this;
 			// params and variables have precedence over members
 			// so first look in context values
-			Context context = super.contextForValue(name);
+			Context context = super.contextForValue(id);
 			if(context!=null)
 				return context;
 			ConcreteCategoryDeclaration decl = getDeclaration();
-			if(decl.hasAttribute(this, name) || decl.hasMethod(this, name))
+			if(decl.hasAttribute(this, id) || decl.hasMethod(this, id))
 				return this;
 			else
 				return null;
@@ -1187,6 +1198,7 @@ public class Context implements IContext {
 		
 		@Override
 		public Stream<INamed> getInstancesStream(boolean includeParent) {
+			// TODO include widgetFields ? (not required qt this point)
 			return Stream.concat(Stream.of(new Variable(new Identifier("this"), instance.getType())), super.getInstancesStream(includeParent));
 		}
 		
@@ -1197,7 +1209,17 @@ public class Context implements IContext {
 			else
 				return super.getInstance(name, includeParent);
 		}
-		
+
+		public void registerWidgetField(Identifier identifier, IType type) {
+			if(widgetFields==null)
+				widgetFields = new HashMap<>();
+			else if(widgetFields.containsKey(identifier)) {
+				Identifier existing = widgetFields.keySet().stream().filter(id->id.equals(identifier)).findFirst().orElse(null);
+				getProblemListener().reportDuplicate(identifier.toString(), identifier, existing);
+			}
+			widgetFields.put(identifier, new WidgetField(identifier, type));
+		}
+
 	}
 
 	public static class ClosureContext extends InstanceContext {

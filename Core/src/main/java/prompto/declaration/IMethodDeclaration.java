@@ -34,7 +34,7 @@ public interface IMethodDeclaration extends IDeclaration {
 	default void setDeclarationOf(DeclarationStatement<IMethodDeclaration> statement) { throw new UnsupportedOperationException("setDeclarationStatement " + this.getClass().getName()); }
 	default DeclarationStatement<IMethodDeclaration> getDeclarationOf() { throw new UnsupportedOperationException("getDeclarationStatement " + this.getClass().getName()); }
 	IValue interpret(Context context) throws PromptoError;
-	void check(ConcreteCategoryDeclaration declaration, Context context);
+	IType checkChild(Context context);
 	boolean isAssignableTo(Context context, ArgumentAssignmentList assignments, boolean checkInstance, boolean allowDerived, Predicate<Specificity> filter);
 	boolean isAssignableFrom(Context context, ArgumentAssignmentList assignments);
 	void registerArguments(Context local);
@@ -53,7 +53,7 @@ public interface IMethodDeclaration extends IDeclaration {
 	default boolean containerHasLocalAnnotation(String name) {
 		CategoryDeclaration category = getMemberOf();
 		return category!=null &&  category.hasLocalAnnotation(name);
-	};
+	}
 
 	
 }

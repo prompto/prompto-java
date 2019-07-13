@@ -1,5 +1,10 @@
 package prompto.processor;
 
+import static org.junit.Assert.assertTrue;
+
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+
 import org.junit.Test;
 
 import prompto.declaration.IDeclaration;
@@ -17,5 +22,10 @@ public class WidgetFieldProcessorTest extends BaseOParserTest {
 		Transpiler transpiler = new Transpiler(new Nashorn8Engine(), context);
 		decl.declare(transpiler);
 		decl.transpile(transpiler);
+		String js = transpiler.toString();
+		try(OutputStream output = new FileOutputStream("transpiled.js")) {
+			output.write(js.getBytes());
+		}
+		assertTrue(js.contains("this.state.stuff"));
 	}
 }

@@ -54,11 +54,11 @@ public class Nashorn8Engine implements IJSEngine {
 	}
 	
 	public static Invocable transpile(Transpiler transpiler) throws Exception {
-		JSContext.set(transpiler.getContext());
 		String js = transpiler.toString();
 		try(OutputStream output = new FileOutputStream("transpiled.js")) {
 			output.write(js.getBytes());
 		}
+		JSContext.set(transpiler.getContext());
 		List<String> lines = Arrays.asList(
 				"var Set = Java.type('" + JSSet.class.getName() + "');",
 				"var React = { createElement: function() { return {}; }, Component: function() { this.getInitialState = function() { return {}; }; return this; } };",

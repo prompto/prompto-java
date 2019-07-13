@@ -43,11 +43,12 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 	
 	@Override
-	public void check(ConcreteCategoryDeclaration declaration, Context context) {
+	public IType checkChild(Context context) {
 		if(arguments!=null)
 			arguments.check(context);
-	}	
-
+		return returnType;
+	}
+	
 	@Override
 	public IValue interpret(Context context) {
 		throw new SyntaxError("Should never get there !");
