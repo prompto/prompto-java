@@ -1233,6 +1233,11 @@ public class Context implements IContext {
 			return superContextForValue(name);
 		}
 		
+		@Override
+		public InstanceContext getClosestInstanceContext() {
+			return parent.getClosestInstanceContext();
+		}
+		
 	}
 
 

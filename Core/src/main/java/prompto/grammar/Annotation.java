@@ -20,6 +20,11 @@ public class Annotation extends Section {
 		this.arguments = arguments;
 	}
 	
+	@Override
+	public String toString() {
+		return id.toString();
+	}
+	
 	public boolean isNamed(String name) {
 		return name.equals(id.toString());
 	}

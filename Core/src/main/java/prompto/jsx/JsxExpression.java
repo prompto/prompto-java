@@ -15,6 +15,11 @@ public class JsxExpression implements IJsxValue, IJsxExpression {
 	}
 	
 	@Override
+	public String toString() {
+		return expression.toString();
+	}
+	
+	@Override
 	public IType check(Context context) {
 		return expression.check(context);
 	}

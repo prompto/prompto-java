@@ -139,7 +139,15 @@ public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    transpiler.append("function ").append(this.getName()).append("() {").indent();
+	    CategoryType type = new CategoryType(this.getId());
+	    transpiler = transpiler.newInstanceTranspiler(type);
+	    doTranspile(transpiler);
+	    transpiler.flush();
+		return true;
+	}
+
+	private void doTranspile(Transpiler transpiler) {
+		transpiler.append("function ").append(this.getName()).append("() {").indent();
 	    transpiler.append("$Root.call(this);").newLine();
 	    transpiler.append("this.mutable = true;").newLine();
 	    transpiler.append("return this;").dedent();
@@ -150,13 +158,12 @@ public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 	    if(this.attributes!=null) {
 	        this.attributes.forEach(attr -> transpiler.append(this.getName()).append(".instance.").append(attr.toString()).append(" = null;").newLine());
 	    }
-	    CategoryType type = new CategoryType(this.getId());
 	    this.methods.forEach(method -> {
-	    	Transpiler m = transpiler.newMemberTranspiler(type);
+	    	Transpiler m = transpiler.newChildTranspiler(null);
 	        method.transpile(m);
 	        m.flush();
 	    });
-		return true;
+		
 	}
 
 }
