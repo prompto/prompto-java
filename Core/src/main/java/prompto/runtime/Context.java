@@ -246,6 +246,7 @@ public class Context implements IContext {
 		return initInstanceContext(new ClosureContext(type), true);
 	}
 
+	// TODO remove this method
 	public Context newMemberContext(CategoryType type) {
 		return newInstanceContext(type, false).newChildContext();
 	}
