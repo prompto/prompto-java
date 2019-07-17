@@ -744,7 +744,7 @@ public class Context implements IContext {
 	public IValue getValue(Identifier id, Supplier<IValue> supplier) throws PromptoError {
 		Context context = contextForValue(id);
 		if(context==null)
-			throw new SyntaxError(id + " is not defined");
+			context = this.globals;
 		return context.readValue(id, supplier);
 	}
 	
