@@ -91,7 +91,10 @@ public class StoreStatement extends BaseStatement {
 	
 	@Override
 	public IType check(Context context) {
-		// TODO check expressions
+		if(andThen!=null) {
+			context = context.newChildContext();
+			andThen.check(context, VoidType.instance());
+		}
 		return VoidType.instance();
 	}
 	

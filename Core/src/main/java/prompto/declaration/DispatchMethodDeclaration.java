@@ -141,11 +141,6 @@ public class DispatchMethodDeclaration extends BaseMethodDeclaration {
 	}
 
 	@Override
-	public void check(ConcreteCategoryDeclaration declaration, Context context) {
-		throw new UnsupportedOperationException("Should never get there!");
-	}
-
-	@Override
 	public void compile(Context context, boolean isStart, ClassFile classFile) {
 		throw new UnsupportedOperationException("Should never get there!");
 	}
@@ -157,6 +152,11 @@ public class DispatchMethodDeclaration extends BaseMethodDeclaration {
 
 	@Override
 	public IType check(Context context, boolean isStart) {
+		throw new UnsupportedOperationException("Should never get there!");
+	}
+	
+	@Override
+	public IType checkChild(Context context) {
 		throw new UnsupportedOperationException("Should never get there!");
 	}
 

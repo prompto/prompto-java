@@ -34,7 +34,7 @@ public class FetchOneStatement extends FetchOneExpression implements IStatement 
 		super.check(context);
 		context = context.newChildContext();
 		context.registerValue(new Variable(name, type));
-		stmts.check(context, null);
+		stmts.check(context, VoidType.instance());
 		return VoidType.instance();
 	}
 	

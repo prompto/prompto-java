@@ -259,8 +259,9 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 
 	@Override
 	public IType check(Context context, boolean isStart) {
+		context = context.newInstanceContext(getType(context), false);
 		checkDerived(context);
-		processAnnotations(context, false);
+		processAnnotations(context, true);
 		checkMethods(context);
 		return super.check(context, isStart);
 	}
@@ -268,7 +269,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	private void checkMethods(Context context) {
 		registerMethods(context);
 		for(IMethodDeclaration method : methods)
-			method.check(this, context);
+			method.checkChild(context);
 	}
 			
 			
@@ -1026,26 +1027,28 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	@Override
 	public void declare(Transpiler transpiler) {
 	    transpiler.declare(this);
+	    Transpiler instance = transpiler.newInstanceTranspiler(getType(transpiler.getContext()));
+	    processAnnotations(instance.getContext(), true);
 	    if (this.derivedFrom != null) {
 	        this.derivedFrom.forEach(cat -> {
-	            CategoryDeclaration decl = transpiler.getContext().getRegisteredDeclaration(CategoryDeclaration.class, cat);
-	            decl.declare(transpiler);
+	            CategoryDeclaration decl = instance.getContext().getRegisteredDeclaration(CategoryDeclaration.class, cat);
+	            decl.declare(instance);
 	        });
 	    } else
-	    	declareRoot(transpiler);
+	    	declareRoot(instance);
 	    if(this.storable) {
-	        transpiler.require("DataStore");
-	        transpiler.require("Remote");
+	    	instance.require("DataStore");
+	    	instance.require("Remote");
 	    }
-	    this.declareMethods(transpiler);
+	    this.declareMethods(instance);
+	    instance.flush();
 	}
 	
 	private void declareMethods(Transpiler transpiler) {
 	    this.methods.stream().filter(decl -> {
 	        return !(decl instanceof SetterMethodDeclaration || decl instanceof GetterMethodDeclaration);
 	    }).forEach(method -> {
-			Transpiler t = transpiler.newMemberTranspiler(getType(transpiler.getContext()));
-			// processAnnotations(t.getContext());
+			Transpiler t = transpiler.newChildTranspiler(null);
 	        method.declare(t);
 	        t.flush();
 	    });
@@ -1078,6 +1081,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	        transpiler.append(this.getName()).append(".prototype = Object.create($Root.prototype);").newLine();
 	    transpiler.append(this.getName()).append(".prototype.constructor = ").append(this.getName()).append(";").newLine();
 	    transpiler = transpiler.newInstanceTranspiler(new CategoryType(this.getId()));
+		processAnnotations(transpiler.getContext(), true);
 	    this.transpileLoaders(transpiler);
 	    this.transpileMethods(transpiler);
 	    this.transpileGetterSetters(transpiler);
@@ -1111,7 +1115,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    transpiler.append("Object.defineProperty(").append(this.getName()).append(".prototype, '").append(id.toString()).append("', {").indent();
 	    transpiler.append("get: function() {").indent();
 	    if(getter!=null) {
-	    	Transpiler m = transpiler.newGetterTranspiler(getType(transpiler.getContext()), id.toString());
+	    	Transpiler m = transpiler.newGetterTranspiler(id.toString());
 	        getter.transpile(m);
 	        m.flush();
 	    } else
@@ -1120,7 +1124,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    transpiler.append(",").newLine();
 	    transpiler.append("set: function(").append(id.toString()).append(") {").indent();
 	    if(setter!=null) {
-	       	Transpiler m = transpiler.newSetterTranspiler(getType(transpiler.getContext()), id.toString());
+	       	Transpiler m = transpiler.newSetterTranspiler(id.toString());
    	        m.append(id.toString()).append(" = (function(").append(id.toString()).append(") {").indent();
 	        setter.transpile(m);
             m.append(";").dedent().append("})(name);").newLine();
@@ -1145,8 +1149,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    this.methods.stream().filter(decl -> {
 	        return !(decl instanceof SetterMethodDeclaration || decl instanceof GetterMethodDeclaration);
 	    }).forEach(method -> {
-	    	Transpiler t = transpiler.newMemberTranspiler(getType(transpiler.getContext()));
-			// processAnnotations(t.getContext());
+	    	Transpiler t = transpiler.newChildTranspiler(null);
 	        method.transpile(t);
 	        t.flush();
 	    });

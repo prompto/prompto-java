@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -11,11 +12,14 @@ import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.Filterable;
 import prompto.intrinsic.IterableWithCounts;
+import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.type.IType;
 import prompto.type.IntegerType;
+import prompto.type.IterableType;
 import prompto.type.IteratorType;
 import prompto.type.ListType;
 import prompto.type.TextType;
@@ -25,7 +29,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class IterableValue extends BaseValue implements IIterable<IValue>, IterableWithCounts<IValue> {
+public class IterableValue extends BaseValue implements IIterable<IValue>, IterableWithCounts<IValue>, IFilterable {
 
 	IType sourceType;
 	Context context;
@@ -87,6 +91,22 @@ public class IterableValue extends BaseValue implements IIterable<IValue>, Itera
 					throw new RuntimeException(e);
 				}
 			}
+		};
+	}
+	
+	@Override
+	public Filterable<IValue, IValue> getFilterable(Context context) {
+		return new Filterable<IValue, IValue>() {
+			@Override
+			public IValue filter(Predicate<IValue> predicate) {
+				PromptoList<IValue> filtered = new PromptoList<IValue>(false);
+				for(IValue value : getIterable(context)) {
+					if(predicate.test(value))
+						filtered.add(value);
+				}
+				return new ListValue(sourceType, filtered);
+			}
+
 		};
 	}
 	

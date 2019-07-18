@@ -198,6 +198,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		return statements.check(context, returnType);
 	}
 
+	@Override
 	public IType checkChild(Context context) {
 		if(arguments!=null)
 			arguments.check(context);
@@ -205,12 +206,6 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		registerArguments(child);
 		return checkStatements(child);
 	}
-
-	@Override
-	public void check(ConcreteCategoryDeclaration declaration, Context context) {
-		context = context.newInstanceContext(declaration.getType(context), false);
-		checkChild(context);
-	}	
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {

@@ -98,27 +98,17 @@ public class Transpiler {
 	    return this.copyTranspiler(context);
 	}
 
-	
-
-
-	public Transpiler newMemberTranspiler(CategoryType categoryType) {
-		Context context = this.context.newMemberContext(categoryType);
-	    return this.copyTranspiler(context);
-	}
-
-	public Transpiler newGetterTranspiler(CategoryType categoryType, String name) {
-		Transpiler transpiler = this.newMemberTranspiler(categoryType);
+	public Transpiler newGetterTranspiler(String name) {
+		Transpiler transpiler = this.newChildTranspiler(null);
 	    transpiler.getterName = name;
 	    return transpiler;
 	}
 
-	public Transpiler newSetterTranspiler(CategoryType categoryType, String name) {
-		Transpiler transpiler = this.newMemberTranspiler(categoryType);
+	public Transpiler newSetterTranspiler(String name) {
+		Transpiler transpiler = this.newChildTranspiler(null);
 	    transpiler.setterName = name;
 	    return transpiler;
 	}
-
-
 
 	public Transpiler copyTranspiler(Context context) {
 		Transpiler transpiler = new Transpiler(this.engine, context);

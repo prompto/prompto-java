@@ -67,12 +67,6 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 	}	
 
 	@Override
-	public void check(ConcreteCategoryDeclaration category, Context context) {
-		// TODO Auto-generated method stub
-	}
-	
-
-	@Override
 	public IType check(Context context) {
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, getId());
 		return decl.getType();
@@ -80,7 +74,6 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 
 	@Override
 	public void compile(Context context, boolean isStart, ClassFile classFile) {
-		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException();
 	}
 
