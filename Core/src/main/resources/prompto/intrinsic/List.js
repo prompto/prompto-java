@@ -130,6 +130,10 @@ List.prototype.iterate = function (fn, instance) {
                 next: function() { return fn(self[idx++]); }
             };
         },
+        filtered: function(filterFunction) {
+        	var array = this.toArray().filter(filterFunction);
+        	return new List(false, array);
+        },
         toArray: function() {
         	var array = [];
         	var iterator = this.iterator();
