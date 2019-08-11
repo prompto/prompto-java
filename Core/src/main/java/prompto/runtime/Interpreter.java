@@ -79,7 +79,7 @@ public class Interpreter {
 	
 	public static void interpretMethod(Context context, Identifier methodName, IExpression args) {
 		IMethodDeclaration method = MethodLocator.locateMethod(context, methodName, args);
-		ArgumentList assignments = buildAssignments(method, args);
+		ArgumentList assignments = buildArguments(method, args);
 		MethodCall call = new MethodCall(new MethodSelector(methodName), assignments);
 		call.interpret(context);	
 	}
@@ -88,7 +88,7 @@ public class Interpreter {
 		throw new UnsupportedOperationException("yet!");
 	}
 
-	public static ArgumentList buildAssignments(IMethodDeclaration method, IExpression args) {
+	public static ArgumentList buildArguments(IMethodDeclaration method, IExpression args) {
 		ArgumentList assignments = new ArgumentList();
 		if(method.getParameters().size()==1) {
 			Identifier name = method.getParameters().getFirst().getId();

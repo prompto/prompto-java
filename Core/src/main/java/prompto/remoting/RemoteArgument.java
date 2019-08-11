@@ -22,12 +22,12 @@ import prompto.type.IType;
 import prompto.utils.TypeUtils;
 import prompto.value.IValue;
 
-public class Parameter {
+public class RemoteArgument {
 
-	public static Parameter read(Context context, JsonNode jsonParam, Map<String, byte[]> parts) throws Exception {
+	public static RemoteArgument read(Context context, JsonNode jsonParam, Map<String, byte[]> parts) throws Exception {
 		if(!jsonParam.isObject())
 			throw new InvalidParameterException("Expecting a JSON object!");
-		Parameter param = new Parameter();
+		RemoteArgument param = new RemoteArgument();
 		JsonNode field = jsonParam.get("name");
 		if(field==null)
 			throw new InvalidParameterException("Expecting a 'name' field!");

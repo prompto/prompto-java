@@ -21,9 +21,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SuppressWarnings("serial")
-public class ParameterList extends ArrayList<Parameter> {
+public class RemoteArgumentList extends ArrayList<RemoteArgument> {
 
-	public ArgumentList toAssignments(Context context) {
+	public ArgumentList toArguments(Context context) {
 		return new ArgumentList(
 				this.stream()
 				.map((param)->
@@ -56,7 +56,7 @@ public class ParameterList extends ArrayList<Parameter> {
 		Writer writer = new StringWriter();
 		JsonGenerator generator = new JsonFactory().createGenerator(writer);
 		generator.writeStartArray();
-		for(Parameter param : this)
+		for(RemoteArgument param : this)
 			param.toJson(context, generator);
 		generator.writeEndArray();
 		generator.flush();
@@ -64,7 +64,7 @@ public class ParameterList extends ArrayList<Parameter> {
 		return writer.toString();
 	}
 
-	public static ParameterList read(Context context, String jsonParams, Map<String, byte[]> parts) throws Exception {
+	public static RemoteArgumentList read(Context context, String jsonParams, Map<String, byte[]> parts) throws Exception {
 		JsonNode params = parseParams(jsonParams);
 		return read(context, params, parts);
 	}
@@ -76,14 +76,14 @@ public class ParameterList extends ArrayList<Parameter> {
 		return parser.readValueAsTree();
 	}
 
-	public static ParameterList read(Context context, JsonNode jsonParams, Map<String, byte[]> parts) throws Exception {
-		ParameterList params = new ParameterList();
+	public static RemoteArgumentList read(Context context, JsonNode jsonParams, Map<String, byte[]> parts) throws Exception {
+		RemoteArgumentList params = new RemoteArgumentList();
 		if(jsonParams==null)
 			return params;
 		if(!jsonParams.isArray())
 			throw new InvalidParameterException("Expecting a JSON array!");
 		for(JsonNode node : jsonParams)
-			params.add(Parameter.read(context, node, parts));
+			params.add(RemoteArgument.read(context, node, parts));
 		return params;
 	}
 
