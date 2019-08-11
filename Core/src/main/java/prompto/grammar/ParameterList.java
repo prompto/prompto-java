@@ -3,7 +3,7 @@ package prompto.grammar;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import prompto.param.CodeArgument;
+import prompto.param.CodeParameter;
 import prompto.param.IParameter;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
@@ -47,7 +47,7 @@ public class ParameterList extends ObjectList<IParameter> {
 	public List<IParameter> stripOutTemplateArguments() {
 		return this.stream()
 			.filter((a)->
-				!(a instanceof CodeArgument))
+				!(a instanceof CodeParameter))
 			.collect(Collectors.toList());
 	}
 
@@ -107,7 +107,7 @@ public class ParameterList extends ObjectList<IParameter> {
 
 	public void transpile(Transpiler transpiler) {
 		List<IParameter> args = this.stream()
-			.filter(arg->!(arg instanceof CodeArgument))
+			.filter(arg->!(arg instanceof CodeParameter))
 			.collect(Collectors.toList());
 		if(!args.isEmpty()) {
 	        args.forEach(arg->{

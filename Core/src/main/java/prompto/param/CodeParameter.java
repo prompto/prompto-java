@@ -11,9 +11,9 @@ import prompto.type.CodeType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 
-public class CodeArgument extends BaseParameter implements ITypedParameter {
+public class CodeParameter extends BaseParameter implements ITypedParameter {
 	
-	public CodeArgument(Identifier id) {
+	public CodeParameter(Identifier id) {
 		super(id);
 	}
 	
@@ -50,9 +50,9 @@ public class CodeArgument extends BaseParameter implements ITypedParameter {
 			return true;
 		if(obj==null)
 			return false;
-		if(!(obj instanceof CodeArgument))
+		if(!(obj instanceof CodeParameter))
 			return false;
-		CodeArgument other = (CodeArgument)obj;
+		CodeParameter other = (CodeParameter)obj;
 		return Objects.equals(this.getId(),other.getId());
 	}
 

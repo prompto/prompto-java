@@ -3,7 +3,7 @@ package prompto.param;
 import prompto.grammar.Identifier;
 import prompto.value.CodeValue;
 
-public class ValuedCodeParameter extends CodeArgument {
+public class ValuedCodeParameter extends CodeParameter {
 
 	CodeValue value;
 	

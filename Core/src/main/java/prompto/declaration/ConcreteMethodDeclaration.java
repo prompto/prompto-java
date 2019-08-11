@@ -32,7 +32,7 @@ import prompto.grammar.ParameterList;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoMethod;
 import prompto.param.CategoryParameter;
-import prompto.param.CodeArgument;
+import prompto.param.CodeParameter;
 import prompto.param.IParameter;
 import prompto.param.ValuedCodeParameter;
 import prompto.parser.ISection;
@@ -178,7 +178,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		if(parameters==null)
 			return false;
 		for( IParameter arg : parameters) {
-			if(arg instanceof CodeArgument)
+			if(arg instanceof CodeParameter)
 				return true;
 		}
 		return false;
@@ -435,7 +435,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	    // remember code arguments
 	    declaration.codeParameters = new HashMap<>();
 	    getParameters().stream()
-	    	.filter(arg ->arg instanceof CodeArgument )
+	    	.filter(arg ->arg instanceof CodeParameter )
 	    	.forEach(arg -> {
 	    		CodeValue value = (CodeValue)transpiler.getContext().getValue(arg.getId()); 
 	    		declaration.codeParameters.put(arg.getId(), new ValuedCodeParameter(arg.getId(), value));

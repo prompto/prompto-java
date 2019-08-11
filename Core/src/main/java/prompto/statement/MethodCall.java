@@ -38,7 +38,7 @@ import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.grammar.Specificity;
 import prompto.javascript.JavaScriptNativeCall;
-import prompto.param.CodeArgument;
+import prompto.param.CodeParameter;
 import prompto.param.IParameter;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
@@ -440,7 +440,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	
 	private void transpileArguments(Transpiler transpiler, IMethodDeclaration declaration, boolean allowDerived) {
 		List<Argument> arguments = this.makeArguments(transpiler.getContext(), declaration);
-	    arguments = arguments.stream().filter(argument->!(argument.getParameter() instanceof CodeArgument)).collect(Collectors.toList());
+	    arguments = arguments.stream().filter(argument->!(argument.getParameter() instanceof CodeParameter)).collect(Collectors.toList());
 	    if(!arguments.isEmpty()) {
 	        transpiler.append("(");
 	        arguments.forEach(argument -> {

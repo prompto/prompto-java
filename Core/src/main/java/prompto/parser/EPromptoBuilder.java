@@ -196,7 +196,7 @@ import prompto.literal.TupleLiteral;
 import prompto.literal.UuidLiteral;
 import prompto.literal.VersionLiteral;
 import prompto.param.CategoryParameter;
-import prompto.param.CodeArgument;
+import prompto.param.CodeParameter;
 import prompto.param.ExtendedParameter;
 import prompto.param.IParameter;
 import prompto.param.UnresolvedParameter;
@@ -783,7 +783,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitCode_argument(Code_argumentContext ctx) {
 		Identifier name = getNodeValue(ctx.name);
-		setNodeValue(ctx, new CodeArgument(name));
+		setNodeValue(ctx, new CodeParameter(name));
 	}
 
 	@Override
