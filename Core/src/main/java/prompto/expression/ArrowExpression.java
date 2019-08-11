@@ -50,6 +50,12 @@ public class ArrowExpression extends Section implements IExpression {
 	public IType check(Context context) {
 		throw new UnsupportedOperationException();
 	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		// TODO Auto-generated method stub
+		IExpression.super.declare(transpiler);
+	}
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
@@ -67,9 +73,18 @@ public class ArrowExpression extends Section implements IExpression {
 	
 	@Override
 	public String toString() {
-		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
-		toDialect(writer);
-		return writer.toString();
+		return toString(Context.newGlobalContext());
+	}
+	
+	
+	public String toString(Context context) {
+		try {
+			CodeWriter writer = new CodeWriter(Dialect.E, context);
+			toDialect(writer);
+			return writer.toString();
+		} catch(Throwable t) {
+			return "";
+		}
 	}
 
 	private void bodyToDialect(CodeWriter writer) {

@@ -418,7 +418,7 @@ public class ConstructorExpression extends Section implements IExpression {
 	    if(this.copyFrom!=null)
 	        this.copyFrom.declare(transpiler);
 	    if(this.assignments!=null)
-	        this.assignments.declare(transpiler);
+	        this.assignments.declare(transpiler, null);
 	}
 	
 	@Override

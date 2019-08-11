@@ -12,11 +12,6 @@ public class TestArrow extends BaseOParserTest {
 	}
 
 	@Test
-	public void testArrowType() throws Exception {
-		compareResourceOMO("arrow/arrowType.poc");
-	}
-
-	@Test
 	public void testFilterFromList() throws Exception {
 		compareResourceOMO("arrow/filterFromList.poc");
 	}

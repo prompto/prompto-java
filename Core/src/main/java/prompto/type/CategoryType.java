@@ -854,10 +854,10 @@ public class CategoryType extends BaseType {
 	public Comparator<? extends IValue> getComparator(Context context, IExpression key, boolean descending) {
 		if(key==null)
 			key = new UnresolvedIdentifier(new Identifier("key"));
-		Identifier keyAsId = new Identifier(key.toString());
 		IDeclaration d = getDeclaration(context);
 		if(d instanceof CategoryDeclaration) {
 			CategoryDeclaration decl = (CategoryDeclaration)d;
+			Identifier keyAsId = new Identifier(key.toString());
 			if(decl.hasAttribute(context, keyAsId))
 				return newAttributeComparator(context, keyAsId, descending);
 			else if(decl.hasMethod(context, keyAsId))

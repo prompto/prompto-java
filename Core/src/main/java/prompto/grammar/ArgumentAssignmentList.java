@@ -126,10 +126,8 @@ public class ArgumentAssignmentList extends LinkedList<ArgumentAssignment> {
 		toODialect(writer);
 	}
 
-	public void declare(Transpiler transpiler) {
-		for(ArgumentAssignment as : this) {
-			as.declare(transpiler);
-		}
+	public void declare(Transpiler transpiler, IMethodDeclaration declaration) {
+		this.forEach(as -> as.declare(transpiler, declaration));
 		
 	}
 

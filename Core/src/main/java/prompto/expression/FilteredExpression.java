@@ -27,8 +27,6 @@ import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
-import prompto.type.ContainerType;
-import prompto.type.CursorType;
 import prompto.type.IType;
 import prompto.type.IterableType;
 import prompto.type.ListType;

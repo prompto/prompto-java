@@ -132,11 +132,26 @@ public class ArgumentAssignment {
 	}
 	
 	public IExpression resolve(Context context, IMethodDeclaration methodDeclaration, boolean checkInstance, boolean allowDerived) throws PromptoError {
+		IArgument argument = findArgument(methodDeclaration);
+		return resolve(context, argument, checkInstance, allowDerived);
+	}
+	
+	public IExpression resolve(Context context, IArgument argument, boolean checkInstance, boolean allowDerived) throws PromptoError {
 		// since we support implicit members, it's time to resolve them
-		Identifier name = argument.getId();
 		IExpression expression = getExpression();
-		IArgument argument = methodDeclaration.getArguments().find(name);
 		IType requiredType = argument.getType(context);
+		IType actualType = getActualType(context, requiredType, expression, checkInstance);
+		boolean assignable = requiredType.isAssignableFrom(context, actualType);
+		// when in dispatch, allow derived
+		if(!assignable && allowDerived)
+	        assignable = actualType.isAssignableFrom(context, requiredType);
+		// try passing category member
+		if(!assignable && (actualType instanceof CategoryType)) 
+			expression = new MemberSelector(expression, argument.getId());
+		return expression; 
+	}
+
+	private IType getActualType(Context context, IType requiredType, IExpression expression, boolean checkInstance) {
 		boolean checkArrow = requiredType instanceof MethodType && expression instanceof ContextualExpression && ((ContextualExpression)expression).getExpression() instanceof ArrowExpression;
 		IType actualType = checkArrow ? ((MethodType)requiredType).checkArrowExpression((ContextualExpression)expression) : expression.check(context.getCallingContext());
 		if(checkInstance && actualType instanceof CategoryType) {
@@ -144,15 +159,14 @@ public class ArgumentAssignment {
 			if(value instanceof IInstance)
 				actualType = ((IInstance)value).getType();
 		}
-		boolean assignable = requiredType.isAssignableFrom(context, actualType);
-		// when in dispatch, allow derived
-		if(!assignable && allowDerived)
-	        assignable = actualType.isAssignableFrom(context, requiredType);
-		// try passing member
-		if(!assignable && (actualType instanceof CategoryType)) 
-			expression = new MemberSelector(expression,name);
-		return expression; 
+		return actualType;
 	}
+
+
+	private IArgument findArgument(IMethodDeclaration methodDeclaration) {
+		return methodDeclaration.getArguments().find(this.argument.getId());
+	}
+
 
 	public ArgumentAssignment resolveAndCheck(Context context, ArgumentList argumentList) {
 		IArgument argument = this.argument;
@@ -170,9 +184,23 @@ public class ArgumentAssignment {
 	}
 
 
-	public void declare(Transpiler transpiler) {
-		if(this.expression!=null)
+	public void declare(Transpiler transpiler, IMethodDeclaration methodDeclaration) {
+		if(this.expression!=null && methodDeclaration!=null && !this.declareArrowExpression(transpiler, methodDeclaration))
 			this.expression.declare(transpiler);
+	}
+
+
+	private boolean declareArrowExpression(Transpiler transpiler, IMethodDeclaration methodDeclaration) {
+		if(this.argument==null)
+			return false;
+		IArgument argument = findArgument(methodDeclaration);
+		IType requiredType = argument.getType(transpiler.getContext());
+		boolean isArrow = requiredType instanceof MethodType && expression instanceof ContextualExpression && ((ContextualExpression)expression).getExpression() instanceof ArrowExpression;
+		if(isArrow) {
+			((MethodType)requiredType).declareArrowExpression(transpiler, (ContextualExpression)expression);
+			return true;
+		} else
+			return false;
 	}
 
 

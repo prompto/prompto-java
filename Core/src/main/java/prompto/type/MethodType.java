@@ -117,8 +117,13 @@ public class MethodType extends BaseType {
 	}
 
 	public IType checkArrowExpression(ContextualExpression expression) {
-		// TODO Auto-generated method stub
+		// TODO check method call
 		return this;
+	}
+
+	public void declareArrowExpression(Transpiler transpiler, ContextualExpression expression) {
+		// TODO Auto-generated method stub
+		expression.declare(transpiler);
 	}
 
 

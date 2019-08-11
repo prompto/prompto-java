@@ -31,7 +31,6 @@ import prompto.declaration.TestMethodDeclaration;
 import prompto.error.NotMutableError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.expression.ArrowExpression;
 import prompto.expression.IAssertion;
 import prompto.expression.IExpression;
 import prompto.expression.MethodSelector;
@@ -52,7 +51,6 @@ import prompto.utils.CodeWriter;
 import prompto.value.ArrowValue;
 import prompto.value.BooleanValue;
 import prompto.value.ClosureValue;
-import prompto.value.ContextualExpression;
 import prompto.value.IValue;
 
 public class MethodCall extends SimpleStatement implements IAssertion {
@@ -351,8 +349,6 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-        if (this.assignments != null)
-            this.assignments.declare(transpiler);
 		Context context = transpiler.getContext();
 		MethodFinder finder = new MethodFinder(context, this);
 	    Set<IMethodDeclaration> declarations = finder.findCompatibleMethods(false, true, spec -> spec!= Specificity.INCOMPATIBLE);
@@ -375,6 +371,8 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	}
 
 	private void declareDeclaration(Transpiler transpiler, IMethodDeclaration declaration, Context local) {
+        if (this.assignments != null)
+            this.assignments.declare(transpiler, declaration);
 	    if(declaration.isTemplate()) {
 	        this.fullDeclareDeclaration(declaration, transpiler, local);
 	    } else {
