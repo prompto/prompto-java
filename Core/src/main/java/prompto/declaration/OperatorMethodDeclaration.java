@@ -1,8 +1,8 @@
 package prompto.declaration;
 
-import prompto.argument.IArgument;
 import prompto.expression.IExpression;
-import prompto.grammar.ArgumentList;
+import prompto.grammar.ParameterList;
+import prompto.param.IParameter;
 import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
 import prompto.runtime.Context;
@@ -15,8 +15,8 @@ public class OperatorMethodDeclaration extends ConcreteMethodDeclaration impleme
 	
 	Operator operator;
 	
-	public OperatorMethodDeclaration(Operator op, IArgument arg, IType returnType, StatementList stmts) {
-		super(new Identifier(getNameAsKey(op)), new ArgumentList(arg), returnType, stmts);
+	public OperatorMethodDeclaration(Operator op, IParameter arg, IType returnType, StatementList stmts) {
+		super(new Identifier(getNameAsKey(op)), new ParameterList(arg), returnType, stmts);
 		this.operator = op;
 	}
 
@@ -40,7 +40,7 @@ public class OperatorMethodDeclaration extends ConcreteMethodDeclaration impleme
 		writer.append("def operator ");
 		writer.append(operator.getToken());
 		writer.append(" (");
-		arguments.toDialect(writer);
+		parameters.toDialect(writer);
 		writer.append(")");
 		if(returnType!=null && returnType!=VoidType.instance()) {
 			writer.append("->");
@@ -57,7 +57,7 @@ public class OperatorMethodDeclaration extends ConcreteMethodDeclaration impleme
 		writer.append("define ");
 		writer.append(operator.getToken());
 		writer.append(" as operator ");
-		arguments.toDialect(writer);
+		parameters.toDialect(writer);
 		if(returnType!=null && returnType!=VoidType.instance()) {
 			writer.append("returning ");
 			returnType.toDialect(writer);
@@ -78,7 +78,7 @@ public class OperatorMethodDeclaration extends ConcreteMethodDeclaration impleme
 		writer.append("operator ");
 		writer.append(operator.getToken());
 		writer.append(" (");
-		arguments.toDialect(writer);
+		parameters.toDialect(writer);
 		writer.append(") {\n");
 		writer.indent();
 		statements.toDialect(writer);

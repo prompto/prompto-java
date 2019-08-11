@@ -6,7 +6,7 @@ import java.lang.reflect.Type;
 import prompto.compiler.ClassFile;
 import prompto.compiler.InterfaceType;
 import prompto.error.SyntaxError;
-import prompto.grammar.ArgumentList;
+import prompto.grammar.ParameterList;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
@@ -17,7 +17,7 @@ import prompto.value.IValue;
 
 public class AbstractMethodDeclaration extends BaseMethodDeclaration implements IMethodDeclaration {
 
-	public AbstractMethodDeclaration(Identifier name, ArgumentList arguments, IType returnType) {
+	public AbstractMethodDeclaration(Identifier name, ParameterList arguments, IType returnType) {
 		super(name, arguments, returnType!=null ? returnType : VoidType.instance());
 	}
 	
@@ -33,19 +33,19 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 
 	@Override
 	public IType check(Context context, boolean isStart) {
-		if(arguments!=null)
-			arguments.check(context);
+		if(parameters!=null)
+			parameters.check(context);
 		if(isStart) {
 			Context local = context.newLocalContext();
-			registerArguments(local); // will check them
+			registerParameters(local); // will check them
 		}
 		return returnType;
 	}
 	
 	@Override
 	public IType checkChild(Context context) {
-		if(arguments!=null)
-			arguments.check(context);
+		if(parameters!=null)
+			parameters.check(context);
 		return returnType;
 	}
 	
@@ -70,7 +70,7 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 	public ClassFile compileInterface(Context context, Type type) {
 		ClassFile classFile = new ClassFile(type);
 		classFile.addModifier(Modifier.ABSTRACT | Modifier.INTERFACE);
-		InterfaceType intf = new InterfaceType(arguments, returnType);
+		InterfaceType intf = new InterfaceType(parameters, returnType);
 		classFile.addAttribute(intf.computeSignature(context, Object.class));
 		classFile.addInterface(intf.getInterfaceType());
 		return classFile;
@@ -96,7 +96,7 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 		writer.append("abstract def ");
 		writer.append(getName());
 		writer.append(" (");
-		arguments.toDialect(writer);
+		parameters.toDialect(writer);
 		writer.append(")");
 		if(returnType!=null && returnType!=VoidType.instance()) {
 			writer.append("->");
@@ -108,7 +108,7 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 		writer.append("define ");
 		writer.append(getName());
 		writer.append(" as abstract method ");
-		arguments.toDialect(writer);
+		parameters.toDialect(writer);
 		if(returnType!=null && returnType!=VoidType.instance()) {
 			writer.append("returning ");
 			returnType.toDialect(writer);
@@ -124,13 +124,13 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 		writer.append("method ");
 		writer.append(getName());
 		writer.append(" (");
-		arguments.toDialect(writer);
+		parameters.toDialect(writer);
 		writer.append(");");
 	}
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-		this.declareArguments(transpiler);
+		this.declareParameters(transpiler);
 	}
 	
 	@Override

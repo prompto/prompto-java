@@ -6,7 +6,6 @@ import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
-import prompto.argument.AttributeArgument;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerUtils;
@@ -22,10 +21,11 @@ import prompto.declaration.EnumeratedCategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
-import prompto.grammar.ArgumentAssignment;
-import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.Argument;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.literal.TextLiteral;
+import prompto.param.AttributeParameter;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
@@ -38,33 +38,33 @@ import prompto.value.TextValue;
 
 public class CategorySymbol extends Symbol implements IExpression  {
 	
-	ArgumentAssignmentList assignments;
+	ArgumentList arguments;
 	
-	public CategorySymbol(Identifier name,ArgumentAssignmentList assignments) {
+	public CategorySymbol(Identifier name, ArgumentList arguments) {
 		super(name);
-		this.assignments = assignments;
+		this.arguments = arguments;
 	}
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
 		writer.append(symbol);
 		writer.append(" ");
-		assignments.toDialect(writer);
+		arguments.toDialect(writer);
 	}
 	
-	public void setAssignments(ArgumentAssignmentList assignments) {
-		this.assignments = assignments;
+	public void setArguments(ArgumentList arguments) {
+		this.arguments = arguments;
 	}
 	
-	public ArgumentAssignmentList getAssignments() {
-		return assignments;
+	public ArgumentList getArguments() {
+		return arguments;
 	}
 	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		if(assignments!=null)
-			sb.append(assignments.toString());
+		if(arguments!=null)
+			sb.append(arguments.toString());
 		if(sb.length()==0)
 			sb.append(type.getTypeNameId());
 		return sb.toString();
@@ -76,13 +76,13 @@ public class CategorySymbol extends Symbol implements IExpression  {
 				EnumeratedCategoryDeclaration.class, type.getTypeNameId());
 		if(cd==null)
 			throw new SyntaxError("Unknown category " + type.getTypeName());
-		if(assignments!=null) {
+		if(arguments!=null) {
 			context = context.newChildContext();
-			for(ArgumentAssignment assignment : assignments) {
-				if(!cd.hasAttribute(context, assignment.getArgumentId()))
-					throw new SyntaxError("\"" + assignment.getArgumentId() + 
+			for(Argument argument : arguments) {
+				if(!cd.hasAttribute(context, argument.getParameterId()))
+					throw new SyntaxError("\"" + argument.getParameterId() + 
 						"\" is not an attribute of " + type.getTypeName());	
-				assignment.check(context);
+				argument.check(context);
 			}
 		}
 		return type;
@@ -93,11 +93,11 @@ public class CategorySymbol extends Symbol implements IExpression  {
 		EnumeratedCategoryType type = (EnumeratedCategoryType)this.getType(context);
 		IInstance instance = type.newInstance(context);
 		instance.setMutable(true);
-		if(assignments!=null) {
+		if(arguments!=null) {
 			context = context.newLocalContext();
-			for(ArgumentAssignment assignment : assignments) {
-				IValue value = assignment.getExpression().interpret(context);
-				instance.setMember(context, assignment.getArgumentId(), value);
+			for(Argument argument : arguments) {
+				IValue value = argument.getExpression().interpret(context);
+				instance.setMember(context, argument.getParameterId(), value);
 			}
 		}
 		instance.setMember(context, new Identifier("name"), new TextValue(this.getId().toString()));
@@ -111,11 +111,11 @@ public class CategorySymbol extends Symbol implements IExpression  {
 			generator.writeStartObject();
 			generator.writeFieldName("name");
 			generator.writeString(symbol.toString());
-			if(assignments!=null) {
+			if(arguments!=null) {
 				context = context.newLocalContext();
-				for(ArgumentAssignment assignment : assignments) {
-					generator.writeFieldName(assignment.getArgument().getName());
-					IValue value = assignment.getExpression().interpret(context);
+				for(Argument argument : arguments) {
+					generator.writeFieldName(argument.getParameter().getName());
+					IValue value = argument.getExpression().interpret(context);
 					value.toJsonStream(context, generator, instanceId, fieldName, withType, binaries);
 				}
 			}
@@ -166,20 +166,19 @@ public class CategorySymbol extends Symbol implements IExpression  {
 	}
 
 	private void compileAssignments(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo) {
-		if(assignments!=null) for(ArgumentAssignment assignment : assignments)
-			compileAssignment(context, method, flags, thisInfo, assignment);
-		ArgumentAssignment name = new ArgumentAssignment(new AttributeArgument(new Identifier("name")), new TextLiteral("\"" + getName() + "\""));
-		compileAssignment(context, method, flags, thisInfo, name);
+		if(arguments!=null) for(Argument argument : arguments)
+			compileArgument(context, method, flags, thisInfo, argument);
+		Argument name = new Argument(new AttributeParameter(new Identifier("name")), new TextLiteral("\"" + getName() + "\""));
+		compileArgument(context, method, flags, thisInfo, name);
 	}
 	
-	private void compileAssignment(Context context, MethodInfo method, Flags flags, 
-			ResultInfo thisInfo, ArgumentAssignment assignment) {
+	private void compileArgument(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo, Argument argument) {
 		// keep a copy of new instance on top of the stack
 		method.addInstruction(Opcode.DUP);
 		// get value
-		/* ResultInfo valueInfo = */assignment.getExpression().compile(context, method, flags);
+		/* ResultInfo valueInfo = */argument.getExpression().compile(context, method, flags);
 		// call setter
-		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, assignment.getArgumentId());
+		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, argument.getParameterId());
 		FieldInfo field = decl.toFieldInfo(context);
 		MethodConstant m = new MethodConstant(thisInfo.getType(), 
 				CompilerUtils.setterName(field.getName().getValue()), field.getType(), void.class);
@@ -221,10 +220,10 @@ public class CategorySymbol extends Symbol implements IExpression  {
 	public void initializeError(Transpiler transpiler) {
 	    transpiler.append("var ").append(this.getName()).append(" = new ").append(this.type.getTypeName()).append("({");
 	    transpiler.append("name: '").append(this.getName()).append("', ");
-	    if(this.assignments!=null) {
-	        this.assignments.forEach(assignment -> {
-	            transpiler.append(assignment.getArgument().getName()).append(":");
-	            assignment.getExpression().transpile(transpiler);
+	    if(this.arguments!=null) {
+	        this.arguments.forEach(argument -> {
+	            transpiler.append(argument.getParameter().getName()).append(":");
+	            argument.getExpression().transpile(transpiler);
 	            transpiler.append(", ");
 	        });
 	    }
@@ -234,11 +233,11 @@ public class CategorySymbol extends Symbol implements IExpression  {
 
 	public void initialize(Transpiler transpiler) {
 	    transpiler.append("var ").append(this.getName()).append(" = ");
-	    AttributeArgument nameArg = new AttributeArgument(new Identifier("name"));
-	    ArgumentAssignment nameAssign = new ArgumentAssignment(nameArg, new TextLiteral('"' + this.getName() + '"'));
-	    ArgumentAssignmentList assignments = new ArgumentAssignmentList(this.assignments);
-	    assignments.add(nameAssign);
-	    ConstructorExpression exp = new ConstructorExpression((CategoryType) this.type, null, assignments, false);
+	    AttributeParameter attribute = new AttributeParameter(new Identifier("name"));
+	    Argument argument = new Argument(attribute, new TextLiteral('"' + this.getName() + '"'));
+	    ArgumentList arguments = new ArgumentList(this.arguments);
+	    arguments.add(argument);
+	    ConstructorExpression exp = new ConstructorExpression((CategoryType) this.type, null, arguments, false);
 	    exp.transpile(transpiler);
 	    transpiler.append(";").newLine();
 	}

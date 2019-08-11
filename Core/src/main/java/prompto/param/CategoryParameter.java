@@ -1,4 +1,4 @@
-package prompto.argument;
+package prompto.param;
 
 import java.util.Objects;
 
@@ -14,16 +14,16 @@ import prompto.type.IType;
 import prompto.type.IntegerType;
 import prompto.utils.CodeWriter;
 
-public class CategoryArgument extends BaseArgument implements ITypedArgument {
+public class CategoryParameter extends BaseParameter implements ITypedParameter {
 	
 	IType type;
 	
-	public CategoryArgument(IType type, Identifier id) {
+	public CategoryParameter(IType type, Identifier id) {
 		super(id);
 		this.type = type;
 	}
 
-	public CategoryArgument(IType type, Identifier id, IExpression defaultValue) {
+	public CategoryParameter(IType type, Identifier id, IExpression defaultValue) {
 		super(id);
 		this.type = type;
 		setDefaultExpression(defaultValue);
@@ -106,9 +106,9 @@ public class CategoryArgument extends BaseArgument implements ITypedArgument {
 			return true;
 		if(obj==null)
 			return false;
-		if(!(obj instanceof CategoryArgument))
+		if(!(obj instanceof CategoryParameter))
 			return false;
-		CategoryArgument other = (CategoryArgument)obj;
+		CategoryParameter other = (CategoryParameter)obj;
 		return Objects.equals(this.getType(),other.getType())
 				&& Objects.equals(this.getId(),other.getId());
 	}

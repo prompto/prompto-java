@@ -378,7 +378,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		if(operator==null)
 			throw new SyntaxError("No " + oper.getToken() + " operator method defined!");
 		Context local = context.newInstanceContext(decl.getType(context), false).newChildContext();
-		operator.registerArguments(local);
+		operator.registerParameters(local);
 		IType resultType = operator.check(local, false);
 		String methodName = "operator_" + oper.name();
 		InterfaceConstant c = new InterfaceConstant(left.getType(), methodName, argType.getJavaType(context), resultType.getJavaType(context));

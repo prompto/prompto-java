@@ -12,10 +12,6 @@ import org.joda.time.DateTimeZone;
 import org.joda.time.tz.ZoneInfoProvider;
 import org.junit.Test;
 
-import prompto.argument.CategoryArgument;
-import prompto.argument.ExtendedArgument;
-import prompto.argument.IArgument;
-import prompto.argument.ITypedArgument;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteMethodDeclaration;
@@ -27,9 +23,9 @@ import prompto.expression.NativeSymbol;
 import prompto.expression.PlusExpression;
 import prompto.expression.UnresolvedIdentifier;
 import prompto.expression.UnresolvedSelector;
-import prompto.grammar.ArgumentAssignment;
-import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.Argument;
 import prompto.grammar.ArgumentList;
+import prompto.grammar.ParameterList;
 import prompto.grammar.Identifier;
 import prompto.instance.IAssignableInstance;
 import prompto.intrinsic.PromptoDate;
@@ -49,6 +45,10 @@ import prompto.literal.TextLiteral;
 import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
 import prompto.literal.VersionLiteral;
+import prompto.param.CategoryParameter;
+import prompto.param.ExtendedParameter;
+import prompto.param.IParameter;
+import prompto.param.ITypedParameter;
 import prompto.parser.Dialect;
 import prompto.parser.ECleverParser;
 import prompto.parser.EIndentingLexer;
@@ -220,7 +220,7 @@ public class TestParserAtoms {
 	public void testArgument() throws Exception {
 		String statement = "Person p";
 		ETestParser parser = new ETestParser(statement, false);
-		ITypedArgument a = parser.parse_typed_argument();
+		ITypedParameter a = parser.parse_typed_argument();
 		assertNotNull(a);
 		assertEquals("Person",a.getType().getTypeName());
 		assertEquals("p",a.getId().toString());
@@ -230,7 +230,7 @@ public class TestParserAtoms {
 	public void testList1Argument() throws Exception {
 		String statement = "Person p";
 		ETestParser parser = new ETestParser(statement, false);
-		ArgumentList l = parser.parse_argument_list();
+		ParameterList l = parser.parse_argument_list();
 		assertNotNull(l);
 		assertEquals(1,l.size());
 	}
@@ -239,7 +239,7 @@ public class TestParserAtoms {
 	public void testList2ArgumentsComma() throws Exception {
 		String statement = "Person p, Employee e";
 		ETestParser parser = new ETestParser(statement, false);
-		ArgumentList l = parser.parse_argument_list();
+		ParameterList l = parser.parse_argument_list();
 		assertNotNull(l);
 		assertEquals(2,l.size());
 	}
@@ -248,7 +248,7 @@ public class TestParserAtoms {
 	public void testList2ArgumentsAnd() throws Exception {
 		String statement = "Person p and Employee e";
 		ETestParser parser = new ETestParser(statement, false);
-		ArgumentList l = parser.parse_argument_list();
+		ParameterList l = parser.parse_argument_list();
 		assertNotNull(l);
 		assertEquals(2,l.size());
 	}
@@ -265,8 +265,8 @@ public class TestParserAtoms {
 	public void testSimpleArgumentAssignment() throws Exception {
 		String statement = "p.name as value";
 		ETestParser parser = new ETestParser(statement, false);
-		ArgumentAssignment as = parser.parse_argument_assignment();
-		assertEquals("value",as.getArgumentId().toString());
+		Argument as = parser.parse_argument_assignment();
+		assertEquals("value",as.getParameterId().toString());
 		IExpression exp = as.getExpression();
 		assertNotNull(exp);
 		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
@@ -278,8 +278,8 @@ public class TestParserAtoms {
 	public void testComplexArgumentAssignment() throws Exception {
 		String statement = "\"person\" + p.name as value";
 		ETestParser parser = new ETestParser(statement, false);
-		ArgumentAssignment as = parser.parse_argument_assignment();
-		assertEquals("value",as.getArgumentId().toString());
+		Argument as = parser.parse_argument_assignment();
+		assertEquals("value",as.getParameterId().toString());
 		IExpression exp = as.getExpression();
 		assertTrue(exp instanceof PlusExpression);
 		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
@@ -291,9 +291,9 @@ public class TestParserAtoms {
 	public void testArgumentAssignmentList1Arg() throws Exception {
 		String statement = "with \"person\" + p.name as value";
 		ETestParser parser = new ETestParser(statement, false);
-		ArgumentAssignmentList ls = parser.parse_argument_assignment_list();
-		ArgumentAssignment as = ls.get(0);
-		assertEquals("value",as.getArgumentId().toString());
+		ArgumentList ls = parser.parse_argument_assignment_list();
+		Argument as = ls.get(0);
+		assertEquals("value",as.getParameterId().toString());
 		IExpression exp = as.getExpression();
 		assertTrue(exp instanceof PlusExpression);
 		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
@@ -312,8 +312,8 @@ public class TestParserAtoms {
 		mc.getCaller().toDialect(writer);
 		assertEquals("print",writer.toString());
 		assertNotNull(mc.getAssignments());
-		ArgumentAssignment as = mc.getAssignments().get(0);
-		assertEquals("value",as.getArgumentId().toString());
+		Argument as = mc.getAssignments().get(0);
+		assertEquals("value",as.getParameterId().toString());
 		IExpression exp = as.getExpression();
 		assertTrue(exp instanceof PlusExpression);
 		writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
@@ -330,8 +330,8 @@ public class TestParserAtoms {
 		ConcreteMethodDeclaration ad = parser.parse_concrete_method_declaration();
 		assertNotNull(ad);
 		assertEquals("printName",ad.getId().toString());
-		assertNotNull(ad.getArguments());
-		assertTrue(ad.getArguments().contains(new CategoryArgument(
+		assertNotNull(ad.getParameters());
+		assertTrue(ad.getParameters().contains(new CategoryParameter(
 				new CategoryType(new Identifier("Person")),
 				new Identifier("p"))));
 		assertNotNull(ad.getStatements());
@@ -348,12 +348,12 @@ public class TestParserAtoms {
 		ConcreteMethodDeclaration ad = parser.parse_concrete_method_declaration();
 		assertNotNull(ad);
 		assertEquals("printName",ad.getId().toString());
-		assertNotNull(ad.getArguments());
-		IArgument expected = new ExtendedArgument(
+		assertNotNull(ad.getParameters());
+		IParameter expected = new ExtendedParameter(
 								new CategoryType(new Identifier("Object")),
 								new Identifier("o"), 
 								new IdentifierList(new Identifier("name")));
-		assertTrue(ad.getArguments().contains(expected));
+		assertTrue(ad.getParameters().contains(expected));
 		assertNotNull(ad.getStatements());
 		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
 		ad.getStatements().getFirst().toDialect(writer);
@@ -368,11 +368,11 @@ public class TestParserAtoms {
 		ConcreteMethodDeclaration ad = parser.parse_concrete_method_declaration();
 		assertNotNull(ad);
 		assertEquals("printName",ad.getId().toString());
-		assertNotNull(ad.getArguments());
-		IArgument expected = new CategoryArgument(new ListType(
+		assertNotNull(ad.getParameters());
+		IParameter expected = new CategoryParameter(new ListType(
 				new CategoryType(new Identifier("Option"))),
 				new Identifier("options"));
-		assertTrue(ad.getArguments().contains(expected)); 
+		assertTrue(ad.getParameters().contains(expected)); 
 		assertNotNull(ad.getStatements());
 		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
 		ad.getStatements().getFirst().toDialect(writer);
@@ -418,18 +418,18 @@ public class TestParserAtoms {
 		ETestParser parser = new ETestParser(statement, false);
 		ConstructorExpression c = parser.parse_constructor_expression();
 		assertNotNull(c);
-		ArgumentAssignmentList l = c.getAssignments();
+		ArgumentList l = c.getArguments();
 		assertNotNull(l);
 		assertEquals(2, l.size());
-		ArgumentAssignment a = l.get(0);
+		Argument a = l.get(0);
 		assertNotNull(a);
-		assertEquals("id",a.getArgumentId().toString());
+		assertEquals("id",a.getParameterId().toString());
 		IExpression e = a.getExpression();
 		assertNotNull(e);
 		assertTrue(e instanceof IntegerLiteral);
 		a = l.get(1);
 		assertNotNull(a);
-		assertEquals("name",a.getArgumentId().toString());
+		assertEquals("name",a.getParameterId().toString());
 		e = a.getExpression();
 		assertNotNull(e);
 		assertTrue(e instanceof TextLiteral);
@@ -441,18 +441,18 @@ public class TestParserAtoms {
 		ETestParser parser = new ETestParser(statement, false);
 		ConstructorExpression c = parser.parse_constructor_expression();
 		assertNotNull(c);
-		ArgumentAssignmentList l = c.getAssignments();
+		ArgumentList l = c.getArguments();
 		assertNotNull(l);
 		assertEquals(2, l.size());
-		ArgumentAssignment a = l.get(0);
+		Argument a = l.get(0);
 		assertNotNull(a);
-		assertEquals("id",a.getArgumentId().toString());
+		assertEquals("id",a.getParameterId().toString());
 		IExpression e = a.getExpression();
 		assertNotNull(e);
 		assertTrue(e instanceof IntegerLiteral);
 		a = l.get(1);
 		assertNotNull(a);
-		assertEquals("name",a.getArgumentId().toString());
+		assertEquals("name",a.getParameterId().toString());
 		e = a.getExpression();
 		assertNotNull(e);
 		assertTrue(e instanceof TextLiteral);
@@ -819,20 +819,20 @@ public class TestParserAtoms {
 			return builder.<IntegerLiteral>getNodeValue(tree);
 		}
 
-		public ArgumentAssignmentList parse_argument_assignment_list() {
+		public ArgumentList parse_argument_assignment_list() {
 			ParseTree tree = argument_assignment_list();
 			EPromptoBuilder builder = new EPromptoBuilder(this);
 			ParseTreeWalker walker = new ParseTreeWalker();
 			walker.walk(builder, tree);
-			return builder.<ArgumentAssignmentList>getNodeValue(tree);
+			return builder.<ArgumentList>getNodeValue(tree);
 		}
 
-		public ArgumentAssignment parse_argument_assignment() {
+		public Argument parse_argument_assignment() {
 			ParseTree tree = argument_assignment();
 			EPromptoBuilder builder = new EPromptoBuilder(this);
 			ParseTreeWalker walker = new ParseTreeWalker();
 			walker.walk(builder, tree);
-			return builder.<ArgumentAssignment>getNodeValue(tree);
+			return builder.<Argument>getNodeValue(tree);
 		}
 
 		public IExpression parse_instance_expression() {
@@ -875,20 +875,20 @@ public class TestParserAtoms {
 			return builder.<CategoryDeclaration>getNodeValue(tree);
 		}
 
-		public ITypedArgument parse_typed_argument() {
+		public ITypedParameter parse_typed_argument() {
 			ParseTree tree = typed_argument();
 			EPromptoBuilder builder = new EPromptoBuilder(this);
 			ParseTreeWalker walker = new ParseTreeWalker();
 			walker.walk(builder, tree);
-			return builder.<ITypedArgument>getNodeValue(tree);
+			return builder.<ITypedParameter>getNodeValue(tree);
 		}
 
-		public ArgumentList parse_argument_list() {
+		public ParameterList parse_argument_list() {
 			ParseTree tree = full_argument_list();
 			EPromptoBuilder builder = new EPromptoBuilder(this);
 			ParseTreeWalker walker = new ParseTreeWalker();
 			walker.walk(builder, tree);
-			return builder.<ArgumentList>getNodeValue(tree);
+			return builder.<ParameterList>getNodeValue(tree);
 		}
 
 		public UnresolvedCall parse_method_call() {

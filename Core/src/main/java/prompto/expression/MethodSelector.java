@@ -40,7 +40,7 @@ import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoNativeSymbol;
@@ -145,7 +145,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 
 	public ResultInfo compileExact(Context context, MethodInfo method, Flags flags, 
-				IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
+				IMethodDeclaration declaration, ArgumentList assignments) {
 		if(parent!=null)
 			return compileExactExplicitMember(context, method, flags, declaration, assignments);
 		else if(declaration.getMemberOf()!=null) 
@@ -159,7 +159,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 	
 	public ResultInfo compileTemplate(Context context, MethodInfo method, Flags flags, 
-			IMethodDeclaration declaration, ArgumentAssignmentList assignments, String methodName) {
+			IMethodDeclaration declaration, ArgumentList assignments, String methodName) {
 		if(parent!=null)
 			return compileTemplateExplicitMember(context, method, flags, declaration, assignments, methodName);
 		else if(declaration.getMemberOf()!=null) 
@@ -170,32 +170,32 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			return compileTemplateStaticMethod(context, method, flags, declaration, assignments, methodName);
 	}
 
-	private ResultInfo compileTemplateStaticMethod(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration, ArgumentAssignmentList assignments, String methodName) {
+	private ResultInfo compileTemplateStaticMethod(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration, ArgumentList assignments, String methodName) {
 		// push arguments on the stack
 		declaration.compileAssignments(context, method, flags, assignments);
 		// call global method in current class
 		Type classType = method.getClassFile().getThisClass().getType();
 		IType returnType = declaration.check(context, false);
-		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);
+		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getParameters(), returnType);
 		MethodConstant constant = new MethodConstant(classType, methodName, descriptor);
 		method.addInstruction(Opcode.INVOKESTATIC, constant);
 		return new ResultInfo(returnType.getJavaType(context));
 	}
 
-	private ResultInfo compileTemplateAbstractMethod(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration, ArgumentAssignmentList assignments, String methodName) {
+	private ResultInfo compileTemplateAbstractMethod(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration, ArgumentList assignments, String methodName) {
 		throw new UnsupportedOperationException();
 	}
 
-	private ResultInfo compileTemplateImplicitMember(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration, ArgumentAssignmentList assignments, String methodName) {
+	private ResultInfo compileTemplateImplicitMember(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration, ArgumentList assignments, String methodName) {
 		throw new UnsupportedOperationException();
 	}
 
-	private ResultInfo compileTemplateExplicitMember(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration, ArgumentAssignmentList assignments, String methodName) {
+	private ResultInfo compileTemplateExplicitMember(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration, ArgumentList assignments, String methodName) {
 		throw new UnsupportedOperationException();
 	}
 
 	public ResultInfo compileDynamic(Context context, MethodInfo method, Flags flags, 
-			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
+			IMethodDeclaration declaration, ArgumentList assignments) {
 	if(parent!=null)
 		return compileDynamicExplicitMember(context, method, flags, declaration, assignments);
 	else if(declaration.getMemberOf()!=null) 
@@ -205,7 +205,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 }
 
 	private ResultInfo compileDynamicGlobalMethod(Context context, MethodInfo method, Flags flags, 
-			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
+			IMethodDeclaration declaration, ArgumentList assignments) {
 		// push arguments on the stack
 		declaration.compileAssignments(context, method, flags, assignments);
 		// call global method bootstrap method in its own class
@@ -217,7 +217,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		BootstrapMethod bsm = new BootstrapMethod(mhc);
 		method.getClassFile().addBootstrapMethod(bsm);
 		IType returnType = declaration.check(context, false);
-		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);
+		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getParameters(), returnType);
 		NameAndTypeConstant nameAndType = new NameAndTypeConstant(methodName, descriptor);
 		CallSiteConstant constant = new CallSiteConstant(bsm, nameAndType);
 		method.addInstruction(Opcode.INVOKEDYNAMIC, constant);
@@ -225,17 +225,17 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 
 	private ResultInfo compileDynamicImplicitMember(Context context, MethodInfo method, Flags flags, 
-			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
+			IMethodDeclaration declaration, ArgumentList assignments) {
 		throw new UnsupportedOperationException();
 	}
 
 	private ResultInfo compileDynamicExplicitMember(Context context, MethodInfo method, Flags flags, 
-			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
+			IMethodDeclaration declaration, ArgumentList assignments) {
 		throw new UnsupportedOperationException();
 	}
 
 	private ResultInfo compileExactMethodInstance(Context context, MethodInfo method, Flags flags, 
-			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
+			IMethodDeclaration declaration, ArgumentList assignments) {
 		// load method instance
 		compileLoadMethodInstance(context, method, flags, declaration);
 		// push arguments on the stack
@@ -244,7 +244,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		Type classType = CompilerUtils.getGlobalMethodType(declaration.getName());
 		String methodName = declaration.getName();
 		IType returnType = declaration.check(context, false);
-		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);
+		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getParameters(), returnType);
 		InterfaceConstant constant = new InterfaceConstant(classType, methodName, descriptor);
 		method.addInstruction(Opcode.INVOKEINTERFACE, constant);
 		return new ResultInfo(returnType.getJavaType(context));
@@ -252,17 +252,17 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 
 	
 	private ResultInfo compileExactAbstractInstance(Context context, MethodInfo method, Flags flags, 
-			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
+			IMethodDeclaration declaration, ArgumentList assignments) {
 		// load method instance
 		compileLoadMethodInstance(context, method, flags, declaration);
 		// push arguments on the stack
 		declaration.compileAssignments(context, method, flags, assignments);
 		// call global method through FunctionalInterface
 		IType returnIType = declaration.check(context, false);
-		InterfaceType intf = new InterfaceType(declaration.getArguments(), returnIType);
+		InterfaceType intf = new InterfaceType(declaration.getParameters(), returnIType);
 		Type classType = intf.getInterfaceType();
 		String methodName = intf.getInterfaceMethodName();
-		List<Type> argTypes = IntStream.range(0, declaration.getArguments().size()).mapToObj(i->Object.class).collect(Collectors.toList());
+		List<Type> argTypes = IntStream.range(0, declaration.getParameters().size()).mapToObj(i->Object.class).collect(Collectors.toList());
 		Descriptor.Method descriptor = new Descriptor.Method(argTypes.toArray(new Type[argTypes.size()]), intf.isVoid() ? void.class : Object.class);
 		InterfaceConstant constant = new InterfaceConstant(classType, methodName, descriptor);
 		method.addInstruction(Opcode.INVOKEINTERFACE, constant);
@@ -296,21 +296,21 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 
 	private ResultInfo compileExactStaticMethod(Context context, MethodInfo method, Flags flags, 
-			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
+			IMethodDeclaration declaration, ArgumentList assignments) {
 		// push arguments on the stack
 		declaration.compileAssignments(context, method, flags, assignments);
 		// call global method in its own class
 		Type classType = CompilerUtils.getGlobalMethodType(declaration.getName());
 		String methodName = declaration.getName();
 		IType returnType = declaration.check(context, false);
-		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);
+		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getParameters(), returnType);
 		MethodConstant constant = new MethodConstant(classType, methodName, descriptor);
 		method.addInstruction(Opcode.INVOKESTATIC, constant);
 		return new ResultInfo(returnType.getJavaType(context));
 	}
 
 	private ResultInfo compileExactImplicitMember(Context context, MethodInfo method, Flags flags, 
-			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
+			IMethodDeclaration declaration, ArgumentList assignments) {
 		// calling method with implicit this
 		StackLocal local = method.getRegisteredLocal("this");
 		ClassConstant klass = ((StackLocal.ObjectLocal)local).getClassName();
@@ -319,13 +319,13 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 
 	private ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, 
-			IMethodDeclaration declaration, ArgumentAssignmentList assignments, 
+			IMethodDeclaration declaration, ArgumentList assignments, 
 			ClassConstant parentClass) {
 		// push arguments on the stack
 		declaration.compileAssignments(context, method, flags, assignments);
 		// call virtual method
 		IType returnType = declaration.check(context, false);
-		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);
+		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getParameters(), returnType);
 		if(parentClass.isInterface()) {
 			InterfaceConstant constant = new InterfaceConstant(parentClass, declaration.getName(), descriptor);
 			method.addInstruction(Opcode.INVOKEINTERFACE, constant);
@@ -337,7 +337,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 	
 	private ResultInfo compileExactStaticMember(Context context, MethodInfo method, Flags flags, 
-			IExpression parent, IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
+			IExpression parent, IMethodDeclaration declaration, ArgumentList assignments) {
 		// find class
 		Type type = getSingletonType(context, parent);
 		ClassConstant parentClass = new ClassConstant(type);
@@ -347,7 +347,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		IType returnType = declaration.check(context, false);
 		if(returnType instanceof EnumeratedNativeType)
 			returnType = new JavaClassType(PromptoNativeSymbol.class);
-		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getArguments(), returnType);
+		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getParameters(), returnType);
 		MethodConstant constant = new MethodConstant(parentClass, declaration.getName(), descriptor);
 		method.addInstruction(Opcode.INVOKESTATIC, constant);
 		return new ResultInfo(returnType.getJavaType(context));
@@ -378,7 +378,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 
 	public ResultInfo compileExactExplicitMember(Context context, MethodInfo method, Flags flags, 
-			IMethodDeclaration declaration, ArgumentAssignmentList assignments) {
+			IMethodDeclaration declaration, ArgumentList assignments) {
 		// calling an explicit instance or singleton member method
 		IExpression parent = resolveParent(context.getCallingContext());
 		if(parent instanceof TypeExpression)
@@ -399,7 +399,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	
 
 	public ResultInfo compileExactNativeMember(Context context, MethodInfo method, Flags flags, 
-			NativeMethodDeclaration declaration, ArgumentAssignmentList assignments, ClassConstant parentClass) {
+			NativeMethodDeclaration declaration, ArgumentList assignments, ClassConstant parentClass) {
 		StackState state = method.captureStackState();
 		// can't use 'this' since it could refer to another abject than the native parent
 		StackLocal local = method.registerLocal("$this$", VerifierType.ITEM_Object, parentClass); 

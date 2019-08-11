@@ -1,13 +1,13 @@
 package prompto.error;
 
-import prompto.argument.UnresolvedArgument;
 import prompto.expression.ConstructorExpression;
 import prompto.expression.IExpression;
-import prompto.grammar.ArgumentAssignment;
-import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.Argument;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.literal.TextLiteral;
+import prompto.param.UnresolvedParameter;
 import prompto.runtime.Context;
 import prompto.runtime.ErrorVariable;
 import prompto.type.CategoryType;
@@ -29,12 +29,12 @@ public abstract class ExecutionError extends PromptoError {
 	public IValue interpret(Context context, Identifier errorName) throws PromptoError {
 		IExpression exp = this.getExpression(context);
 		if(exp==null) {
-			ArgumentAssignmentList args = new ArgumentAssignmentList();
-			args.add(new ArgumentAssignment(
-					new UnresolvedArgument(new Identifier("name")), 
+			ArgumentList args = new ArgumentList();
+			args.add(new Argument(
+					new UnresolvedParameter(new Identifier("name")), 
 					new TextLiteral(this.getClass().getSimpleName())));
-			args.add(new ArgumentAssignment(
-					new UnresolvedArgument(new Identifier("text")), 
+			args.add(new Argument(
+					new UnresolvedParameter(new Identifier("text")), 
 					new TextLiteral(this.getMessage())));
 			exp = new ConstructorExpression( new CategoryType(new Identifier("Error")), null, args, true);
 		}

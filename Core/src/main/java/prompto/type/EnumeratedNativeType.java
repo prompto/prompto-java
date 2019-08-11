@@ -9,8 +9,6 @@ import java.util.Set;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import prompto.argument.CategoryArgument;
-import prompto.argument.IArgument;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -27,6 +25,8 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.param.CategoryParameter;
+import prompto.param.IParameter;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
@@ -82,7 +82,7 @@ public class EnumeratedNativeType extends BaseType {
 			return super.getMemberMethods(context, name);
 	}
 
-	static IArgument NAME_ARGUMENT = new CategoryArgument(TextType.instance(), new Identifier("name"));
+	static IParameter NAME_ARGUMENT = new CategoryParameter(TextType.instance(), new Identifier("name"));
 
 	final IMethodDeclaration SYMBOL_OF_METHOD = new BuiltInMethodDeclaration("symbolOf", NAME_ARGUMENT) {
 		
@@ -101,7 +101,7 @@ public class EnumeratedNativeType extends BaseType {
 		}
 
 		@Override
-		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentList assignments) {
 	      transpiler.append("symbolOf(");
 	      assignments.get(0).transpile(transpiler);
 	      transpiler.append(")");

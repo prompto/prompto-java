@@ -1,6 +1,5 @@
 package prompto.grammar;
 
-import prompto.argument.IArgument;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -8,6 +7,7 @@ import prompto.expression.ArrowExpression;
 import prompto.expression.IExpression;
 import prompto.expression.InstanceExpression;
 import prompto.expression.MemberSelector;
+import prompto.param.IParameter;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.transpiler.Transpiler;
@@ -19,32 +19,32 @@ import prompto.utils.CodeWriter;
 import prompto.value.ContextualExpression;
 import prompto.value.IInstance;
 
-public class ArgumentAssignment {
+public class Argument {
 	
-	IArgument argument;
+	IParameter parameter;
 	IExpression expression;
 	
-	public ArgumentAssignment(IArgument argument, IExpression expression) {
-		this.argument = argument;
+	public Argument(IParameter parameter, IExpression expression) {
+		this.parameter = parameter;
 		this.expression = expression;
 	}
 	
 	
-	public void setArgument(IArgument argument) {
-		this.argument = argument;
+	public void setParameter(IParameter parameter) {
+		this.parameter = parameter;
 	}
 	
 	
-	public IArgument getArgument() {
-		return argument;
+	public IParameter getParameter() {
+		return parameter;
 	}
 
-	public Identifier getArgumentId() {
-		return argument==null ? null : argument.getId();
+	public Identifier getParameterId() {
+		return parameter==null ? null : parameter.getId();
 	} 
 	
 	public IExpression getExpression() {
-		return expression!=null ? expression : new InstanceExpression(argument.getId());
+		return expression!=null ? expression : new InstanceExpression(parameter.getId());
 	}
 
 	public void setExpression(IExpression expression) {
@@ -53,12 +53,12 @@ public class ArgumentAssignment {
 	
 	@Override
 	public String toString() {
-		if(argument==null)
+		if(parameter==null)
 			return expression.toString();
 		else if(expression==null)
-			return argument.getId().toString();
+			return parameter.getId().toString();
 		else
-			return argument.getId() + " = " + expression.toString();
+			return parameter.getId() + " = " + expression.toString();
 	}
 	
 	public void toDialect(CodeWriter writer) {
@@ -81,10 +81,10 @@ public class ArgumentAssignment {
 
 	private void toMDialect(CodeWriter writer) {
 		if(expression==null)
-			writer.append(argument.getId());
+			writer.append(parameter.getId());
 		else {
-			if(argument!=null) {
-				writer.append(argument.getId());
+			if(parameter!=null) {
+				writer.append(parameter.getId());
 				writer.append(" = ");
 			}
 			expression.toDialect(writer);
@@ -93,12 +93,12 @@ public class ArgumentAssignment {
 
 	private void toEDialect(CodeWriter writer) {
 		if(expression==null)
-			writer.append(argument.getId());
+			writer.append(parameter.getId());
 		else {
 			expression.toDialect(writer);
-			if(argument!=null) {
+			if(parameter!=null) {
 				writer.append(" as ");
-				writer.append(argument.getId());
+				writer.append(parameter.getId());
 			}
 		}
 	}
@@ -109,19 +109,19 @@ public class ArgumentAssignment {
 			return true;
 		if(obj==null)
 			return false;
-		if(!(obj instanceof ArgumentAssignment))
+		if(!(obj instanceof Argument))
 			return false;
-		ArgumentAssignment other = (ArgumentAssignment)obj;
-		return this.getArgument().equals(other.getArgument())
+		Argument other = (Argument)obj;
+		return this.getParameter().equals(other.getParameter())
 				&& this.getExpression().equals(other.getExpression());
 	}
 	
 	public IType check(Context context) {
 		IExpression expression = getExpression();
-		INamed actual = context.getRegisteredValue(INamed.class, argument.getId());
+		INamed actual = context.getRegisteredValue(INamed.class, parameter.getId());
 		if(actual==null) {
 			IType actualType = expression.check(context);
-			context.registerValue(new Variable(argument.getId(), actualType));
+			context.registerValue(new Variable(parameter.getId(), actualType));
 		} else {
 			// need to check type compatibility
 			IType actualType = actual.getType(context);
@@ -132,14 +132,14 @@ public class ArgumentAssignment {
 	}
 	
 	public IExpression resolve(Context context, IMethodDeclaration methodDeclaration, boolean checkInstance, boolean allowDerived) throws PromptoError {
-		IArgument argument = findArgument(methodDeclaration);
-		return resolve(context, argument, checkInstance, allowDerived);
+		IParameter parameter = findParameter(methodDeclaration);
+		return resolve(context, parameter, checkInstance, allowDerived);
 	}
 	
-	public IExpression resolve(Context context, IArgument argument, boolean checkInstance, boolean allowDerived) throws PromptoError {
+	public IExpression resolve(Context context, IParameter parameter, boolean checkInstance, boolean allowDerived) throws PromptoError {
 		// since we support implicit members, it's time to resolve them
 		IExpression expression = getExpression();
-		IType requiredType = argument.getType(context);
+		IType requiredType = parameter.getType(context);
 		IType actualType = getActualType(context, requiredType, expression, checkInstance);
 		boolean assignable = requiredType.isAssignableFrom(context, actualType);
 		// when in dispatch, allow derived
@@ -147,7 +147,7 @@ public class ArgumentAssignment {
 	        assignable = actualType.isAssignableFrom(context, requiredType);
 		// try passing category member
 		if(!assignable && (actualType instanceof CategoryType)) 
-			expression = new MemberSelector(expression, argument.getId());
+			expression = new MemberSelector(expression, parameter.getId());
 		return expression; 
 	}
 
@@ -163,38 +163,38 @@ public class ArgumentAssignment {
 	}
 
 
-	private IArgument findArgument(IMethodDeclaration methodDeclaration) {
-		return methodDeclaration.getArguments().find(this.argument.getId());
+	private IParameter findParameter(IMethodDeclaration methodDeclaration) {
+		return methodDeclaration.getParameters().find(this.parameter.getId());
 	}
 
 
-	public ArgumentAssignment resolveAndCheck(Context context, ArgumentList argumentList) {
-		IArgument argument = this.argument;
+	public Argument resolveAndCheck(Context context, ParameterList argumentList) {
+		IParameter parameter = this.parameter;
 		// when 1st argument, can be unnamed
-		if(argument==null) {
+		if(parameter==null) {
 			if(argumentList.size()==0)
-				throw new SyntaxError("Method has no argument");
-			argument = argumentList.get(0);
+				throw new SyntaxError("Method has no parameter");
+			parameter = argumentList.get(0);
 		} else
-			argument = argumentList.find(this.getArgumentId());
-		if(argument==null)
-			throw new SyntaxError("Method has no argument:" + this.getArgumentId());
+			parameter = argumentList.find(this.getParameterId());
+		if(parameter==null)
+			throw new SyntaxError("Method has no parameter:" + this.getParameterId());
 		IExpression expression = new ContextualExpression(context, getExpression());
-		return new ArgumentAssignment(argument,expression);
+		return new Argument(parameter,expression);
 	}
 
 
 	public void declare(Transpiler transpiler, IMethodDeclaration methodDeclaration) {
-		if(this.expression!=null && methodDeclaration!=null && !this.declareArrowExpression(transpiler, methodDeclaration))
+		if(this.expression!=null && !this.declareArrowExpression(transpiler, methodDeclaration))
 			this.expression.declare(transpiler);
 	}
 
 
 	private boolean declareArrowExpression(Transpiler transpiler, IMethodDeclaration methodDeclaration) {
-		if(this.argument==null)
+		if(this.parameter==null || methodDeclaration==null)
 			return false;
-		IArgument argument = findArgument(methodDeclaration);
-		IType requiredType = argument.getType(transpiler.getContext());
+		IParameter parameter = findParameter(methodDeclaration);
+		IType requiredType = parameter.getType(transpiler.getContext());
 		boolean isArrow = requiredType instanceof MethodType && expression instanceof ContextualExpression && ((ContextualExpression)expression).getExpression() instanceof ArrowExpression;
 		if(isArrow) {
 			((MethodType)requiredType).declareArrowExpression(transpiler, (ContextualExpression)expression);

@@ -8,14 +8,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import prompto.argument.IArgument;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.MethodSelector;
-import prompto.grammar.ArgumentAssignment;
-import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.Argument;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.Specificity;
+import prompto.param.IParameter;
 import prompto.statement.MethodCall;
 import prompto.type.CategoryType;
 import prompto.type.IType;
@@ -128,17 +128,17 @@ public class MethodFinder {
 	Score compareSpecifity(IMethodDeclaration d1, IMethodDeclaration d2, boolean useInstance, boolean allowDerived) {
 		try {
 			Context s1 = context.newLocalContext();
-			d1.registerArguments(s1);
+			d1.registerParameters(s1);
 			Context s2 = context.newLocalContext();
-			d2.registerArguments(s2);
-			Iterator<ArgumentAssignment> it1 = methodCall.makeAssignments(context, d1).iterator();
-			Iterator<ArgumentAssignment> it2 = methodCall.makeAssignments(context, d2).iterator();
+			d2.registerParameters(s2);
+			Iterator<Argument> it1 = methodCall.makeArguments(context, d1).iterator();
+			Iterator<Argument> it2 = methodCall.makeArguments(context, d2).iterator();
 			while(it1.hasNext() && it2.hasNext()) {
-				ArgumentAssignment as1 = it1.next();
-				ArgumentAssignment as2 = it2.next();
-				IArgument ar1 = d1.getArguments().find(as1.getArgumentId());
-				IArgument ar2 = d2.getArguments().find(as2.getArgumentId());
-				if(as1.getArgumentId().equals(as2.getArgumentId())) {
+				Argument as1 = it1.next();
+				Argument as2 = it2.next();
+				IParameter ar1 = d1.getParameters().find(as1.getParameterId());
+				IParameter ar2 = d2.getParameters().find(as2.getParameterId());
+				if(as1.getParameterId().equals(as2.getParameterId())) {
 					// the general case with named arguments
 					IType t1 = ar1.getType(s1);
 					IType t2 = ar2.getType(s2);
@@ -175,7 +175,7 @@ public class MethodFinder {
 		Set<IMethodDeclaration> compatibles = new HashSet<IMethodDeclaration>();
 		for(IMethodDeclaration declaration : candidates) {
 			try {
-				ArgumentAssignmentList args = methodCall.makeAssignments(context, declaration);
+				ArgumentList args = methodCall.makeArguments(context, declaration);
 				if(declaration.isAssignableTo(context, args, checkInstance, allowDerived, filter))
 					compatibles.add(declaration);
 			} catch(SyntaxError e) {
@@ -189,7 +189,7 @@ public class MethodFinder {
 		List<IMethodDeclaration> potential = new ArrayList<IMethodDeclaration>();
 		for(IMethodDeclaration declaration : candidates) {
 			try {
-				ArgumentAssignmentList args = methodCall.makeAssignments(context, declaration);
+				ArgumentList args = methodCall.makeArguments(context, declaration);
 				if(declaration.isAssignableFrom(context, args))
 					potential.add(declaration);
 			} catch(SyntaxError e) {

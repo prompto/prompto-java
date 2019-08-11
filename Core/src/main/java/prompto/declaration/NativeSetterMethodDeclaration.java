@@ -13,8 +13,8 @@ public class NativeSetterMethodDeclaration extends SetterMethodDeclaration {
 	
 	@Override
 	public IType checkChild(Context context) {
-		if(arguments!=null)
-			arguments.check(context);
+		if(parameters!=null)
+			parameters.check(context);
 		return check(context);
 	}
 

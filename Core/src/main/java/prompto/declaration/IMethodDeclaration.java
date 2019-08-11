@@ -2,16 +2,16 @@ package prompto.declaration;
 
 import java.util.function.Predicate;
 
-import prompto.argument.IArgument;
 import prompto.compiler.ClassFile;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
-import prompto.grammar.ArgumentAssignment;
-import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.Argument;
 import prompto.grammar.ArgumentList;
+import prompto.grammar.ParameterList;
 import prompto.grammar.Identifier;
 import prompto.grammar.Specificity;
+import prompto.param.IParameter;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.statement.DeclarationStatement;
@@ -23,7 +23,7 @@ public interface IMethodDeclaration extends IDeclaration {
 
 	String getProto();
 	IType getReturnType();
-	ArgumentList getArguments();
+	ParameterList getParameters();
 	String getSignature(Dialect dialect);
 	boolean isAbstract();
 	boolean isTemplate();
@@ -35,14 +35,14 @@ public interface IMethodDeclaration extends IDeclaration {
 	default DeclarationStatement<IMethodDeclaration> getDeclarationOf() { throw new UnsupportedOperationException("getDeclarationStatement " + this.getClass().getName()); }
 	IValue interpret(Context context) throws PromptoError;
 	IType checkChild(Context context);
-	boolean isAssignableTo(Context context, ArgumentAssignmentList assignments, boolean checkInstance, boolean allowDerived, Predicate<Specificity> filter);
-	boolean isAssignableFrom(Context context, ArgumentAssignmentList assignments);
-	void registerArguments(Context local);
-	Specificity computeSpecificity(Context context, IArgument argument, ArgumentAssignment assignment, boolean useInstance, boolean allowDerived);
+	boolean isAssignableTo(Context context, ArgumentList assignments, boolean checkInstance, boolean allowDerived, Predicate<Specificity> filter);
+	boolean isAssignableFrom(Context context, ArgumentList assignments);
+	void registerParameters(Context local);
+	Specificity computeSpecificity(Context context, IParameter parameter, Argument argument, boolean useInstance, boolean allowDerived);
 	void compile(Context context, boolean isStart, ClassFile classFile);
 	void compilePrototype(Context context, boolean isStart, ClassFile classFile);
 	String compileTemplate(Context context, boolean isStart, ClassFile classFile);
-	void compileAssignments(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments);
+	void compileAssignments(Context context, MethodInfo method, Flags flags, ArgumentList assignments);
 	@Override
 	String getTranspiledName(Context context);
 	default void fullDeclare(Transpiler transpiler, Identifier methodName) { throw new UnsupportedOperationException("fullDeclare " + this.getClass().getName()); }

@@ -1,4 +1,4 @@
-package prompto.argument;
+package prompto.param;
 
 import java.lang.reflect.Type;
 
@@ -13,8 +13,8 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.DefaultExpression;
 import prompto.expression.IExpression;
-import prompto.grammar.ArgumentAssignment;
-import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.Argument;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
@@ -25,13 +25,13 @@ import prompto.value.IValue;
 import prompto.value.IntegerValue;
 
 
-public abstract class BaseArgument implements IArgument {
+public abstract class BaseParameter implements IParameter {
 
 	Identifier id;
 	boolean mutable = false;
 	DefaultExpression defaultExpression;
 	
-	protected BaseArgument(Identifier id) {
+	protected BaseParameter(Identifier id) {
 		this.id = id;
 	}
 	
@@ -86,8 +86,8 @@ public abstract class BaseArgument implements IArgument {
 	}
 
 	@Override
-	public void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments, boolean isFirst) {
-		ArgumentAssignment assign = makeAssignment(assignments, isFirst);
+	public void compileArgument(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
+		Argument assign = makeArgument(assignments, isFirst);
 		ResultInfo valueInfo = assign.getExpression().compile(context.getCallingContext(), method, flags);
 		// cast if required
 		Type type = this.getJavaType(context);
@@ -98,17 +98,17 @@ public abstract class BaseArgument implements IArgument {
 		
 	}
 
-	protected ArgumentAssignment makeAssignment(ArgumentAssignmentList assignments, boolean isFirst) {
-		ArgumentAssignment assign = assignments.find(id);
+	protected Argument makeArgument(ArgumentList assignments, boolean isFirst) {
+		Argument assign = assignments.find(id);
 		if(assign!=null)
 			return assign;
 		// first argument can be anonymous
-		else if(isFirst && assignments.size()>0 && assignments.get(0).getArgument()==null)
+		else if(isFirst && assignments.size()>0 && assignments.get(0).getParameter()==null)
 			return assignments.get(0);
 		else if(defaultExpression!=null)
-			return new ArgumentAssignment(this, defaultExpression);
+			return new Argument(this, defaultExpression);
 		else
-			throw new SyntaxError("Missing assignment for argument " + getName());
+			throw new SyntaxError("Missing value for argument " + getName());
 	}
 	
 	@Override

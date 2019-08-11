@@ -7,10 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import prompto.argument.CategoryArgument;
-import prompto.argument.CodeArgument;
-import prompto.argument.IArgument;
-import prompto.argument.ValuedCodeArgument;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerUtils;
@@ -32,9 +28,13 @@ import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.compiler.StringConstant;
 import prompto.error.PromptoError;
-import prompto.grammar.ArgumentList;
+import prompto.grammar.ParameterList;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoMethod;
+import prompto.param.CategoryParameter;
+import prompto.param.CodeArgument;
+import prompto.param.IParameter;
+import prompto.param.ValuedCodeParameter;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.statement.DeclarationStatement;
@@ -53,10 +53,10 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 
 	StatementList statements;
 	DeclarationStatement<IMethodDeclaration> declarationOf;
-	Map<Identifier, ValuedCodeArgument> codeArguments;
+	Map<Identifier, ValuedCodeParameter> codeParameters;
 	
 	@SuppressWarnings("unchecked")
-	public ConcreteMethodDeclaration(Identifier name, ArgumentList arguments, IType returnType, StatementList statements) {
+	public ConcreteMethodDeclaration(Identifier name, ParameterList arguments, IType returnType, StatementList statements) {
 		super(name, arguments, returnType);
 		if(statements==null)
 			statements = new StatementList();
@@ -95,7 +95,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	public void toDialect(CodeWriter writer) {
 		if(writer.isGlobalContext())
 			writer = writer.newLocalWriter();
-		registerArguments(writer.getContext());
+		registerParameters(writer.getContext());
 		switch(writer.getDialect()) {
 		case E:
 			toEDialect(writer);
@@ -113,7 +113,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		writer.append("def ");
 		writer.append(getName());
 		writer.append(" (");
-		arguments.toDialect(writer);
+		parameters.toDialect(writer);
 		writer.append(")");
 		if(returnType!=null && returnType!=VoidType.instance()) {
 			writer.append("->");
@@ -129,7 +129,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		writer.append("define ");
 		writer.append(getName());
 		writer.append(" as method ");
-		arguments.toDialect(writer);
+		parameters.toDialect(writer);
 		if(returnType!=null && returnType!=VoidType.instance()) {
 			writer.append("returning ");
 			returnType.toDialect(writer);
@@ -149,7 +149,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		writer.append("method ");
 		writer.append(getName());
 		writer.append(" (");
-		arguments.toDialect(writer);
+		parameters.toDialect(writer);
 		writer.append(") {\n");
 		writer.indent();
 		statements.toDialect(writer);
@@ -175,9 +175,9 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	@Override
 	public boolean isTemplate() {
 		// if at least one argument is 'Code'
-		if(arguments==null)
+		if(parameters==null)
 			return false;
-		for( IArgument arg : arguments) {
+		for( IParameter arg : parameters) {
 			if(arg instanceof CodeArgument)
 				return true;
 		}
@@ -187,10 +187,10 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	private IType fullCheck(Context context, boolean isStart) {
 		if(isStart) {
 			context = context.newLocalContext();
-			registerArguments(context);
+			registerParameters(context);
 		}
-		if(arguments!=null)
-			arguments.check(context);
+		if(parameters!=null)
+			parameters.check(context);
 		return checkStatements(context);
 	}
 
@@ -200,10 +200,10 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 
 	@Override
 	public IType checkChild(Context context) {
-		if(arguments!=null)
-			arguments.check(context);
+		if(parameters!=null)
+			parameters.check(context);
 		Context child = context.newChildContext();
-		registerArguments(child);
+		registerParameters(child);
 		return checkStatements(child);
 	}
 
@@ -237,7 +237,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			method.addModifier(Modifier.STATIC); // otherwise it's a member method
 		else 
 			method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
-		List<IArgument> args = arguments.stripOutTemplateArguments();
+		List<IParameter> args = parameters.stripOutTemplateArguments();
 		args.forEach((arg)->
 			arg.registerLocal(context, method, new Flags()));
 		args.forEach((arg)->
@@ -263,12 +263,12 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 
 	@Override
 	public boolean isEligibleAsMain() {
-		if(arguments.size()==0)
+		if(parameters.size()==0)
 			return true;
-		if(arguments.size()==1) {
-			IArgument arg = arguments.getFirst();
-			if(arg instanceof CategoryArgument) {
-				IType type = ((CategoryArgument)arg).getType();
+		if(parameters.size()==1) {
+			IParameter arg = parameters.getFirst();
+			if(arg instanceof CategoryParameter) {
+				IType type = ((CategoryParameter)arg).getType();
 				if(type instanceof DictType)
 					return ((DictType)type).getItemType()==TextType.instance();
 			}
@@ -278,7 +278,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 
 	public Type compileClosureClass(Context context, MethodInfo method) {
 		IType returnType = this.checkChild(context);
-		InterfaceType intf = new InterfaceType(arguments, returnType);
+		InterfaceType intf = new InterfaceType(parameters, returnType);
 		Type innerType = getClosureClassType(method);
 		ClassFile classFile = new ClassFile(innerType);
 		classFile.setSuperClass(new ClassConstant(Object.class));
@@ -289,7 +289,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		compileClosureFields(context, classFile, locals);
 		compileClosureConstructor(context, classFile, locals);
 		context = context.newClosureContext(new MethodType(this));
-		registerArguments(context);
+		registerParameters(context);
 		compile(context, false, classFile, intf.getInterfaceMethodName());
 		method.getClassFile().addInnerClass(classFile);
 		return innerType;
@@ -409,9 +409,9 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		    if(this.memberOf==null) {
 		        transpiler = transpiler.newLocalTranspiler();
 		        transpiler.declare(this);
-		        this.declareArguments(transpiler);
+		        this.declareParameters(transpiler);
 		    }
-	    	this.registerArguments(transpiler.getContext());
+	    	this.registerParameters(transpiler.getContext());
 		    this.statements.declare(transpiler);
 		} finally {
 			declaring = false;
@@ -420,31 +420,31 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	
 	@Override
 	public void declareChild(Transpiler transpiler) {
-	    this.declareArguments(transpiler);
+	    this.declareParameters(transpiler);
 	    transpiler = transpiler.newChildTranspiler(null);
-	    this.registerArguments(transpiler.getContext());
+	    this.registerParameters(transpiler.getContext());
 	    this.statements.declare(transpiler);
 	}
 	
 	@Override
 	public void fullDeclare(Transpiler transpiler, Identifier methodName) {
-		ConcreteMethodDeclaration declaration = new ConcreteMethodDeclaration(getId(), getArguments(), this.returnType, this.statements);
+		ConcreteMethodDeclaration declaration = new ConcreteMethodDeclaration(getId(), getParameters(), this.returnType, this.statements);
 	    declaration.memberOf = this.memberOf;
 	    transpiler.declare(declaration);
 	    this.statements.declare(transpiler);
 	    // remember code arguments
-	    declaration.codeArguments = new HashMap<>();
-	    getArguments().stream()
+	    declaration.codeParameters = new HashMap<>();
+	    getParameters().stream()
 	    	.filter(arg ->arg instanceof CodeArgument )
 	    	.forEach(arg -> {
 	    		CodeValue value = (CodeValue)transpiler.getContext().getValue(arg.getId()); 
-	    		declaration.codeArguments.put(arg.getId(), new ValuedCodeArgument(arg.getId(), value));
+	    		declaration.codeParameters.put(arg.getId(), new ValuedCodeParameter(arg.getId(), value));
 	    });
 	}
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    this.registerArguments(transpiler.getContext());
+	    this.registerParameters(transpiler.getContext());
 	    this.registerCodeArguments(transpiler.getContext());
 	    this.transpileProlog(transpiler);
 	    this.statements.transpile(transpiler);
@@ -454,9 +454,9 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 
 	private void registerCodeArguments(Context context) {
 		if(this.isTemplate()) {
-		    if(this.codeArguments==null)
+		    if(this.codeParameters==null)
 		        return;
-		    this.codeArguments.forEach( (k,v) -> context.setValue(v.getId(), v.getValue()));
+		    this.codeParameters.forEach( (k,v) -> context.setValue(v.getId(), v.getValue()));
 		}
 		
 	}

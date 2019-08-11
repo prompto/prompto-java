@@ -1,4 +1,4 @@
-package prompto.argument;
+package prompto.param;
 
 import java.lang.reflect.Type;
 
@@ -9,7 +9,7 @@ import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
-import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
@@ -19,15 +19,15 @@ import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
-public class UnresolvedArgument extends BaseArgument implements INamedArgument {
+public class UnresolvedParameter extends BaseParameter implements INamedParameter {
 
-	INamedArgument resolved = null;
+	INamedParameter resolved = null;
 	
-	public UnresolvedArgument(Identifier id) {
+	public UnresolvedParameter(Identifier id) {
 		super(id);
 	}
 	
-	public INamedArgument getResolved() {
+	public INamedParameter getResolved() {
 		return resolved;
 	}
 	
@@ -84,9 +84,9 @@ public class UnresolvedArgument extends BaseArgument implements INamedArgument {
 			return;
 		IDeclaration named = context.getRegisteredDeclaration(IDeclaration.class, id);
 		if(named instanceof AttributeDeclaration)
-			resolved = new AttributeArgument(id);
+			resolved = new AttributeParameter(id);
 		else if(named instanceof MethodDeclarationMap)
-			resolved = new MethodArgument(id);
+			resolved = new MethodParameter(id);
 		else
 			throw new SyntaxError("Unknown identifier: " + id);
 	}
@@ -110,9 +110,9 @@ public class UnresolvedArgument extends BaseArgument implements INamedArgument {
 	}
 	
 	@Override
-	public void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments, boolean isFirst) {
+	public void compileArgument(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
 		resolve(context);
-		resolved.compileAssignment(context, method, flags, assignments, isFirst);
+		resolved.compileArgument(context, method, flags, assignments, isFirst);
 	}
 	
 	@Override

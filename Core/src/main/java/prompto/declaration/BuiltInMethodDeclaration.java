@@ -1,12 +1,12 @@
 package prompto.declaration;
 
-import prompto.argument.IArgument;
 import prompto.compiler.ClassFile;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
-import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.ArgumentList;
+import prompto.grammar.ParameterList;
+import prompto.param.IParameter;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.runtime.Context.BuiltInContext;
@@ -21,12 +21,12 @@ public abstract class BuiltInMethodDeclaration extends BaseMethodDeclaration {
 		super(new Identifier(name), null, null);
 	}
 
-	public BuiltInMethodDeclaration(String name, IArgument argument) {
-		super(new Identifier(name), new ArgumentList(argument), null);
+	public BuiltInMethodDeclaration(String name, IParameter argument) {
+		super(new Identifier(name), new ParameterList(argument), null);
 	}
 
-	public BuiltInMethodDeclaration(String name, IArgument ... arguments) {
-		super(new Identifier(name), new ArgumentList(arguments), null);
+	public BuiltInMethodDeclaration(String name, IParameter ... arguments) {
+		super(new Identifier(name), new ParameterList(arguments), null);
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public abstract class BuiltInMethodDeclaration extends BaseMethodDeclaration {
 		return false;
 	}
 
-	public ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments) {
+	public ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList assignments) {
 		throw new UnsupportedOperationException("Should never get there!");
 	}
 	
@@ -80,7 +80,7 @@ public abstract class BuiltInMethodDeclaration extends BaseMethodDeclaration {
 		throw new UnsupportedOperationException("Should never get there!");
 	}
 
-	public abstract void transpileCall(Transpiler transpiler, ArgumentAssignmentList assignments);
+	public abstract void transpileCall(Transpiler transpiler, ArgumentList assignments);
 
 
 

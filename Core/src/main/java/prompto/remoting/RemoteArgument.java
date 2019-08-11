@@ -8,13 +8,13 @@ import java.util.Map;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import prompto.argument.CategoryArgument;
-import prompto.argument.IArgument;
 import prompto.declaration.AttributeDeclaration;
 import prompto.error.PromptoError;
 import prompto.expression.ValueExpression;
-import prompto.grammar.ArgumentAssignment;
+import prompto.grammar.Argument;
 import prompto.grammar.Identifier;
+import prompto.param.CategoryParameter;
+import prompto.param.IParameter;
 import prompto.runtime.Context;
 import prompto.store.DataStore;
 import prompto.store.IStore;
@@ -22,12 +22,12 @@ import prompto.type.IType;
 import prompto.utils.TypeUtils;
 import prompto.value.IValue;
 
-public class Parameter {
+public class RemoteArgument {
 
-	public static Parameter read(Context context, JsonNode jsonParam, Map<String, byte[]> parts) throws Exception {
+	public static RemoteArgument read(Context context, JsonNode jsonParam, Map<String, byte[]> parts) throws Exception {
 		if(!jsonParam.isObject())
 			throw new InvalidParameterException("Expecting a JSON object!");
-		Parameter param = new Parameter();
+		RemoteArgument param = new RemoteArgument();
 		JsonNode field = jsonParam.get("name");
 		if(field==null)
 			throw new InvalidParameterException("Expecting a 'name' field!");
@@ -98,9 +98,9 @@ public class Parameter {
 		return value.convertTo(context, Object.class);
 	}
 	
-	public ArgumentAssignment toAssignment(Context context) {
-		IArgument argument = new CategoryArgument(type, new Identifier(name));
-		return new ArgumentAssignment(argument, new ValueExpression(type, value));
+	public Argument toAssignment(Context context) {
+		IParameter argument = new CategoryParameter(type, new Identifier(name));
+		return new Argument(argument, new ValueExpression(type, value));
 	}
 
 	public void toJson(Context context, JsonGenerator generator) throws IOException, PromptoError {

@@ -9,8 +9,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import prompto.argument.CategoryArgument;
-import prompto.argument.IArgument;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Descriptor;
 import prompto.compiler.Flags;
@@ -25,6 +23,8 @@ import prompto.expression.IExpression;
 import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoLong;
+import prompto.param.CategoryParameter;
+import prompto.param.IParameter;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
@@ -151,7 +151,7 @@ public class IntegerType extends NativeType implements INumberType {
 	}
 	
 	
-	static IArgument FORMAT_ARGUMENT = new CategoryArgument(TextType.instance(), new Identifier("format"));
+	static IParameter FORMAT_ARGUMENT = new CategoryParameter(TextType.instance(), new Identifier("format"));
 
 	static final IMethodDeclaration FORMAT_METHOD = new BuiltInMethodDeclaration("format", FORMAT_ARGUMENT) {
 		
@@ -181,7 +181,7 @@ public class IntegerType extends NativeType implements INumberType {
 		}
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentList assignments) {
 			// push arguments on the stack
 			this.compileAssignments(context, method, flags, assignments); // stack = Long/String
 			// create DecimalFormat instance
@@ -200,7 +200,7 @@ public class IntegerType extends NativeType implements INumberType {
 		}
 		
 		@Override
-		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentList assignments) {
 	        transpiler.append("formatInteger(");
 	        assignments.get(0).transpile(transpiler);
 	        transpiler.append(")");

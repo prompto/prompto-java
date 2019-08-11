@@ -4,12 +4,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import prompto.argument.AttributeArgument;
-import prompto.argument.CategoryArgument;
-import prompto.argument.IArgument;
-import prompto.argument.UnresolvedArgument;
 import prompto.compiler.ClassFile;
-import prompto.grammar.ArgumentList;
+import prompto.grammar.ParameterList;
+import prompto.param.AttributeParameter;
+import prompto.param.CategoryParameter;
+import prompto.param.IParameter;
+import prompto.param.UnresolvedParameter;
 import prompto.runtime.Context;
 import prompto.statement.MethodCall;
 import prompto.transpiler.Transpiler;
@@ -25,7 +25,7 @@ public class DispatchMethodDeclaration extends BaseMethodDeclaration {
 	List<IMethodDeclaration> declarations;
 	
 	public DispatchMethodDeclaration(Context context, MethodCall call, IMethodDeclaration declaration, List<IMethodDeclaration> declarations) {
-		super(declaration.getId(), declaration.getArguments(), declaration.getReturnType());
+		super(declaration.getId(), declaration.getParameters(), declaration.getReturnType());
 		this.context = context;
 		this.call = call;
 		this.declaration = declaration;
@@ -39,7 +39,7 @@ public class DispatchMethodDeclaration extends BaseMethodDeclaration {
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    this.registerArguments(transpiler.getContext());
+	    this.registerParameters(transpiler.getContext());
 	    this.transpileProlog(transpiler);
 	    this.transpileDispatch(transpiler);
 	    this.transpileEpilog(transpiler);
@@ -47,7 +47,7 @@ public class DispatchMethodDeclaration extends BaseMethodDeclaration {
 	}
 
 	private void transpileDispatch(Transpiler transpiler) {
-		Set<IArgument> common = this.collectCommonArguments();
+		Set<IParameter> common = this.collectCommonArguments();
 	    for(int i=0; i<this.declarations.size(); i++) {
 	        if(i>0)
 	            transpiler.append("else ");
@@ -65,7 +65,7 @@ public class DispatchMethodDeclaration extends BaseMethodDeclaration {
 	private void transpileCall(Transpiler transpiler, IMethodDeclaration declaration) {
 	    call.transpileSelector(transpiler, declaration);
 	    transpiler.append("(");
-	    this.arguments.forEach(arg -> {
+	    this.parameters.forEach(arg -> {
 	        transpiler.append(arg.getName());
 	        transpiler.append(", ");
 	    });
@@ -73,55 +73,55 @@ public class DispatchMethodDeclaration extends BaseMethodDeclaration {
 	    transpiler.append(")");
 	}
 
-	private void transpileTest(Transpiler transpiler, Set<IArgument> common, IMethodDeclaration declaration) {
-	    for(int i = 0, count = 0;i<this.call.getAssignments().size(); i++) {
-	        IArgument incoming = this.call.getAssignments().get(i).getArgument();
+	private void transpileTest(Transpiler transpiler, Set<IParameter> common, IMethodDeclaration declaration) {
+	    for(int i = 0, count = 0;i<this.call.getArguments().size(); i++) {
+	        IParameter incoming = this.call.getArguments().get(i).getParameter();
 	        if(common.contains(incoming))
 	            continue;
 	        if(count>0)
 	            transpiler.append(" && ");
 	        count++;
-	        if(incoming instanceof UnresolvedArgument)
-	            incoming = ((UnresolvedArgument)incoming).getResolved();
-	        IArgument outgoing = incoming==null ? declaration.getArguments().get(0) : findCorrespondingArg(transpiler.getContext(), declaration.getArguments(), common, incoming);
-	        if(outgoing instanceof UnresolvedArgument)
-	        	outgoing = ((UnresolvedArgument)incoming).getResolved();
+	        if(incoming instanceof UnresolvedParameter)
+	            incoming = ((UnresolvedParameter)incoming).getResolved();
+	        IParameter outgoing = incoming==null ? declaration.getParameters().get(0) : findCorrespondingArg(transpiler.getContext(), declaration.getParameters(), common, incoming);
+	        if(outgoing instanceof UnresolvedParameter)
+	        	outgoing = ((UnresolvedParameter)incoming).getResolved();
 	        if(incoming==null)
-	            incoming = this.declaration.getArguments().get(0);
-	        if(incoming instanceof UnresolvedArgument)
-	            incoming = ((UnresolvedArgument)incoming).getResolved();
-	        if(incoming instanceof CategoryArgument && outgoing instanceof CategoryArgument) {
-	            transpiler.append(incoming.getName()).append(".instanceOf(").append(((CategoryArgument)outgoing).getType().getTypeName()).append(")");
-	        } else if(incoming instanceof CategoryArgument && outgoing instanceof AttributeArgument) {
+	            incoming = this.declaration.getParameters().get(0);
+	        if(incoming instanceof UnresolvedParameter)
+	            incoming = ((UnresolvedParameter)incoming).getResolved();
+	        if(incoming instanceof CategoryParameter && outgoing instanceof CategoryParameter) {
+	            transpiler.append(incoming.getName()).append(".instanceOf(").append(((CategoryParameter)outgoing).getType().getTypeName()).append(")");
+	        } else if(incoming instanceof CategoryParameter && outgoing instanceof AttributeParameter) {
 	            transpiler.append(incoming.getName()).append(".hasOwnProperty('").append(outgoing.getName()).append("')");
 	        } else
 	            throw new Error("Unsupported: " + incoming.getClass().getSimpleName() + " and " + outgoing.getClass().getSimpleName());
 	    }
 	}
 
-	private IArgument findCorrespondingArg(Context context2, ArgumentList arguments, Set<IArgument> common, IArgument incoming) {
+	private IParameter findCorrespondingArg(Context context2, ParameterList arguments, Set<IParameter> common, IParameter incoming) {
 	    for(int i=0;i<arguments.size();i++) {
-	    	IArgument outgoing = arguments.get(i);
+	    	IParameter outgoing = arguments.get(i);
 	        if (common.contains(outgoing))
 	            continue;
 	        if (outgoing.equals(incoming))
 	            return outgoing;
-	        if (incoming instanceof CategoryArgument && outgoing instanceof CategoryArgument) {
-	            if(((CategoryArgument)incoming).getType().isAssignableFrom(context, ((CategoryArgument)outgoing).getType()) || ((CategoryArgument)outgoing).getType().isAssignableFrom(context, ((CategoryArgument)incoming).getType()))
+	        if (incoming instanceof CategoryParameter && outgoing instanceof CategoryParameter) {
+	            if(((CategoryParameter)incoming).getType().isAssignableFrom(context, ((CategoryParameter)outgoing).getType()) || ((CategoryParameter)outgoing).getType().isAssignableFrom(context, ((CategoryParameter)incoming).getType()))
 	                return outgoing;
 	        }
 	    }
 	    throw new Error("Could not find matching argument for: " + incoming + " in " + arguments);
 	}
 
-	private Set<IArgument> collectCommonArguments() {
-		Set<IArgument> common = null;
+	private Set<IParameter> collectCommonArguments() {
+		Set<IParameter> common = null;
 	    for(int i=0; i<this.declarations.size(); i++) {
 	    	IMethodDeclaration declaration = this.declarations.get(i);
 	        if(i==0)
-	            common = new HashSet<>(declaration.getArguments());
+	            common = new HashSet<>(declaration.getParameters());
 	        else {
-	        	Set<IArgument> current = new HashSet<>(declaration.getArguments());
+	        	Set<IParameter> current = new HashSet<>(declaration.getParameters());
 	            common.retainAll(current);
 	            if(common.isEmpty())
 	                break;

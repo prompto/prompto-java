@@ -17,7 +17,7 @@ import prompto.expression.MethodSelector;
 import prompto.expression.SelectorExpression;
 import prompto.expression.UnresolvedIdentifier;
 import prompto.expression.UnresolvedSelector;
-import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
@@ -37,11 +37,11 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 	
 	IExpression caller;
 	IExpression resolved;
-	ArgumentAssignmentList assignments;
+	ArgumentList arguments;
 	
-	public UnresolvedCall(IExpression caller, ArgumentAssignmentList assignments) {
+	public UnresolvedCall(IExpression caller, ArgumentList arguments) {
 		this.caller = caller;
-		this.assignments = assignments;
+		this.arguments = arguments;
 	}
 	
 	public void setParent(IExpression parent) {
@@ -73,8 +73,8 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 		return caller;
 	}
 	
-	public ArgumentAssignmentList getAssignments() {
-		return assignments;
+	public ArgumentList getAssignments() {
+		return arguments;
 	}
 	
 	@Override
@@ -84,8 +84,8 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 			resolved.toDialect(writer);
 		} catch(SyntaxError error) {
 			caller.toDialect(writer);
-			if(assignments!=null)
-				assignments.toDialect(writer);
+			if(arguments!=null)
+				arguments.toDialect(writer);
 		}
 	}
 	
@@ -165,7 +165,7 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 	
 	private IExpression resolveUnresolvedSelector(Context context) {
 		UnresolvedSelector selector = (UnresolvedSelector)caller;
-		selector.resolveMethod(context, assignments);
+		selector.resolveMethod(context, arguments);
 		return selector.getResolved();
 	}
 
@@ -178,14 +178,14 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 		if(instance!=null) {
 			decl = resolveUnresolvedMember(instance, id);
 			if(decl!=null)
-				call = new MethodCall(new MethodSelector(id), assignments);
+				call = new MethodCall(new MethodSelector(id), arguments);
 		}
 		if(call==null) {
 			INamed named = context.getRegisteredValue(INamed.class, id);
 			if(named!=null) {
 				IType type = named.getType(context);
 				if(type instanceof MethodType) {
-					call = new MethodCall(new MethodSelector(id), assignments);
+					call = new MethodCall(new MethodSelector(id), arguments);
 					((MethodCall)call).setVariableName(id.toString());
 				}
 			}
@@ -196,9 +196,9 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 				context.getProblemListener().reportUnknownMethod(id.toString(), id);
 				return null;
 			} else if(decl instanceof CategoryDeclaration)
-				call = new ConstructorExpression(new CategoryType(id), null, assignments, false);
+				call = new ConstructorExpression(new CategoryType(id), null, arguments, false);
 			else
-				call = new MethodCall(new MethodSelector(id), assignments);
+				call = new MethodCall(new MethodSelector(id), arguments);
 		}
 		// call.copySectionFrom(this); // TODO
 		return call;
@@ -216,7 +216,7 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 	private IExpression resolveMember(Context context) {
 		IExpression parent = ((MemberSelector)caller).getParent();
 		Identifier id = ((MemberSelector)caller).getId();
-		return new MethodCall(new MethodSelector(parent, id), assignments);
+		return new MethodCall(new MethodSelector(parent, id), arguments);
 	}
 	
 	@Override

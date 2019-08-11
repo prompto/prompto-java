@@ -1,13 +1,13 @@
-package prompto.argument;
+package prompto.param;
 
 import prompto.grammar.Identifier;
 import prompto.value.CodeValue;
 
-public class ValuedCodeArgument extends CodeArgument {
+public class ValuedCodeParameter extends CodeArgument {
 
 	CodeValue value;
 	
-	public ValuedCodeArgument(Identifier id, CodeValue value) {
+	public ValuedCodeParameter(Identifier id, CodeValue value) {
 		super(id);
 		this.value = value;
 	}

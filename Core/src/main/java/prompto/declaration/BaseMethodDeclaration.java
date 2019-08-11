@@ -6,7 +6,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import prompto.argument.IArgument;
 import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerException;
 import prompto.compiler.CompilerUtils;
@@ -17,11 +16,12 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.ArrowExpression;
 import prompto.expression.IExpression;
-import prompto.grammar.ArgumentAssignment;
-import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.Argument;
 import prompto.grammar.ArgumentList;
+import prompto.grammar.ParameterList;
 import prompto.grammar.Identifier;
 import prompto.grammar.Specificity;
+import prompto.param.IParameter;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
@@ -36,12 +36,12 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 
 	CategoryDeclaration memberOf;
 	IMethodDeclaration closureOf;
-	ArgumentList arguments;
+	ParameterList parameters;
 	IType returnType;
 	
-	public BaseMethodDeclaration(Identifier name, ArgumentList arguments, IType returnType) {
+	public BaseMethodDeclaration(Identifier name, ParameterList parameters, IType returnType) {
 		super(name);
-		this.arguments = arguments!=null ? arguments : new ArgumentList();
+		this.parameters = parameters!=null ? parameters : new ParameterList();
 		this.returnType = returnType;
 	}
 
@@ -74,11 +74,11 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	public String getSignature(Dialect dialect) {
 		StringBuilder sb = new StringBuilder(getId().toString());
 		sb.append('(');
-		for(IArgument arg : arguments) {
-			sb.append(arg.getSignature(dialect));
+		for(IParameter param : parameters) {
+			sb.append(param.getSignature(dialect));
 			sb.append(", ");
 		}
-		if(arguments.size()>0)
+		if(parameters.size()>0)
 			sb.setLength(sb.length()-2); // strip ", "
 		sb.append(')');
 		return sb.toString();
@@ -87,17 +87,17 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	@Override
 	public String getProto() {
 		StringBuilder sb = new StringBuilder();
-		for(IArgument arg : arguments) {
+		for(IParameter param : parameters) {
 			if(sb.length()>0)
 				sb.append('/');
-			sb.append(arg.getProto());
+			sb.append(param.getProto());
 		}
 		return sb.toString();
 	}
 	
 	@Override
-	public ArgumentList getArguments() {
-		return arguments;
+	public ParameterList getParameters() {
+		return parameters;
 	}
 	
 	@Override
@@ -111,9 +111,9 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	}
 	
 	@Override
-	public void registerArguments (Context context) {
-		if(arguments!=null)
-			arguments.register(context);
+	public void registerParameters (Context context) {
+		if(parameters!=null)
+			parameters.register(context);
 	}
 		
 	@Override
@@ -126,69 +126,69 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	}
 	
 	@Override
-	public boolean isAssignableTo(Context context, ArgumentAssignmentList assignments, boolean checkInstance, boolean allowDerived, Predicate<Specificity> filter) {
+	public boolean isAssignableTo(Context context, ArgumentList arguments, boolean checkInstance, boolean allowDerived, Predicate<Specificity> filter) {
 		try {
 			Context local = context.newLocalContext();
-			registerArguments(local);
-			ArgumentAssignmentList assignmentsList = new ArgumentAssignmentList(assignments);
-			for(IArgument argument : arguments) {
-				ArgumentAssignment assignment = assignmentsList.find(argument.getId());
-				if(assignment==null) {
-					IExpression expression = argument.getDefaultExpression();
+			registerParameters(local);
+			ArgumentList argsList = new ArgumentList(arguments);
+			for(IParameter parameter : parameters) {
+				Argument argument = argsList.find(parameter.getId());
+				if(argument==null) {
+					IExpression expression = parameter.getDefaultExpression();
 					if(expression!=null)
-						assignment = new ArgumentAssignment(argument, expression);
+						argument = new Argument(parameter, expression);
 				}
-				if(assignment==null) // missing argument
+				if(argument==null) // missing argument
 					return false;
-				if(!isAssignableTo(local, argument, assignment, checkInstance, allowDerived, filter))
+				if(!isAssignableTo(local, parameter, argument, checkInstance, allowDerived, filter))
 					return false;
-				assignmentsList.remove(assignment);
+				argsList.remove(argument);
 			}
-			return assignmentsList.isEmpty();
+			return argsList.isEmpty();
 		} catch (SyntaxError e) {
 			return false;
 		}
 	}
 	
 	@Override
-	public boolean isAssignableFrom(Context context, ArgumentAssignmentList assignments) {
+	public boolean isAssignableFrom(Context context, ArgumentList arguments) {
 		try {
 			Context local = context.newLocalContext();
-			registerArguments(local);
-			ArgumentAssignmentList assignmentsList = new ArgumentAssignmentList(assignments);
-			for(IArgument argument : arguments) {
-				ArgumentAssignment assignment = assignmentsList.find(argument.getId());
-				if(assignment==null) {
-					IExpression expression = argument.getDefaultExpression();
+			registerParameters(local);
+			ArgumentList argsList = new ArgumentList(arguments);
+			for(IParameter parameter : parameters) {
+				Argument argument = argsList.find(parameter.getId());
+				if(argument==null) {
+					IExpression expression = parameter.getDefaultExpression();
 					if(expression!=null)
-						assignment = new ArgumentAssignment(argument, expression);
+						argument = new Argument(parameter, expression);
 				}
-				if(assignment==null) // missing argument
+				if(argument==null) // missing argument
 					return false;
-				if(!isAssignableFrom(local, argument, assignment))
+				if(!isAssignableFrom(local, parameter, argument))
 					return false;
-				assignmentsList.remove(assignment);
+				argsList.remove(argument);
 			}
-			return assignmentsList.isEmpty();
+			return argsList.isEmpty();
 		} catch (SyntaxError e) {
 			return false;
 		}
 	}
 	
-	boolean isAssignableTo(Context context, IArgument argument, ArgumentAssignment assignment, boolean useInstance, boolean allowDerived, Predicate<Specificity> filter) {
-		Specificity spec = computeSpecificity(context, argument, assignment, useInstance, allowDerived);
+	boolean isAssignableTo(Context context, IParameter parameter, Argument argument, boolean useInstance, boolean allowDerived, Predicate<Specificity> filter) {
+		Specificity spec = computeSpecificity(context, parameter, argument, useInstance, allowDerived);
 		return filter.test(spec);
 	}
 	
-	boolean isAssignableFrom(Context context, IArgument argument, ArgumentAssignment assignment) {
+	boolean isAssignableFrom(Context context, IParameter parameter, Argument argument) {
 		try {
-			IType required = argument.getType(context);
-			IType actual = assignment.getExpression().check(context);
+			IType required = parameter.getType(context);
+			IType actual = argument.getExpression().check(context);
 			if(actual.equals(required)
 					|| actual.isAssignableFrom(context, required)
 					|| required.isAssignableFrom(context, actual))
 				return true;
-			actual = assignment.resolve(context, this, false, false).check(context);
+			actual = argument.resolve(context, this, false, false).check(context);
 			return actual.equals(required)
 					|| actual.isAssignableFrom(context, required)
 					|| required.isAssignableFrom(context, actual);
@@ -198,16 +198,16 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	}
 
 	@Override
-	public Specificity computeSpecificity(Context context, IArgument argument, ArgumentAssignment assignment, boolean useInstance, boolean allowDerived) {
+	public Specificity computeSpecificity(Context context, IParameter parameter, Argument argument, boolean useInstance, boolean allowDerived) {
 		try {
-			IType requiredType = argument.getType(context);
-			IExpression expression = assignment.getExpression();
+			IType requiredType = parameter.getType(context);
+			IExpression expression = argument.getExpression();
 			boolean checkArrow = requiredType instanceof MethodType && expression instanceof ContextualExpression && ((ContextualExpression)expression).getExpression() instanceof ArrowExpression;
 			IType actualType = checkArrow ? ((MethodType)requiredType).checkArrowExpression((ContextualExpression)expression) : expression.check(context);
 			// retrieve actual runtime type
 			if(useInstance && actualType instanceof CategoryType) {
 				// TODO: potential side effects here with function called multiple times
-				IValue value = assignment.getExpression().interpret(context.getCallingContext());
+				IValue value = argument.getExpression().interpret(context.getCallingContext());
 				if(value instanceof IInstance)
 					actualType = ((IInstance)value).getType();
 			}
@@ -217,7 +217,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 				return Specificity.INHERITED;
 			else if(allowDerived && actualType.isAssignableFrom(context, requiredType)) 
 				return Specificity.DERIVED;
-			actualType = assignment.resolve(context, this, useInstance, false).check(context);
+			actualType = argument.resolve(context, this, useInstance, false).check(context);
 			if(requiredType.isAssignableFrom(context, actualType))
 				return Specificity.IMPLICIT;
 			else if(allowDerived && actualType.isAssignableFrom(context, requiredType))
@@ -251,30 +251,30 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 
 	protected Context prepareContext(Context context, boolean isStart) {
 		if(isStart) {
-			// coming from nowhere, so need a clean context in which to register arguments
+			// coming from nowhere, so need a clean context in which to register parameters
 			context = context.newLocalContext();
-			registerArguments(context);
+			registerParameters(context);
 		}
 		return context;
 	}
 	
 	protected MethodInfo createMethodInfo(Context context, ClassFile classFile, IType returnType, String methodName) {
-		Descriptor.Method proto = CompilerUtils.createMethodDescriptor(context, arguments, returnType);
+		Descriptor.Method proto = CompilerUtils.createMethodDescriptor(context, parameters, returnType);
 		MethodInfo method = classFile.newMethod(methodName, proto); 
 		return method;
 	}
 
 	@Override
-	public void compileAssignments(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments) {
+	public void compileAssignments(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 		boolean isFirst = true;
-		for(IArgument arg : arguments.stripOutTemplateArguments()) {
-			arg.compileAssignment(context, method, flags, assignments, isFirst);
+		for(IParameter arg : parameters.stripOutTemplateArguments()) {
+			arg.compileArgument(context, method, flags, arguments, isFirst);
 			isFirst = false;
 		}
 	}
 	
-	public void declareArguments(Transpiler transpiler) {
-		this.arguments.declare(transpiler);
+	public void declareParameters(Transpiler transpiler) {
+		this.parameters.declare(transpiler);
 	}
 
 	public void transpileProlog(Transpiler transpiler) {
@@ -287,7 +287,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	        transpiler.append(this.getTranspiledName(transpiler.getContext())).append(" = function (");
 	    } else
 	        transpiler.append("function ").append(this.getTranspiledName(transpiler.getContext())).append(" (");
-	    this.arguments.transpile(transpiler);
+	    this.parameters.transpile(transpiler);
 	    transpiler.append(") {").indent();
 	}
 
@@ -308,7 +308,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	    	return this.getName();
 	    else {
 	    	Stream<String> name = Stream.of(this.getName());
-	    	Stream<String> args = this.arguments.stream().map(arg->arg.getTranspiledName(context));
+	    	Stream<String> args = this.parameters.stream().map(arg->arg.getTranspiledName(context));
 	    	return Stream.concat(name, args).collect(Collectors.joining("$"));
 	    }
 	};

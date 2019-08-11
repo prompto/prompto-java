@@ -5,7 +5,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.problem.IProblemListener;
 import prompto.problem.ProblemListener;
@@ -120,12 +120,12 @@ public class UnresolvedSelector extends SelectorExpression {
 		}
 	}
 
-	public void resolveMethod(Context context, ArgumentAssignmentList assignments) {
+	public void resolveMethod(Context context, ArgumentList assignments) {
 		if (resolved == null)
 			resolved = tryResolveMethod(context, assignments);
 	}
 	
-	public IExpression tryResolveMethod(Context context, ArgumentAssignmentList assignments) {
+	public IExpression tryResolveMethod(Context context, ArgumentList assignments) {
 		try {
 			IExpression resolvedParent = parent;
 			if (resolvedParent instanceof UnresolvedIdentifier) {

@@ -12,7 +12,7 @@ public class ArrowDeclaration extends AbstractMethodDeclaration {
 	ArrowValue arrow;
 	
 	public ArrowDeclaration(ArrowValue arrow) {
-		super(new Identifier("%Arrow"), arrow.getMethod().getArguments(), arrow.getMethod().getReturnType());
+		super(new Identifier("%Arrow"), arrow.getMethod().getParameters(), arrow.getMethod().getReturnType());
 		this.arrow = arrow;
 	}
 	

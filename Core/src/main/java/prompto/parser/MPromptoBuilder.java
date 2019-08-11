@@ -14,11 +14,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import prompto.argument.CategoryArgument;
-import prompto.argument.CodeArgument;
-import prompto.argument.ExtendedArgument;
-import prompto.argument.IArgument;
-import prompto.argument.UnresolvedArgument;
 import prompto.constraint.IAttributeConstraint;
 import prompto.constraint.MatchingCollectionConstraint;
 import prompto.constraint.MatchingExpressionConstraint;
@@ -108,9 +103,9 @@ import prompto.expression.TypeExpression;
 import prompto.expression.UnresolvedIdentifier;
 import prompto.expression.UnresolvedSelector;
 import prompto.grammar.Annotation;
-import prompto.grammar.ArgumentAssignment;
-import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.Argument;
 import prompto.grammar.ArgumentList;
+import prompto.grammar.ParameterList;
 import prompto.grammar.CategorySymbolList;
 import prompto.grammar.CmpOp;
 import prompto.grammar.ContOp;
@@ -197,6 +192,12 @@ import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
 import prompto.literal.UuidLiteral;
 import prompto.literal.VersionLiteral;
+import prompto.param.CategoryParameter;
+import prompto.param.CodeArgument;
+import prompto.param.ExtendedParameter;
+import prompto.param.IParameter;
+import prompto.param.UnresolvedParameter;
+
 import static prompto.parser.MParser.*;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
@@ -353,7 +354,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitAbstract_method_declaration(Abstract_method_declarationContext ctx) {
 		IType type = getNodeValue(ctx.typ);
 		Identifier name = getNodeValue(ctx.name);
-		ArgumentList args = getNodeValue(ctx.args);
+		ParameterList args = getNodeValue(ctx.args);
 		setNodeValue(ctx, new AbstractMethodDeclaration(name, args, type));
 	}
 	
@@ -436,17 +437,17 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitArgument_assignment(Argument_assignmentContext ctx) {
 		Identifier name = getNodeValue(ctx.name);
 		IExpression exp = getNodeValue(ctx.exp);
-		IArgument arg = new UnresolvedArgument(name);
-		ArgumentAssignment item = new ArgumentAssignment(arg, exp);
+		IParameter arg = new UnresolvedParameter(name);
+		Argument item = new Argument(arg, exp);
 		setNodeValue(ctx, item);
 	}
 
 	
 	@Override
 	public void exitArgument_list(Argument_listContext ctx) {
-		ArgumentList items = new ArgumentList();
+		ParameterList items = new ParameterList();
 		ctx.argument().forEach((a)->{
-			IArgument item = getNodeValue(a); 
+			IParameter item = getNodeValue(a); 
 			items.add(item);
 		});
 		setNodeValue(ctx, items);
@@ -455,15 +456,15 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitArgumentAssignmentList(ArgumentAssignmentListContext ctx) {
-		ArgumentAssignment item = getNodeValue(ctx.item);
-		ArgumentAssignmentList items = new ArgumentAssignmentList(Collections.singletonList(item));
+		Argument item = getNodeValue(ctx.item);
+		ArgumentList items = new ArgumentList(Collections.singletonList(item));
 		setNodeValue(ctx, items);
 	}
 	
 	@Override
 	public void exitArgumentAssignmentListItem(ArgumentAssignmentListItemContext ctx) {
-		ArgumentAssignment item = getNodeValue(ctx.item);
-		ArgumentAssignmentList items = getNodeValue(ctx.items);
+		Argument item = getNodeValue(ctx.item);
+		ArgumentList items = getNodeValue(ctx.items);
 		items.add(item);
 		setNodeValue(ctx, items);
 	}
@@ -677,7 +678,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	@Override
 	public void exitCategory_symbol(Category_symbolContext ctx) {
 		Identifier name = getNodeValue(ctx.name);
-		ArgumentAssignmentList args = getNodeValue(ctx.args);
+		ArgumentList args = getNodeValue(ctx.args);
 		setNodeValue(ctx, new CategorySymbol(name, args));
 	}
 
@@ -753,7 +754,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitCodeArgument(CodeArgumentContext ctx) {
-		IArgument arg = getNodeValue(ctx.arg);
+		IParameter arg = getNodeValue(ctx.arg);
 		setNodeValue(ctx, arg);
 	}
 	
@@ -806,7 +807,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitConcrete_method_declaration(Concrete_method_declarationContext ctx) {
 		IType type = getNodeValue(ctx.typ);
 		Identifier name = getNodeValue(ctx.name);
-		ArgumentList args = getNodeValue(ctx.args);
+		ParameterList args = getNodeValue(ctx.args);
 		StatementList stmts = getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new ConcreteMethodDeclaration(name, args, type, stmts));
 	}
@@ -835,7 +836,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitConstructorFrom(ConstructorFromContext ctx) {
 		CategoryType type = getNodeValue(ctx.typ);
 		IExpression copyFrom =  getNodeValue(ctx.copyExp);
-		ArgumentAssignmentList args = getNodeValue(ctx.args);
+		ArgumentList args = getNodeValue(ctx.args);
 		setNodeValue(ctx, new ConstructorExpression(type, copyFrom, args, true));
 	}
 
@@ -843,7 +844,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	@Override
 	public void exitConstructorNoFrom(ConstructorNoFromContext ctx) {
 		CategoryType type = getNodeValue(ctx.typ);
-		ArgumentAssignmentList args = getNodeValue(ctx.args);
+		ArgumentList args = getNodeValue(ctx.args);
 		setNodeValue(ctx, new ConstructorExpression(type, null, args, true));
 	}
 	
@@ -1268,8 +1269,8 @@ public class MPromptoBuilder extends MParserBaseListener {
 	@Override
 	public void exitExpressionAssignmentList(ExpressionAssignmentListContext ctx) {
 		IExpression exp = getNodeValue(ctx.exp);
-		ArgumentAssignmentList items = new ArgumentAssignmentList();
-		items.add(new ArgumentAssignment(null, exp));
+		ArgumentList items = new ArgumentList();
+		items.add(new Argument(null, exp));
 		setNodeValue(ctx, items);
 	}
 	
@@ -2101,7 +2102,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitMethod_call_expression(Method_call_expressionContext ctx) {
 		Identifier name = getNodeValue(ctx.name);
 		IExpression caller = new UnresolvedIdentifier(name);
-		ArgumentAssignmentList args = getNodeValue(ctx.args);
+		ArgumentList args = getNodeValue(ctx.args);
 		setNodeValue(ctx, new UnresolvedCall(caller, args));
 	}
 	
@@ -2220,7 +2221,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	@Override
 	public void exitNamed_argument(Named_argumentContext ctx) {
 		Identifier name = getNodeValue(ctx.variable_identifier());
-		UnresolvedArgument arg = new UnresolvedArgument(name);
+		UnresolvedParameter arg = new UnresolvedParameter(name);
 		IExpression exp = getNodeValue(ctx.literal_expression());
 		arg.setDefaultExpression(exp);
 		setNodeValue(ctx, arg);
@@ -2268,7 +2269,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitNative_method_declaration(Native_method_declarationContext ctx) {
 		IType type = getNodeValue(ctx.typ);
 		Identifier name = getNodeValue(ctx.name);
-		ArgumentList args = getNodeValue(ctx.args);
+		ParameterList args = getNodeValue(ctx.args);
 		StatementList stmts = getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new NativeMethodDeclaration(name, args, type, stmts));
 	}
@@ -2420,14 +2421,14 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitOperator_argument(Operator_argumentContext ctx) {
-		IArgument arg = getNodeValue(ctx.getChild(0));
+		IParameter arg = getNodeValue(ctx.getChild(0));
 		setNodeValue(ctx, arg);
 	}
 	
 	@Override
 	public void exitOperator_method_declaration(Operator_method_declarationContext ctx) {
 		Operator op = getNodeValue(ctx.op);
-		IArgument arg = getNodeValue(ctx.arg);
+		IParameter arg = getNodeValue(ctx.arg);
 		IType typ = getNodeValue(ctx.typ);
 		StatementList stmts = getNodeValue(ctx.stmts);
 		OperatorMethodDeclaration decl = new OperatorMethodDeclaration(op, arg, typ, stmts);
@@ -2437,7 +2438,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	@Override
 	public void exitOperatorArgument(OperatorArgumentContext ctx) {
 		boolean mutable = ctx.MUTABLE()!=null;
-		IArgument arg = getNodeValue(ctx.arg);
+		IParameter arg = getNodeValue(ctx.arg);
 		arg.setMutable(mutable);
 		setNodeValue(ctx, arg);
 	}
@@ -3048,9 +3049,9 @@ public class MPromptoBuilder extends MParserBaseListener {
 		IType type = getNodeValue(ctx.typ);
 		Identifier name = getNodeValue(ctx.name);
 		IdentifierList attrs = getNodeValue(ctx.attrs);
-		CategoryArgument arg = attrs==null ?
-				new CategoryArgument(type, name) : 
-				new ExtendedArgument(type, name, attrs); 
+		CategoryParameter arg = attrs==null ?
+				new CategoryParameter(type, name) : 
+				new ExtendedParameter(type, name, attrs); 
 		IExpression exp = getNodeValue(ctx.value);
 		arg.setDefaultExpression(exp);
 		setNodeValue(ctx, arg);
