@@ -20,6 +20,21 @@ public class TestFilter extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedFilterFromIterable() throws Exception {
+		checkInterpretedOutput("filter/filterFromIterable.poc");
+	}
+
+	@Test
+	public void testCompiledFilterFromIterable() throws Exception {
+		checkCompiledOutput("filter/filterFromIterable.poc");
+	}
+
+	@Test
+	public void testTranspiledFilterFromIterable() throws Exception {
+		checkTranspiledOutput("filter/filterFromIterable.poc");
+	}
+
+	@Test
 	public void testInterpretedFilterFromList() throws Exception {
 		checkInterpretedOutput("filter/filterFromList.poc");
 	}

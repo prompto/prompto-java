@@ -226,7 +226,7 @@ public class FilteredExpression extends Section implements IExpression {
 	public void declare(Transpiler transpiler) {
 	    this.source.declare(transpiler);
 	    IType manyType = this.source.check(transpiler.getContext());
-	    IType itemType = manyType instanceof ContainerType ? ((ContainerType)manyType).getItemType() : ((CursorType)manyType).getItemType();
+	    IType itemType = ((IterableType)manyType).getItemType() ;
 	    ArrowExpression arrow = toArrowExpression();
 	    arrow.declareFilter(transpiler, itemType);
 	}
@@ -234,8 +234,8 @@ public class FilteredExpression extends Section implements IExpression {
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 	    IType manyType = this.source.check(transpiler.getContext());
-	    IType itemType = manyType instanceof ContainerType ? ((ContainerType)manyType).getItemType() : ((CursorType)manyType).getItemType();
-	    this.source.transpile(transpiler);
+	    IType itemType = ((IterableType)manyType).getItemType() ;
+		this.source.transpile(transpiler);
 	    transpiler.append(".filtered(");
 	    ArrowExpression arrow = toArrowExpression();
 	    arrow.transpileFilter(transpiler, itemType);
