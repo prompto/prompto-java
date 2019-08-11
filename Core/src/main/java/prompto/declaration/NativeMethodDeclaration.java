@@ -8,8 +8,8 @@ import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
-import prompto.grammar.ArgumentAssignmentList;
 import prompto.grammar.ArgumentList;
+import prompto.grammar.ParameterList;
 import prompto.grammar.Identifier;
 import prompto.java.JavaNativeCall;
 import prompto.runtime.Context;
@@ -26,7 +26,7 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 
 	JavaNativeCall statement;
 	
-	public NativeMethodDeclaration(Identifier name, ArgumentList arguments, IType returnType, StatementList instructions) {
+	public NativeMethodDeclaration(Identifier name, ParameterList arguments, IType returnType, StatementList instructions) {
 		super(name, arguments, returnType, instructions);
 		statement = findCall(JavaNativeCall.class);
 	}
@@ -119,7 +119,7 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 	public void compileGlobal(Context context, ClassFile classFile) {
 		try {
 			context = context.newLocalContext();
-			registerArguments(context);
+			registerParameters(context);
 			IType returnType = this.checkNative(context);
 			MethodInfo method = createMethodInfo(context, classFile, returnType, getName());
 			registerLocals(context, classFile, method);
@@ -134,7 +134,7 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 	}
 
 	
-	public ResultInfo compileMember(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments) {
+	public ResultInfo compileMember(Context context, MethodInfo method, Flags flags, ArgumentList assignments) {
 		try {
 			// push arguments on the stack
 			compileAssignments(context, method, flags, assignments);
@@ -152,7 +152,7 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 			writer.append("native ");
 		writer.append(getName());
 		writer.append(" (");
-		arguments.toDialect(writer);
+		parameters.toDialect(writer);
 		writer.append(")");
 		if(returnType!=null && returnType!=VoidType.instance()) {
 			writer.append("->");
@@ -175,7 +175,7 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 		writer.append("method ");
 		writer.append(getName());
 		writer.append(" (");
-		arguments.toDialect(writer);
+		parameters.toDialect(writer);
 		writer.append(") {\n");
 		writer.indent();
 		for(IStatement statement : statements) {
@@ -194,7 +194,7 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 		if(memberOf==null)
 			writer.append("native ");
 		writer.append("method ");
-		arguments.toDialect(writer);
+		parameters.toDialect(writer);
 		if(returnType!=null && returnType!=VoidType.instance()) {
 			writer.append("returning ");
 			returnType.toDialect(writer);

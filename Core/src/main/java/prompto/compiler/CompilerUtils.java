@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import prompto.compiler.IVerifierEntry.VerifierType;
-import prompto.grammar.ArgumentList;
+import prompto.grammar.ParameterList;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.AttributeInfo;
@@ -109,7 +109,7 @@ public abstract class CompilerUtils {
 		return sb.toString();
 	}
 	
-	public static Descriptor.Method createMethodDescriptor(Context context, ArgumentList arguments, IType returnType) {
+	public static Descriptor.Method createMethodDescriptor(Context context, ParameterList arguments, IType returnType) {
 		List<Type> argTypes = arguments
 			.stripOutTemplateArguments()
 			.stream()

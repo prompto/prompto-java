@@ -1,12 +1,12 @@
 package prompto.grammar;
 
-import prompto.argument.IArgument;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.expression.InstanceExpression;
 import prompto.expression.MemberSelector;
+import prompto.param.IParameter;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.transpiler.Transpiler;
@@ -17,32 +17,32 @@ import prompto.utils.CodeWriter;
 import prompto.value.ContextualExpression;
 import prompto.value.IInstance;
 
-public class ArgumentAssignment {
+public class Argument {
 	
-	IArgument argument;
+	IParameter parameter;
 	IExpression expression;
 	
-	public ArgumentAssignment(IArgument argument, IExpression expression) {
-		this.argument = argument;
+	public Argument(IParameter parameter, IExpression expression) {
+		this.parameter = parameter;
 		this.expression = expression;
 	}
 	
 	
-	public void setArgument(IArgument argument) {
-		this.argument = argument;
+	public void setParameter(IParameter parameter) {
+		this.parameter = parameter;
 	}
 	
 	
-	public IArgument getArgument() {
-		return argument;
+	public IParameter getParameter() {
+		return parameter;
 	}
 
-	public Identifier getArgumentId() {
-		return argument==null ? null : argument.getId();
+	public Identifier getParameterId() {
+		return parameter==null ? null : parameter.getId();
 	} 
 	
 	public IExpression getExpression() {
-		return expression!=null ? expression : new InstanceExpression(argument.getId());
+		return expression!=null ? expression : new InstanceExpression(parameter.getId());
 	}
 
 	public void setExpression(IExpression expression) {
@@ -51,12 +51,12 @@ public class ArgumentAssignment {
 	
 	@Override
 	public String toString() {
-		if(argument==null)
+		if(parameter==null)
 			return expression.toString();
 		else if(expression==null)
-			return argument.getId().toString();
+			return parameter.getId().toString();
 		else
-			return argument.getId() + " = " + expression.toString();
+			return parameter.getId() + " = " + expression.toString();
 	}
 	
 	public void toDialect(CodeWriter writer) {
@@ -79,10 +79,10 @@ public class ArgumentAssignment {
 
 	private void toMDialect(CodeWriter writer) {
 		if(expression==null)
-			writer.append(argument.getId());
+			writer.append(parameter.getId());
 		else {
-			if(argument!=null) {
-				writer.append(argument.getId());
+			if(parameter!=null) {
+				writer.append(parameter.getId());
 				writer.append(" = ");
 			}
 			expression.toDialect(writer);
@@ -91,12 +91,12 @@ public class ArgumentAssignment {
 
 	private void toEDialect(CodeWriter writer) {
 		if(expression==null)
-			writer.append(argument.getId());
+			writer.append(parameter.getId());
 		else {
 			expression.toDialect(writer);
-			if(argument!=null) {
+			if(parameter!=null) {
 				writer.append(" as ");
-				writer.append(argument.getId());
+				writer.append(parameter.getId());
 			}
 		}
 	}
@@ -107,19 +107,19 @@ public class ArgumentAssignment {
 			return true;
 		if(obj==null)
 			return false;
-		if(!(obj instanceof ArgumentAssignment))
+		if(!(obj instanceof Argument))
 			return false;
-		ArgumentAssignment other = (ArgumentAssignment)obj;
-		return this.getArgument().equals(other.getArgument())
+		Argument other = (Argument)obj;
+		return this.getParameter().equals(other.getParameter())
 				&& this.getExpression().equals(other.getExpression());
 	}
 	
 	public IType check(Context context) {
 		IExpression expression = getExpression();
-		INamed actual = context.getRegisteredValue(INamed.class, argument.getId());
+		INamed actual = context.getRegisteredValue(INamed.class, parameter.getId());
 		if(actual==null) {
 			IType actualType = expression.check(context);
-			context.registerValue(new Variable(argument.getId(), actualType));
+			context.registerValue(new Variable(parameter.getId(), actualType));
 		} else {
 			// need to check type compatibility
 			IType actualType = actual.getType(context);
@@ -131,9 +131,9 @@ public class ArgumentAssignment {
 	
 	public IExpression resolve(Context context, IMethodDeclaration methodDeclaration, boolean checkInstance, boolean allowDerived) throws PromptoError {
 		// since we support implicit members, it's time to resolve them
-		Identifier name = argument.getId();
+		Identifier name = parameter.getId();
 		IExpression expression = getExpression();
-		IArgument argument = methodDeclaration.getArguments().find(name);
+		IParameter argument = methodDeclaration.getParameters().find(name);
 		IType required = argument.getType(context);
 		IType actual = expression.check(context.getCallingContext());
 		if(checkInstance && actual instanceof CategoryType) {
@@ -151,19 +151,19 @@ public class ArgumentAssignment {
 		return expression; 
 	}
 
-	public ArgumentAssignment resolveAndCheck(Context context, ArgumentList argumentList) {
-		IArgument argument = this.argument;
+	public Argument resolveAndCheck(Context context, ParameterList argumentList) {
+		IParameter argument = this.parameter;
 		// when 1st argument, can be unnamed
 		if(argument==null) {
 			if(argumentList.size()==0)
 				throw new SyntaxError("Method has no argument");
 			argument = argumentList.get(0);
 		} else
-			argument = argumentList.find(this.getArgumentId());
+			argument = argumentList.find(this.getParameterId());
 		if(argument==null)
-			throw new SyntaxError("Method has no argument:" + this.getArgumentId());
+			throw new SyntaxError("Method has no argument:" + this.getParameterId());
 		IExpression expression = new ContextualExpression(context, getExpression());
-		return new ArgumentAssignment(argument,expression);
+		return new Argument(argument,expression);
 	}
 
 

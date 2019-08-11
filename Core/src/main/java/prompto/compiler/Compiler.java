@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import prompto.argument.IArgument;
 import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.declaration.AbstractMethodDeclaration;
 import prompto.declaration.AttributeDeclaration;
@@ -25,9 +24,10 @@ import prompto.declaration.EnumeratedNativeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
-import prompto.grammar.ArgumentList;
+import prompto.grammar.ParameterList;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoCallSite;
+import prompto.param.IParameter;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.type.IType;
@@ -219,7 +219,7 @@ public class Compiler {
 		method.addInstruction(Opcode.LDC, new StringConstant(decl.getName()));
 		// descriptor
 		IType returnType = decl.check(context, isStart);
-		String descriptor = CompilerUtils.createMethodDescriptor(context, decl.getArguments(), returnType).toString();
+		String descriptor = CompilerUtils.createMethodDescriptor(context, decl.getParameters(), returnType).toString();
 		method.addInstruction(Opcode.LDC, new StringConstant(descriptor));
 		// loader
 		mc = new MethodConstant(PromptoClassLoader.class, "getInstance", PromptoClassLoader.class);
@@ -255,10 +255,10 @@ public class Compiler {
 
 	private void createGlobalCheckParamsMethods(Context context, ClassFile classFile, Collection<IMethodDeclaration> decls) {
 		for(IMethodDeclaration decl : decls)
-			createGlobalCheckParamsMethod(context, classFile, decl.getArguments());
+			createGlobalCheckParamsMethod(context, classFile, decl.getParameters());
 	}
 
-	private void createGlobalCheckParamsMethod(Context context, ClassFile classFile, ArgumentList arguments) {
+	private void createGlobalCheckParamsMethod(Context context, ClassFile classFile, ParameterList arguments) {
 		String name = buildGlobalCheckParamsMethodName(context, arguments);
 		Type[] types = buildGlobalCheckParamsMethodTypes(arguments.size());
 		Descriptor.Method desc = new Descriptor.Method(types, boolean.class);
@@ -296,10 +296,10 @@ public class Compiler {
 		return types;
 	}
 
-	private String buildGlobalCheckParamsMethodName(Context context, ArgumentList arguments) {
+	private String buildGlobalCheckParamsMethodName(Context context, ParameterList arguments) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("checkParams");
-		for(IArgument arg : arguments) {
+		for(IParameter arg : arguments) {
 			String typeName = arg.getJavaType(context).getTypeName();
 			String name = typeName.substring(typeName.lastIndexOf('.') + 1);
 			sb.append(name);

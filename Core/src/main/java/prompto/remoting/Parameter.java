@@ -8,13 +8,13 @@ import java.util.Map;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import prompto.argument.CategoryArgument;
-import prompto.argument.IArgument;
 import prompto.declaration.AttributeDeclaration;
 import prompto.error.PromptoError;
 import prompto.expression.ValueExpression;
-import prompto.grammar.ArgumentAssignment;
+import prompto.grammar.Argument;
 import prompto.grammar.Identifier;
+import prompto.param.CategoryParameter;
+import prompto.param.IParameter;
 import prompto.runtime.Context;
 import prompto.store.DataStore;
 import prompto.store.IStore;
@@ -98,9 +98,9 @@ public class Parameter {
 		return value.convertTo(context, Object.class);
 	}
 	
-	public ArgumentAssignment toAssignment(Context context) {
-		IArgument argument = new CategoryArgument(type, new Identifier(name));
-		return new ArgumentAssignment(argument, new ValueExpression(type, value));
+	public Argument toAssignment(Context context) {
+		IParameter argument = new CategoryParameter(type, new Identifier(name));
+		return new Argument(argument, new ValueExpression(type, value));
 	}
 
 	public void toJson(Context context, JsonGenerator generator) throws IOException, PromptoError {

@@ -10,17 +10,17 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import prompto.grammar.ArgumentList;
+import prompto.grammar.ParameterList;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.VoidType;
 
 public class InterfaceType {
 	
-	ArgumentList arguments;
+	ParameterList arguments;
 	IType returnType;
 
-	public InterfaceType(ArgumentList arguments, IType returnType) {
+	public InterfaceType(ParameterList arguments, IType returnType) {
 		this.arguments = arguments;
 		this.returnType = returnType;
 	}

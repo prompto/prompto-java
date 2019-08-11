@@ -45,8 +45,8 @@ import prompto.expression.InstanceExpression;
 import prompto.expression.MethodSelector;
 import prompto.expression.UnresolvedIdentifier;
 import prompto.expression.ValueExpression;
-import prompto.grammar.ArgumentAssignment;
-import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.Argument;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
 import prompto.instance.MemberInstance;
@@ -227,7 +227,7 @@ public class CategoryType extends BaseType {
 				return null;
 			context = context.newInstanceContext(this, false);
 			Context local = context.newLocalContext();
-			method.registerArguments(local);
+			method.registerParameters(local);
 			return method.check(local, false);
 		} catch(SyntaxError e) {
 			// ok to pass, will try reverse
@@ -689,8 +689,8 @@ public class CategoryType extends BaseType {
 	private IDeclaration findGlobalMethod(Context context, String name) {
 		try {
 			IExpression exp = new ValueExpression(this, this.newInstance(context));
-			ArgumentAssignment arg = new ArgumentAssignment(null, exp);
-			ArgumentAssignmentList args = new ArgumentAssignmentList(Collections.singletonList(arg));
+			Argument arg = new Argument(null, exp);
+			ArgumentList args = new ArgumentList(Collections.singletonList(arg));
 			MethodCall proto = new MethodCall(new MethodSelector(null, new Identifier(name)), args);
 			MethodFinder finder = new MethodFinder(context, proto);
 			return finder.findBestMethod(true);
@@ -885,8 +885,8 @@ public class CategoryType extends BaseType {
 	public MethodCall createGlobalMethodCallIfExists(Context context, Identifier methodName) {
 		try {
 			IExpression exp = new ValueExpression(this, newInstance(context));
-			ArgumentAssignment arg = new ArgumentAssignment(null, exp); // MethodCall supports first anonymous argument
-			ArgumentAssignmentList args = new ArgumentAssignmentList(Collections.singletonList(arg));
+			Argument arg = new Argument(null, exp); // MethodCall supports first anonymous argument
+			ArgumentList args = new ArgumentList(Collections.singletonList(arg));
 			MethodCall call = new MethodCall(new MethodSelector(methodName), args);
 			MethodFinder finder = new MethodFinder(context, call);
 			IMethodDeclaration decl = finder.findBestMethod(true);
@@ -933,7 +933,7 @@ public class CategoryType extends BaseType {
 			}
 
 			private IValue interpret(IInstance o) throws PromptoError {
-				ArgumentAssignment assignment = call.getAssignments().getFirst();
+				Argument assignment = call.getArguments().getFirst();
 				assignment.setExpression(new ValueExpression(CategoryType.this, o));
 				return call.interpret(context);
 			}
@@ -1072,7 +1072,7 @@ public class CategoryType extends BaseType {
 
 		private ResultInfo compileValue(Context context, MethodInfo method, Type paramType, String paramName) {
 			context.registerValue(new Variable(new Identifier(paramName), CategoryType.this));
-			ArgumentAssignment assignment = call.getAssignments().getFirst();
+			Argument assignment = call.getArguments().getFirst();
 			assignment.setExpression(new UnresolvedIdentifier(new Identifier(paramName)));
 			return call.compile(context, method, new Flags());
 		}

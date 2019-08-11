@@ -17,7 +17,7 @@ import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.grammar.ArgumentList;
+import prompto.grammar.ParameterList;
 import prompto.intrinsic.PromptoProxy;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
@@ -122,7 +122,7 @@ public class CastExpression implements IExpression {
 	
 	private ResultInfo compileWithProxy(Context context, MethodInfo method, Flags flags, MethodType target) {
 		IMethodDeclaration decl = target.getMethod();
-		ArgumentList args = decl.getArguments();
+		ParameterList args = decl.getParameters();
 		// the JVM can only cast to declared types, so we need a proxy to convert the FunctionalInterface call into the concrete one
 		// 1st parameter is method reference
 		expression.compile(context, method, flags); // this would return a lambda

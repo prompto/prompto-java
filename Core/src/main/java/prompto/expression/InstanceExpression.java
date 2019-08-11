@@ -1,6 +1,5 @@
 package prompto.expression;
 
-import prompto.argument.IArgument;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -17,6 +16,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
+import prompto.param.IParameter;
 import prompto.parser.Dialect;
 import prompto.parser.Section;
 import prompto.runtime.Context;
@@ -84,7 +84,7 @@ public class InstanceExpression extends Section implements IExpression {
 		}
 		else if(named instanceof Variable // local variable
 				|| named instanceof LinkedVariable // local variable with downcast
-				|| named instanceof IArgument // named argument
+				|| named instanceof IParameter // named argument
 				|| named instanceof CategoryDeclaration // any p with x
 				|| named instanceof AttributeDeclaration) // in category method
 			return named.getType(context);

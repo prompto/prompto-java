@@ -13,10 +13,6 @@ import org.joda.time.LocalTime;
 import org.joda.time.tz.ZoneInfoProvider;
 import org.junit.Test;
 
-import prompto.argument.CategoryArgument;
-import prompto.argument.ExtendedArgument;
-import prompto.argument.IArgument;
-import prompto.argument.ITypedArgument;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteMethodDeclaration;
@@ -28,9 +24,9 @@ import prompto.expression.MemberSelector;
 import prompto.expression.NativeSymbol;
 import prompto.expression.PlusExpression;
 import prompto.expression.TernaryExpression;
-import prompto.grammar.ArgumentAssignment;
-import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.Argument;
 import prompto.grammar.ArgumentList;
+import prompto.grammar.ParameterList;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDate;
 import prompto.intrinsic.PromptoDateTime;
@@ -48,6 +44,10 @@ import prompto.literal.RangeLiteral;
 import prompto.literal.TextLiteral;
 import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
+import prompto.param.CategoryParameter;
+import prompto.param.ExtendedParameter;
+import prompto.param.IParameter;
+import prompto.param.ITypedParameter;
 import prompto.parser.Dialect;
 import prompto.parser.OCleverParser;
 import prompto.parser.OPromptoBuilder;
@@ -181,7 +181,7 @@ public class TestParserAtoms {
 	public void testArgument() throws Exception {
 		String statement = "Person p";
 		OTestParser parser = new OTestParser(statement);
-		ITypedArgument a = parser.parse_typed_argument();
+		ITypedParameter a = parser.parse_typed_argument();
 		assertNotNull(a);
 		assertNotNull(a.getType());
 		assertEquals("Person",a.getType().getTypeName());
@@ -192,7 +192,7 @@ public class TestParserAtoms {
 	public void testList1Argument() throws Exception {
 		String statement = "Person p"; 
 		OTestParser parser = new OTestParser(statement);
-		ArgumentList l = parser.parse_argument_list();
+		ParameterList l = parser.parse_argument_list();
 		assertNotNull(l);
 		assertEquals(1,l.size());
 	}
@@ -201,7 +201,7 @@ public class TestParserAtoms {
 	public void testList2ArgumentsComma() throws Exception {
 		String statement = "Person p, Employee e"; 
 		OTestParser parser = new OTestParser(statement);
-		ArgumentList l = parser.parse_argument_list();
+		ParameterList l = parser.parse_argument_list();
 		assertNotNull(l);
 		assertEquals(2,l.size());
 	}
@@ -223,8 +223,8 @@ public class TestParserAtoms {
 		assertNotNull(mc);
 		assertEquals("print",mc.getCaller().toString());
 		assertNotNull(mc.getAssignments());
-		ArgumentAssignment as = mc.getAssignments().get(0);
-		assertEquals("value",as.getArgumentId().toString());
+		Argument as = mc.getAssignments().get(0);
+		assertEquals("value",as.getParameterId().toString());
 		IExpression exp = as.getExpression();
 		assertTrue(exp instanceof PlusExpression);
 		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());
@@ -240,9 +240,9 @@ public class TestParserAtoms {
 		ConcreteMethodDeclaration ad = parser.parse_concrete_method_declaration();
 		assertNotNull(ad);
 		assertEquals("printName",ad.getId().toString());
-		assertNotNull(ad.getArguments());
-		assertTrue(ad.getArguments().contains(
-				new CategoryArgument(
+		assertNotNull(ad.getParameters());
+		assertTrue(ad.getParameters().contains(
+				new CategoryParameter(
 						new CategoryType(new Identifier("Person")),
 						new Identifier("p"))));
 		assertNotNull(ad.getStatements());
@@ -258,12 +258,12 @@ public class TestParserAtoms {
 		ConcreteMethodDeclaration ad = parser.parse_concrete_method_declaration();
 		assertNotNull(ad);
 		assertEquals("printName",ad.getId().toString());
-		assertNotNull(ad.getArguments());
-		IArgument expected = new ExtendedArgument(
+		assertNotNull(ad.getParameters());
+		IParameter expected = new ExtendedParameter(
 				new CategoryType(new Identifier("Object")), 
 				new Identifier("o"), 
 				new IdentifierList( new Identifier("name")));
-		assertTrue(ad.getArguments().contains(expected));
+		assertTrue(ad.getParameters().contains(expected));
 		assertNotNull(ad.getStatements());
 		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());
 		ad.getStatements().getFirst().toDialect(writer);
@@ -278,12 +278,12 @@ public class TestParserAtoms {
 		ConcreteMethodDeclaration ad = parser.parse_concrete_method_declaration();
 		assertNotNull(ad);
 		assertEquals("printName",ad.getId().toString());
-		assertNotNull(ad.getArguments());
-		IArgument expected = new CategoryArgument(
+		assertNotNull(ad.getParameters());
+		IParameter expected = new CategoryParameter(
 				new ListType(
 						new CategoryType(new Identifier("Option"))),
 						new Identifier("options"));
-		assertTrue(ad.getArguments().contains(expected)); 
+		assertTrue(ad.getParameters().contains(expected)); 
 		assertNotNull(ad.getStatements());
 		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());
 		ad.getStatements().getFirst().toDialect(writer);
@@ -312,18 +312,18 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		ConstructorExpression c = parser.parse_constructor_expression();
 		assertNotNull(c);
-		ArgumentAssignmentList l = c.getAssignments();
+		ArgumentList l = c.getAssignments();
 		assertNotNull(l);
 		assertEquals(2, l.size());
-		ArgumentAssignment a = l.get(0);
+		Argument a = l.get(0);
 		assertNotNull(a);
-		assertEquals("id",a.getArgumentId().toString());
+		assertEquals("id",a.getParameterId().toString());
 		IExpression e = a.getExpression();
 		assertNotNull(e);
 		assertTrue(e instanceof IntegerLiteral);
 		a = l.get(1);
 		assertNotNull(a);
-		assertEquals("name",a.getArgumentId().toString());
+		assertEquals("name",a.getParameterId().toString());
 		e = a.getExpression();
 		assertNotNull(e);
 		assertTrue(e instanceof TextLiteral);
@@ -678,20 +678,20 @@ public class TestParserAtoms {
 			return builder.<CategoryDeclaration>getNodeValue(tree);
 		}
 
-		public ITypedArgument parse_typed_argument() {
+		public ITypedParameter parse_typed_argument() {
 			ParseTree tree = typed_argument();
 			OPromptoBuilder builder = new OPromptoBuilder(this);
 			ParseTreeWalker walker = new ParseTreeWalker();
 			walker.walk(builder, tree);
-			return builder.<ITypedArgument>getNodeValue(tree);
+			return builder.<ITypedParameter>getNodeValue(tree);
 		}
 
-		public ArgumentList parse_argument_list() {
+		public ParameterList parse_argument_list() {
 			ParseTree tree = argument_list();
 			OPromptoBuilder builder = new OPromptoBuilder(this);
 			ParseTreeWalker walker = new ParseTreeWalker();
 			walker.walk(builder, tree);
-			return builder.<ArgumentList>getNodeValue(tree);
+			return builder.<ParameterList>getNodeValue(tree);
 		}
 
 		public UnresolvedCall parse_method_call_statement() {

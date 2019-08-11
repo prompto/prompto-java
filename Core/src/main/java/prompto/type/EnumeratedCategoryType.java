@@ -4,8 +4,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import prompto.argument.CategoryArgument;
-import prompto.argument.IArgument;
 import prompto.declaration.BuiltInMethodDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IEnumeratedDeclaration;
@@ -13,6 +11,8 @@ import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.param.CategoryParameter;
+import prompto.param.IParameter;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
@@ -56,7 +56,7 @@ public class EnumeratedCategoryType extends CategoryType {
 			return super.getMemberMethods(context, name);
 	}
 
-	static IArgument NAME_ARGUMENT = new CategoryArgument(TextType.instance(), new Identifier("name"));
+	static IParameter NAME_ARGUMENT = new CategoryParameter(TextType.instance(), new Identifier("name"));
 
 	final IMethodDeclaration SYMBOL_OF_METHOD = new BuiltInMethodDeclaration("symbolOf", NAME_ARGUMENT) {
 		
@@ -75,7 +75,7 @@ public class EnumeratedCategoryType extends CategoryType {
 		}
 
 		@Override
-		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentList assignments) {
 	      transpiler.append("symbolOf(");
 	      assignments.get(0).transpile(transpiler);
 	      transpiler.append(")");

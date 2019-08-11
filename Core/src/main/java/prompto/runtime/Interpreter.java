@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import prompto.argument.UnresolvedArgument;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
@@ -12,11 +11,12 @@ import prompto.error.SyntaxError;
 import prompto.expression.ValueExpression;
 import prompto.expression.IExpression;
 import prompto.expression.MethodSelector;
-import prompto.grammar.ArgumentAssignment;
-import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.Argument;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDict;
 import prompto.literal.DictLiteral;
+import prompto.param.UnresolvedParameter;
 import prompto.statement.MethodCall;
 import prompto.type.DictType;
 import prompto.type.IType;
@@ -79,7 +79,7 @@ public class Interpreter {
 	
 	public static void interpretMethod(Context context, Identifier methodName, IExpression args) {
 		IMethodDeclaration method = MethodLocator.locateMethod(context, methodName, args);
-		ArgumentAssignmentList assignments = buildAssignments(method, args);
+		ArgumentList assignments = buildAssignments(method, args);
 		MethodCall call = new MethodCall(new MethodSelector(methodName), assignments);
 		call.interpret(context);	
 	}
@@ -88,11 +88,11 @@ public class Interpreter {
 		throw new UnsupportedOperationException("yet!");
 	}
 
-	public static ArgumentAssignmentList buildAssignments(IMethodDeclaration method, IExpression args) {
-		ArgumentAssignmentList assignments = new ArgumentAssignmentList();
-		if(method.getArguments().size()==1) {
-			Identifier name = method.getArguments().getFirst().getId();
-			assignments.add(new ArgumentAssignment(new UnresolvedArgument(name), args)); 
+	public static ArgumentList buildAssignments(IMethodDeclaration method, IExpression args) {
+		ArgumentList assignments = new ArgumentList();
+		if(method.getParameters().size()==1) {
+			Identifier name = method.getParameters().getFirst().getId();
+			assignments.add(new Argument(new UnresolvedParameter(name), args)); 
 		}
 		return assignments;
 	}

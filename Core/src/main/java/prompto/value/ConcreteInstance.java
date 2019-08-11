@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import prompto.argument.IArgument;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.EnumeratedCategoryDeclaration;
@@ -23,6 +22,7 @@ import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
+import prompto.param.IParameter;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.store.DataStore;
@@ -322,8 +322,8 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		IMethodDeclaration decl = declaration.findOperator(context, operator, value.getType());
 		context = context.newInstanceContext(this, false);
 		Context local = context.newChildContext();
-		decl.registerArguments(local);
-		IArgument arg = decl.getArguments().getFirst();
+		decl.registerParameters(local);
+		IParameter arg = decl.getParameters().getFirst();
 		local.setValue(arg.getId(), value);
 		return decl.interpret(local);
 	}

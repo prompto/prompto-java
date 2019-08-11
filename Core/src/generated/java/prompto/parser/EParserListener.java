@@ -2659,25 +2659,25 @@ public interface EParserListener extends ParseTreeListener {
 	void exitArgument_list(EParser.Argument_listContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code CodeArgument}
-	 * labeled alternative in {@link EParser#argument}.
+	 * labeled alternative in {@link EParser#parameter}.
 	 * @param ctx the parse tree
 	 */
 	void enterCodeArgument(EParser.CodeArgumentContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code CodeArgument}
-	 * labeled alternative in {@link EParser#argument}.
+	 * labeled alternative in {@link EParser#parameter}.
 	 * @param ctx the parse tree
 	 */
 	void exitCodeArgument(EParser.CodeArgumentContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code OperatorArgument}
-	 * labeled alternative in {@link EParser#argument}.
+	 * labeled alternative in {@link EParser#parameter}.
 	 * @param ctx the parse tree
 	 */
 	void enterOperatorArgument(EParser.OperatorArgumentContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code OperatorArgument}
-	 * labeled alternative in {@link EParser#argument}.
+	 * labeled alternative in {@link EParser#parameter}.
 	 * @param ctx the parse tree
 	 */
 	void exitOperatorArgument(EParser.OperatorArgumentContext ctx);

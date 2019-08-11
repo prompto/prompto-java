@@ -7,8 +7,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import prompto.argument.CategoryArgument;
-import prompto.argument.IArgument;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Descriptor;
@@ -27,6 +25,8 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoString;
 import prompto.literal.TextLiteral;
+import prompto.param.CategoryParameter;
+import prompto.param.IParameter;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
@@ -150,8 +150,8 @@ public class TextType extends NativeType {
 		}
 	}
 	
-	static IArgument TO_REPLACE_ARGUMENT = new CategoryArgument(TextType.instance(), new Identifier("toReplace"));
-	static IArgument REPLACE_WITH_ARGUMENT = new CategoryArgument(TextType.instance(), new Identifier("replaceWith"));
+	static IParameter TO_REPLACE_ARGUMENT = new CategoryParameter(TextType.instance(), new Identifier("toReplace"));
+	static IParameter REPLACE_WITH_ARGUMENT = new CategoryParameter(TextType.instance(), new Identifier("replaceWith"));
 
 	static final IMethodDeclaration REPLACE_METHOD = new BuiltInMethodDeclaration("replace", TO_REPLACE_ARGUMENT, REPLACE_WITH_ARGUMENT) {
 		
@@ -177,7 +177,7 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentList assignments) {
 			// push arguments on the stack
 			this.compileAssignments(context, method, flags, assignments);
 			// call replace method
@@ -190,7 +190,7 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentList assignments) {
 			transpiler.append("replace(");
 	        assignments.find(new Identifier("toReplace")).transpile(transpiler);
 	        transpiler.append(",");
@@ -223,7 +223,7 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentList assignments) {
 			// push arguments on the stack
 			this.compileAssignments(context, method, flags, assignments);
 			// call replace method
@@ -236,7 +236,7 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentList assignments) {
 	        transpiler.append("replace(new RegExp(");
 	        assignments.find(new Identifier("toReplace")).transpile(transpiler);
 	        transpiler.append(", 'g'),");
@@ -246,7 +246,7 @@ public class TextType extends NativeType {
 	};
 	
 	
-	static IArgument SINGLE_SPACE_ARGUMENT = new CategoryArgument(TextType.instance(), new Identifier("separator"), new TextLiteral("\" \""));
+	static IParameter SINGLE_SPACE_ARGUMENT = new CategoryParameter(TextType.instance(), new Identifier("separator"), new TextLiteral("\" \""));
 
 	static final IMethodDeclaration SPLIT_METHOD = new BuiltInMethodDeclaration("split", SINGLE_SPACE_ARGUMENT) {
 		
@@ -274,7 +274,7 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentList assignments) {
 			// push arguments on the stack
 			this.compileAssignments(context, method, flags, assignments);
 			// call split method
@@ -300,7 +300,7 @@ public class TextType extends NativeType {
 		
 
 		@Override
-		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentList assignments) {
 	       transpiler.append("splitToList(");
 	        if(assignments!=null)
 	            assignments.get(0).transpile(transpiler);
@@ -331,7 +331,7 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentList assignments) {
 			// push arguments on the stack
 			this.compileAssignments(context, method, flags, assignments);
 			// call static method
@@ -343,7 +343,7 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentList assignments) {
 	      transpiler.append("replace( /(^|\\s)([a-z])/g , function(m, p1, p2){ return p1 + p2.toUpperCase(); } )");
 		}
 	};
@@ -363,7 +363,7 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentList assignments) {
 			transpiler.append("toLowerCase()");
 		}
 
@@ -384,7 +384,7 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentList assignments) {
 			transpiler.append("toUpperCase()");
 		}
 
@@ -405,13 +405,13 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentList assignments) {
 			transpiler.append("trim()");
 		}
 
 	};
 	
-	static IArgument TEXT_VALUE_ARGUMENT = new CategoryArgument(TextType.instance(), new Identifier("value"));
+	static IParameter TEXT_VALUE_ARGUMENT = new CategoryParameter(TextType.instance(), new Identifier("value"));
 
 	static final IMethodDeclaration STARTS_WITH_METHOD = new BuiltInMethodDeclaration("startsWith", TEXT_VALUE_ARGUMENT) {
 		
@@ -434,7 +434,7 @@ public class TextType extends NativeType {
 		};
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentList assignments) {
 			// push arguments on the stack
 			this.compileAssignments(context, method, flags, assignments);
 			// call replace method
@@ -449,7 +449,7 @@ public class TextType extends NativeType {
 		};
 		
 		@Override
-		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentList assignments) {
 	        transpiler.append("startsWith(");
 	        assignments.get(0).transpile(transpiler);
 	        transpiler.append(")");
@@ -478,7 +478,7 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentList assignments) {
 			// push arguments on the stack
 			this.compileAssignments(context, method, flags, assignments);
 			// call replace method
@@ -493,7 +493,7 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentList assignments) {
 			transpiler.append("endsWith(");
 	        assignments.get(0).transpile(transpiler);
 	        transpiler.append(")");
@@ -523,7 +523,7 @@ public class TextType extends NativeType {
 		};
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentList assignments) {
 			// push arguments on the stack
 			this.compileAssignments(context, method, flags, assignments);
 			// call indexOf method
@@ -541,7 +541,7 @@ public class TextType extends NativeType {
 		};
 		
 		@Override
-		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentList assignments) {
 	        transpiler.append("indexOf1Based(");
 	        assignments.get(0).transpile(transpiler);
 	        transpiler.append(")");

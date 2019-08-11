@@ -1,4 +1,4 @@
-package prompto.argument;
+package prompto.param;
 
 import java.util.Objects;
 
@@ -11,7 +11,7 @@ import prompto.type.CodeType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 
-public class CodeArgument extends BaseArgument implements ITypedArgument {
+public class CodeArgument extends BaseParameter implements ITypedParameter {
 	
 	public CodeArgument(Identifier id) {
 		super(id);

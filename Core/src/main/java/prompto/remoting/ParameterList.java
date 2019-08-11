@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import prompto.error.PromptoError;
-import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.ArgumentList;
 import prompto.runtime.Context;
 
 import com.fasterxml.jackson.core.JsonFactory;
@@ -23,8 +23,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @SuppressWarnings("serial")
 public class ParameterList extends ArrayList<Parameter> {
 
-	public ArgumentAssignmentList toAssignments(Context context) {
-		return new ArgumentAssignmentList(
+	public ArgumentList toAssignments(Context context) {
+		return new ArgumentList(
 				this.stream()
 				.map((param)->
 					param.toAssignment(context))

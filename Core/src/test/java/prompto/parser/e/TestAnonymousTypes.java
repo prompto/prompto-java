@@ -5,11 +5,11 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import prompto.argument.CategoryArgument;
-import prompto.argument.ExtendedArgument;
-import prompto.argument.IArgument;
 import prompto.declaration.DeclarationList;
 import prompto.grammar.Identifier;
+import prompto.param.CategoryParameter;
+import prompto.param.ExtendedParameter;
+import prompto.param.IParameter;
 import prompto.type.AnyType;
 import prompto.type.BooleanType;
 import prompto.type.CategoryType;
@@ -41,7 +41,7 @@ public class TestAnonymousTypes extends BaseEParserTest {
 	@Test
 	public void testAnonymousAnyType() throws Exception {
 		// any x
-		IArgument argument = new CategoryArgument(AnyType.instance(), new Identifier("x"));
+		IParameter argument = new CategoryParameter(AnyType.instance(), new Identifier("x"));
 		argument.register(context);
 		IType st = argument.getType(context);
 		assertTrue(st instanceof AnyType);
@@ -63,7 +63,7 @@ public class TestAnonymousTypes extends BaseEParserTest {
 	public void testAnonymousAnyTypeWithAttribute() throws Exception {
 		// any x with attribute: name
 		IdentifierList list = new IdentifierList(new Identifier("name"));
-		IArgument argument = new ExtendedArgument(AnyType.instance(), new Identifier("x"), list);
+		IParameter argument = new ExtendedParameter(AnyType.instance(), new Identifier("x"), list);
 		argument.register(context);
 		IType st = argument.getType(context);
 		assertTrue(st instanceof CategoryType);
@@ -84,7 +84,7 @@ public class TestAnonymousTypes extends BaseEParserTest {
 	@Test
 	public void testAnonymousCategoryType() throws Exception {
 		// Root x
-		IArgument argument = new CategoryArgument(new CategoryType(new Identifier("Root")), new Identifier("x"));
+		IParameter argument = new CategoryParameter(new CategoryType(new Identifier("Root")), new Identifier("x"));
 		argument.register(context);
 		IType st = argument.getType(context);
 		assertTrue(st instanceof CategoryType);
@@ -106,7 +106,7 @@ public class TestAnonymousTypes extends BaseEParserTest {
 	public void testAnonymousCategoryTypeWithAttribute() throws Exception {
 		// Root x with attribute: name
 		IdentifierList list = new IdentifierList(new Identifier("name"));
-		IArgument argument = new ExtendedArgument(new CategoryType(new Identifier("Root")), new Identifier("test"), list);
+		IParameter argument = new ExtendedParameter(new CategoryType(new Identifier("Root")), new Identifier("test"), list);
 		argument.register(context);
 		IType st = argument.getType(context);
 		assertTrue(st instanceof CategoryType);

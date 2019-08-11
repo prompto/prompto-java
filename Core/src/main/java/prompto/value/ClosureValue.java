@@ -4,7 +4,7 @@ import java.lang.reflect.Type;
 
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
-import prompto.grammar.ArgumentList;
+import prompto.grammar.ParameterList;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.type.IType;
@@ -49,8 +49,8 @@ public class ClosureValue extends BaseValue {
 		return getMethod().getId();
 	}
 
-	public ArgumentList getArguments() {
-		return getMethod().getArguments();
+	public ParameterList getArguments() {
+		return getMethod().getParameters();
 	}
 
 	public IType getReturnType() {

@@ -1,4 +1,4 @@
-package prompto.argument;
+package prompto.param;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -16,9 +16,9 @@ import prompto.compiler.StringConstant;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
-import prompto.grammar.ArgumentAssignment;
-import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.Argument;
 import prompto.grammar.ArgumentList;
+import prompto.grammar.ParameterList;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoProxy;
@@ -29,9 +29,9 @@ import prompto.transpiler.Transpiler;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
 
-public class MethodArgument extends BaseArgument implements INamedArgument {
+public class MethodParameter extends BaseParameter implements INamedParameter {
 	
-	public MethodArgument(Identifier id) {
+	public MethodParameter(Identifier id) {
 		super(id);
 	}
 	
@@ -61,9 +61,9 @@ public class MethodArgument extends BaseArgument implements INamedArgument {
 			return true;
 		if(obj==null)
 			return false;
-		if(!(obj instanceof MethodArgument))
+		if(!(obj instanceof MethodParameter))
 			return false;
-		MethodArgument other = (MethodArgument)obj;
+		MethodParameter other = (MethodParameter)obj;
 		return Objects.equals(this.getId(),other.getId());
 	}
 
@@ -71,7 +71,7 @@ public class MethodArgument extends BaseArgument implements INamedArgument {
 	public void register(Context context) {
 		INamed actual = context.getRegisteredValue(INamed.class,id);
 		if(actual!=null)
-			throw new SyntaxError("Duplicate argument: \"" + id + "\"");
+			throw new SyntaxError("Duplicate parameter: \"" + id + "\"");
 		context.registerValue(this);
 	}
 	
@@ -97,14 +97,14 @@ public class MethodArgument extends BaseArgument implements INamedArgument {
 	}
 	
 	@Override
-	public void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments, boolean isFirst) {
+	public void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
 		MethodType target = getType(context);
 		IMethodDeclaration decl = target.getMethod();
-		ArgumentList args = decl.getArguments();
+		ParameterList args = decl.getParameters();
 		InterfaceType intf = new InterfaceType(args, decl.getReturnType());
 		// the JVM can only cast to declared types, so we need a proxy to convert the FunctionalInterface call into the concrete one
 		// 1st parameter is method reference
-		ArgumentAssignment assign = makeAssignment(assignments, isFirst);
+		Argument assign = makeAssignment(assignments, isFirst);
 		IExpression expression = assign.getExpression();
 		expression.compile(context.getCallingContext(), method, flags); // this would return a lambda
 		// what interface we are casting to

@@ -2507,25 +2507,25 @@ public interface OParserListener extends ParseTreeListener {
 	void exitArgument_list(OParser.Argument_listContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code CodeArgument}
-	 * labeled alternative in {@link OParser#argument}.
+	 * labeled alternative in {@link OParser#parameter}.
 	 * @param ctx the parse tree
 	 */
 	void enterCodeArgument(OParser.CodeArgumentContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code CodeArgument}
-	 * labeled alternative in {@link OParser#argument}.
+	 * labeled alternative in {@link OParser#parameter}.
 	 * @param ctx the parse tree
 	 */
 	void exitCodeArgument(OParser.CodeArgumentContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code OperatorArgument}
-	 * labeled alternative in {@link OParser#argument}.
+	 * labeled alternative in {@link OParser#parameter}.
 	 * @param ctx the parse tree
 	 */
 	void enterOperatorArgument(OParser.OperatorArgumentContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code OperatorArgument}
-	 * labeled alternative in {@link OParser#argument}.
+	 * labeled alternative in {@link OParser#parameter}.
 	 * @param ctx the parse tree
 	 */
 	void exitOperatorArgument(OParser.OperatorArgumentContext ctx);

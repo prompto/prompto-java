@@ -1,11 +1,11 @@
 package prompto.runtime;
 
-import prompto.argument.IArgument;
-import prompto.argument.ITypedArgument;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
-import prompto.grammar.ArgumentList;
+import prompto.grammar.ParameterList;
+import prompto.param.IParameter;
+import prompto.param.ITypedParameter;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.type.DictType;
@@ -31,40 +31,40 @@ public abstract class MethodLocator {
 	static IMethodDeclaration locateMethod(MethodDeclarationMap map, IType ... argTypes) {
 		// try exact match first
 		for(IMethodDeclaration method : map.values()) {
-			if(MethodLocator.identicalArguments(method.getArguments(), argTypes))
+			if(MethodLocator.identicalParameters(method.getParameters(), argTypes))
 				return method;
 		}
 		// match Text{} argument, will pass null 
 		if(argTypes.length==0) for(IMethodDeclaration method : map.values()) {
-			if(isSingleTextDictArgument(method.getArguments()))
+			if(isSingleTextDictParameter(method.getParameters()))
 				return method;
 		}
-		// match no argument, will ignore options
+		// match no parameter, will ignore options
 		for(IMethodDeclaration method : map.values()) {
-			if(method.getArguments().size()==0)
+			if(method.getParameters().size()==0)
 				return method;
 		}
 		throw new SyntaxError("Could not find a compatible \"" + map.getId() + "\" method.");
 	}
 
-	static boolean isSingleTextDictArgument(ArgumentList arguments) {
+	static boolean isSingleTextDictParameter(ParameterList arguments) {
 		if(arguments.size()!=1)
 			return false;
-		IArgument arg = arguments.getFirst();
-		if(!(arg instanceof ITypedArgument))
+		IParameter arg = arguments.getFirst();
+		if(!(arg instanceof ITypedParameter))
 			return false;
-		return ((ITypedArgument)arg).getType().equals(Interpreter.argsType);
+		return ((ITypedParameter)arg).getType().equals(Interpreter.argsType);
 	}
 
-	static boolean identicalArguments(ArgumentList arguments, IType[] argTypes) {
-		if(arguments.size()!=argTypes.length)
+	static boolean identicalParameters(ParameterList parameters, IType[] argTypes) {
+		if(parameters.size()!=argTypes.length)
 			return false;
 		int idx = 0;
-		for(IArgument argument : arguments) {
-			if(!(argument instanceof ITypedArgument))
+		for(IParameter parameter : parameters) {
+			if(!(parameter instanceof ITypedParameter))
 				return false;
 			IType argType = argTypes[idx++];
-			if(!argType.equals(((ITypedArgument)argument).getType()))
+			if(!argType.equals(((ITypedParameter)parameter).getType()))
 				return false;
 		}
 		return true;

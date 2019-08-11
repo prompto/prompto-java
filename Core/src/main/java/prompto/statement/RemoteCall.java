@@ -1,6 +1,5 @@
 package prompto.statement;
 
-import prompto.argument.IArgument;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -8,10 +7,11 @@ import prompto.compiler.ResultInfo;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
-import prompto.grammar.ArgumentAssignment;
-import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.Argument;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.instance.VariableInstance;
+import prompto.param.IParameter;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
@@ -28,10 +28,10 @@ public class RemoteCall extends UnresolvedCall {
 	StatementList andThen;
 
 	public RemoteCall(UnresolvedCall call, Identifier resultName, StatementList andThen) {
-		this(call.caller, call.assignments, resultName, andThen);
+		this(call.caller, call.arguments, resultName, andThen);
 	}
 
-	public RemoteCall(IExpression caller, ArgumentAssignmentList assignments, Identifier resultName, StatementList andThen) {
+	public RemoteCall(IExpression caller, ArgumentList assignments, Identifier resultName, StatementList andThen) {
 		super(caller, assignments);
 		this.resultName = resultName;
 		this.andThen = andThen;
@@ -88,7 +88,7 @@ public class RemoteCall extends UnresolvedCall {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		resolveAndCheck(context);
 		if(resultName!=null) {
-			AssignInstanceStatement assign = new AssignInstanceStatement(new VariableInstance(resultName), new UnresolvedCall(caller, assignments));
+			AssignInstanceStatement assign = new AssignInstanceStatement(new VariableInstance(resultName), new UnresolvedCall(caller, arguments));
 			assign.compile(context, method, flags);
 		} else {
 			ResultInfo result = resolved.compile(context, method, flags);
@@ -161,10 +161,10 @@ public class RemoteCall extends UnresolvedCall {
 
 	private void transpileAssignments(Transpiler transpiler, MethodCall call) {
 		transpiler.append("[");
-		ArgumentAssignmentList assigns = call.getAssignments();
+		ArgumentList assigns = call.getArguments();
 		if(assigns!=null && !assigns.isEmpty()) {
 			IMethodDeclaration declaration = call.findDeclaration(transpiler.getContext(), false);
-			assigns = assigns.makeAssignments(transpiler.getContext(), declaration);
+			assigns = assigns.makeArguments(transpiler.getContext(), declaration);
 			assigns.forEach(assign->{
 				transpileAssignment(transpiler, assign, declaration);
 				transpiler.append(",");
@@ -174,9 +174,9 @@ public class RemoteCall extends UnresolvedCall {
 		transpiler.append("]");
 	}
 
-	private void transpileAssignment(Transpiler transpiler, ArgumentAssignment assign, IMethodDeclaration declaration) {
+	private void transpileAssignment(Transpiler transpiler, Argument assign, IMethodDeclaration declaration) {
 		Context ctx = transpiler.getContext();
-        IArgument argument = assign.getArgument();
+        IParameter argument = assign.getParameter();
         IExpression expression = assign.resolve(ctx, declaration, false, false);
 		transpiler.append("{name:'")
 			.append(argument.getName())

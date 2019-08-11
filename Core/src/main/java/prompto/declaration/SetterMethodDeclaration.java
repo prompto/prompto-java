@@ -1,6 +1,5 @@
 package prompto.declaration;
 
-import prompto.argument.AttributeArgument;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerUtils;
@@ -11,6 +10,7 @@ import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.MethodInfo;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.param.AttributeParameter;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.statement.IStatement;
@@ -93,7 +93,7 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    AttributeArgument arg = new AttributeArgument(this.getId());
+	    AttributeParameter arg = new AttributeParameter(this.getId());
 	    arg.register(transpiler.getContext());
 	    this.statements.transpile(transpiler);
 	    return false;

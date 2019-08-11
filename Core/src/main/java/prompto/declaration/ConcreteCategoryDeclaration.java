@@ -441,13 +441,13 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		// find best candidate
 		IMethodDeclaration candidate = null;
 		for(IMethodDeclaration method : methods.values()) {
-			IType potential = method.getArguments().getFirst().getType(context);
+			IType potential = method.getParameters().getFirst().getType(context);
 			if(!potential.isAssignableFrom(context, type))
 				continue;
 			if(candidate==null)
 				candidate = method;
 			else {
-				IType currentBest = candidate.getArguments().getFirst().getType(context);
+				IType currentBest = candidate.getParameters().getFirst().getType(context);
 				if(potential.isAssignableFrom(context, currentBest))
 					candidate = method;
 			}
@@ -659,7 +659,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	private void compileMethodPrototype(Context context, ClassFile classFile, IMethodDeclaration method) {
 		try {
 			context = context.newInstanceContext(getType(context), false).newChildContext();
-			method.registerArguments(context);
+			method.registerParameters(context);
 			method.compilePrototype(context, false, classFile);
 		} catch(SyntaxError e) {
 			throw new CompilerException(e);
@@ -1005,7 +1005,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			if(	method instanceof GetterMethodDeclaration || method instanceof SetterMethodDeclaration)
 				continue;
 			context = context.newMemberContext(getType(context));
-			method.registerArguments(context);
+			method.registerParameters(context);
 			method.compile(context, false, classFile);
 		}
 	}

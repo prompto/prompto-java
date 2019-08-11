@@ -136,7 +136,7 @@ public class CursorType extends IterableType {
 		}
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentAssignmentList assignments) {
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentList assignments) {
 			// call replace method
 			Descriptor.Method descriptor = new Descriptor.Method(PromptoList.class);
 			InterfaceConstant constant = new InterfaceConstant(IterableWithCounts.class, "toList", descriptor);
@@ -152,7 +152,7 @@ public class CursorType extends IterableType {
 		};
 		
 		@Override
-		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentAssignmentList assignments) {
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentList assignments) {
 			transpiler.append("toList()");
 		}
 	};

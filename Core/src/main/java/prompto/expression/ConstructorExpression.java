@@ -3,7 +3,6 @@ package prompto.expression;
 import java.lang.reflect.Type;
 import java.util.Set;
 
-import prompto.argument.AttributeArgument;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.FieldInfo;
 import prompto.compiler.Flags;
@@ -23,11 +22,12 @@ import prompto.declaration.NativeWidgetDeclaration;
 import prompto.error.NotMutableError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.grammar.ArgumentAssignment;
-import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.Argument;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.IMutable;
 import prompto.intrinsic.PromptoDocument;
+import prompto.param.AttributeParameter;
 import prompto.parser.Dialect;
 import prompto.parser.Section;
 import prompto.runtime.Context;
@@ -47,9 +47,9 @@ public class ConstructorExpression extends Section implements IExpression {
 	CategoryType type;
 	boolean checked; // if coming from UnresolvedCall, need to check homonyms
 	IExpression copyFrom = null;
-	ArgumentAssignmentList assignments;
+	ArgumentList assignments;
 	
-	public ConstructorExpression(CategoryType type, IExpression copyFrom, ArgumentAssignmentList assignments, boolean checked) {
+	public ConstructorExpression(CategoryType type, IExpression copyFrom, ArgumentList assignments, boolean checked) {
 		this.type = type;
 		this.copyFrom = copyFrom;
 		this.assignments = assignments;
@@ -67,7 +67,7 @@ public class ConstructorExpression extends Section implements IExpression {
 		return writer.toString();
 	}
 	
-	public ArgumentAssignmentList getAssignments() {
+	public ArgumentList getAssignments() {
 		return assignments;
 	}
 	
@@ -105,9 +105,9 @@ public class ConstructorExpression extends Section implements IExpression {
 
 	private void toODialect(CodeWriter writer) {
 		type.toDialect(writer);
-		ArgumentAssignmentList assignments = new ArgumentAssignmentList();
+		ArgumentList assignments = new ArgumentList();
 		if (copyFrom != null)
-			assignments.add(new ArgumentAssignment(new AttributeArgument(new Identifier("from")), copyFrom));
+			assignments.add(new Argument(new AttributeParameter(new Identifier("from")), copyFrom));
 		if(this.assignments!=null)
 			assignments.addAll(this.assignments);
 		assignments.toDialect(writer);
@@ -135,8 +135,8 @@ public class ConstructorExpression extends Section implements IExpression {
 	}
 	
 
-	private void checkFirstHomonym(Context context, CategoryDeclaration decl, ArgumentAssignment assignment) {
-		if(assignment.getArgument()==null) {
+	private void checkFirstHomonym(Context context, CategoryDeclaration decl, Argument assignment) {
+		if(assignment.getParameter()==null) {
 			IExpression exp = assignment.getExpression();
 			// when coming from UnresolvedCall, could be an homonym
 			Identifier name = null;
@@ -146,7 +146,7 @@ public class ConstructorExpression extends Section implements IExpression {
 				name = ((InstanceExpression)exp).getId();
 			if(name!=null && decl.hasAttribute(context, name)) {
 				// convert expression to name to avoid translation issues
-				assignment.setArgument(new AttributeArgument(name));
+				assignment.setParameter(new AttributeParameter(name));
 				assignment.setExpression(null);
 			}
 		}
@@ -166,9 +166,9 @@ public class ConstructorExpression extends Section implements IExpression {
 		}
 		if(assignments!=null) {
 			context = context.newChildContext();
-			for(ArgumentAssignment assignment : assignments) {
-				if(!cd.hasAttribute(context, assignment.getArgumentId()))
-					throw new SyntaxError("\"" + assignment.getArgumentId() + 
+			for(Argument assignment : assignments) {
+				if(!cd.hasAttribute(context, assignment.getParameterId()))
+					throw new SyntaxError("\"" + assignment.getParameterId() + 
 						"\" is not an attribute of " + type.getTypeName());	
 				assignment.check(context);
 			}
@@ -218,8 +218,8 @@ public class ConstructorExpression extends Section implements IExpression {
 				}
 			}
 			if(assignments!=null) {
-				for(ArgumentAssignment assignment : assignments) {
-					Identifier argId = assignment.getArgumentId();
+				for(Argument assignment : assignments) {
+					Identifier argId = assignment.getParameterId();
 					if(cd.hasAttribute(context, argId)) {
 						IValue value = assignment.getExpression().interpret(context);
 						if(value!=null && value.isMutable() && !type.isMutable())
@@ -265,7 +265,7 @@ public class ConstructorExpression extends Section implements IExpression {
 				compileAssignment(context, method, flags, thisInfo, a));
 	}
 
-	private void compileAssignment(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo, ArgumentAssignment assignment) {
+	private void compileAssignment(Context context, MethodInfo method, Flags flags, ResultInfo thisInfo, Argument assignment) {
 		// keep a copy of new instance on top of the stack
 		method.addInstruction(Opcode.DUP);
 		// get value
@@ -273,7 +273,7 @@ public class ConstructorExpression extends Section implements IExpression {
 		// check immutable member
 		compileCheckImmutable(context, method, flags, valueInfo);
 		// call setter
-		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, assignment.getArgumentId());
+		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, assignment.getParameterId());
 		FieldInfo field = decl.toFieldInfo(context);
 		// cast if required
 		if(field.getType()==Boolean.class && !valueInfo.isPromptoAttribute())
@@ -389,8 +389,8 @@ public class ConstructorExpression extends Section implements IExpression {
 
 	private boolean willBeAssigned(Identifier name) {
 		if(assignments!=null) 
-			for(ArgumentAssignment assignment : assignments) 
-				if(name.equals(assignment.getArgumentId()))
+			for(Argument assignment : assignments) 
+				if(name.equals(assignment.getParameterId()))
 					return true;
 		return false;
 	}
@@ -460,7 +460,7 @@ public class ConstructorExpression extends Section implements IExpression {
 	    if(this.assignments!=null) {
 	        transpiler.append("{");
 	        this.assignments.forEach(assignment -> {
-	            transpiler.append(assignment.getArgument().getName()).append(":");
+	            transpiler.append(assignment.getParameter().getName()).append(":");
 	            assignment.getExpression().transpile(transpiler);
 	            transpiler.append(", ");
 	        });

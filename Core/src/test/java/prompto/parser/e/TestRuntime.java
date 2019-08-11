@@ -9,10 +9,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import prompto.argument.CategoryArgument;
-import prompto.argument.IArgument;
 import prompto.grammar.Identifier;
 import prompto.java.JavaStatement;
+import prompto.param.CategoryParameter;
+import prompto.param.IParameter;
 import prompto.parser.ECleverParser;
 import prompto.parser.EIndentingLexer;
 import prompto.parser.EPromptoBuilder;
@@ -44,7 +44,7 @@ public class TestRuntime extends BaseEParserTest {
 		walker.walk(builder, tree);
 		JavaStatement statement =  builder.<JavaStatement>getNodeValue(tree);
 		Context context = Context.newGlobalContext();
-		IArgument arg = new CategoryArgument(TextType.instance(), new Identifier("value"));
+		IParameter arg = new CategoryParameter(TextType.instance(), new Identifier("value"));
 		arg.register(context);
 		context.setValue(new Identifier("value"), new TextValue("test")); // StringLiteral trims enclosing quotes
 		Object result = statement.interpret(context, null);

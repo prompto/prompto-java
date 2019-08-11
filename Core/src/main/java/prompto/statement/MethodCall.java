@@ -6,8 +6,6 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-import prompto.argument.CodeArgument;
-import prompto.argument.IArgument;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IInstructionListener;
@@ -34,11 +32,13 @@ import prompto.expression.IAssertion;
 import prompto.expression.IExpression;
 import prompto.expression.MethodSelector;
 import prompto.expression.ThisExpression;
-import prompto.grammar.ArgumentAssignment;
-import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.Argument;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.grammar.Specificity;
 import prompto.javascript.JavaScriptNativeCall;
+import prompto.param.CodeArgument;
+import prompto.param.IParameter;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
@@ -55,7 +55,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 
 	MethodSelector selector;
 	MethodSelector fullSelector;
-	ArgumentAssignmentList assignments;
+	ArgumentList arguments;
 	String variableName;
 	DispatchMethodDeclaration dispatcher;
 	
@@ -63,9 +63,9 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		this.selector = selector;
 	}
 
-	public MethodCall(MethodSelector method, ArgumentAssignmentList assignments) {
+	public MethodCall(MethodSelector method, ArgumentList arguments) {
 		this.selector = method;
-		this.assignments = assignments;
+		this.arguments = arguments;
 	}
 	
 	public void setVariableName(String variableName) {
@@ -76,8 +76,8 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		return selector;
 	}
 
-	public ArgumentAssignmentList getAssignments() {
-		return assignments;
+	public ArgumentList getArguments() {
+		return arguments;
 	}
 
 	@Override
@@ -85,14 +85,14 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		if (requiresInvoke(writer))
 			writer.append("invoke: ");
 		selector.toDialect(writer);
-		if (assignments != null)
-			assignments.toDialect(writer);
+		if (arguments != null)
+			arguments.toDialect(writer);
 		else if (writer.getDialect() != Dialect.E)
 			writer.append("()");
 	}
 
 	private boolean requiresInvoke(CodeWriter writer) {
-		if (writer.getDialect() != Dialect.E || (assignments!=null && !assignments.isEmpty()))
+		if (writer.getDialect() != Dialect.E || (arguments!=null && !arguments.isEmpty()))
 			return false;
 		try {
 			MethodFinder finder = new MethodFinder(writer.getContext(), this);
@@ -110,8 +110,8 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		StringBuilder sb = new StringBuilder();
 		sb.append(selector.toString());
 		sb.append('(');
-		if(assignments != null && assignments.size() > 0) {
-			assignments.forEach((ass)->
+		if(arguments != null && arguments.size() > 0) {
+			arguments.forEach((ass)->
 				{
 					sb.append(ass.toString());
 					sb.append(", ");
@@ -153,18 +153,18 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	}
 
 	private IType lightCheck(IMethodDeclaration declaration, Context parent, Context local) {
-		declaration.registerArguments(local);
+		declaration.registerParameters(local);
 		return declaration.check(local, false);
 	}
 
 	private IType fullCheck(ConcreteMethodDeclaration declaration, Context parent, Context local) {
 		try {
-			ArgumentAssignmentList assignments = makeAssignments(parent, declaration);
-			declaration.registerArguments(local);
-			for (ArgumentAssignment assignment : assignments) {
-				IExpression expression = assignment.resolve(local, declaration, true, false);
-				IValue value = assignment.getArgument().checkValue(parent, expression);
-				local.setValue(assignment.getArgumentId(), value);
+			ArgumentList arguments = makeArguments(parent, declaration);
+			declaration.registerParameters(local);
+			for (Argument argument : arguments) {
+				IExpression expression = argument.resolve(local, declaration, true, false);
+				IValue value = argument.getParameter().checkValue(parent, expression);
+				local.setValue(argument.getParameterId(), value);
 			}
 			return declaration.check(local, false);
 		} catch (PromptoError e) {
@@ -172,19 +172,17 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		}
 	}
 
-	public ArgumentAssignmentList makeAssignments(Context context, IMethodDeclaration declaration) {
-		ArgumentAssignmentList assignments = this.assignments;
-		if (assignments == null)
-			assignments = new ArgumentAssignmentList();
-		return assignments.makeAssignments(context, declaration);
+	public ArgumentList makeArguments(Context context, IMethodDeclaration declaration) {
+		ArgumentList arguments = this.arguments!=null ? this.arguments : new ArgumentList();
+		return arguments.makeArguments(context, declaration);
 	}
 
-	public ArgumentAssignmentList makeCodeAssignments(Context context, IMethodDeclaration declaration) {
-		if (assignments == null)
-			return new ArgumentAssignmentList();
+	public ArgumentList makeCodeAssignments(Context context, IMethodDeclaration declaration) {
+		if (arguments == null)
+			return new ArgumentList();
 		else {
-			ArgumentAssignmentList list = new ArgumentAssignmentList();
-			list.addAll(assignments.stream()
+			ArgumentList list = new ArgumentList();
+			list.addAll(arguments.stream()
 					.filter((a)->
 						(a.getExpression().check(context)==CodeType.instance()))
 					.collect(Collectors.toList()));
@@ -208,9 +206,9 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	
 	private ResultInfo compileDynamic(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration) {
 		Context local = this.selector.newLocalCheckContext(context, declaration);
-		declaration.registerArguments(local);
-		ArgumentAssignmentList assignments = this.assignments!=null ? this.assignments : new ArgumentAssignmentList();
-		return this.selector.compileDynamic(local, method, flags, declaration, assignments);
+		declaration.registerParameters(local);
+		ArgumentList arguments = this.arguments!=null ? this.arguments : new ArgumentList();
+		return this.selector.compileDynamic(local, method, flags, declaration, arguments);
 	}
 
 	private ResultInfo compileExact(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration) {
@@ -222,34 +220,34 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 
 	private ResultInfo compileConcrete(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration) {
 		Context local = isLocalClosure(context) ? context : selector.newLocalCheckContext(context, declaration);
-		declaration.registerArguments(local);
-		ArgumentAssignmentList assignments = this.assignments!=null ? this.assignments : new ArgumentAssignmentList();
-		return this.selector.compileExact(local, method, flags, declaration, assignments);
+		declaration.registerParameters(local);
+		ArgumentList arguments = this.arguments!=null ? this.arguments : new ArgumentList();
+		return this.selector.compileExact(local, method, flags, declaration, arguments);
 	}
 
 	private ResultInfo compileTemplate(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration) {
 		// compile the method as a member method
 		Context local = context.newLocalContext();
-		declaration.registerArguments(local);
+		declaration.registerParameters(local);
 		registerCodeAssignments(context, local, declaration);
 		String methodName = declaration.compileTemplate(local, false, method.getClassFile());
 		// compile the method call
 		IExpression parent = method.isStatic() ? null : new ThisExpression();
 		MethodSelector selector = new MethodSelector(parent, new Identifier(methodName));
 		local = selector.newLocalContext(context, declaration);
-		declaration.registerArguments(local);
+		declaration.registerParameters(local);
 		registerCodeAssignments(context, local, declaration);
-		ArgumentAssignmentList assignments = this.assignments!=null ? this.assignments : new ArgumentAssignmentList();
-		return selector.compileTemplate(local, method, flags, declaration, assignments, methodName);
+		ArgumentList arguments = this.arguments!=null ? this.arguments : new ArgumentList();
+		return selector.compileTemplate(local, method, flags, declaration, arguments, methodName);
 	}
 
 	private void registerCodeAssignments(Context context, Context local, IMethodDeclaration declaration) {
-		ArgumentAssignmentList assignments = makeCodeAssignments(context, declaration);
-		for (ArgumentAssignment assignment : assignments) {
-			IExpression expression = assignment.resolve(local, declaration, true, false);
-			IArgument argument = assignment.getArgument();
-			IValue value = argument.checkValue(context, expression);
-			local.setValue(assignment.getArgumentId(), value);
+		ArgumentList arguments = makeCodeAssignments(context, declaration);
+		for (Argument argument : arguments) {
+			IExpression expression = argument.resolve(local, declaration, true, false);
+			IParameter parameter = argument.getParameter();
+			IValue value = parameter.checkValue(context, expression);
+			local.setValue(argument.getParameterId(), value);
 		}	
 	}
 
@@ -259,23 +257,23 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		Context local = selector.newLocalContext(context, declaration);
 		local.enterMethod(declaration);
 		try {
-			declaration.registerArguments(local);
-			registerAssignments(context, local, declaration);
+			declaration.registerParameters(local);
+			registerArguments(context, local, declaration);
 			return declaration.interpret(local);
 		} finally {
 			local.leaveSection(declaration);
 		}
 	}
 
-	private void registerAssignments(Context context, Context local, IMethodDeclaration declaration) throws PromptoError {
-		ArgumentAssignmentList assignments = makeAssignments(context, declaration);
-		for (ArgumentAssignment assignment : assignments) {
-			IExpression expression = assignment.resolve(local, declaration, true, false);
-			IArgument argument = assignment.getArgument();
-			IValue value = argument.checkValue(context, expression);
-			if(value!=null && argument.isMutable() & !value.isMutable()) 
+	private void registerArguments(Context context, Context local, IMethodDeclaration declaration) throws PromptoError {
+		ArgumentList arguments = makeArguments(context, declaration);
+		for (Argument argument : arguments) {
+			IExpression expression = argument.resolve(local, declaration, true, false);
+			IParameter parameter = argument.getParameter();
+			IValue value = parameter.checkValue(context, expression);
+			if(value!=null && parameter.isMutable() & !value.isMutable()) 
 				throw new NotMutableError();
-			local.setValue(assignment.getArgumentId(), value);
+			local.setValue(argument.getParameterId(), value);
 		}
 	}
 
@@ -345,8 +343,8 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-        if (this.assignments != null)
-            this.assignments.declare(transpiler);
+        if (this.arguments != null)
+            this.arguments.declare(transpiler);
 		Context context = transpiler.getContext();
 		MethodFinder finder = new MethodFinder(context, this);
 	    Set<IMethodDeclaration> declarations = finder.findCompatibleMethods(false, true, spec -> spec!= Specificity.INCOMPATIBLE);
@@ -380,12 +378,12 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	
 	private void fullDeclareDeclaration(IMethodDeclaration declaration, Transpiler transpiler, Context local) {
 	    if(this.fullSelector==null) {
-	    	List<ArgumentAssignment> assignments = this.makeAssignments(transpiler.getContext(), declaration);
-	        declaration.registerArguments(local);
-	        assignments.forEach(assignment -> {
-	            IExpression expression = assignment.resolve(local, declaration, true, false);
-	            IValue value = assignment.getArgument().checkValue(transpiler.getContext(), expression);
-	            local.setValue(assignment.getArgument().getId(), value);
+	    	ArgumentList arguments = this.makeArguments(transpiler.getContext(), declaration);
+	        declaration.registerParameters(local);
+	        arguments.forEach(argument -> {
+	            IExpression expression = argument.resolve(local, declaration, true, false);
+	            IValue value = argument.getParameter().checkValue(transpiler.getContext(), expression);
+	            local.setValue(argument.getParameter().getId(), value);
 	        });
 	        Transpiler localTranspiler = transpiler.copyTranspiler(local);
 	        this.fullSelector = this.selector.newFullSelector(fullDeclareCounter.incrementAndGet());
@@ -418,7 +416,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		   this.transpileInlinedMemberMethod(transpiler, declaration);
 	   else {
 	        this.transpileSelector(transpiler, declaration);
-	        this.transpileAssignments(transpiler, declaration, allowDerived);
+	        this.transpileArguments(transpiler, declaration, allowDerived);
 	    }
 	}
 
@@ -436,15 +434,15 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	}
 	
 	
-	private void transpileAssignments(Transpiler transpiler, IMethodDeclaration declaration, boolean allowDerived) {
-		List<ArgumentAssignment> assignments = this.makeAssignments(transpiler.getContext(), declaration);
-	    assignments = assignments.stream().filter(assignment->!(assignment.getArgument() instanceof CodeArgument)).collect(Collectors.toList());
-	    if(!assignments.isEmpty()) {
+	private void transpileArguments(Transpiler transpiler, IMethodDeclaration declaration, boolean allowDerived) {
+		List<Argument> arguments = this.makeArguments(transpiler.getContext(), declaration);
+	    arguments = arguments.stream().filter(argument->!(argument.getParameter() instanceof CodeArgument)).collect(Collectors.toList());
+	    if(!arguments.isEmpty()) {
 	        transpiler.append("(");
-	        assignments.forEach(assignment -> {
-	            IArgument argument = assignment.getArgument();
-	            IExpression expression = assignment.resolve(transpiler.getContext(), declaration, false, allowDerived);
-	            argument.transpileCall(transpiler, expression);
+	        arguments.forEach(argument -> {
+	            IParameter parameter = argument.getParameter();
+	            IExpression expression = argument.resolve(transpiler.getContext(), declaration, false, allowDerived);
+	            parameter.transpileCall(transpiler, expression);
 	            transpiler.append(", ");
 	        });
 	        transpiler.trimLast(2);
@@ -477,7 +475,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	    IExpression parent = this.selector.resolveParent(transpiler.getContext());
 	    parent.transpile(transpiler);
 	    transpiler.append(".");
-	    declaration.transpileCall(transpiler, this.assignments);
+	    declaration.transpileCall(transpiler, this.arguments);
 	}
 
 	private void transpileMultiple(Transpiler transpiler, Set<IMethodDeclaration> declarations) {
@@ -487,7 +485,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	        parent = new ThisExpression();
 	    MethodSelector selector = new MethodSelector(parent, new Identifier(name));
 	    selector.transpile(transpiler);
-	    this.transpileAssignments(transpiler, this.dispatcher, false);
+	    this.transpileArguments(transpiler, this.dispatcher, false);
 	}
 
 

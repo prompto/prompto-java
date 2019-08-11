@@ -1,4 +1,4 @@
-package prompto.argument;
+package prompto.param;
 
 import java.lang.reflect.Type;
 import java.util.Objects;
@@ -14,7 +14,7 @@ import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoProxy;
@@ -23,11 +23,11 @@ import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 
-public class ExtendedArgument extends CategoryArgument {
+public class ExtendedParameter extends CategoryParameter {
 	
 	IdentifierList attributes;
 	
-	public ExtendedArgument(IType type, Identifier id, IdentifierList attributes) {
+	public ExtendedParameter(IType type, Identifier id, IdentifierList attributes) {
 		super(type, id);
 		this.attributes = attributes;
 	}
@@ -109,9 +109,9 @@ public class ExtendedArgument extends CategoryArgument {
 			return true;
 		if(obj==null)
 			return false;
-		if(!(obj instanceof ExtendedArgument))
+		if(!(obj instanceof ExtendedParameter))
 			return false;
-		ExtendedArgument other = (ExtendedArgument)obj;
+		ExtendedParameter other = (ExtendedParameter)obj;
 		return Objects.equals(this.getType(),other.getType())
 				&& Objects.equals(this.getId(),other.getId())
 				&& Objects.equals(this.getAttributes(),other.getAttributes());
@@ -156,7 +156,7 @@ public class ExtendedArgument extends CategoryArgument {
 	}
 
 	@Override
-	public void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments, boolean isFirst) {
+	public void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
 		super.compileAssignment(context, method, flags, assignments, isFirst);
 		// create a proxy to the required java type
 		ClassConstant c = new ClassConstant(getJavaType(context));

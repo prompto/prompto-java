@@ -1,4 +1,4 @@
-package prompto.argument;
+package prompto.param;
 
 import java.lang.reflect.Type;
 import java.util.Objects;
@@ -18,8 +18,8 @@ import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
-import prompto.grammar.ArgumentAssignment;
-import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.Argument;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
@@ -32,9 +32,9 @@ import prompto.utils.CodeWriter;
 import prompto.utils.TypeUtils;
 import prompto.value.IValue;
 
-public class AttributeArgument extends BaseArgument implements INamedArgument {
+public class AttributeParameter extends BaseParameter implements INamedParameter {
 	
-	public AttributeArgument(Identifier id) {
+	public AttributeParameter(Identifier id) {
 		super(id);
 	}
 
@@ -68,9 +68,9 @@ public class AttributeArgument extends BaseArgument implements INamedArgument {
 			return true;
 		if(obj==null)
 			return false;
-		if(!(obj instanceof AttributeArgument))
+		if(!(obj instanceof AttributeParameter))
 			return false;
-		AttributeArgument other = (AttributeArgument)obj;
+		AttributeParameter other = (AttributeParameter)obj;
 		return Objects.equals(this.getId(),other.getId());
 	}
 
@@ -138,8 +138,8 @@ public class AttributeArgument extends BaseArgument implements INamedArgument {
 	}
 	
 	@Override
-	public void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentAssignmentList assignments, boolean isFirst) {
-		ArgumentAssignment assign = makeAssignment(assignments, isFirst);
+	public void compileAssignment(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
+		Argument assign = makeAssignment(assignments, isFirst);
 		IType itype = assign.getExpression().check(context.getCallingContext());
 		// if param is a category, assume it implements the required attribute interface
 		if(itype instanceof CategoryType)

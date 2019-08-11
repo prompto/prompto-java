@@ -29,8 +29,8 @@ import prompto.expression.ValueExpression;
 import prompto.expression.IExpression;
 import prompto.expression.MethodSelector;
 import prompto.expression.UnresolvedIdentifier;
-import prompto.grammar.ArgumentAssignment;
-import prompto.grammar.ArgumentAssignmentList;
+import prompto.grammar.Argument;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDocument;
 import prompto.intrinsic.PromptoList;
@@ -319,7 +319,7 @@ public class DocumentType extends NativeType {
 			}
 
 			private IValue interpret(DocumentValue o) throws PromptoError {
-				ArgumentAssignment assignment = call.getAssignments().getFirst();
+				Argument assignment = call.getArguments().getFirst();
 				assignment.setExpression(new ValueExpression(DocumentType.instance(), o));
 				return call.interpret(context);
 			}
@@ -327,8 +327,8 @@ public class DocumentType extends NativeType {
 	}
 
 	private MethodCall createGlobalMethodCall(Context context, Identifier method) {
-		ArgumentAssignment arg = new ArgumentAssignment(null, new DocumentExpression(null)); // MethodCall supports first anonymous argument
-		ArgumentAssignmentList args = new ArgumentAssignmentList(Collections.singletonList(arg));
+		Argument arg = new Argument(null, new DocumentExpression(null)); // MethodCall supports first anonymous argument
+		ArgumentList args = new ArgumentList(Collections.singletonList(arg));
 		return new MethodCall(new MethodSelector(method), args);
 	}
 
@@ -422,7 +422,7 @@ public class DocumentType extends NativeType {
 
 		private ResultInfo compileValue(Context context, MethodInfo method, Type paramType, String paramName) {
 			context.registerValue(new Variable(new Identifier(paramName), DocumentType.instance()));
-			ArgumentAssignment assignment = call.getAssignments().getFirst();
+			Argument assignment = call.getArguments().getFirst();
 			assignment.setExpression(new UnresolvedIdentifier(new Identifier(paramName)));
 			return call.compile(context, method, new Flags());
 		}
