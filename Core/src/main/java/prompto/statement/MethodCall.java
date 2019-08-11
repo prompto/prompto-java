@@ -19,6 +19,7 @@ import prompto.compiler.ResultInfo;
 import prompto.compiler.StackState;
 import prompto.compiler.StringConstant;
 import prompto.declaration.AbstractMethodDeclaration;
+import prompto.declaration.ArrowDeclaration;
 import prompto.declaration.BuiltInMethodDeclaration;
 import prompto.declaration.ClosureDeclaration;
 import prompto.declaration.ConcreteMethodDeclaration;
@@ -30,6 +31,7 @@ import prompto.declaration.TestMethodDeclaration;
 import prompto.error.NotMutableError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.ArrowExpression;
 import prompto.expression.IAssertion;
 import prompto.expression.IExpression;
 import prompto.expression.MethodSelector;
@@ -47,8 +49,10 @@ import prompto.transpiler.Transpiler;
 import prompto.type.CodeType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
+import prompto.value.ArrowValue;
 import prompto.value.BooleanValue;
 import prompto.value.ClosureValue;
+import prompto.value.ContextualExpression;
 import prompto.value.IValue;
 
 public class MethodCall extends SimpleStatement implements IAssertion {
@@ -337,6 +341,8 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			Object o = context.getValue(selector.getId());
 			if (o instanceof ClosureValue)
 				return new ClosureDeclaration((ClosureValue)o);
+			else if (o instanceof ArrowValue)
+				return new ArrowDeclaration((ArrowValue)o);
 		} catch (PromptoError e) {
 		}
 		MethodFinder finder = new MethodFinder(context, this);

@@ -14,7 +14,9 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.StringConstant;
 import prompto.declaration.IMethodDeclaration;
+import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.ArrowExpression;
 import prompto.expression.IExpression;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
@@ -28,6 +30,9 @@ import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.transpiler.Transpiler;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
+import prompto.value.ArrowValue;
+import prompto.value.ContextualExpression;
+import prompto.value.IValue;
 
 public class MethodArgument extends BaseArgument implements INamedArgument {
 	
@@ -82,6 +87,19 @@ public class MethodArgument extends BaseArgument implements INamedArgument {
 			throw new SyntaxError("Unknown method: \"" + id + "\"");
 	}
 	
+	@Override
+	public IValue checkValue(Context context, IExpression expression) throws PromptoError {
+		boolean isArrow = expression instanceof ContextualExpression && ((ContextualExpression)expression).getExpression() instanceof ArrowExpression;
+		if(isArrow)
+			return checkArrowValue(context, (ContextualExpression)expression);
+		else
+			return super.checkValue(context, expression);
+	}
+	
+	private IValue checkArrowValue(Context context, ContextualExpression expression) {
+		return new ArrowValue(getDeclaration(context), expression.getCalling(), (ArrowExpression)expression.getExpression()); // TODO check
+	}
+
 	@Override
 	public MethodType getType(Context context) {
 		IMethodDeclaration actual = getDeclaration(context);

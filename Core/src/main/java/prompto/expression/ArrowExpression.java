@@ -13,6 +13,7 @@ import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.parser.Dialect;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
@@ -52,7 +53,7 @@ public class ArrowExpression extends Section implements IExpression {
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		throw new UnsupportedOperationException();
+		return statements.interpret(context);
 	}
 
 	@Override
@@ -62,6 +63,13 @@ public class ArrowExpression extends Section implements IExpression {
 		writer.append("=>");
 		writer.append(arrowSuite);
 		bodyToDialect(writer);
+	}
+	
+	@Override
+	public String toString() {
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		toDialect(writer);
+		return writer.toString();
 	}
 
 	private void bodyToDialect(CodeWriter writer) {

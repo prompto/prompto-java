@@ -13,6 +13,7 @@ import prompto.runtime.Context;
 import prompto.runtime.Context.ClosureContext;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
+import prompto.value.ContextualExpression;
 
 public class MethodType extends BaseType {
 
@@ -113,6 +114,11 @@ public class MethodType extends BaseType {
 	@Override
 	public void declare(Transpiler transpiler) {
 		// nothing to do
+	}
+
+	public IType checkArrowExpression(ContextualExpression expression) {
+		// TODO Auto-generated method stub
+		return this;
 	}
 
 

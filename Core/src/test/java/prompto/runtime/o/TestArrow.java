@@ -20,6 +20,21 @@ public class TestArrow extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedArrowArgument() throws Exception {
+		checkInterpretedOutput("arrow/arrowArgument.poc");
+	}
+
+	@Test
+	public void testCompiledArrowArgument() throws Exception {
+		checkCompiledOutput("arrow/arrowArgument.poc");
+	}
+
+	@Test
+	public void testTranspiledArrowArgument() throws Exception {
+		checkTranspiledOutput("arrow/arrowArgument.poc");
+	}
+
+	@Test
 	public void testInterpretedFilterFromList() throws Exception {
 		checkInterpretedOutput("arrow/filterFromList.poc");
 	}

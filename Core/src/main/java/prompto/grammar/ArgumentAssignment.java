@@ -4,6 +4,7 @@ import prompto.argument.IArgument;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.ArrowExpression;
 import prompto.expression.IExpression;
 import prompto.expression.InstanceExpression;
 import prompto.expression.MemberSelector;
@@ -12,6 +13,7 @@ import prompto.runtime.Variable;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
+import prompto.type.MethodType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.ContextualExpression;
@@ -134,19 +136,20 @@ public class ArgumentAssignment {
 		Identifier name = argument.getId();
 		IExpression expression = getExpression();
 		IArgument argument = methodDeclaration.getArguments().find(name);
-		IType required = argument.getType(context);
-		IType actual = expression.check(context.getCallingContext());
-		if(checkInstance && actual instanceof CategoryType) {
+		IType requiredType = argument.getType(context);
+		boolean checkArrow = requiredType instanceof MethodType && expression instanceof ContextualExpression && ((ContextualExpression)expression).getExpression() instanceof ArrowExpression;
+		IType actualType = checkArrow ? ((MethodType)requiredType).checkArrowExpression((ContextualExpression)expression) : expression.check(context.getCallingContext());
+		if(checkInstance && actualType instanceof CategoryType) {
 			Object value = expression.interpret(context.getCallingContext());
 			if(value instanceof IInstance)
-				actual = ((IInstance)value).getType();
+				actualType = ((IInstance)value).getType();
 		}
-		boolean assignable = required.isAssignableFrom(context, actual);
+		boolean assignable = requiredType.isAssignableFrom(context, actualType);
 		// when in dispatch, allow derived
 		if(!assignable && allowDerived)
-	        assignable = actual.isAssignableFrom(context, required);
+	        assignable = actualType.isAssignableFrom(context, requiredType);
 		// try passing member
-		if(!assignable && (actual instanceof CategoryType)) 
+		if(!assignable && (actualType instanceof CategoryType)) 
 			expression = new MemberSelector(expression,name);
 		return expression; 
 	}

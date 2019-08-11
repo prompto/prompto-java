@@ -15,6 +15,7 @@ import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.ArrowExpression;
 import prompto.expression.IExpression;
 import prompto.grammar.ArgumentAssignment;
 import prompto.grammar.ArgumentAssignmentList;
@@ -26,6 +27,8 @@ import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
+import prompto.type.MethodType;
+import prompto.value.ContextualExpression;
 import prompto.value.IInstance;
 import prompto.value.IValue;
 
@@ -197,25 +200,27 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	@Override
 	public Specificity computeSpecificity(Context context, IArgument argument, ArgumentAssignment assignment, boolean useInstance, boolean allowDerived) {
 		try {
-			IType required = argument.getType(context);
-			IType actual = assignment.getExpression().check(context);
+			IType requiredType = argument.getType(context);
+			IExpression expression = assignment.getExpression();
+			boolean checkArrow = requiredType instanceof MethodType && expression instanceof ContextualExpression && ((ContextualExpression)expression).getExpression() instanceof ArrowExpression;
+			IType actualType = checkArrow ? ((MethodType)requiredType).checkArrowExpression((ContextualExpression)expression) : expression.check(context);
 			// retrieve actual runtime type
-			if(useInstance && actual instanceof CategoryType) {
+			if(useInstance && actualType instanceof CategoryType) {
 				// TODO: potential side effects here with function called multiple times
 				IValue value = assignment.getExpression().interpret(context.getCallingContext());
 				if(value instanceof IInstance)
-					actual = ((IInstance)value).getType();
+					actualType = ((IInstance)value).getType();
 			}
-			if(actual.equals(required))
+			if(actualType.equals(requiredType))
 				return Specificity.EXACT;
-			else if(required.isAssignableFrom(context, actual)) 
+			else if(requiredType.isAssignableFrom(context, actualType)) 
 				return Specificity.INHERITED;
-			else if(allowDerived && actual.isAssignableFrom(context, required)) 
+			else if(allowDerived && actualType.isAssignableFrom(context, requiredType)) 
 				return Specificity.DERIVED;
-			actual = assignment.resolve(context, this, useInstance, false).check(context);
-			if(required.isAssignableFrom(context, actual))
+			actualType = assignment.resolve(context, this, useInstance, false).check(context);
+			if(requiredType.isAssignableFrom(context, actualType))
 				return Specificity.IMPLICIT;
-			else if(allowDerived && actual.isAssignableFrom(context, required))
+			else if(allowDerived && actualType.isAssignableFrom(context, requiredType))
 				return Specificity.IMPLICIT;
 		} catch(PromptoError error) {
 		}

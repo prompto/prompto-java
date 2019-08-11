@@ -7,6 +7,16 @@ import prompto.parser.o.BaseOParserTest;
 public class TestArrow extends BaseOParserTest {
 
 	@Test
+	public void testArrowArgument() throws Exception {
+		compareResourceOEO("arrow/arrowArgument.poc");
+	}
+
+	@Test
+	public void testArrowType() throws Exception {
+		compareResourceOEO("arrow/arrowType.poc");
+	}
+
+	@Test
 	public void testFilterFromList() throws Exception {
 		compareResourceOEO("arrow/filterFromList.poc");
 	}

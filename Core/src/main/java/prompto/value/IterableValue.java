@@ -19,7 +19,6 @@ import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.type.IType;
 import prompto.type.IntegerType;
-import prompto.type.IterableType;
 import prompto.type.IteratorType;
 import prompto.type.ListType;
 import prompto.type.TextType;

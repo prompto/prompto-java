@@ -22,6 +22,14 @@ public class ContextualExpression extends BaseValue implements IExpression {
 		this.expression = expression;
 	}
 	
+	public Context getCalling() {
+		return calling;
+	}
+	
+	public IExpression getExpression() {
+		return expression;
+	}
+	
 	@Override
 	public void toDialect(CodeWriter writer) {
 		expression.toDialect(writer);
