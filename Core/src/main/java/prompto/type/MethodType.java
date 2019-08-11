@@ -7,13 +7,13 @@ import prompto.compiler.PromptoType;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.SyntaxError;
+import prompto.expression.ArrowExpression;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.runtime.Context.ClosureContext;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
-import prompto.value.ContextualExpression;
 
 public class MethodType extends BaseType {
 
@@ -116,14 +116,28 @@ public class MethodType extends BaseType {
 		// nothing to do
 	}
 
-	public IType checkArrowExpression(ContextualExpression expression) {
-		// TODO check method call
+	public IType checkArrowExpression(Context context, ArrowExpression expression) {
+		context = context.newChildContext();
+		this.method.registerParameters(context);
+		expression.check(context, this.method.getReturnType());
 		return this;
 	}
 
-	public void declareArrowExpression(Transpiler transpiler, ContextualExpression expression) {
-		// TODO Auto-generated method stub
+	public void declareArrowExpression(Transpiler transpiler, ArrowExpression expression) {
+		transpiler = transpiler.newChildTranspiler(null);
+		this.method.registerParameters(transpiler.getContext());
 		expression.declare(transpiler);
+	}
+
+	public void transpileArrowExpression(Transpiler transpiler, ArrowExpression expression) {
+		transpiler = transpiler.newChildTranspiler(null);
+		transpiler.append("function(");
+		this.method.getParameters().transpile(transpiler);
+		transpiler.append(") {");
+		this.method.registerParameters(transpiler.getContext());
+		expression.transpile(transpiler);
+		transpiler.append("}");
+		transpiler.flush();
 	}
 
 

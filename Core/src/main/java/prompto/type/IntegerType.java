@@ -20,6 +20,7 @@ import prompto.declaration.BuiltInMethodDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoLong;
@@ -200,9 +201,9 @@ public class IntegerType extends NativeType implements INumberType {
 		}
 		
 		@Override
-		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentList assignments) {
+		public void transpileCall(Transpiler transpiler, ArgumentList arguments) {
 	        transpiler.append("formatInteger(");
-	        assignments.get(0).transpile(transpiler);
+	        arguments.get(0).transpile(transpiler, null);
 	        transpiler.append(")");
 		}
 	};

@@ -14,22 +14,17 @@ import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.expression.ArrowExpression;
 import prompto.expression.IExpression;
 import prompto.grammar.Argument;
 import prompto.grammar.ArgumentList;
-import prompto.grammar.ParameterList;
 import prompto.grammar.Identifier;
+import prompto.grammar.ParameterList;
 import prompto.grammar.Specificity;
 import prompto.param.IParameter;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
-import prompto.type.CategoryType;
 import prompto.type.IType;
-import prompto.type.MethodType;
-import prompto.value.ContextualExpression;
-import prompto.value.IInstance;
 import prompto.value.IValue;
 
 public abstract class BaseMethodDeclaration extends BaseDeclaration implements IMethodDeclaration {
@@ -202,15 +197,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 		try {
 			IType requiredType = parameter.getType(context);
 			IExpression expression = argument.getExpression();
-			boolean checkArrow = requiredType instanceof MethodType && expression instanceof ContextualExpression && ((ContextualExpression)expression).getExpression() instanceof ArrowExpression;
-			IType actualType = checkArrow ? ((MethodType)requiredType).checkArrowExpression((ContextualExpression)expression) : expression.check(context);
-			// retrieve actual runtime type
-			if(useInstance && actualType instanceof CategoryType) {
-				// TODO: potential side effects here with function called multiple times
-				IValue value = argument.getExpression().interpret(context.getCallingContext());
-				if(value instanceof IInstance)
-					actualType = ((IInstance)value).getType();
-			}
+			IType actualType = argument.checkActualType(context, requiredType, expression, useInstance);
 			if(actualType.equals(requiredType))
 				return Specificity.EXACT;
 			else if(requiredType.isAssignableFrom(context, actualType)) 

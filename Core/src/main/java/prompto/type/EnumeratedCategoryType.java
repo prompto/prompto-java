@@ -10,6 +10,7 @@ import prompto.declaration.IEnumeratedDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.param.CategoryParameter;
 import prompto.param.IParameter;
@@ -75,9 +76,9 @@ public class EnumeratedCategoryType extends CategoryType {
 		}
 
 		@Override
-		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentList assignments) {
+		public void transpileCall(Transpiler transpiler, ArgumentList arguments) {
 	      transpiler.append("symbolOf(");
-	      assignments.get(0).transpile(transpiler);
+	      arguments.get(0).transpile(transpiler, null);
 	      transpiler.append(")");
 		}
 	};

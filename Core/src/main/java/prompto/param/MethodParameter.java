@@ -118,12 +118,12 @@ public class MethodParameter extends BaseParameter implements INamedParameter {
 	public void compileArgument(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
 		MethodType target = getType(context);
 		IMethodDeclaration decl = target.getMethod();
-		ParameterList args = decl.getParameters();
-		InterfaceType intf = new InterfaceType(args, decl.getReturnType());
+		ParameterList parameters = decl.getParameters();
+		InterfaceType intf = new InterfaceType(parameters, decl.getReturnType());
 		// the JVM can only cast to declared types, so we need a proxy to convert the FunctionalInterface call into the concrete one
 		// 1st parameter is method reference
-		Argument assign = makeArgument(assignments, isFirst);
-		IExpression expression = assign.getExpression();
+		Argument argument = makeArgument(assignments, isFirst);
+		IExpression expression = argument.getExpression();
 		expression.compile(context.getCallingContext(), method, flags); // this would return a lambda
 		// what interface we are casting to
 		ClassConstant dest = new ClassConstant(getJavaType(context));
@@ -132,7 +132,7 @@ public class MethodParameter extends BaseParameter implements INamedParameter {
 		String methodName = intf.getInterfaceMethodName(); 
 		method.addInstruction(Opcode.LDC, new StringConstant(methodName));
 		// method arg types
-		List<Type> javaTypes = args.stream().map(arg->arg.getJavaType(context)).collect(Collectors.toList());
+		List<Type> javaTypes = parameters.stream().map(arg->arg.getJavaType(context)).collect(Collectors.toList());
 		CompilerUtils.compileClassConstantsArray(method, javaTypes);
 		// create proxy
 		MethodConstant m = new MethodConstant(PromptoProxy.class, "newProxy", Object.class, Class.class, String.class, Class[].class, Object.class);
@@ -149,6 +149,23 @@ public class MethodParameter extends BaseParameter implements INamedParameter {
 	public String getTranspiledName(Context context) {
 		IMethodDeclaration method = this.getDeclaration(context);
 	    return method.getTranspiledName(context);
+	}
+	
+	@Override
+	public void transpileCall(Transpiler transpiler, IExpression expression) {
+		if(!transpileArrowExpressionCall(transpiler, expression))
+			expression.transpile(transpiler);
+	}
+
+	private boolean transpileArrowExpressionCall(Transpiler transpiler, IExpression expression) {
+		if(!(expression instanceof ContextualExpression))
+			return false;
+		ContextualExpression ce = (ContextualExpression)expression;
+		if(!(ce.getExpression() instanceof ArrowExpression))
+			return false;
+		MethodType target = getType(transpiler.getContext());
+		target.transpileArrowExpression(transpiler, (ArrowExpression)ce.getExpression());
+		return true;
 	}
 
 }

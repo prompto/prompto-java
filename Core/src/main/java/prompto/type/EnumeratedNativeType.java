@@ -101,9 +101,9 @@ public class EnumeratedNativeType extends BaseType {
 		}
 
 		@Override
-		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentList assignments) {
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentList arguments) {
 	      transpiler.append("symbolOf(");
-	      assignments.get(0).transpile(transpiler);
+	      arguments.get(0).transpile(transpiler, null);
 	      transpiler.append(")");
 		}
 	};

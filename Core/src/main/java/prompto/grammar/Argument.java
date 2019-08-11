@@ -140,7 +140,7 @@ public class Argument {
 		// since we support implicit members, it's time to resolve them
 		IExpression expression = getExpression();
 		IType requiredType = parameter.getType(context);
-		IType actualType = getActualType(context, requiredType, expression, checkInstance);
+		IType actualType = checkActualType(context, requiredType, expression, checkInstance);
 		boolean assignable = requiredType.isAssignableFrom(context, actualType);
 		// when in dispatch, allow derived
 		if(!assignable && allowDerived)
@@ -151,15 +151,32 @@ public class Argument {
 		return expression; 
 	}
 
-	private IType getActualType(Context context, IType requiredType, IExpression expression, boolean checkInstance) {
-		boolean checkArrow = requiredType instanceof MethodType && expression instanceof ContextualExpression && ((ContextualExpression)expression).getExpression() instanceof ArrowExpression;
-		IType actualType = checkArrow ? ((MethodType)requiredType).checkArrowExpression((ContextualExpression)expression) : expression.check(context.getCallingContext());
+	public IType checkActualType(Context context, IType requiredType, IExpression expression, boolean checkInstance) {
+		boolean isArrow = isArrowExpression(requiredType, expression);
+		IType actualType = isArrow ? checkArrowExpression(context, (MethodType)requiredType, expression) : expression.check(context.getCallingContext());
 		if(checkInstance && actualType instanceof CategoryType) {
 			Object value = expression.interpret(context.getCallingContext());
 			if(value instanceof IInstance)
 				actualType = ((IInstance)value).getType();
 		}
 		return actualType;
+	}
+
+
+	private IType checkArrowExpression(Context context, MethodType requiredType, IExpression expression) {
+		context = expression instanceof ContextualExpression ? ((ContextualExpression)expression).getCalling() : context.getCallingContext();
+		ArrowExpression arrow = (ArrowExpression)(expression instanceof ArrowExpression ? expression : ((ContextualExpression)expression).getExpression());
+		return requiredType.checkArrowExpression(context, arrow);
+	}
+
+
+	private boolean isArrowExpression(IType requiredType, IExpression expression) {
+		if(!(requiredType instanceof MethodType))
+			return false;
+		if(expression instanceof ArrowExpression)
+			return true;
+		else
+			return expression instanceof ContextualExpression && ((ContextualExpression)expression).getExpression() instanceof ArrowExpression;
 	}
 
 
@@ -195,16 +212,23 @@ public class Argument {
 			return false;
 		IParameter parameter = findParameter(methodDeclaration);
 		IType requiredType = parameter.getType(transpiler.getContext());
-		boolean isArrow = requiredType instanceof MethodType && expression instanceof ContextualExpression && ((ContextualExpression)expression).getExpression() instanceof ArrowExpression;
+		boolean isArrow = requiredType instanceof MethodType && expression instanceof ArrowExpression;
 		if(isArrow) {
-			((MethodType)requiredType).declareArrowExpression(transpiler, (ContextualExpression)expression);
+			((MethodType)requiredType).declareArrowExpression(transpiler, (ArrowExpression)expression);
 			return true;
 		} else
 			return false;
 	}
 
 
-	public void transpile(Transpiler transpiler) {
-		this.expression.transpile(transpiler);
+	public void transpile(Transpiler transpiler, IMethodDeclaration methodDeclaration) {
+		if(this.expression!=null && !this.transpileArrowExpression(transpiler, methodDeclaration))
+			this.expression.transpile(transpiler);
+	}
+
+
+	private boolean transpileArrowExpression(Transpiler transpiler, IMethodDeclaration methodDeclaration) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

@@ -48,18 +48,28 @@ public class ArrowExpression extends Section implements IExpression {
 
 	@Override
 	public IType check(Context context) {
-		throw new UnsupportedOperationException();
+		return check(context, null);
+	}
+	
+	
+	public IType check(Context context, IType returnType) {
+		return statements.check(context, returnType);
 	}
 	
 	@Override
-	public void declare(Transpiler transpiler) {
-		// TODO Auto-generated method stub
-		IExpression.super.declare(transpiler);
+	public IValue interpret(Context context) throws PromptoError {
+		return statements.interpret(context);
 	}
 
 	@Override
-	public IValue interpret(Context context) throws PromptoError {
-		return statements.interpret(context);
+	public void declare(Transpiler transpiler) {
+		statements.declare(transpiler);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler) {
+		statements.transpile(transpiler);
+		return false;
 	}
 
 	@Override
