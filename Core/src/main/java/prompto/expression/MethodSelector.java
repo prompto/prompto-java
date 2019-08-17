@@ -172,7 +172,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 
 	private ResultInfo compileTemplateStaticMethod(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration, ArgumentList assignments, String methodName) {
 		// push arguments on the stack
-		declaration.compileAssignments(context, method, flags, assignments);
+		declaration.compileArguments(context, method, flags, assignments);
 		// call global method in current class
 		Type classType = method.getClassFile().getThisClass().getType();
 		IType returnType = declaration.check(context, false);
@@ -207,7 +207,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	private ResultInfo compileDynamicGlobalMethod(Context context, MethodInfo method, Flags flags, 
 			IMethodDeclaration declaration, ArgumentList assignments) {
 		// push arguments on the stack
-		declaration.compileAssignments(context, method, flags, assignments);
+		declaration.compileArguments(context, method, flags, assignments);
 		// call global method bootstrap method in its own class
 		Type classType = CompilerUtils.getGlobalMethodType(declaration.getName());
 		String methodName = declaration.getName();
@@ -239,7 +239,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		// load method instance
 		compileLoadMethodInstance(context, method, flags, declaration);
 		// push arguments on the stack
-		declaration.compileAssignments(context, method, flags, assignments);
+		declaration.compileArguments(context, method, flags, assignments);
 		// call global method in its own class
 		Type classType = CompilerUtils.getGlobalMethodType(declaration.getName());
 		String methodName = declaration.getName();
@@ -256,7 +256,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		// load method instance
 		compileLoadMethodInstance(context, method, flags, declaration);
 		// push arguments on the stack
-		declaration.compileAssignments(context, method, flags, assignments);
+		declaration.compileArguments(context, method, flags, assignments);
 		// call global method through FunctionalInterface
 		IType returnIType = declaration.check(context, false);
 		InterfaceType intf = new InterfaceType(declaration.getParameters(), returnIType);
@@ -296,9 +296,9 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 
 	private ResultInfo compileExactStaticMethod(Context context, MethodInfo method, Flags flags, 
-			IMethodDeclaration declaration, ArgumentList assignments) {
+			IMethodDeclaration declaration, ArgumentList arguments) {
 		// push arguments on the stack
-		declaration.compileAssignments(context, method, flags, assignments);
+		declaration.compileArguments(context, method, flags, arguments);
 		// call global method in its own class
 		Type classType = CompilerUtils.getGlobalMethodType(declaration.getName());
 		String methodName = declaration.getName();
@@ -310,19 +310,19 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 
 	private ResultInfo compileExactImplicitMember(Context context, MethodInfo method, Flags flags, 
-			IMethodDeclaration declaration, ArgumentList assignments) {
+			IMethodDeclaration declaration, ArgumentList arguments) {
 		// calling method with implicit this
 		StackLocal local = method.getRegisteredLocal("this");
 		ClassConstant klass = ((StackLocal.ObjectLocal)local).getClassName();
 		method.addInstruction(Opcode.ALOAD_0, klass); // 'this' is always at index 0
-		return compileExactInstanceMember(context, method, flags, declaration, assignments, klass);
+		return compileExactInstanceMember(context, method, flags, declaration, arguments, klass);
 	}
 
 	private ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, 
-			IMethodDeclaration declaration, ArgumentList assignments, 
+			IMethodDeclaration declaration, ArgumentList arguments, 
 			ClassConstant parentClass) {
 		// push arguments on the stack
-		declaration.compileAssignments(context, method, flags, assignments);
+		declaration.compileArguments(context, method, flags, arguments);
 		// call virtual method
 		IType returnType = declaration.check(context, false);
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getParameters(), returnType);
@@ -342,7 +342,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		Type type = getSingletonType(context, parent);
 		ClassConstant parentClass = new ClassConstant(type);
 		// push arguments on the stack
-		declaration.compileAssignments(context, method, flags, assignments);
+		declaration.compileArguments(context, method, flags, assignments);
 		// call static method
 		IType returnType = declaration.check(context, false);
 		if(returnType instanceof EnumeratedNativeType)

@@ -178,9 +178,9 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList assignments) {
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
-			this.compileAssignments(context, method, flags, assignments);
+			this.compileArguments(context, method, flags, arguments);
 			// call replace method
 			Descriptor.Method descriptor = new Descriptor.Method(String.class, String.class, String.class, String.class);
 			MethodConstant constant = new MethodConstant(StringUtils.class, "replaceOne", descriptor);
@@ -191,11 +191,11 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public void transpileCall(Transpiler transpiler, ArgumentList assignments) {
+		public void transpileCall(Transpiler transpiler, ArgumentList arguments) {
 			transpiler.append("replace(");
-	        assignments.find(new Identifier("toReplace")).transpile(transpiler, null);
+	        arguments.find(new Identifier("toReplace")).transpile(transpiler, null);
 	        transpiler.append(",");
-	        assignments.find(new Identifier("replaceWith")).transpile(transpiler, null);
+	        arguments.find(new Identifier("replaceWith")).transpile(transpiler, null);
 	        transpiler.append(")");
 		}
 	};
@@ -224,9 +224,9 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList assignments) {
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
-			this.compileAssignments(context, method, flags, assignments);
+			this.compileArguments(context, method, flags, arguments);
 			// call replace method
 			Descriptor.Method descriptor = new Descriptor.Method(CharSequence.class, CharSequence.class, String.class);
 			MethodConstant constant = new MethodConstant(String.class, "replace", descriptor);
@@ -277,7 +277,7 @@ public class TextType extends NativeType {
 		@Override
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
-			this.compileAssignments(context, method, flags, arguments);
+			this.compileArguments(context, method, flags, arguments);
 			// call split method
 			Descriptor.Method descriptor = new Descriptor.Method(String.class, String[].class);
 			MethodConstant constant = new MethodConstant(String.class, "split", descriptor);
@@ -332,9 +332,9 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList assignments) {
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
-			this.compileAssignments(context, method, flags, assignments);
+			this.compileArguments(context, method, flags, arguments);
 			// call static method
 			Descriptor.Method descriptor = new Descriptor.Method(String.class, String.class);
 			MethodConstant constant = new MethodConstant(StringUtils.class, "capitalizeAll", descriptor);
@@ -344,7 +344,7 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public void transpileCall(Transpiler transpiler, ArgumentList assignments) {
+		public void transpileCall(Transpiler transpiler, ArgumentList arguments) {
 	      transpiler.append("replace( /(^|\\s)([a-z])/g , function(m, p1, p2){ return p1 + p2.toUpperCase(); } )");
 		}
 	};
@@ -364,7 +364,7 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public void transpileCall(Transpiler transpiler, ArgumentList assignments) {
+		public void transpileCall(Transpiler transpiler, ArgumentList arguments) {
 			transpiler.append("toLowerCase()");
 		}
 
@@ -385,7 +385,7 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public void transpileCall(Transpiler transpiler, ArgumentList assignments) {
+		public void transpileCall(Transpiler transpiler, ArgumentList arguments) {
 			transpiler.append("toUpperCase()");
 		}
 
@@ -406,7 +406,7 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public void transpileCall(Transpiler transpiler, ArgumentList assignments) {
+		public void transpileCall(Transpiler transpiler, ArgumentList arguments) {
 			transpiler.append("trim()");
 		}
 
@@ -435,9 +435,9 @@ public class TextType extends NativeType {
 		};
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList assignments) {
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
-			this.compileAssignments(context, method, flags, assignments);
+			this.compileArguments(context, method, flags, arguments);
 			// call replace method
 			Descriptor.Method descriptor = new Descriptor.Method(String.class, boolean.class);
 			MethodConstant constant = new MethodConstant(String.class, "startsWith", descriptor);
@@ -479,9 +479,9 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList assignments) {
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
-			this.compileAssignments(context, method, flags, assignments);
+			this.compileArguments(context, method, flags, arguments);
 			// call replace method
 			Descriptor.Method descriptor = new Descriptor.Method(String.class, boolean.class);
 			MethodConstant constant = new MethodConstant(String.class, "endsWith", descriptor);
@@ -524,9 +524,9 @@ public class TextType extends NativeType {
 		};
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList assignments) {
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
-			this.compileAssignments(context, method, flags, assignments);
+			this.compileArguments(context, method, flags, arguments);
 			// call indexOf method
 			Descriptor.Method descriptor = new Descriptor.Method(String.class, int.class);
 			MethodConstant constant = new MethodConstant(String.class, "indexOf", descriptor);

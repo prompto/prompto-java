@@ -177,16 +177,17 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	
 	boolean isAssignableFrom(Context context, IParameter parameter, Argument argument) {
 		try {
-			IType required = parameter.getType(context);
-			IType actual = argument.getExpression().check(context);
-			if(actual.equals(required)
-					|| actual.isAssignableFrom(context, required)
-					|| required.isAssignableFrom(context, actual))
+			IType requiredType = parameter.getType(context);
+			IExpression expression = argument.getExpression();
+			IType actualType = argument.checkActualType(context, requiredType, expression, false);
+			if(actualType.equals(requiredType)
+					|| actualType.isAssignableFrom(context, requiredType)
+					|| requiredType.isAssignableFrom(context, actualType))
 				return true;
-			actual = argument.resolve(context, this, false, false).check(context);
-			return actual.equals(required)
-					|| actual.isAssignableFrom(context, required)
-					|| required.isAssignableFrom(context, actual);
+			actualType = argument.resolve(context, this, false, false).check(context);
+			return actualType.equals(requiredType)
+					|| actualType.isAssignableFrom(context, requiredType)
+					|| requiredType.isAssignableFrom(context, actualType);
 		} catch(PromptoError error) {
 			return false;
 		}
@@ -252,7 +253,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	}
 
 	@Override
-	public void compileAssignments(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
+	public void compileArguments(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 		boolean isFirst = true;
 		for(IParameter arg : parameters.stripOutTemplateArguments()) {
 			arg.compileArgument(context, method, flags, arguments, isFirst);

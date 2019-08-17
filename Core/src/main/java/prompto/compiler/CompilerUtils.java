@@ -11,6 +11,7 @@ import java.util.stream.IntStream;
 
 import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.grammar.ParameterList;
+import prompto.param.CodeParameter;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.AttributeInfo;
@@ -109,14 +110,15 @@ public abstract class CompilerUtils {
 		return sb.toString();
 	}
 	
-	public static Descriptor.Method createMethodDescriptor(Context context, ParameterList arguments, IType returnType) {
-		List<Type> argTypes = arguments
-			.stripOutTemplateArguments()
+	public static Descriptor.Method createMethodDescriptor(Context context, ParameterList parameters, IType returnType) {
+		List<Type> paramTypes = parameters
 			.stream()
+			.filter(a-> 
+				!(a instanceof CodeParameter)) // stripOutTemplateArguments
 			.map((arg)->
 				arg.getJavaType(context))
 			.collect(Collectors.toList());
-		return new Descriptor.Method(argTypes.toArray(new Type[argTypes.size()]), returnType.getJavaType(context));
+		return new Descriptor.Method(paramTypes.toArray(new Type[paramTypes.size()]), returnType.getJavaType(context));
 	}
 
 	public static String createProto(Type[] parameterTypes, Type returnType) {
