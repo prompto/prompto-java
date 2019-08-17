@@ -42,12 +42,8 @@ public abstract class PromptoProxy {
 
 					@Override
 					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-						try {
-							method = o.getClass().getMethod(methodName, paramTypes);
-							return method.invoke(o, args);
-						} catch(NoSuchFieldError e) {
-							throw e;
-						}
+						method = o.getClass().getMethod(methodName, paramTypes);
+						return method.invoke(o, args);
 					}
 					
 				});
