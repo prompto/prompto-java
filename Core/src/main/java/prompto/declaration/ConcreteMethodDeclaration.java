@@ -304,6 +304,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 
 	private void compileClosureConstructor(Context context, ClassFile classFile, LocalVariableTableAttribute locals) {
+		// TODO filter out unused locals
 		if(locals.getEntries().isEmpty())
 			CompilerUtils.compileEmptyConstructor(classFile);
 		else {

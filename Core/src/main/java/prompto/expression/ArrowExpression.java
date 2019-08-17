@@ -10,6 +10,7 @@ import prompto.compiler.Descriptor;
 import prompto.compiler.Flags;
 import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
@@ -71,7 +72,7 @@ public class ArrowExpression extends Section implements IExpression {
 		statements.transpile(transpiler);
 		return false;
 	}
-
+	
 	@Override
 	public void toDialect(CodeWriter writer) {
 		argsToDialect(writer);
@@ -319,6 +320,11 @@ public class ArrowExpression extends Section implements IExpression {
 		context.registerValue(new Variable(args.get(0), paramIType));
 		context.registerValue(new Variable(args.get(1), paramIType));
 		statements.compile(context, method, new Flags().withReturnType(int.class));
+	}
+
+	@Override
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		return statements.compile(context, method, new Flags());
 	}
 
 
