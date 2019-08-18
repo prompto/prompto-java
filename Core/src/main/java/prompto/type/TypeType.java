@@ -3,6 +3,9 @@ package prompto.type;
 import java.lang.reflect.Type;
 import java.util.Set;
 
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
@@ -58,6 +61,11 @@ public class TypeType extends BaseType {
 	@Override
 	public void transpileMember(Transpiler transpiler, String name) {
 		type.transpileStaticMember(transpiler, name);
+	}
+	
+	@Override
+	public ResultInfo compileGetStaticMember(Context context, MethodInfo method, Flags flags, Identifier id) {
+		return type.compileGetStaticMember(context, method, flags, id);
 	}
 
 

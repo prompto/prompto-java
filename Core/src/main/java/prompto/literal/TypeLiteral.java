@@ -1,15 +1,17 @@
 package prompto.literal;
 
+import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
-import prompto.declaration.IDeclaration;
+import prompto.compiler.StringConstant;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.expression.TypeExpression;
+import prompto.intrinsic.PromptoType;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
-import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.type.TypeType;
 import prompto.utils.CodeWriter;
@@ -36,9 +38,11 @@ public class TypeLiteral implements IExpression {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		// method.addInstruction(Opcode.ACONST_NULL);
-		// return new ResultInfo(Object.class);
-		throw new UnsupportedOperationException("Yet!");
+		CompilerUtils.compileNewRawInstance(method, PromptoType.class); 
+		method.addInstruction(Opcode.DUP);
+		method.addInstruction(Opcode.LDC, new StringConstant(type.getTypeName()));
+		CompilerUtils.compileCallConstructor(method, PromptoType.class, String.class); 
+		return new ResultInfo(PromptoType.class);
 	}
 	
 	@Override

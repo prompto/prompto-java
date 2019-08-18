@@ -2,14 +2,11 @@ package prompto.expression;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.Flags;
-import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.PromptoType;
+import prompto.compiler.NamedType;
 import prompto.compiler.ResultInfo;
-import prompto.compiler.StringConstant;
-import prompto.declaration.IDeclaration;
-import prompto.declaration.SingletonCategoryDeclaration;
+import prompto.compiler.ResultInfo.Flag;
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
@@ -48,18 +45,20 @@ public class TypeExpression implements IExpression {
 
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		ClassConstant c = new ClassConstant(new PromptoType(type.getJavaType(context).getTypeName()));
+		// used in a type expression we want the class that holds this type
+		ClassConstant c = new ClassConstant(getCompiledType(context));
 		method.addInstruction(Opcode.LDC, c);
 		return new ResultInfo(Class.class);
 	}
 	
 	@Override
 	public ResultInfo compileParent(Context context, MethodInfo method, Flags flags) {
-		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, type.getTypeNameId());
-		if(decl instanceof SingletonCategoryDeclaration)
-			return compile(context, method, flags);
-		else
-			return IExpression.super.compileParent(context, method, flags);
+		// caller will simply call a static method or field
+		return new ResultInfo(getCompiledType(context), Flag.STATIC);
+	}
+	
+	private NamedType getCompiledType(Context context) {
+		return new NamedType(type.getJavaType(context).getTypeName());
 	}
 	
 	public IType getType() {

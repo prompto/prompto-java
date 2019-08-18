@@ -143,8 +143,21 @@ public class MemberSelector extends SelectorExpression {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
         // resolve parent to keep clarity
 		IExpression parent = resolveParent(context);
-		Type resultType = check(context).getJavaType(context);
 		ResultInfo info = parent.compileParent(context, method, flags);
+		if(info.isStatic())
+			return compileStaticMember(context, method, flags, parent);
+		else
+			return compileInstanceMember(context, method, flags, info);
+	}
+	
+	
+	private ResultInfo compileStaticMember(Context context, MethodInfo method, Flags flags, IExpression parent) {
+		IType type = parent.check(context);
+		return type.compileGetStaticMember(context, method, flags, id);
+	}
+
+	private ResultInfo compileInstanceMember(Context context, MethodInfo method, Flags flags, ResultInfo info) {
+		Type resultType = check(context).getJavaType(context);
 		// special case for char.codePoint() to avoid wrapping char.class for just one member
 		if(Character.class==info.getType() && "codePoint".equals(getName()))
 			return compileCharacterCodePoint(method, flags);

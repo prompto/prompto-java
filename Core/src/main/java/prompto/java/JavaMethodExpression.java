@@ -11,7 +11,7 @@ import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.PromptoClassLoader;
-import prompto.compiler.PromptoType;
+import prompto.compiler.NamedType;
 import prompto.compiler.ResultInfo;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
@@ -160,8 +160,8 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	}
 
 	public Method findMethod(Context context, Object instance) throws ClassNotFoundException {
-		if(instance instanceof PromptoType)
-			instance = Class.forName(((PromptoType)instance).getTypeName(), true, PromptoClassLoader.getInstance());
+		if(instance instanceof NamedType)
+			instance = Class.forName(((NamedType)instance).getTypeName(), true, PromptoClassLoader.getInstance());
 		if(instance instanceof Class<?>)
 			return findMethod(context, (Class<?>)instance);
 		else
@@ -184,7 +184,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		try {
 			for(JavaExpression exp  : arguments) {
 				Type argType = exp.check(context).getJavaType(context);
-				if(argType instanceof PromptoType)
+				if(argType instanceof NamedType)
 					argType = Class.forName(argType.getTypeName());
 				types[i++] = (Class<?>)argType;
 			}
@@ -222,7 +222,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 			return true;
 		} else {
 			Type argType = argIType.getJavaType(context);
-			if(argType instanceof PromptoType) try {
+			if(argType instanceof NamedType) try {
 				argType = Class.forName(argType.getTypeName());
 			} catch (ClassNotFoundException e) {
 				return false;

@@ -10,7 +10,7 @@ import prompto.compiler.Descriptor;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.PromptoType;
+import prompto.compiler.NamedType;
 import prompto.compiler.Tags;
 import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.expression.IExpression;
@@ -23,7 +23,7 @@ public abstract class ComparatorCompilerBase implements ComparatorCompiler {
 	public Type compile(Context context, ClassFile parentClass, IType itemType, IExpression key, boolean descending) {
 		int innerClassIndex = 1 + parentClass.getInnerClasses().size();
 		String innerClassName = parentClass.getThisClass().getType().getTypeName() + '$' + innerClassIndex;
-		Type innerClassType = new PromptoType(innerClassName); 
+		Type innerClassType = new NamedType(innerClassName); 
 		ClassFile classFile = new ClassFile(innerClassType);
 		classFile.setSuperClass(new ClassConstant(Object.class));
 		classFile.addInterface(new ClassConstant(Comparator.class));

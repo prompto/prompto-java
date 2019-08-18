@@ -13,7 +13,7 @@ import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.PromptoType;
+import prompto.compiler.NamedType;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.Tags;
 import prompto.error.NullReferenceError;
@@ -159,7 +159,7 @@ public class FilteredExpression extends Section implements IExpression {
 		// get iterable
 		ResultInfo srcinfo = source.compile(context, method, flags);
 		// instantiate filter
-		ClassConstant innerClass = new ClassConstant(new PromptoType(innerClassName));
+		ClassConstant innerClass = new ClassConstant(new NamedType(innerClassName));
 		method.addInstruction(Opcode.NEW, innerClass);
 		method.addInstruction(Opcode.DUP);
 		// call filter constructor
@@ -186,7 +186,7 @@ public class FilteredExpression extends Section implements IExpression {
 	private String compileInnerFilterClass(Context context, ClassFile parentClass) {
 		int innerClassIndex = 1 + parentClass.getInnerClasses().size();
 		String innerClassName = parentClass.getThisClass().getType().getTypeName() + '$' + innerClassIndex;
-		ClassFile classFile = new ClassFile(new PromptoType(innerClassName));
+		ClassFile classFile = new ClassFile(new NamedType(innerClassName));
 		classFile.setSuperClass(new ClassConstant(Object.class));
 		classFile.addInterface(new ClassConstant(Predicate.class));
 		CompilerUtils.compileEmptyConstructor(classFile);

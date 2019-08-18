@@ -11,7 +11,7 @@ import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.PromptoType;
+import prompto.compiler.NamedType;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.Tags;
 import prompto.error.PromptoError;
@@ -100,7 +100,7 @@ public class IteratorExpression implements IExpression {
 	private Type compileInnerClass(Context context, ClassFile parentClass) {
 		int innerClassIndex = 1 + parentClass.getInnerClasses().size();
 		String innerClassName = parentClass.getThisClass().getType().getTypeName() + '$' + innerClassIndex;
-		Type innerClassType = new PromptoType(innerClassName); 
+		Type innerClassType = new NamedType(innerClassName); 
 		ClassFile classFile = new ClassFile(innerClassType);
 		classFile.setSuperClass(new ClassConstant(PromptoIterable.class));
 		compileInnerClassConstructor(classFile);

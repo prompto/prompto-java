@@ -16,7 +16,6 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.SyntaxError;
-import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.grammar.MethodDeclarationList;
 import prompto.intrinsic.PromptoRoot;
@@ -116,7 +115,7 @@ public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 		method.addInstruction(Opcode.RETURN);
 	}
 
-	public ResultInfo compileGetMember(Context context, MethodInfo method, Flags flags, IExpression parent, Identifier id) {
+	public ResultInfo compileGetStaticMember(Context context, MethodInfo method, Flags flags, Identifier id) {
 		java.lang.reflect.Type concreteType = CompilerUtils.getCategorySingletonType(getId());
 		String getterName = CompilerUtils.getterName(id.toString());
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
@@ -126,8 +125,7 @@ public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 		return new ResultInfo(field.getType());
 	}
 
-	public ResultInfo compileSetStaticMember(Context context, MethodInfo method, Flags flags, IExpression value, Identifier id) {
-		value.compile(context, method, flags);
+	public ResultInfo compileSetStaticMember(Context context, MethodInfo method, Flags flags, Identifier id) {
 		java.lang.reflect.Type concreteType = CompilerUtils.getCategorySingletonType(getId());
 		String setterName = CompilerUtils.setterName(id.toString());
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, id);

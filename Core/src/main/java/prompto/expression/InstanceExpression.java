@@ -144,7 +144,7 @@ public class InstanceExpression extends Section implements IExpression {
 		Context actual = context.contextForValue(getId());
 		if(actual instanceof InstanceContext) {
 			IType type = ((InstanceContext)actual).getInstanceType();
-			return type.compileGetMember(context, method, flags, null, id);
+			return type.compileGetStaticMember(context, method, flags, id);
 		} else
 			return null;
 	}

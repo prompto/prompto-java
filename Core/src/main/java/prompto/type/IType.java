@@ -97,11 +97,6 @@ public interface IType extends ISection {
 		throw new UnsupportedOperationException("Cannot convertJavaValueToPromptoValue for " + this.getClass());
 	}
 	
-	default ResultInfo compileGetMember(Context context, MethodInfo method,
-			Flags flags, IExpression parent, Identifier id) {
-		throw new UnsupportedOperationException("Cannot compileGetMember for " + this.getClass());
-	}
-
 	default void compileConvertObjectToExact(Context context, MethodInfo method, Flags flags) {
 		throw new UnsupportedOperationException("Cannot compileConvertObjectToExact for " + this.getClass());
 	}
@@ -305,6 +300,10 @@ public interface IType extends ISection {
 
 	default ResultInfo compileSorted(Context context, MethodInfo method, Flags flags, ResultInfo srcInfo, IExpression key, boolean descending) {
 		throw new UnsupportedOperationException("compileSorted " + this.getClass().getName());
+	}
+
+	default ResultInfo compileGetStaticMember(Context context, MethodInfo method, Flags flags, Identifier id) {
+		throw new UnsupportedOperationException("compileGetStaticMember " + this.getClass().getName());
 	}
 
 

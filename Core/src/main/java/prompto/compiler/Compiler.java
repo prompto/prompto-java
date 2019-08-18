@@ -115,7 +115,7 @@ public class Compiler {
 	
 	
 	private ClassFile createExtendedClassFile(Context context, String simpleName, String fullName) throws ClassNotFoundException {
-		ClassFile classFile = new ClassFile(new PromptoType(fullName));
+		ClassFile classFile = new ClassFile(new NamedType(fullName));
 		classFile.addModifier(Modifier.ABSTRACT | Modifier.INTERFACE);
 		String[] interfaces = simpleName.split("%");
 		for(String s : interfaces) {

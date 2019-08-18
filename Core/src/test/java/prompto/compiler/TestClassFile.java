@@ -85,7 +85,7 @@ public class TestClassFile {
 		c = new LongConstant(123);
 		c.register(pool);
 		assertEquals(4, pool.nextIndex);
-		NameAndTypeConstant ntc = new NameAndTypeConstant("xyw", new Descriptor.Field(new PromptoType("hkp")));
+		NameAndTypeConstant ntc = new NameAndTypeConstant("xyw", new Descriptor.Field(new NamedType("hkp")));
 		ntc.register(pool);
 		assertEquals(4, ntc.getIndexInConstantPool());
 		assertEquals(5, ntc.name.getIndexInConstantPool());
@@ -96,7 +96,7 @@ public class TestClassFile {
 	@Test
 	public void testDefineClassForGlobalMethod() throws Exception {
 		String name = "π/χ/µ/print";
-		ClassFile c = new ClassFile(new PromptoType(name));
+		ClassFile c = new ClassFile(new NamedType(name));
 		c.addModifier(Modifier.ABSTRACT);
 		Descriptor.Method proto = new Descriptor.Method(String.class, void.class);
 		MethodInfo m = c.newMethod("printAbstract", proto);
@@ -122,7 +122,7 @@ public class TestClassFile {
 	public void testCallGlobalMethod() throws Exception {
 		Out.init();
 		String name = "π/χ/µ/print";
-		ClassFile c = new ClassFile(new PromptoType(name));
+		ClassFile c = new ClassFile(new NamedType(name));
 		c.addModifier(Modifier.ABSTRACT);
 		Descriptor.Method proto = new Descriptor.Method(String.class, void.class);
 		MethodInfo m = c.newMethod("print", proto);
@@ -149,7 +149,7 @@ public class TestClassFile {
 	@Test
 	public void testClassWithLongConstant() throws Exception {
 		String name = "k1";
-		ClassFile c = new ClassFile(new PromptoType(name));
+		ClassFile c = new ClassFile(new NamedType(name));
 		c.addModifier(Modifier.ABSTRACT);
 		Descriptor.Method proto = new Descriptor.Method(Long.class);
 		MethodInfo m = c.newMethod("m3", proto);
@@ -165,7 +165,7 @@ public class TestClassFile {
 	@Test
 	public void testClassWithStackLabel_FULL() throws Exception {
 		String name = "k1";
-		ClassFile c = new ClassFile(new PromptoType(name));
+		ClassFile c = new ClassFile(new NamedType(name));
 		c.addModifier(Modifier.ABSTRACT);
 		Descriptor.Method proto = new Descriptor.Method(void.class);
 		MethodInfo m = c.newMethod("m", proto);
@@ -196,21 +196,21 @@ public class TestClassFile {
 	public void testInterfaceWithInnerClass() throws Exception {
 		File dir = Files.createTempDirectory("prompto_").toFile();
 		String root = "Root";
-		ClassFile c = new ClassFile(new PromptoType(root));
+		ClassFile c = new ClassFile(new NamedType(root));
 		c.addModifier(Modifier.INTERFACE | Modifier.ABSTRACT);
 		try(OutputStream o = new FileOutputStream(new File(dir, root + ".class"))) {
 			c.writeTo(o);
 		}
 		String derived = "Derived";
 		String inner = "%Inner";
-		ClassFile i = new ClassFile(new PromptoType(derived + '$' + inner));
-		i.addInterface(new PromptoType(derived));
+		ClassFile i = new ClassFile(new NamedType(derived + '$' + inner));
+		i.addInterface(new NamedType(derived));
 		try(OutputStream o = new FileOutputStream(new File(dir, derived + '$' + inner + ".class"))) {
 			i.writeTo(o);
 		}
-		ClassFile d = new ClassFile(new PromptoType(derived));
+		ClassFile d = new ClassFile(new NamedType(derived));
 		d.addModifier(Modifier.INTERFACE | Modifier.ABSTRACT);
-		d.addInterface(new PromptoType(root));
+		d.addInterface(new NamedType(root));
 		d.addInnerClass(i);
 		try(OutputStream o = new FileOutputStream(new File(dir, derived + ".class"))) {
 			d.writeTo(o);
@@ -229,7 +229,7 @@ public class TestClassFile {
 	@Test
 	public void testMethodWithException() throws Exception {
 		String name = "π/χ/µ/print";
-		ClassFile c = new ClassFile(new PromptoType(name));
+		ClassFile c = new ClassFile(new NamedType(name));
 		c.addModifier(Modifier.ABSTRACT);
 		Descriptor.Method proto = new Descriptor.Method(Object.class, String.class);
 		MethodInfo m = c.newMethod("stringValueOf", proto);
@@ -261,7 +261,7 @@ public class TestClassFile {
 	@Test(expected=UnsupportedOperationException.class)
 	public void testMethodWithThrow() throws Throwable {
 		String name = "π/χ/µ/print";
-		ClassFile c = new ClassFile(new PromptoType(name));
+		ClassFile c = new ClassFile(new NamedType(name));
 		c.addModifier(Modifier.ABSTRACT);
 		Descriptor.Method proto = new Descriptor.Method(Object.class, String.class);
 		MethodInfo m = c.newMethod("stringValueOf", proto);
@@ -298,7 +298,7 @@ public class TestClassFile {
 		Out.init();
 		try {
 			String name = "π/χ/µ/print";
-			ClassFile c = new ClassFile(new PromptoType(name));
+			ClassFile c = new ClassFile(new NamedType(name));
 			c.addModifier(Modifier.ABSTRACT);
 			Descriptor.Method proto = new Descriptor.Method(String.class, void.class);
 			MethodInfo m = c.newMethod("test", proto);

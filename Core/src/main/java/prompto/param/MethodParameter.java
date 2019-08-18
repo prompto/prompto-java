@@ -15,7 +15,7 @@ import prompto.compiler.InterfaceType;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.PromptoType;
+import prompto.compiler.NamedType;
 import prompto.compiler.StackLocal;
 import prompto.compiler.StringConstant;
 import prompto.declaration.IMethodDeclaration;
@@ -166,14 +166,14 @@ public class MethodParameter extends BaseParameter implements INamedParameter {
 	
 	private void compileNewArrowExpressionInstance(Context context, MethodInfo method, Flags flags, String innerClassName, ArrowExpression expression) {
 		// TODO support closure (see ConcreteMethodDeclaration.compileClosureClass)
-		Type innerType = new PromptoType(innerClassName); 
+		Type innerType = new NamedType(innerClassName); 
 		CompilerUtils.compileNewInstance(method, innerType); 
 	}
 
 	private String compileArrowExpressionInnerClass(Context context, ClassFile parentClass, InterfaceType interfaceType, ArrowExpression expression) {
 		int innerClassIndex = 1 + parentClass.getInnerClasses().size();
 		String innerClassName = parentClass.getThisClass().getType().getTypeName() + '$' + innerClassIndex;
-		ClassFile classFile = new ClassFile(new PromptoType(innerClassName));
+		ClassFile classFile = new ClassFile(new NamedType(innerClassName));
 		classFile.setSuperClass(new ClassConstant(Object.class));
 		classFile.addInterface(new ClassConstant(interfaceType.getInterfaceType()));
 		CompilerUtils.compileEmptyConstructor(classFile);

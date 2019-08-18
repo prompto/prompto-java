@@ -141,9 +141,7 @@ public class EnumeratedNativeType extends BaseType {
 			return super.getStaticMemberValue(context, id);
 	}
 	
-	@Override
-	public ResultInfo compileGetMember(Context context, MethodInfo method,
-			Flags flags, IExpression parent, Identifier id) {
+	public ResultInfo compileGetStaticMember(Context context, MethodInfo method, Flags flags, IExpression parent, Identifier id) {
 		String name = id.toString();
 		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
 		if(!(decl instanceof IEnumeratedDeclaration))

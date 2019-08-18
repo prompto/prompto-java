@@ -19,7 +19,8 @@ import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.PromptoType;
+import prompto.compiler.NamedType;
+import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.compiler.StringConstant;
 import prompto.error.InvalidSymbolError;
@@ -167,7 +168,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 
 	public ClassFile compile(Context context, String fullName) {
 		try {
-			ClassFile classFile = new ClassFile(new PromptoType(fullName));
+			ClassFile classFile = new ClassFile(new NamedType(fullName));
 			classFile.setSuperClass(new ClassConstant(PromptoNativeSymbol.class));
 			compileSymbolFields(context, classFile, new Flags());
 			compileNameField(context, classFile, new Flags());
@@ -298,6 +299,17 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 	    transpiler.append(this.getName()).append(".symbols = new List(false, [").append(names.stream().collect(Collectors.joining(", "))).append("]);").newLine();
 	    transpiler.append(this.getName()).append(".symbolOf = eval;");
 	    return true;
+	}
+
+	public ResultInfo compileGetStaticMember(Context context, MethodInfo method, Flags flags, Identifier id) {
+		if("symbols".equals(id.toString())) {
+			java.lang.reflect.Type concreteType = CompilerUtils.getNativeEnumType(getId());
+			String getterName = CompilerUtils.getterName("symbols");
+			MethodConstant m = new MethodConstant(concreteType, getterName, List.class);
+			method.addInstruction(Opcode.INVOKESTATIC, m);
+			return new ResultInfo(List.class);
+		} else
+			throw new SyntaxError("No such field " + id);
 	}
 
 

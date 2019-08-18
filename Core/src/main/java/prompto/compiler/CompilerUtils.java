@@ -143,7 +143,7 @@ public abstract class CompilerUtils {
 
 	public static Type getTestType(String testName) {
 		testName = encodeName(testName);
-		return new PromptoType(TEST_METHOD_PACKAGE_PREFIX + testName);
+		return new NamedType(TEST_METHOD_PACKAGE_PREFIX + testName);
 	}
 	
 	// see https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html#jvms-4.2.2
@@ -215,7 +215,7 @@ public abstract class CompilerUtils {
 	}
 
 	public static Type getGlobalMethodType(String name) {
-		return new PromptoType(GLOBAL_METHOD_PACKAGE_PREFIX + name);
+		return new NamedType(GLOBAL_METHOD_PACKAGE_PREFIX + name);
 	}
 	
 	public static Type attributeInterfaceTypeFrom(String fullName) {
@@ -226,14 +226,14 @@ public abstract class CompilerUtils {
 		int idx = fullName.indexOf('$');
 		if(idx<0)
 			fullName += INNER_SEPARATOR + attributeSimpleNameFrom(fullName);
-		return new PromptoType(fullName);
+		return new NamedType(fullName);
 	}
 
 	public static Type categoryConcreteTypeFrom(String fullName) {
 		int idx = fullName.indexOf('$');
 		if(idx<0)
 			fullName += INNER_SEPARATOR + categorySimpleNameFrom(fullName);
-		return new PromptoType(fullName);
+		return new NamedType(fullName);
 	}
 
 	public static Type categoryConcreteParentTypeFrom(String fullName) {
@@ -259,7 +259,7 @@ public abstract class CompilerUtils {
 		int idx = fullName.indexOf(INNER_SEPARATOR);
 		if(idx>=0)
 			fullName = fullName.substring(0, idx);
-		return new PromptoType(fullName);
+		return new NamedType(fullName);
 	}
 
 	public static String categorySimpleNameFrom(String fullName) {
@@ -300,7 +300,7 @@ public abstract class CompilerUtils {
 	}
 
 	public static Type getAttributeInterfaceType(String name) {
-		return new PromptoType(ATTRIBUTE_PACKAGE_PREFIX + name);
+		return new NamedType(ATTRIBUTE_PACKAGE_PREFIX + name);
 	}
 
 	public static Type getAttributeConcreteType(Identifier id) {
@@ -308,7 +308,7 @@ public abstract class CompilerUtils {
 	}
 
 	public static Type getAttributeConcreteType(String name) {
-		return new PromptoType(ATTRIBUTE_PACKAGE_PREFIX + name + INNER_SEPARATOR + name);
+		return new NamedType(ATTRIBUTE_PACKAGE_PREFIX + name + INNER_SEPARATOR + name);
 	}
 
 	public static Type getCategoryInterfaceType(Identifier id) {
@@ -332,7 +332,7 @@ public abstract class CompilerUtils {
 			sb.append('%');
 			sb.append(n);
 		});
-		return new PromptoType(sb.toString());
+		return new NamedType(sb.toString());
 	}
 	
 	public static Type getCategorySingletonType(Identifier id) {
@@ -344,11 +344,11 @@ public abstract class CompilerUtils {
 	}
 	
 	public static Type getCategoryInterfaceType(String name) {
-		return new PromptoType(CATEGORY_PACKAGE_PREFIX + name);
+		return new NamedType(CATEGORY_PACKAGE_PREFIX + name);
 	}
 	
 	public static Type getCategoryConcreteType(String name) {
-		return new PromptoType(CATEGORY_PACKAGE_PREFIX + name + INNER_SEPARATOR + name);
+		return new NamedType(CATEGORY_PACKAGE_PREFIX + name + INNER_SEPARATOR + name);
 	}
 	
 	public static Type getCategoryEnumInterfaceType(Identifier id) {
@@ -360,7 +360,7 @@ public abstract class CompilerUtils {
 	}
 	
 	public static Type getExceptionType(Type type, String name) {
-		return new PromptoType(type.getTypeName() + '$' + name);
+		return new NamedType(type.getTypeName() + '$' + name);
 	}
 
 	public static Type getNativeEnumType(Identifier id) {
@@ -368,15 +368,15 @@ public abstract class CompilerUtils {
 	}
 
 	public static Type getNativeEnumType(String name) {
-		return new PromptoType(NATIVE_ENUM_PACKAGE_PREFIX + name);
+		return new NamedType(NATIVE_ENUM_PACKAGE_PREFIX + name);
 	}
 
 	public static Type getCategoryEnumInterfaceType(String name) {
-		return new PromptoType(CATEGORY_ENUM_PACKAGE_PREFIX + name);
+		return new NamedType(CATEGORY_ENUM_PACKAGE_PREFIX + name);
 	}
 
 	public static Type getCategoryEnumConcreteType(String name) {
-		return new PromptoType(CATEGORY_ENUM_PACKAGE_PREFIX + name + INNER_SEPARATOR + name);
+		return new NamedType(CATEGORY_ENUM_PACKAGE_PREFIX + name + INNER_SEPARATOR + name);
 	}
 
 	public static ResultInfo reverseBoolean(MethodInfo method) {
@@ -690,7 +690,7 @@ public abstract class CompilerUtils {
 
 	public static Type getType(String name) {
 		name = name.replace('.', '/');
-		return new PromptoType(name);
+		return new NamedType(name);
 	}
 
 	public static String setterName(String name) {

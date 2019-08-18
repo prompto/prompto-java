@@ -15,7 +15,7 @@ import prompto.compiler.IOperand;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.PromptoType;
+import prompto.compiler.NamedType;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.ShortOperand;
 import prompto.compiler.StackState;
@@ -154,7 +154,7 @@ public class IntegerValue extends BaseValue implements INumber, Comparable<INumb
 			return compileMultiplyCharacter(context, method, flags, left, exp);
 		else if(type==TextType.instance())
 			return compileMultiplyText(context, method, flags, left, exp);
-		else if(type.getJavaType(context) instanceof PromptoType)
+		else if(type.getJavaType(context) instanceof NamedType)
 			return compileMultiplyCategory(context, method, flags, left, exp);
 		else if(IMultiplyable.class.isAssignableFrom((Class<?>)type.getJavaType(context)))
 			return compileMultiplyMultiplyable(context, method, flags, left, exp);

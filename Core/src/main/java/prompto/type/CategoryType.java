@@ -21,7 +21,7 @@ import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
-import prompto.compiler.PromptoType;
+import prompto.compiler.NamedType;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.compiler.comparator.ArrowExpressionComparatorCompiler;
@@ -127,11 +127,15 @@ public class CategoryType extends BaseType {
 	public Type getJavaType(Context context) {
 		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
 		if(decl instanceof NativeCategoryDeclaration)
-			return new PromptoType(((NativeCategoryDeclaration) decl).getBoundClassName());
+			return new NamedType(((NativeCategoryDeclaration) decl).getBoundClassName());
 		else if(decl instanceof EnumeratedNativeDeclaration)
-			return CompilerUtils.getNativeEnumType(getTypeName());
-		else 
-			return CompilerUtils.getCategoryInterfaceType(getTypeName());
+			return CompilerUtils.getNativeEnumType(typeNameId);
+		else if(decl instanceof EnumeratedCategoryDeclaration)
+			return CompilerUtils.getCategoryEnumConcreteType(typeNameId);
+		else if(decl instanceof SingletonCategoryDeclaration)
+			return CompilerUtils.getCategorySingletonType(typeNameId);
+		else
+			return CompilerUtils.getCategoryInterfaceType(typeNameId);
 	}
 	
 	@Override
@@ -582,24 +586,12 @@ public class CategoryType extends BaseType {
 		return decl.newInstance(context, stored);
 	}
 
-	@Override
-	public ResultInfo compileGetMember(Context context, MethodInfo method,
-			Flags flags, IExpression parent, Identifier id) {
+	public ResultInfo compileSetMember(Context context, MethodInfo method, Flags flags, IExpression parent, IExpression value, Identifier id) {
 		IDeclaration decl = getDeclaration(context);
-		if(decl instanceof SingletonCategoryDeclaration)
-			return ((SingletonCategoryDeclaration)decl).compileGetMember(context, method, flags, parent, id);
-		else if(decl instanceof EnumeratedCategoryDeclaration)
-			return ((EnumeratedCategoryDeclaration)decl).compileGetMember(context, method, flags, parent, id);
-		else
-			throw new SyntaxError("No static member support for non-singleton " + decl.getName());
-	}
-
-	public ResultInfo compileSetMember(Context context, MethodInfo method,
-			Flags flags, IExpression parent, IExpression value, Identifier id) {
-		IDeclaration decl = getDeclaration(context);
-		if(decl instanceof SingletonCategoryDeclaration)
-			return ((SingletonCategoryDeclaration)decl).compileSetStaticMember(context, method, flags, value, id);
-		else if(couldBeImplicitThis(decl, flags)) {
+		if(decl instanceof SingletonCategoryDeclaration) {
+			value.compile(context, method, flags);
+			return ((SingletonCategoryDeclaration)decl).compileSetStaticMember(context, method, flags, id);
+		} else if(couldBeImplicitThis(decl, flags)) {
 			MemberInstance instance = new MemberInstance(id);
 			instance.setParent(new VariableInstance(new Identifier("this")));
 			return instance.compileAssign(context, method, flags, value);
@@ -611,6 +603,19 @@ public class CategoryType extends BaseType {
 		return decl instanceof ConcreteCategoryDeclaration && flags.isMember();
 	}
 
+	
+	@Override
+	public ResultInfo compileGetStaticMember(Context context, MethodInfo method, Flags flags, Identifier id) {
+		IDeclaration decl = getDeclaration(context);
+		if(decl instanceof SingletonCategoryDeclaration)
+			return ((SingletonCategoryDeclaration)decl).compileGetStaticMember(context, method, flags, id);
+		else if(decl instanceof EnumeratedCategoryDeclaration)
+			return ((EnumeratedCategoryDeclaration)decl).compileGetStaticMember(context, method, flags, id);
+		 else if(decl instanceof EnumeratedNativeDeclaration)
+			return ((EnumeratedNativeDeclaration)decl).compileGetStaticMember(context, method, flags, id);
+		else 
+			return super.compileGetStaticMember(context, method, flags, id);
+	}
 
 	@Override
 	public void compileGetStorableData(Context context, MethodInfo method, Flags flags) {

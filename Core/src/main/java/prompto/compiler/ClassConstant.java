@@ -40,7 +40,7 @@ public class ClassConstant implements ICodeConstant, IValueConstant {
 			return new ClassConstant(klass);
 		} catch (Exception e) {
 		}
-		return new ClassConstant(new PromptoType(className));
+		return new ClassConstant(new NamedType(className));
 	}
 	
 	public boolean isInterface() {

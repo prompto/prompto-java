@@ -23,7 +23,7 @@ import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.NameAndTypeConstant;
 import prompto.compiler.Opcode;
-import prompto.compiler.PromptoType;
+import prompto.compiler.NamedType;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.compiler.StringConstant;
@@ -300,7 +300,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		if(closureOf!=null && closureOf.getMemberOf()!=null)
 			innerClassName += "$" + closureOf.getName();
 		innerClassName += "$" + this.getName();
-		return new PromptoType(innerClassName); 
+		return new NamedType(innerClassName); 
 	}
 
 	private void compileClosureConstructor(Context context, ClassFile classFile, LocalVariableTableAttribute locals) {

@@ -3,7 +3,7 @@ package prompto.type;
 import java.lang.reflect.Type;
 
 import prompto.compiler.CompilerUtils;
-import prompto.compiler.PromptoType;
+import prompto.compiler.NamedType;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.SyntaxError;
@@ -57,17 +57,17 @@ public class MethodType extends BaseType {
 
 	private Type getMemberJavaType(Context context) {
 		Type outer = CompilerUtils.getCategoryConcreteType(method.getMemberOf().getId()); 
-		return new PromptoType(outer.getTypeName() + '$' + method.getName());
+		return new NamedType(outer.getTypeName() + '$' + method.getName());
 	}
 
 	private Type getClosureJavaType(Context context) {
 		IMethodDeclaration embedding = method.getClosureOf();
 		if(embedding.getMemberOf()==null) {
 			Type outer = CompilerUtils.getGlobalMethodType(embedding.getId()); 
-			return new PromptoType(outer.getTypeName() + '$' + method.getName());
+			return new NamedType(outer.getTypeName() + '$' + method.getName());
 		} else {
 			Type outer = CompilerUtils.getCategoryConcreteType(embedding.getMemberOf().getId()); 
-			return new PromptoType(outer.getTypeName() + '$' + embedding.getName() + '$' + method.getName());
+			return new NamedType(outer.getTypeName() + '$' + embedding.getName() + '$' + method.getName());
 		}
 	}
 	

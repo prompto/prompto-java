@@ -25,7 +25,6 @@ import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.error.SyntaxError;
 import prompto.expression.CategorySymbol;
-import prompto.expression.IExpression;
 import prompto.expression.Symbol;
 import prompto.grammar.CategorySymbolList;
 import prompto.grammar.Identifier;
@@ -292,7 +291,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 
 	
 	private void compileSymbolOfMethod(Context context, ClassFile classFile, Flags flags) {
-		MethodInfo method = classFile.newMethod("symbolOf", new Descriptor.Method(String.class, getInterface(context).getType()));
+		MethodInfo method = classFile.newMethod("symbolOf", new Descriptor.Method(String.class, classFile.getThisClass().getType()));
 		method.addModifier(Modifier.STATIC);
 		method.addInstruction(Opcode.LDC, classFile.getThisClass());
 		method.addInstruction(Opcode.ALOAD_0, new ClassConstant(String.class));
@@ -335,7 +334,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 			return CompilerUtils.getExceptionType(thisType, symbol.getName());
 	}
 
-	public ResultInfo compileGetMember(Context context, MethodInfo method, Flags flags, IExpression parent, Identifier id) {
+	public ResultInfo compileGetStaticMember(Context context, MethodInfo method, Flags flags, Identifier id) {
 		if("symbols".equals(id.toString())) {
 			java.lang.reflect.Type concreteType = CompilerUtils.getCategoryEnumConcreteType(getId());
 			String getterName = CompilerUtils.getterName("symbols");
@@ -343,7 +342,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 			method.addInstruction(Opcode.INVOKESTATIC, m);
 			return new ResultInfo(List.class);
 		} else
-			throw new SyntaxError("No static member support for non-singleton " + this.getName());
+			throw new SyntaxError("No such attribute " + id);
 	}
 
 	@Override
