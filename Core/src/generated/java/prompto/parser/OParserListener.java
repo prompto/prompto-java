@@ -1706,6 +1706,16 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitAssign_tuple_statement(OParser.Assign_tuple_statementContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link OParser#type_literal}.
+	 * @param ctx the parse tree
+	 */
+	void enterType_literal(OParser.Type_literalContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#type_literal}.
+	 * @param ctx the parse tree
+	 */
+	void exitType_literal(OParser.Type_literalContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link OParser#null_literal}.
 	 * @param ctx the parse tree
 	 */

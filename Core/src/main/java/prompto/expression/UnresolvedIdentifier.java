@@ -3,6 +3,9 @@ package prompto.expression;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
+import prompto.declaration.IDeclaration;
+import prompto.declaration.IEnumeratedDeclaration;
+import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
@@ -104,21 +107,40 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 		IExpression resolved = resolveSymbol(context);
 		if(resolved!=null)
 			return resolved;
-		resolved = resolveConstructor(context, forMember);
+		resolved = resolveTypeOrConstructor(context, forMember);
 		if(resolved!=null)
 			return resolved;
 		resolved = resolveMethodCall(context, updateSelectorParent);
 		if(resolved!=null)
 			return resolved;
 		resolved = resolveInstance(context);
-		return resolved;
+		if(resolved!=null)
+			return resolved;
+		return null;
 	}
 
-	private IExpression resolveConstructor(Context context, boolean forMember) {
+	private IExpression resolveTypeOrConstructor(Context context, boolean forMember) {
 		if(Character.isUpperCase(id.toString().charAt(0)))
-			return resolveConstructor(context);
+			return resolveTypeOrConstructor(context);
 		else
 			return null;
+	}
+
+	private IExpression resolveTypeOrConstructor(Context context) {
+		try {
+			CategoryType type = new CategoryType(id);
+			IDeclaration decl = type.getDeclaration(context);
+			if(decl instanceof SingletonCategoryDeclaration || decl instanceof IEnumeratedDeclaration)
+				return new TypeExpression(type);
+			else {
+				IExpression method = new ConstructorExpression(type, null, null, true);
+				method.check(context);
+				return method;
+			}
+		} catch(SyntaxError e) {
+			// ignore resolution errors
+			return null;
+		}
 	}
 
 	private IExpression resolveInstance(Context context) {
@@ -139,17 +161,6 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 			MethodCall method = new MethodCall(new MethodSelector(id));
 			method.setFrom(this);
 			method.check(context, updateSelectorParent);
-			return method;
-		} catch(SyntaxError e) {
-			// ignore resolution errors
-			return null;
-		}
-	}
-
-	private IExpression resolveConstructor(Context context) {
-		try {
-			IExpression method = new ConstructorExpression(new CategoryType(id), null, null, true);
-			method.check(context);
 			return method;
 		} catch(SyntaxError e) {
 			// ignore resolution errors

@@ -1868,6 +1868,16 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitDedent(EParser.DedentContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link EParser#type_literal}.
+	 * @param ctx the parse tree
+	 */
+	void enterType_literal(EParser.Type_literalContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#type_literal}.
+	 * @param ctx the parse tree
+	 */
+	void exitType_literal(EParser.Type_literalContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link EParser#null_literal}.
 	 * @param ctx the parse tree
 	 */

@@ -193,6 +193,7 @@ import prompto.literal.SetLiteral;
 import prompto.literal.TextLiteral;
 import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
+import prompto.literal.TypeLiteral;
 import prompto.literal.UuidLiteral;
 import prompto.literal.VersionLiteral;
 import prompto.param.CategoryParameter;
@@ -896,6 +897,8 @@ public class EPromptoBuilder extends EParserBaseListener {
 		Argument arg = getNodeValue(ctx.arg);
 		if(arg!=null)
 			args.add(arg);
+		else if(args!=null)
+			args.checkLastAnd();
 		setNodeValue(ctx, new ConstructorExpression(type, null, args, true));
 	}
 
@@ -3099,6 +3102,12 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	
 	@Override
+	public void exitType_literal(Type_literalContext ctx) {
+		IType type = getNodeValue(ctx.typedef());
+		setNodeValue(ctx, new TypeLiteral(type));
+	}
+	
+	@Override
 	public void exitTyped_argument(Typed_argumentContext ctx) {
 		IType type = getNodeValue(ctx.typ);
 		Identifier name = getNodeValue(ctx.name);
@@ -3116,6 +3125,13 @@ public class EPromptoBuilder extends EParserBaseListener {
 		Identifier name = getNodeValue(ctx.type_identifier());
 		setNodeValue(ctx, name);
 	}
+	
+	
+	@Override
+	public void exitTypeLiteral(TypeLiteralContext ctx) {
+		setNodeValue(ctx, getNodeValue(ctx.type_literal()));
+	}
+
 	
 	@Override
 	public void exitUnresolved_selector(Unresolved_selectorContext ctx) {

@@ -200,6 +200,7 @@ import prompto.param.ExtendedParameter;
 import prompto.param.IParameter;
 import prompto.param.UnresolvedParameter;
 import prompto.parser.OParser.TypeLiteralContext;
+import prompto.parser.OParser.Type_literalContext;
 
 import static prompto.parser.OParser.*;
 import prompto.python.Python2NativeCall;
@@ -3075,6 +3076,24 @@ public class OPromptoBuilder extends OParserBaseListener {
 	}
 	
 	@Override
+	public void exitType_identifier_list(Type_identifier_listContext ctx) {
+		IdentifierList items = new IdentifierList();
+		ctx.type_identifier().forEach((i)->{
+			Identifier item = getNodeValue(i);
+			items.add(item);
+		});
+		setNodeValue(ctx, items);
+	}
+	
+	
+	@Override
+	public void exitType_literal(Type_literalContext ctx) {
+		IType type = getNodeValue(ctx.typedef());
+		setNodeValue(ctx, new TypeLiteral(type));
+	}
+	
+	
+	@Override
 	public void exitTyped_argument(Typed_argumentContext ctx) {
 		IType type = getNodeValue(ctx.typ);
 		Identifier name = getNodeValue(ctx.name);
@@ -3096,19 +3115,9 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitTypeLiteral(TypeLiteralContext ctx) {
-		IType type = getNodeValue(ctx.typedef());
-		setNodeValue(ctx, new TypeLiteral(type));
+		setNodeValue(ctx, getNodeValue(ctx.type_literal()));
 	}
 	
-	@Override
-	public void exitType_identifier_list(Type_identifier_listContext ctx) {
-		IdentifierList items = new IdentifierList();
-		ctx.type_identifier().forEach((i)->{
-			Identifier item = getNodeValue(i);
-			items.add(item);
-		});
-		setNodeValue(ctx, items);
-	}
 	
 	@Override
 	public void exitUUIDLiteral(UUIDLiteralContext ctx) {

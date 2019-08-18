@@ -101,7 +101,7 @@ public class MemberSelector extends SelectorExpression {
 			parent.toDialect(writer);
 			writer.append(')');
 		} else
-			parent.toDialect(writer);
+			parent.parentToDialect(writer);
 	}
 	
 	protected void parentToOMDialect(CodeWriter writer) {

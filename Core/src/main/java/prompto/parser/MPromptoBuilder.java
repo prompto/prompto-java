@@ -190,6 +190,7 @@ import prompto.literal.SetLiteral;
 import prompto.literal.TextLiteral;
 import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
+import prompto.literal.TypeLiteral;
 import prompto.literal.UuidLiteral;
 import prompto.literal.VersionLiteral;
 import prompto.param.CategoryParameter;
@@ -197,6 +198,7 @@ import prompto.param.CodeParameter;
 import prompto.param.ExtendedParameter;
 import prompto.param.IParameter;
 import prompto.param.UnresolvedParameter;
+import prompto.parser.MParser.Type_literalContext;
 
 import static prompto.parser.MParser.*;
 import prompto.python.Python2NativeCall;
@@ -3044,6 +3046,24 @@ public class MPromptoBuilder extends MParserBaseListener {
 		setNodeValue(ctx, new Identifier(ctx.getText()));
 	}
 	
+
+	@Override
+	public void exitType_identifier_list(Type_identifier_listContext ctx) {
+		IdentifierList items = new IdentifierList();
+		ctx.type_identifier().forEach((i)->{
+			Identifier item = getNodeValue(i);
+			items.add(item);
+		});
+		setNodeValue(ctx, items);
+	}
+	
+	
+	@Override
+	public void exitType_literal(Type_literalContext ctx) {
+		IType type = getNodeValue(ctx.typedef());
+		setNodeValue(ctx, new TypeLiteral(type));
+	}
+	
 	@Override
 	public void exitTyped_argument(Typed_argumentContext ctx) {
 		IType type = getNodeValue(ctx.typ);
@@ -3063,16 +3083,12 @@ public class MPromptoBuilder extends MParserBaseListener {
 		setNodeValue(ctx, name);
 	}
 	
-	@Override
-	public void exitType_identifier_list(Type_identifier_listContext ctx) {
-		IdentifierList items = new IdentifierList();
-		ctx.type_identifier().forEach((i)->{
-			Identifier item = getNodeValue(i);
-			items.add(item);
-		});
-		setNodeValue(ctx, items);
-	}
 	
+	@Override
+	public void exitTypeLiteral(TypeLiteralContext ctx) {
+		setNodeValue(ctx, getNodeValue(ctx.type_literal()));
+	}
+
 	
 	@Override
 	public void exitUUIDLiteral(UUIDLiteralContext ctx) {

@@ -11,6 +11,7 @@ import prompto.error.PromptoError;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
+import prompto.type.TypeType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 import prompto.value.TypeValue;
@@ -35,7 +36,7 @@ public class TypeExpression implements IExpression {
 	
 	@Override
 	public IType check(Context context) {
-		return type;
+		return new TypeType(type);
 	}
 	
 	@Override

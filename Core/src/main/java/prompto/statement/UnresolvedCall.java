@@ -153,24 +153,23 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 	protected void resolve(Context context) {
 		if(resolved==null) {
 			if(caller instanceof UnresolvedIdentifier)
-				resolved = resolveUnresolvedIdentifier(context);
+				resolved = resolveUnresolvedIdentifier(context, (UnresolvedIdentifier)caller);
 			else if(caller instanceof UnresolvedSelector)
-				resolved = resolveUnresolvedSelector(context);
+				resolved = resolveUnresolvedSelector(context, (UnresolvedSelector)caller);
 			else if(caller instanceof MemberSelector)
-				resolved = resolveMember(context);
+				resolved = resolveMemberSelector(context, (MemberSelector)caller);
 			if(resolved instanceof Section)
 				((Section)resolved).setFrom(this);
 		}
 	}
 	
-	private IExpression resolveUnresolvedSelector(Context context) {
-		UnresolvedSelector selector = (UnresolvedSelector)caller;
-		selector.resolveMethod(context, arguments);
-		return selector.getResolved();
+	private IExpression resolveUnresolvedSelector(Context context, UnresolvedSelector caller) {
+		caller.resolveMethod(context, arguments);
+		return caller.getResolved();
 	}
 
-	private IExpression resolveUnresolvedIdentifier(Context context) {
-		Identifier id = ((UnresolvedIdentifier)caller).getId();
+	private IExpression resolveUnresolvedIdentifier(Context context, UnresolvedIdentifier caller) {
+		Identifier id = caller.getId();
 		IExpression call = null;
 		IDeclaration decl = null;
 		// if this happens in the context of a member method, then we need to check for category members first
@@ -213,9 +212,9 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 			return null;
 	}
 
-	private IExpression resolveMember(Context context) {
-		IExpression parent = ((MemberSelector)caller).getParent();
-		Identifier id = ((MemberSelector)caller).getId();
+	private IExpression resolveMemberSelector(Context context, MemberSelector caller) {
+		IExpression parent = caller.getParent();
+		Identifier id = caller.getId();
 		return new MethodCall(new MethodSelector(parent, id), arguments);
 	}
 	

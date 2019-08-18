@@ -22,6 +22,9 @@ public interface IExpression {
 	IType check(Context context);
 	IValue interpret(Context context) throws PromptoError;
 	void toDialect(CodeWriter writer);
+	default void parentToDialect(CodeWriter writer) {
+		toDialect(writer);
+	}
 
 	default ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		throw new UnsupportedOperationException("compile " + this.getClass().getName());
@@ -52,7 +55,6 @@ public interface IExpression {
 	default void transpileFound(Transpiler transpiler, Dialect dialect) {
 		throw new UnsupportedOperationException("transpileFound " + this.getClass().getName());
 	}
-	
 	
 	
 }

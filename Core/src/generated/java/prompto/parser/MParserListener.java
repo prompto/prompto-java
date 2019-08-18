@@ -1672,6 +1672,16 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitDedent(MParser.DedentContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MParser#type_literal}.
+	 * @param ctx the parse tree
+	 */
+	void enterType_literal(MParser.Type_literalContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MParser#type_literal}.
+	 * @param ctx the parse tree
+	 */
+	void exitType_literal(MParser.Type_literalContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MParser#null_literal}.
 	 * @param ctx the parse tree
 	 */

@@ -61,7 +61,7 @@ public class EnumeratedCategoryType extends CategoryType {
 		if(name.toString().equals("symbolOf"))
 			return new HashSet<>(Collections.singletonList(SYMBOL_OF_METHOD));
 		else
-			return super.getStaticMemberMethods(context, name);
+			return Collections.emptySet();
 	}
 
 	static IParameter NAME_ARGUMENT = new CategoryParameter(TextType.instance(), new Identifier("name"));

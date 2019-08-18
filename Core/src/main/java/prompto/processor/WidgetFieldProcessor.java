@@ -1,14 +1,15 @@
 package prompto.processor;
 
 import prompto.declaration.CategoryDeclaration;
-import prompto.expression.TypeExpression;
 import prompto.grammar.Annotation;
 import prompto.grammar.Identifier;
 import prompto.literal.TextLiteral;
+import prompto.literal.TypeLiteral;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
 import prompto.type.IType;
 import prompto.error.InternalError;
+import prompto.expression.TypeExpression;
 
 public class WidgetFieldProcessor extends AnnotationProcessor {
 
@@ -25,7 +26,7 @@ public class WidgetFieldProcessor extends AnnotationProcessor {
 		Object fieldType = annotation.getArgument("type");
 		if (!(fieldName instanceof TextLiteral))
 			context.getProblemListener().reportIllegalAnnotation("WidgetField requires a Text value for argument 'name'",  annotation);
-		else if (!(fieldType instanceof TypeExpression))
+		if (!(fieldType instanceof TypeLiteral || fieldType instanceof TypeExpression))
 			context.getProblemListener().reportIllegalAnnotation("WidgetField requires a Type value for argument 'type'",  annotation);
 	
 		else {
@@ -34,7 +35,7 @@ public class WidgetFieldProcessor extends AnnotationProcessor {
 				throw new InternalError("Expected an instance context. Please report this bug.");
 			else {
 				String name = ((TextLiteral)fieldName).toString();
-				IType type = ((TypeExpression)fieldType).getType();
+				IType type = fieldType instanceof TypeLiteral ? ((TypeLiteral)fieldType).getType() : ((TypeExpression)fieldType).getType();
 				((InstanceContext)context).registerWidgetField(new Identifier(name.substring(1, name.length() -1)), type);
 			}
 		}

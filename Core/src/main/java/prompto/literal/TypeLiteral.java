@@ -10,6 +10,8 @@ import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.expression.TypeExpression;
 import prompto.intrinsic.PromptoType;
+import prompto.parser.Dialect;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
@@ -18,12 +20,16 @@ import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 import prompto.value.TypeValue;
 
-public class TypeLiteral implements IExpression {
+public class TypeLiteral extends Section implements IExpression {
 
 	IType type;
 	
 	public TypeLiteral(IType type) {
 		this.type = type;
+	}
+	
+	public IType getType() {
+		return type;
 	}
 	
 	@Override
@@ -52,6 +58,13 @@ public class TypeLiteral implements IExpression {
 
 	@Override
 	public void toDialect(CodeWriter writer) {
+		if(writer.getDialect()==Dialect.E)
+			writer.append("type: ");
+		type.toDialect(writer);
+	}
+	
+	@Override
+	public void parentToDialect(CodeWriter writer) {
 		type.toDialect(writer);
 	}
 	
