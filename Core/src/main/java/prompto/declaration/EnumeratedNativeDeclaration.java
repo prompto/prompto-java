@@ -284,6 +284,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 	@Override
 	public void declare(Transpiler transpiler) {
 		transpiler.require("List");
+		transpiler.declare(this);
 	}
 	
 	@Override

@@ -477,7 +477,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 
 	private void transpileBuiltin(Transpiler transpiler, BuiltInMethodDeclaration declaration) {
 	    IExpression parent = this.selector.resolveParent(transpiler.getContext());
-	    parent.transpile(transpiler);
+	    parent.transpileParent(transpiler);
 	    transpiler.append(".");
 	    declaration.transpileCall(transpiler, this.arguments);
 	}

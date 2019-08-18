@@ -2507,25 +2507,25 @@ public interface OParserListener extends ParseTreeListener {
 	void exitArgument_list(OParser.Argument_listContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code CodeArgument}
-	 * labeled alternative in {@link OParser#parameter}.
+	 * labeled alternative in {@link OParser#argument}.
 	 * @param ctx the parse tree
 	 */
 	void enterCodeArgument(OParser.CodeArgumentContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code CodeArgument}
-	 * labeled alternative in {@link OParser#parameter}.
+	 * labeled alternative in {@link OParser#argument}.
 	 * @param ctx the parse tree
 	 */
 	void exitCodeArgument(OParser.CodeArgumentContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code OperatorArgument}
-	 * labeled alternative in {@link OParser#parameter}.
+	 * labeled alternative in {@link OParser#argument}.
 	 * @param ctx the parse tree
 	 */
 	void enterOperatorArgument(OParser.OperatorArgumentContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code OperatorArgument}
-	 * labeled alternative in {@link OParser#parameter}.
+	 * labeled alternative in {@link OParser#argument}.
 	 * @param ctx the parse tree
 	 */
 	void exitOperatorArgument(OParser.OperatorArgumentContext ctx);
@@ -3119,6 +3119,18 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitUUIDLiteral(OParser.UUIDLiteralContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code TypeLiteral}
+	 * labeled alternative in {@link OParser#atomic_literal}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypeLiteral(OParser.TypeLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code TypeLiteral}
+	 * labeled alternative in {@link OParser#atomic_literal}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypeLiteral(OParser.TypeLiteralContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code NullLiteral}
 	 * labeled alternative in {@link OParser#atomic_literal}.

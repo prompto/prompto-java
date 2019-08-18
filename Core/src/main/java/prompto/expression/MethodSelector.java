@@ -34,6 +34,7 @@ import prompto.declaration.BuiltInMethodDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.EnumeratedCategoryDeclaration;
+import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.NativeMethodDeclaration;
 import prompto.declaration.SingletonCategoryDeclaration;
@@ -51,7 +52,6 @@ import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.runtime.Variable;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
-import prompto.type.EnumeratedCategoryType;
 import prompto.type.EnumeratedNativeType;
 import prompto.type.IType;
 import prompto.type.NativeType;
@@ -385,7 +385,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			return compileExactStaticMember(context, method, flags, parent, declaration, assignments);
 		else {
 			// push instance if any
-			ResultInfo info = parent.compile(context.getCallingContext(), method, flags); 
+			ResultInfo info = parent.compileParent(context.getCallingContext(), method, flags); 
 			ClassConstant c = new ClassConstant(info.getType());
 			if(declaration instanceof BuiltInMethodDeclaration) {
 				BuiltInMethodDeclaration builtin = (BuiltInMethodDeclaration)declaration;
@@ -451,11 +451,16 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			throw new NullReferenceError();
 		if(value instanceof TypeValue) {
 			IType type = ((TypeValue)value).getValue();
-			if(type instanceof CategoryType && !(type instanceof EnumeratedCategoryType)) {
-				value = context.loadSingleton(context, (CategoryType)type);
+			if(type instanceof CategoryType) {
+				IDeclaration decl = ((CategoryType)type).getDeclaration(context);
+				if(decl instanceof SingletonCategoryDeclaration) {
+					value = context.loadSingleton((CategoryType)type);
+				}
 			}
 		}
-		if(value instanceof IInstance) {
+		if(value instanceof TypeValue) {
+			return context.newChildContext(); 
+		} else if(value instanceof IInstance) {
 			context = context.newInstanceContext((IInstance)value, false);
 			return context.newChildContext();
 		} else {

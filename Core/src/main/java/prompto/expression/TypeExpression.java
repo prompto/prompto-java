@@ -1,13 +1,16 @@
 package prompto.expression;
 
+import prompto.compiler.ClassConstant;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.compiler.PromptoType;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StringConstant;
+import prompto.declaration.IDeclaration;
+import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.error.PromptoError;
-import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
@@ -45,17 +48,20 @@ public class TypeExpression implements IExpression {
 
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		StringConstant s = new StringConstant(type.getJavaType(context).getTypeName());
-		method.addInstruction(Opcode.LDC_W, s);
-		MethodConstant m = new MethodConstant(Class.class, "forName", String.class, Class.class);
-		method.addInstruction(Opcode.INVOKESTATIC, m);
+		ClassConstant c = new ClassConstant(new PromptoType(type.getJavaType(context).getTypeName()));
+		method.addInstruction(Opcode.LDC, c);
 		return new ResultInfo(Class.class);
 	}
 	
-	public IValue getMember(Context context, Identifier name) throws PromptoError {
-		return type.getMemberValue(context, name);
+	@Override
+	public ResultInfo compileParent(Context context, MethodInfo method, Flags flags) {
+		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, type.getTypeNameId());
+		if(decl instanceof SingletonCategoryDeclaration)
+			return compile(context, method, flags);
+		else
+			return IExpression.super.compileParent(context, method, flags);
 	}
-
+	
 	public IType getType() {
 		return type;
 	}

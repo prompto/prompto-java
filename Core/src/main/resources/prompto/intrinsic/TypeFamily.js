@@ -7,7 +7,7 @@ TypeFamily.prototype.toTranspiled = function() {
     return "new TypeFamily('" + this.name + "')";
 };
 
-// non storable
+// storable
 TypeFamily.BOOLEAN = new TypeFamily("BOOLEAN");
 TypeFamily.CHARACTER = new TypeFamily("CHARACTER");
 TypeFamily.INTEGER = new TypeFamily("INTEGER");

@@ -1,12 +1,8 @@
 package prompto.expression;
 
 import prompto.compiler.Flags;
-import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodInfo;
-import prompto.declaration.CategoryDeclaration;
-import prompto.declaration.EnumeratedCategoryDeclaration;
-import prompto.declaration.EnumeratedNativeDeclaration;
-import prompto.declaration.IDeclaration;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
@@ -19,9 +15,7 @@ import prompto.statement.MethodCall;
 import prompto.transpiler.Transpiler;
 import prompto.type.AnyType;
 import prompto.type.CategoryType;
-import prompto.type.EnumeratedCategoryType;
 import prompto.type.IType;
-import prompto.type.NativeType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
@@ -110,7 +104,7 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 		IExpression resolved = resolveSymbol(context);
 		if(resolved!=null)
 			return resolved;
-		resolved = resolveTypeOrConstructor(context, forMember);
+		resolved = resolveConstructor(context, forMember);
 		if(resolved!=null)
 			return resolved;
 		resolved = resolveMethodCall(context, updateSelectorParent);
@@ -120,13 +114,11 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 		return resolved;
 	}
 
-	private IExpression resolveTypeOrConstructor(Context context, boolean forMember) {
-		if(!Character.isUpperCase(id.toString().charAt(0)))
-			return null;
-		if(forMember)
-			return resolveType(context);
-		else
+	private IExpression resolveConstructor(Context context, boolean forMember) {
+		if(Character.isUpperCase(id.toString().charAt(0)))
 			return resolveConstructor(context);
+		else
+			return null;
 	}
 
 	private IExpression resolveInstance(Context context) {
@@ -163,21 +155,6 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 			// ignore resolution errors
 			return null;
 		}
-	}
-
-	private IExpression resolveType(Context context) {
-		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, id);
-		if(decl instanceof EnumeratedCategoryDeclaration)
-			return new TypeExpression(new EnumeratedCategoryType(id));
-		else if(decl instanceof CategoryDeclaration)
-			return new TypeExpression(new CategoryType(id));
-		else if(decl instanceof EnumeratedNativeDeclaration)
-			return new TypeExpression(decl.getType(context));
-		else for(IType type : NativeType.getAll()) {
-			if(id.equals(type.getTypeNameId()))
-				return new TypeExpression(type);
-		}
-		return null;
 	}
 
 	private IExpression resolveSymbol(Context context) {

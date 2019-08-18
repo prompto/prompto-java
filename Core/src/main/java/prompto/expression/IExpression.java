@@ -26,11 +26,22 @@ public interface IExpression {
 	default ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		throw new UnsupportedOperationException("compile " + this.getClass().getName());
 	}
+	
+	default ResultInfo compileParent(Context context, MethodInfo method, Flags flags) {
+		return compile(context, method, flags);
+	}
+	
 	default void declare(Transpiler transpiler) {
 		throw new UnsupportedOperationException("declare " + this.getClass().getName());
 	}
+	default void declareParent(Transpiler transpiler) {
+		declare(transpiler);
+	}
 	default boolean transpile(Transpiler transpiler) {
 		throw new UnsupportedOperationException("transpile " + this.getClass().getName());
+	}
+	default boolean transpileParent(Transpiler transpiler) {
+		return transpile(transpiler);
 	}
 	default void declareQuery(Transpiler transpiler) {
 		throw new UnsupportedOperationException("declareQuery " + this.getClass().getName());
@@ -41,5 +52,7 @@ public interface IExpression {
 	default void transpileFound(Transpiler transpiler, Dialect dialect) {
 		throw new UnsupportedOperationException("transpileFound " + this.getClass().getName());
 	}
+	
+	
 	
 }

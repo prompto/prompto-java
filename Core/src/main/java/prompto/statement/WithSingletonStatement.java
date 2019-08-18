@@ -41,7 +41,7 @@ public class WithSingletonStatement extends BaseStatement {
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		ConcreteInstance instance = context.loadSingleton(context, type);
+		ConcreteInstance instance = context.loadSingleton(type);
 		synchronized(instance) {
 			Context instanceContext = context.newInstanceContext(instance, true);
 			Context childContext = instanceContext.newChildContext();

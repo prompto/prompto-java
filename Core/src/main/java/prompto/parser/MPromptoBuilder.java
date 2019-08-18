@@ -621,7 +621,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitBooleanLiteral(BooleanLiteralContext ctx) {
-		setNodeValue(ctx, new BooleanLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new BooleanLiteral(ctx.getText()));
 	}
 
 	@Override
@@ -707,7 +707,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitCharacterLiteral(CharacterLiteralContext ctx) {
-		setNodeValue(ctx, new CharacterLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new CharacterLiteral(ctx.getText()));
 	}
 	
 	@Override
@@ -1044,12 +1044,12 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitDateLiteral(DateLiteralContext ctx) {
-		setNodeValue(ctx, new DateLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new DateLiteral(ctx.getText()));
 	}
 	
 	@Override
 	public void exitDateTimeLiteral(DateTimeLiteralContext ctx) {
-		setNodeValue(ctx, new DateTimeLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new DateTimeLiteral(ctx.getText()));
 	}
 	
 	@Override
@@ -1064,7 +1064,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitDecimalLiteral(DecimalLiteralContext ctx) {
-		setNodeValue(ctx, new DecimalLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new DecimalLiteral(ctx.getText()));
 	}
 	
 	@Override
@@ -1395,7 +1395,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitHexadecimalLiteral(HexadecimalLiteralContext ctx) {
-		setNodeValue(ctx, new HexaLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new HexaLiteral(ctx.getText()));
 	}
 	
 	
@@ -1452,7 +1452,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitIntegerLiteral(IntegerLiteralContext ctx) {
-		setNodeValue(ctx, new IntegerLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new IntegerLiteral(ctx.getText()));
 	}
 	
 	@Override
@@ -2511,7 +2511,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitPeriodLiteral(PeriodLiteralContext ctx) {
-		setNodeValue(ctx, new PeriodLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new PeriodLiteral(ctx.getText()));
 	}
 	
 	@Override
@@ -2991,7 +2991,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitTextLiteral(TextLiteralContext ctx) {
-		setNodeValue(ctx, new TextLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new TextLiteral(ctx.getText()));
 	}
 	
 	@Override
@@ -3006,7 +3006,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitTimeLiteral(TimeLiteralContext ctx) {
-		setNodeValue(ctx, new TimeLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new TimeLiteral(ctx.getText()));
 	}
 	
 	@Override
@@ -3076,7 +3076,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitUUIDLiteral(UUIDLiteralContext ctx) {
-		setNodeValue(ctx, new UuidLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new UuidLiteral(ctx.getText()));
 	}
 	
 	
@@ -3119,7 +3119,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitVersionLiteral(VersionLiteralContext ctx) {
-		setNodeValue(ctx, new VersionLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new VersionLiteral(ctx.getText()));
 	}
 	
 	

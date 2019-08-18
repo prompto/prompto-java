@@ -31,6 +31,11 @@ public class SymbolExpression implements IExpression {
 	}
 	
 	@Override
+	public String toString() {
+		return id.toString();
+	}
+	
+	@Override
 	public void toDialect(CodeWriter writer) {
 		writer.append(id);
 	}

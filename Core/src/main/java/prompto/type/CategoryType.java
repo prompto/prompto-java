@@ -67,6 +67,7 @@ import prompto.utils.CodeWriter;
 import prompto.utils.Logger;
 import prompto.utils.ObjectUtils;
 import prompto.utils.TypeUtils;
+import prompto.value.ConcreteInstance;
 import prompto.value.IInstance;
 import prompto.value.IValue;
 import prompto.value.NullValue;
@@ -244,41 +245,82 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-    public IType checkMember(Context context, Identifier name) {
-        IDeclaration dd = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
-        if (dd == null)
+    public IType checkMember(Context context, Identifier id) {
+        IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
+        if (decl == null)
             throw new SyntaxError("Unknown type:" + typeNameId);
-        if(dd instanceof EnumeratedNativeDeclaration)
-        	return dd.getType(context).checkMember(context, name);
-        else if(dd instanceof CategoryDeclaration) {
-        	CategoryDeclaration cd = (CategoryDeclaration)dd;
-        	if(cd.isStorable() && IStore.dbIdName.equals(name.toString()))
-        		return AnyType.instance();
-        	else if (cd.hasAttribute(context, name)) {
-	            AttributeDeclaration ad = context.getRegisteredDeclaration(AttributeDeclaration.class, name);
-	            if (ad != null)
-	            	return ad.getType(context);
-	            else
-	                throw new SyntaxError("Missing atttribute:" + name);
-	        } else if(cd.hasMethod(context, name)) {
-	        	IMethodDeclaration method = cd.getMemberMethods(context, name).getFirst();
-	        	return new MethodType(method);
-	        } else if("text".equals(name.toString()))
-	        	return TextType.instance();
-	        else
-	            throw new SyntaxError("No attribute:" + name + " in category:" + typeNameId);
-        } else
+        else if(decl instanceof EnumeratedNativeDeclaration) // for .value member
+        	return decl.getType(context).checkMember(context, id);
+        else if(decl instanceof CategoryDeclaration)
+        	return checkMember(context, (CategoryDeclaration)decl, id);
+        else
             throw new SyntaxError("Not a category:" + typeNameId);
-        	
     }
+	
+	private IType checkMember(Context context, CategoryDeclaration decl, Identifier id) {
+       	if(decl.isStorable() && IStore.dbIdName.equals(id.toString()))
+    		return AnyType.instance();
+    	else if (decl.hasAttribute(context, id)) {
+            AttributeDeclaration ad = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
+            if (ad != null)
+            	return ad.getType(context);
+            else
+                throw new SyntaxError("Missing atttribute:" + id);
+        } else if(decl.hasMethod(context, id)) {
+        	IMethodDeclaration method = decl.getMemberMethods(context, id).getFirst();
+        	return new MethodType(method);
+        } else if("text".equals(id.toString()))
+        	return TextType.instance();
+        else
+            throw new SyntaxError("No attribute:" + id + " in category:" + typeNameId);
+	}
+
+	@Override
+	public IType checkStaticMember(Context context, Identifier id) {
+       IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
+       if(decl==null) {
+    	   context.getProblemListener().reportUnknownIdentifier(typeNameId.toString(), this);
+    	   return null;
+       } else if(decl instanceof IEnumeratedDeclaration) {
+    	   return decl.getType(context).checkStaticMember(context, id);
+       } else if(decl instanceof SingletonCategoryDeclaration) {
+    	   return checkMember(context, (SingletonCategoryDeclaration)decl, id);
+       } else {
+       	   context.getProblemListener().reportUnknownAttribute(id.toString(), this);
+    	   return null;
+       }
+ 	}
+
     
+	@Override
+	public Set<IMethodDeclaration> getStaticMemberMethods(Context context, Identifier id) throws PromptoError {
+		IDeclaration decl = getDeclaration(context);
+		if(decl instanceof IEnumeratedDeclaration)
+			return decl.getType(context).getStaticMemberMethods(context, id);
+		else if(decl instanceof SingletonCategoryDeclaration)
+			return decl.getType(context).getMemberMethods(context, id);
+		else
+			return super.getStaticMemberMethods(context, id);
+	}
+	
+	@Override
+	public IValue getStaticMemberValue(Context context, Identifier id) throws PromptoError {
+		IDeclaration decl = getDeclaration(context);
+		if(decl instanceof IEnumeratedDeclaration)
+			return decl.getType(context).getStaticMemberValue(context, id);
+		else if(decl instanceof SingletonCategoryDeclaration) {
+			ConcreteInstance singleton = context.loadSingleton(this);
+			return singleton.getMember(context, id, false);
+		} else
+			return super.getStaticMemberValue(context, id);
+	}
 	
 	@Override
 	public Set<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError {
-		IDeclaration cd = getDeclaration(context);
-		if(!(cd instanceof ConcreteCategoryDeclaration))
+		IDeclaration decl = getDeclaration(context);
+		if(!(decl instanceof ConcreteCategoryDeclaration))
 			throw new SyntaxError("Unknown category:" + this.getTypeName());
-		Collection<IMethodDeclaration> methods = ((ConcreteCategoryDeclaration)cd).getMemberMethods(context, name).values();
+		Collection<IMethodDeclaration> methods = ((ConcreteCategoryDeclaration)decl).getMemberMethods(context, name).values();
 		if(methods instanceof Set)
 			return (Set<IMethodDeclaration>)methods;
 		else
@@ -713,6 +755,19 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
+	public void declareStaticMember(Transpiler transpiler, String name) {
+		// TODO visit attributes
+	}
+	
+	
+	@Override
+	public void transpileStaticMember(Transpiler transpiler, String name) {
+		if(getDeclaration(transpiler.getContext()) instanceof SingletonCategoryDeclaration)
+			transpiler.append("instance.");
+		transpiler.append(name);
+	}
+	
+	@Override
 	public void transpileAssignMemberValue(Transpiler transpiler, String name, IExpression expression) {
 	    transpiler.append(".setMember('").append(name).append("', ");
 	    expression.transpile(transpiler);
@@ -1077,6 +1132,7 @@ public class CategoryType extends BaseType {
 			return call.compile(context, method, new Flags());
 		}
 	}
+
 
 
 }

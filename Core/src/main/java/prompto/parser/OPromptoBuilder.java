@@ -191,6 +191,7 @@ import prompto.literal.SetLiteral;
 import prompto.literal.TextLiteral;
 import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
+import prompto.literal.TypeLiteral;
 import prompto.literal.UuidLiteral;
 import prompto.literal.VersionLiteral;
 import prompto.param.CategoryParameter;
@@ -198,6 +199,7 @@ import prompto.param.CodeParameter;
 import prompto.param.ExtendedParameter;
 import prompto.param.IParameter;
 import prompto.param.UnresolvedParameter;
+import prompto.parser.OParser.TypeLiteralContext;
 
 import static prompto.parser.OParser.*;
 import prompto.python.Python2NativeCall;
@@ -602,7 +604,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitBooleanLiteral(BooleanLiteralContext ctx) {
-		setNodeValue(ctx, new BooleanLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new BooleanLiteral(ctx.getText()));
 	}
 	
 	@Override
@@ -691,7 +693,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 
 	@Override
 	public void exitCharacterLiteral(CharacterLiteralContext ctx) {
-		setNodeValue(ctx, new CharacterLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new CharacterLiteral(ctx.getText()));
 	}
 
 	@Override
@@ -1048,12 +1050,12 @@ public class OPromptoBuilder extends OParserBaseListener {
 
 	@Override
 	public void exitDateLiteral(DateLiteralContext ctx) {
-		setNodeValue(ctx, new DateLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new DateLiteral(ctx.getText()));
 	}
 	
 	@Override
 	public void exitDateTimeLiteral(DateTimeLiteralContext ctx) {
-		setNodeValue(ctx, new DateTimeLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new DateTimeLiteral(ctx.getText()));
 	}
 	
 	@Override
@@ -1068,7 +1070,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitDecimalLiteral(DecimalLiteralContext ctx) {
-		setNodeValue(ctx, new DecimalLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new DecimalLiteral(ctx.getText()));
 	}
 	
 	@Override
@@ -1404,7 +1406,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitHexadecimalLiteral(HexadecimalLiteralContext ctx) {
-		setNodeValue(ctx, new HexaLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new HexaLiteral(ctx.getText()));
 	}
 	
 	
@@ -1460,7 +1462,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitIntegerLiteral(IntegerLiteralContext ctx) {
-		setNodeValue(ctx, new IntegerLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new IntegerLiteral(ctx.getText()));
 	}
 	
 	@Override
@@ -2537,7 +2539,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitPeriodLiteral(PeriodLiteralContext ctx) {
-		setNodeValue(ctx, new PeriodLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new PeriodLiteral(ctx.getText()));
 	}
 	
 	@Override
@@ -3019,7 +3021,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 
 	@Override
 	public void exitTextLiteral(TextLiteralContext ctx) {
-		setNodeValue(ctx, new TextLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new TextLiteral(ctx.getText()));
 	}
 	
 	@Override
@@ -3034,7 +3036,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitTimeLiteral(TimeLiteralContext ctx) {
-		setNodeValue(ctx, new TimeLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new TimeLiteral(ctx.getText()));
 	}
 	
 	@Override
@@ -3093,6 +3095,12 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	
 	@Override
+	public void exitTypeLiteral(TypeLiteralContext ctx) {
+		IType type = getNodeValue(ctx.typedef());
+		setNodeValue(ctx, new TypeLiteral(type));
+	}
+	
+	@Override
 	public void exitType_identifier_list(Type_identifier_listContext ctx) {
 		IdentifierList items = new IdentifierList();
 		ctx.type_identifier().forEach((i)->{
@@ -3104,7 +3112,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitUUIDLiteral(UUIDLiteralContext ctx) {
-		setNodeValue(ctx, new UuidLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new UuidLiteral(ctx.getText()));
 	}
 	
 	
@@ -3147,7 +3155,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 
 	@Override
 	public void exitVersionLiteral(VersionLiteralContext ctx) {
-		setNodeValue(ctx, new VersionLiteral(ctx.t.getText()));
+		setNodeValue(ctx, new VersionLiteral(ctx.getText()));
 	}
 	
 	

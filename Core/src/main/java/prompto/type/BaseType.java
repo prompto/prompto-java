@@ -151,6 +151,12 @@ public abstract class BaseType extends Section implements IType {
 	}
 
 	@Override
+	public IType checkStaticMember(Context context, Identifier name) {
+		context.getProblemListener().reportIllegalMember(name.toString(), name);
+		return VoidType.instance();
+	}
+
+	@Override
 	public IType checkSlice(Context context) {
 		throw new SyntaxError("Cannot slice " + this.getTypeName());
 	}
@@ -209,12 +215,17 @@ public abstract class BaseType extends Section implements IType {
 	}
 	
 	@Override
-	public IValue getMemberValue(Context context, Identifier name) throws PromptoError {
+	public IValue getStaticMemberValue(Context context, Identifier name) throws PromptoError {
 		throw new SyntaxError("Cannot read member from " + this.getTypeName());
 	}
 	
 	@Override
 	public Set<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError {
+		return Collections.emptySet();
+	}
+
+	@Override
+	public Set<IMethodDeclaration> getStaticMemberMethods(Context context, Identifier name) throws PromptoError {
 		return Collections.emptySet();
 	}
 

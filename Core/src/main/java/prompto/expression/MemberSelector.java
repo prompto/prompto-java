@@ -34,11 +34,9 @@ import prompto.runtime.Context.InstanceContext;
 import prompto.statement.UnresolvedCall;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
-import prompto.type.EnumeratedCategoryType;
 import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
-import prompto.value.ConcreteInstance;
 import prompto.value.IValue;
 import prompto.value.NullValue;
 
@@ -134,70 +132,19 @@ public class MemberSelector extends SelectorExpression {
 	public IValue interpret(Context context) throws PromptoError {
         // resolve parent to keep clarity
 		IExpression parent = resolveParent(context);
-        // special case for singletons 
-		IValue value = interpretSingleton(context, parent);
-		if(value!=null)
-			return value;
-		// special case for 'static' type members (like Enum.symbols, Type.name etc...)
-		value = interpretTypeMember(context, parent);
-		if(value!=null)
-			return value;
-        // finally resolve instance member
-		return interpretInstanceMember(context, parent);
- 	}
-
-	private IValue interpretInstanceMember(Context context, IExpression parent) throws PromptoError {
-       IValue instance = parent.interpret(context);
+        IValue instance = parent.interpret(context);
         if (instance == null || instance == NullValue.instance())
             throw new NullReferenceError();
         else
         	return instance.getMember(context, id, true);
 	}
 
-	private IValue interpretTypeMember(Context context, IExpression parent) throws PromptoError {
-       if(parent instanceof TypeExpression)
-    	   return ((TypeExpression)parent).getMember(context, id);
-       else
-    	   return null;
-	}
-
-	private IValue interpretSingleton(Context context, IExpression parent) throws PromptoError {
-        if(parent instanceof TypeExpression) {
-        	IType type = ((TypeExpression)parent).getType();
-        	if(type instanceof CategoryType && !(type instanceof EnumeratedCategoryType)) {
-        		ConcreteInstance instance = context.loadSingleton(context,  (CategoryType)((TypeExpression)parent).getType());
-	        	if(instance!=null)
-	        		return instance.getMember(context, id, false); 
-        	}
-        }
-        return null;
-	}
-
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
         // resolve parent to keep clarity
 		IExpression parent = resolveParent(context);
-		// special case for 'static' type members (like Enum.symbols, Type.name etc...)
-		ResultInfo	result = compileTypeMember(context, method, flags, parent);
-		if(result!=null)
-			return result;
-		else
-			// finally resolve instance member
-			return compileInstanceMember(context, method, flags, parent);		
-	}
-
-	private ResultInfo compileTypeMember(Context context, MethodInfo method, Flags flags, IExpression parent) {
-	       if(parent instanceof TypeExpression) {
-	    	   IType type = ((TypeExpression)parent).getType();
-	    	   return type.compileGetMember(context, method, flags, parent, id);
-	       } else
-	    	   return null;
-	}
-
-
-	private ResultInfo compileInstanceMember(Context context, MethodInfo method, Flags flags, IExpression parent) {
 		Type resultType = check(context).getJavaType(context);
-		ResultInfo info = parent.compile(context, method, flags);
+		ResultInfo info = parent.compileParent(context, method, flags);
 		// special case for char.codePoint() to avoid wrapping char.class for just one member
 		if(Character.class==info.getType() && "codePoint".equals(getName()))
 			return compileCharacterCodePoint(method, flags);
@@ -345,54 +292,20 @@ public class MemberSelector extends SelectorExpression {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-	    this.declareParent(transpiler);
+	    IExpression parent = this.resolveParent(transpiler.getContext());
+	    parent.declareParent(transpiler);
 	    IType parentType = this.checkParent(transpiler.getContext());
 	    parentType.declareMember(transpiler, this.getName());
 	}
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    // resolve parent to keep clarity
 	    IExpression parent = this.resolveParent(transpiler.getContext());
-	    // special case for singletons
-	    if(this.transpileSingleton(transpiler, parent))
-	        return false;
-	    // special case for 'static' type members (like Enum.symbols, Type.name etc...)
-	    if(this.transpileTypeMember(transpiler, parent))
-	        return false;
-	    // finally resolve instance member
-	    this.transpileInstanceMember(transpiler, parent);
-	    return false;
-	}
-
-	private boolean transpileSingleton(Transpiler transpiler, IExpression parent) {
-	   if(parent instanceof TypeExpression) {
-		   IType type = ((TypeExpression)parent).getType();
-		   if(type instanceof CategoryType && !(type instanceof EnumeratedCategoryType)) {
-		 	   type.transpileInstance(transpiler);
-		        transpiler.append(".").append(this.getName());
-		        return true;
-		   }
-	    } 
-	   return false;
-	}
-
-	private boolean transpileTypeMember(Transpiler transpiler, IExpression parent) {
-		// TODO Auto-generated method stub
+	    parent.transpileParent(transpiler);
+	    transpiler.append(".");
+		IType parentType = this.checkParent(transpiler.getContext());
+		parentType.transpileMember(transpiler, this.getName());
 		return false;
-	}
-
-	private void transpileInstanceMember(Transpiler transpiler, IExpression parent) {
-		parent.transpile(transpiler);
-		transpiler.append(".");
-		IType type = parent.check(transpiler.getContext());
-		type.transpileMember(transpiler, this.getName());
-	}
-
-	private void declareParent(Transpiler transpiler) {
- 	   // resolve parent to keep clarity
-	    IExpression parent = this.resolveParent(transpiler.getContext());
-	    parent.declare(transpiler);
 	}
 
 }

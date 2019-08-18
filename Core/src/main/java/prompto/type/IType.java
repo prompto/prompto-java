@@ -69,6 +69,7 @@ public interface IType extends ISection {
 	IType checkIterator(Context context);
 	IType checkSlice(Context context);
 	IType checkMember(Context context, Identifier name);
+	IType checkStaticMember(Context context, Identifier name);
 	
 	void checkUnique(Context context);
 	void checkExists(Context context);
@@ -79,8 +80,9 @@ public interface IType extends ISection {
 	
 	RangeBase<?> newRange(Object first,Object last);
 	Comparator<? extends IValue> getComparator(Context context, IExpression key, boolean descending);
-	IValue getMemberValue(Context context, Identifier name) throws PromptoError;
-	Set<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError;
+	Set<IMethodDeclaration> getMemberMethods(Context context, Identifier id);
+	IValue getStaticMemberValue(Context context, Identifier id);
+	Set<IMethodDeclaration> getStaticMemberMethods(Context context, Identifier id);
 
 
 	String toString(Object value);
@@ -152,7 +154,15 @@ public interface IType extends ISection {
 	    else
 	        throw new UnsupportedOperationException("transpileMember " + name + " for " + this.getClass().getName());
 	}
+	
+	default void declareStaticMember(Transpiler transpiler, String name) {
+        throw new UnsupportedOperationException("declareStaticMember " + name + " for " + this.getClass().getName());
+	}
 
+	default void transpileStaticMember(Transpiler transpiler, String name) {
+	    throw new UnsupportedOperationException("transpileStaticMember " + name + " for " + this.getClass().getName());
+	}
+	
 	default void declareModulo(Transpiler transpiler, IType other, IExpression left, IExpression right)  { 
 		throw new UnsupportedOperationException("declareModulo " + this.getClass().getName());
 	}
@@ -296,6 +306,8 @@ public interface IType extends ISection {
 	default ResultInfo compileSorted(Context context, MethodInfo method, Flags flags, ResultInfo srcInfo, IExpression key, boolean descending) {
 		throw new UnsupportedOperationException("compileSorted " + this.getClass().getName());
 	}
+
+
 
 }
  

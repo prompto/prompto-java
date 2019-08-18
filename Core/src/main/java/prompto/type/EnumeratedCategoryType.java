@@ -27,18 +27,25 @@ public class EnumeratedCategoryType extends CategoryType {
 	}
 	
 	@Override
-	public IType checkMember(Context context, Identifier id) {
+	public IType checkStaticMember(Context context, Identifier id) {
 		String name = id.toString();
 		if ("symbols".equals(name))
 			return new ListType(this);
-		else if ("name".equals(name))
+		else
+			return super.checkStaticMember(context, id);
+	}
+
+	@Override
+	public IType checkMember(Context context, Identifier id) {
+		String name = id.toString();
+		if ("name".equals(name))
 			return TextType.instance();
 		else
 			return super.checkMember(context, id);
 	}
 
 	@Override
-	public IValue getMemberValue(Context context, Identifier id) {
+	public IValue getStaticMemberValue(Context context, Identifier id) {
 		String name = id.toString();
 		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
 		if(!(decl instanceof IEnumeratedDeclaration))
@@ -46,15 +53,15 @@ public class EnumeratedCategoryType extends CategoryType {
 		if ("symbols".equals(name))
 			return ((IEnumeratedDeclaration<?>)decl).getSymbolsList();
 		else
-			throw new SyntaxError("No such member:" + name);
+			return super.getStaticMemberValue(context, id);
 	}
 	
 	@Override
-	public Set<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError {
+	public Set<IMethodDeclaration> getStaticMemberMethods(Context context, Identifier name) throws PromptoError {
 		if(name.toString().equals("symbolOf"))
 			return new HashSet<>(Collections.singletonList(SYMBOL_OF_METHOD));
 		else
-			return super.getMemberMethods(context, name);
+			return super.getStaticMemberMethods(context, name);
 	}
 
 	static IParameter NAME_ARGUMENT = new CategoryParameter(TextType.instance(), new Identifier("name"));
