@@ -5,4 +5,4 @@ function Type(name) {
 
 Type.prototype.toString = function() {
 	return this.name;
-}
+};
