@@ -885,8 +885,13 @@ public class EPromptoBuilder extends EParserBaseListener {
 		IExpression copyFrom = getNodeValue(ctx.copyExp);
 		ArgumentList args = getNodeValue(ctx.args);
 		Argument arg = getNodeValue(ctx.arg);
-		if(arg!=null)
+		if(arg!=null) {
+			if(args==null) {
+				args = new ArgumentList();
+			}
 			args.add(arg);
+		} else if(args!=null)
+			args.checkLastAnd();
 		setNodeValue(ctx, new ConstructorExpression(type, copyFrom, args, true));
 	}
 
@@ -895,8 +900,12 @@ public class EPromptoBuilder extends EParserBaseListener {
 		CategoryType type = getNodeValue(ctx.typ);
 		ArgumentList args = getNodeValue(ctx.args);
 		Argument arg = getNodeValue(ctx.arg);
-		if(arg!=null)
+		if(arg!=null) {
+			if(args==null) {
+				args = new ArgumentList();
+			}
 			args.add(arg);
+		}
 		else if(args!=null)
 			args.checkLastAnd();
 		setNodeValue(ctx, new ConstructorExpression(type, null, args, true));
