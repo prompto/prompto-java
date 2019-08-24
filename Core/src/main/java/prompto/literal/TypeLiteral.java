@@ -59,7 +59,7 @@ public class TypeLiteral extends Section implements IExpression {
 	@Override
 	public void toDialect(CodeWriter writer) {
 		if(writer.getDialect()==Dialect.E)
-			writer.append("type: ");
+			writer.append("Type: ");
 		type.toDialect(writer);
 	}
 	
