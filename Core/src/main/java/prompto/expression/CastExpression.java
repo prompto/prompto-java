@@ -82,14 +82,14 @@ public class CastExpression implements IExpression {
 	private static IType getTargetAtomicType(Context context, IType type) {
 		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, type.getTypeNameId());
 		if(decl==null) {
-			context.getProblemListener().reportUnknownIdentifier(type.getTypeName(), type);
+			context.getProblemListener().reportUnknownIdentifier(type, type.getTypeName());
 			return null;
 		} else if(decl instanceof MethodDeclarationMap) {
 			MethodDeclarationMap map = (MethodDeclarationMap)decl;
 			if(map.size()==1)
 				return new MethodType(map.getFirst());
 			else {
-				context.getProblemListener().reportAmbiguousIdentifier(type.getTypeName(), type);
+				context.getProblemListener().reportAmbiguousIdentifier(type, type.getTypeName());
 				return null;
 			}
 		} else

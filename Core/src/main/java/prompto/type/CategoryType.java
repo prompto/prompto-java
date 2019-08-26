@@ -283,14 +283,14 @@ public class CategoryType extends BaseType {
 	public IType checkStaticMember(Context context, Identifier id) {
        IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
        if(decl==null) {
-    	   context.getProblemListener().reportUnknownIdentifier(typeNameId.toString(), this);
+    	   context.getProblemListener().reportUnknownIdentifier(this, typeNameId.toString());
     	   return null;
        } else if(decl instanceof IEnumeratedDeclaration) {
     	   return decl.getType(context).checkStaticMember(context, id);
        } else if(decl instanceof SingletonCategoryDeclaration) {
     	   return checkMember(context, (SingletonCategoryDeclaration)decl, id);
        } else {
-       	   context.getProblemListener().reportUnknownAttribute(id.toString(), this);
+       	   context.getProblemListener().reportUnknownAttribute(this, id.toString());
     	   return null;
        }
  	}

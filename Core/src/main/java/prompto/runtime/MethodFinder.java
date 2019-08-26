@@ -40,7 +40,7 @@ public class MethodFinder {
 	public Set<IMethodDeclaration> findCompatibleMethods(boolean checkInstance, boolean allowDerived, Predicate<Specificity> filter) {
 		Set<IMethodDeclaration> methods = findCandidateMethods(checkInstance);
 		if(methods.size()==0) {
-			context.getProblemListener().reportUnknownMethod(methodCall.toString(), methodCall.getSelector().getId());
+			context.getProblemListener().reportUnknownMethod(methodCall.getSelector().getId(), methodCall.toString());
 			return null;
 		}
 		return filterCompatible(methods, checkInstance, allowDerived, filter);
@@ -50,7 +50,7 @@ public class MethodFinder {
 		Collection<IMethodDeclaration> methods = findCompatibleMethods(checkInstance, false, spec -> spec!=Specificity.INCOMPATIBLE && spec!=Specificity.DERIVED);
 		switch(methods.size()) {
 		case 0:
-			context.getProblemListener().reportNoMatchingPrototype(methodCall.toString(), methodCall.getSelector().getId());
+			context.getProblemListener().reportNoMatchingPrototype(methodCall.getSelector().getId(), methodCall.toString());
 			return null;
 		case 1:
 			return methods.iterator().next();
@@ -68,7 +68,7 @@ public class MethodFinder {
 		MethodSelector selector = methodCall.getSelector();
 		Collection<IMethodDeclaration> candidates = selector.getCandidates(context, false);
 		if(candidates.size()==0)
-			context.getProblemListener().reportUnknownMethod(methodCall.toString(), methodCall.getSelector().getId());
+			context.getProblemListener().reportUnknownMethod(methodCall.getSelector().getId(), methodCall.toString());
 		return filterPotential(candidates);
 	}
 

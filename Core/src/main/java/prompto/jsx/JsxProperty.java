@@ -1,26 +1,38 @@
 package prompto.jsx;
 
 import prompto.grammar.Identifier;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
+import prompto.type.BooleanType;
+import prompto.type.IType;
 import prompto.utils.CodeWriter;
 
-public class JsxAttribute {
+public class JsxProperty extends Section {
 
 	Identifier id;
 	IJsxValue value;
 	String suite;
 	
-	public JsxAttribute(Identifier id, IJsxValue value, String suite) {
+	public JsxProperty(Identifier id, IJsxValue value, String suite) {
 		this.id = id;
 		this.value = value;
 		this.suite = (suite!=null && !suite.isEmpty()) ? suite : null;
 	}
+	
+	public Identifier getId() {
+		return id;
+	}
 
+	public String getName() {
+		return id.toString();
+	}
 
-	public void check(Context context) {
+	public IType check(Context context) {
 		if(value!=null)
-			value.check(context);
+			return value.check(context);
+		else
+			return BooleanType.instance(); // a value-less property is treated as a boolean flag
 	}
 
 

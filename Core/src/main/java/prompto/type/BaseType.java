@@ -119,7 +119,7 @@ public abstract class BaseType extends Section implements IType {
 		if(other instanceof EnumeratedNativeType)
 			return checkCompare(context, ((EnumeratedNativeType)other).getDerivedFrom(), section);
 		else 		
-			context.getProblemListener().reportIllegalComparison(this, other, section);
+			context.getProblemListener().reportIllegalComparison(section, this, other);
 		return BooleanType.instance();
 	}
 
@@ -146,13 +146,13 @@ public abstract class BaseType extends Section implements IType {
 
 	@Override
 	public IType checkMember(Context context, Identifier name) {
-		context.getProblemListener().reportIllegalMember(name.toString(), name);
+		context.getProblemListener().reportIllegalMember(name, name.toString());
 		return VoidType.instance();
 	}
 
 	@Override
 	public IType checkStaticMember(Context context, Identifier name) {
-		context.getProblemListener().reportIllegalMember(name.toString(), name);
+		context.getProblemListener().reportIllegalMember(name, name.toString());
 		return VoidType.instance();
 	}
 

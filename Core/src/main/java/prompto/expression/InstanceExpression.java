@@ -79,7 +79,7 @@ public class InstanceExpression extends Section implements IExpression {
 		if(named==null) 
 			named = context.getRegisteredDeclaration(IDeclaration.class, id, true);
 		if(named==null) {
-			context.getProblemListener().reportUnknownIdentifier(id.toString(), id);
+			context.getProblemListener().reportUnknownIdentifier(id, id.toString());
 			return null;
 		}
 		else if(named instanceof Variable // local variable

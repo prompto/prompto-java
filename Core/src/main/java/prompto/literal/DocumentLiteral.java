@@ -34,6 +34,10 @@ public class DocumentLiteral extends Literal<DocumentValue> {
 		super(()->entries.toString(), new DocumentValue());
 		this.entries = entries;
 	}
+	
+	public DocEntryList getEntries() {
+		return entries;
+	}
 
 	@Override
 	public void toDialect(CodeWriter writer) {

@@ -18,16 +18,16 @@ public class WidgetFieldProcessor extends AnnotationProcessor {
 		if(declaration.isAWidget(context))
 			doProcessCategory(annotation, context, declaration);
 		else
-			context.getProblemListener().reportIllegalAnnotation("WidgetField is only applicable to widgets", annotation);
+			context.getProblemListener().reportIllegalAnnotation(annotation, "WidgetField is only applicable to widgets");
 	}
 
 	private void doProcessCategory(Annotation annotation, Context context, CategoryDeclaration declaration) {
 		Object fieldName = annotation.getArgument("name");
 		Object fieldType = annotation.getArgument("type");
 		if (!(fieldName instanceof TextLiteral))
-			context.getProblemListener().reportIllegalAnnotation("WidgetField requires a Text value for argument 'name'",  annotation);
+			context.getProblemListener().reportIllegalAnnotation(annotation,  "WidgetField requires a Text value for argument 'name'");
 		if (!(fieldType instanceof TypeLiteral || fieldType instanceof TypeExpression))
-			context.getProblemListener().reportIllegalAnnotation("WidgetField requires a Type value for argument 'type'",  annotation);
+			context.getProblemListener().reportIllegalAnnotation(annotation,  "WidgetField requires a Type value for argument 'type'");
 	
 		else {
 			context = context.getClosestInstanceContext();

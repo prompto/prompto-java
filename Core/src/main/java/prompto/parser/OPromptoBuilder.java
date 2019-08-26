@@ -157,7 +157,7 @@ import prompto.javascript.JavaScriptTextLiteral;
 import prompto.javascript.JavaScriptThisExpression;
 import prompto.jsx.IJsxExpression;
 import prompto.jsx.IJsxValue;
-import prompto.jsx.JsxAttribute;
+import prompto.jsx.JsxProperty;
 import prompto.jsx.JsxClosing;
 import prompto.jsx.JsxCode;
 import prompto.jsx.JsxElement;
@@ -1918,7 +1918,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 		IJsxValue value = getNodeValue(ctx.value);
 		Token stop = value!=null ? ctx.value.getStop() : ctx.name.getStop();
 		String suite = value==null ? null : getHiddenTokensAfter(stop);
-		setNodeValue(ctx, new JsxAttribute(name, value, suite));
+		setNodeValue(ctx, new JsxProperty(name, value, suite));
 	}
 	
 	
@@ -1958,8 +1958,8 @@ public class OPromptoBuilder extends OParserBaseListener {
 	public void exitJsx_opening(Jsx_openingContext ctx) {
 		Identifier name = getNodeValue(ctx.name);
 		String nameSuite = getHiddenTokensAfter(ctx.name.getStop());
-		List<JsxAttribute> attributes = ctx.jsx_attribute().stream()
-				.map(cx->(JsxAttribute)getNodeValue(cx))
+		List<JsxProperty> attributes = ctx.jsx_attribute().stream()
+				.map(cx->(JsxProperty)getNodeValue(cx))
 				.collect(Collectors.toList());
 		String openingSuite = getHiddenTokensAfter(ctx.GT());
 		setNodeValue(ctx, new JsxElement(name, nameSuite, attributes, openingSuite));
@@ -1976,8 +1976,8 @@ public class OPromptoBuilder extends OParserBaseListener {
 	public void exitJsx_self_closing(Jsx_self_closingContext ctx) {
 		Identifier name = getNodeValue(ctx.name);
 		String nameSuite = getHiddenTokensAfter(ctx.name.getStop());
-		List<JsxAttribute> attributes = ctx.jsx_attribute().stream()
-				.map(cx->(JsxAttribute)getNodeValue(cx))
+		List<JsxProperty> attributes = ctx.jsx_attribute().stream()
+				.map(cx->(JsxProperty)getNodeValue(cx))
 				.collect(Collectors.toList());
 		String openingSuite = getHiddenTokensAfter(ctx.GT());
 		setNodeValue(ctx, new JsxSelfClosing(name, nameSuite, attributes, openingSuite));

@@ -31,6 +31,7 @@ public enum Family {
 	METHOD,
 	CURSOR,
 	ITERATOR,
+	STRUCTURE,
 	CLASS,
 	TYPE,
 	CODE,

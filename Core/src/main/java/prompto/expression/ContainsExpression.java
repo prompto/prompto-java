@@ -401,7 +401,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 		if(reverse) {
 			operator = operator.reverse();
 			if(operator==null)
-				context.getProblemListener().reportIllegalOperation("Cannot reverse " + this.operator, this);
+				context.getProblemListener().reportIllegalOperation(this, "Cannot reverse " + this.operator);
 			return getMatchOp(context, valueType, fieldType, operator, false);
 		}
 		if((fieldType==TextType.instance() || valueType==CharacterType.instance()) &&

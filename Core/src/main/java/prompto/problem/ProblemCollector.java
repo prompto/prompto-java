@@ -70,19 +70,19 @@ public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 	}
 	
 	@Override
-	public void reportDuplicate(String name, ISection section, ISection existing) {
+	public void reportDuplicate(ISection section, String name, ISection existing) {
 		synchronized(problems) {
 			problems.add(new DuplicateError(name, section, existing));
 		}
 	}
 	
 	@Override
-	public void reportIllegalNonBoolean(ISection section, IType type) {
+	public void reportIllegalAssignment(ISection section, IType expected, IType actual) {
 		synchronized(problems) {
-			problems.add(new IllegalNonBooleanError(section, type));
+			problems.add(new IllegalAssignmentError(section, expected, actual));
 		}
 	}
-	
+
 	@Override
 	public void reportIllegalReturn(ISection section) {
 		synchronized(problems) {
@@ -91,70 +91,84 @@ public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 	}
 	
 	@Override
-	public void reportUnknownIdentifier(String name, ISection section) {
+	public void reportUnknownIdentifier(ISection section, String name) {
 		synchronized(problems) {
 			problems.add(new UnknownIdentifierError(name, section));
 		}
 	}
 	
 	@Override
-	public void reportAmbiguousIdentifier(String name, ISection section) {
+	public void reportAmbiguousIdentifier(ISection section, String name) {
 		synchronized(problems) {
 			problems.add(new AmbiguousIdentifierError(name, section));
 		}
 	}
 	
 	@Override
-	public void reportUnknownAttribute(String name, ISection section) {
+	public void reportUnknownAttribute(ISection section, String name) {
 		synchronized(problems) {
 			problems.add(new UnknowAttributeError(name, section));
 		}
 	}
 	
 	@Override
-	public void reportUnknownMethod(String name, ISection section) {
+	public void reportUnknownProperty(ISection section, String name) {
+		synchronized(problems) {
+			problems.add(new UnknowPropertyError(name, section));
+		}
+	}
+	
+	@Override
+	public void reportUnknownAnnotation(ISection section, String name) {
+		synchronized(problems) {
+			problems.add(new UnknowAnnotationError(name, section));
+		}
+	}
+	
+	@Override
+	public void reportUnknownMethod(ISection section, String name) {
 		synchronized(problems) {
 			problems.add(new UnknownMethodError(name, section));
 		}
 	}
 	
 	@Override
-	public void reportNoMatchingPrototype(String proto, ISection section) {
+	public void reportNoMatchingPrototype(ISection section, String proto) {
 		synchronized(problems) {
 			problems.add(new NoMatchingPrototypeError(proto, section));
 		}
 	}
 	
 	@Override
-	public void reportIllegalComparison(IType type, IType other, ISection section) {
+	public void reportIllegalComparison(ISection section, IType type, IType other) {
 		synchronized(problems) {
 			problems.add(new IllegalComparisonError(type, other, section));
 		}
 	}
 	
 	@Override
-	public void reportIllegalMember(String name, ISection section) {
+	public void reportIllegalMember(ISection section, String name) {
 		synchronized(problems) {
 			problems.add(new IllegalMemberError(name, section));
 		}
 	}
 	
 	@Override
-	public void reportIllegalOperation(String message, ISection section) {
+	public void reportIllegalOperation(ISection section, String message) {
 		synchronized(problems) {
 			problems.add(new IllegalOperationError(message, section));
 		}
 	}
 	
 	@Override
-	public void reportIllegalRemoteCall(String message, ISection section) {
+	public void reportIllegalRemoteCall(ISection section, String message) {
 		synchronized(problems) {
 			problems.add(new IllegalRemoteCallError(message, section));
 		}
 	}
 	
 	@Override
-	public void reportIllegalAnnotation(String message, ISection section) {
+	public void reportIllegalAnnotation(ISection section, String message) {
 		synchronized(problems) {
 			problems.add(new IllegalAnnotationError(message, section));
 		}

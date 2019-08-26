@@ -472,7 +472,7 @@ public class Context implements IContext {
 	private boolean checkDuplicateDeclaration(IDeclaration declaration) {
 		IDeclaration current = getRegisteredDeclaration(IDeclaration.class, declaration.getId(), false);
 		if(current!=null && current!=declaration)
-			problemListener.reportDuplicate(declaration.getId().toString(), declaration, current.getId());
+			problemListener.reportDuplicate(declaration, declaration.getId().toString(), current.getId());
 		return current==null;
 	}
 
@@ -497,7 +497,7 @@ public class Context implements IContext {
 	private MethodDeclarationMap checkDuplicate(IMethodDeclaration declaration) {
 		INamed current = getRegistered(declaration.getId());
 		if(current!=null && !(current instanceof MethodDeclarationMap))
-			problemListener.reportDuplicate(declaration.getId().toString(), declaration, (ISection)current);
+			problemListener.reportDuplicate(declaration, declaration.getId().toString(), (ISection)current);
 		return (MethodDeclarationMap)current;
 	}
 
@@ -509,7 +509,7 @@ public class Context implements IContext {
 	private boolean checkDuplicate(TestMethodDeclaration declaration) {
 		TestMethodDeclaration current = tests.get(declaration.getId());
 		if(current!=null)
-			problemListener.reportDuplicate(declaration.getId().toString(), declaration, (ISection)current);
+			problemListener.reportDuplicate(declaration, declaration.getId().toString(), (ISection)current);
 		return current==null;
 	}
 	
@@ -602,7 +602,7 @@ public class Context implements IContext {
 		public void register(IMethodDeclaration declaration, Context context) {
 			String proto = declaration.getProto();
 			if(this.containsKey(proto))
-				context.getProblemListener().reportDuplicate(declaration.getId().toString(), declaration, this.get(proto));
+				context.getProblemListener().reportDuplicate(declaration, declaration.getId().toString(), this.get(proto));
 			else
 				this.put(proto, declaration);
 		}
@@ -1216,7 +1216,7 @@ public class Context implements IContext {
 				widgetFields = new HashMap<>();
 			else if(widgetFields.containsKey(identifier)) {
 				Identifier existing = widgetFields.keySet().stream().filter(id->id.equals(identifier)).findFirst().orElse(null);
-				getProblemListener().reportDuplicate(identifier.toString(), identifier, existing);
+				getProblemListener().reportDuplicate(identifier, identifier.toString(), existing);
 			}
 			widgetFields.put(identifier, new WidgetField(identifier, type));
 		}

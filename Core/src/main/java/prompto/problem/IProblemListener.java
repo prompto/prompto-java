@@ -6,18 +6,20 @@ import prompto.type.IType;
 public interface IProblemListener {
 
 	default boolean isCheckNative() { return true; };
-	void reportDuplicate(String name, ISection section, ISection existing);
+	void reportDuplicate(ISection section, String name, ISection existing);
 	void reportIllegalReturn(ISection section);
-	void reportIllegalNonBoolean(ISection section, IType type);
-	void reportUnknownIdentifier(String name, ISection section);
-	void reportUnknownAttribute(String name, ISection section);
-	void reportUnknownMethod(String name, ISection section);
-	void reportNoMatchingPrototype(String proto, ISection section);
-	void reportIllegalComparison(IType type, IType other, ISection section);
-	void reportIllegalMember(String name, ISection section);
-	void reportIllegalOperation(String message, ISection section);
-	void reportIllegalRemoteCall(String message, ISection section);
-	void reportAmbiguousIdentifier(String name, ISection section);
-	void reportIllegalAnnotation(String message, ISection section);
+	void reportUnknownIdentifier(ISection section, String name);
+	void reportUnknownProperty(ISection section, String name);
+	void reportUnknownAttribute(ISection section, String name);
+	void reportUnknownAnnotation(ISection section, String name);
+	void reportUnknownMethod(ISection section, String name);
+	void reportNoMatchingPrototype(ISection section, String proto);
+	void reportIllegalAssignment(ISection section, IType expected, IType actual);
+	void reportIllegalComparison(ISection section, IType type, IType other);
+	void reportIllegalMember(ISection section, String name);
+	void reportIllegalOperation(ISection section, String message);
+	void reportIllegalRemoteCall(ISection section, String message);
+	void reportAmbiguousIdentifier(ISection section, String name);
+	void reportIllegalAnnotation(ISection section, String message);
 
 }

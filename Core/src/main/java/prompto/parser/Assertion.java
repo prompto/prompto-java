@@ -29,7 +29,7 @@ public class Assertion extends Section {
 	public Context check(Context context) {
 		IType type = expression.check(context);
 		if(type!=BooleanType.instance())
-			context.getProblemListener().reportIllegalNonBoolean(this, type);
+			context.getProblemListener().reportIllegalAssignment(this, BooleanType.instance(), type);
 		// need to optionally auto-downcast
 		if(expression instanceof EqualsExpression) 
 			context = ((EqualsExpression)expression).downCastForCheck(context);

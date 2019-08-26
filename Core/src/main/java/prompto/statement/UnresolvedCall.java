@@ -98,7 +98,7 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 	public IValue interpret(Context context) throws PromptoError {
 		resolveAndCheck(context);
 		if(resolved==null) {
-			context.getProblemListener().reportUnknownMethod(caller.toString(), this);
+			context.getProblemListener().reportUnknownMethod(this, caller.toString());
 			return NullValue.instance();
 		} else
 			return resolved.interpret(context);
@@ -192,7 +192,7 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 		if(call==null) {
 			decl = context.getRegisteredDeclaration(IDeclaration.class, id);
 			if(decl==null) {
-				context.getProblemListener().reportUnknownMethod(id.toString(), id);
+				context.getProblemListener().reportUnknownMethod(id, id.toString());
 				return null;
 			} else if(decl instanceof CategoryDeclaration)
 				call = new ConstructorExpression(new CategoryType(id), null, arguments, false);

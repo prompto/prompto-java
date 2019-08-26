@@ -34,6 +34,7 @@ import prompto.value.IValue;
 
 public abstract class CategoryDeclaration extends BaseDeclaration {
 	
+	IWidgetDeclaration widget;
 	IdentifierList attributes;
 	boolean storable = false;
 	
@@ -53,6 +54,14 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	
 	public boolean isAWidget(Context context) {
 		return false;
+	}
+	
+	public IWidgetDeclaration asWidget() {
+		// cache it so it can be assigned widget specific data
+		if(widget==null) {
+			widget = new WrappingWidgetDeclaration(this);
+		}
+		return widget;
 	}
 
 	
@@ -98,7 +107,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 				continue; // problem already handled by parser
 			AttributeDeclaration ad = context.getRegisteredDeclaration(AttributeDeclaration.class, attribute);
 			if(ad==null)
-				context.getProblemListener().reportUnknownAttribute(attribute.toString(), attribute);
+				context.getProblemListener().reportUnknownAttribute(attribute, attribute.toString());
 		}
 		return new CategoryType(this.getId());
 	}

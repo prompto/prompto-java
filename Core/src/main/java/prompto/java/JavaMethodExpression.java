@@ -59,7 +59,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		try {
 			Method method = findMethod(context);
 			if(method==null) {
-				context.getProblemListener().reportUnknownMethod(name, this);
+				context.getProblemListener().reportUnknownMethod(this, name);
 				return VoidType.instance();
 			} else
 				return new JavaClassType(method.getGenericReturnType());
@@ -142,7 +142,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	public Method findMethod(Context context) throws ClassNotFoundException {
 		IType type = parent.check(context);
 		if(type==null) {
-			context.getProblemListener().reportUnknownIdentifier(parent.toString(), parent);
+			context.getProblemListener().reportUnknownIdentifier(parent, parent.toString());
 			return null;
 		} else {
 			Type klass = findClass(context, type);

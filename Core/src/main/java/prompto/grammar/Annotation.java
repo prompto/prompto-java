@@ -9,9 +9,12 @@ import prompto.parser.Section;
 import prompto.processor.AnnotationProcessor;
 import prompto.runtime.Context;
 import prompto.utils.CodeWriter;
+import prompto.utils.Logger;
 
 public class Annotation extends Section {
 
+	static Logger logger = new Logger();
+	
 	Identifier id;
 	DictEntryList arguments;
 	
@@ -39,6 +42,14 @@ public class Annotation extends Section {
 			return null;
 	}
 
+	public Object getDefaultArgument() {
+		if(arguments!=null && arguments.size()==1)
+			return arguments.get(0).getValue();
+		else
+			return null;		
+	}
+
+
 	public void toDialect(CodeWriter writer) {
 		writer.append(id.toString());
 		if(arguments!=null && !arguments.isEmpty()) {
@@ -61,6 +72,10 @@ public class Annotation extends Section {
 		AnnotationProcessor processor = AnnotationProcessor.forId(id);
 		if(processor!=null)
 			processor.processCategory(this, context, declaration);
+		else {
+			logger.warn(()->"No processor for annotation " + id.toString());
+			context.getProblemListener().reportUnknownAnnotation(this, id.toString());
+		}
 	}
 
 

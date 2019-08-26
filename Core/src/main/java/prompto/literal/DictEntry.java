@@ -24,7 +24,7 @@ public class DictEntry {
 
 	@Override
 	public String toString() {
-		return key.toString() + ':' + value.toString();
+		return String.valueOf(key) + ':' + value.toString();
 	}
 
 	public void toDialect(CodeWriter writer) {

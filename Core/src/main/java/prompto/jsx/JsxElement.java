@@ -13,7 +13,7 @@ public class JsxElement extends JsxElementBase {
 	List<IJsxExpression> children;
 	JsxClosing closing;
 	
-	public JsxElement(Identifier name, String nameSuite, List<JsxAttribute> attributes, String openingSuite) {
+	public JsxElement(Identifier name, String nameSuite, List<JsxProperty> attributes, String openingSuite) {
 		super(name, attributes);
 		this.nameSuite = nameSuite;
 		this.openingSuite = openingSuite;
@@ -32,9 +32,9 @@ public class JsxElement extends JsxElementBase {
 		writer.append("<").append(id);
 		if(nameSuite!=null)
 			writer.appendRaw(nameSuite);
-		else if(!attributes.isEmpty())
+		else if(!properties.isEmpty())
 			writer.append(" ");
-		attributes.forEach(attr->attr.toDialect(writer));
+		properties.forEach(attr->attr.toDialect(writer));
 		writer.append(">");
 		if(openingSuite!=null)
 			writer.appendRaw(openingSuite);

@@ -103,7 +103,7 @@ public class UnresolvedSelector extends SelectorExpression {
 				context.setProblemListener(saved);
 			}
 			if (resolved == null)
-				context.getProblemListener().reportUnknownIdentifier(id.toString(), this);
+				context.getProblemListener().reportUnknownIdentifier(this, id.toString());
 		}
 		return resolved;
 	}

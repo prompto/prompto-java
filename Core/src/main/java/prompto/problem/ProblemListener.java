@@ -33,13 +33,13 @@ public class ProblemListener implements ANTLRErrorListener, IProblemListener {
 	}
 	
 	@Override
-	public void reportDuplicate(String name, ISection section, ISection existing) {
+	public void reportDuplicate(ISection section, String name, ISection existing) {
 		throw new SyntaxError("Duplicate name: \"" + name + "\"");
 	}
 	
 	@Override
-	public void reportIllegalNonBoolean(ISection section, IType type) {
-		throw new SyntaxError("Illegal expression type, expected Boolean, got:" + type.getTypeName());
+	public void reportIllegalAssignment(ISection section, IType expected, IType actual) {
+		throw new SyntaxError("Illegal expression type, expected: " +  expected.getTypeName() + ", got:" + actual.getTypeName());
 	}
 	
 	@Override
@@ -48,52 +48,62 @@ public class ProblemListener implements ANTLRErrorListener, IProblemListener {
 	}
 	
 	@Override
-	public void reportUnknownIdentifier(String name, ISection section) {
+	public void reportUnknownIdentifier(ISection section, String name) {
 		throw new SyntaxError("Unknown identifier: \"" + name + "\"");
 	}
 	
 	@Override
-	public void reportAmbiguousIdentifier(String name, ISection section) {
+	public void reportAmbiguousIdentifier(ISection section, String name) {
 		throw new SyntaxError("Ambiguous identifier: \"" + name + "\"");
 	}
 	
 	@Override
-	public void reportUnknownAttribute(String name, ISection section) {
+	public void reportUnknownAttribute(ISection section, String name) {
 		throw new SyntaxError("Unknown attribute: \"" + name + "\"");
 	}
 	
 	@Override
-	public void reportUnknownMethod(String name, ISection section) {
+	public void reportUnknownProperty(ISection section, String name) {
+		throw new SyntaxError("Unknown property: \"" + name + "\"");
+	}
+	
+	@Override
+	public void reportUnknownAnnotation(ISection section, String name) {
+		throw new SyntaxError("Unknown annotation: \"" + name + "\"");
+	}
+	
+	@Override
+	public void reportUnknownMethod(ISection section, String name) {
 		throw new SyntaxError("Unknown method: \"" + name + "\"");
 	}
 	
 	@Override
-	public void reportNoMatchingPrototype(String proto, ISection section) {
+	public void reportNoMatchingPrototype(ISection section, String proto) {
 		throw new SyntaxError("No matching prototype: \"" + proto + "\"");
 	}
 	
 	@Override
-	public void reportIllegalComparison(IType type, IType other, ISection section) {
+	public void reportIllegalComparison(ISection section, IType type, IType other) {
 		throw new SyntaxError("Cannot compare " +type.getTypeName() + " to " + other.getTypeName());
 	}
 	
 	@Override
-	public void reportIllegalMember(String name, ISection section) {
+	public void reportIllegalMember(ISection section, String name) {
 		throw new SyntaxError("Cannot read member from " + name);
 	}
 	
 	@Override
-	public void reportIllegalOperation(String message, ISection section) {
+	public void reportIllegalOperation(ISection section, String message) {
 		throw new SyntaxError(message);
 	}
 	
 	@Override
-	public void reportIllegalRemoteCall(String message, ISection section) {
+	public void reportIllegalRemoteCall(ISection section, String message) {
 		throw new SyntaxError(message);
 	}
 	
 	@Override
-	public void reportIllegalAnnotation(String message, ISection section) {
+	public void reportIllegalAnnotation(ISection section, String message) {
 		throw new SyntaxError(message);
 	}
 }

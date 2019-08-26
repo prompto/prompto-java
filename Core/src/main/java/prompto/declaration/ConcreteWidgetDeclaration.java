@@ -2,6 +2,7 @@ package prompto.declaration;
 
 import prompto.grammar.Identifier;
 import prompto.grammar.MethodDeclarationList;
+import prompto.grammar.Structure;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
@@ -10,6 +11,8 @@ import prompto.utils.IdentifierList;
 
 public class ConcreteWidgetDeclaration extends ConcreteCategoryDeclaration implements IWidgetDeclaration {
 
+	Structure propertyTypes;
+	
 	public ConcreteWidgetDeclaration(Identifier name, Identifier derivedFrom, MethodDeclarationList methods) {
 		super(name, null, derivedFrom==null ? null: new IdentifierList(derivedFrom), methods);
 	}
@@ -19,7 +22,22 @@ public class ConcreteWidgetDeclaration extends ConcreteCategoryDeclaration imple
 	public boolean isAWidget(Context context) {
 		return true;
 	}
+
+	@Override
+	public IWidgetDeclaration asWidget() {
+		return this;
+	}
+
+	@Override
+	public void setPropertyTypes(Structure types) {
+		propertyTypes = types;
+	}
 	
+	@Override
+	public Structure getPropertyTypes() {
+		return propertyTypes;
+	}
+
 	@Override
 	protected void categoryTypeToEDialect(CodeWriter writer) {
 		if(derivedFrom==null)

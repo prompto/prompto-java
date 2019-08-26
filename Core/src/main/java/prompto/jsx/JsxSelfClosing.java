@@ -10,7 +10,7 @@ public class JsxSelfClosing extends JsxElementBase {
 	String nameSuite;
 	String openingSuite;
 	
-	public JsxSelfClosing(Identifier name, String nameSuite, List<JsxAttribute> attributes, String openingSuite) {
+	public JsxSelfClosing(Identifier name, String nameSuite, List<JsxProperty> attributes, String openingSuite) {
 		super(name, attributes);
 		this.nameSuite = nameSuite;
 		this.openingSuite = openingSuite;
@@ -21,9 +21,9 @@ public class JsxSelfClosing extends JsxElementBase {
 		writer.append("<").append(id);
 		if(nameSuite!=null)
 			writer.appendRaw(nameSuite);
-		else if(!attributes.isEmpty())
+		else if(!properties.isEmpty())
 			writer.append(" ");
-		attributes.forEach(attr->attr.toDialect(writer));
+		properties.forEach(attr->attr.toDialect(writer));
 		writer.append("/>");
 		if(openingSuite!=null)
 			writer.appendRaw(openingSuite);

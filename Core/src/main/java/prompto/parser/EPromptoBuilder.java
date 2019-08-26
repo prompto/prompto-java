@@ -159,7 +159,7 @@ import prompto.javascript.JavaScriptTextLiteral;
 import prompto.javascript.JavaScriptThisExpression;
 import prompto.jsx.IJsxExpression;
 import prompto.jsx.IJsxValue;
-import prompto.jsx.JsxAttribute;
+import prompto.jsx.JsxProperty;
 import prompto.jsx.JsxClosing;
 import prompto.jsx.JsxCode;
 import prompto.jsx.JsxElement;
@@ -1969,7 +1969,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 		Identifier name = getNodeValue(ctx.name);
 		IJsxValue value = getNodeValue(ctx.value);
 		String suite = getWhiteSpacePlus(ctx.ws_plus());
-		setNodeValue(ctx, new JsxAttribute(name, value, suite));
+		setNodeValue(ctx, new JsxProperty(name, value, suite));
 	}
 	
 	
@@ -2009,8 +2009,8 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitJsx_opening(Jsx_openingContext ctx) {
 		Identifier name = getNodeValue(ctx.name);
 		String nameSuite = getWhiteSpacePlus(ctx.ws_plus());
-		List<JsxAttribute> attributes = ctx.jsx_attribute().stream()
-				.map(cx->(JsxAttribute)getNodeValue(cx))
+		List<JsxProperty> attributes = ctx.jsx_attribute().stream()
+				.map(cx->(JsxProperty)getNodeValue(cx))
 				.collect(Collectors.toList());
 		setNodeValue(ctx, new JsxElement(name, nameSuite, attributes, null));
 	}
@@ -2026,8 +2026,8 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitJsx_self_closing(Jsx_self_closingContext ctx) {
 		Identifier name = getNodeValue(ctx.name);
 		String nameSuite = getWhiteSpacePlus(ctx.ws_plus());
-		List<JsxAttribute> attributes = ctx.jsx_attribute().stream()
-				.map(cx->(JsxAttribute)getNodeValue(cx))
+		List<JsxProperty> attributes = ctx.jsx_attribute().stream()
+				.map(cx->(JsxProperty)getNodeValue(cx))
 				.collect(Collectors.toList());
 		setNodeValue(ctx, new JsxSelfClosing(name, nameSuite, attributes, null));
 	}

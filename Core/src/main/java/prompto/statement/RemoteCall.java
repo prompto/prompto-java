@@ -63,7 +63,7 @@ public class RemoteCall extends UnresolvedCall {
 	public IType check(Context context) {
 		IType type = resolveAndCheck(context);
 		if(!(resolved instanceof MethodCall))
-			context.getProblemListener().reportIllegalRemoteCall(resolved.toString(), this);
+			context.getProblemListener().reportIllegalRemoteCall(this, resolved.toString());
 		context = context.newChildContext();
 		if(resultName!=null)
 			context.registerValue(new Variable(resultName, type));
@@ -118,7 +118,7 @@ public class RemoteCall extends UnresolvedCall {
 	public boolean transpile(Transpiler transpiler) {
 		resolveAndCheck(transpiler.getContext());
 		if(!(resolved instanceof MethodCall))
-			transpiler.getContext().getProblemListener().reportIllegalRemoteCall(resolved.toString(), this);
+			transpiler.getContext().getProblemListener().reportIllegalRemoteCall(this, resolved.toString());
 		else if(transpiler.getEngine().isTestEngine())
 			transpileTest(transpiler);
 		else
