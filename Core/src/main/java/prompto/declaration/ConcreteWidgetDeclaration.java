@@ -2,7 +2,7 @@ package prompto.declaration;
 
 import prompto.grammar.Identifier;
 import prompto.grammar.MethodDeclarationList;
-import prompto.grammar.Structure;
+import prompto.grammar.PropertyMap;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
@@ -11,7 +11,7 @@ import prompto.utils.IdentifierList;
 
 public class ConcreteWidgetDeclaration extends ConcreteCategoryDeclaration implements IWidgetDeclaration {
 
-	Structure propertyTypes;
+	PropertyMap properties;
 	
 	public ConcreteWidgetDeclaration(Identifier name, Identifier derivedFrom, MethodDeclarationList methods) {
 		super(name, null, derivedFrom==null ? null: new IdentifierList(derivedFrom), methods);
@@ -29,13 +29,13 @@ public class ConcreteWidgetDeclaration extends ConcreteCategoryDeclaration imple
 	}
 
 	@Override
-	public void setPropertyTypes(Structure types) {
-		propertyTypes = types;
+	public void setProperties(PropertyMap properties) {
+		this.properties = properties;
 	}
 	
 	@Override
-	public Structure getPropertyTypes() {
-		return propertyTypes;
+	public PropertyMap getProperties() {
+		return properties;
 	}
 
 	@Override

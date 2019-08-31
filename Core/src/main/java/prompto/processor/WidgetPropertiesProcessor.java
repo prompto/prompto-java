@@ -4,13 +4,15 @@ package prompto.processor;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.IWidgetDeclaration;
 import prompto.grammar.Annotation;
-import prompto.grammar.Structure;
+import prompto.grammar.Property;
+import prompto.grammar.PropertyMap;
 import prompto.literal.DictEntry;
 import prompto.literal.DocEntryList;
 import prompto.literal.DocumentLiteral;
+import prompto.literal.TextLiteral;
 import prompto.literal.TypeLiteral;
 import prompto.runtime.Context;
-import prompto.type.StructureType;
+import prompto.type.PropertiesType;
 
 public class WidgetPropertiesProcessor extends AnnotationProcessor {
 
@@ -24,38 +26,71 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 
 	private void doProcessCategory(Annotation annotation, Context context, CategoryDeclaration declaration) {
 		IWidgetDeclaration widget = declaration.asWidget();
-		Object types = annotation.getDefaultArgument();
-		Structure structure = checkStructure(annotation, context, types);
-		if(structure!=null)
-			widget.setPropertyTypes(structure);
+		Object value = annotation.getDefaultArgument();
+		PropertyMap properties = checkProperties(annotation, context, value);
+		if(properties!=null)
+			widget.setProperties(properties);
 	}
 
-	private Structure checkStructure(Annotation annotation, Context context, Object types) {
-		if(!(types instanceof DocumentLiteral)) {
+	private PropertyMap checkProperties(Annotation annotation, Context context, Object value) {
+		if(!(value instanceof DocumentLiteral)) {
 			context.getProblemListener().reportIllegalAnnotation(annotation, "WidgetProperties expects a Document of types as unique parameter");
 			return null;
 		}
-		return checkStructure(annotation, context, ((DocumentLiteral)types).getEntries());
+		return checkProperties(annotation, context, ((DocumentLiteral)value).getEntries());
 	}
 	
-	private Structure checkStructure(Annotation annotation, Context context, DocEntryList entries) {
-		Structure structure = new Structure();
+	private PropertyMap checkProperties(Annotation annotation, Context context, DocEntryList entries) {
+		PropertyMap props = new PropertyMap();
 		for(DictEntry entry : entries) {
-			if(entry.getValue() instanceof TypeLiteral)
-				structure.put(entry.getKey().toString(), ((TypeLiteral)entry.getValue()).getType());
-			else if(entry.getValue() instanceof DocumentLiteral) {
-				Structure embedded = checkStructure(annotation, context, ((DocumentLiteral)entry.getValue()).getEntries());
-				if(embedded==null)
-					return null;
-				else
-					structure.put(entry.getKey().toString(), new StructureType(embedded));
-			} else {
-				context.getProblemListener().reportIllegalAnnotation(annotation, "WidgetProperties expects a Document of types as unique parameter");
-				return null;
-			}
-			
+			Property prop = checkProperty(annotation, context, entry);
+			if(prop==null)
+				continue;
+			if(props.containsKey(prop.getName()))
+				context.getProblemListener().reportIllegalAnnotation(entry.getKey(), "Duplicate property: " + prop.getName());
+			else
+				props.put(prop.getName(), prop);
 		}
-		return structure;
+		return props;
+	}
+	
+	private Property checkProperty(Annotation annotation, Context context, DictEntry entry) {
+		Property prop = new Property();
+		prop.setName(entry.getKey().toString());
+		if(entry.getValue() instanceof TypeLiteral)
+			prop.setType(((TypeLiteral)entry.getValue()).getType());
+		else if(entry.getValue() instanceof DocumentLiteral) {
+			DocEntryList children = ((DocumentLiteral)entry.getValue()).getEntries();
+			for(DictEntry child : children) {
+				String name = child.getKey().toString();
+				Object value = child.getValue();
+				switch(name) {
+				case "help":
+					if(value instanceof TextLiteral)
+						prop.setHelp(((TextLiteral)value).getValue().getStorableData());
+					else
+						context.getProblemListener().reportIllegalAnnotation(child.getKey(), "Expected a Text value for 'help'.");
+					break;
+				case "type":
+					if(value instanceof TypeLiteral)
+						prop.setType(((TypeLiteral)value).getType());
+					else if(value instanceof DocumentLiteral) {
+						PropertyMap embedded = checkProperties(annotation, context, ((DocumentLiteral)value).getEntries());
+						prop.setType(new PropertiesType(embedded));
+					} else {
+						context.getProblemListener().reportIllegalAnnotation(child.getKey(), "Expected a Type value for 'type'.");
+						return null;
+					}
+					break;
+				default:
+					context.getProblemListener().reportIllegalAnnotation(child.getKey(), "Unknown property attribute: " + name);
+				}
+			}
+		} else {
+			context.getProblemListener().reportIllegalAnnotation(annotation, "WidgetProperties expects a Document of types as unique parameter");
+			return null;
+		}
+		return prop;
 	}
 
 

@@ -5,7 +5,8 @@ import java.util.List;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.grammar.Identifier;
-import prompto.grammar.Structure;
+import prompto.grammar.Property;
+import prompto.grammar.PropertyMap;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
@@ -24,35 +25,38 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 
 	@Override
 	public IType check(Context context) {
-		Structure propertyTypes = null;
+		PropertyMap propertyMap = null;
 		if(Character.isUpperCase(id.toString().charAt(0))) {
 			IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, id);
 			if(decl==null)
 				context.getProblemListener().reportUnknownIdentifier(id, id.toString());
 			else if(decl instanceof CategoryDeclaration && ((CategoryDeclaration)decl).isAWidget(context))
-				propertyTypes = ((CategoryDeclaration)decl).asWidget().getPropertyTypes();
+				propertyMap = ((CategoryDeclaration)decl).asWidget().getProperties();
 		} else
-			propertyTypes = getHtmlPropertyTypes(id.toString());
-		checkProperties(context, propertyTypes);
+			propertyMap = getHtmlPropertyTypes(id.toString());
+		checkProperties(context, propertyMap);
 		return JsxType.instance();
 	}
 	
-	private void checkProperties(Context context, Structure propertyTypes) {
+	private void checkProperties(Context context, PropertyMap propertyMap) {
 		if(properties==null)
 			return;
 		properties.forEach(prop->{
 			IType actual = prop.check(context);
-			if(propertyTypes!=null) {
-				IType expected = propertyTypes.get(prop.getName());
-				if(expected==null)
+			if(propertyMap!=null) {
+				Property declared = propertyMap.get(prop.getName());
+				if(declared==null)
 					context.getProblemListener().reportUnknownProperty(prop, prop.getName());
-				else if(!expected.isAssignableFrom(context, actual))
-					context.getProblemListener().reportIllegalAssignment(prop, expected, actual);
+				else {
+					IType expected = declared.getType();
+					if(!expected.isAssignableFrom(context, actual))
+						context.getProblemListener().reportIllegalAssignment(prop, expected, actual);
+				}
 			}
 		});
 	}
 
-	private Structure getHtmlPropertyTypes(String string) {
+	private PropertyMap getHtmlPropertyTypes(String string) {
 		// TODO Auto-generated method stub
 		return null;
 	}

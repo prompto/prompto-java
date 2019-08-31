@@ -2,21 +2,22 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 
-import prompto.grammar.Structure;
+import prompto.grammar.PropertyMap;
 import prompto.runtime.Context;
 import prompto.store.Family;
 
-public class StructureType extends BaseType {
+/* transient type for holding child property structure */
+public class PropertiesType extends BaseType {
 
-	Structure structure;
+	PropertyMap properties;
 	
-	public StructureType(Structure structure) {
-		super(Family.STRUCTURE);
-		this.structure = structure;
+	public PropertiesType(PropertyMap properties) {
+		super(Family.PROPERTIES);
+		this.properties = properties;
 	}
 	
-	public Structure getStructure() {
-		return structure;
+	public PropertyMap getStructure() {
+		return properties;
 	}
 
 	@Override
@@ -37,6 +38,14 @@ public class StructureType extends BaseType {
 	@Override
 	public boolean isMoreSpecificThan(Context context, IType other) {
 		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public boolean isAssignableFrom(Context context, IType other) {
+		if(other instanceof DocumentType)
+			return true;
+		else
+			return super.isAssignableFrom(context, other);
 	}
 
 }

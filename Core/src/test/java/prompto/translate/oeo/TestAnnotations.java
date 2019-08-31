@@ -17,6 +17,16 @@ public class TestAnnotations extends BaseOParserTest {
 	}
 
 	@Test
+	public void testWidgetChildProps1() throws Exception {
+		compareResourceOEO("annotations/WidgetChildProps1.poc");
+	}
+
+	@Test
+	public void testWidgetChildProps2() throws Exception {
+		compareResourceOEO("annotations/WidgetChildProps2.poc");
+	}
+
+	@Test
 	public void testWidgetField() throws Exception {
 		compareResourceOEO("annotations/WidgetField.poc");
 	}
@@ -29,6 +39,16 @@ public class TestAnnotations extends BaseOParserTest {
 	@Test
 	public void testWidgetProps2() throws Exception {
 		compareResourceOEO("annotations/WidgetProps2.poc");
+	}
+
+	@Test
+	public void testWidgetProps3() throws Exception {
+		compareResourceOEO("annotations/WidgetProps3.poc");
+	}
+
+	@Test
+	public void testWidgetProps4() throws Exception {
+		compareResourceOEO("annotations/WidgetProps4.poc");
 	}
 
 	@Test

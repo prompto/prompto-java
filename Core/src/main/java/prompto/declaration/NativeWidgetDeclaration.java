@@ -3,7 +3,7 @@ package prompto.declaration;
 import prompto.grammar.Identifier;
 import prompto.grammar.MethodDeclarationList;
 import prompto.grammar.NativeCategoryBindingList;
-import prompto.grammar.Structure;
+import prompto.grammar.PropertyMap;
 import prompto.javascript.JavaScriptNativeCategoryBinding;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
@@ -11,7 +11,7 @@ import prompto.utils.CodeWriter;
 
 public class NativeWidgetDeclaration extends NativeCategoryDeclaration implements IWidgetDeclaration {
 	
-	Structure propertyTypes;
+	PropertyMap properties;
 	
 	public NativeWidgetDeclaration(Identifier id, NativeCategoryBindingList categoryBindings, MethodDeclarationList methods) {
 		super(id, null, categoryBindings, null, methods);
@@ -28,13 +28,13 @@ public class NativeWidgetDeclaration extends NativeCategoryDeclaration implement
 	}
 
 	@Override
-	public void setPropertyTypes(Structure types) {
-		propertyTypes = types;
+	public void setProperties(PropertyMap properties) {
+		this.properties = properties;
 	}
 	
 	@Override
-	public Structure getPropertyTypes() {
-		return propertyTypes;
+	public PropertyMap getProperties() {
+		return properties;
 	}
 
 	@Override

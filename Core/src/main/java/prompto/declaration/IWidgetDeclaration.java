@@ -1,10 +1,10 @@
 package prompto.declaration;
 
-import prompto.grammar.Structure;
+import prompto.grammar.PropertyMap;
 
 public interface IWidgetDeclaration extends IDeclaration {
 
-	void setPropertyTypes(Structure types);
-	Structure getPropertyTypes();
+	void setProperties(PropertyMap properties);
+	PropertyMap getProperties();
 
 }
