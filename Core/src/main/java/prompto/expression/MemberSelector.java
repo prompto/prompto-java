@@ -70,9 +70,13 @@ public class MemberSelector extends SelectorExpression {
 	}
 	
 	void toEDialect(CodeWriter writer) {
-		IType type = check(writer.getContext());
-		if(type instanceof MethodType)
-			writer.append("Method: ");
+		try {
+			IType type = check(writer.getContext());
+			if(type instanceof MethodType)
+				writer.append("Method: ");
+		} catch(SyntaxError e) {
+			// gracefully skip exceptions
+		}
 		parentAndMemberToDialect(writer);
 	}
 	
