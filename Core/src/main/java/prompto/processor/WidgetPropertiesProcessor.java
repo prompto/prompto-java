@@ -105,7 +105,10 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 						prop.setType(((TypeLiteral)value).getType());
 					else if(value instanceof DocumentLiteral) {
 						PropertyMap embedded = checkProperties(annotation, context, ((DocumentLiteral)value).getEntries());
-						prop.setType(new PropertiesType(embedded));
+						if(embedded!=null)
+							prop.setType(new PropertiesType(embedded));
+						else
+							return null;
 					} else {
 						context.getProblemListener().reportIllegalAnnotation(child.getKey(), "Expected a Type value for 'type'.");
 						return null;

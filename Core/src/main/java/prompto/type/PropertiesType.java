@@ -19,7 +19,7 @@ public class PropertiesType extends BaseType {
 		this.properties = properties;
 	}
 	
-	public PropertyMap getStructure() {
+	public PropertyMap getProperties() {
 		return properties;
 	}
 
