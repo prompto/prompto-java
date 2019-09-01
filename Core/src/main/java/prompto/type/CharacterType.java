@@ -155,14 +155,14 @@ public class CharacterType extends NativeType {
 	}
 	
 	@Override
-	public void declareMember(Transpiler transpiler, String name) {
-	    if (!"codePoint".equals(name))
+	public void declareMember(Transpiler transpiler, Identifier name) {
+	    if (!"codePoint".equals(name.toString()))
 	    	super.declareMember(transpiler, name);
 	}
 	
 	@Override
-	public void transpileMember(Transpiler transpiler, String name) {
-	    if ("codePoint".equals(name))
+	public void transpileMember(Transpiler transpiler, Identifier name) {
+	    if ("codePoint".equals(name.toString()))
 	    	transpiler.append("charCodeAt(0)");
 	    else
 	    	super.transpileMember(transpiler, name);

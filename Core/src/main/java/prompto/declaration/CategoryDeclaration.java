@@ -1,10 +1,13 @@
 package prompto.declaration;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import prompto.compiler.ClassFile;
 import prompto.compiler.Flags;
@@ -15,6 +18,7 @@ import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.grammar.Annotation;
 import prompto.grammar.Identifier;
 import prompto.grammar.MethodDeclarationList;
 import prompto.grammar.Operator;
@@ -27,6 +31,7 @@ import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
+import prompto.utils.Instance;
 import prompto.utils.TypeUtils;
 import prompto.value.DbIdValue;
 import prompto.value.IInstance;
@@ -201,20 +206,34 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 			break;
 		}
 	}
-
-	protected void processAnnotations(Context context, boolean processDerivedFrom) {
-		if(processDerivedFrom) {
-			IdentifierList derivedFrom = getDerivedFrom();
-			if(derivedFrom!=null) {
-				derivedFrom.forEach(id->{
-					CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, id);
-					decl.processAnnotations(context, true);
-				});
-			}
+	
+	
+	@Override
+	public Collection<Annotation> getAllAnnotations(Context context) {
+		return getAllAnnotationsAsStream(context).collect(Collectors.toList());
+	}
+	
+	@Override
+	public Stream<Annotation> getAllAnnotationsAsStream(Context context) {
+		Instance<Stream<Annotation>> stream = new Instance<>();
+		stream.set(Stream.empty());
+		IdentifierList derivedFrom = getDerivedFrom();
+		if(derivedFrom!=null) {
+			derivedFrom.forEach(id->{
+				CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, id);
+				stream.set(Stream.concat(stream.get(), decl.getAllAnnotationsAsStream(context)));
+			});
 		}
 		if(annotations!=null)
-			annotations.forEach(a->a.processCategory(context, this));
+			stream.set(Stream.concat(stream.get(), annotations.stream()));
+		return stream.get();
 	}
+
+	protected void processAnnotations(Context context, boolean processDerivedFrom) {
+		Stream<Annotation> stream = processDerivedFrom ? getAllAnnotationsAsStream(context) : annotations==null ? Stream.empty() : annotations.stream();
+		stream.forEach(a->a.processCategory(context, this));
+	}
+	
 	
 	protected abstract void toEDialect(CodeWriter writer);
 
@@ -252,8 +271,8 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		for(IDeclaration decl : methods) {
 			if(decl.getComments()!=null)
 				decl.getComments().forEach(comment->comment.toDialect(writer));
-			if(decl.getAnnotations()!=null)
-				decl.getAnnotations().forEach(annotation->annotation.toDialect(writer));
+			if(decl.getLocalAnnotations()!=null)
+				decl.getLocalAnnotations().forEach(annotation->annotation.toDialect(writer));
 			writer.newLine();
 			CodeWriter w = writer.newMemberWriter();
 			decl.toDialect(w);
@@ -265,8 +284,8 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		for(IDeclaration decl : methods) {
 			if(decl.getComments()!=null)
 				decl.getComments().forEach(comment->comment.toDialect(writer));
-			if(decl.getAnnotations()!=null)
-				decl.getAnnotations().forEach(annotation->annotation.toDialect(writer));
+			if(decl.getLocalAnnotations()!=null)
+				decl.getLocalAnnotations().forEach(annotation->annotation.toDialect(writer));
 			CodeWriter w = writer.newMemberWriter();
 			decl.toDialect(w);
 			w.newLine();

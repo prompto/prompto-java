@@ -113,5 +113,45 @@ public class WidgetPropertiesProcessorTest extends BaseOParserTest {
 		}
 		assertTrue(js.contains("some stuff"));
 	}
+	
+	@Test
+	public void transpilesReactProps() throws Exception {
+		loadResource("annotations/ReactWidgetProps1.poc");
+		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, new Identifier("Container"));
+		Transpiler transpiler = new Transpiler(new Nashorn8Engine(), context);
+		decl.declare(transpiler);
+		decl.transpile(transpiler);
+		String js = transpiler.toString();
+		try(OutputStream output = new FileOutputStream("transpiled.js")) {
+			output.write(js.getBytes());
+		}
+		assertTrue(js.contains("1961-02-25"));
+	}
+
+	@Test
+	public void transpilesReactPropsWithWarnings() throws Exception {
+		Instance<String> warning = new Instance<>();
+		context.setProblemListener(new ProblemListener() {
+			@Override
+			public void reportUnknownMember(ISection section, String name) {
+				warning.set("invalid");
+			}
+		});
+		try {
+			loadResource("annotations/ReactWidgetProps2.poc");
+			IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, new Identifier("Container"));
+			Transpiler transpiler = new Transpiler(new Nashorn8Engine(), context);
+			decl.declare(transpiler);
+			decl.transpile(transpiler);
+			String js = transpiler.toString();
+			try(OutputStream output = new FileOutputStream("transpiled.js")) {
+				output.write(js.getBytes());
+			}
+			assertTrue(js.contains("some stuff"));
+		} finally {
+			assertNotNull(warning.get());
+			assertTrue(warning.get().contains("invalid"));
+		}
+	}
 
 }

@@ -147,9 +147,9 @@ public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 	}
 	
 	@Override
-	public void reportIllegalMember(ISection section, String name) {
+	public void reportUnknownMember(ISection section, String name) {
 		synchronized(problems) {
-			problems.add(new IllegalMemberError(name, section));
+			problems.add(new UnknownMemberError(name, section));
 		}
 	}
 	

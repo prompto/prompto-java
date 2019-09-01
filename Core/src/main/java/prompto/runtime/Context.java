@@ -535,7 +535,17 @@ public class Context implements IContext {
 		}
 		
 		@Override
-		public Collection<Annotation> getAnnotations() {
+		public Collection<Annotation> getLocalAnnotations() {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override
+		public Collection<Annotation> getAllAnnotations(Context context) {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override
+		public Stream<Annotation> getAllAnnotationsAsStream(Context context) {
 			throw new UnsupportedOperationException();
 		}
 
@@ -1211,14 +1221,15 @@ public class Context implements IContext {
 				return super.getInstance(name, includeParent);
 		}
 
-		public void registerWidgetField(Identifier identifier, IType type) {
+		public void registerWidgetField(Identifier identifier, IType type, boolean override) {
 			if(widgetFields==null)
 				widgetFields = new HashMap<>();
-			else if(widgetFields.containsKey(identifier)) {
+			if(override || !widgetFields.containsKey(identifier)) 	
+				widgetFields.put(identifier, new WidgetField(identifier, type));
+			else {
 				Identifier existing = widgetFields.keySet().stream().filter(id->id.equals(identifier)).findFirst().orElse(null);
 				getProblemListener().reportDuplicate(identifier, identifier.toString(), existing);
 			}
-			widgetFields.put(identifier, new WidgetField(identifier, type));
 		}
 
 	}

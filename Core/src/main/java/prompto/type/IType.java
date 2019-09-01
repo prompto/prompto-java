@@ -137,24 +137,23 @@ public interface IType extends ISection {
 		throw new UnsupportedOperationException("transpileInstance " + this.getClass().getName());
 	}
 
-	default void declareMember(Transpiler transpiler, String name) {
-	    if(!"text".equals(name))
-	        throw new UnsupportedOperationException("declareMember " + name + " for " + this.getClass().getName());
-
+	default void declareMember(Transpiler transpiler, Identifier name) {
+	    if(!"text".equals(name.toString()))
+			transpiler.getContext().getProblemListener().reportUnknownMember(name, name.toString());
 	}
 
-	default void transpileMember(Transpiler transpiler, String name) {
-	    if("text".equals(name))
+	default void transpileMember(Transpiler transpiler, Identifier name) {
+	    if("text".equals(name.toString()))
           transpiler.append("getText()");
 	    else
 	        throw new UnsupportedOperationException("transpileMember " + name + " for " + this.getClass().getName());
 	}
 	
-	default void declareStaticMember(Transpiler transpiler, String name) {
+	default void declareStaticMember(Transpiler transpiler, Identifier name) {
         throw new UnsupportedOperationException("declareStaticMember " + name + " for " + this.getClass().getName());
 	}
 
-	default void transpileStaticMember(Transpiler transpiler, String name) {
+	default void transpileStaticMember(Transpiler transpiler, Identifier name) {
 	    throw new UnsupportedOperationException("transpileStaticMember " + name + " for " + this.getClass().getName());
 	}
 	

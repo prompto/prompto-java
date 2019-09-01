@@ -190,8 +190,8 @@ public class DateTimeType extends NativeType {
 	}
 	
 	@Override
-	public void declareMember(Transpiler transpiler, String name) {
-		switch(name) {
+	public void declareMember(Transpiler transpiler, Identifier name) {
+		switch(name.toString()) {
 		case "year":
 		case "month":
 		case "dayOfMonth":
@@ -215,8 +215,8 @@ public class DateTimeType extends NativeType {
 	}
 	
 	@Override
-	public void transpileMember(Transpiler transpiler, String name) {
-		switch(name) {
+	public void transpileMember(Transpiler transpiler, Identifier name) {
+		switch(name.toString()) {
 		case "year":
 	        transpiler.append("getYear()");
 			break;

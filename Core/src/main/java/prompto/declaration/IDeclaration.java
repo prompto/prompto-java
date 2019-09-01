@@ -1,6 +1,7 @@
 package prompto.declaration;
 
 import java.util.Collection;
+import java.util.stream.Stream;
 
 import prompto.code.ICodeStore;
 import prompto.grammar.Annotation;
@@ -32,7 +33,9 @@ public interface IDeclaration extends ITranspilable, INamed, ISection {
 	void setComments(Collection<CommentStatement> comments);
 	Collection<CommentStatement> getComments();
 	void setAnnotations(Collection<Annotation> annotations);
-	Collection<Annotation> getAnnotations();
+	Collection<Annotation> getLocalAnnotations();
+	Collection<Annotation> getAllAnnotations(Context context);
+	Stream<Annotation> getAllAnnotationsAsStream(Context context);
 	default boolean hasAnnotation(Context context, String name) {
 		return hasLocalAnnotation(name) || hasInheritedAnnotation(context, name);
 	}

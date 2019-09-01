@@ -53,13 +53,13 @@ public class TypeType extends BaseType {
 	}
 	
 	@Override
-	public void declareMember(Transpiler transpiler, String name) {
+	public void declareMember(Transpiler transpiler, Identifier name) {
 		type.declare(transpiler);
 		type.declareStaticMember(transpiler, name);
 	}
 
 	@Override
-	public void transpileMember(Transpiler transpiler, String name) {
+	public void transpileMember(Transpiler transpiler, Identifier name) {
 		type.transpileStaticMember(transpiler, name);
 	}
 	

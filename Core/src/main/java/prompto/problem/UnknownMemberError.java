@@ -2,11 +2,11 @@ package prompto.problem;
 
 import prompto.parser.ISection;
 
-public class IllegalMemberError extends SyntaxProblemBase {
+public class UnknownMemberError extends SyntaxProblemBase {
 
 	String name;
 	
-	public IllegalMemberError(String name, ISection section) {
+	public UnknownMemberError(String name, ISection section) {
 		super(section);
 		this.name = name;
 	}

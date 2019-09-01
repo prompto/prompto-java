@@ -308,7 +308,7 @@ public class MemberSelector extends SelectorExpression {
 	    IExpression parent = this.resolveParent(transpiler.getContext());
 	    parent.declareParent(transpiler);
 	    IType parentType = this.checkParent(transpiler.getContext());
-	    parentType.declareMember(transpiler, this.getName());
+	    parentType.declareMember(transpiler, this.getId());
 	}
 	
 	@Override
@@ -317,7 +317,7 @@ public class MemberSelector extends SelectorExpression {
 	    parent.transpileParent(transpiler);
 	    transpiler.append(".");
 		IType parentType = this.checkParent(transpiler.getContext());
-		parentType.transpileMember(transpiler, this.getName());
+		parentType.transpileMember(transpiler, this.getId());
 		return false;
 	}
 

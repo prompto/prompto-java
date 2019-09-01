@@ -197,8 +197,8 @@ public class TimeType extends NativeType {
 	
 	
 	@Override
-	public void declareMember(Transpiler transpiler, String name) {
-		switch(name) {
+	public void declareMember(Transpiler transpiler, Identifier name) {
+		switch(name.toString()) {
 		case "hour":
 		case "minute":
 		case "second":
@@ -210,8 +210,8 @@ public class TimeType extends NativeType {
 	}
 	
 	@Override
-	public void transpileMember(Transpiler transpiler, String name) {
-		switch(name) {
+	public void transpileMember(Transpiler transpiler, Identifier name) {
+		switch(name.toString()) {
 		case "hour":
 	        transpiler.append("getHour()");
 			break;

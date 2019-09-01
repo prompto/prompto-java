@@ -1,17 +1,21 @@
 package prompto.processor;
 
-
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.IWidgetDeclaration;
+import prompto.error.InternalError;
 import prompto.grammar.Annotation;
+import prompto.grammar.Identifier;
 import prompto.grammar.Property;
 import prompto.grammar.PropertyMap;
+import prompto.literal.BooleanLiteral;
 import prompto.literal.DictEntry;
 import prompto.literal.DocEntryList;
 import prompto.literal.DocumentLiteral;
 import prompto.literal.TextLiteral;
 import prompto.literal.TypeLiteral;
 import prompto.runtime.Context;
+import prompto.runtime.Context.InstanceContext;
+import prompto.type.IType;
 import prompto.type.PropertiesType;
 
 public class WidgetPropertiesProcessor extends AnnotationProcessor {
@@ -28,8 +32,33 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 		IWidgetDeclaration widget = declaration.asWidget();
 		Object value = annotation.getDefaultArgument();
 		PropertyMap properties = checkProperties(annotation, context, value);
-		if(properties!=null)
+		if(properties!=null) {
 			widget.setProperties(properties);
+			Annotation widgetField = findWidgetPropertiesFieldAnnotation(context, declaration);
+			if(widgetField!=null)
+				overrideWidgetFieldType(context, widgetField, new PropertiesType(properties));
+		}
+	}
+	
+	private void overrideWidgetFieldType(Context context, Annotation widgetField, IType type) {
+		Object value = widgetField.getArgument("name");
+		if(!(value instanceof TextLiteral))	
+			return; // raise warning
+		String name = ((TextLiteral)value).toString();
+		InstanceContext instance = context.getClosestInstanceContext();
+		if(instance==null)
+			throw new InternalError("Expected an instance context. Please report this bug.");
+		instance.registerWidgetField(new Identifier(name.substring(1, name.length() -1)), type, true);
+	}
+
+	private Annotation findWidgetPropertiesFieldAnnotation(Context context, CategoryDeclaration declaration) {
+		return declaration.getAllAnnotationsAsStream(context)
+				.filter(a->a.isNamed("@WidgetField"))
+				.filter(a->{
+					Object value = a.getArgument("isProperties");
+					return value instanceof BooleanLiteral && ((BooleanLiteral)value).getValue().getValue();
+				}).findFirst()
+				.orElse(null);
 	}
 
 	private PropertyMap checkProperties(Annotation annotation, Context context, Object value) {

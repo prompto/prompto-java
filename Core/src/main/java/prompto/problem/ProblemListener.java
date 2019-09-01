@@ -88,8 +88,8 @@ public class ProblemListener implements ANTLRErrorListener, IProblemListener {
 	}
 	
 	@Override
-	public void reportIllegalMember(ISection section, String name) {
-		throw new SyntaxError("Cannot read member from " + name);
+	public void reportUnknownMember(ISection section, String name) {
+		throw new SyntaxError("Cannot read member " + name);
 	}
 	
 	@Override

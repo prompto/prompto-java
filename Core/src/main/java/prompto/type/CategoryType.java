@@ -747,26 +747,26 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public void declareMember(Transpiler transpiler, String name) {
+	public void declareMember(Transpiler transpiler, Identifier name) {
 		// TODO visit attributes
 	}
 	
 	@Override
-	public void transpileMember(Transpiler transpiler, String name) {
-	    if ("text".equals(name))
+	public void transpileMember(Transpiler transpiler, Identifier name) {
+	    if ("text".equals(name.toString()))
 	        transpiler.append("getText()");
 	    else
 	        transpiler.append(name);
 	}
 	
 	@Override
-	public void declareStaticMember(Transpiler transpiler, String name) {
+	public void declareStaticMember(Transpiler transpiler, Identifier name) {
 		// TODO visit attributes
 	}
 	
 	
 	@Override
-	public void transpileStaticMember(Transpiler transpiler, String name) {
+	public void transpileStaticMember(Transpiler transpiler, Identifier name) {
 		if(getDeclaration(transpiler.getContext()) instanceof SingletonCategoryDeclaration)
 			transpiler.append("instance.");
 		transpiler.append(name);

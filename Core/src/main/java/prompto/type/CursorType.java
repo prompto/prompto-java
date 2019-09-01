@@ -75,17 +75,26 @@ public class CursorType extends IterableType {
    }
 	
 	@Override
-	public void declareMember(Transpiler transpiler, String name) {
-	    if(!"count".equals(name) && !"totalCount".equals(name))
-	        super.declareMember(transpiler, name);
+	public void declareMember(Transpiler transpiler, Identifier name) {
+		switch(name.toString()) {
+		case "count":
+		case "totalCount":
+			break;
+		default:
+			super.declareMember(transpiler, name);
+		}
 	}
 
 	@Override
-	public void transpileMember(Transpiler transpiler, String name) {
-	    if("count".equals(name) || "totalCount".equals(name))
+	public void transpileMember(Transpiler transpiler, Identifier name) {
+		switch(name.toString()) {
+		case "count":
+		case "totalCount":
 	    	transpiler.append(name);
-	    else
+			break;
+		default:
 	    	super.transpileMember(transpiler, name);
+		}
 	}
 	
 	@Override

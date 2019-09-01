@@ -22,15 +22,15 @@ public abstract class ContainerType extends IterableType {
 	}
 	
 	@Override
-	public void declareMember(Transpiler transpiler, String name) {
-	    if (!"count".equals(name)) {
+	public void declareMember(Transpiler transpiler, Identifier name) {
+	    if (!"count".equals(name.toString())) {
 	        super.declareMember(transpiler, name);
 	    }
 	}
 	
 	@Override
-	public void transpileMember(Transpiler transpiler, String name) {
-	    if ("count".equals(name)) {
+	public void transpileMember(Transpiler transpiler, Identifier name) {
+	    if ("count".equals(name.toString())) {
 	        transpiler.append("length");
 	    } else {
 	        super.transpileMember(transpiler, name);

@@ -30,13 +30,13 @@ public class WidgetFieldProcessor extends AnnotationProcessor {
 			context.getProblemListener().reportIllegalAnnotation(annotation,  "WidgetField requires a Type value for argument 'type'");
 	
 		else {
-			context = context.getClosestInstanceContext();
-			if(context==null)
+			InstanceContext instance = context.getClosestInstanceContext();
+			if(instance==null)
 				throw new InternalError("Expected an instance context. Please report this bug.");
 			else {
 				String name = ((TextLiteral)fieldName).toString();
 				IType type = fieldType instanceof TypeLiteral ? ((TypeLiteral)fieldType).getType() : ((TypeExpression)fieldType).getType();
-				((InstanceContext)context).registerWidgetField(new Identifier(name.substring(1, name.length() -1)), type);
+				instance.registerWidgetField(new Identifier(name.substring(1, name.length() -1)), type, false);
 			}
 		}
 	}

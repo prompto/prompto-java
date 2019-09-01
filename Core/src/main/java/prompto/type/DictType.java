@@ -125,23 +125,32 @@ public class DictType extends ContainerType {
 	}
 	
 	@Override
-	public void declareMember(Transpiler transpiler, String name) {
-	    if("keys".equals(name)) {
+	public void declareMember(Transpiler transpiler, Identifier name) {
+		switch(name.toString()) {
+		case "count":
+			break;
+		case "keys":
 	        transpiler.require("StrictSet");
-	    } else if("values".equals(name)) {
+	        break;
+		case "values":
 	        transpiler.require("List");
-	    } else if (!"count".equals(name)) {
-			super.declareMember(transpiler, name);
+	        break;
+       default: 
+	    	super.declareMember(transpiler, name);
 	    }
 	}
 	
 	@Override
-	public void transpileMember(Transpiler transpiler, String name) {
-	    if ("count".equals(name)) {
+	public void transpileMember(Transpiler transpiler, Identifier name) {
+		switch(name.toString()) {
+		case "count":
 	        transpiler.append("length");
-	    } else if("keys".equals(name) || "values".equals(name)) {
-	        transpiler.append(name);
-	    } else {
+			break;
+		case "keys":
+		case "values":
+			transpiler.append(name);
+			break;
+		default: 
 			super.transpileMember(transpiler, name);
 	    }
 	}

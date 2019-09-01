@@ -148,17 +148,17 @@ public class DocumentType extends NativeType {
 	}
 	
 	@Override
-	public void declareMember(Transpiler transpiler, String name) {
+	public void declareMember(Transpiler transpiler, Identifier name) {
 		// nothing to do
 	}
 	
 	
 	@Override
-	public void transpileMember(Transpiler transpiler, String name) {
-	    if (!"text".equals(name)) {
-	        transpiler.append(name);
-	    } else {
+	public void transpileMember(Transpiler transpiler, Identifier name) {
+	    if ("text".equals(name.toString())) {
 	        transpiler.append("getText()");
+	    } else {
+	        transpiler.append(name);
 	    }
 	}
 	

@@ -188,19 +188,30 @@ public class EnumeratedNativeType extends BaseType {
 	}
 	
 	@Override
-	public void declareMember(Transpiler transpiler, String name) {
-	    if("symbols".equals(name) || "value".equals(name) || "name".equals(name)) {
-	    	EnumeratedNativeDeclaration decl = transpiler.getContext().getRegisteredDeclaration(EnumeratedNativeDeclaration.class, typeNameId);
-	        transpiler.declare(decl);
-	    } else
+	public void declareMember(Transpiler transpiler, Identifier name) {
+		switch(name.toString()) {
+		case "symbols":
+		case "value":
+		case "name":
+			{
+		    	EnumeratedNativeDeclaration decl = transpiler.getContext().getRegisteredDeclaration(EnumeratedNativeDeclaration.class, typeNameId);
+		        transpiler.declare(decl);
+		    } 
+		break;
+	    default:
 	        super.declareMember(transpiler, name);
+		}
 	}
 	
 	@Override
-	public void transpileMember(Transpiler transpiler, String name) {
-	    if("symbols".equals(name) || "value".equals(name) || "name".equals(name)) {
+	public void transpileMember(Transpiler transpiler, Identifier name) {
+		switch(name.toString()) {
+		case "symbols":
+		case "value":
+		case "name":
 	        transpiler.append(name);
-	    } else {
+	    	break;
+	    default:
 	        super.transpileMember(transpiler, name);
 	    }
 	}

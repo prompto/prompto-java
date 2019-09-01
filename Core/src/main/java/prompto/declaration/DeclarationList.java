@@ -88,8 +88,8 @@ public class DeclarationList extends LinkedList<IDeclaration> {
 		for(IDeclaration declaration : this) {
 			if(declaration.getComments()!=null)
 				declaration.getComments().forEach(comment->comment.toDialect(writer));
-			if(declaration.getAnnotations()!=null)
-				declaration.getAnnotations().forEach(annotation->annotation.toDialect(writer));
+			if(declaration.getLocalAnnotations()!=null)
+				declaration.getLocalAnnotations().forEach(annotation->annotation.toDialect(writer));
 			declaration.toDialect(writer);
 			writer.append("\n");
 		}

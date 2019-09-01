@@ -2,9 +2,12 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 
+import prompto.grammar.Identifier;
+import prompto.grammar.Property;
 import prompto.grammar.PropertyMap;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 
 /* transient type for holding child property structure */
 public class PropertiesType extends BaseType {
@@ -46,6 +49,30 @@ public class PropertiesType extends BaseType {
 			return true;
 		else
 			return super.isAssignableFrom(context, other);
+	}
+	
+	@Override
+	public IType checkMember(Context context, Identifier name) {
+		Property prop = properties.get(name.toString());
+		return prop!=null ? prop.getType() : super.checkMember(context, name);
+	}
+	
+	@Override
+	public void declareMember(Transpiler transpiler, Identifier name) {
+		Property prop = properties.get(name.toString());
+		if(prop==null)
+			super.declareMember(transpiler, name);
+		else
+			prop.getType().declare(transpiler);
+	}
+	
+	@Override
+	public void transpileMember(Transpiler transpiler, Identifier name) {
+	    if ("text".equals(name.toString())) {
+	        transpiler.append("getText()");
+	    } else {
+	        transpiler.append(name);
+	    }
 	}
 
 }

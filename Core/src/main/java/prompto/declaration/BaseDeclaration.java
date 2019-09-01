@@ -1,6 +1,7 @@
 package prompto.declaration;
 
 import java.util.Collection;
+import java.util.stream.Stream;
 
 import prompto.code.ICodeStore;
 import prompto.grammar.Annotation;
@@ -67,8 +68,19 @@ public abstract class BaseDeclaration extends Section implements IDeclaration {
 	}
 	
 	@Override
-	public Collection<Annotation> getAnnotations() {
+	public Collection<Annotation> getLocalAnnotations() {
 		return annotations;
+	}
+	
+	
+	@Override
+	public Collection<Annotation> getAllAnnotations(Context context) {
+		return annotations;
+	}
+	
+	@Override
+	public Stream<Annotation> getAllAnnotationsAsStream(Context context) {
+		return annotations==null ? Stream.empty() : annotations.stream();
 	}
 	
 	@Override

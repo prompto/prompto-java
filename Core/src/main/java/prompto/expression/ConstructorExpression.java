@@ -226,7 +226,7 @@ public class ConstructorExpression extends Section implements IExpression {
 							throw new NotMutableError();
 						instance.setMember(context, argId, value);
 					} else 
-						context.getProblemListener().reportIllegalMember(argId, argId.toString());
+						context.getProblemListener().reportUnknownMember(argId, argId.toString());
 				}
 			}
 		} finally {
