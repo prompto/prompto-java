@@ -3088,7 +3088,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitType_literal(Type_literalContext ctx) {
-		IType type = getNodeValue(ctx.typedef());
+		IType type = getNodeValue(ctx.category_or_any_type());
 		setNodeValue(ctx, new TypeLiteral(type));
 	}
 	

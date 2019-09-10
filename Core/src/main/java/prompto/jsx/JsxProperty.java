@@ -27,6 +27,10 @@ public class JsxProperty extends Section {
 	public String getName() {
 		return id.toString();
 	}
+	
+	public IJsxValue getValue() {
+		return value;
+	}
 
 	public IType check(Context context) {
 		if(value!=null)

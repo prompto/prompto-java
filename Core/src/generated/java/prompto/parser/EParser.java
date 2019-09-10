@@ -9229,8 +9229,8 @@ public class EParser extends AbstractParser {
 	public static class Type_literalContext extends ParserRuleContext {
 		public TerminalNode TYPE() { return getToken(EParser.TYPE, 0); }
 		public TerminalNode COLON() { return getToken(EParser.COLON, 0); }
-		public TypedefContext typedef() {
-			return getRuleContext(TypedefContext.class,0);
+		public Category_or_any_typeContext category_or_any_type() {
+			return getRuleContext(Category_or_any_typeContext.class,0);
 		}
 		public Type_literalContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -9257,7 +9257,7 @@ public class EParser extends AbstractParser {
 			setState(1624);
 			match(COLON);
 			setState(1625);
-			typedef(0);
+			category_or_any_type();
 			}
 		}
 		catch (RecognitionException re) {
@@ -25161,7 +25161,7 @@ public class EParser extends AbstractParser {
 		"\2\2\u0652\u0651\3\2\2\2\u0653\u0656\3\2\2\2\u0654\u0652\3\2\2\2\u0654"+
 		"\u0655\3\2\2\2\u0655\u0657\3\2\2\2\u0656\u0654\3\2\2\2\u0657\u0658\7\4"+
 		"\2\2\u0658\u0095\3\2\2\2\u0659\u065a\7I\2\2\u065a\u065b\7\21\2\2\u065b"+
-		"\u065c\5\u00c0a\2\u065c\u0097\3\2\2\2\u065d\u065e\7\u0081\2\2\u065e\u0099"+
+		"\u065c\5\u00f0y\2\u065c\u0097\3\2\2\2\u065d\u065e\7\u0081\2\2\u065e\u0099"+
 		"\3\2\2\2\u065f\u0663\5\u00a0Q\2\u0660\u0663\58\35\2\u0661\u0663\5\\/\2"+
 		"\u0662\u065f\3\2\2\2\u0662\u0660\3\2\2\2\u0662\u0661\3\2\2\2\u0663\u009b"+
 		"\3\2\2\2\u0664\u0666\5\u009eP\2\u0665\u0664\3\2\2\2\u0665\u0666\3\2\2"+

@@ -555,6 +555,16 @@ public class Context implements IContext {
 		}
 		
 		@Override
+		public void addAnnotation(Annotation annotation) {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override
+		public boolean removeAnnotation(String name) {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override
 		public boolean hasLocalAnnotation(String name) {
 			throw new UnsupportedOperationException();
 		}

@@ -5,9 +5,9 @@ import java.util.List;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.grammar.Identifier;
-import prompto.grammar.Property;
-import prompto.grammar.PropertyMap;
 import prompto.parser.Section;
+import prompto.property.Property;
+import prompto.property.PropertyMap;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
@@ -42,16 +42,13 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 		if(properties==null)
 			return;
 		properties.forEach(prop->{
-			IType actual = prop.check(context);
+			prop.check(context);
 			if(propertyMap!=null) {
 				Property declared = propertyMap.get(prop.getName());
 				if(declared==null)
 					context.getProblemListener().reportUnknownProperty(prop, prop.getName());
-				else {
-					IType expected = declared.getType();
-					if(!expected.isAssignableFrom(context, actual))
-						context.getProblemListener().reportIllegalAssignment(prop, expected, actual);
-				}
+				else
+					declared.validate(context, prop);
 			}
 		});
 	}

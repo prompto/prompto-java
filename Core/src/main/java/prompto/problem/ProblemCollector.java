@@ -3,6 +3,7 @@ package prompto.problem;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
+import java.util.Set;
 
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.InputMismatchException;
@@ -78,6 +79,13 @@ public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 	
 	@Override
 	public void reportIllegalAssignment(ISection section, IType expected, IType actual) {
+		synchronized(problems) {
+			problems.add(new IllegalAssignmentError(section, expected, actual));
+		}
+	}
+	
+	@Override
+	public void reportIllegalAssignment(ISection section, Set<IType> expected, IType actual) {
 		synchronized(problems) {
 			problems.add(new IllegalAssignmentError(section, expected, actual));
 		}
@@ -171,6 +179,13 @@ public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 	public void reportIllegalAnnotation(ISection section, String message) {
 		synchronized(problems) {
 			problems.add(new IllegalAnnotationError(message, section));
+		}
+	}
+	
+	@Override
+	public void reportIllegalValue(ISection section, String message) {
+		synchronized(problems) {
+			problems.add(new IllegalValueError(message, section));
 		}
 	}
 }

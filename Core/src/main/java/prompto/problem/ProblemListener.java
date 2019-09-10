@@ -1,6 +1,7 @@
 package prompto.problem;
 
 import java.util.BitSet;
+import java.util.Set;
 
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.Parser;
@@ -40,6 +41,11 @@ public class ProblemListener implements ANTLRErrorListener, IProblemListener {
 	@Override
 	public void reportIllegalAssignment(ISection section, IType expected, IType actual) {
 		throw new SyntaxError("Illegal expression type, expected: " +  expected.getTypeName() + ", got:" + actual.getTypeName());
+	}
+	
+	@Override
+	public void reportIllegalAssignment(ISection section, Set<IType> expected, IType actual) {
+		throw new SyntaxError("Illegal expression type, expected: " +  expected + ", got:" + actual.getTypeName());
 	}
 	
 	@Override
@@ -104,6 +110,11 @@ public class ProblemListener implements ANTLRErrorListener, IProblemListener {
 	
 	@Override
 	public void reportIllegalAnnotation(ISection section, String message) {
+		throw new SyntaxError(message);
+	}
+	
+	@Override
+	public void reportIllegalValue(ISection section, String message) {
 		throw new SyntaxError(message);
 	}
 }

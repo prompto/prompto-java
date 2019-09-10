@@ -1,6 +1,6 @@
 package prompto.declaration;
 
-import prompto.grammar.PropertyMap;
+import prompto.property.PropertyMap;
 
 public interface IWidgetDeclaration extends IDeclaration {
 

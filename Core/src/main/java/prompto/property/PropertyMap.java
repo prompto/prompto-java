@@ -1,4 +1,4 @@
-package prompto.grammar;
+package prompto.property;
 
 import java.util.HashMap;
 

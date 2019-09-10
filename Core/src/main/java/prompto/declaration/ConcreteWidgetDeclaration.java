@@ -2,7 +2,7 @@ package prompto.declaration;
 
 import prompto.grammar.Identifier;
 import prompto.grammar.MethodDeclarationList;
-import prompto.grammar.PropertyMap;
+import prompto.property.PropertyMap;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;

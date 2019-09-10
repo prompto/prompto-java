@@ -33,6 +33,7 @@ public interface IDeclaration extends ITranspilable, INamed, ISection {
 	void setComments(Collection<CommentStatement> comments);
 	Collection<CommentStatement> getComments();
 	void setAnnotations(Collection<Annotation> annotations);
+	void addAnnotation(Annotation annotation);
 	Collection<Annotation> getLocalAnnotations();
 	Collection<Annotation> getAllAnnotations(Context context);
 	Stream<Annotation> getAllAnnotationsAsStream(Context context);
@@ -41,6 +42,7 @@ public interface IDeclaration extends ITranspilable, INamed, ISection {
 	}
 	boolean hasLocalAnnotation(String name);
 	boolean hasInheritedAnnotation(Context context, String name);
+	boolean removeAnnotation(String name);
 	default void setClosureOf(IMethodDeclaration declaration) { throw new UnsupportedOperationException(); }
 	default IMethodDeclaration getClosureOf() { throw new UnsupportedOperationException(); }
 	default boolean isStorable() { return false; }

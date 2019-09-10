@@ -3,8 +3,8 @@ package prompto.type;
 import java.lang.reflect.Type;
 
 import prompto.grammar.Identifier;
-import prompto.grammar.Property;
-import prompto.grammar.PropertyMap;
+import prompto.property.Property;
+import prompto.property.PropertyMap;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
@@ -54,7 +54,7 @@ public class PropertiesType extends BaseType {
 	@Override
 	public IType checkMember(Context context, Identifier name) {
 		Property prop = properties.get(name.toString());
-		return prop!=null ? prop.getType() : super.checkMember(context, name);
+		return prop!=null ? prop.getValidator().getType(context) : super.checkMember(context, name);
 	}
 	
 	@Override
@@ -63,7 +63,7 @@ public class PropertiesType extends BaseType {
 		if(prop==null)
 			super.declareMember(transpiler, name);
 		else
-			prop.getType().declare(transpiler);
+			prop.getValidator().getType(transpiler.getContext()).declare(transpiler);
 	}
 	
 	@Override
@@ -74,5 +74,5 @@ public class PropertiesType extends BaseType {
 	        transpiler.append(name);
 	    }
 	}
-
+	
 }

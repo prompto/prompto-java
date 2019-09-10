@@ -30,6 +30,7 @@ import prompto.type.DocumentType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
 import prompto.type.MissingType;
+import prompto.type.NullType;
 import prompto.type.PeriodType;
 import prompto.type.TextType;
 import prompto.type.TimeType;
@@ -57,7 +58,7 @@ public abstract class TypeUtils {
 			return MissingType.instance();
 		IType lastType = null;
 		for(IType type : types) {
-			if(lastType==null)
+			if(lastType==null || lastType==NullType.instance())
 				lastType = type;
 			else if(!lastType.equals(type)) { 
 				if(lastType.isAssignableFrom(context, type))

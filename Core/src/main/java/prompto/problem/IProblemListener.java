@@ -1,5 +1,7 @@
 package prompto.problem;
 
+import java.util.Set;
+
 import prompto.parser.ISection;
 import prompto.type.IType;
 
@@ -17,9 +19,11 @@ public interface IProblemListener {
 	void reportNoMatchingPrototype(ISection section, String proto);
 	void reportIllegalReturn(ISection section);
 	void reportIllegalAssignment(ISection section, IType expected, IType actual);
+	void reportIllegalAssignment(ISection section, Set<IType> expected, IType actual);
 	void reportIllegalComparison(ISection section, IType type, IType other);
 	void reportIllegalOperation(ISection section, String message);
 	void reportIllegalRemoteCall(ISection section, String message);
 	void reportIllegalAnnotation(ISection section, String message);
+	void reportIllegalValue(ISection section, String message);
 
 }

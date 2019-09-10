@@ -1,22 +1,33 @@
 package prompto.processor;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.IWidgetDeclaration;
 import prompto.error.InternalError;
 import prompto.grammar.Annotation;
 import prompto.grammar.Identifier;
-import prompto.grammar.Property;
-import prompto.grammar.PropertyMap;
 import prompto.literal.BooleanLiteral;
 import prompto.literal.DictEntry;
 import prompto.literal.DocEntryList;
 import prompto.literal.DocumentLiteral;
+import prompto.literal.SetLiteral;
 import prompto.literal.TextLiteral;
 import prompto.literal.TypeLiteral;
+import prompto.property.Property;
+import prompto.property.PropertyMap;
+import prompto.property.TypeSetValidator;
+import prompto.property.ValueSetValidator;
+import prompto.property.TypeValidator;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
+import prompto.type.ContainerType;
 import prompto.type.IType;
 import prompto.type.PropertiesType;
+import prompto.type.TypeType;
+import prompto.value.BooleanValue;
+import prompto.value.IValue;
 
 public class WidgetPropertiesProcessor extends AnnotationProcessor {
 
@@ -86,42 +97,95 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 	private Property checkProperty(Annotation annotation, Context context, DictEntry entry) {
 		Property prop = new Property();
 		prop.setName(entry.getKey().toString());
-		if(entry.getValue() instanceof TypeLiteral)
-			prop.setType(((TypeLiteral)entry.getValue()).getType());
-		else if(entry.getValue() instanceof DocumentLiteral) {
-			DocEntryList children = ((DocumentLiteral)entry.getValue()).getEntries();
-			for(DictEntry child : children) {
-				String name = child.getKey().toString();
-				Object value = child.getValue();
-				switch(name) {
-				case "help":
-					if(value instanceof TextLiteral)
-						prop.setHelp(((TextLiteral)value).getValue().getStorableData());
-					else
-						context.getProblemListener().reportIllegalAnnotation(child.getKey(), "Expected a Text value for 'help'.");
-					break;
-				case "type":
-					if(value instanceof TypeLiteral)
-						prop.setType(((TypeLiteral)value).getType());
-					else if(value instanceof DocumentLiteral) {
-						PropertyMap embedded = checkProperties(annotation, context, ((DocumentLiteral)value).getEntries());
-						if(embedded!=null)
-							prop.setType(new PropertiesType(embedded));
-						else
-							return null;
-					} else {
-						context.getProblemListener().reportIllegalAnnotation(child.getKey(), "Expected a Type value for 'type'.");
-						return null;
-					}
-					break;
-				default:
-					context.getProblemListener().reportIllegalAnnotation(child.getKey(), "Unknown property attribute: " + name);
-				}
-			}
-		} else {
+		Object value = entry.getValue();
+		if(value instanceof TypeLiteral)
+			return checkProperty(annotation, context, entry, prop, (TypeLiteral)value);
+		else if(entry.getValue() instanceof SetLiteral)
+			return checkProperty(annotation, context, entry, prop, (SetLiteral)value);
+		else if(entry.getValue() instanceof DocumentLiteral)
+			return checkProperty(annotation, context, entry, prop, (DocumentLiteral)value);
+		else {
 			context.getProblemListener().reportIllegalAnnotation(annotation, "WidgetProperties expects a Document of types as unique parameter");
 			return null;
 		}
+	}
+			
+	private Property checkProperty(Annotation annotation, Context context, DictEntry entry, Property prop, DocumentLiteral doc) {
+		for(DictEntry child : doc.getEntries()) {
+			String name = child.getKey().toString();
+			Object value = child.getValue();
+			switch(name) {
+			case "required":
+				if(value instanceof BooleanLiteral)
+					prop.setRequired(((BooleanLiteral)value).interpret(context)==BooleanValue.TRUE);
+				else {
+					context.getProblemListener().reportIllegalAnnotation(child.getKey(), "Expected a Boolean value for 'required'.");
+					return null;
+				}
+				break;
+			case "help":
+				if(value instanceof TextLiteral)
+					prop.setHelp(((TextLiteral)value).getValue().getStorableData());
+				else {
+					context.getProblemListener().reportIllegalAnnotation(child.getKey(), "Expected a Text value for 'help'.");
+					return null;
+				}
+				break;
+			case "type":
+				if(value instanceof TypeLiteral)
+					prop.setValidator(new TypeValidator(((TypeLiteral)value).getType()));
+				else if(value instanceof DocumentLiteral) {
+					PropertyMap embedded = checkProperties(annotation, context, ((DocumentLiteral)value).getEntries());
+					if(embedded!=null)
+						prop.setValidator(new TypeValidator(new PropertiesType(embedded)));
+					else
+						return null;
+				} else {
+					context.getProblemListener().reportIllegalAnnotation(child.getKey(), "Expected a Type value for 'type'.");
+					return null;
+				}
+				break;
+			case "values":
+				if(value instanceof SetLiteral) {
+					Set<String> texts = ((SetLiteral)value).getValue().getItems().stream()
+							.map(IValue::getStorableData)
+							.map(String::valueOf)
+							.collect(Collectors.toSet());
+					prop.setValidator(new ValueSetValidator(texts));
+				} else {
+					context.getProblemListener().reportIllegalAnnotation(child.getKey(), "Expected a Set value for 'texts'.");
+					return null;
+				}
+				break;
+			default:
+				context.getProblemListener().reportIllegalAnnotation(child.getKey(), "Unknown property attribute: " + name);
+				return null;
+			}
+		}
+		return prop;
+	}
+
+	private Property checkProperty(Annotation annotation, Context context, DictEntry entry, Property prop, SetLiteral value) {
+		IType itemType = null;
+		IType setType = ((SetLiteral)entry.getValue()).check(context);
+		if(setType instanceof ContainerType)
+			itemType = ((ContainerType)setType).getItemType();
+		if(itemType instanceof TypeType) {
+			Set<IType> types = ((SetLiteral)entry.getValue()).getItems().stream()
+				.map(v->(TypeLiteral)v)
+				.map(TypeLiteral::getType)
+				.collect(Collectors.toSet());
+			prop.setValidator(new TypeSetValidator(types));
+			return prop;
+			
+		} else {
+			context.getProblemListener().reportIllegalAnnotation(entry.getKey(), "Expected a set of Types.");
+			return null;
+		}
+	}
+
+	private Property checkProperty(Annotation annotation, Context context, DictEntry entry, Property prop, TypeLiteral value) {
+		prop.setValidator(new TypeValidator(((TypeLiteral)entry.getValue()).getType()));
 		return prop;
 	}
 

@@ -1,6 +1,8 @@
 package prompto.declaration;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import prompto.code.ICodeStore;
@@ -65,6 +67,24 @@ public abstract class BaseDeclaration extends Section implements IDeclaration {
 	@Override
 	public void setAnnotations(Collection<Annotation> annotations) {
 		this.annotations = annotations;
+	}
+	
+	@Override
+	public void addAnnotation(Annotation annotation) {
+		if(annotations==null)
+			annotations = Collections.singletonList(annotation);
+		else
+			annotations = Stream.concat(annotations.stream(), Stream.of(annotation)).collect(Collectors.toList());
+		
+	}
+	
+	@Override
+	public boolean removeAnnotation(String name) {
+		String prefixed = name.startsWith("@") ? name : "@" + name;
+		if(annotations==null || !annotations.stream().anyMatch(a->a.isNamed(prefixed)))
+			return false;
+		annotations = annotations.stream().filter(a->!a.isNamed(prefixed)).collect(Collectors.toList());
+		return true;
 	}
 	
 	@Override

@@ -30,7 +30,7 @@ public class SetLiteral extends ContainerLiteral<SetValue> {
 	}
 
 	@Override
-	protected Collection<IValue> getItems() {
+	public Collection<IValue> getItems() {
 		return value.getItems();
 	}
 	
