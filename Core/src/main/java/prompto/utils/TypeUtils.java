@@ -30,6 +30,7 @@ import prompto.type.DocumentType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
 import prompto.type.MissingType;
+import prompto.type.NativeType;
 import prompto.type.NullType;
 import prompto.type.PeriodType;
 import prompto.type.TextType;
@@ -83,6 +84,8 @@ public abstract class TypeUtils {
 	public static IType inferCommonRootType(Context context, IType type1, IType type2) {
 		if(type1 instanceof CategoryType && type2 instanceof CategoryType)
 			return inferCommonRootType(context, (CategoryType)type1, (CategoryType)type2, true);
+		else if(type1 instanceof NativeType || type2 instanceof NativeType)
+			return AnyType.instance();
 		else
 			return null;
 	}

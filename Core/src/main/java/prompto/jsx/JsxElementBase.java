@@ -1,6 +1,8 @@
 package prompto.jsx;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.IDeclaration;
@@ -39,19 +41,30 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 	}
 	
 	private void checkProperties(Context context, PropertyMap propertyMap) {
-		if(properties==null)
-			return;
-		properties.forEach(prop->{
-			prop.check(context);
-			if(propertyMap!=null) {
-				Property declared = propertyMap.get(prop.getName());
-				if(declared==null)
-					context.getProblemListener().reportUnknownProperty(prop, prop.getName());
+		Set<String> actualNames = new HashSet<>();
+		if(properties!=null)
+			properties.forEach(prop->{
+				if(actualNames.contains(prop.getName()))
+					context.getProblemListener().reportDuplicateProperty(prop, prop.getName());
 				else
-					declared.validate(context, prop);
-			}
-		});
-		// TODO check required properties
+					actualNames.add(prop.getName());
+				prop.check(context);
+				if(propertyMap!=null) {
+					Property declared = propertyMap.get(prop.getName());
+					if(declared==null)
+						context.getProblemListener().reportUnknownProperty(prop, prop.getName());
+					else
+						declared.validate(context, prop);
+				}
+			});
+		if(propertyMap!=null) {
+			propertyMap.entrySet().stream()
+				.filter(e->e.getValue().isRequired())
+				.forEach(e->{
+					if(properties==null || !actualNames.contains(e.getKey()))
+						context.getProblemListener().reportMissingProperty(this, e.getKey());
+				});
+		}
 	}
 
 	private PropertyMap getHtmlPropertyTypes(String string) {

@@ -13,6 +13,8 @@ public interface IProblemListener {
 	void reportUnknownIdentifier(ISection section, String name);
 	void reportUnknownMember(ISection section, String name);
 	void reportUnknownProperty(ISection section, String name);
+	void reportMissingProperty(ISection section, String name);
+	void reportDuplicateProperty(ISection section, String name);
 	void reportUnknownAttribute(ISection section, String name);
 	void reportUnknownAnnotation(ISection section, String name);
 	void reportUnknownMethod(ISection section, String name);

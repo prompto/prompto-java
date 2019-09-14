@@ -22,12 +22,15 @@ import prompto.property.ValueSetValidator;
 import prompto.property.TypeValidator;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
+import prompto.type.AnyType;
 import prompto.type.ContainerType;
 import prompto.type.IType;
 import prompto.type.PropertiesType;
 import prompto.type.TypeType;
 import prompto.value.BooleanValue;
 import prompto.value.IValue;
+import prompto.value.SetValue;
+import prompto.value.TypeValue;
 
 public class WidgetPropertiesProcessor extends AnnotationProcessor {
 
@@ -165,19 +168,25 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 		return prop;
 	}
 
-	private Property checkProperty(Annotation annotation, Context context, DictEntry entry, Property prop, SetLiteral value) {
+	private Property checkProperty(Annotation annotation, Context context, DictEntry entry, Property prop, SetLiteral literal) {
 		IType itemType = null;
-		IType setType = value.check(context);
+		IType setType = literal.check(context);
 		if(setType instanceof ContainerType)
 			itemType = ((ContainerType)setType).getItemType();
+		SetValue value = literal.interpret(context);
 		if(itemType instanceof TypeType) {
-			Set<IType> types = ((SetLiteral)entry.getValue()).getItems().stream()
-				.map(v->(TypeLiteral)v)
-				.map(TypeLiteral::getType)
+			Set<IType> types = value.getItems().stream()
+				.map(v->(TypeValue)v)
+				.map(TypeValue::getValue)
 				.collect(Collectors.toSet());
 			prop.setValidator(new TypeSetValidator(types));
 			return prop;
-			
+		} else if(itemType==AnyType.instance()) {
+			Set<String> values = value.getItems().stream()
+					.map(Object::toString)
+					.collect(Collectors.toSet());
+				prop.setValidator(new ValueSetValidator(values));
+				return prop;
 		} else {
 			context.getProblemListener().reportIllegalAnnotation(entry.getKey(), "Expected a set of Types.");
 			return null;

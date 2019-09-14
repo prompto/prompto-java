@@ -1,6 +1,7 @@
 package prompto.jsx;
 
 import prompto.expression.IExpression;
+import prompto.literal.Literal;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
@@ -12,6 +13,11 @@ public class JsxExpression implements IJsxValue, IJsxExpression {
 	
 	public JsxExpression(IExpression expression) {
 		this.expression = expression;
+	}
+	
+	@Override
+	public boolean isLiteral() {
+		return expression instanceof Literal<?>;
 	}
 	
 	@Override

@@ -74,6 +74,16 @@ public class ProblemListener implements ANTLRErrorListener, IProblemListener {
 	}
 	
 	@Override
+	public void reportDuplicateProperty(ISection section, String name) {
+		throw new SyntaxError("Duplicate property: \"" + name + "\"");
+	}
+	
+	@Override
+	public void reportMissingProperty(ISection section, String name) {
+		throw new SyntaxError("Missing property: \"" + name + "\"");
+	}
+	
+	@Override
 	public void reportUnknownAnnotation(ISection section, String name) {
 		throw new SyntaxError("Unknown annotation: \"" + name + "\"");
 	}

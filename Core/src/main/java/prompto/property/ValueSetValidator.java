@@ -3,7 +3,6 @@ package prompto.property;
 import java.util.Set;
 
 import prompto.jsx.IJsxValue;
-import prompto.jsx.JsxLiteral;
 import prompto.jsx.JsxProperty;
 import prompto.runtime.Context;
 import prompto.type.AnyType;
@@ -25,9 +24,14 @@ public class ValueSetValidator implements IPropertyValidator {
 	@Override
 	public void validate(Context context, JsxProperty property) {
 		IJsxValue value = property.getValue();
-		if(value instanceof JsxLiteral && !values.contains(value.toString())) {
-			String message = "Illegal value " + value.toString() + ", expected one of " + toLiteral(); 
-			context.getProblemListener().reportIllegalValue(property, message);
+		if(value.isLiteral()) {
+			String text = value.toString();
+			if(text.startsWith("\"") && text.endsWith("\""))
+				text = text.substring(1, text.length() - 1);
+			if(!values.contains(text)) {
+				String message = "Illegal value " + value.toString() + ", expected one of " + toLiteral(); 
+				context.getProblemListener().reportIllegalValue(property, message);
+			}
 		}
 	}
 	

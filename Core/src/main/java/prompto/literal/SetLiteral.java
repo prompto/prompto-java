@@ -40,7 +40,7 @@ public class SetLiteral extends ContainerLiteral<SetValue> {
 	}
 	
 	@Override
-	public IValue interpret(Context context) throws PromptoError {
+	public SetValue interpret(Context context) throws PromptoError {
 		if(value.isEmpty() && expressions!=null && !expressions.isEmpty()) {
 			check(context); // force computation of itemType
 			PromptoSet<IValue> set = new PromptoSet<IValue>();

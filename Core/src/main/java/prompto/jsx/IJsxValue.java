@@ -9,12 +9,12 @@ public interface IJsxValue {
 
 	IType check(Context context);
 
-
 	default void toDialect(CodeWriter writer) {
 		throw new UnsupportedOperationException("toDialect " + this.getClass().getName());
 	}
 
 	void declare(Transpiler transpiler);
 	boolean transpile(Transpiler transpiler);
+	boolean isLiteral();
 
 }

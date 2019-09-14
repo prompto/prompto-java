@@ -127,6 +127,20 @@ public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 	}
 	
 	@Override
+	public void reportDuplicateProperty(ISection section, String name) {
+		synchronized(problems) {
+			problems.add(new DuplicatePropertyError(name, section));
+		}
+	}
+
+	@Override
+	public void reportMissingProperty(ISection section, String name) {
+		synchronized(problems) {
+			problems.add(new MissingPropertyError(name, section));
+		}
+	}
+
+	@Override
 	public void reportUnknownAnnotation(ISection section, String name) {
 		synchronized(problems) {
 			problems.add(new UnknowAnnotationError(name, section));

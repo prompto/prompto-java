@@ -15,6 +15,11 @@ public class JsxLiteral implements IJsxValue {
 	}
 	
 	@Override
+	public boolean isLiteral() {
+		return true;
+	}
+	
+	@Override
 	public IType check(Context context) {
 		return TextType.instance();
 	}
