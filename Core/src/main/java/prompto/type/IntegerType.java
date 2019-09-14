@@ -172,7 +172,7 @@ public class IntegerType extends NativeType implements INumberType {
 		}
 
 		@Override
-		public void toDialect(CodeWriter writer) {
+		public void declarationToDialect(CodeWriter writer) {
 			throw new UnsupportedOperationException();
 		}
 		

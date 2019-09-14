@@ -112,7 +112,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 	}
 	
 	@Override
-	public void toDialect(CodeWriter writer) {
+	public void declarationToDialect(CodeWriter writer) {
 		switch(writer.getDialect()) {
 		case E:
 			writer.append("define ");

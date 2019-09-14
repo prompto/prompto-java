@@ -161,7 +161,7 @@ public class DispatchMethodDeclaration extends BaseMethodDeclaration {
 	}
 
 	@Override
-	public void toDialect(CodeWriter writer) {
+	public void declarationToDialect(CodeWriter writer) {
 		throw new UnsupportedOperationException("Should never get there!");
 	}
 

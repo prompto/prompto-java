@@ -86,10 +86,6 @@ public class DeclarationList extends LinkedList<IDeclaration> {
 
 	public void toDialect(CodeWriter writer) {
 		for(IDeclaration declaration : this) {
-			if(declaration.getComments()!=null)
-				declaration.getComments().forEach(comment->comment.toDialect(writer));
-			if(declaration.getLocalAnnotations()!=null)
-				declaration.getLocalAnnotations().forEach(annotation->annotation.toDialect(writer));
 			declaration.toDialect(writer);
 			writer.append("\n");
 		}

@@ -11,6 +11,7 @@ import prompto.grammar.Identifier;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.statement.CommentStatement;
+import prompto.utils.CodeWriter;
 
 public abstract class BaseDeclaration extends Section implements IDeclaration {
 
@@ -54,6 +55,17 @@ public abstract class BaseDeclaration extends Section implements IDeclaration {
 		return getId().hashCode();
 	}
 	
+	@Override
+	public final void toDialect(CodeWriter writer) {
+		if(getComments()!=null)
+			getComments().forEach(comment->comment.toDialect(writer));
+		if(getLocalAnnotations()!=null)
+			getLocalAnnotations().forEach(annotation->annotation.toDialect(writer));
+		declarationToDialect(writer);
+	}
+	
+	protected abstract void declarationToDialect(CodeWriter writer);
+
 	@Override
 	public Collection<CommentStatement> getComments() {
 		return comments;

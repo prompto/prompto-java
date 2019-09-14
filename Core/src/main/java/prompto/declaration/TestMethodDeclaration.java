@@ -168,7 +168,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	}
 
 	@Override
-	public void toDialect(CodeWriter writer) {
+	public void declarationToDialect(CodeWriter writer) {
 		if(writer.isGlobalContext())
 			writer = writer.newLocalWriter();
 		switch(writer.getDialect()) {

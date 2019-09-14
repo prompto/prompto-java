@@ -191,7 +191,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	}
 	
 	@Override
-	public void toDialect(CodeWriter writer) {
+	public void declarationToDialect(CodeWriter writer) {
 		writer = writer.newInstanceWriter(getType(writer.getContext()));
 		processAnnotations(writer.getContext(), true);
 		switch(writer.getDialect()) {
@@ -269,23 +269,15 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	protected void methodsToEDialect(CodeWriter writer, MethodDeclarationList methods) {
 		writer.indent();
 		for(IDeclaration decl : methods) {
-			if(decl.getComments()!=null)
-				decl.getComments().forEach(comment->comment.toDialect(writer));
-			if(decl.getLocalAnnotations()!=null)
-				decl.getLocalAnnotations().forEach(annotation->annotation.toDialect(writer));
-			writer.newLine();
 			CodeWriter w = writer.newMemberWriter();
 			decl.toDialect(w);
+			writer.newLine();
 		}
 		writer.dedent();
 	}
 
 	protected void methodsToODialect(CodeWriter writer, MethodDeclarationList methods) {
 		for(IDeclaration decl : methods) {
-			if(decl.getComments()!=null)
-				decl.getComments().forEach(comment->comment.toDialect(writer));
-			if(decl.getLocalAnnotations()!=null)
-				decl.getLocalAnnotations().forEach(annotation->annotation.toDialect(writer));
 			CodeWriter w = writer.newMemberWriter();
 			decl.toDialect(w);
 			w.newLine();

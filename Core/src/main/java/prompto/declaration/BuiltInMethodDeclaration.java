@@ -67,7 +67,7 @@ public abstract class BuiltInMethodDeclaration extends BaseMethodDeclaration {
 	}
 	
 	@Override
-	public void toDialect(CodeWriter writer) {
+	public void declarationToDialect(CodeWriter writer) {
 		throw new UnsupportedOperationException();
 	}
 

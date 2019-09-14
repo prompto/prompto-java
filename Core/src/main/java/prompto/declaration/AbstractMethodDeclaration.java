@@ -78,7 +78,7 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 	
 	
 	@Override
-	public void toDialect(CodeWriter writer) {
+	public void declarationToDialect(CodeWriter writer) {
 		switch(writer.getDialect()) {
 		case E:
 			toEDialect(writer);
