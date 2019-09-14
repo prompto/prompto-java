@@ -19,7 +19,7 @@ public class AlwaysValidator implements IPropertyValidator {
 	
 	@Override
 	public void validate(Context context, JsxProperty property) {
-		// TODO accept any property
+		// accept any property
 	}
 	
 	@Override

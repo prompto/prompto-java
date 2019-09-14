@@ -100,9 +100,9 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 		Object value = entry.getValue();
 		if(value instanceof TypeLiteral)
 			return checkProperty(annotation, context, entry, prop, (TypeLiteral)value);
-		else if(entry.getValue() instanceof SetLiteral)
+		else if(value instanceof SetLiteral)
 			return checkProperty(annotation, context, entry, prop, (SetLiteral)value);
-		else if(entry.getValue() instanceof DocumentLiteral)
+		else if(value instanceof DocumentLiteral)
 			return checkProperty(annotation, context, entry, prop, (DocumentLiteral)value);
 		else {
 			context.getProblemListener().reportIllegalAnnotation(annotation, "WidgetProperties expects a Document of types as unique parameter");
@@ -153,7 +153,7 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 							.collect(Collectors.toSet());
 					prop.setValidator(new ValueSetValidator(texts));
 				} else {
-					context.getProblemListener().reportIllegalAnnotation(child.getKey(), "Expected a Set value for 'texts'.");
+					context.getProblemListener().reportIllegalAnnotation(child.getKey(), "Expected a Set value for 'values'.");
 					return null;
 				}
 				break;
@@ -167,7 +167,7 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 
 	private Property checkProperty(Annotation annotation, Context context, DictEntry entry, Property prop, SetLiteral value) {
 		IType itemType = null;
-		IType setType = ((SetLiteral)entry.getValue()).check(context);
+		IType setType = value.check(context);
 		if(setType instanceof ContainerType)
 			itemType = ((ContainerType)setType).getItemType();
 		if(itemType instanceof TypeType) {

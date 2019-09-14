@@ -51,6 +51,7 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 					declared.validate(context, prop);
 			}
 		});
+		// TODO check required properties
 	}
 
 	private PropertyMap getHtmlPropertyTypes(String string) {
