@@ -1,7 +1,16 @@
-define ClickEvent as native category with bindings:
+@Inlined
+define MouseEvent as native category with bindings:
 	
 	define category bindings as:
 		JavaScript: Event
+
+
+@Inlined
+define KeyboardEvent as native category with bindings:
+	
+	define category bindings as:
+		JavaScript: Event
+
 
 @Inlined
 define RadioChangedEvent as native category with bindings:
@@ -30,6 +39,14 @@ and methods:
 		JavaScript: return this.target.value;
 
 
+define MouseEventCallback as abstract method receiving MouseEvent event
+define KeyboardEventCallback as abstract method receiving KeyboardEvent event
+define RadioChangedCallback as abstract method receiving RadioChangedEvent event
+define InputChangedCallback as abstract method receiving InputChangedEvent event
+define DateChangedCallback as abstract method receiving Date value
+define ToggleChangedCallback as abstract method receiving Boolean value
+define ItemSelectedCallback as abstract method receiving Text value
+define PageSelectedCallback as abstract method receiving Integer value
 define getReactWidgetProps as native method receiving ReactWidget w returning Document doing:
 	JavaScript: return w.props;
 
@@ -54,7 +71,7 @@ define hideReactModal as native method doing:
 	JavaScript: ReactUtils.hideModal();
 
 
-define showReactContextMenu as native method receiving ClickEvent event and Html menu doing:
+define showReactContextMenu as native method receiving MouseEvent event and Html menu doing:
 	JavaScript: ReactUtils.showContextMenu(event, menu);
 
 
@@ -64,7 +81,7 @@ define hideReactContextMenu as native method doing:
 
 
 @WidgetField(name="state", type=Document)
-@WidgetField(name="props", type=Document)
+@WidgetField(name="props", type=Document, isProperties=true)
 define ReactWidget as widget with methods:
 	
 	@Static
@@ -115,3 +132,4 @@ define ReactWidget as widget with methods:
 define alert as native method receiving Text text doing:
 	JavaScript: alert(text);
 
+define WidgetCallback as abstract method receiving any ref
