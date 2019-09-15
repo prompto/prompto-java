@@ -1,10 +1,12 @@
 package prompto.jsx;
 
+import prompto.expression.ArrowExpression;
 import prompto.expression.IExpression;
 import prompto.literal.Literal;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
+import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
 
 public class JsxExpression implements IJsxValue, IJsxExpression {
@@ -30,6 +32,14 @@ public class JsxExpression implements IJsxValue, IJsxExpression {
 		return expression.check(context);
 	}
 	
+	@Override
+	public IType checkProto(Context context, MethodType expected) {
+		if(expression instanceof ArrowExpression)
+			return expected.checkArrowExpression(context, (ArrowExpression)expression);
+		else
+			return expression.check(context);
+	}
+
 	@Override
 	public void toDialect(CodeWriter writer) {
 		writer.append("{");

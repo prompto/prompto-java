@@ -3,7 +3,9 @@ package prompto.jsx;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
+import prompto.type.MethodType;
 import prompto.type.TextType;
+import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 
 public class JsxLiteral implements IJsxValue {
@@ -24,6 +26,11 @@ public class JsxLiteral implements IJsxValue {
 		return TextType.instance();
 	}
 	
+	@Override
+	public IType checkProto(Context context, MethodType expected) {
+		return VoidType.instance();
+	}
+
 	@Override
 	public void toDialect(CodeWriter writer) {
 		writer.append(text);

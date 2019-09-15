@@ -274,5 +274,34 @@ public class WidgetPropertiesProcessorTest extends BaseOParserTest {
 			assertTrue(warning.get().contains("invalid"));
 		}
 	}
+	
+	@Test
+	public void transpilesCallback() throws Exception {
+		loadResource("annotations/WidgetProps11.poc");
+		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, new Identifier("Container"));
+		Transpiler transpiler = new Transpiler(new Nashorn8Engine(), context);
+		decl.declare(transpiler);
+		decl.transpile(transpiler);
+		String js = transpiler.toString();
+		try(OutputStream output = new FileOutputStream("transpiled.js")) {
+			output.write(js.getBytes());
+		}
+		assertTrue(js.contains("stuff"));
+	}
+
+	@Test
+	public void transpilesArrow() throws Exception {
+		loadResource("annotations/WidgetProps12.poc");
+		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, new Identifier("Container"));
+		Transpiler transpiler = new Transpiler(new Nashorn8Engine(), context);
+		decl.declare(transpiler);
+		decl.transpile(transpiler);
+		String js = transpiler.toString();
+		try(OutputStream output = new FileOutputStream("transpiled.js")) {
+			output.write(js.getBytes());
+		}
+		assertTrue(js.contains("stuff"));
+	}
+
 
 }

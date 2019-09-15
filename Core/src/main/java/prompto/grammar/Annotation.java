@@ -32,6 +32,10 @@ public class Annotation extends Section {
 		return name.equals(id.toString());
 	}
 	
+	public DictEntryList getArguments() {
+		return arguments;
+	}
+	
 	public Object getArgument(String name) {
 		Optional<DictEntry> entry = arguments.stream()
 				.filter(arg->arg.getKey().asText().getStorableData().equals(name))

@@ -61,22 +61,26 @@ public class Property {
 		return "{ name=" + name + ", help=" + help + "}";
 	}
 
-	public void toLiteral(Writer writer) throws IOException {
-		writer.append(name).append(": ");
-		if(help!=null || validator.isRequired()) {
-			writer.append("{ ")
-				.append(validator.getKeyName())
-				.append(": ")
-				.append(validator.toLiteral());
-			if(help!=null) {
-				String escaped = help.replaceAll("\"", "'");
-				writer.append(", help: \"").append(escaped).append("\"");
-			}
-			if(validator.isRequired())
-				writer.append(", required: true");
-			writer.append('}');
-		} else 
-			writer.append(getValidator().toLiteral());
+	public void toLiteral(Writer writer) {
+		try {
+			writer.append(name).append(": ");
+			if(help!=null || validator.isRequired()) {
+				writer.append("{ ")
+					.append(validator.getKeyName())
+					.append(": ")
+					.append(validator.toLiteral());
+				if(help!=null) {
+					String escaped = help.replaceAll("\"", "'");
+					writer.append(", help: \"").append(escaped).append("\"");
+				}
+				if(validator.isRequired())
+					writer.append(", required: true");
+				writer.append('}');
+			} else 
+				writer.append(getValidator().toLiteral());
+		} catch(IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 

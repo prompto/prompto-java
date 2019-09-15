@@ -6,6 +6,8 @@ import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.IType;
+import prompto.type.MethodType;
+import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 
 public class JsxProperty extends Section {
@@ -38,6 +40,15 @@ public class JsxProperty extends Section {
 		else
 			return BooleanType.instance(); // a value-less property is treated as a boolean flag
 	}
+	
+	
+	public IType checkProto(Context context, MethodType type) {
+		if(value!=null)
+			return value.checkProto(context, type);
+		else
+			return VoidType.instance();
+	}
+
 
 
 	public void toDialect(CodeWriter writer) {

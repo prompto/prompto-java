@@ -3,6 +3,7 @@ package prompto.property;
 import prompto.jsx.JsxProperty;
 import prompto.runtime.Context;
 import prompto.type.IType;
+import prompto.type.MethodType;
 
 public class TypeValidator implements IPropertyValidator {
 
@@ -19,9 +20,9 @@ public class TypeValidator implements IPropertyValidator {
 
 	@Override
 	public void validate(Context context, JsxProperty property) {
-		IType actual = property.check(context);
+		IType actual = type instanceof MethodType ? property.checkProto(context, (MethodType)type) : property.check(context);
 		if(!type.isAssignableFrom(context, actual))
-		context.getProblemListener().reportIllegalAssignment(property, type, actual);
+			context.getProblemListener().reportIllegalAssignment(property, type, actual);
 	}
 	
 	@Override
