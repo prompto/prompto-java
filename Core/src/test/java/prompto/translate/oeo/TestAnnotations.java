@@ -42,6 +42,16 @@ public class TestAnnotations extends BaseOParserTest {
 	}
 
 	@Test
+	public void testWidgetProps11() throws Exception {
+		compareResourceOEO("annotations/WidgetProps11.poc");
+	}
+
+	@Test
+	public void testWidgetProps12() throws Exception {
+		compareResourceOEO("annotations/WidgetProps12.poc");
+	}
+
+	@Test
 	public void testWidgetProps2() throws Exception {
 		compareResourceOEO("annotations/WidgetProps2.poc");
 	}

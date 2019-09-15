@@ -76,9 +76,11 @@ public class ArrowExpression extends Section implements IExpression {
 	@Override
 	public void toDialect(CodeWriter writer) {
 		argsToDialect(writer);
-		writer.append(argsSuite);
+		if(argsSuite!=null)
+			writer.append(argsSuite);
 		writer.append("=>");
-		writer.append(arrowSuite);
+		if(arrowSuite!=null)
+			writer.append(arrowSuite);
 		bodyToDialect(writer);
 	}
 	
