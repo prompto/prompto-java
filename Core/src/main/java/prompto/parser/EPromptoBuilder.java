@@ -260,6 +260,7 @@ import prompto.type.BooleanType;
 import prompto.type.CategoryType;
 import prompto.type.CharacterType;
 import prompto.type.CodeType;
+import prompto.type.CssType;
 import prompto.type.DateTimeType;
 import prompto.type.DateType;
 import prompto.type.DecimalType;
@@ -909,6 +910,11 @@ public class EPromptoBuilder extends EParserBaseListener {
 		else if(args!=null)
 			args.checkLastAnd();
 		setNodeValue(ctx, new ConstructorExpression(type, null, args, true));
+	}
+	
+	@Override
+	public void exitCssType(CssTypeContext ctx) {
+		setNodeValue(ctx, CssType.instance());
 	}
 
 	@Override

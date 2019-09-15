@@ -2252,6 +2252,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitBooleanType(EParser.BooleanTypeContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code CssType}
+	 * labeled alternative in {@link EParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterCssType(EParser.CssTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code CssType}
+	 * labeled alternative in {@link EParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitCssType(EParser.CssTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code CharacterType}
 	 * labeled alternative in {@link EParser#native_type}.
 	 * @param ctx the parse tree

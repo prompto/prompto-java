@@ -199,6 +199,7 @@ import prompto.param.CodeParameter;
 import prompto.param.ExtendedParameter;
 import prompto.param.IParameter;
 import prompto.param.UnresolvedParameter;
+import prompto.parser.OParser.CssTypeContext;
 import prompto.parser.OParser.TypeLiteralContext;
 import prompto.parser.OParser.Type_literalContext;
 
@@ -260,6 +261,7 @@ import prompto.type.BooleanType;
 import prompto.type.CategoryType;
 import prompto.type.CharacterType;
 import prompto.type.CodeType;
+import prompto.type.CssType;
 import prompto.type.DateTimeType;
 import prompto.type.DateType;
 import prompto.type.DecimalType;
@@ -839,6 +841,11 @@ public class OPromptoBuilder extends OParserBaseListener {
 	@Override
 	public void exitCopy_from(Copy_fromContext ctx) {
 		setNodeValue(ctx, this.getNodeValue(ctx.exp));
+	}
+	
+	@Override
+	public void exitCssType(CssTypeContext ctx) {
+		setNodeValue(ctx, CssType.instance());
 	}
 		
 	@Override

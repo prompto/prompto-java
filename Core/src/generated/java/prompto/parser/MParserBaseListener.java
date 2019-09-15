@@ -2212,6 +2212,18 @@ public class MParserBaseListener implements MParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterCssType(MParser.CssTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCssType(MParser.CssTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCharacterType(MParser.CharacterTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
