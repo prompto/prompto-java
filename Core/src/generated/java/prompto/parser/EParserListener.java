@@ -2648,16 +2648,6 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitSymbol_identifier(EParser.Symbol_identifierContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link EParser#any_identifier}.
-	 * @param ctx the parse tree
-	 */
-	void enterAny_identifier(EParser.Any_identifierContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link EParser#any_identifier}.
-	 * @param ctx the parse tree
-	 */
-	void exitAny_identifier(EParser.Any_identifierContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link EParser#argument_list}.
 	 * @param ctx the parse tree
 	 */

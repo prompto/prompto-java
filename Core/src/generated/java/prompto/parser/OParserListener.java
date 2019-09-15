@@ -2496,16 +2496,6 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitSymbol_identifier(OParser.Symbol_identifierContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link OParser#any_identifier}.
-	 * @param ctx the parse tree
-	 */
-	void enterAny_identifier(OParser.Any_identifierContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link OParser#any_identifier}.
-	 * @param ctx the parse tree
-	 */
-	void exitAny_identifier(OParser.Any_identifierContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link OParser#argument_list}.
 	 * @param ctx the parse tree
 	 */

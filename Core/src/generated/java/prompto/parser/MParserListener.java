@@ -2452,16 +2452,6 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitSymbol_identifier(MParser.Symbol_identifierContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MParser#any_identifier}.
-	 * @param ctx the parse tree
-	 */
-	void enterAny_identifier(MParser.Any_identifierContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MParser#any_identifier}.
-	 * @param ctx the parse tree
-	 */
-	void exitAny_identifier(MParser.Any_identifierContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link MParser#argument_list}.
 	 * @param ctx the parse tree
 	 */
