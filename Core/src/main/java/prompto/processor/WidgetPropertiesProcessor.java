@@ -29,6 +29,7 @@ import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.type.NativeType;
 import prompto.type.PropertiesType;
+import prompto.type.TextType;
 import prompto.type.TypeType;
 import prompto.value.BooleanValue;
 import prompto.value.IValue;
@@ -208,7 +209,7 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 			prop.setValidator(new TypeSetValidator(types));
 			prop.setRequired(types.size()==values.getLength()); // no null filtered out
 			return prop;
-		} else if(itemType==AnyType.instance()) {
+		} else if(itemType==AnyType.instance() || itemType==TextType.instance()) {
 			Set<String> texts = values.getItems().stream()
 					.filter(v->v!=NullValue.instance())
 					.map(Object::toString)

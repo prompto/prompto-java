@@ -5,6 +5,7 @@ import java.io.Writer;
 
 import prompto.jsx.JsxProperty;
 import prompto.runtime.Context;
+import prompto.utils.StringUtils;
 
 public class Property {
 	
@@ -63,11 +64,7 @@ public class Property {
 
 	public void toLiteral(Writer writer) {
 		try {
-			if(name.contains("-")) 
-				writer.append('"').append(name).append('"');
-			else	
-				writer.append(name);
-			writer.append(": ");
+			writer.append(nameToKey()).append(": ");
 			if(help!=null || validator.isRequired()) {
 				writer.append("{ ")
 					.append(validator.getKeyName())
@@ -85,6 +82,14 @@ public class Property {
 		} catch(IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	private String nameToKey() {
+		String value = StringUtils.trimEnclosingQuotes(name);
+		if(value.contains("-")) 
+			return '"' + value + '"';
+		else
+			return value;
 	}
 
 

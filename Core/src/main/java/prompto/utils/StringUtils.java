@@ -68,5 +68,12 @@ public abstract class StringUtils {
 		return result.toString(StandardCharsets.UTF_8.name());
 	}
 
+	public static String trimEnclosingQuotes(String value) {
+		if((value.startsWith("'") && value.endsWith("'")) || (value.startsWith("\"") && value.endsWith("\"")))
+			return value.substring(1, value.length()-1);
+		else 
+			return value;
+	}
+
 
 }
