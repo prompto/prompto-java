@@ -32,6 +32,7 @@ import prompto.type.PropertiesType;
 import prompto.type.TypeType;
 import prompto.value.BooleanValue;
 import prompto.value.IValue;
+import prompto.value.NullValue;
 import prompto.value.SetValue;
 import prompto.value.TypeValue;
 
@@ -156,13 +157,15 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 					SetValue values = ((SetLiteral)value).interpret(context);
 					if(values.getItemType() instanceof TypeType) {
 						Set<IType> types = values.getItems().stream()
+								.filter(v->v!=NullValue.instance())
 								.map(v->(TypeValue)v)
 								.map(TypeValue::getValue)
 								.map(type->resolveType(annotation, context, type))
 								.collect(Collectors.toSet());
 						if(types.contains(null))
-							return null;
+							return null; // TODO something went wrong
 						prop.setValidator(new TypeSetValidator(types));
+						prop.setRequired(types.size()==values.getLength()); // no null filtered out
 						break;
 					}
 				}
@@ -172,10 +175,12 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 				if(value instanceof SetLiteral) {
 					SetValue values = ((SetLiteral)value).interpret(context);
 					Set<String> texts = values.getItems().stream()
+							.filter(v->v!=NullValue.instance())
 							.map(IValue::getStorableData)
 							.map(String::valueOf)
 							.collect(Collectors.toSet());
 					prop.setValidator(new ValueSetValidator(texts));
+					prop.setRequired(texts.size()==values.getLength()); // no null filtered out
 					break;
 				} 
 				context.getProblemListener().reportIllegalAnnotation(child.getKey(), "Expected a Set value for 'values'.");
@@ -189,10 +194,11 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 	}
 
 	private Property loadProperty(Annotation annotation, Context context, DictEntry entry, Property prop, SetLiteral literal) {
-		SetValue value = literal.interpret(context);
-		IType itemType = value.getItemType();
+		SetValue values = literal.interpret(context);
+		IType itemType = values.getItemType();
 		if(itemType instanceof TypeType) {
-			Set<IType> types = value.getItems().stream()
+			Set<IType> types = values.getItems().stream()
+				.filter(v->v!=NullValue.instance())
 				.map(v->(TypeValue)v)
 				.map(TypeValue::getValue)
 				.map(type->resolveType(annotation, context, type))
@@ -200,12 +206,15 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 			if(types.contains(null))
 				return null;
 			prop.setValidator(new TypeSetValidator(types));
+			prop.setRequired(types.size()==values.getLength()); // no null filtered out
 			return prop;
 		} else if(itemType==AnyType.instance()) {
-			Set<String> values = value.getItems().stream()
+			Set<String> texts = values.getItems().stream()
+					.filter(v->v!=NullValue.instance())
 					.map(Object::toString)
 					.collect(Collectors.toSet());
-				prop.setValidator(new ValueSetValidator(values));
+				prop.setValidator(new ValueSetValidator(texts));
+				prop.setRequired(texts.size()==values.getLength()); // no null filtered out
 				return prop;
 		} else {
 			context.getProblemListener().reportIllegalAnnotation(entry.getKey(), "Expected a set of Types.");

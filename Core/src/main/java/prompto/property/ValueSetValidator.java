@@ -37,12 +37,6 @@ public class ValueSetValidator implements IPropertyValidator {
 	}
 	
 	@Override
-	public boolean isRequired() {
-		return !values.contains(null);
-	}
-	
-	
-	@Override
 	public String getKeyName() {
 		return "values";
 	}
