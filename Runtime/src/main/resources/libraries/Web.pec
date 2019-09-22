@@ -79,7 +79,7 @@ define hideReactModal as native method doing:
 	JavaScript: ReactUtils.hideModal();
 
 
-define showReactContextMenu as native method receiving MouseEvent event and Html menu doing:
+define showReactContextMenu as native method receiving ClickEvent event and Html menu doing:
 	JavaScript: ReactUtils.showContextMenu(event, menu);
 
 
