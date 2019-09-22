@@ -21,6 +21,8 @@ public abstract class Module {
 	private String description;
 	private PromptoBinary image;
 	private List<Dependency> dependencies;
+	private ModuleStatus moduleStatus;
+	private Boolean parked;
 	
 	public abstract ModuleType getType();
 
@@ -82,6 +84,12 @@ public abstract class Module {
 					.collect(Collectors.toList());
 			storable.setData("dependencies", dbIds);
 		}
+		if(moduleStatus!=null)
+			storable.setData("moduleStatus", moduleStatus.name());
+		else
+			storable.setData("moduleStatus", ModuleStatus.ACTIVE.name());
+		if(parked!=null)
+			storable.setData("parked", parked);
 		return storable;
 	}
 	
@@ -93,6 +101,10 @@ public abstract class Module {
 		setImage((PromptoBinary)stored.getData("image"));
 		List<Dependency> dependencies = Dependency.listFromStored(store, stored.getData("dependencies"));
 		setDependencies(dependencies);
+		String value = (String)stored.getData("moduleStatus");
+		if(value!=null)
+			setModuleStatus(ModuleStatus.valueOf(value));
+		setParked((Boolean)stored.getData("parked"));
 	}
 
 	private List<String> getCategories() {
@@ -114,6 +126,23 @@ public abstract class Module {
 	
 	public List<Dependency> getDependencies() {
 		return dependencies;
+	}
+	
+	public void setModuleStatus(ModuleStatus moduleStatus) {
+		this.moduleStatus = moduleStatus;
+	}
+	
+	public ModuleStatus getModuleStatus() {
+		return moduleStatus;
+	}
+	
+	
+	public void setParked(Boolean parked) {
+		this.parked = parked;
+	}
+	
+	public Boolean getParked() {
+		return parked;
 	}
 
 
