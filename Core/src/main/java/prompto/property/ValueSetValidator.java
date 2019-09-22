@@ -1,6 +1,7 @@
 package prompto.property;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import prompto.jsx.IJsxValue;
 import prompto.jsx.JsxProperty;
@@ -48,7 +49,7 @@ public class ValueSetValidator implements IPropertyValidator {
 	
 	@Override
 	public String toLiteral() {
-		return "<" + String.join(", ", values) + ">";
+		return "<" + values.stream().map(s->s==null? "null" : '"' + s + '"').collect(Collectors.joining(", ")) + ">";
 	}
 
 

@@ -58,12 +58,16 @@ public class Property {
 
 	@Override
 	public String toString() {
-		return "{ name=" + name + ", help=" + help + "}";
+		return "name=" + name + ", type=" + validator + ", help=" + help;
 	}
 
 	public void toLiteral(Writer writer) {
 		try {
-			writer.append(name).append(": ");
+			if(name.contains("-")) 
+				writer.append('"').append(name).append('"');
+			else	
+				writer.append(name);
+			writer.append(": ");
 			if(help!=null || validator.isRequired()) {
 				writer.append("{ ")
 					.append(validator.getKeyName())

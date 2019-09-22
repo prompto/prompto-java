@@ -31,5 +31,10 @@ public class AlwaysValidator implements IPropertyValidator {
 	public String toLiteral() {
 		return AnyType.instance().getTypeName();
 	}
+	
+	@Override
+	public String toString() {
+		return "any";
+	}
 
 }
