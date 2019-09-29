@@ -5,9 +5,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import prompto.declaration.AttributeDeclaration;
@@ -56,7 +58,11 @@ public class CodeStoreBootstrapper {
 		columns = fetchLatestDeclarations(columns);
 		registerColumnAttributes(columns.values());
 		if(store!=null) {
-			List<AttributeInfo> infos = columns.values().stream().map((c)->c.getAttributeInfo(context)).collect(Collectors.toList());
+			Function<Identifier, IDeclaration> locator = id -> {
+				Iterator<IDeclaration> decls = next.fetchLatestDeclarations(id.toString()).iterator();
+				return decls.hasNext() ? decls.next() : null;
+			};
+			List<AttributeInfo> infos = columns.values().stream().map(c->c.getAttributeInfo(locator)).collect(Collectors.toList());
 			store.createOrUpdateAttributes(infos);
 		}
 	}
@@ -120,6 +126,8 @@ public class CodeStoreBootstrapper {
 		columns.put("body", new AttributeDeclaration(new Identifier("body"), TextType.instance()));
 		columns.put("data", new AttributeDeclaration(new Identifier("data"), BlobType.instance()));
 		columns.put("mimeType", new AttributeDeclaration(new Identifier("mimeType"), TextType.instance()));
+		columns.put("moduleStatus", new AttributeDeclaration(new Identifier("moduleStatus"), TextType.instance())); // for bootstrapping TextType is good enough
+		columns.put("parked", new AttributeDeclaration(new Identifier("parked"), BooleanType.instance()));
 		return columns;
 	}
 

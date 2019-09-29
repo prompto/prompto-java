@@ -5,3 +5,9 @@ define dialect as storable Text attribute with key index
 define body as storable Text attribute with words index
 define mimeType as storable Text attribute with key index
 define data as storable Blob attribute
+define parked as storable Boolean attribute
+define moduleStatus as storable ModuleStatus attribute
+define ModuleStatus as enumerated Text with symbols:
+	PROVIDED with "Provided" as value
+	ACTIVE with "Active" as value
+	TAGGED with "Tagged" as value
