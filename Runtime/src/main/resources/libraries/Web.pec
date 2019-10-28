@@ -53,7 +53,7 @@ define RadioChangedCallback as abstract method receiving RadioChangedEvent event
 define InputChangedCallback as abstract method receiving InputChangedEvent event
 define DateChangedCallback as abstract method receiving Date value
 define ToggleChangedCallback as abstract method receiving Boolean value
-define ItemSelectedCallback as abstract method receiving Text value
+define ItemSelectedCallback as abstract method receiving Any value
 define PageSelectedCallback as abstract method receiving Integer value
 define getReactWidgetProps as native method receiving ReactWidget w returning Document doing:
 	JavaScript: return w.props;
