@@ -158,6 +158,8 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 	}
 
 	public IValue readJSONValue(Context context, JsonNode value) throws PromptoError {
+		if(value.isObject() && value.has("name"))
+			value = value.get("name");
 		String name = value.asText();
 		for(Symbol symbol : symbolsList) {
 			if(name.equals(symbol.getName()))
