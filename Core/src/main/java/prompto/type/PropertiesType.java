@@ -1,7 +1,10 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
+import java.util.Set;
 
+import prompto.declaration.IMethodDeclaration;
+import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.property.Property;
 import prompto.property.PropertyMap;
@@ -75,4 +78,10 @@ public class PropertiesType extends BaseType {
 	    }
 	}
 	
+	@Override
+	public Set<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError {
+		Property prop = properties.get(name.toString());
+		return prop!=null ? prop.getValidator().getMethods(context) : super.getMemberMethods(context, name);
+	}
+
 }

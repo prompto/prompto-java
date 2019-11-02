@@ -1,5 +1,9 @@
 package prompto.property;
 
+import java.util.Collections;
+import java.util.Set;
+
+import prompto.declaration.IMethodDeclaration;
 import prompto.jsx.JsxProperty;
 import prompto.runtime.Context;
 import prompto.type.IType;
@@ -27,6 +31,9 @@ public interface IPropertyValidator {
 	}
 	default IPropertyValidator optionalForAccessibility() {
 		return this;
+	}
+	default Set<IMethodDeclaration> getMethods(Context context) {
+		return Collections.emptySet();
 	}
 	
 

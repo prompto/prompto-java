@@ -1,7 +1,13 @@
 package prompto.property;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+import prompto.declaration.IMethodDeclaration;
 import prompto.jsx.JsxProperty;
 import prompto.runtime.Context;
+import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.type.IType;
 import prompto.type.MethodType;
 
@@ -33,6 +39,16 @@ public class TypeValidator implements IPropertyValidator {
 	@Override
 	public String toLiteral() {
 		return type.getTypeName();
+	}
+	
+	@Override
+	public Set<IMethodDeclaration> getMethods(Context context) {
+		if(type instanceof MethodType) {
+			MethodDeclarationMap decls = context.getRegisteredDeclaration(MethodDeclarationMap.class, type.getTypeNameId());
+			if(decls!=null)
+				return new HashSet<>(decls.values());
+		} 
+		return IPropertyValidator.super.getMethods(context);
 	}
 
 }

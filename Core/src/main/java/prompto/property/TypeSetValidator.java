@@ -1,12 +1,16 @@
 package prompto.property;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import prompto.declaration.IMethodDeclaration;
 import prompto.jsx.JsxProperty;
 import prompto.runtime.Context;
+import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.type.AnyType;
 import prompto.type.IType;
+import prompto.type.MethodType;
 
 public class TypeSetValidator implements IPropertyValidator {
 
@@ -38,5 +42,20 @@ public class TypeSetValidator implements IPropertyValidator {
 	public String toLiteral() {
 		return "<" + types.stream().map(String::valueOf).collect(Collectors.joining(", ")) + ">";
 	}
+	
+	@Override
+	public Set<IMethodDeclaration> getMethods(Context context) {
+		return types.stream()
+				.filter(type->type instanceof MethodType)
+				.map(type->getMethods(context, type))
+				.flatMap(Collection::stream)
+				.collect(Collectors.toSet());
+	}
+
+	private Collection<IMethodDeclaration> getMethods(Context context, IType type) {
+		MethodDeclarationMap maps = context.getRegisteredDeclaration(MethodDeclarationMap.class, type.getTypeNameId());
+		return maps.values();
+	}
+
 
 }
