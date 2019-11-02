@@ -453,9 +453,12 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    if(this.parent!=null)
-	        return super.transpile(transpiler);
-	    else {
+	    if(parent!=null) {
+	        super.transpile(transpiler);
+			if(parent instanceof ThisExpression)
+				transpiler.append(".bind(this)");
+			return false;
+	    } else {
 	        transpiler.append(this.getName());
 	        return false;
 	    }
