@@ -287,6 +287,8 @@ public class WidgetPropertiesProcessorTest extends BaseOParserTest {
 			output.write(js.getBytes());
 		}
 		assertTrue(js.contains("stuff"));
+		assertTrue(js.contains("function(click)"));
+		assertTrue(js.contains("this.props.callback(7)"));
 	}
 
 	@Test
@@ -301,6 +303,8 @@ public class WidgetPropertiesProcessorTest extends BaseOParserTest {
 			output.write(js.getBytes());
 		}
 		assertTrue(js.contains("stuff"));
+		assertTrue(js.contains("function(v)"));
+		assertTrue(js.contains("this.selected.bind(this)()"));
 	}
 
 
