@@ -161,6 +161,8 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 			if(resolved instanceof Section)
 				((Section)resolved).setFrom(this);
 		}
+		if(resolved==null)
+	    	context.getProblemListener().reportUnknownMethod(this, this.toString());
 	}
 	
 	private IExpression resolveUnresolvedSelector(Context context, UnresolvedSelector caller) {
@@ -199,7 +201,6 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 			else
 				call = new MethodCall(new MethodSelector(id), arguments);
 		}
-		// call.copySectionFrom(this); // TODO
 		return call;
 	}
 
@@ -221,13 +222,15 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 	@Override
 	public void declare(Transpiler transpiler) {
 	    this.resolve(transpiler.getContext());
-	    this.resolved.declare(transpiler);
+	    if(this.resolved!=null)
+	    	this.resolved.declare(transpiler);
 	}
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 	    this.resolve(transpiler.getContext());
-	    this.resolved.transpile(transpiler);
+	    if(this.resolved!=null)
+	    	this.resolved.transpile(transpiler);
 	    return false;
 	}
 	
