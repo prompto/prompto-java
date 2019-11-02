@@ -47,6 +47,7 @@ import prompto.runtime.MethodFinder;
 import prompto.transpiler.Transpiler;
 import prompto.type.CodeType;
 import prompto.type.IType;
+import prompto.type.PropertiesType;
 import prompto.utils.CodeWriter;
 import prompto.value.ArrowValue;
 import prompto.value.BooleanValue;
@@ -470,6 +471,9 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	        name = this.variableName;
 	    /*else if(this.fullSelector)
 	        name = this.fullSelector.name;*/
+	    // don't transpile name of method references in widget property value,  
+	    else if(parent!=null && parent.check(transpiler.getContext()) instanceof PropertiesType)
+	    	name = selector.getName();
 	    else 
 	        name = declaration.getTranspiledName(transpiler.getContext());
 	    return new MethodSelector(parent, new Identifier(name));
