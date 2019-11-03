@@ -51,6 +51,12 @@ public class NativeWidgetDeclaration extends NativeCategoryDeclaration implement
 	protected void categoryTypeToMDialect(CodeWriter writer) {
 		writer.append("native widget");
 	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		processAnnotations(transpiler.getContext(), true);
+		super.declare(transpiler);
+	}
 
 	@Override
 	public boolean transpile(Transpiler transpiler) {
