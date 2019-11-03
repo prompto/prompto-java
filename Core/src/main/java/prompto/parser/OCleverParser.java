@@ -13,6 +13,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import prompto.declaration.DeclarationList;
+import prompto.literal.DocumentLiteral;
 import prompto.problem.IProblemListener;
 
 public class OCleverParser extends OParser implements IParser {
@@ -86,6 +87,10 @@ public class OCleverParser extends OParser implements IParser {
 		return this.<DeclarationList>doParse(this::declaration_list);
 	}
 	
+	public DocumentLiteral parse_document_literal() {
+		return this.<DocumentLiteral>doParse(this::document_literal);
+	}
+
 	public <T extends Object> T doParse(Supplier<ParseTree> method) {
 		ParseTree tree = method.get();
 		OPromptoBuilder builder = new OPromptoBuilder(this);
@@ -93,4 +98,5 @@ public class OCleverParser extends OParser implements IParser {
 		walker.walk(builder, tree);
 		return builder.<T>getNodeValue(tree);
 	}
+
 }
