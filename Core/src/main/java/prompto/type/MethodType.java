@@ -131,12 +131,12 @@ public class MethodType extends BaseType {
 
 	public void transpileArrowExpression(Transpiler transpiler, ArrowExpression expression) {
 		transpiler = transpiler.newChildTranspiler(null);
-		transpiler.append("function(");
+		transpiler.append("(function(");
 		expression.transpileArguments(transpiler);
 		transpiler.append(") {");
 		this.method.registerParameters(transpiler.getContext());
 		expression.transpile(transpiler);
-		transpiler.append("}");
+		transpiler.append("}).bind(this)");
 		transpiler.flush();
 	}
 
