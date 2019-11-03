@@ -35,8 +35,11 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 
 	@Override
 	public IType check(Context context) {
-		PropertyMap propertyMap = getPropertyMap(context);
-		checkProperties(context, propertyMap);
+		if(Character.isUpperCase(id.toString().charAt(0))) {
+			PropertyMap propertyMap = getPropertyMap(context);
+			checkWidgetProperties(context, propertyMap);
+		} else
+			checkHtmlProperties(context);
 		return JsxType.instance();
 	}
 	
@@ -54,7 +57,7 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 			return getHtmlPropertyTypes(context, id.toString());
 	}
 
-	private void checkProperties(Context context, PropertyMap propertyMap) {
+	private void checkWidgetProperties(Context context, PropertyMap propertyMap) {
 		Set<String> actualNames = new HashSet<>();
 		if(properties!=null)
 			properties.forEach(prop->{
@@ -66,10 +69,38 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 				if(propertyMap!=null) {
 					Property declared = propertyMap.get(prop.getName());
 					if(declared==null)
+						declared = getHtmlPropertyTypes(context, null).get(prop.getName());
+					if(declared==null)
 						context.getProblemListener().reportUnknownProperty(prop, prop.getName());
 					else
 						declared.validate(context, prop);
 				}
+			});
+		if(propertyMap!=null) {
+			propertyMap.entrySet().stream()
+				.filter(e->e.getValue().isRequired())
+				.forEach(e->{
+					if(properties==null || !actualNames.contains(e.getKey()))
+						context.getProblemListener().reportMissingProperty(this, e.getKey());
+				});
+		}
+	}
+	
+	private void checkHtmlProperties(Context context) {
+		PropertyMap propertyMap = getHtmlPropertyTypes(context, id.toString());
+		Set<String> actualNames = new HashSet<>();
+		if(properties!=null)
+			properties.forEach(prop->{
+				if(actualNames.contains(prop.getName()))
+					context.getProblemListener().reportDuplicateProperty(prop, prop.getName());
+				else
+					actualNames.add(prop.getName());
+				prop.check(context);
+				Property declared = propertyMap.get(prop.getName());
+				if(declared==null)
+					context.getProblemListener().reportUnknownProperty(prop, prop.getName());
+				else
+					declared.validate(context, prop);
 			});
 		if(propertyMap!=null) {
 			propertyMap.entrySet().stream()
@@ -214,7 +245,7 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 		+ "}"; // TODO: 'key' is for React only
 
 	static ThreadLocal<PropertyMap> HTML_PROPERTIES_MAP = new ThreadLocal<>();
-	static ThreadLocal<Boolean> HTML_TEST_MODE = new ThreadLocal<>();
+	static ThreadLocal<Boolean> HTML_TEST_MODE = ThreadLocal.withInitial(()->false);
 
 	public static void setTestMode(boolean set) {
 		HTML_TEST_MODE.set(set);
