@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import prompto.declaration.IDeclaration;
 import prompto.grammar.Identifier;
+import prompto.jsx.JsxElementBase;
 import prompto.parser.ISection;
 import prompto.parser.o.BaseOParserTest;
 import prompto.problem.ProblemListener;
@@ -131,6 +132,7 @@ public class WidgetPropertiesProcessorTest extends BaseOParserTest {
 
 	@Test
 	public void transpilesReactPropsWithWarnings() throws Exception {
+		JsxElementBase.setTestMode(false);
 		Instance<String> warning = new Instance<>();
 		context.setProblemListener(new ProblemListener() {
 			@Override
@@ -277,6 +279,7 @@ public class WidgetPropertiesProcessorTest extends BaseOParserTest {
 	
 	@Test
 	public void transpilesCallback() throws Exception {
+		JsxElementBase.setTestMode(false);
 		loadResource("annotations/WidgetProps11.poc");
 		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, new Identifier("Container"));
 		Transpiler transpiler = new Transpiler(new Nashorn8Engine(), context);

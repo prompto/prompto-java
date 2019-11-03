@@ -21,6 +21,7 @@ import prompto.declaration.IDeclaration;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
+import prompto.jsx.JsxElementBase;
 import prompto.parser.Dialect;
 import prompto.parser.ECleverParser;
 import prompto.parser.MCleverParser;
@@ -40,6 +41,7 @@ public abstract class BaseParserTest extends BaseTest {
 
 	@Before  
 	public void __before__test__() {
+		JsxElementBase.setTestMode(true);
 		context = Context.newGlobalContext();
 	}
 
