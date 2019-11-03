@@ -1,5 +1,6 @@
 package prompto.jsx;
 
+import prompto.property.Property;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
@@ -15,8 +16,8 @@ public interface IJsxValue {
 		throw new UnsupportedOperationException("toDialect " + this.getClass().getName());
 	}
 
-	void declare(Transpiler transpiler);
-	boolean transpile(Transpiler transpiler);
+	void declare(Transpiler transpiler, Property property);
+	boolean transpile(Transpiler transpiler, Property property);
 	boolean isLiteral();
 
 }

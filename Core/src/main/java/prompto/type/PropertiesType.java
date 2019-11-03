@@ -81,7 +81,7 @@ public class PropertiesType extends BaseType {
 	@Override
 	public Set<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError {
 		Property prop = properties.get(name.toString());
-		return prop!=null ? prop.getValidator().getMethods(context) : super.getMemberMethods(context, name);
+		return prop!=null ? prop.getValidator().getMethodDeclarations(context) : super.getMemberMethods(context, name);
 	}
 
 }

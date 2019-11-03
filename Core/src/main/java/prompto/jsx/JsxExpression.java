@@ -1,13 +1,17 @@
 package prompto.jsx;
 
+import java.util.Set;
+
 import prompto.expression.ArrowExpression;
 import prompto.expression.IExpression;
 import prompto.literal.Literal;
+import prompto.property.Property;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
+import prompto.value.ContextualExpression;
 
 public class JsxExpression implements IJsxValue, IJsxExpression {
 
@@ -49,14 +53,52 @@ public class JsxExpression implements IJsxValue, IJsxExpression {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-		this.expression.declare(transpiler);
+		declare(transpiler, null);
+	}
+
+	@Override
+	public void declare(Transpiler transpiler, Property property) {
+		expression.declare(transpiler);
 	}
 	
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-		this.expression.transpile(transpiler);
+		return transpile(transpiler, null);
+	}
+	
+	@Override
+	public boolean transpile(Transpiler transpiler, Property property) {
+		if(!transpileArrowExpressionCall(transpiler, expression, property))
+			expression.transpile(transpiler);
 		return false;
+	}
+
+	private boolean transpileArrowExpressionCall(Transpiler transpiler, IExpression expression, Property property) {
+		if(expression instanceof ContextualExpression)
+			expression = ((ContextualExpression)expression).getExpression();
+		if(expression instanceof ArrowExpression) {
+			MethodType target = getMethodType(transpiler.getContext(), property);
+			if(target==null)
+				transpiler.getContext().getProblemListener().reportNoMatchingPrototype((ArrowExpression)expression, "Cannot use arrow expression without a prototype");
+			else
+				target.transpileArrowExpression(transpiler, (ArrowExpression)expression);
+			return true;
+		} else
+			return false;
+	}
+
+	private MethodType getMethodType(Context context, Property property) {
+		if(property==null)
+			return null;
+		Set<MethodType> types = property.getValidator().getMethodTypes(context);
+		if(types!=null && types.size()==1)
+			return types.iterator().next();
+		if(types==null || types.isEmpty())
+			context.getProblemListener().reportNoMatchingPrototype((ArrowExpression)expression, "Cannot use arrow expression without a prototype");
+		else if(types.size() > 1)
+			context.getProblemListener().reportNoMatchingPrototype((ArrowExpression)expression, "Ambiguous prototype");
+		return null;
 	}
 
 }

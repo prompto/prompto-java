@@ -1,5 +1,6 @@
 package prompto.property;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -40,14 +41,20 @@ public class TypeValidator implements IPropertyValidator {
 		return type.getTypeName();
 	}
 	
+	
 	@Override
-	public Set<IMethodDeclaration> getMethods(Context context) {
+	public Set<MethodType> getMethodTypes(Context context) {
+		return type instanceof MethodType ? Collections.singleton((MethodType)type) : IPropertyValidator.super.getMethodTypes(context);
+	}
+	
+	@Override
+	public Set<IMethodDeclaration> getMethodDeclarations(Context context) {
 		if(type instanceof MethodType) {
 			MethodDeclarationMap decls = context.getRegisteredDeclaration(MethodDeclarationMap.class, type.getTypeNameId());
 			if(decls!=null)
 				return new HashSet<>(decls.values());
 		} 
-		return IPropertyValidator.super.getMethods(context);
+		return IPropertyValidator.super.getMethodDeclarations(context);
 	}
 
 }

@@ -69,15 +69,11 @@ public class ArrowExpression extends Section implements IExpression {
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-		transpiler.append("(function(");
-		transpileArgs(transpiler);
-		transpiler.append(") {").newLine();
 		statements.transpile(transpiler);
-		transpiler.append("}).bind(this)");
 		return false;
 	}
 	
-	private void transpileArgs(Transpiler transpiler) {
+	public void transpileArguments(Transpiler transpiler) {
 		if(args.size()>0) {
 			args.forEach(arg->{
 				transpiler.append(arg);
@@ -342,6 +338,8 @@ public class ArrowExpression extends Section implements IExpression {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		return statements.compile(context, method, new Flags());
 	}
+
+
 
 
 

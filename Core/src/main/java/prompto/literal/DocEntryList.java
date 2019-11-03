@@ -1,6 +1,7 @@
 package prompto.literal;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
@@ -13,7 +14,7 @@ public class DocEntryList extends LinkedList<DictEntry> {
 	}
 	
 	
-	public DocEntryList(LinkedList<DictEntry> entries) {
+	public DocEntryList(List<DictEntry> entries) {
 		super(entries);
 	}
 	

@@ -43,8 +43,17 @@ public class TypeSetValidator implements IPropertyValidator {
 		return "<" + types.stream().map(String::valueOf).collect(Collectors.joining(", ")) + ">";
 	}
 	
+	
 	@Override
-	public Set<IMethodDeclaration> getMethods(Context context) {
+	public Set<MethodType> getMethodTypes(Context context) {
+		return types.stream()
+				.filter(type->type instanceof MethodType)
+				.map(type->(MethodType)type)
+				.collect(Collectors.toSet());
+	}
+	
+	@Override
+	public Set<IMethodDeclaration> getMethodDeclarations(Context context) {
 		return types.stream()
 				.filter(type->type instanceof MethodType)
 				.map(type->getMethods(context, type))

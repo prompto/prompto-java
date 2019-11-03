@@ -88,7 +88,7 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 		return loadProperties(annotation, context, ((DocumentLiteral)value).getEntries());
 	}
 	
-	private PropertyMap loadProperties(Annotation annotation, Context context, DocEntryList entries) {
+	public PropertyMap loadProperties(Annotation annotation, Context context, DocEntryList entries) {
 		PropertyMap props = new PropertyMap();
 		for(DictEntry entry : entries) {
 			Property prop = loadProperty(annotation, context, entry);
@@ -236,6 +236,7 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 	}
 	
 	private IType resolveType(Annotation annotation, Context context, IType type) {
+		type = IType.anyfy(type);
 		if(type instanceof NativeType)
 			return type;
 		else {

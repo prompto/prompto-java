@@ -263,14 +263,14 @@ public class MethodParameter extends BaseParameter implements INamedParameter {
 	}
 
 	private boolean transpileArrowExpressionCall(Transpiler transpiler, IExpression expression) {
-		if(!(expression instanceof ContextualExpression))
+		if(expression instanceof ContextualExpression)
+			expression = ((ContextualExpression)expression).getExpression();
+		if(expression instanceof ArrowExpression) {
+			MethodType target = getType(transpiler.getContext());
+			target.transpileArrowExpression(transpiler, (ArrowExpression)expression);
+			return true;
+		} else
 			return false;
-		ContextualExpression ce = (ContextualExpression)expression;
-		if(!(ce.getExpression() instanceof ArrowExpression))
-			return false;
-		MethodType target = getType(transpiler.getContext());
-		target.transpileArrowExpression(transpiler, (ArrowExpression)ce.getExpression());
-		return true;
 	}
 
 }

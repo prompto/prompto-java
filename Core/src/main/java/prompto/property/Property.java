@@ -45,6 +45,11 @@ public class Property {
 			this.validator = validator.optional();
 	}
 	
+	public Property withValidator(IPropertyValidator validator) {
+		setValidator(validator);
+		return this;
+	}
+	
 	public void validate(Context context, JsxProperty prop) {
 		validator.validate(context, prop);
 	}

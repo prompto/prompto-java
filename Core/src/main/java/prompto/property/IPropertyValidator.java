@@ -7,6 +7,7 @@ import prompto.declaration.IMethodDeclaration;
 import prompto.jsx.JsxProperty;
 import prompto.runtime.Context;
 import prompto.type.IType;
+import prompto.type.MethodType;
 
 public interface IPropertyValidator {
 
@@ -32,7 +33,10 @@ public interface IPropertyValidator {
 	default IPropertyValidator optionalForAccessibility() {
 		return this;
 	}
-	default Set<IMethodDeclaration> getMethods(Context context) {
+	default Set<IMethodDeclaration> getMethodDeclarations(Context context) {
+		return Collections.emptySet();
+	}
+	default Set<MethodType> getMethodTypes(Context context) {
 		return Collections.emptySet();
 	}
 	

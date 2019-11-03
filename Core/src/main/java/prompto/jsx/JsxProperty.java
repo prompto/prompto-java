@@ -2,6 +2,7 @@ package prompto.jsx;
 
 import prompto.grammar.Identifier;
 import prompto.parser.Section;
+import prompto.property.Property;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
@@ -64,20 +65,20 @@ public class JsxProperty extends Section {
 	}
 
 
-	public void declare(Transpiler transpiler) {
+	public void declare(Transpiler transpiler, Property property) {
 	    if(this.value!=null)
-	        this.value.declare(transpiler);
+	        this.value.declare(transpiler, property);
 	}
 
 
-	public void transpile(Transpiler transpiler) {
+	public void transpile(Transpiler transpiler, Property property) {
 		String name = this.id.toString();
 		if(name.contains("-"))
 			name = "\"" + name + "\"";
 	    transpiler.append(name);
 	    transpiler.append(": ");
 	    if(this.value!=null)
-	        this.value.transpile(transpiler);
+	        this.value.transpile(transpiler, property);
 	    else
 	        transpiler.append("true");
 	}
