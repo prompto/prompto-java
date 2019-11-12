@@ -20,6 +20,21 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedAbstractMember() throws Exception {
+		checkInterpretedOutput("methods/abstractMember.pec");
+	}
+
+	@Test
+	public void testCompiledAbstractMember() throws Exception {
+		checkCompiledOutput("methods/abstractMember.pec");
+	}
+
+	@Test
+	public void testTranspiledAbstractMember() throws Exception {
+		checkTranspiledOutput("methods/abstractMember.pec");
+	}
+
+	@Test
 	public void testInterpretedAnonymous() throws Exception {
 		checkInterpretedOutput("methods/anonymous.pec");
 	}

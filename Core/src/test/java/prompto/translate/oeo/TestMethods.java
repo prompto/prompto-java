@@ -7,6 +7,11 @@ import prompto.parser.o.BaseOParserTest;
 public class TestMethods extends BaseOParserTest {
 
 	@Test
+	public void testAbstractMember() throws Exception {
+		compareResourceOEO("methods/abstractMember.poc");
+	}
+
+	@Test
 	public void testAnonymous() throws Exception {
 		compareResourceOEO("methods/anonymous.poc");
 	}
