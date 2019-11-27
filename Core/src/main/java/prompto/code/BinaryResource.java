@@ -3,6 +3,8 @@ package prompto.code;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 
 import prompto.intrinsic.PromptoBinary;
 import prompto.store.IStorable;
@@ -25,6 +27,11 @@ public class BinaryResource extends Resource {
 		IStorable storable = super.toStorable(store);
 		storable.setData("data", getData());
 		return storable;
+	}
+	
+	@Override
+	protected List<String> getCategoryList() {
+		return Arrays.asList("Stuff", "Resource", "BinaryResource");
 	}
 	
 	@Override

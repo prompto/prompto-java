@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collections;
+import java.util.List;
 
 import prompto.intrinsic.PromptoVersion;
 import prompto.store.IStorable;
@@ -59,7 +59,7 @@ public abstract class Resource {
 	}
 	
 	public IStorable toStorable(IStore store) {
-		IStorable storable = store.newStorable(Collections.singletonList("Resource"), null);
+		IStorable storable = store.newStorable(getCategoryList(), null);
 		setDbId(storable.getOrCreateDbId());
 		storable.setData("name", this.getName());
 		storable.setData("mimeType", this.getMimeType());
@@ -69,6 +69,8 @@ public abstract class Resource {
 		storable.setData("lastModified", this.getLastModified().toInstant().toEpochMilli());
 		return storable;
 	}
+
+	protected abstract List<String> getCategoryList();
 
 	public abstract long length();
 	public abstract InputStream getInputStream() throws IOException;

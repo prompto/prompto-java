@@ -3,6 +3,8 @@ package prompto.code;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 
 import prompto.store.IStorable;
 import prompto.store.IStore;
@@ -25,6 +27,12 @@ public class TextResource extends Resource {
 		storable.setData("body", getBody());
 		return storable;
 	}
+	
+	@Override
+	protected List<String> getCategoryList() {
+		return Arrays.asList("Stuff", "Resource", "TextResource");
+	}
+
 	
 	@Override
 	public long length() {

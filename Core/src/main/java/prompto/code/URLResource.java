@@ -3,6 +3,7 @@ package prompto.code;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.List;
 
 import prompto.store.IStorable;
 import prompto.store.IStore;
@@ -18,6 +19,11 @@ public class URLResource extends Resource {
 	
 	@Override
 	public IStorable toStorable(IStore store) {
+		throw new UnsupportedOperationException("Should never get there!");
+	}
+	
+	@Override
+	protected List<String> getCategoryList() {
 		throw new UnsupportedOperationException("Should never get there!");
 	}
 	
