@@ -13,6 +13,8 @@ public class WebLibrary extends Library {
 	String widgetLibrary;
 	String htmlEngine;
 	String uiFramework;
+	String nativeResource;
+	String stubResource;
 	
 	@Override
 	public ModuleType getType() {
@@ -25,6 +27,22 @@ public class WebLibrary extends Library {
 
 	public void setWidgetLibrary(String widgetLibrary) {
 		this.widgetLibrary = widgetLibrary;
+	}
+	
+	public String getNativeResource() {
+		return nativeResource;
+	}
+	
+	public void setNativeResource(String nativeResource) {
+		this.nativeResource = nativeResource;
+	}
+	
+	public String getStubResource() {
+		return stubResource;
+	}
+	
+	public void setStubResource(String stubResource) {
+		this.stubResource = stubResource;
 	}
 
 	public String getHtmlEngine() {
@@ -49,6 +67,8 @@ public class WebLibrary extends Library {
 		storable.setData("widgetLibrary", widgetLibrary);
 		storable.setData("htmlEngine", htmlEngine);
 		storable.setData("uiFramework", uiFramework);
+		storable.setData("nativeResource", nativeResource);
+		storable.setData("stubResource", stubResource);
 		return storable;
 	}
 
@@ -58,6 +78,8 @@ public class WebLibrary extends Library {
 		setWidgetLibrary((String)stored.getData("widgetLibrary"));
 		setHtmlEngine((String)stored.getData("htmlEngine"));
 		setUIFramework((String)stored.getData("uiFramework"));
+		setNativeResource((String)stored.getData("nativeResource"));
+		setStubResource((String)stored.getData("stubResource"));
 	}
 
 }

@@ -34,6 +34,15 @@ public class Dependency {
 	private String name;
 	private PromptoVersion version;
 
+	public Dependency() {
+	}
+	
+	public Dependency(String name, PromptoVersion version) {
+		super();
+		this.name = name;
+		this.version = version;
+	}
+
 	public Object getDbId() {
 		return dbId;
 	}
