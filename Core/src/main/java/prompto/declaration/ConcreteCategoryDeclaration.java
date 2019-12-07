@@ -1056,33 +1056,40 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    Identifier parent = this.derivedFrom!=null && this.derivedFrom.size()>0 ? this.derivedFrom.get(0) : null;
-	    transpiler.append("function ").append(this.getName()).append("(copyFrom, values, mutable) {");
+		transpileConstructor(transpiler);
+	    transpiler = transpiler.newInstanceTranspiler(new CategoryType(getId()));
+		processAnnotations(transpiler.getContext(), true);
+	    transpileLoaders(transpiler);
+	    transpileMethods(transpiler);
+	    transpileGetterSetters(transpiler);
+	    transpiler.flush();
+	    return true;
+	}
+
+	private void transpileConstructor(Transpiler transpiler) {
+	    transpiler.append("function ").append(getName()).append("(copyFrom, values, mutable) {");
 	    transpiler.indent();
-	    List<String> categories = this.collectCategories(transpiler.getContext());
-	    if(this.storable)
-	        transpiler.append("this.storable = $DataStore.instance.newStorableDocument(['").append(categories.stream().collect(Collectors.joining("', '"))).append("'], this.dbIdListener.bind(this));").newLine();
-	    this.transpileGetterSetterAttributes(transpiler);
-	    this.transpileSuperConstructor(transpiler);
+	    List<String> categories = collectCategories(transpiler.getContext());
+	    if(storable) {
+	    	transpiler.append("if(!this.storable) {").newLine().indent()
+	        	.append("this.storable = $DataStore.instance.newStorableDocument(['").append(categories.stream().collect(Collectors.joining("', '"))).append("'], this.dbIdListener.bind(this));").newLine()
+	    		.dedent().append("}").newLine();
+	    }
+	    transpileGetterSetterAttributes(transpiler);
+	    transpileSuperConstructor(transpiler);
 	    transpiler.append("this.category = [").append(categories.stream().collect(Collectors.joining(", "))).append("];").newLine();
-	    this.transpileLocalAttributes(transpiler);
+	    transpileLocalAttributes(transpiler);
 	    transpiler.append("this.mutable = mutable;").newLine();
 	    transpiler.append("return this;");
 	    transpiler.dedent();
 	    transpiler.append("}");
 	    transpiler.newLine();
+	    Identifier parent = derivedFrom!=null && derivedFrom.size()>0 ? derivedFrom.get(0) : null;
 	    if(parent!=null)
-	        transpiler.append(this.getName()).append(".prototype = Object.create(").append(parent.toString()).append(".prototype);").newLine();
+	        transpiler.append(getName()).append(".prototype = Object.create(").append(parent.toString()).append(".prototype);").newLine();
 	    else
-	        transpiler.append(this.getName()).append(".prototype = Object.create($Root.prototype);").newLine();
-	    transpiler.append(this.getName()).append(".prototype.constructor = ").append(this.getName()).append(";").newLine();
-	    transpiler = transpiler.newInstanceTranspiler(new CategoryType(this.getId()));
-		processAnnotations(transpiler.getContext(), true);
-	    this.transpileLoaders(transpiler);
-	    this.transpileMethods(transpiler);
-	    this.transpileGetterSetters(transpiler);
-	    transpiler.flush();
-	    return true;
+	        transpiler.append(getName()).append(".prototype = Object.create($Root.prototype);").newLine();
+	    transpiler.append(getName()).append(".prototype.constructor = ").append(getName()).append(";").newLine();
 	}
 
 	protected void transpileLoaders(Transpiler transpiler) {
