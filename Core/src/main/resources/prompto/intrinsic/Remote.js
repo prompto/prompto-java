@@ -1,7 +1,10 @@
 function readJSONValue(value) {
 	if(value==null)
 		return null;
-	else if(Array.isArray(value.value)) {
+	else if(Array.isArray(value)) {
+		const items = value.map(readJSONValue);
+		return new List(false, items);
+	} else if(Array.isArray(value.value)) {
 		var items = value.value.map(readJSONValue);
 		return new List(false, items);
 	} else if(typeof(value)==typeof({})) {
