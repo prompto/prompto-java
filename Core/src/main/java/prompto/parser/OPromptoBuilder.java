@@ -1958,8 +1958,8 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitJsx_fragment(Jsx_fragmentContext ctx) {
-		String openingSuite = getHiddenTokensAfter(ctx.start);
-		String closingSuite = getHiddenTokensBefore(ctx.stop);
+		String openingSuite = ctx.ws_plus(0)==null ? null : ctx.ws_plus(0).getText();
+		String closingSuite = ctx.ws_plus(1)==null ? null : ctx.ws_plus(1).getText();
 		JsxFragment fragment = new JsxFragment(openingSuite, closingSuite);
 		List<IJsxExpression> children = getNodeValue(ctx.children_);
 		fragment.setChildren(children);

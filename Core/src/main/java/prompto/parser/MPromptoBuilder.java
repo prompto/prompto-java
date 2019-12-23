@@ -1927,8 +1927,8 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitJsx_fragment(Jsx_fragmentContext ctx) {
-		String openingSuite = getHiddenTokensAfter(ctx.start);
-		String closingSuite = getHiddenTokensBefore(ctx.stop);
+		String openingSuite = getHiddenTokensAfter(ctx.jsx_fragment_start().getStop());
+		String closingSuite = getHiddenTokensBefore(ctx.jsx_fragment_end().getStart());
 		JsxFragment fragment = new JsxFragment(openingSuite, closingSuite);
 		List<IJsxExpression> children = getNodeValue(ctx.children_);
 		fragment.setChildren(children);
