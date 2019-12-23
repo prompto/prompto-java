@@ -44,7 +44,9 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 	}
 	
 	private PropertyMap getPropertyMap(Context context) {
-		if(Character.isUpperCase(id.toString().charAt(0))) {
+		if(isHtmlTag())
+			return getHtmlPropertyTypes(context, id.toString());
+		else {
 			IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, id);
 			if(decl==null) {
 				context.getProblemListener().reportUnknownIdentifier(id, id.toString());
@@ -53,8 +55,11 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 				return ((CategoryDeclaration)decl).asWidget().getProperties();
 			else
 				return null;
-		} else
-			return getHtmlPropertyTypes(context, id.toString());
+		}
+	}
+
+	private boolean isHtmlTag() {
+		return Character.isLowerCase(id.toString().charAt(0));
 	}
 
 	private void checkWidgetProperties(Context context, PropertyMap propertyMap) {
@@ -301,8 +306,11 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 	    else {
 	    	PropertyMap propertyMap = getPropertyMap(transpiler.getContext());
 	        transpiler.append("{");
-	        this.properties.forEach(prop -> {
-	        	prop.transpile(transpiler, propertyMap==null ? null : propertyMap.get(prop.getName()));
+	        this.properties.forEach(jsxprop -> {
+	        	Property prop = propertyMap==null ? null : propertyMap.get(jsxprop.getName());
+	        	if(prop==null && !isHtmlTag())
+	        		prop = getHtmlPropertyTypes(transpiler.getContext(), null).get(jsxprop.getName());
+	        	jsxprop.transpile(transpiler, prop);
 	            transpiler.append(", ");
 	        });
 	        transpiler.trimLast(2).append("}");
