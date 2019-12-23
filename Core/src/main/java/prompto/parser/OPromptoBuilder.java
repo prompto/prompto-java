@@ -162,6 +162,7 @@ import prompto.jsx.JsxClosing;
 import prompto.jsx.JsxCode;
 import prompto.jsx.JsxElement;
 import prompto.jsx.JsxExpression;
+import prompto.jsx.JsxFragment;
 import prompto.jsx.JsxLiteral;
 import prompto.jsx.JsxSelfClosing;
 import prompto.jsx.JsxText;
@@ -200,6 +201,7 @@ import prompto.param.ExtendedParameter;
 import prompto.param.IParameter;
 import prompto.param.UnresolvedParameter;
 import prompto.parser.OParser.CssTypeContext;
+import prompto.parser.OParser.Jsx_fragmentContext;
 import prompto.parser.OParser.TypeLiteralContext;
 import prompto.parser.OParser.Type_literalContext;
 
@@ -1888,7 +1890,6 @@ public class OPromptoBuilder extends OParserBaseListener {
 		setNodeValue(ctx, exp);
 	}
 	
-	
 	@Override
 	public void exitJsxElement(JsxElementContext ctx) {
 		JsxElement element = getNodeValue(ctx.opening);
@@ -1953,6 +1954,16 @@ public class OPromptoBuilder extends OParserBaseListener {
 	public void exitJsx_identifier(Jsx_identifierContext ctx) {
 		String name = ctx.getText();
 		setNodeValue(ctx, new Identifier(name));
+	}
+	
+	@Override
+	public void exitJsx_fragment(Jsx_fragmentContext ctx) {
+		String openingSuite = getHiddenTokensAfter(ctx.start);
+		String closingSuite = getHiddenTokensBefore(ctx.stop);
+		JsxFragment fragment = new JsxFragment(openingSuite, closingSuite);
+		List<IJsxExpression> children = getNodeValue(ctx.children_);
+		fragment.setChildren(children);
+		setNodeValue(ctx, fragment);
 	}
 	
 	@Override

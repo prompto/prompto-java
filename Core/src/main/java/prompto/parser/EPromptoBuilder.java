@@ -164,6 +164,7 @@ import prompto.jsx.JsxClosing;
 import prompto.jsx.JsxCode;
 import prompto.jsx.JsxElement;
 import prompto.jsx.JsxExpression;
+import prompto.jsx.JsxFragment;
 import prompto.jsx.JsxLiteral;
 import prompto.jsx.JsxSelfClosing;
 import prompto.jsx.JsxText;
@@ -2003,6 +2004,16 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitJsx_identifier(Jsx_identifierContext ctx) {
 		String name = ctx.getText();
 		setNodeValue(ctx, new Identifier(name));
+	}
+	
+	@Override
+	public void exitJsx_fragment(Jsx_fragmentContext ctx) {
+		String openingSuite = getHiddenTokensAfter(ctx.start);
+		String closingSuite = getHiddenTokensBefore(ctx.stop);
+		JsxFragment fragment = new JsxFragment(openingSuite, closingSuite);
+		List<IJsxExpression> children = getNodeValue(ctx.children_);
+		fragment.setChildren(children);
+		setNodeValue(ctx, fragment);
 	}
 	
 	@Override

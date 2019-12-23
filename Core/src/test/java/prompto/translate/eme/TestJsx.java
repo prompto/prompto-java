@@ -37,6 +37,11 @@ public class TestJsx extends BaseEParserTest {
 	}
 
 	@Test
+	public void testFragment() throws Exception {
+		compareResourceEME("jsx/fragment.pec");
+	}
+
+	@Test
 	public void testHyphenName() throws Exception {
 		compareResourceEME("jsx/hyphenName.pec");
 	}

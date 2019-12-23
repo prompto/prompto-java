@@ -37,6 +37,11 @@ public class TestJsx extends BaseOParserTest {
 	}
 
 	@Test
+	public void testFragment() throws Exception {
+		compareResourceOMO("jsx/fragment.poc");
+	}
+
+	@Test
 	public void testHyphenName() throws Exception {
 		compareResourceOMO("jsx/hyphenName.poc");
 	}

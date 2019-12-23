@@ -161,6 +161,7 @@ import prompto.jsx.JsxProperty;
 import prompto.jsx.JsxClosing;
 import prompto.jsx.JsxElement;
 import prompto.jsx.JsxExpression;
+import prompto.jsx.JsxFragment;
 import prompto.jsx.JsxLiteral;
 import prompto.jsx.JsxSelfClosing;
 import prompto.jsx.JsxText;
@@ -198,8 +199,6 @@ import prompto.param.CodeParameter;
 import prompto.param.ExtendedParameter;
 import prompto.param.IParameter;
 import prompto.param.UnresolvedParameter;
-import prompto.parser.MParser.CssTypeContext;
-import prompto.parser.MParser.Type_literalContext;
 
 import static prompto.parser.MParser.*;
 import prompto.python.Python2NativeCall;
@@ -1924,6 +1923,16 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitJsx_identifier(Jsx_identifierContext ctx) {
 		String name = ctx.getText();
 		setNodeValue(ctx, new Identifier(name));
+	}
+	
+	@Override
+	public void exitJsx_fragment(Jsx_fragmentContext ctx) {
+		String openingSuite = getHiddenTokensAfter(ctx.start);
+		String closingSuite = getHiddenTokensBefore(ctx.stop);
+		JsxFragment fragment = new JsxFragment(openingSuite, closingSuite);
+		List<IJsxExpression> children = getNodeValue(ctx.children_);
+		fragment.setChildren(children);
+		setNodeValue(ctx, fragment);
 	}
 	
 	@Override

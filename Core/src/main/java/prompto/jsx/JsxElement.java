@@ -3,6 +3,7 @@ package prompto.jsx;
 import java.util.List;
 
 import prompto.grammar.Identifier;
+import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 
@@ -25,6 +26,12 @@ public class JsxElement extends JsxElementBase {
 	
 	public void setClosing(JsxClosing closing) {
 		this.closing = closing;
+	}
+	
+	@Override
+	protected void checkChildren(Context context) {
+		if (children != null)
+			children.forEach(child->child.check(context));
 	}
 	
 	@Override

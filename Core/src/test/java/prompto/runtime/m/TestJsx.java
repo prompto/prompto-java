@@ -95,6 +95,21 @@ public class TestJsx extends BaseMParserTest {
 	}
 
 	@Test
+	public void testInterpretedFragment() throws Exception {
+		checkInterpretedOutput("jsx/fragment.pmc");
+	}
+
+	@Test
+	public void testCompiledFragment() throws Exception {
+		checkCompiledOutput("jsx/fragment.pmc");
+	}
+
+	@Test
+	public void testTranspiledFragment() throws Exception {
+		checkTranspiledOutput("jsx/fragment.pmc");
+	}
+
+	@Test
 	public void testInterpretedHyphenName() throws Exception {
 		checkInterpretedOutput("jsx/hyphenName.pmc");
 	}

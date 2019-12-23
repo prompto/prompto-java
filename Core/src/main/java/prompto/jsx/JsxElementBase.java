@@ -40,9 +40,13 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 			checkWidgetProperties(context, propertyMap);
 		} else
 			checkHtmlProperties(context);
+		checkChildren(context);
 		return JsxType.instance();
 	}
 	
+	protected void checkChildren(Context context) {
+	}
+
 	private PropertyMap getPropertyMap(Context context) {
 		if(isHtmlTag())
 			return getHtmlPropertyTypes(context, id.toString());

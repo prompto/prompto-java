@@ -95,6 +95,21 @@ public class TestJsx extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedFragment() throws Exception {
+		checkInterpretedOutput("jsx/fragment.pec");
+	}
+
+	@Test
+	public void testCompiledFragment() throws Exception {
+		checkCompiledOutput("jsx/fragment.pec");
+	}
+
+	@Test
+	public void testTranspiledFragment() throws Exception {
+		checkTranspiledOutput("jsx/fragment.pec");
+	}
+
+	@Test
 	public void testInterpretedHyphenName() throws Exception {
 		checkInterpretedOutput("jsx/hyphenName.pec");
 	}

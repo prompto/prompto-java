@@ -95,6 +95,21 @@ public class TestJsx extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedFragment() throws Exception {
+		checkInterpretedOutput("jsx/fragment.poc");
+	}
+
+	@Test
+	public void testCompiledFragment() throws Exception {
+		checkCompiledOutput("jsx/fragment.poc");
+	}
+
+	@Test
+	public void testTranspiledFragment() throws Exception {
+		checkTranspiledOutput("jsx/fragment.poc");
+	}
+
+	@Test
 	public void testInterpretedHyphenName() throws Exception {
 		checkInterpretedOutput("jsx/hyphenName.poc");
 	}
