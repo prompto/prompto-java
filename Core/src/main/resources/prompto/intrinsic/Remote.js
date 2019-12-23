@@ -57,7 +57,7 @@ function writeJSONValue(value, useDbRefs) {
 				return writeJSONValue(value, useDbRefs);
 			});
 		default:	
-			if(typeof Root !== 'undefined' && value instanceof $Root) {
+			if(typeof($Root) !== 'undefined' && value instanceof $Root) {
 				if(useDbRefs) {
 					var dbId = value.getOrCreateDbId();
 					return { type: "%dbRef%", value: writeJSONValue(dbId, useDbRefs) };
