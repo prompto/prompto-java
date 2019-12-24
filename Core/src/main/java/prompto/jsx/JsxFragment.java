@@ -13,11 +13,9 @@ public class JsxFragment extends Section implements IJsxExpression {
 
 	String openingSuite;
 	List<IJsxExpression> children;
-	String closingSuite;
 	
-	public JsxFragment(String openingSuite, String closingSuite) {
+	public JsxFragment(String openingSuite) {
 		this.openingSuite = openingSuite;
-		this.closingSuite = closingSuite;
 	}
 
 	public void setChildren(List<IJsxExpression> children) {
@@ -31,8 +29,6 @@ public class JsxFragment extends Section implements IJsxExpression {
 			writer.appendRaw(openingSuite);
 		if(children!=null)
 			children.forEach(child->child.toDialect(writer));
-		if(closingSuite!=null)
-			writer.appendRaw(closingSuite);
 		writer.append("</>");
 	}
 	

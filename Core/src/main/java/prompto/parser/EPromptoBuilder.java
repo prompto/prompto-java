@@ -2009,8 +2009,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitJsx_fragment(Jsx_fragmentContext ctx) {
 		String openingSuite = getHiddenTokensAfter(ctx.jsx_fragment_start().getStop());
-		String closingSuite = getHiddenTokensBefore(ctx.jsx_fragment_end().getStart());
-		JsxFragment fragment = new JsxFragment(openingSuite, closingSuite);
+		JsxFragment fragment = new JsxFragment(openingSuite);
 		List<IJsxExpression> children = getNodeValue(ctx.children_);
 		fragment.setChildren(children);
 		setNodeValue(ctx, fragment);
