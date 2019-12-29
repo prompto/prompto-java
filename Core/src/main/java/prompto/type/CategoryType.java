@@ -250,6 +250,8 @@ public class CategoryType extends BaseType {
 	
 	@Override
     public IType checkMember(Context context, Identifier id) {
+		if("category".contentEquals(id.toString()))
+			return new CategoryType(new Identifier("Category"));
         IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
         if (decl == null)
             throw new SyntaxError("Unknown type:" + typeNameId);

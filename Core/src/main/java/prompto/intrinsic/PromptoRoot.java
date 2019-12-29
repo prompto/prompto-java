@@ -13,7 +13,11 @@ import java.util.stream.Collectors;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.PromptoClassLoader;
+import prompto.declaration.CategoryDeclaration;
 import prompto.error.NotStorableError;
+import prompto.grammar.Identifier;
+import prompto.runtime.ApplicationContext;
+import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.store.IStorable.IDbIdListener;
 import prompto.store.IStorable.IDbIdProvider;
@@ -118,6 +122,17 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 			dbId = stored.getDbId();
 	}
 	
+	public CategoryDeclaration getCategory() {
+		String name = getCategoryName();
+		Context context = ApplicationContext.get();
+		return context.getRegisteredDeclaration(CategoryDeclaration.class, new Identifier(name));
+	}
+	
+	private String getCategoryName() {
+		String[] parts = this.getClass().getName().split("%");
+		return parts[parts.length-1];
+	}
+
 	public final Object getDbId() {
 		return dbId;
 	}

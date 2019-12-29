@@ -35,6 +35,21 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedCategoryCategory() throws Exception {
+		checkInterpretedOutput("builtins/categoryCategory.pec");
+	}
+
+	@Test
+	public void testCompiledCategoryCategory() throws Exception {
+		checkCompiledOutput("builtins/categoryCategory.pec");
+	}
+
+	@Test
+	public void testTranspiledCategoryCategory() throws Exception {
+		checkTranspiledOutput("builtins/categoryCategory.pec");
+	}
+
+	@Test
 	public void testInterpretedCategoryText() throws Exception {
 		checkInterpretedOutput("builtins/categoryText.pec");
 	}

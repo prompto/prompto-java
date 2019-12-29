@@ -146,6 +146,8 @@ public class NativeInstance extends BaseValue implements IInstance {
 	
 	@Override
 	public IValue getMember(Context context, Identifier attrName, boolean autoCreate) throws PromptoError {
+		if("category".equals(attrName.toString()))
+			return getCategory(context);
 		Map<Identifier,Context> activeGetters = this.activeGetters.get();
 		Context stacked = activeGetters.get(attrName);
 		boolean first = stacked==null;
@@ -157,6 +159,11 @@ public class NativeInstance extends BaseValue implements IInstance {
 			if(first)
 				activeGetters.remove(attrName);
 		}
+	}
+
+	private IValue getCategory(Context context) {
+		NativeCategoryDeclaration decl = context.getRegisteredDeclaration(NativeCategoryDeclaration.class, new Identifier("Category"));
+		return new NativeInstance(decl, declaration);
 	}
 
 	public IValue getMemberAllowGetter(Context context, Identifier attrName, boolean allowGetter) throws PromptoError {

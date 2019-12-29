@@ -12,6 +12,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCategoryCategory() throws Exception {
+		compareResourceEME("builtins/categoryCategory.pec");
+	}
+
+	@Test
 	public void testCategoryText() throws Exception {
 		compareResourceEME("builtins/categoryText.pec");
 	}

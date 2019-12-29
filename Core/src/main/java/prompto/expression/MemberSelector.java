@@ -27,6 +27,7 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoAny;
 import prompto.intrinsic.PromptoDict;
 import prompto.intrinsic.PromptoDocument;
+import prompto.intrinsic.PromptoRoot;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.ClosureContext;
@@ -177,7 +178,9 @@ public class MemberSelector extends SelectorExpression {
 			return compileObjectToString(method, flags);
 		else {
 			String getterName = CompilerUtils.getterName(getName());
-			if(isCompilingGetter(context, method, info, getterName))
+			if("getCategory".contentEquals(getterName))
+				compileGetCategory(context, method, flags);
+			else if(isCompilingGetter(context, method, info, getterName))
 				compileGetField(context, method, flags, info, resultType);
 			else if(context instanceof ClosureContext)
 				compileGetField(context, method, flags, info, resultType);
@@ -233,6 +236,12 @@ public class MemberSelector extends SelectorExpression {
 		else
 			return null;
 	}
+
+	private void compileGetCategory(Context context, MethodInfo method, Flags flags) {
+		IOperand oper = new MethodConstant(PromptoRoot.class, "getCategory", CategoryDeclaration.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+	}
+
 
 	private void compileBeanGetter(Context context, MethodInfo method, Flags flags, String getterName, ResultInfo info, Type resultType) {
 		IOperand oper = new MethodConstant(info.getType(), getterName, resultType);

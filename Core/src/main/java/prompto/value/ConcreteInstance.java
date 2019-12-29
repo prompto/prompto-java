@@ -14,6 +14,7 @@ import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.EnumeratedCategoryDeclaration;
 import prompto.declaration.GetterMethodDeclaration;
 import prompto.declaration.IMethodDeclaration;
+import prompto.declaration.NativeCategoryDeclaration;
 import prompto.declaration.SetterMethodDeclaration;
 import prompto.error.NotMutableError;
 import prompto.error.NotStorableError;
@@ -144,6 +145,8 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	
 	@Override
 	public IValue getMember(Context context, Identifier attrName, boolean autoCreate) throws PromptoError {
+		if("category".equals(attrName.toString()))
+			return getCategory(context);
 		Map<Identifier,Context> activeGetters = this.activeGetters.get();
 		Context stacked = activeGetters.get(attrName);
 		boolean first = stacked==null;
@@ -157,6 +160,11 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		}
 	}
 	
+	private IValue getCategory(Context context) {
+		NativeCategoryDeclaration decl = context.getRegisteredDeclaration(NativeCategoryDeclaration.class, new Identifier("Category"));
+		return new NativeInstance(decl, declaration);
+	}
+
 	protected IValue getMemberAllowGetter(Context context, Identifier attrName, boolean allowGetter) throws PromptoError {
 		GetterMethodDeclaration getter = allowGetter ? declaration.findGetter(context, attrName) : null;
 		if(getter!=null) {
