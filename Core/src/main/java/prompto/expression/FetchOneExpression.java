@@ -47,7 +47,7 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 	
 	@Override
 	public String toString() {
-		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalsContext());
 		toDialect(writer);
 		return writer.toString();
 	}
@@ -116,7 +116,7 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 	
 	@Override
 	public Object fetchRaw(IStore store) {
-		IQuery query = buildFetchOneQuery(Context.newGlobalContext(), store);
+		IQuery query = buildFetchOneQuery(Context.newGlobalsContext(), store);
 		return store.fetchOne(query);
 	}
 	

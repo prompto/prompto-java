@@ -17,7 +17,7 @@ public class TestIntrinsic extends BaseEParserTest {
 		String code = "define now as native method returning DateTime doing:\n" +
 			"\tJavaScript: return DateTime.now(); from module: prompto/intrinsic/DateTime.js";
 		DeclarationList decls = parseString(code);
-		Context context = Context.newGlobalContext();
+		Context context = Context.newGlobalsContext();
 		decls.register(context);
 		IDeclaration decl = decls.getFirst();
 		Transpiler transpiler = new Transpiler(new IJSEngine.DefaultJSEngine(), context);
@@ -30,7 +30,7 @@ public class TestIntrinsic extends BaseEParserTest {
 		String code = "define now as native method returning DateTime doing:\n" +
 			"\tJavaScript: return DateTime.now(); from module: prompto/intrinsic/DateTime.js";
 		DeclarationList decls = parseString(code);
-		Context context = Context.newGlobalContext();
+		Context context = Context.newGlobalsContext();
 		decls.register(context);
 		IDeclaration decl = decls.getFirst();
 		Transpiler transpiler = new Transpiler(new IJSEngine.DefaultJSEngine(), context);

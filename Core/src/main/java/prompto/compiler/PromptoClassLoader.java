@@ -120,7 +120,7 @@ public class PromptoClassLoader extends URLClassLoader {
 		// logger.debug(()->"Compiling " + fullName + " @ " + classDir.toString());
 		// System.err.println("Compiling " + fullName + " @ " + classDir.toString());
 		Compiler compiler = new Compiler(classDir); // where to store .class
-		compiler.compileClass(context.getGlobalContext(), fullName);
+		compiler.compileClass(context.getGlobalsContext(), fullName);
 	}
 
 	private Throwable extractSyntaxError(Throwable t) {

@@ -95,7 +95,7 @@ public class TestErrorListener {
 		IParser parser = Dialect.E.getParserFactory().newParser();
 		parser.setProblemListener(listener);
 		DeclarationList decls = parser.parse(null, new ByteArrayInputStream(prompto.getBytes()));
-		Context context = Context.newGlobalContext();
+		Context context = Context.newGlobalsContext();
 		context.setProblemListener(listener);
 		decls.register(context);
 		decls.check(context);

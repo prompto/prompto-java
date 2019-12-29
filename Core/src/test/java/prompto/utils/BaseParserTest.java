@@ -26,6 +26,7 @@ import prompto.parser.Dialect;
 import prompto.parser.ECleverParser;
 import prompto.parser.MCleverParser;
 import prompto.parser.OCleverParser;
+import prompto.runtime.ApplicationContext;
 import prompto.runtime.Context;
 import prompto.runtime.Executor;
 import prompto.runtime.Interpreter;
@@ -42,12 +43,12 @@ public abstract class BaseParserTest extends BaseTest {
 	@Before  
 	public void __before__test__() {
 		JsxElementBase.setTestMode(true);
-		context = Context.newGlobalContext();
+		context = ApplicationContext.init();
 	}
 
 	public void loadDependency(String name) throws Exception {
 		if(coreContext==null)
-			coreContext = Context.newGlobalContext();
+			coreContext = Context.newGlobalsContext();
 		DeclarationList allStmts = null;
 		File[] files = listRuntimeFiles(name);
 		if(files!=null) for(File file : files) {
@@ -344,7 +345,7 @@ public abstract class BaseParserTest extends BaseTest {
 		// System.out.println(expected);
 		// parse e source code
 		DeclarationList dle = parseEString(expected);
-		context = Context.newGlobalContext();
+		context = Context.newGlobalsContext();
 		dle.register(context);
 		// rewrite as o
 		CodeWriter writer = new CodeWriter(Dialect.O, context);
@@ -353,7 +354,7 @@ public abstract class BaseParserTest extends BaseTest {
 		// System.out.println(o);
 		// parse o source code
 		DeclarationList dlo = parseOString(o);
-		context = Context.newGlobalContext();
+		context = Context.newGlobalsContext();
 		dlo.register(context);
 		// rewrite as e
 		writer = new CodeWriter(Dialect.E, context);
@@ -369,7 +370,7 @@ public abstract class BaseParserTest extends BaseTest {
 		// System.out.println(expected);
 		// parse e source code
 		DeclarationList dle = parseEString(expected);
-		context = Context.newGlobalContext();
+		context = Context.newGlobalsContext();
 		dle.register(context);
 		// rewrite as o
 		CodeWriter writer = new CodeWriter(Dialect.M, context);
@@ -378,7 +379,7 @@ public abstract class BaseParserTest extends BaseTest {
 		// System.out.println(p);
 		// parse o source code
 		DeclarationList dls = parseMString(p);
-		context = Context.newGlobalContext();
+		context = Context.newGlobalsContext();
 		dls.register(context);
 		// rewrite as e
 		writer = new CodeWriter(Dialect.E, context);
@@ -394,7 +395,7 @@ public abstract class BaseParserTest extends BaseTest {
 		// System.out.println(expected);
 		// parse o source code
 		DeclarationList dlo = parseOString(expected);
-		context = Context.newGlobalContext();
+		context = Context.newGlobalsContext();
 		dlo.register(context);
 		// rewrite as e
 		CodeWriter writer = new CodeWriter(Dialect.E, context);
@@ -403,7 +404,7 @@ public abstract class BaseParserTest extends BaseTest {
 		// System.out.println(e);
 		// parse e source code
 		DeclarationList dle = parseEString(e);
-		context = Context.newGlobalContext();
+		context = Context.newGlobalsContext();
 		dle.register(context);
 		// rewrite as o
 		writer = new CodeWriter(Dialect.O, context);
@@ -419,7 +420,7 @@ public abstract class BaseParserTest extends BaseTest {
 		// System.out.println(expected);
 		// parse o source code
 		DeclarationList dlo = parseOString(expected);
-		context = Context.newGlobalContext();
+		context = Context.newGlobalsContext();
 		dlo.register(context);
 		// rewrite as p
 		CodeWriter writer = new CodeWriter(Dialect.M, context);
@@ -428,7 +429,7 @@ public abstract class BaseParserTest extends BaseTest {
 		// System.out.println(p);
 		// parse s source code
 		DeclarationList dls = parseMString(p);
-		context = Context.newGlobalContext();
+		context = Context.newGlobalsContext();
 		dls.register(context);
 		// rewrite as o
 		writer = new CodeWriter(Dialect.O, context);

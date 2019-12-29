@@ -60,7 +60,7 @@ import prompto.value.IValue;
 /* a Context is the place where the Interpreter locates declarations and values */
 public class Context implements IContext {
 	
-	public static Context newGlobalContext() {
+	public static Context newGlobalsContext() {
 		Context context = new Context();
 		context.globals = context;
 		context.calling = null;
@@ -125,11 +125,11 @@ public class Context implements IContext {
 	protected Context() {
 	}
 
-	public Context getGlobalContext() {
+	public Context getGlobalsContext() {
 		return globals;
 	}
 
-	public boolean isGlobalContext() {
+	public boolean isGlobalsContext() {
 		return this==globals;
 	}
 	

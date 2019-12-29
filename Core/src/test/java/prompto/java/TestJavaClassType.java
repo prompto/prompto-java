@@ -28,7 +28,7 @@ public class TestJavaClassType {
 		assertNotNull(method);
 		Type type = method.getGenericReturnType();
 		assertNotNull(type);
-		Context context = Context.newGlobalContext();
+		Context context = Context.newGlobalsContext();
 		Identifier name = new Identifier("Attribute");
 		NativeCategoryDeclaration declaration = new NativeCategoryDeclaration(name, null, null, null, null);
 		context.registerNativeBinding(AttributeDeclaration.class, declaration);

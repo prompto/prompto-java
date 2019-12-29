@@ -27,7 +27,7 @@ public class DefaultExpression implements IExpression {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		if(value==null)
-			value = expression.interpret(context.getGlobalContext());
+			value = expression.interpret(context.getGlobalsContext());
 		return value;
 	}
 
@@ -38,7 +38,7 @@ public class DefaultExpression implements IExpression {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		return expression.compile(context.getGlobalContext(), method, flags);
+		return expression.compile(context.getGlobalsContext(), method, flags);
 	}
 	
 	@Override

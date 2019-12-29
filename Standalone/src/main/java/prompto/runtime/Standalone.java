@@ -68,7 +68,6 @@ import prompto.value.TextValue;
 public abstract class Standalone {
 
 	private static Logger logger = new Logger();
-	private static Context globalContext;
 	private static PromptoClassLoader classLoader;
 	private static IDebugRequestListener debugRequestListener;
 	private static IDebugEventAdapter debugEventAdapter;
@@ -160,25 +159,12 @@ public abstract class Standalone {
 	}
 
 
-	public static Context getGlobalContext() {
-		return globalContext;
-	}
-	
 	public static PromptoClassLoader getClassLoader() {
 		return classLoader;
 	}
 
-	public static void clearGlobalContext() {
-		WorkerDebugger debugger = globalContext.getDebugger();
-		globalContext = Context.newGlobalContext();
-		globalContext.setDebugger(debugger);
-		PromptoClassLoader loader = PromptoClassLoader.getInstance();
-		if(loader!=null)
-			loader.setContext(globalContext);
-	}
-
 	private static void runTest(String testMethod) {
-		runTest(getGlobalContext(), testMethod);
+		runTest(ApplicationContext.get(), testMethod);
 	}
 	
 	private static void runTest(Context context, String testMethod) {
@@ -206,7 +192,7 @@ public abstract class Standalone {
 	}
 
 	private static void runApplication(String mainMethod, IExpression args) {
-		runApplication(getGlobalContext(), mainMethod, args);
+		runApplication(ApplicationContext.get(), mainMethod, args);
 	}
 	
 	
@@ -242,14 +228,14 @@ public abstract class Standalone {
 	public static Context startProcessDebugger(IDebugConfiguration config) throws Throwable {
 		// wire adapter which will send events to client
 		debugEventAdapter = createDebugEventAdapter(config);
-		ProcessDebugger processDebugger = ProcessDebugger.createInstance(getGlobalContext());
+		ProcessDebugger processDebugger = ProcessDebugger.createInstance(ApplicationContext.get());
 		processDebugger.setListener(debugEventAdapter);
 		// wire listener which will receive requests from client
 		debugRequestListener = createDebugRequestListener(config, processDebugger);
 		IDebugEvent.Connected connected = debugRequestListener.startListening();
 		debugEventAdapter.handleConnectedEvent(connected);
 		// wire local context to debugger
-		Context local = getGlobalContext().newLocalContext();
+		Context local = ApplicationContext.get().newLocalContext();
 		WorkerDebugger workerDebugger = startWorkerDebugger(Thread.currentThread(), local);
 		processDebugger.setProcessStatus(Status.RUNNING);
 		// step in start method by default
@@ -332,8 +318,7 @@ public abstract class Standalone {
 
 	public static ICodeStore bootstrapCodeStore(IStore store, IRuntimeConfiguration config) throws Exception {
 		logger.info(()->"Initializing class loader " + ( Mode.get()==Mode.UNITTEST ? "in test mode" : "") + "...");
-		globalContext = Context.newGlobalContext();
-		classLoader = PromptoClassLoader.initialize(globalContext);
+		classLoader = PromptoClassLoader.initialize(ApplicationContext.init());
 		JavaIdentifierExpression.registerAddOns(config.getAddOnURLs(), classLoader);
 		logger.info(()->"Class loader initialized.");
 		logger.info(()->"Bootstrapping prompto...");

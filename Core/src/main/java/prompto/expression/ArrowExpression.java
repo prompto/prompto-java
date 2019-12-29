@@ -96,7 +96,7 @@ public class ArrowExpression extends Section implements IExpression {
 	
 	@Override
 	public String toString() {
-		return toString(Context.newGlobalContext());
+		return toString(Context.newGlobalsContext());
 	}
 	
 	

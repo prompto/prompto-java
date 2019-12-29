@@ -132,7 +132,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 	
 	@Override
 	public void storeModule(Module module) throws PromptoError {
-		Context context = Context.newGlobalContext();
+		Context context = Context.newGlobalsContext();
 		List<IStorable> storables = new ArrayList<>();
 		module.collectStorables(context, store, storables);
 		store.store(null, storables);

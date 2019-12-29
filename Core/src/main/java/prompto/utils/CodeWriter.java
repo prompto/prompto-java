@@ -120,7 +120,7 @@ public class CodeWriter {
 
 
 	public boolean isGlobalContext() {
-		return context.isGlobalContext();
+		return context.isGlobalsContext();
 	}
 
 	public CodeWriter newLocalWriter() {

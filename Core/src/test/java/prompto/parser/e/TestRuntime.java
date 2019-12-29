@@ -43,7 +43,7 @@ public class TestRuntime extends BaseEParserTest {
 		ParseTreeWalker walker = new ParseTreeWalker();
 		walker.walk(builder, tree);
 		JavaStatement statement =  builder.<JavaStatement>getNodeValue(tree);
-		Context context = Context.newGlobalContext();
+		Context context = Context.newGlobalsContext();
 		IParameter arg = new CategoryParameter(TextType.instance(), new Identifier("value"));
 		arg.register(context);
 		context.setValue(new Identifier("value"), new TextValue("test")); // StringLiteral trims enclosing quotes

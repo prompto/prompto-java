@@ -20,7 +20,7 @@ public class TestParserJsx extends BaseEParserTest {
 		ECleverParser parser = new ECleverParser(jsx);
 		ReturnStatement stmt = parser.<ReturnStatement>doParse(parser::return_statement, true);
 		assertNotNull(stmt.getExpression());
-		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalsContext());
 		stmt.toDialect(writer);
 		String out = writer.toString();
 		assertEquals(jsx, out);
@@ -32,7 +32,7 @@ public class TestParserJsx extends BaseEParserTest {
 		ECleverParser parser = new ECleverParser(jsx);
 		ReturnStatement stmt = parser.<ReturnStatement>doParse(parser::return_statement, true);
 		assertNotNull(stmt.getExpression());
-		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalsContext());
 		stmt.toDialect(writer);
 		String out = writer.toString();
 		assertEquals(jsx, out);

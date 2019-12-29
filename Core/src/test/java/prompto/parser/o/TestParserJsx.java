@@ -19,7 +19,7 @@ public class TestParserJsx extends BaseOParserTest {
 		OCleverParser parser = new OCleverParser(jsx);
 		ReturnStatement stmt = parser.<ReturnStatement>doParse(parser::return_statement);
 		assertNotNull(stmt.getExpression());
-		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalsContext());
 		stmt.toDialect(writer);
 		writer.append(';');
 		String out = writer.toString();
@@ -32,7 +32,7 @@ public class TestParserJsx extends BaseOParserTest {
 		OCleverParser parser = new OCleverParser(jsx);
 		ReturnStatement stmt = parser.<ReturnStatement>doParse(parser::return_statement);
 		assertNotNull(stmt.getExpression());
-		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalsContext());
 		stmt.toDialect(writer);
 		writer.append(';');
 		String out = writer.toString();

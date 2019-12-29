@@ -62,7 +62,7 @@ public class ConstructorExpression extends Section implements IExpression {
 	
 	@Override
 	public String toString() {
-		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalsContext());
 		this.toDialect(writer);
 		return writer.toString();
 	}

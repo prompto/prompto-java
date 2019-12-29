@@ -227,7 +227,7 @@ public class TestParserAtoms {
 		assertEquals("value",as.getParameterId().toString());
 		IExpression exp = as.getExpression();
 		assertTrue(exp instanceof PlusExpression);
-		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalsContext());
 		mc.toDialect(writer);
 		assertEquals("print(value = \"person\" + p.name)", writer.toString());
 		
@@ -246,7 +246,7 @@ public class TestParserAtoms {
 						new CategoryType(new Identifier("Person")),
 						new Identifier("p"))));
 		assertNotNull(ad.getStatements());
-		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalsContext());
 		ad.getStatements().getFirst().toDialect(writer);
 		assertEquals("print(value = \"person\" + p.name)", writer.toString());	
 	}
@@ -265,7 +265,7 @@ public class TestParserAtoms {
 				new IdentifierList( new Identifier("name")));
 		assertTrue(ad.getParameters().contains(expected));
 		assertNotNull(ad.getStatements());
-		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalsContext());
 		ad.getStatements().getFirst().toDialect(writer);
 		assertEquals("print(value = \"object\" + o.name)", writer.toString());
 		
@@ -285,7 +285,7 @@ public class TestParserAtoms {
 						new Identifier("options"));
 		assertTrue(ad.getParameters().contains(expected)); 
 		assertNotNull(ad.getStatements());
-		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalsContext());
 		ad.getStatements().getFirst().toDialect(writer);
 		assertEquals("print(value = \"array\" + options)", writer.toString());
 	}
@@ -492,7 +492,7 @@ public class TestParserAtoms {
 		IExpression literal = parser.parse_literal_expression();
 		assertNotNull(literal);
 		assertTrue(literal instanceof DictLiteral);
-		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalsContext());
 		literal.toDialect(writer);
 		assertEquals("<\"john\":1234, \"eric\":5678>", writer.toString()); // TODO DictLiteral
 	}
@@ -600,7 +600,7 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		IStatement stmt = parser.parse_statement();
 		assertNotNull(stmt);
-		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalsContext());
 		stmt.toDialect(writer);
 		assertEquals("x = print(value = \"1\")", writer.toString());
 	}
@@ -611,7 +611,7 @@ public class TestParserAtoms {
 		OTestParser parser = new OTestParser(statement);
 		IStatement stmt = parser.parse_statement();
 		assertNotNull(stmt); 
-		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.O, Context.newGlobalsContext());
 		stmt.toDialect(writer);
 		assertEquals("print(\"a\", value = \"1\")", writer.toString());
 	}

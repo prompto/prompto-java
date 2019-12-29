@@ -49,7 +49,7 @@ public class FetchManyExpression extends FetchOneExpression {
 	
 	@Override
 	public String toString() {
-		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalsContext());
 		toDialect(writer);
 		return writer.toString();
 	}
@@ -204,7 +204,7 @@ public class FetchManyExpression extends FetchOneExpression {
 
 	@Override
 	public Object fetchRaw(IStore store) {
-		IQuery query = buildFetchManyQuery(Context.newGlobalContext(), store);
+		IQuery query = buildFetchManyQuery(Context.newGlobalsContext(), store);
 		return store.fetchMany(query);
 	}
 

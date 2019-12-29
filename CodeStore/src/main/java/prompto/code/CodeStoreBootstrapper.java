@@ -43,7 +43,7 @@ public class CodeStoreBootstrapper {
 		return bs.context;
 	}
 	
-	Context context = Context.newGlobalContext();
+	Context context = Context.newGlobalsContext();
 	ICodeStore next;
 	IStore store;
 	

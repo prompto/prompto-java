@@ -51,7 +51,7 @@ public class TestStatic extends BaseEParserTest {
 	@Test
 	public void inlinedCategoryIsNotTranspiled() throws Exception {
 		DeclarationList decls = parseResource("samples/inlinedEvent.pec");
-		Context context = Context.newGlobalContext();
+		Context context = Context.newGlobalsContext();
 		decls.register(context);
 		Transpiler transpiler = new Transpiler(new Nashorn8Engine(), context);
 		IMethodDeclaration method = (IMethodDeclaration)decls.get(1);
@@ -62,7 +62,7 @@ public class TestStatic extends BaseEParserTest {
 	@Test
 	public void inlinedMethodCallIsInlined() throws Exception {
 		DeclarationList decls = parseResource("samples/inlinedEvent.pec");
-		Context context = Context.newGlobalContext();
+		Context context = Context.newGlobalsContext();
 		decls.register(context);
 		Transpiler transpiler = new Transpiler(new Nashorn8Engine(), context);
 		IMethodDeclaration method = (IMethodDeclaration)decls.get(1);

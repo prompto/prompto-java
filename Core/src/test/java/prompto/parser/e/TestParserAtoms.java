@@ -269,7 +269,7 @@ public class TestParserAtoms {
 		assertEquals("value",as.getParameterId().toString());
 		IExpression exp = as.getExpression();
 		assertNotNull(exp);
-		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalsContext());
 		as.toDialect(writer);
 		assertEquals("p.name as value", writer.toString());		
 	}
@@ -282,7 +282,7 @@ public class TestParserAtoms {
 		assertEquals("value",as.getParameterId().toString());
 		IExpression exp = as.getExpression();
 		assertTrue(exp instanceof PlusExpression);
-		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalsContext());
 		as.toDialect(writer);
 		assertEquals("\"person\" + p.name as value", writer.toString());		
 	}
@@ -296,7 +296,7 @@ public class TestParserAtoms {
 		assertEquals("value",as.getParameterId().toString());
 		IExpression exp = as.getExpression();
 		assertTrue(exp instanceof PlusExpression);
-		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalsContext());
 		as.toDialect(writer);
 		assertEquals("\"person\" + p.name as value",writer.toString());
 		
@@ -308,7 +308,7 @@ public class TestParserAtoms {
 		ETestParser parser = new ETestParser(statement, false);
 		UnresolvedCall mc = parser.parse_method_call();
 		assertNotNull(mc);
-		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalsContext());
 		mc.getCaller().toDialect(writer);
 		assertEquals("print",writer.toString());
 		assertNotNull(mc.getAssignments());
@@ -316,7 +316,7 @@ public class TestParserAtoms {
 		assertEquals("value",as.getParameterId().toString());
 		IExpression exp = as.getExpression();
 		assertTrue(exp instanceof PlusExpression);
-		writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		writer = new CodeWriter(Dialect.E, Context.newGlobalsContext());
 		mc.toDialect(writer);
 		assertEquals("print with \"person\" + p.name as value",writer.toString());
 		
@@ -335,7 +335,7 @@ public class TestParserAtoms {
 				new CategoryType(new Identifier("Person")),
 				new Identifier("p"))));
 		assertNotNull(ad.getStatements());
-		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalsContext());
 		ad.getStatements().getFirst().toDialect(writer);
 		assertEquals("print with \"person\" + p.name as value", writer.toString());	
 	}
@@ -355,7 +355,7 @@ public class TestParserAtoms {
 								new IdentifierList(new Identifier("name")));
 		assertTrue(ad.getParameters().contains(expected));
 		assertNotNull(ad.getStatements());
-		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalsContext());
 		ad.getStatements().getFirst().toDialect(writer);
 		assertEquals("print with \"object\" + o.name as value", writer.toString());
 	}
@@ -374,7 +374,7 @@ public class TestParserAtoms {
 				new Identifier("options"));
 		assertTrue(ad.getParameters().contains(expected)); 
 		assertNotNull(ad.getStatements());
-		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalsContext());
 		ad.getStatements().getFirst().toDialect(writer);
 		assertEquals("print with \"array\" + args as value", writer.toString());
 	}
@@ -620,7 +620,7 @@ public class TestParserAtoms {
 		IExpression literal = parser.parse_literal_expression();
 		assertNotNull(literal);
 		assertTrue(literal instanceof DictLiteral);
-		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalsContext());
 		literal.toDialect(writer);
 		assertEquals("<\"john\":1234, eric:5678>", writer.toString()); // TODO DictLiteral
 	}
@@ -727,7 +727,7 @@ public class TestParserAtoms {
 		ETestParser parser = new ETestParser(statement, false);
 		IStatement stmt = parser.parse_statement();
 		assertNotNull(stmt);
-		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalsContext());
 		stmt.toDialect(writer);
 		assertEquals(statement, writer.toString());
 	}
@@ -738,7 +738,7 @@ public class TestParserAtoms {
 		ETestParser parser = new ETestParser(statement, false);
 		IStatement stmt = parser.parse_statement();
 		assertTrue(stmt instanceof UnresolvedCall);
-		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalsContext());
 		stmt.toDialect(writer);
 		assertEquals(statement, writer.toString());
 	}
@@ -749,7 +749,7 @@ public class TestParserAtoms {
 		ETestParser parser = new ETestParser(statement, false);
 		IStatement stmt = parser.parse_statement();
 		assertTrue(stmt instanceof UnresolvedCall);
-		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalsContext());
 		stmt.toDialect(writer);
 		assertEquals(statement, writer.toString());
 	}
@@ -760,7 +760,7 @@ public class TestParserAtoms {
 		ETestParser parser = new ETestParser(statement, false);
 		IStatement stmt = parser.parse_statement();
 		assertNotNull(stmt);
-		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalsContext());
 		stmt.toDialect(writer);
 		assertEquals(statement, writer.toString());
 	}
@@ -771,7 +771,7 @@ public class TestParserAtoms {
 		ETestParser parser = new ETestParser(statement, false);
 		IExpression stmt = parser.parse_expression();
 		assertNotNull(stmt);
-		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalContext());
+		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalsContext());
 		stmt.toDialect(writer);
 		assertEquals(statement, writer.toString());
 	}

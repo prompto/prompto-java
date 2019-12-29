@@ -50,7 +50,7 @@ public class SymbolExpression implements IExpression {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		Context gc = context.getGlobalContext();
+		Context gc = context.getGlobalsContext();
 		return gc.getValue(id, ()-> {
 			Symbol symbol = gc.getRegisteredSymbol(id, true);
 			if(symbol==null)
