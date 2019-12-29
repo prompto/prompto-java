@@ -202,6 +202,7 @@ import prompto.param.IParameter;
 import prompto.param.UnresolvedParameter;
 import prompto.parser.OParser.CssTypeContext;
 import prompto.parser.OParser.Jsx_fragmentContext;
+import prompto.parser.OParser.Member_identifierContext;
 import prompto.parser.OParser.TypeLiteralContext;
 import prompto.parser.OParser.Type_literalContext;
 
@@ -2123,7 +2124,6 @@ public class OPromptoBuilder extends OParserBaseListener {
 		}
 	}
 	
-	
 	@Override
 	public void exitMember_method_declaration_list(Member_method_declaration_listContext ctx) {
 		MethodDeclarationList items = new MethodDeclarationList();
@@ -2132,6 +2132,11 @@ public class OPromptoBuilder extends OParserBaseListener {
 			items.add(item);
 		});
 		setNodeValue(ctx, items);
+	}
+	
+	@Override
+	public void exitMember_identifier(Member_identifierContext ctx) {
+		setNodeValue(ctx, new Identifier(ctx.getText()));
 	}
 	
 	@Override
@@ -2145,7 +2150,6 @@ public class OPromptoBuilder extends OParserBaseListener {
 		Identifier name = getNodeValue(ctx.name);
 		setNodeValue(ctx, new MemberSelector(name));
 	}
-	
 	
 	@Override
 	public void exitMethod_call_expression(Method_call_expressionContext ctx) {

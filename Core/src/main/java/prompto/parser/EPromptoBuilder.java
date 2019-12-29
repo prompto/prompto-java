@@ -2183,6 +2183,11 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
+	public void exitMember_identifier(Member_identifierContext ctx) {
+		setNodeValue(ctx, new Identifier(ctx.getText()));
+	}	
+
+	@Override
 	public void exitMemberInstance(MemberInstanceContext ctx) {
 		Identifier name = getNodeValue(ctx.name);
 		setNodeValue(ctx, new MemberInstance(name));

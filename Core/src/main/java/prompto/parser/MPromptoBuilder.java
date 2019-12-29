@@ -199,6 +199,7 @@ import prompto.param.CodeParameter;
 import prompto.param.ExtendedParameter;
 import prompto.param.IParameter;
 import prompto.param.UnresolvedParameter;
+import prompto.parser.MParser.Member_identifierContext;
 
 import static prompto.parser.MParser.*;
 import prompto.python.Python2NativeCall;
@@ -2102,6 +2103,11 @@ public class MPromptoBuilder extends MParserBaseListener {
 			items.add(item);
 		});
 		setNodeValue(ctx, items);
+	}
+	
+	@Override
+	public void exitMember_identifier(Member_identifierContext ctx) {
+		setNodeValue(ctx, new Identifier(ctx.getText()));
 	}
 
 	@Override
