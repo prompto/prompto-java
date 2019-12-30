@@ -97,6 +97,15 @@ define password as Text attribute
 // users typically have an email  
 define email as storable Text attribute with value index
 
+define Category as native category with attribute name, and bindings:
+
+	define category bindings as:
+		Java: prompto.declaration.CategoryDeclaration
+		C#: prompto.declaration.CategoryDeclaration
+		Python2: CategoryDeclaration from module: prompto.declaration.CategoryDeclaration
+		Python3: CategoryDeclaration from module: prompto.declaration.CategoryDeclaration
+		JavaScript: CategoryDeclaration from module: prompto/declaration/CategoryDeclaration.js
+
 define getCurrentCloud as native method returning Text doing:
 	Java: return prompto.cloud.Cloud.current().name();
 
