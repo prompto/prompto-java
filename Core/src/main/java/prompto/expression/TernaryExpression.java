@@ -15,6 +15,8 @@ import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.IType;
+import prompto.type.TypeMap;
+import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.BooleanValue;
 import prompto.value.IValue;
@@ -54,9 +56,11 @@ public class TernaryExpression implements IExpression {
 		if(!(type instanceof BooleanType))
 			throw new SyntaxError("Cannot test condition on " +  type.getTypeName() );
 		IType trueType = ifTrue.check(context);
-		// IType falseType = ifFalse.check(context);
-		// TODO check compatibility
-		return trueType;
+		IType falseType = ifFalse.check(context);
+		TypeMap types = new TypeMap();
+		types.put(trueType.getTypeNameId(), trueType);
+		types.put(falseType.getTypeNameId(), falseType);
+		return types.inferType(context);
 	}
 	
 	@Override
