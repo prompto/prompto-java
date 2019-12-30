@@ -16,6 +16,7 @@ List.prototype.addItems = function(items) {
 	return this; // enable fluid API
 };
 
+
 List.prototype.add = function(items) {
     if(typeof(StrictSet) !== 'undefined' && items instanceof StrictSet)
         items = Array.from(items.set.values());
@@ -140,6 +141,9 @@ List.prototype.iterate = function (fn, instance) {
         	while(iterator.hasNext())
         		array.push(iterator.next());
         	return array;
+        },
+        toList: function() {
+            return self;
         },
         getText: function() {
         	return this.toArray().join(", ");

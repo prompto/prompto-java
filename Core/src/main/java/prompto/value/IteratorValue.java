@@ -25,4 +25,11 @@ public class IteratorValue extends BaseValue implements Iterator<IValue> {
 		return source.next();
 	}
 	
+	public IValue toListValue() {
+		ListValue values = new ListValue(((IteratorType)this.getType()).getItemType());
+		while(source.hasNext())
+			values.addItem(source.next());
+		return values;
+	}
+
 }

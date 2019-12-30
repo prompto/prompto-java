@@ -33,6 +33,9 @@ Cursor.prototype.iterate = function (fn, instance) {
         		array.push(iterator.next());
         	return array;
         },
+        toList: function() {
+            return new List(false, this.toArray());
+        },
         getText: function() {
             return this.toArray().join(", ");
         }
@@ -62,7 +65,7 @@ Cursor.prototype.iterator = function() {
             var name = stored.getData('category').slice(-1)[0];
             var type = eval(name);
             var result = new type(null, {}, cursor.mutable);
-            result.fromStored(stored);
+            result.fromStored(stored); // call loaders
             return result;
         };
         return this;
