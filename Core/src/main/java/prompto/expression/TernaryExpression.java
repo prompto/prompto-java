@@ -16,7 +16,6 @@ import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.type.TypeMap;
-import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.BooleanValue;
 import prompto.value.IValue;
