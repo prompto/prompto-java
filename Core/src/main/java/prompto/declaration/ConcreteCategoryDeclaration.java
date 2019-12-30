@@ -1071,15 +1071,15 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    transpiler.indent();
 	    List<String> categories = collectCategories(transpiler.getContext());
 	    if(storable) {
-	    	transpiler.append("if(!this.storable) {").newLine().indent()
-	        	.append("this.storable = $DataStore.instance.newStorableDocument(['").append(categories.stream().collect(Collectors.joining("', '"))).append("'], this.dbIdListener.bind(this));").newLine()
+	    	transpiler.append("if(!this.$storable) {").newLine().indent()
+	        	.append("this.$storable = $DataStore.instance.newStorableDocument(['").append(categories.stream().collect(Collectors.joining("', '"))).append("'], this.dbIdListener.bind(this));").newLine()
 	    		.dedent().append("}").newLine();
 	    }
 	    transpileGetterSetterAttributes(transpiler);
 	    transpileSuperConstructor(transpiler);
-	    transpiler.append("this.category = [").append(categories.stream().collect(Collectors.joining(", "))).append("];").newLine();
+	    transpiler.append("this.$categories = [").append(categories.stream().collect(Collectors.joining(", "))).append("];").newLine();
 	    transpileLocalAttributes(transpiler);
-	    transpiler.append("this.mutable = mutable;").newLine();
+	    transpiler.append("this.$mutable = mutable;").newLine();
 	    transpiler.append("return this;");
 	    transpiler.dedent();
 	    transpiler.append("}");
@@ -1161,7 +1161,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	protected void transpileLocalAttributes(Transpiler transpiler) {
 	    Set<Identifier> attributes = this.getLocalAttributes(transpiler.getContext());
 	    if (attributes!=null) {
-	        transpiler.append("this.mutable = true;").newLine();
+	        transpiler.append("this.$mutable = true;").newLine();
 	        transpiler.append("values = Object.assign({}, copyFrom, values);").newLine();
 	        attributes.forEach(attr -> {
 	        	boolean isEnum = isEnumeratedAttribute(transpiler.getContext(), attr);

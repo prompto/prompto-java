@@ -299,7 +299,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 	    this.symbolsList.forEach(symbol->symbol.initialize(transpiler));
 	    List<String> names = this.symbolsList.stream().map(Symbol::getName).collect(Collectors.toList());
 	    transpiler.append(this.getName()).append(".symbols = new List(false, [").append(names.stream().collect(Collectors.joining(", "))).append("]);").newLine();
-	    transpiler.append(this.getName()).append(".symbolOf = eval;");
+	    transpiler.append(this.getName()).append(".symbolOf = function(name) { return eval(name); };");
 	    return true;
 	}
 

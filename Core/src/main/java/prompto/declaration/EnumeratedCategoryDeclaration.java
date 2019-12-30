@@ -441,7 +441,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 	private void transpileSymbols(Transpiler transpiler) {
 	    Stream<String> names = this.symbolsList.stream().map(symbol ->symbol.getName());
 	    transpiler.append(this.getName()).append(".symbols = new List(false, [").append(names.collect(Collectors.joining(", "))).append("]);").newLine();
-	    transpiler.append(this.getName()).append(".symbolOf = eval").newLine();
+	    transpiler.append(this.getName()).append(".symbolOf = function(name) { return eval(name); };").newLine();
 	}
 
 
