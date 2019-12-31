@@ -79,6 +79,18 @@ public class SetType extends ContainerType {
 	}
 	
 	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.register("StrictSet");
+		itemType.declare(transpiler);
+	}
+	
+
+	@Override
+	public void transpile(Transpiler transpiler) {
+		transpiler.append("StrictSet");
+	}
+
+	@Override
 	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
 	    if((other instanceof SetType || other instanceof ListType) && this.getItemType().equals(((ContainerType)other).getItemType())) {
 	        left.declare(transpiler);

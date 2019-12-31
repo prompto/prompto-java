@@ -84,6 +84,18 @@ public class VersionType extends NativeType {
 	}
 	
 	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.register("Version");
+	}
+	
+	
+	@Override
+	public void transpile(Transpiler transpiler) {
+		transpiler.append("Version");
+	}
+	
+
+	@Override
 	public void declareCompare(Transpiler transpiler, IType other) {
 		// nothing to do
 	}

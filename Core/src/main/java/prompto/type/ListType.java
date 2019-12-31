@@ -175,13 +175,14 @@ public class ListType extends ContainerType {
 	
 	@Override
 	public String getTranspiledName(Context context) {
-		return this.itemType.getTranspiledName(context) + "_list";
+		return itemType.getTranspiledName(context) + "_list";
 	}
 	
 	
 	@Override
 	public void declare(Transpiler transpiler) {
 		transpiler.register("List");
+		itemType.declare(transpiler);
 	}
 	
 

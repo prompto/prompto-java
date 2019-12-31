@@ -109,6 +109,7 @@ public class RemoteCall extends UnresolvedCall {
 	    transpiler = transpiler.newChildTranspiler(null);
 		if(resultName!=null) {
 			IType type = resolveAndCheck(transpiler.getContext());
+			type.declare(transpiler);
 			transpiler.getContext().registerValue(new Variable(resultName, type));
 		}
 		andThen.declare(transpiler);

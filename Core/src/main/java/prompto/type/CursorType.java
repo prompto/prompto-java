@@ -75,6 +75,18 @@ public class CursorType extends IterableType {
    }
 	
 	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.register("Cursor");
+		itemType.declare(transpiler);
+	}
+	
+
+	@Override
+	public void transpile(Transpiler transpiler) {
+		transpiler.append("Cursor");
+	}
+
+	@Override
 	public void declareMember(Transpiler transpiler, Identifier name) {
 		switch(name.toString()) {
 		case "count":
