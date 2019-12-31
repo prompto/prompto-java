@@ -174,7 +174,7 @@ define parseVersion as native method receiving Text text returning Version doing
 	C#: return prompto.value.Version.Parse(text);
 	Python2: return Version.Parse(text) from module: prompto.value.Version
 	Python3: return Version.Parse(text) from module: prompto.value.Version
-	JavaScript: return Version.Parse(text); from module: prompto/intrinsic/Version.js
+	JavaScript: return Version.parse(text); from module: prompto/intrinsic/Version.js
 
 
 define parsePeriod as native method receiving Text text returning Period doing:
