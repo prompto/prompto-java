@@ -74,32 +74,14 @@ Cursor.prototype.iterator = function() {
 };
 
 Cursor.prototype.filtered = function(fn) {
-    var Iterator = function(cursor) {
-        this.iterator = cursor.iterator();
-        this.current = null;
-        this.hasNext = function () {
-            if (this.current)
-                return true;
-            while (this.iterator.hasNext()) {
-                var current = this.iterator.next();
-                if (fn(current)) {
-                    this.current = current;
-                    return true;
-                }
-            }
-            return false;
-        };
-        this.next = function () {
-            var current = this.current;
-            this.current = null;
-            return current;
-        };
-        return this;
-    };
-    var self = this;
-    var cursor = new Cursor(this.mutable);
-    cursor.iterator = function() { return new Iterator(self); };
-    return cursor;
+	var list = new List(false);
+	var iterator = this.iterator();
+	while(iterator.hasNext()) {
+		var current = iterator.next();
+		if (fn(current))
+			list.push();
+	}
+	return list;
 };
 
 Cursor.prototype.toString = function () {

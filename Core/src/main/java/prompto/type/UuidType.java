@@ -43,6 +43,17 @@ public class UuidType extends NativeType {
 	}
 	
 	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.register("UUID");
+	}
+	
+	
+	@Override
+	public void transpile(Transpiler transpiler) {
+		transpiler.append("UUID");
+	}
+
+	@Override
 	public void transpileCode(Transpiler transpiler) {
 		transpiler.append(".toString()");
 	}
