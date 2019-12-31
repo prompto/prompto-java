@@ -56,10 +56,10 @@ Cursor.prototype.collectDbIds = function(idsToDelete) {
 
 Cursor.prototype.iterator = function() {
     var Iterator = function(cursor) {
-        this.iterable = cursor.iterable;
-        this.hasNext = function() { return this.iterable.hasNext(); };
+        var iterator = cursor.iterable.iterator();
+        this.hasNext = function() { return iterator.hasNext(); };
         this.next = function() {
-            var stored = this.iterable.next();
+            var stored = iterator.next();
             if(!stored)
                 return null;
             var name = stored.getData('category').slice(-1)[0];

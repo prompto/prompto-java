@@ -4,10 +4,9 @@ function readJSONValue(value) {
 	else if(Array.isArray(value)) {
 		var items = value.map(readJSONValue);
 		return new List(false, items);
-	} else if(Array.isArray(value.value)) {
-		var items = value.value.map(readJSONValue);
-		return new List(false, items);
-	} else if(typeof(value)==typeof({})) {
+	} else if(value.type) {
+		if(value.type.endsWith("[]"))
+			return readList(value);
 		switch(value.type) {
 			case "Uuid":
 				return UUID.fromString(value.value);
@@ -17,14 +16,41 @@ function readJSONValue(value) {
 				return LocalTime.parse(value.value);
 			case "DateTime":
 				return DateTime.parse(value.value);
+			case "Version":
+				return Version.parse(value.value);
+			case "Cursor":
+				return readCursor(value);
 			default:
-				return readJSONInstance(value);
-			}	
+				return readInstance(value);
+		}
+	} else if(value.name) {
+		return eval(value.name);
 	} else
-		return value;
+		return value; // a string, boolean or number
 }
 
-function readJSONInstance(value) {
+function readList(value) {
+	var items = value.value.map(readJSONValue);
+	return new List(false, items);
+}
+
+function readCursor(value) {
+	var iterable = {
+		count: function() { return value.count; },
+		totalCount: function() { return value.totalCount; },
+		iterator: function() {
+		    return {
+		        idx: 0, 
+		        hasNext: function() { return this.idx < value.count },
+		        next : function() { return recordToStored(value.items[this.idx++]); }
+		    };
+		}
+	};
+	return new Cursor(false, iterable);
+}
+
+
+function readInstance(value) {
 	var type = eval(value.type);
 	if(typeof(type)!=='function')
 		throw new Error("Unsupported: " + value.type);

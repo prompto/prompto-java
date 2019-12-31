@@ -22,7 +22,6 @@ import prompto.type.CursorType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
 import prompto.type.IterableType;
-import prompto.type.ListType;
 import prompto.type.TextType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -142,14 +141,14 @@ public class CursorValue extends BaseValue implements IIterable<IValue>, Iterabl
 			if(withType) {
 				generator.writeStartObject();
 				generator.writeFieldName("type");
-				// serialize Cursor as list
-				IType type = new ListType(getItemType());
-				generator.writeString(type.getTypeName());
+				generator.writeString("Cursor");
+				generator.writeFieldName("itemType");
+				generator.writeString(getItemType().getTypeName());
 				generator.writeFieldName("count");
 				generator.writeNumber(iterable.count());
 				generator.writeFieldName("totalCount");
 				generator.writeNumber(iterable.totalCount());
-				generator.writeFieldName("value");
+				generator.writeFieldName("items");
 			}
 			generator.writeStartArray();
 			Iterator<IValue> iter = iterator();
