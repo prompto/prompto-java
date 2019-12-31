@@ -143,7 +143,7 @@ List.prototype.iterate = function (fn, instance) {
         	return array;
         },
         toList: function() {
-            return self;
+            return new List(false, this.toArray());
         },
         getText: function() {
         	return this.toArray().join(", ");
