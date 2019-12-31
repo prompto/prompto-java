@@ -1023,6 +1023,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	@Override
 	public void declare(Transpiler transpiler) {
 	    transpiler.declare(this);
+	    declareAttributes(transpiler);
 	    Transpiler instance = transpiler.newInstanceTranspiler(getType(transpiler.getContext()));
 	    processAnnotations(instance.getContext(), true);
 	    if (this.derivedFrom != null) {
@@ -1052,7 +1053,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 
 	protected void declareRoot(Transpiler transpiler) {
         transpiler.require("$Root");
-	}
+ 	}
 
 	@Override
 	public boolean transpile(Transpiler transpiler) {

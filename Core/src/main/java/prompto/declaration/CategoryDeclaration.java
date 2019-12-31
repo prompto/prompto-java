@@ -27,6 +27,7 @@ import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.transpiler.ITranspilable;
+import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -224,7 +225,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 				if(decl==null)
 					context.getProblemListener().reportUnknownCategory(id, id.toString());
 				else
-				stream.set(Stream.concat(stream.get(), decl.getAllAnnotationsAsStream(context)));
+					stream.set(Stream.concat(stream.get(), decl.getAllAnnotationsAsStream(context)));
 			});
 		}
 		if(annotations!=null)
@@ -437,6 +438,20 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 
 	protected boolean isPromptoRoot(Context context) {
 		return false;
+	}
+	
+	protected void declareAttributes(Transpiler transpiler) {
+		if(attributes!=null)
+			attributes.forEach(attr->declareAttribute(attr, transpiler));
+		
+	}
+	
+	protected void declareAttribute(Identifier attr, Transpiler transpiler) {
+		AttributeDeclaration decl = transpiler.getContext().getRegisteredDeclaration(AttributeDeclaration.class, attr);
+		if(decl==null)
+			transpiler.getContext().getProblemListener().reportUnknownAttribute(attr, attr.toString());
+		else
+			decl.declare(transpiler);
 	}
 
 	public abstract void ensureDeclarationOrder(Context context, List<ITranspilable> list, Set<ITranspilable> set);
