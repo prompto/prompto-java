@@ -414,6 +414,7 @@ public class ConstructorExpression extends Section implements IExpression {
 	@Override
 	public void declare(Transpiler transpiler) {
 		CategoryDeclaration cd = transpiler.getContext().getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
+		checkFirstHomonym(transpiler.getContext(), cd);
 	    cd.declare(transpiler);
 	    if(this.copyFrom!=null)
 	        this.copyFrom.declare(transpiler);
@@ -423,13 +424,14 @@ public class ConstructorExpression extends Section implements IExpression {
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-		CategoryDeclaration decl = transpiler.getContext().getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
-	    if (decl instanceof NativeWidgetDeclaration)
-	        this.transpileNativeWidget(transpiler, (NativeWidgetDeclaration)decl);
-	    else if (decl instanceof ConcreteWidgetDeclaration)
-	        this.transpileConcreteWidget(transpiler, (ConcreteWidgetDeclaration)decl);
-	    else if (decl instanceof NativeCategoryDeclaration)
-	        this.transpileNative(transpiler, (NativeCategoryDeclaration)decl);
+		CategoryDeclaration cd = transpiler.getContext().getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
+		checkFirstHomonym(transpiler.getContext(), cd);
+	    if (cd instanceof NativeWidgetDeclaration)
+	        this.transpileNativeWidget(transpiler, (NativeWidgetDeclaration)cd);
+	    else if (cd instanceof ConcreteWidgetDeclaration)
+	        this.transpileConcreteWidget(transpiler, (ConcreteWidgetDeclaration)cd);
+	    else if (cd instanceof NativeCategoryDeclaration)
+	        this.transpileNative(transpiler, (NativeCategoryDeclaration)cd);
 	    else
 	        this.transpileConcrete(transpiler);
 	    return false;
