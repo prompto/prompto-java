@@ -166,7 +166,7 @@ public class CategoryType extends BaseType {
 		if(actual==null)
 			actual = context.getRegisteredDeclaration(EnumeratedNativeDeclaration.class, id);
 		if(actual==null)
-			throw new SyntaxError("Unknown category: \"" + id + "\"");
+			context.getProblemListener().reportUnknownCategory(id, id.toString());
 		return actual;
 	}
 
@@ -322,11 +322,11 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public Set<IMethodDeclaration> getMemberMethods(Context context, Identifier name) throws PromptoError {
+	public Set<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
 		IDeclaration decl = getDeclaration(context);
 		if(!(decl instanceof ConcreteCategoryDeclaration))
-			throw new SyntaxError("Unknown category:" + this.getTypeName());
-		Collection<IMethodDeclaration> methods = ((ConcreteCategoryDeclaration)decl).getMemberMethods(context, name).values();
+			context.getProblemListener().reportUnknownCategory(id, id.toString());
+		Collection<IMethodDeclaration> methods = ((ConcreteCategoryDeclaration)decl).getMemberMethods(context, id).values();
 		if(methods instanceof Set)
 			return (Set<IMethodDeclaration>)methods;
 		else

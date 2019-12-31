@@ -84,7 +84,7 @@ public class ConstructorExpression extends Section implements IExpression {
 		Context context = writer.getContext();
 		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 		if(cd==null)
-			throw new SyntaxError("Unknown category " + type.getTypeName());
+			context.getProblemListener().reportUnknownCategory(this, type.getTypeName());
 		checkFirstHomonym(context, cd);
 		switch(writer.getDialect()) {
 		case E:
@@ -156,7 +156,7 @@ public class ConstructorExpression extends Section implements IExpression {
 	public IType check(Context context) {
 		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 		if(cd==null)
-			throw new SyntaxError("Unknown category " + type.getTypeName());
+			context.getProblemListener().reportUnknownCategory(this, type.getTypeName());
 		checkFirstHomonym(context, cd);
 		cd.checkConstructorContext(context);
 		if(copyFrom!=null) {
@@ -180,7 +180,7 @@ public class ConstructorExpression extends Section implements IExpression {
 	public IValue interpret(Context context) throws PromptoError {
 		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 		if(cd==null)
-			throw new SyntaxError("Unknown category " + type.getTypeName());
+			context.getProblemListener().reportUnknownCategory(this, type.getTypeName());
 		checkFirstHomonym(context, cd);
 		IInstance instance = type.newInstance(context);
 		instance.setMutable(true);
@@ -239,7 +239,7 @@ public class ConstructorExpression extends Section implements IExpression {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 		if(cd==null)
-			throw new SyntaxError("Unknown category " + type.getTypeName());
+			context.getProblemListener().reportUnknownCategory(this, type.getTypeName());
 		checkFirstHomonym(context, cd);
 		Type klass = getConcreteType(context);
 		ResultInfo result = CompilerUtils.compileNewInstance(method, klass);

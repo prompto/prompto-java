@@ -75,7 +75,7 @@ public class CategorySymbol extends Symbol implements IExpression  {
 		EnumeratedCategoryDeclaration cd = context.getRegisteredDeclaration(
 				EnumeratedCategoryDeclaration.class, type.getTypeNameId());
 		if(cd==null)
-			throw new SyntaxError("Unknown category " + type.getTypeName());
+			context.getProblemListener().reportUnknownCategory(this, type.getTypeName());
 		if(arguments!=null) {
 			context = context.newChildContext();
 			for(Argument argument : arguments) {

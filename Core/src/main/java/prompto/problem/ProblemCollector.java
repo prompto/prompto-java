@@ -163,6 +163,13 @@ public class ProblemCollector implements ANTLRErrorListener, IProblemListener {
 	}
 	
 	@Override
+	public void reportUnknownCategory(ISection section, String name) {
+		synchronized(problems) {
+			addProblem(new UnknownCategoryError(name, section));
+		}
+	}
+
+	@Override
 	public void reportNoMatchingPrototype(ISection section, String proto) {
 		synchronized(problems) {
 			addProblem(new NoMatchingPrototypeError(proto, section));

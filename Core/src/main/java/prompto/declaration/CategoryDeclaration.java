@@ -221,6 +221,9 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		if(derivedFrom!=null) {
 			derivedFrom.forEach(id->{
 				CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, id);
+				if(decl==null)
+					context.getProblemListener().reportUnknownCategory(id, id.toString());
+				else
 				stream.set(Stream.concat(stream.get(), decl.getAllAnnotationsAsStream(context)));
 			});
 		}

@@ -297,7 +297,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		if(derivedFrom!=null) for(Identifier category : derivedFrom) {
 			ConcreteCategoryDeclaration cd = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, category);
 			if(cd==null)
-				throw new SyntaxError("Unknown category: \"" + category + "\"");
+				context.getProblemListener().reportUnknownCategory(category, category.toString());
 		}
 	}
 

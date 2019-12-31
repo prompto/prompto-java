@@ -94,6 +94,11 @@ public class ProblemListener implements ANTLRErrorListener, IProblemListener {
 	}
 	
 	@Override
+	public void reportUnknownCategory(ISection section, String name) {
+		throw new SyntaxError("Unknown category: \"" + name + "\"");
+	}
+	
+	@Override
 	public void reportNoMatchingPrototype(ISection section, String proto) {
 		throw new SyntaxError("No matching prototype: \"" + proto + "\"");
 	}

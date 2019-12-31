@@ -103,7 +103,7 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 		if(type!=null) {
 			CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 			if(decl==null)
-				throw new SyntaxError("Unknown category: " + type.getTypeName());
+				context.getProblemListener().reportUnknownCategory(type, type.getTypeName());
 			context = context.newInstanceContext(decl.getType(context), true);
 		}
 		if(!(predicate instanceof IPredicateExpression))
