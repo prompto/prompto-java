@@ -26,7 +26,6 @@ import prompto.store.IStoredIterable;
 import prompto.store.memory.MemStore;
 import prompto.store.memory.Query;
 
-@SuppressWarnings("restriction") 
 public class MemStoreMirror {
 	
 	MemStore store = new MemStore();
@@ -377,6 +376,10 @@ public class MemStoreMirror {
 		
 		public long totalCount() {
 			return iterable.totalCount();
+		}
+		
+		public Object iterator() {
+			return iterable.iterator();
 		}
 
 		public Object iterate(ScriptObjectMirror function, ScriptObjectMirror binding) {

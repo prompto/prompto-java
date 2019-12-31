@@ -50,7 +50,13 @@ public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoLi
 		return result;
 	}
 
+	public PromptoList<V> slice(long first) {
+		return slice(first, this.size());
+	}
+	
 	public PromptoList<V> slice(long first, long last) {
+		if (first < 0)
+			first = this.size() + 1 + first;
 		if (last < 0)
 			last = this.size() + 1 + last;
 		return new PromptoList<>(this.subList((int)(first-1), (int)last), false);
