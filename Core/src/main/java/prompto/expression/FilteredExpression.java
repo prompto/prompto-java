@@ -100,7 +100,7 @@ public class FilteredExpression extends Section implements IExpression {
 	public IType check(Context context) {
 		IType sourceType = source.check(context);
 		if(!(sourceType instanceof IterableType))
-			throw new SyntaxError("Expecting a list, set or tuple as data source!");
+			throw new SyntaxError("Expecting a cursor, list, set or tuple as data source!");
 		IType itemType = ((IterableType)sourceType).getItemType();
 		if(itemId!=null) {
 			Context child = context.newChildContext();
@@ -111,7 +111,7 @@ public class FilteredExpression extends Section implements IExpression {
 		} else if(predicate instanceof ArrowExpression) {
 			// TODO
 		} else
-			throw new SyntaxError("Expecting an arrow expression!");
+			throw new SyntaxError("Expecting a filtering expression!");
 		return new ListType(itemType);
 	}
 	
@@ -157,7 +157,7 @@ public class FilteredExpression extends Section implements IExpression {
 		// create inner class for filter
 		String innerClassName = compileInnerFilterClass(context, method.getClassFile());
 		// get iterable
-		ResultInfo srcinfo = source.compile(context, method, flags);
+		ResultInfo srcInfo = source.compile(context, method, flags);
 		// instantiate filter
 		ClassConstant innerClass = new ClassConstant(new NamedType(innerClassName));
 		method.addInstruction(Opcode.NEW, innerClass);
@@ -167,19 +167,19 @@ public class FilteredExpression extends Section implements IExpression {
 		MethodConstant m = new MethodConstant(innerClass, "<init>", proto);
 		method.addInstruction(Opcode.INVOKESPECIAL, m);
 		// adjust return type
-		Type resultType = srcinfo.getType();
-		if(srcinfo.getType().equals(IterableWithCounts.class))
+		Type resultType = srcInfo.getType();
+		if(resultType==IterableWithCounts.class)
 			resultType = Iterable.class;
 		// invoke filter on source
 		Descriptor.Method desc = new Descriptor.Method(Predicate.class, resultType);
-		if(srcinfo.isInterface()) {
-			InterfaceConstant i = new InterfaceConstant(new ClassConstant(srcinfo.getType()), "filter",  desc);
+		if(srcInfo.isInterface()) {
+			InterfaceConstant i = new InterfaceConstant(new ClassConstant(srcInfo.getType()), "filter",  desc);
 			method.addInstruction(Opcode.INVOKEINTERFACE, i);
 		} else {
-			m = new MethodConstant(new ClassConstant(srcinfo.getType()), "filter",  desc);
+			m = new MethodConstant(new ClassConstant(srcInfo.getType()), "filter",  desc);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 		}
-		return new ResultInfo(srcinfo.getType());
+		return new ResultInfo(srcInfo.getType());
 	}
 
 
