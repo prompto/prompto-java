@@ -6,8 +6,10 @@ function readJSONValue(value) {
 		return new List(false, items);
 	} else if(value.type) {
 		if(value.type.endsWith("[]"))
-			return readList(value);
-		switch(value.type) {
+			return readList(value.value);
+		else if(value.type.startsWith("Cursor<"))
+			return readCursor(value.value);
+		else switch(value.type) {
 			case "Uuid":
 				return UUID.fromString(value.value);
 			case "Date":
@@ -18,8 +20,6 @@ function readJSONValue(value) {
 				return DateTime.parse(value.value);
 			case "Version":
 				return Version.parse(value.value);
-			case "Cursor":
-				return readCursor(value);
 			default:
 				return readInstance(value);
 		}
@@ -30,7 +30,7 @@ function readJSONValue(value) {
 }
 
 function readList(value) {
-	var items = value.value.map(readJSONValue);
+	var items = value.map(readJSONValue);
 	return new List(false, items);
 }
 

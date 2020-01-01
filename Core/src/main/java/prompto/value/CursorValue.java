@@ -141,20 +141,20 @@ public class CursorValue extends BaseValue implements IIterable<IValue>, Iterabl
 			if(withType) {
 				generator.writeStartObject();
 				generator.writeFieldName("type");
-				generator.writeString("Cursor");
-				generator.writeFieldName("itemType");
-				generator.writeString(getItemType().getTypeName());
-				generator.writeFieldName("count");
-				generator.writeNumber(iterable.count());
-				generator.writeFieldName("totalCount");
-				generator.writeNumber(iterable.totalCount());
-				generator.writeFieldName("items");
+				generator.writeString(type.getTypeName());
 			}
+			generator.writeStartObject();
+			generator.writeFieldName("count");
+			generator.writeNumber(iterable.count());
+			generator.writeFieldName("totalCount");
+			generator.writeNumber(iterable.totalCount());
+			generator.writeFieldName("items");
 			generator.writeStartArray();
 			Iterator<IValue> iter = iterator();
 			while(iter.hasNext())
 				iter.next().toJsonStream(context, generator, null, null, withType, data);
 			generator.writeEndArray();
+			generator.writeEndObject();
 			if(withType)
 				generator.writeEndObject();
 		} catch(IOException e) {
