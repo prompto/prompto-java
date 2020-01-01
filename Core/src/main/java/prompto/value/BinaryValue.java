@@ -114,14 +114,25 @@ public abstract class BinaryValue extends BaseValue {
 	@Override
 	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
 		try {
-			// if no binaries container, store a relative URL
-			if(binaries==null) 
+			if(withType) {
+				generator.writeStartObject();
+				generator.writeStringField("type", getType().getTypeName());
+				generator.writeFieldName("value");
+			}
+			generator.writeStartObject();
+			generator.writeStringField("mimeType", getMimeType());
+			generator.writeFieldName("url");
+			if(binaries==null) {
+				// if no binaries container, store an absolute URL
 				generator.writeString("/ws/bin/data?dbId=" + instanceId + "&attribute=" + fieldName.toString());
-			else {
+			} else {
 				String partId = "@" + instanceId + '/' + fieldName + '/' + getMimeType().replace('/', '.');
 				generator.writeString(partId);
 				binaries.put(partId, getBytes());
 			}
+			generator.writeEndObject();
+			if(withType)
+				generator.writeEndObject();
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		} 
