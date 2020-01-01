@@ -48,6 +48,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 	
 	public EnumeratedCategoryDeclaration(Identifier name) {
 		super(name);
+		this.type = new EnumeratedCategoryType(name);
 	}
 	
 	public EnumeratedCategoryDeclaration(Identifier name, IdentifierList attrs, IdentifierList derived, CategorySymbolList symbols) {

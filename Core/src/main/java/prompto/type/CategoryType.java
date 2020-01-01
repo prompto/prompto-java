@@ -103,7 +103,7 @@ public class CategoryType extends BaseType {
 	public IType resolve(Context context) {
 		if(resolved==null) {
 			IDeclaration decl = getDeclaration(context);
-			resolved = decl==null ? this : decl.getType(context);
+			resolved = decl==null || decl.getType(context).getClass()==this.getClass()  ? this : decl.getType(context);
 		}
 		return resolved;
 	}
