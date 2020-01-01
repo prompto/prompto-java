@@ -9,6 +9,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.FieldConstant;
 import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
+import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
@@ -131,6 +133,19 @@ public class NativeSymbol extends Symbol implements IExpression {
 		EnumeratedNativeType itype = (EnumeratedNativeType)this.getType(context);
 		return CompilerUtils.getNativeEnumType(itype.getTypeNameId());
 	}
+	
+	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, ResultInfo left, IExpression exp) {
+		exp.compile(context, method, flags);
+		IOperand oper = new MethodConstant(left.getType(), "equals", Object.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		if(flags.isReverse())
+			CompilerUtils.reverseBoolean(method);
+		if(flags.toPrimitive())
+			return new ResultInfo(boolean.class);
+		else
+			return CompilerUtils.booleanToBoolean(method);
+	}
+
 	
 	@Override
 	public void declare(Transpiler transpiler) {

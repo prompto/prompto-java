@@ -17,6 +17,11 @@ public class TestEnums extends BaseOParserTest {
 	}
 
 	@Test
+	public void testSwitchEnum() throws Exception {
+		compareResourceOEO("enums/switchEnum.poc");
+	}
+
+	@Test
 	public void testTextEnum() throws Exception {
 		compareResourceOEO("enums/textEnum.poc");
 	}

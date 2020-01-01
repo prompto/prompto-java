@@ -3294,6 +3294,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitUUIDLiteral(EParser.UUIDLiteralContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code SymbolLiteral}
+	 * labeled alternative in {@link EParser#atomic_literal}.
+	 * @param ctx the parse tree
+	 */
+	void enterSymbolLiteral(EParser.SymbolLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code SymbolLiteral}
+	 * labeled alternative in {@link EParser#atomic_literal}.
+	 * @param ctx the parse tree
+	 */
+	void exitSymbolLiteral(EParser.SymbolLiteralContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code TypeLiteral}
 	 * labeled alternative in {@link EParser#atomic_literal}.
 	 * @param ctx the parse tree

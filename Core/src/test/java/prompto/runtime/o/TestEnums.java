@@ -50,6 +50,21 @@ public class TestEnums extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedSwitchEnum() throws Exception {
+		checkInterpretedOutput("enums/switchEnum.poc");
+	}
+
+	@Test
+	public void testCompiledSwitchEnum() throws Exception {
+		checkCompiledOutput("enums/switchEnum.poc");
+	}
+
+	@Test
+	public void testTranspiledSwitchEnum() throws Exception {
+		checkTranspiledOutput("enums/switchEnum.poc");
+	}
+
+	@Test
 	public void testInterpretedTextEnum() throws Exception {
 		checkInterpretedOutput("enums/textEnum.poc");
 	}

@@ -200,6 +200,7 @@ import prompto.param.ExtendedParameter;
 import prompto.param.IParameter;
 import prompto.param.UnresolvedParameter;
 import prompto.parser.MParser.Member_identifierContext;
+import prompto.parser.MParser.SymbolLiteralContext;
 
 import static prompto.parser.MParser.*;
 import prompto.python.Python2NativeCall;
@@ -2982,6 +2983,11 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitSymbolIdentifier(SymbolIdentifierContext ctx) {
 		Identifier name = getNodeValue(ctx.symbol_identifier());
 		setNodeValue(ctx, name);
+	}
+	
+	@Override
+	public void exitSymbolLiteral(SymbolLiteralContext ctx) {
+		setNodeValue(ctx, new SymbolExpression(new Identifier(ctx.getText())));
 	}
 	
 	@Override

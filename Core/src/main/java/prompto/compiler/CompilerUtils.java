@@ -821,6 +821,10 @@ public abstract class CompilerUtils {
 			});
 	}
 
+	public static boolean isEnumNativeType(Type type) {
+		return type.getTypeName().startsWith(NATIVE_ENUM_PACKAGE_PREFIX);
+	}
+
 
 
 }

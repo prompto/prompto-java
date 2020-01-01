@@ -3142,6 +3142,18 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitUUIDLiteral(OParser.UUIDLiteralContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code SymbolLiteral}
+	 * labeled alternative in {@link OParser#atomic_literal}.
+	 * @param ctx the parse tree
+	 */
+	void enterSymbolLiteral(OParser.SymbolLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code SymbolLiteral}
+	 * labeled alternative in {@link OParser#atomic_literal}.
+	 * @param ctx the parse tree
+	 */
+	void exitSymbolLiteral(OParser.SymbolLiteralContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code TypeLiteral}
 	 * labeled alternative in {@link OParser#atomic_literal}.
 	 * @param ctx the parse tree

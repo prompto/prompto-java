@@ -1,5 +1,6 @@
 package prompto.expression;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -544,12 +545,19 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 
 	public ResultInfo compileEquals(Context context, MethodInfo method, Flags flags) {
 		ResultInfo lval = left.compile(context, method, flags.withPrimitive(true));
-		IOperatorFunction compiler = EQUALS_COMPILERS.get(lval.getType());
+		IOperatorFunction compiler = getEqualsCompiler(lval.getType());
 		if(compiler==null) {
 			System.err.println("Missing IOperatorFunction for = " + lval.getType().getTypeName());
 			throw new SyntaxError("Cannot check equality of " + lval.getType().getTypeName() + " with " + right.check(context).getFamily());
 		}
 		return compiler.compile(context, method, flags, lval, right);
+	}
+
+	private IOperatorFunction getEqualsCompiler(Type type) {
+		IOperatorFunction function = EQUALS_COMPILERS.get(type);
+		if(function==null && CompilerUtils.isEnumNativeType(type))
+			return NativeSymbol::compileEquals;
+		return function;
 	}
 
 	public ResultInfo compileContains(Context context, MethodInfo method, Flags flags) {

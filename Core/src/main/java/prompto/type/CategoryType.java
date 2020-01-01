@@ -81,6 +81,7 @@ public class CategoryType extends BaseType {
 	
 	boolean mutable = false;
 	Identifier typeNameId;
+	IType resolved;
 	
 	public CategoryType(Identifier typeNameId) {
 		super(Family.CATEGORY);
@@ -96,6 +97,15 @@ public class CategoryType extends BaseType {
 	protected CategoryType(Family family, Identifier typeNameId) {
 		super(family);
 		this.typeNameId = typeNameId;
+	}
+	
+	@Override
+	public IType resolve(Context context) {
+		if(resolved==null) {
+			IDeclaration decl = getDeclaration(context);
+			resolved = decl==null ? this : decl.getType(context);
+		}
+		return resolved;
 	}
 
 	@Override
@@ -336,9 +346,14 @@ public class CategoryType extends BaseType {
 	
 	@Override
 	public boolean isAssignableFrom(Context context, IType other) {
-		return super.isAssignableFrom(context, other) 
-				|| ( other instanceof CategoryType 
-					 && isAssignableFrom(context, (CategoryType)other));
+		IType actual = resolve(context);
+		other = other.resolve(context);
+		if(actual==this)
+			return super.isAssignableFrom(context, other) 
+					|| ( other instanceof CategoryType 
+						 && isAssignableFrom(context, (CategoryType)other));
+		else
+			return actual.isAssignableFrom(context, other);
 	}
 	
 	public boolean isAssignableFrom(Context context, CategoryType other) {

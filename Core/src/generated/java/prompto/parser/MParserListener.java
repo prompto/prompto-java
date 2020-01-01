@@ -3098,6 +3098,18 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitUUIDLiteral(MParser.UUIDLiteralContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code SymbolLiteral}
+	 * labeled alternative in {@link MParser#atomic_literal}.
+	 * @param ctx the parse tree
+	 */
+	void enterSymbolLiteral(MParser.SymbolLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code SymbolLiteral}
+	 * labeled alternative in {@link MParser#atomic_literal}.
+	 * @param ctx the parse tree
+	 */
+	void exitSymbolLiteral(MParser.SymbolLiteralContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code TypeLiteral}
 	 * labeled alternative in {@link MParser#atomic_literal}.
 	 * @param ctx the parse tree

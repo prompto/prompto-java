@@ -203,6 +203,7 @@ import prompto.param.UnresolvedParameter;
 import prompto.parser.OParser.CssTypeContext;
 import prompto.parser.OParser.Jsx_fragmentContext;
 import prompto.parser.OParser.Member_identifierContext;
+import prompto.parser.OParser.SymbolLiteralContext;
 import prompto.parser.OParser.TypeLiteralContext;
 import prompto.parser.OParser.Type_literalContext;
 
@@ -3015,6 +3016,11 @@ public class OPromptoBuilder extends OParserBaseListener {
 	public void exitSymbolIdentifier(SymbolIdentifierContext ctx) {
 		Identifier name = getNodeValue(ctx.symbol_identifier());
 		setNodeValue(ctx, new SymbolExpression(name));
+	}
+	
+	@Override
+	public void exitSymbolLiteral(SymbolLiteralContext ctx) {
+		setNodeValue(ctx, new SymbolExpression(new Identifier(ctx.getText())));
 	}
 	
 	@Override

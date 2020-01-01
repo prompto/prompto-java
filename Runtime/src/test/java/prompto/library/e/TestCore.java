@@ -76,6 +76,21 @@ public class TestCore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedCategory() throws Exception {
+		runInterpretedTests("core/category.pec");
+	}
+
+	@Test
+	public void testCompiledCategory() throws Exception {
+		runCompiledTests("core/category.pec");
+	}
+
+	@Test
+	public void testTranspiledCategory() throws Exception {
+		runTranspiledTests("core/category.pec");
+	}
+
+	@Test
 	public void testInterpretedCloud() throws Exception {
 		runInterpretedTests("core/cloud.pec");
 	}

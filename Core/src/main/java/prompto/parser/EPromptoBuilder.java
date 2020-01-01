@@ -3041,6 +3041,11 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
+	public void exitSymbolLiteral(SymbolLiteralContext ctx) {
+		setNodeValue(ctx, new SymbolExpression(new Identifier(ctx.getText())));
+	}
+	
+	@Override
 	public void exitSymbols_token(Symbols_tokenContext ctx) {
 		setNodeValue(ctx, ctx.getText());
 	}
