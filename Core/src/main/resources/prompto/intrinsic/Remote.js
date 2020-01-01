@@ -20,6 +20,8 @@ function readJSONValue(value) {
 				return DateTime.parse(value.value);
 			case "Version":
 				return Version.parse(value.value);
+			case "Image":
+				return Image.fromJSON(value.value);
 			default:
 				return readInstance(value);
 		}
