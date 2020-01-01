@@ -140,8 +140,8 @@ public class CursorValue extends BaseValue implements IIterable<IValue>, Iterabl
 		try {
 			if(withType) {
 				generator.writeStartObject();
-				generator.writeFieldName("type");
-				generator.writeString(type.getTypeName());
+				generator.writeStringField("type", type.getTypeName());
+				generator.writeFieldName("value");
 			}
 			generator.writeStartObject();
 			generator.writeFieldName("count");
