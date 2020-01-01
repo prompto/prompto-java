@@ -121,8 +121,7 @@ public class VersionValue extends BaseValue implements Comparable<VersionValue> 
 		try {
 			if(withType) {
 				generator.writeStartObject();
-				generator.writeFieldName("type");
-				generator.writeString(VersionType.instance().getTypeName());
+				generator.writeStringField("type", VersionType.instance().getTypeName());
 				generator.writeFieldName("value");
 			}
 			generator.writeString(value.toString());
