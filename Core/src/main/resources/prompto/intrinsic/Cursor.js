@@ -79,7 +79,7 @@ Cursor.prototype.filtered = function(fn) {
 	while(iterator.hasNext()) {
 		var current = iterator.next();
 		if (fn(current))
-			list.push();
+			list.push(current);
 	}
 	return list;
 };
