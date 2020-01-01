@@ -43,37 +43,63 @@ public abstract class BinaryType extends NativeType {
 	
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
-		if(value.isObject()) {
-			JsonNode valueNode = value.get("value");
-			if(valueNode!=null && valueNode.isObject() && parts!=null) {
-				// if this an object received by the browser, use reverse logic from BinaryValue::toJson
-				JsonNode urlNode = valueNode.get("url");
-				if(urlNode!=null && urlNode.isTextual()) {
-					String url = urlNode.asText();
-					if(url.startsWith("/ws/bin/data?"))
-						return null; // TODO ok for storing an updated instance (attribute will not be overwritten), but might need a lazy loading BinaryRef value for other situations ? 
-					else if(url.startsWith("@")) {
-						byte[] bytes = parts.get(url);
-						if(bytes==null)
-							return NullValue.instance(); // TODO throw ?
-						String[] segments = url.split("/");
-						String mimeType = segments[segments.length-1].replaceAll("\\.", "/");
-						return newInstance(new PromptoBinary(mimeType, bytes));
-					}
-				}
-				// if this an object created by the browser, image data 
-				JsonNode partNode = valueNode.get("partName");
-				if(partNode!=null && partNode.isTextual()) {
-					String partName = partNode.asText();
-					byte[] bytes = parts.get(partName);
-					if(bytes==null)
-						return NullValue.instance(); // TODO throw ?
-					String mimeType = valueNode.get("mimeType").asText();
-					return newInstance(new PromptoBinary(mimeType, bytes));
-				}
-			}
-		}
+		if(wasReceivedFromBrowser(value, parts))
+			return readJSONValueReceivedFromBrowser(value, parts);
+		else if(wasCreatedInBrowser(value, parts))
+			return readJSONValueCreatedInBrowser(value, parts);
 		throw new ReadWriteError("Cannot read binary value from: " + value.toString());
+	}
+
+	private IValue readJSONValueCreatedInBrowser(JsonNode value, Map<String, byte[]> parts) {
+		JsonNode valueNode = value.get("value");
+		JsonNode partNode = valueNode.get("partName");
+		String partName = partNode.asText();
+		byte[] bytes = parts.get(partName);
+		if(bytes==null)
+			return NullValue.instance(); // TODO throw ?
+		String mimeType = valueNode.get("mimeType").asText();
+		return newInstance(new PromptoBinary(mimeType, bytes));
+	}
+	
+	private boolean wasCreatedInBrowser(JsonNode value, Map<String, byte[]> parts) {
+		if(!value.isObject())
+			return false;
+		JsonNode valueNode = value.get("value");
+		if(valueNode==null || !valueNode.isObject() || parts==null)
+			return false;
+		JsonNode partNode = valueNode.get("partName");
+		return partNode!=null && partNode.isTextual();
+	}
+	
+	
+	private IValue readJSONValueReceivedFromBrowser(JsonNode value, Map<String, byte[]> parts) {
+		// use reverse logic from BinaryValue::toJson
+		JsonNode valueNode = value.get("value");
+		JsonNode urlNode = valueNode.get("url");
+		String url = urlNode.asText();
+		if(url.startsWith("/ws/bin/data?"))
+			return null; // TODO ok for storing an updated instance (attribute will not be overwritten), but might need a lazy loading BinaryRef value for other situations ? 
+		else {
+			byte[] bytes = parts.get(url);
+			if(bytes==null)
+				return NullValue.instance(); // TODO throw ?
+			String[] segments = url.split("/");
+			String mimeType = segments[segments.length-1].replaceAll("\\.", "/");
+			return newInstance(new PromptoBinary(mimeType, bytes));
+		}
+	}
+
+	private boolean wasReceivedFromBrowser(JsonNode value, Map<String, byte[]> parts) {
+		if(!value.isObject())
+			return false;
+		JsonNode valueNode = value.get("value");
+		if(valueNode==null || !valueNode.isObject() || parts==null)
+			return false;
+		JsonNode urlNode = valueNode.get("url");
+		if(urlNode==null || !urlNode.isTextual())
+			return false;
+		String url = urlNode.asText();
+		return url.startsWith("/ws/bin/data?") || url.startsWith("@");
 	}
 	
 }
