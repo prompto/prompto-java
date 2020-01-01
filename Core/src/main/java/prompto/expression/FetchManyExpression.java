@@ -315,7 +315,7 @@ public class FetchManyExpression extends FetchOneExpression {
 	    transpiler.append("(function() {").indent();
 	    this.transpileQuery(transpiler);
 	    boolean mutable = this.type!=null ? this.type.isMutable() : false;
-	    transpiler.append("return $DataStore.instance.fetchMany(builder.build(),").append(mutable).append(");").newLine();
+	    transpiler.append("return $DataStore.instance.fetchMany(builder.build(),").append(mutable).append(");").newLine().dedent();
 	    transpiler.append("})()");
 	    return false;
 	}
