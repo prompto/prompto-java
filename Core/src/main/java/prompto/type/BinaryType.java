@@ -7,6 +7,7 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoBinary;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 import prompto.value.BinaryValue;
 import prompto.value.IValue;
 import prompto.value.NullValue;
@@ -32,6 +33,24 @@ public abstract class BinaryType extends NativeType {
 		else
 			return super.checkMember(context, id);
 	}
+	
+	@Override
+	public void declareMember(Transpiler transpiler, Identifier name) {
+		if("mimeType".equals(name.toString()) || "url".equals(name.toString()))
+			return;
+		else
+			super.declareMember(transpiler, name);
+	}
+	
+	
+	@Override
+	public void transpileMember(Transpiler transpiler, Identifier name) {
+		if("mimeType".equals(name.toString()) || "url".equals(name.toString()))
+			transpiler.append(name.toString());
+	    else
+	    	super.transpileMember(transpiler, name);;
+	}
+
 	
 	@Override
 	public IValue convertJavaValueToIValue(Context context, Object value) {
