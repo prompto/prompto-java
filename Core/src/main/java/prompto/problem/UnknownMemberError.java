@@ -18,7 +18,7 @@ public class UnknownMemberError extends SyntaxProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return "Cannot read member from " + name;
+		return "Cannot read member: " + name;
 	}
 
 }
