@@ -79,6 +79,8 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 					if(declared==null)
 						declared = getHtmlPropertyTypes(context, null).get(prop.getName());
 					if(declared==null)
+						declared = getHtmlPropertyTypes(context, null).get(prop.getName().toLowerCase()); // TODO generate camel case html property types
+					if(declared==null)
 						context.getProblemListener().reportUnknownProperty(prop, prop.getName());
 					else
 						declared.validate(context, prop);
@@ -106,6 +108,8 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 					actualNames.add(prop.getName());
 				prop.check(context);
 				Property declared = propertyMap.get(prop.getName());
+				if(declared==null)
+					declared = propertyMap.get(prop.getName().toLowerCase()); // TODO generate camel case html property types
 				if(declared==null)
 					context.getProblemListener().reportUnknownProperty(prop, prop.getName());
 				else
@@ -278,7 +282,7 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 
 	@Override
 	public void declare(Transpiler transpiler) {
-		if(Character.isUpperCase(id.toString().charAt(0))) {
+		if(!isHtmlTag()) {
 			IDeclaration decl = transpiler.getContext().getRegisteredDeclaration(IDeclaration.class, id);
 			if(decl==null)
 				transpiler.getContext().getProblemListener().reportUnknownIdentifier(id, id.toString());
@@ -287,7 +291,15 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 		}
 		if(this.properties!=null) {
 			PropertyMap propertyMap = getPropertyMap(transpiler.getContext());
-			this.properties.forEach(prop -> prop.declare(transpiler, propertyMap==null ? null : propertyMap.get(prop.getName())));
+			PropertyMap htmlPropertyMap = isHtmlTag() ? null : getHtmlPropertyTypes(transpiler.getContext(), id.toString());
+			this.properties.forEach(jsxprop -> {
+				Property prop = propertyMap==null ? null : propertyMap.get(jsxprop.getName());
+				if(prop==null)
+					prop = htmlPropertyMap==null ? null : htmlPropertyMap.get(jsxprop.getName());
+				if(prop==null)
+					prop = htmlPropertyMap==null ? null : htmlPropertyMap.get(jsxprop.getName().toLowerCase()); // TODO generate camel case html property types
+				jsxprop.declare(transpiler, prop );
+			});
 		}
 		this.declareChildren(transpiler);
 	}
@@ -300,7 +312,7 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 	public boolean transpile(Transpiler transpiler) {
 		// TODO call htmlEngine
 	    transpiler.append("React.createElement(");
-	    if (Character.isUpperCase(this.id.toString().charAt(0)))
+	    if (!isHtmlTag())
 	        transpiler.append(this.id.toString());
 	    else
 	        transpiler.append('"').append(this.id.toString()).append('"');
@@ -309,11 +321,14 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 	        transpiler.append("null");
 	    else {
 	    	PropertyMap propertyMap = getPropertyMap(transpiler.getContext());
+	    	PropertyMap htmlPropertyMap = isHtmlTag() ? null : getHtmlPropertyTypes(transpiler.getContext(), id.toString());
 	        transpiler.append("{");
 	        this.properties.forEach(jsxprop -> {
-	        	Property prop = propertyMap==null ? null : propertyMap.get(jsxprop.getName());
-	        	if(prop==null && !isHtmlTag())
-	        		prop = getHtmlPropertyTypes(transpiler.getContext(), null).get(jsxprop.getName());
+				Property prop = propertyMap==null ? null : propertyMap.get(jsxprop.getName());
+				if(prop==null)
+					prop = htmlPropertyMap==null ? null : htmlPropertyMap.get(jsxprop.getName());
+				if(prop==null)
+					prop = htmlPropertyMap==null ? null : htmlPropertyMap.get(jsxprop.getName().toLowerCase()); // TODO generate camel case html property types
 	        	jsxprop.transpile(transpiler, prop);
 	            transpiler.append(", ");
 	        });
