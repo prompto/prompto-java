@@ -56,8 +56,8 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	Map<Identifier, ValuedCodeParameter> codeParameters;
 	
 	@SuppressWarnings("unchecked")
-	public ConcreteMethodDeclaration(Identifier name, ParameterList arguments, IType returnType, StatementList statements) {
-		super(name, arguments, returnType);
+	public ConcreteMethodDeclaration(Identifier name, ParameterList parameters, IType returnType, StatementList statements) {
+		super(name, parameters, returnType);
 		if(statements==null)
 			statements = new StatementList();
 		this.statements = statements;
@@ -174,14 +174,11 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	
 	@Override
 	public boolean isTemplate() {
-		// if at least one argument is 'Code'
+		// if at least one parameter is 'Code'
 		if(parameters==null)
 			return false;
-		for( IParameter arg : parameters) {
-			if(arg instanceof CodeParameter)
-				return true;
-		}
-		return false;
+		else
+			return parameters.stream().anyMatch(param -> param instanceof CodeParameter);
 	}
 
 	private IType fullCheck(Context context, boolean isStart) {
@@ -237,11 +234,11 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			method.addModifier(Modifier.STATIC); // otherwise it's a member method
 		else 
 			method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
-		List<IParameter> args = parameters.stripOutTemplateArguments();
-		args.forEach((arg)->
-			arg.registerLocal(context, method, new Flags()));
-		args.forEach((arg)->
-			arg.extractLocal(context, method, new Flags()));
+		List<IParameter> params = parameters.stripOutTemplateParameters();
+		params.forEach(param->
+			param.registerLocal(context, method, new Flags()));
+		params.forEach(param->
+			param.extractLocal(context, method, new Flags()));
 	}
 
 	@Override
@@ -266,9 +263,9 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		if(parameters.size()==0)
 			return true;
 		if(parameters.size()==1) {
-			IParameter arg = parameters.getFirst();
-			if(arg instanceof CategoryParameter) {
-				IType type = ((CategoryParameter)arg).getType();
+			IParameter param = parameters.getFirst();
+			if(param instanceof CategoryParameter) {
+				IType type = ((CategoryParameter)param).getType();
 				if(type instanceof DictType)
 					return ((DictType)type).getItemType()==TextType.instance();
 			}
@@ -433,13 +430,13 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	    declaration.memberOf = this.memberOf;
 	    transpiler.declare(declaration);
 	    this.statements.declare(transpiler);
-	    // remember code arguments
+	    // remember code parameters
 	    declaration.codeParameters = new HashMap<>();
 	    getParameters().stream()
-	    	.filter(arg ->arg instanceof CodeParameter )
-	    	.forEach(arg -> {
-	    		CodeValue value = (CodeValue)transpiler.getContext().getValue(arg.getId()); 
-	    		declaration.codeParameters.put(arg.getId(), new ValuedCodeParameter(arg.getId(), value));
+	    	.filter(param -> param instanceof CodeParameter )
+	    	.forEach(param -> {
+	    		CodeValue value = (CodeValue)transpiler.getContext().getValue(param.getId()); 
+	    		declaration.codeParameters.put(param.getId(), new ValuedCodeParameter(param.getId(), value));
 	    });
 	}
 	

@@ -17,18 +17,18 @@ public class ParameterList extends ObjectList<IParameter> {
 	public ParameterList() {
 	}
 
-	public ParameterList(IParameter argument) {
-		this.add(argument);
+	public ParameterList(IParameter param) {
+		this.add(param);
 	}
 	
-	public ParameterList(IParameter ... arguments) {
-		for(IParameter argument : arguments)
-			this.add(argument);
+	public ParameterList(IParameter ... params) {
+		for(IParameter param : params)
+			this.add(param);
 	}
 
 	public void register(Context context) {
-		for(IParameter argument : this) 
-			argument.register(context);
+		for(IParameter param : this) 
+			param.register(context);
 	}
 
 	public void check(Context context) {
@@ -37,14 +37,14 @@ public class ParameterList extends ObjectList<IParameter> {
 	}
 
 	public IParameter find(Identifier name) {
-		for(IParameter argument : this) {
-			if(name.equals(argument.getId()))
-					return argument;
+		for(IParameter param : this) {
+			if(name.equals(param.getId()))
+					return param;
 		}
 		return null;
 	}
 	
-	public List<IParameter> stripOutTemplateArguments() {
+	public List<IParameter> stripOutTemplateParameters() {
 		return this.stream()
 			.filter((a)->
 				!(a instanceof CodeParameter))
@@ -71,10 +71,10 @@ public class ParameterList extends ObjectList<IParameter> {
 	private void toEDialect(CodeWriter writer) {
 		IParameter last = this.getLast();
 		writer.append("receiving ");
-		for(IParameter argument : this) {
-			if(argument==last)
+		for(IParameter param : this) {
+			if(param==last)
 				break;
-			argument.toDialect(writer);
+			param.toDialect(writer);
 			writer.append(", ");
 		}
 		if(this.size()>1) {
@@ -86,32 +86,32 @@ public class ParameterList extends ObjectList<IParameter> {
 	}
 
 	private void toODialect(CodeWriter writer) {
-		for(IParameter argument : this) {
-			argument.toDialect(writer);
+		for(IParameter param : this) {
+			param.toDialect(writer);
 			writer.append(", ");
 		}
 		writer.trimLast(2);
 	}
 
 	private void toMDialect(CodeWriter writer) {
-		for(IParameter argument : this) {
-			argument.toDialect(writer);
+		for(IParameter param : this) {
+			param.toDialect(writer);
 			writer.append(", ");
 		}
 		writer.trimLast(2);
 	}
 
 	public void declare(Transpiler transpiler) {
-		this.forEach(arg->arg.declare(transpiler));
+		this.forEach(param -> param.declare(transpiler));
 	}
 
 	public void transpile(Transpiler transpiler) {
-		List<IParameter> args = this.stream()
-			.filter(arg->!(arg instanceof CodeParameter))
+		List<IParameter> params = this.stream()
+			.filter(param->!(param instanceof CodeParameter))
 			.collect(Collectors.toList());
-		if(!args.isEmpty()) {
-	        args.forEach(arg->{
-	            arg.transpile(transpiler);
+		if(!params.isEmpty()) {
+	        params.forEach(param->{
+	            param.transpile(transpiler);
 	            transpiler.append(", ");
 	        });
 	        transpiler.trimLast(2);

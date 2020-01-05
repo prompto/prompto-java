@@ -74,7 +74,7 @@ public class ArrowExpression extends Section implements IExpression {
 	}
 	
 	public void transpileArguments(Transpiler transpiler) {
-		if(args.size()>0) {
+		if(args!=null && args.size()>0) {
 			args.forEach(arg->{
 				transpiler.append(arg);
 				transpiler.append(", ");
@@ -148,7 +148,7 @@ public class ArrowExpression extends Section implements IExpression {
 	}
 
 	public Predicate<IValue> getFilter(Context context, IType itemType) {
-		if(args.size()!=1)
+		if(args==null || args.size()!=1)
 			throw new SyntaxError("Expecting 1 parameter only!");
 		Context local = registerArrowArgs(context.newChildContext(), itemType);
 		return o -> {
@@ -163,7 +163,7 @@ public class ArrowExpression extends Section implements IExpression {
 
 	
 	public void declareFilter(Transpiler transpiler, IType itemType) {
-		if(args.size()!=1)
+		if(args==null || args.size()!=1)
 			throw new SyntaxError("Expecting 1 parameter only!");
 	    transpiler = transpiler.newChildTranspiler(null);
 	    transpiler.getContext().registerValue(new Variable(args.get(0), itemType));
@@ -172,7 +172,7 @@ public class ArrowExpression extends Section implements IExpression {
 
 	
 	public void transpileFilter(Transpiler transpiler, IType itemType) {
-		if(args.size()!=1)
+		if(args==null || args.size()!=1)
 			throw new SyntaxError("Expecting 1 parameter only!");
 	    transpiler = transpiler.newChildTranspiler(null);
 		transpiler.getContext().registerValue(new Variable(args.get(0), itemType));
@@ -183,7 +183,7 @@ public class ArrowExpression extends Section implements IExpression {
 	}
 
 	public void compileFilter(Context context, ClassFile classFile, IType paramIType, Type paramType) {
-		if(args.size()!=1)
+		if(args==null || args.size()!=1)
 			throw new SyntaxError("Expecting 1 parameter only!");
 		context = context.newChildContext();
 		context.registerValue(new Variable(args.get(0), paramIType));
@@ -195,7 +195,7 @@ public class ArrowExpression extends Section implements IExpression {
 	}
 
 	public void filterToDialect(CodeWriter writer, IExpression source) {
-		if(args.size()!=1)
+		if(args==null || args.size()!=1)
 			throw new SyntaxError("Expecting 1 parameter only!");
 		IType sourceType = source.check(writer.getContext());
 		IType itemType = ((IterableType)sourceType).getItemType();
@@ -219,7 +219,8 @@ public class ArrowExpression extends Section implements IExpression {
 	}
 
 	public Comparator<? extends IValue> getComparator(Context context, IType itemType, boolean descending) {
-		switch(args.size()) {
+		int size = args==null ? 0 : args.size();
+		switch(size) {
 		case 1:
 			return getComparator1Arg(context, itemType, descending);
 		case 2:
@@ -255,7 +256,7 @@ public class ArrowExpression extends Section implements IExpression {
 	}
 
 	private Context registerArrowArgs(Context context, IType itemType) {
-		args.forEach(arg->{
+		if(args!=null) args.forEach(arg->{
 			Variable param = new Variable(arg, itemType);
 			context.registerValue(param);
 		});
@@ -263,7 +264,8 @@ public class ArrowExpression extends Section implements IExpression {
 	}
 
 	public void transpileSortedComparator(Transpiler transpiler, IType itemType, boolean descending) {
-		switch(args.size()) {
+		int size = args==null ? 0 : args.size();
+		switch(size) {
 		case 1:
 			transpileSortedComparator1Arg(transpiler, itemType, descending);
 			break;

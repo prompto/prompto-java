@@ -255,7 +255,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	@Override
 	public void compileArguments(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 		boolean isFirst = true;
-		for(IParameter arg : parameters.stripOutTemplateArguments()) {
+		for(IParameter arg : parameters.stripOutTemplateParameters()) {
 			arg.compileArgument(context, method, flags, arguments, isFirst);
 			isFirst = false;
 		}
