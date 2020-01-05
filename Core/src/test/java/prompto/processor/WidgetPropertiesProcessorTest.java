@@ -306,8 +306,8 @@ public class WidgetPropertiesProcessorTest extends BaseOParserTest {
 			output.write(js.getBytes());
 		}
 		assertTrue(js.contains("stuff"));
-		assertTrue(js.contains("function(v)"));
-		assertTrue(js.contains("this.selected.bind(this)()"));
+		assertTrue(js.contains("function(value)"));
+		assertTrue(js.contains("this.selected$Integer.bind(this)(value)"));
 	}
 
 

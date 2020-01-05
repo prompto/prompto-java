@@ -74,7 +74,6 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 					context.getProblemListener().reportDuplicateProperty(prop, prop.getName());
 				else
 					actualNames.add(prop.getName());
-				prop.check(context);
 				if(propertyMap!=null) {
 					Property declared = propertyMap.get(prop.getName());
 					if(declared==null)
@@ -83,7 +82,8 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 						context.getProblemListener().reportUnknownProperty(prop, prop.getName());
 					else
 						declared.validate(context, prop);
-				}
+				} else
+					prop.check(context);
 			});
 		if(propertyMap!=null) {
 			propertyMap.entrySet().stream()

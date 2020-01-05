@@ -58,10 +58,25 @@ public class JsxExpression implements IJsxValue, IJsxExpression {
 
 	@Override
 	public void declare(Transpiler transpiler, Property property) {
-		expression.declare(transpiler);
+		if(!declareArrowExpressionCall(transpiler, expression, property))
+			expression.declare(transpiler);
 	}
 	
 	
+	private boolean declareArrowExpressionCall(Transpiler transpiler, IExpression expression2, Property property) {
+		if(expression instanceof ContextualExpression)
+			expression = ((ContextualExpression)expression).getExpression();
+		if(expression instanceof ArrowExpression) {
+			MethodType target = getMethodType(transpiler.getContext(), property);
+			if(target==null)
+				transpiler.getContext().getProblemListener().reportNoMatchingPrototype((ArrowExpression)expression, "Cannot use arrow expression without a prototype");
+			else
+				target.declareArrowExpression(transpiler, (ArrowExpression)expression);
+			return true;
+		} else
+			return false;
+	}
+
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 		return transpile(transpiler, null);
