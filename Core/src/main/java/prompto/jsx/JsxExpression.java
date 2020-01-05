@@ -63,7 +63,7 @@ public class JsxExpression implements IJsxValue, IJsxExpression {
 	}
 	
 	
-	private boolean declareArrowExpressionCall(Transpiler transpiler, IExpression expression2, Property property) {
+	private boolean declareArrowExpressionCall(Transpiler transpiler, IExpression expression, Property property) {
 		if(expression instanceof ContextualExpression)
 			expression = ((ContextualExpression)expression).getExpression();
 		if(expression instanceof ArrowExpression) {
