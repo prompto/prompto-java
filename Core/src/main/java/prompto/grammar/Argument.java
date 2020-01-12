@@ -173,10 +173,9 @@ public class Argument {
 	private boolean isArrowExpression(IType requiredType, IExpression expression) {
 		if(!(requiredType instanceof MethodType))
 			return false;
-		if(expression instanceof ArrowExpression)
-			return true;
-		else
-			return expression instanceof ContextualExpression && ((ContextualExpression)expression).getExpression() instanceof ArrowExpression;
+		if(expression instanceof ContextualExpression)
+			expression = ((ContextualExpression)expression).getExpression();
+		return expression instanceof ArrowExpression;
 	}
 
 
