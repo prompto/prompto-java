@@ -20,6 +20,7 @@ import prompto.debug.IDebugEvent;
 import prompto.debug.ProcessDebugger.DebuggedWorker;
 import prompto.debug.WorkerDebugger;
 import prompto.declaration.AttributeDeclaration;
+import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
@@ -1125,7 +1126,7 @@ public class Context implements IContext {
 			INamed actual = super.getRegistered(id);
 			if(actual!=null) 
 				return actual;
-			ConcreteCategoryDeclaration decl = getDeclaration();
+			CategoryDeclaration decl = getDeclaration();
 			MethodDeclarationMap methods = decl.getMemberMethods(this, id);
 			if(methods!=null && !methods.isEmpty())
 				return methods;
@@ -1139,7 +1140,7 @@ public class Context implements IContext {
 		@Override
 		public <T extends IDeclaration> T getRegisteredDeclaration(Class<T> klass, Identifier id, boolean lookInStore) {
 			if(klass==MethodDeclarationMap.class) {
-				ConcreteCategoryDeclaration decl = getDeclaration();
+				CategoryDeclaration decl = getDeclaration();
 				if(decl!=null) {
 					MethodDeclarationMap methods = decl.getMemberMethods(this, id);
 					if(methods!=null && !methods.isEmpty())
@@ -1172,11 +1173,11 @@ public class Context implements IContext {
 			else if(widgetFields!=null && widgetFields.containsKey(id))
 				return this;
 			// params and variables have precedence over members
-			// so first look in context values
+			// so first look in context values, ignoring members
 			Context context = super.contextForValue(id);
-			if(context!=null)
+			if(context!=null && !(context instanceof InstanceContext)) 
 				return context;
-			ConcreteCategoryDeclaration decl = getDeclaration();
+			CategoryDeclaration decl = getDeclaration();
 			if(decl.hasAttribute(this, id) || decl.hasMethod(this, id))
 				return this;
 			else
@@ -1187,7 +1188,7 @@ public class Context implements IContext {
 			return super.contextForValue(name);
 		}
 		
-		private ConcreteCategoryDeclaration getDeclaration() {
+		private CategoryDeclaration getDeclaration() {
 			if(instance!=null)
 				return instance.getDeclaration();
 			else
@@ -1198,7 +1199,7 @@ public class Context implements IContext {
 		protected IValue readValue(Identifier name, Supplier<IValue> supplier) throws PromptoError {
 			if("this".equals(name.toString()))
 				return instance;
-			ConcreteCategoryDeclaration decl = getDeclaration();
+			CategoryDeclaration decl = getDeclaration();
 			if(decl.hasAttribute(this, name)) {
 				IValue value = instance.getMember(calling, name, false);
 				return value!=null ? value : supplier.get();
@@ -1261,6 +1262,7 @@ public class Context implements IContext {
 		}
 		
 	}
+
 
 
 

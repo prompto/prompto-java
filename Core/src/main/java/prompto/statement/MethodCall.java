@@ -334,7 +334,17 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	}
 	
 	IMethodDeclaration findDeclaration(Context context, boolean checkInstance) {
-		try {
+		IMethodDeclaration method = findRegistered(context);
+		if(method!=null)
+			return method;
+		else {
+			MethodFinder finder = new MethodFinder(context, this);
+			return finder.findBestMethod(checkInstance);
+		}
+	}
+	
+	private IMethodDeclaration findRegistered(Context context) {
+		if(selector.getParent()==null) try {
 			Object o = context.getValue(selector.getId());
 			if (o instanceof ClosureValue)
 				return new ClosureDeclaration((ClosureValue)o);
@@ -342,10 +352,9 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 				return new ArrowDeclaration((ArrowValue)o);
 		} catch (PromptoError e) {
 		}
-		MethodFinder finder = new MethodFinder(context, this);
-		return finder.findBestMethod(checkInstance);
+		return null;
 	}
-	
+
 	@Override
 	public void declare(Transpiler transpiler) {
 		Context context = transpiler.getContext();

@@ -456,7 +456,12 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 
 	public abstract void ensureDeclarationOrder(Context context, List<ITranspilable> list, Set<ITranspilable> set);
 
+	public GetterMethodDeclaration findGetter(Context context, Identifier attrName) {
+		throw new IllegalStateException("Should never get there");
+	}
 
-
+	public SetterMethodDeclaration findSetter(Context context, Identifier attrName) {
+		throw new IllegalStateException("Should never get there");
+	}
 	
 }

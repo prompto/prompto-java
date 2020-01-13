@@ -151,4 +151,9 @@ public abstract class ProblemListenerBase implements ANTLRErrorListener, IProble
 	public void reportIllegalValue(ISection section, String message) {
 		addProblem(new IllegalValueError(message, section));
 	}
+	
+	@Override
+	public void reportNoSuperType(ISection section, IType actual) {
+		addProblem(new NoSuperTypeError(actual, section));
+	}
 }

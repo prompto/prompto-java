@@ -327,6 +327,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return new ConcreteInstance(context, this);
 	}
 	
+	@Override
 	public GetterMethodDeclaration findGetter(Context context, Identifier attrName) {
 		if(methodsMap==null)
 			return null;
@@ -357,6 +358,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		return cd.findGetter(context, attrName);
 	}
 
+	@Override
 	public SetterMethodDeclaration findSetter(Context context, Identifier attrName) {
 		if(methodsMap==null)
 			return null;

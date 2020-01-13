@@ -9,8 +9,13 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import prompto.declaration.AttributeDeclaration;
-import prompto.declaration.ConcreteCategoryDeclaration;
+import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.EnumeratedCategoryDeclaration;
 import prompto.declaration.GetterMethodDeclaration;
 import prompto.declaration.IMethodDeclaration;
@@ -35,19 +40,14 @@ import prompto.type.IType;
 import prompto.type.IntegerType;
 import prompto.type.TextType;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 public class ConcreteInstance extends BaseValue implements IInstance, IMultiplyable {
 
-	ConcreteCategoryDeclaration declaration;
+	CategoryDeclaration declaration;
 	Map<Identifier,IValue> values = new HashMap<Identifier,IValue>();
 	IStorable storable = null;
 	boolean mutable = false;
 	
-	public ConcreteInstance(Context context, ConcreteCategoryDeclaration declaration) {
+	public ConcreteInstance(Context context, CategoryDeclaration declaration) {
 		super(new CategoryType(declaration.getId()));
 		this.declaration = declaration;
 		if(declaration.isStorable()) {
@@ -120,7 +120,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	}
 	
 	@Override
-	public ConcreteCategoryDeclaration getDeclaration() {
+	public CategoryDeclaration getDeclaration() {
 		return declaration;
 	}
 

@@ -8,6 +8,7 @@ import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.parser.Dialect;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.DocumentType;
@@ -15,7 +16,7 @@ import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
-public class ThisExpression implements IExpression {
+public class ThisExpression extends Section implements IExpression {
 
 	@Override
 	public String toString() {

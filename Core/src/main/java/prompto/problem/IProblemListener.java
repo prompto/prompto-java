@@ -28,5 +28,6 @@ public interface IProblemListener {
 	void reportIllegalRemoteCall(ISection section, String message);
 	void reportIllegalAnnotation(ISection section, String message);
 	void reportIllegalValue(ISection section, String message);
+	void reportNoSuperType(ISection section, IType actual);
 
 }

@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import prompto.compiler.ByteOperand;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
@@ -20,8 +22,8 @@ import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
-import prompto.compiler.Opcode;
 import prompto.compiler.NamedType;
+import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.compiler.comparator.ArrowExpressionComparatorCompiler;
@@ -53,6 +55,7 @@ import prompto.instance.MemberInstance;
 import prompto.instance.VariableInstance;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoRoot;
+import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.runtime.MethodFinder;
 import prompto.runtime.Score;
@@ -64,6 +67,7 @@ import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
+import prompto.utils.IdentifierList;
 import prompto.utils.Logger;
 import prompto.utils.ObjectUtils;
 import prompto.utils.TypeUtils;
@@ -71,8 +75,6 @@ import prompto.value.ConcreteInstance;
 import prompto.value.IInstance;
 import prompto.value.IValue;
 import prompto.value.NullValue;
-
-import com.fasterxml.jackson.databind.JsonNode;
 
 
 public class CategoryType extends BaseType {
@@ -97,6 +99,17 @@ public class CategoryType extends BaseType {
 	protected CategoryType(Family family, Identifier typeNameId) {
 		super(family);
 		this.typeNameId = typeNameId;
+	}
+	
+	public CategoryType getSuperType(ISection section, Context context) {
+		IDeclaration decl = getDeclaration(context);
+		if(decl instanceof CategoryDeclaration) {
+			IdentifierList derived = ((CategoryDeclaration)decl).getDerivedFrom();
+			if(derived!=null && !derived.isEmpty())
+				return new CategoryType(derived.get(0));
+		}
+		context.getProblemListener().reportNoSuperType(section, this);
+		return this; // limit the damage
 	}
 	
 	@Override
