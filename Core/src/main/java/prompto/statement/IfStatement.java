@@ -314,14 +314,18 @@ public class IfStatement extends BaseStatement {
 		}
 		
 		public void toEDialect(CodeWriter writer) {
+			Context context = writer.getContext();
 			if(condition!=null) {
 				writer.append("if ");
 				condition.toDialect(writer);
+				context = downCastContextForCheck(context);
+				if(context!=writer.getContext())
+					writer = writer.newChildWriter(context);
 			}
 			writer.append(":\n");
 			writer.indent();
 			statements.toDialect(writer);
-			writer.dedent();	
+			writer.dedent();
 		}
 
 		public void toODialect(CodeWriter writer) {

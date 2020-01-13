@@ -86,6 +86,8 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 			caller.toDialect(writer);
 			if(arguments!=null)
 				arguments.toDialect(writer);
+			else if(writer.getDialect() != Dialect.E)
+				writer.append("()");
 		}
 	}
 	

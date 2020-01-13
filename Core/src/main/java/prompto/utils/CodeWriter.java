@@ -128,7 +128,11 @@ public class CodeWriter {
 	}
 
 	public CodeWriter newChildWriter() {
-		return new CodeWriter(dialect, context.newChildContext(), escapeMode, sb, indenter);
+		return newChildWriter(context.newChildContext());
+	}
+
+	public CodeWriter newChildWriter(Context context) {
+		return new CodeWriter(dialect, context, escapeMode, sb, indenter);
 	}
 
 	public CodeWriter newMemberWriter() {
