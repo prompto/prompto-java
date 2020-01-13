@@ -1378,6 +1378,18 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitThisExpression(OParser.ThisExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code SuperExpression}
+	 * labeled alternative in {@link OParser#selectable_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterSuperExpression(OParser.SuperExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code SuperExpression}
+	 * labeled alternative in {@link OParser#selectable_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitSuperExpression(OParser.SuperExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code SelectorExpression}
 	 * labeled alternative in {@link OParser#instance_expression}.
 	 * @param ctx the parse tree
@@ -3197,6 +3209,16 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitThis_expression(OParser.This_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#super_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterSuper_expression(OParser.Super_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#super_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitSuper_expression(OParser.Super_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#parenthesis_expression}.
 	 * @param ctx the parse tree

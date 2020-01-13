@@ -1500,6 +1500,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitThisExpression(EParser.ThisExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code SuperExpression}
+	 * labeled alternative in {@link EParser#selectable_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterSuperExpression(EParser.SuperExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code SuperExpression}
+	 * labeled alternative in {@link EParser#selectable_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitSuperExpression(EParser.SuperExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code SelectorExpression}
 	 * labeled alternative in {@link EParser#instance_expression}.
 	 * @param ctx the parse tree
@@ -3349,6 +3361,16 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitThis_expression(EParser.This_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link EParser#super_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterSuper_expression(EParser.Super_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#super_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitSuper_expression(EParser.Super_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link EParser#parenthesis_expression}.
 	 * @param ctx the parse tree

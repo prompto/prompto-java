@@ -95,6 +95,7 @@ import prompto.expression.SelectorExpression;
 import prompto.expression.SliceSelector;
 import prompto.expression.SortedExpression;
 import prompto.expression.SubtractExpression;
+import prompto.expression.SuperExpression;
 import prompto.expression.SymbolExpression;
 import prompto.expression.TernaryExpression;
 import prompto.expression.ThisExpression;
@@ -2982,6 +2983,11 @@ public class OPromptoBuilder extends OParserBaseListener {
 		setNodeValue(ctx, getNodeValue(ctx.stmt));
 	}
 
+	@Override
+	public void exitSuperExpression(SuperExpressionContext ctx) {
+		setNodeValue(ctx, new SuperExpression());
+	}
+	
 	@Override
 	public void exitSwitch_statement(Switch_statementContext ctx) {
 		IExpression exp = getNodeValue(ctx.exp);
