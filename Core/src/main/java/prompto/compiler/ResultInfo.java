@@ -10,7 +10,8 @@ public class ResultInfo {
 		RETURN,
 		BREAK,
 		THROW,
-		STATIC
+		STATIC, 
+		SUPER
 	}
 
 	Type type;
@@ -18,6 +19,7 @@ public class ResultInfo {
 	boolean isBreak = false;
 	boolean isThrow = false;
 	boolean isStatic = false;
+	boolean isSuper = false;
 	Boolean isPrimitive = null;
 	Boolean isInterface = null;
 	Boolean isPromptoCategory = null;
@@ -26,7 +28,17 @@ public class ResultInfo {
 	
 	public ResultInfo(Type type, Flag ...flags) {
 		this.type = type;
-		for(Flag flag : flags) switch(flag) {
+		for(Flag flag : flags)
+			setFlag(flag);
+	}
+	
+	public ResultInfo withFlag(Flag flag) {
+		setFlag(flag);
+		return this;
+	}
+
+	private void setFlag(Flag flag) {
+		switch(flag) {
 		case RETURN:
 			isReturn = true;
 			break;
@@ -38,6 +50,9 @@ public class ResultInfo {
 			break;
 		case STATIC:
 			isStatic = true;
+			break;
+		case SUPER:
+			isSuper = true;
 			break;
 		}
 	}
@@ -81,6 +96,10 @@ public class ResultInfo {
 	
 	public boolean isStatic() {
 		return isStatic;
+	}
+
+	public boolean isSuper() {
+		return isSuper;
 	}
 
 	public boolean isReturn() {
@@ -140,4 +159,5 @@ public class ResultInfo {
 		}
 		return isPromptoAttribute;
 	}
+
 }

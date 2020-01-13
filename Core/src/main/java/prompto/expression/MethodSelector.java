@@ -304,20 +304,24 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		StackLocal local = method.getRegisteredLocal("this");
 		ClassConstant klass = ((StackLocal.ObjectLocal)local).getClassName();
 		method.addInstruction(Opcode.ALOAD_0, klass); // 'this' is always at index 0
-		return compileExactInstanceMember(context, method, flags, declaration, arguments, klass);
+		return compileExactInstanceMember(context, method, flags, declaration, arguments, new ResultInfo(klass.getType()));
 	}
 
-	private ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration, ArgumentList arguments, ClassConstant parentClass) {
+	private ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration, ArgumentList arguments, ResultInfo info) {
 		// push arguments on the stack
 		declaration.compileArguments(context, method, flags, arguments);
 		// call virtual method
+		ClassConstant klass = new ClassConstant(info.getType());
 		IType returnType = declaration.check(context, false);
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getParameters(), returnType);
-		if(parentClass.isInterface()) {
-			InterfaceConstant constant = new InterfaceConstant(parentClass, declaration.getName(), descriptor);
+		if(info.isSuper()) {
+			MethodConstant constant = new MethodConstant(klass, declaration.getName(), descriptor);
+			method.addInstruction(Opcode.INVOKESPECIAL, constant);
+		} else if(info.isInterface()) {
+			InterfaceConstant constant = new InterfaceConstant(klass, declaration.getName(), descriptor);
 			method.addInstruction(Opcode.INVOKEINTERFACE, constant);
 		} else {
-			MethodConstant constant = new MethodConstant(parentClass, declaration.getName(), descriptor);
+			MethodConstant constant = new MethodConstant(klass, declaration.getName(), descriptor);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, constant);
 		}
 		return new ResultInfo(returnType.getJavaType(context));
@@ -353,25 +357,25 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			return compileExactStaticMember(context, method, flags, info.getType(), declaration, assignments);
 		else {
 			// push instance if any
-			ClassConstant c = new ClassConstant(info.getType());
 			if(declaration instanceof BuiltInMethodDeclaration) {
 				BuiltInMethodDeclaration builtin = (BuiltInMethodDeclaration)declaration;
 				if(builtin.hasCompileExactInstanceMember())
 					return builtin.compileExactInstanceMember(context, method, flags, assignments);
 			} else if(declaration instanceof NativeMethodDeclaration)
-				return compileExactNativeMember (context, method, flags, (NativeMethodDeclaration)declaration, assignments, c);	
-			return compileExactInstanceMember(context, method, flags, declaration, assignments, c);
+				return compileExactNativeMember (context, method, flags, (NativeMethodDeclaration)declaration, assignments, info);	
+			return compileExactInstanceMember(context, method, flags, declaration, assignments, info);
 		}
 	}
 	
 
-	public ResultInfo compileExactNativeMember(Context context, MethodInfo method, Flags flags, NativeMethodDeclaration declaration, ArgumentList assignments, ClassConstant parentClass) {
+	public ResultInfo compileExactNativeMember(Context context, MethodInfo method, Flags flags, NativeMethodDeclaration declaration, ArgumentList assignments, ResultInfo info) {
 		StackState state = method.captureStackState();
 		// can't use 'this' since it could refer to another abject than the native parent
-		StackLocal local = method.registerLocal("$this$", VerifierType.ITEM_Object, parentClass); 
+		ClassConstant klass = new ClassConstant(info.getType());
+		StackLocal local = method.registerLocal("$this$", VerifierType.ITEM_Object, klass); 
 		CompilerUtils.compileASTORE(method, local);
 		context = context.newInstanceContext(declaration.getMemberOf().getType(context), false).newChildContext(); // mimic method call
-		ResultInfo info = declaration.compileMember(context, method, new Flags(), assignments);
+		info = declaration.compileMember(context, method, new Flags(), assignments);
 		method.unregisterLocal(local);
 		method.restoreStackLocals(state);
 		state = method.captureStackState();
