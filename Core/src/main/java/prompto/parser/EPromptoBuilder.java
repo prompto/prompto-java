@@ -3202,7 +3202,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitUnresolvedWithArgsStatement(UnresolvedWithArgsStatementContext ctx) {
-		IExpression exp = getNodeValue(ctx.exp);
+		IExpression exp = ctx.exp1!=null ? getNodeValue(ctx.exp1) : getNodeValue(ctx.exp2);
 		ArgumentList args = getNodeValue(ctx.args);
 		Identifier resultName = getNodeValue(ctx.name);
 		StatementList stmts = getNodeValue(ctx.stmts);
