@@ -24,7 +24,6 @@ import prompto.utils.CodeWriter;
 import prompto.value.BooleanValue;
 import prompto.value.IValue;
 
-
 public class IfStatement extends BaseStatement {
 
 	public static class IfElementList extends LinkedList<IfElement> {
@@ -33,38 +32,36 @@ public class IfStatement extends BaseStatement {
 
 		public IfElementList() {
 		}
-		
+
 		public IfElementList(IfElement elem) {
 			this.add(elem);
 		}
-		
+
 	}
-	
+
 	IfElementList elements = new IfElementList();
-	
+
 	public IfStatement(IExpression condition, StatementList statements) {
-		elements.add(new IfElement(condition,statements));
+		elements.add(new IfElement(condition, statements));
 	}
 
-
-	public IfStatement(IExpression condition, StatementList statements, 
-			IfElementList elseIfs, StatementList elseStmts) {
-		elements.add(new IfElement(condition,statements));
-		if(elseIfs!=null)
+	public IfStatement(IExpression condition, StatementList statements, IfElementList elseIfs,
+			StatementList elseStmts) {
+		elements.add(new IfElement(condition, statements));
+		if (elseIfs != null)
 			elements.addAll(elseIfs);
-		if(elseStmts!=null)
-			elements.add(new IfElement(null,elseStmts));
+		if (elseStmts != null)
+			elements.add(new IfElement(null, elseStmts));
 	}
-
 
 	public void addAdditional(IExpression condition, StatementList instructions) {
-		elements.add(new IfElement(condition,instructions));
+		elements.add(new IfElement(condition, instructions));
 	}
 
 	public void setFinal(StatementList instructions) {
-		elements.add(new IfElement(null,instructions));
+		elements.add(new IfElement(null, instructions));
 	}
-	
+
 	@Override
 	public boolean canReturn() {
 		return true;
@@ -72,7 +69,7 @@ public class IfStatement extends BaseStatement {
 
 	@Override
 	public void toDialect(CodeWriter writer) {
-		switch(writer.getDialect()) {
+		switch (writer.getDialect()) {
 		case E:
 			toEDialect(writer);
 			break;
@@ -84,48 +81,44 @@ public class IfStatement extends BaseStatement {
 			break;
 		}
 	}
-	
 
 	private void toMDialect(CodeWriter writer) {
 		boolean first = true;
-		for(IfElement elem : elements) {
-			if(!first)
+		for (IfElement elem : elements) {
+			if (!first)
 				writer.append("else ");
 			elem.toDialect(writer);
 			first = false;
 		}
 		writer.newLine();
 	}
-
 
 	private void toODialect(CodeWriter writer) {
 		boolean first = true;
 		boolean curly = false;
-		for(IfElement elem : elements) {
-			if(!first) {
-				if(curly)
+		for (IfElement elem : elements) {
+			if (!first) {
+				if (curly)
 					writer.append(" ");
 				writer.append("else ");
 			}
-			curly = elem.statements.size()>1;
+			curly = elem.statements.size() > 1;
 			elem.toDialect(writer);
 			first = false;
 		}
 		writer.newLine();
 	}
 
-
 	private void toEDialect(CodeWriter writer) {
 		boolean first = true;
-		for(IfElement elem : elements) {
-			if(!first)
+		for (IfElement elem : elements) {
+			if (!first)
 				writer.append("else ");
 			elem.toDialect(writer);
 			first = false;
 		}
 		writer.newLine();
 	}
-
 
 	@Override
 	public IType check(Context context) {
@@ -135,18 +128,18 @@ public class IfStatement extends BaseStatement {
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		for(IfElement element : elements) {
+		for (IfElement element : elements) {
 			IExpression condition = element.getCondition();
-			Object test = condition==null ? BooleanValue.TRUE : condition.interpret(context);
-			if(test instanceof BooleanValue && BooleanValue.TRUE.equals((BooleanValue)test))
+			Object test = condition == null ? BooleanValue.TRUE : condition.interpret(context);
+			if (test instanceof BooleanValue && BooleanValue.TRUE.equals((BooleanValue) test))
 				return element.interpret(context);
 		}
 		return null;
 	}
-	
+
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
- 		IType result = check(context);
+		IType result = check(context);
 		compileIfElements(context, method, flags);
 		return new ResultInfo(result.getJavaType(context));
 	}
@@ -156,21 +149,20 @@ public class IfStatement extends BaseStatement {
 		IInstructionListener branchOffsetListener = null;
 		StackState neutralState = null;
 	}
-	
+
 	private void compileIfElements(Context context, MethodInfo method, Flags flags) {
 		IfElementBranch branch = new IfElementBranch();
 		branch.neutralState = method.captureStackState();
-		for(IfElement element : elements)
-			 compileIfElement(context, method, flags, element, branch);
+		for (IfElement element : elements)
+			compileIfElement(context, method, flags, element, branch);
 		method.restoreFullStackState(branch.neutralState);
 		method.placeLabel(branch.neutralState);
 		stopListeningForThisBranch(method, branch);
-		branch.finalOffsetListeners.forEach((l)->
-			method.inhibitOffsetListener(l));
+		branch.finalOffsetListeners.forEach((l) -> method.inhibitOffsetListener(l));
 	}
 
-	
-	private void compileIfElement(Context context, MethodInfo method, Flags flags, IfElement element, IfElementBranch branch) {
+	private void compileIfElement(Context context, MethodInfo method, Flags flags, IfElement element,
+			IfElementBranch branch) {
 		restoreNeutralStackState(method, branch);
 		stopListeningForThisBranch(method, branch);
 		compileCondition(context, method, flags, element);
@@ -182,32 +174,27 @@ public class IfStatement extends BaseStatement {
 		cancelAutodowncast(context, method, element);
 	}
 
-	
 	private void cancelAutodowncast(Context context, MethodInfo method, IfElement element) {
-		if(element.condition instanceof EqualsExpression)
-			((EqualsExpression)element.condition).cancelAutodowncast(context, method);
+		if (element.condition instanceof EqualsExpression)
+			((EqualsExpression) element.condition).cancelAutodowncast(context, method);
 	}
 
-
 	private Context prepareAutodowncast(Context context, MethodInfo method, IfElement element) {
-		if(element.condition instanceof EqualsExpression)
-			return ((EqualsExpression)element.condition).prepareAutodowncast(context, method);
+		if (element.condition instanceof EqualsExpression)
+			return ((EqualsExpression) element.condition).prepareAutodowncast(context, method);
 		else
 			return context;
 	}
 
-
 	private void compileBranch(MethodInfo method, IfElement element, IfElementBranch branch) {
-		if(element.condition!=null) {
+		if (element.condition != null) {
 			method.addInstruction(Opcode.IFEQ, branch.branchOffsetListener);
-		}		
+		}
 	}
 
-
-	private void startListeningForFinalThenGoto(Context context, MethodInfo method, Flags flags, IfElement element, IfElementBranch branch, ResultInfo info) {
-		if (element.condition==null 
-				|| info.isReturn() 
-				|| info.isBreak())
+	private void startListeningForFinalThenGoto(Context context, MethodInfo method, Flags flags, IfElement element,
+			IfElementBranch branch, ResultInfo info) {
+		if (element.condition == null || info.isReturn() || info.isBreak())
 			return;
 		IInstructionListener finalOffset = method.addOffsetListener(new OffsetListenerConstant());
 		method.activateOffsetListener(finalOffset);
@@ -215,88 +202,83 @@ public class IfStatement extends BaseStatement {
 		method.addInstruction(Opcode.GOTO, finalOffset);
 	}
 
-
-	private ResultInfo compileStatements(Context context, MethodInfo method, Flags flags, IfElement element, IfElementBranch branch) {
-		if(element.statements!=null)
+	private ResultInfo compileStatements(Context context, MethodInfo method, Flags flags, IfElement element,
+			IfElementBranch branch) {
+		if (element.statements != null)
 			return element.statements.compile(context, method, flags);
 		else
 			return new ResultInfo(void.class);
 	}
 
-
 	private void stopListeningForThisBranch(MethodInfo method, IfElementBranch branch) {
-		if(branch.branchOffsetListener!=null) {
+		if (branch.branchOffsetListener != null) {
 			method.inhibitOffsetListener(branch.branchOffsetListener);
 			branch.branchOffsetListener = null;
 		}
 	}
 
-
 	private void startListeningForNextBranch(MethodInfo method, IfElement element, IfElementBranch branch) {
-		if(element.condition!=null) {
+		if (element.condition != null) {
 			branch.branchOffsetListener = method.addOffsetListener(new OffsetListenerConstant());
 			method.activateOffsetListener(branch.branchOffsetListener);
 		}
 	}
 
-
 	private void compileCondition(Context context, MethodInfo method, Flags flags, IfElement element) {
-		if(element.condition!=null) {
+		if (element.condition != null) {
 			ResultInfo info = element.condition.compile(context, method, flags.withPrimitive(true));
-			if(BooleanValue.class==info.getType())
+			if (BooleanValue.class == info.getType())
 				CompilerUtils.BooleanToboolean(method);
 		}
 	}
 
-
 	private void restoreNeutralStackState(MethodInfo method, IfElementBranch branch) {
 		// is there a need to restore the stack?
-		if(branch.branchOffsetListener!=null) {
+		if (branch.branchOffsetListener != null) {
 			method.restoreFullStackState(branch.neutralState);
 			method.placeLabel(branch.neutralState);
 		}
 	}
 
-	
 	@Override
 	public void declare(Transpiler transpiler) {
-		this.elements.forEach(e->e.declare(transpiler));
+		this.elements.forEach(e -> e.declare(transpiler));
 	}
-	
+
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    for(int i=0;i<this.elements.size();i++) {
-	        IfElement element = this.elements.get(i);
-	        if (i > 0)
-	            transpiler.append(" else ");
-	        if (element.condition!=null) {
-	            transpiler.append("if (");
-	            element.condition.transpile(transpiler);
-	            transpiler.append(") ");
-	        }
-	        transpiler.append("{");
-	        transpiler.indent();
-	        element.transpile(transpiler);
-	        transpiler.dedent();
-	        transpiler.append("}");
-	    }
-	    transpiler.newLine();
-	    return true;
+		for (int i = 0; i < this.elements.size(); i++) {
+			IfElement element = this.elements.get(i);
+			if (i > 0)
+				transpiler.append(" else ");
+			if (element.condition != null) {
+				transpiler.append("if (");
+				element.condition.transpile(transpiler);
+				transpiler.append(") ");
+			}
+			transpiler.append("{");
+			transpiler.indent();
+			element.transpile(transpiler);
+			transpiler.dedent();
+			transpiler.append("}");
+		}
+		transpiler.newLine();
+		return true;
 	}
-	
+
 	public static class IfElement extends BaseStatement {
 
 		IExpression condition;
 		StatementList statements;
-		
+
 		public IfElement(IExpression condition, StatementList statements) {
 			this.condition = condition;
 			this.statements = statements;
 		}
-		
+
 		@Override
 		public void toDialect(CodeWriter writer) {
-			switch(writer.getDialect()) {
+			switch (writer.getDialect()) {
 			case E:
 				toEDialect(writer);
 				break;
@@ -312,14 +294,14 @@ public class IfStatement extends BaseStatement {
 		public void toMDialect(CodeWriter writer) {
 			toEDialect(writer);
 		}
-		
+
 		public void toEDialect(CodeWriter writer) {
 			Context context = writer.getContext();
-			if(condition!=null) {
+			if (condition != null) {
 				writer.append("if ");
 				condition.toDialect(writer);
 				context = downCastContextForCheck(context);
-				if(context!=writer.getContext())
+				if (context != writer.getContext())
 					writer = writer.newChildWriter(context);
 			}
 			writer.append(":\n");
@@ -329,36 +311,39 @@ public class IfStatement extends BaseStatement {
 		}
 
 		public void toODialect(CodeWriter writer) {
-			if(condition!=null)
-				{
+			Context context = writer.getContext();
+			if (condition != null) {
 				writer.append("if (");
 				condition.toDialect(writer);
 				writer.append(") ");
+				context = downCastContextForCheck(context);
+				if (context != writer.getContext())
+					writer = writer.newChildWriter(context);
 			}
-			boolean curly = statements!=null && statements.size()>1;
-			if(curly) 
+			boolean curly = statements != null && statements.size() > 1;
+			if (curly)
 				writer.append("{\n");
-			else 
+			else
 				writer.newLine();
 			writer.indent();
 			statements.toDialect(writer);
 			writer.dedent();
-			if(curly) 
+			if (curly)
 				writer.append("}");
 		}
 
 		public IExpression getCondition() {
 			return condition;
 		}
-		
+
 		public StatementList getInstructions() {
 			return statements;
 		}
-		
+
 		@Override
 		public IType check(Context context) {
 			IType cond = condition.check(context);
-			if(cond!=BooleanType.instance())
+			if (cond != BooleanType.instance())
 				throw new SyntaxError("Expected a boolean condition!");
 			context = downCastContextForCheck(context);
 			return statements.check(context, null);
@@ -372,49 +357,47 @@ public class IfStatement extends BaseStatement {
 
 		private Context downCastContextForCheck(Context context) {
 			Context parent = context;
-			if(condition instanceof EqualsExpression)
-				context = ((EqualsExpression)condition).downCastForCheck(context);
-			context = parent!=context ? context : context.newChildContext();
+			if (condition instanceof EqualsExpression)
+				context = ((EqualsExpression) condition).downCastForCheck(context);
+			context = parent != context ? context : context.newChildContext();
 			return context;
 		}
 
 		private Context downCastContextForInterpret(Context context) throws PromptoError {
 			Context parent = context;
-			if(condition instanceof EqualsExpression)
-				context = ((EqualsExpression)condition).downCastForInterpret(context);
-			context = parent!=context ? context : context.newChildContext();
+			if (condition instanceof EqualsExpression)
+				context = ((EqualsExpression) condition).downCastForInterpret(context);
+			context = parent != context ? context : context.newChildContext();
 			return context;
 		}
 
 		@Override
 		public void declare(Transpiler transpiler) {
-		    if(this.condition!=null)
-		        this.condition.declare(transpiler);
-		    Context context = transpiler.getContext();
-		    if(this.condition instanceof EqualsExpression)
-		        context = ((EqualsExpression)condition).downCastForCheck(context);
-		    if(context!=transpiler.getContext())
-		        transpiler = transpiler.newChildTranspiler(context);
-		    else
-		        transpiler = transpiler.newChildTranspiler(null);
-		    this.statements.declare(transpiler);
+			if (this.condition != null)
+				this.condition.declare(transpiler);
+			Context context = transpiler.getContext();
+			if (this.condition instanceof EqualsExpression)
+				context = ((EqualsExpression) condition).downCastForCheck(context);
+			if (context != transpiler.getContext())
+				transpiler = transpiler.newChildTranspiler(context);
+			else
+				transpiler = transpiler.newChildTranspiler(null);
+			this.statements.declare(transpiler);
 		}
-		
+
 		@Override
 		public boolean transpile(Transpiler transpiler) {
-		    Context context = transpiler.getContext();
-		    if(this.condition instanceof EqualsExpression)
-		        context = ((EqualsExpression)condition).downCastForCheck(context);
-		    if(context!=transpiler.getContext())
-		        transpiler = transpiler.newChildTranspiler(context);
-		    else
-		        transpiler = transpiler.newChildTranspiler(null);
-		    this.statements.transpile(transpiler);
-		    transpiler.flush();
-		    return false;
+			Context context = transpiler.getContext();
+			if (this.condition instanceof EqualsExpression)
+				context = ((EqualsExpression) condition).downCastForCheck(context);
+			if (context != transpiler.getContext())
+				transpiler = transpiler.newChildTranspiler(context);
+			else
+				transpiler = transpiler.newChildTranspiler(null);
+			this.statements.transpile(transpiler);
+			transpiler.flush();
+			return false;
 		}
 	}
-	
-
 
 }
