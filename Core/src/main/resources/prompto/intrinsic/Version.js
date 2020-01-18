@@ -6,6 +6,8 @@ function Version(major, minor, fix) {
 }
 
 Version.parse = function(text) {
+	if(text.startsWith("v"))
+		text = text.substring(1);
     var d1 = text.indexOf('.');
     var major = parseInt(text.substring(0, d1));
     var d2 = text.indexOf('.', d1 + 1);

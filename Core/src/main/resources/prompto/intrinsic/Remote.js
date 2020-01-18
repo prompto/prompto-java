@@ -83,6 +83,8 @@ function writeJSONValue(value, useDbRefs) {
 			return { type: "Time", value: value.toString() };
 		case "DateTime":
 			return { type: "DateTime", value: value.toString() };
+		case "Version":
+			return { type: "Version", value: value.toString() };
 		case "List":
 			return value.map(function(value) {
 				return writeJSONValue(value, useDbRefs);
