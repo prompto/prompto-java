@@ -197,8 +197,10 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	public Specificity computeSpecificity(Context context, IParameter parameter, Argument argument, boolean useInstance, boolean allowDerived) {
 		try {
 			IType requiredType = parameter.getType(context);
+			requiredType = IType.anyfy(requiredType);
 			IExpression expression = argument.getExpression();
 			IType actualType = argument.checkActualType(context, requiredType, expression, useInstance);
+			actualType = IType.anyfy(requiredType);
 			if(actualType.equals(requiredType))
 				return Specificity.EXACT;
 			else if(requiredType.isAssignableFrom(context, actualType)) 
