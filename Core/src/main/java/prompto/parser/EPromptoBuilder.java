@@ -360,6 +360,8 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitAbstract_method_declaration(Abstract_method_declarationContext ctx) {
 		IType type = getNodeValue(ctx.typ);
+		if(type instanceof CategoryType)
+			((CategoryType)type).setMutable(ctx.MUTABLE()!=null);
 		Identifier name = getNodeValue(ctx.name);
 		ParameterList args = getNodeValue(ctx.args);
 		setNodeValue(ctx, new AbstractMethodDeclaration(name, args, type));
@@ -850,6 +852,8 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitConcrete_method_declaration(Concrete_method_declarationContext ctx) {
 		IType type = getNodeValue(ctx.typ);
+		if(type instanceof CategoryType)
+			((CategoryType)type).setMutable(ctx.MUTABLE()!=null);
 		Identifier name = getNodeValue(ctx.name);
 		ParameterList args = getNodeValue(ctx.args);
 		StatementList stmts = getNodeValue(ctx.stmts);

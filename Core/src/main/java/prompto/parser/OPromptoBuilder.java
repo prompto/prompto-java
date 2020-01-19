@@ -351,6 +351,8 @@ public class OPromptoBuilder extends OParserBaseListener {
 	@Override
 	public void exitAbstract_method_declaration(Abstract_method_declarationContext ctx) {
 		IType type = getNodeValue(ctx.typ);
+		if(type instanceof CategoryType)
+			((CategoryType)type).setMutable(ctx.MUTABLE()!=null);
 		Identifier name = getNodeValue(ctx.name);
 		ParameterList args = getNodeValue(ctx.args);
 		setNodeValue(ctx, new AbstractMethodDeclaration(name, args, type));
@@ -801,6 +803,8 @@ public class OPromptoBuilder extends OParserBaseListener {
 	@Override
 	public void exitConcrete_method_declaration(Concrete_method_declarationContext ctx) {
 		IType type = getNodeValue(ctx.typ);
+		if(type instanceof CategoryType)
+			((CategoryType)type).setMutable(ctx.MUTABLE()!=null);
 		Identifier name = getNodeValue(ctx.name);
 		ParameterList args = getNodeValue(ctx.args);
 		StatementList stmts = getNodeValue(ctx.stmts);
@@ -2245,9 +2249,9 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitMutable_category_type(Mutable_category_typeContext ctx) {
-		CategoryType typ = getNodeValue(ctx.category_type());
-		typ.setMutable(ctx.MUTABLE()!=null);
-		setNodeValue(ctx, typ);
+		CategoryType type = getNodeValue(ctx.category_type());
+		type.setMutable(ctx.MUTABLE()!=null);
+		setNodeValue(ctx, type);
 	}
 	
 	@Override
