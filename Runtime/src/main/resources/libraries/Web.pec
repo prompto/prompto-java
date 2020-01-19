@@ -140,4 +140,7 @@ define ReactWidget as widget with methods:
 define alert as native method receiving Text text doing:
 	JavaScript: alert(text);
 
+define openWindow as native method receiving Text url and Text name = Nothing doing:
+	JavaScript: window.open(url, name);
+
 define WidgetCallback as abstract method receiving any ref
