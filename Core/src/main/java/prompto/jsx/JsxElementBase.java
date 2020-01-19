@@ -34,6 +34,11 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 	}
 
 	@Override
+	public String toString() {
+		return "<" + id.toString() + ">...</" + id.toString() + ">";
+	}
+	
+	@Override
 	public IType check(Context context) {
 		if(Character.isUpperCase(id.toString().charAt(0))) {
 			PropertyMap propertyMap = getPropertyMap(context);

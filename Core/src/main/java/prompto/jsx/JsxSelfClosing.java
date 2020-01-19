@@ -17,6 +17,11 @@ public class JsxSelfClosing extends JsxElementBase {
 	}
 	
 	@Override
+	public String toString() {
+		return "<" + id.toString() + "/>";
+	}
+	
+	@Override
 	public void toDialect(CodeWriter writer) {
 		writer.append("<").append(id);
 		if(nameSuite!=null)
