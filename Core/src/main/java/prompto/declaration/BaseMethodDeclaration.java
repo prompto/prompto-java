@@ -200,7 +200,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 			requiredType = IType.anyfy(requiredType);
 			IExpression expression = argument.getExpression();
 			IType actualType = argument.checkActualType(context, requiredType, expression, useInstance);
-			actualType = IType.anyfy(requiredType);
+			actualType = IType.anyfy(actualType);
 			if(actualType.equals(requiredType))
 				return Specificity.EXACT;
 			else if(requiredType.isAssignableFrom(context, actualType)) 
