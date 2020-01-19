@@ -23,13 +23,10 @@ import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
-import prompto.store.DataStore;
-import prompto.store.IStore;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.utils.TypeUtils;
 import prompto.value.IValue;
 
 public class AttributeParameter extends BaseParameter implements INamedParameter {
@@ -93,13 +90,8 @@ public class AttributeParameter extends BaseParameter implements INamedParameter
 	
 	@Override
 	public IType getType(Context context) {
-		// dbId type can only be resolved at runtime
-		if(IStore.dbIdName.equals(id.toString()))
-			return TypeUtils.typeToIType(DataStore.getInstance().getDbIdClass());
-		else {
-			IDeclaration named = context.getRegisteredDeclaration(IDeclaration.class, id);
-			return named.getType(context);
-		}
+		IDeclaration named = context.getRegisteredDeclaration(IDeclaration.class, id);
+		return named.getType(context);
 	}
 	
 	@Override
