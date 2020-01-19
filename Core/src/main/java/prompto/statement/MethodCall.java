@@ -414,7 +414,9 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	public boolean transpile(Transpiler transpiler) {
 		MethodFinder finder = new MethodFinder(transpiler.getContext(), this);
 	    Set<IMethodDeclaration> declarations = finder.findCompatibleMethods(false, true, spec -> spec!=Specificity.INCOMPATIBLE);
-	    if (declarations.size() == 1)
+	    if(declarations==null || declarations.isEmpty())
+	    	transpiler.getContext().getProblemListener().reportUnknownMethod(this, this.toString());
+	    else if (declarations.size() == 1)
 	        this.transpileSingle(transpiler, declarations.iterator().next(), false);
 	    else
 	        this.transpileMultiple(transpiler, declarations);
