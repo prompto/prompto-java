@@ -56,7 +56,7 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 			inferred = checkNativeVoid(context);
 		else
 			inferred = checkNativeType(context);
-		return IType.anyfy(inferred);
+		return inferred.anyfy();
 	}
 	
 	private IType checkNativeType(Context context) {

@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
@@ -28,13 +29,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public interface IType extends ISection {
 	
-	static IType anyfy(IType type) {
-		if(type instanceof CategoryType && "Any".equals(((CategoryType)type).getTypeName()))
-			return AnyType.instance();	
-		else
-			return type;
-	}
-	
 	static IType fromTypeName(Context context, String typeName) throws PromptoError {
 		if(Character.isUpperCase(typeName.charAt(0))) try {
 			return new ECleverParser(typeName).parse_standalone_type();
@@ -46,7 +40,11 @@ public interface IType extends ISection {
 
 	Family getFamily();
 	
-	default IType resolve(Context context) {
+	default IType anyfy() {
+		return this;
+	}
+	
+	default IType resolve(Context context, Consumer<IType> onError) {
 		return this;
 	}
 

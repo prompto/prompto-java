@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -60,6 +61,7 @@ import prompto.runtime.Context;
 import prompto.runtime.MethodFinder;
 import prompto.runtime.Score;
 import prompto.runtime.Variable;
+import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.statement.MethodCall;
 import prompto.store.DataStore;
 import prompto.store.Family;
@@ -112,11 +114,36 @@ public class CategoryType extends BaseType {
 		return this; // limit the damage
 	}
 	
+	
 	@Override
-	public IType resolve(Context context) {
+	public IType anyfy() {
+		if("Any".equals(getTypeName()))
+			return AnyType.instance();	
+		else
+			return this;
+	}
+	
+	@Override
+	public IType resolve(Context context, Consumer<IType> onError) {
 		if(resolved==null) {
-			IDeclaration decl = getDeclaration(context);
-			resolved = decl==null || decl.getType(context).getClass()==this.getClass()  ? this : decl.getType(context);
+			IType type = this.anyfy();
+			if(type instanceof NativeType)
+				resolved = type;
+			else {
+				IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, type.getTypeNameId());
+				if(decl==null) {
+					if(onError!=null) {
+						onError.accept(type);
+						return null;
+					} else
+						throw new SyntaxError("Unkown type:" + type.getTypeNameId());
+				} else if(decl instanceof MethodDeclarationMap)
+					resolved = new MethodType(((MethodDeclarationMap)decl).getFirst());
+				else {
+					IType found = decl.getType(context);
+					resolved = found.getClass()==type.getClass() ? type : found;
+				}
+			}
 		}
 		return resolved;
 	}
@@ -359,8 +386,8 @@ public class CategoryType extends BaseType {
 	
 	@Override
 	public boolean isAssignableFrom(Context context, IType other) {
-		IType actual = resolve(context);
-		other = other.resolve(context);
+		IType actual = this.resolve(context, null);
+		other = other.resolve(context, null);
 		if(actual==this)
 			return super.isAssignableFrom(context, other) 
 					|| ( other instanceof CategoryType 

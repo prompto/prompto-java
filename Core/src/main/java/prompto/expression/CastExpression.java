@@ -41,7 +41,7 @@ public class CastExpression implements IExpression {
 	
 	public CastExpression(IExpression expression, IType type) {
 		this.expression = expression;
-		this.type = IType.anyfy(type);
+		this.type = type.anyfy();
 	}
 	
 	@Override
@@ -51,7 +51,7 @@ public class CastExpression implements IExpression {
 	
 	@Override
 	public IType check(Context context) {
-		IType actual = IType.anyfy(expression.check(context));
+		IType actual = expression.check(context).anyfy();
 		IType target = getTargetType(context);
 		// check Any
 		if(actual==AnyType.instance())

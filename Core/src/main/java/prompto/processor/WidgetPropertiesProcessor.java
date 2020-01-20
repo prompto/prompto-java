@@ -4,7 +4,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import prompto.declaration.CategoryDeclaration;
-import prompto.declaration.IDeclaration;
 import prompto.declaration.IWidgetDeclaration;
 import prompto.error.InternalError;
 import prompto.grammar.Annotation;
@@ -19,15 +18,12 @@ import prompto.literal.TypeLiteral;
 import prompto.property.Property;
 import prompto.property.PropertyMap;
 import prompto.property.TypeSetValidator;
-import prompto.property.ValueSetValidator;
 import prompto.property.TypeValidator;
+import prompto.property.ValueSetValidator;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
-import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.type.AnyType;
 import prompto.type.IType;
-import prompto.type.MethodType;
-import prompto.type.NativeType;
 import prompto.type.PropertiesType;
 import prompto.type.TextType;
 import prompto.type.TypeType;
@@ -139,7 +135,7 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 				return null;
 			case "type":
 				if(value instanceof TypeLiteral) {
-					IType type = resolveType(annotation, context, (TypeLiteral)value);
+					IType type = ((TypeLiteral)value).getType().resolve(context, t->context.getProblemListener().reportIllegalAnnotation(annotation, "Unkown type: " + t.getTypeName()));
 					if(type==null)
 						return null;
 					prop.setValidator(new TypeValidator(type));
@@ -161,7 +157,7 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 								.filter(v->v!=NullValue.instance())
 								.map(v->(TypeValue)v)
 								.map(TypeValue::getValue)
-								.map(type->resolveType(annotation, context, type))
+								.map(type->type.resolve(context,t->context.getProblemListener().reportIllegalAnnotation(annotation, "Unkown type: " + t.getTypeName())))
 								.collect(Collectors.toSet());
 						if(types.contains(null))
 							return null; // TODO something went wrong
@@ -202,7 +198,7 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 				.filter(v->v!=NullValue.instance())
 				.map(v->(TypeValue)v)
 				.map(TypeValue::getValue)
-				.map(type->resolveType(annotation, context, type))
+				.map(type->type.resolve(context,t->context.getProblemListener().reportIllegalAnnotation(annotation, "Unkown type: " + t.getTypeName())))
 				.collect(Collectors.toSet());
 			if(types.contains(null))
 				return null;
@@ -224,31 +220,11 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 	}
 
 	private Property loadProperty(Annotation annotation, Context context, DictEntry entry, Property prop, TypeLiteral value) {
-		IType type = resolveType(annotation, context, value);
+		IType type = value.getType().resolve(context, t->context.getProblemListener().reportIllegalAnnotation(annotation, "Unkown type: " + t.getTypeName()));
 		if(type==null)
 			return null;
 		prop.setValidator(new TypeValidator(type));
 		return prop;
-	}
-
-	private IType resolveType(Annotation annotation, Context context, TypeLiteral value) {
-		return resolveType(annotation, context, value.getType());
-	}
-	
-	private IType resolveType(Annotation annotation, Context context, IType type) {
-		type = IType.anyfy(type);
-		if(type instanceof NativeType)
-			return type;
-		else {
-			IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, type.getTypeNameId());
-			if(decl==null) {
-				context.getProblemListener().reportIllegalAnnotation(annotation, "Unkown type: " + type.getTypeName());
-				return null;
-			} else if(decl instanceof MethodDeclarationMap)
-				return new MethodType(((MethodDeclarationMap)decl).getFirst());
-			else
-				return decl.getType(context);
-		}
 	}
 
 
