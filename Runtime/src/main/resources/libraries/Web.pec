@@ -137,10 +137,42 @@ define ReactWidget as widget with methods:
 	define forceRender as method doing:
 		forceReactWidgetRender self
 
+define WidgetCallback as abstract method receiving any ref
+
 define alert as native method receiving Text text doing:
 	JavaScript: alert(text);
 
-define openWindow as native method receiving Text url and Text name = Nothing doing:
-	JavaScript: window.open(url, name);
+define openWindow as native method receiving Text url, Text name = Nothing and Text methodName = "open" doing:
+	JavaScript: openWindow(methodName, url, name); from module: prompto/internet/Window.js
 
-define WidgetCallback as abstract method receiving any ref
+@Inlined
+define FileRef as native category with bindings:
+
+	define category bindings as:
+		JavaScript: FileRef from module: prompto/internet/FileRef.js
+
+and methods: 
+
+	define getName as method returning Text doing:
+		JavaScript: return this.file.name;
+	
+	define getMimeType as method returning Text doing:
+		JavaScript: return this.file.type;
+
+	define getSize as method returning Integer doing:
+		JavaScript: return this.file.size;
+
+	define readText as method returning Text doing:
+		JavaScript: return this.file.text();
+
+	define readImage as method returning Image doing:
+		JavaScript: return this.readImage();
+
+	define readBlob as method returning Blob doing:
+		JavaScript: return this.readBlob();
+
+define FileRefCallback as abstract method receiving FileRef file
+ 
+define selectFile as native method receiving FileRefCallback callback and Text<> mimeTypes = nothing doing:
+	JavaScript: selectFileRef(callback, mimeTypes); from module: prompto/internet/FileRef.js
+
