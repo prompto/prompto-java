@@ -692,10 +692,12 @@ public class CategoryType extends BaseType {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-	    if("Any".equals(this.getTypeName()))
-	    	return;
-		IDeclaration decl = this.getDeclaration(transpiler.getContext());
-		decl.declare(transpiler);
+		IType type = resolve(transpiler.getContext(), null);
+		if(type==this) {
+		  	IDeclaration decl = this.getDeclaration(transpiler.getContext());
+			decl.declare(transpiler);
+		} else
+			type.declare(transpiler);
 	}
 	
 	@Override
