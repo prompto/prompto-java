@@ -78,6 +78,13 @@ public class SetType extends ContainerType {
 		return BooleanType.instance();
 	}
 	
+	
+	@Override
+	public String getTranspiledName(Context context) {
+		return itemType.getTranspiledName(context) + "_set";
+	}
+	
+	
 	@Override
 	public void declare(Transpiler transpiler) {
 		transpiler.register("StrictSet");
