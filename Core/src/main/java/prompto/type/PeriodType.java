@@ -68,6 +68,11 @@ public class PeriodType extends NativeType {
 	}
 	
 	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler.require("Period");
+	}
+	
+	@Override
 	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
 	   if(other == PeriodType.instance()) {
 	        left.declare(transpiler);
