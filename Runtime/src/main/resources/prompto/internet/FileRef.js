@@ -10,7 +10,7 @@ FileRef.prototype.readImage = function() {
 };
 
 FileRef.prototype.readBlob = function() {
-    return null;
+    return Blob.fromFile(this.file);
 };
 
 exports.FileRef = FileRef;

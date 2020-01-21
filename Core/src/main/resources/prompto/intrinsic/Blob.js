@@ -1,9 +1,16 @@
-function Blob(data) {
-    this.data = data;
+function Blob() {
+    this.zipped = null;
+    this.file = null;
     return this;
 }
 
-Blob.ofValue = function(value) {
+Blob.fromFile = function(file) {
+    var blob = new Blob();
+    blob.file = file;
+    return blob;
+};
+
+Blob.fromValue = function(value) {
     var binaries = {};
     // create json type-aware object graph and collect binaries
     var values = {}; // need a temporary parent
@@ -14,7 +21,9 @@ Blob.ofValue = function(value) {
     // zip binaries
     var zipped = Blob.zipDatas(binaries)
     // done
-    return new Blob(zipped);
+    var blob = new Blob();
+    blob.zipped = zipped;
+    return blob;
 };
 
 Blob.zipDatas = function(datas) {
@@ -33,12 +42,12 @@ Blob.zipDatas = function(datas) {
 };
 
 
-Blob.readParts = function(data) {
+Blob.readParts = function(zipped) {
     var JSZip = require("jszip-sync");
     var zip = new JSZip();
     return zip.sync(function() {
         var parts = {};
-        zip.loadAsync(data);
+        zip.loadAsync(zipped);
         zip.forEach(function (entry) {
             zip.file(entry)
                 .async("arraybuffer")
@@ -59,9 +68,15 @@ Blob.readValue = function(parts) {
 };
 
 
-
 Blob.prototype.toDocument = function() {
-    var parts = Blob.readParts(this.data);
+    if (this.zipped)
+        return zippedToDocument();
+    else
+        return null;
+};
+
+Blob.prototype.zippedToDocument = function() {
+    var parts = Blob.readParts(this.zipped);
     var value = Blob.readValue(parts);
     var typeName = value["type"] || null;
     if (typeName == null)

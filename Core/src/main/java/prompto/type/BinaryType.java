@@ -70,31 +70,26 @@ public abstract class BinaryType extends NativeType {
 	}
 
 	private IValue readJSONValueCreatedInBrowser(JsonNode value, Map<String, byte[]> parts) {
-		JsonNode valueNode = value.get("value");
-		JsonNode partNode = valueNode.get("partName");
+		JsonNode partNode = value.get("partName");
 		String partName = partNode.asText();
 		byte[] bytes = parts.get(partName);
 		if(bytes==null)
 			return NullValue.instance(); // TODO throw ?
-		String mimeType = valueNode.get("mimeType").asText();
+		String mimeType = value.get("mimeType").asText();
 		return newInstance(new PromptoBinary(mimeType, bytes));
 	}
 	
 	private boolean wasCreatedInBrowser(JsonNode value, Map<String, byte[]> parts) {
 		if(!value.isObject())
 			return false;
-		JsonNode valueNode = value.get("value");
-		if(valueNode==null || !valueNode.isObject() || parts==null)
-			return false;
-		JsonNode partNode = valueNode.get("partName");
+		JsonNode partNode = value.get("partName");
 		return partNode!=null && partNode.isTextual();
 	}
 	
 	
 	private IValue readJSONValueReceivedFromBrowser(JsonNode value, Map<String, byte[]> parts) {
 		// use reverse logic from BinaryValue::toJson
-		JsonNode valueNode = value.get("value");
-		JsonNode urlNode = valueNode.get("url");
+		JsonNode urlNode = value.get("url");
 		String url = urlNode.asText();
 		if(url.startsWith("/ws/bin/data?"))
 			return null; // TODO ok for storing an updated instance (attribute will not be overwritten), but might need a lazy loading BinaryRef value for other situations ? 
@@ -111,10 +106,7 @@ public abstract class BinaryType extends NativeType {
 	private boolean wasReceivedFromBrowser(JsonNode value, Map<String, byte[]> parts) {
 		if(!value.isObject())
 			return false;
-		JsonNode valueNode = value.get("value");
-		if(valueNode==null || !valueNode.isObject() || parts==null)
-			return false;
-		JsonNode urlNode = valueNode.get("url");
+		JsonNode urlNode = value.get("url");
 		if(urlNode==null || !urlNode.isTextual())
 			return false;
 		String url = urlNode.asText();

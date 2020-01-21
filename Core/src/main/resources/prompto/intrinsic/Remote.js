@@ -69,7 +69,7 @@ function getTypeName(value) {
 	return name;
 }
 
-function writeJSONValue(value, useDbRefs) {
+function writeJSONValue(value, useDbRefs, formData) {
 	if(value==null)
 		return value;
 	else {
@@ -89,6 +89,8 @@ function writeJSONValue(value, useDbRefs) {
 			return value.map(function(value) {
 				return writeJSONValue(value, useDbRefs);
 			});
+		case "Blob":
+			return writeJSONBlob(value, formData);
 		default:	
 			if(typeof($Root) !== 'undefined' && value instanceof $Root) {
 				if(useDbRefs) {
@@ -105,5 +107,16 @@ function writeJSONValue(value, useDbRefs) {
 				return value;
 		}
 	}
-	
 }
+
+function writeJSONBlob(blob, formData) {
+	if(blob.file) {
+		var partName = '@' + blob.file.name;
+		formData.append(partName, blob.file);
+		return { mimeType: blob.file.type, partName: partName };
+	} else {
+		// TODO log
+		return null;
+	}
+}
+
