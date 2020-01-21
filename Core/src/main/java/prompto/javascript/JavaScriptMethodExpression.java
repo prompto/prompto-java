@@ -1,5 +1,7 @@
 package prompto.javascript;
 
+import prompto.declaration.IMethodDeclaration;
+import prompto.statement.MethodCall;
 import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 
@@ -56,5 +58,18 @@ public class JavaScriptMethodExpression extends JavaScriptSelectorExpression {
 		else
 			transpiler.append(name);
 	}
+	
+	@Override
+	public void transpileInlineMethodCall(Transpiler transpiler, IMethodDeclaration declaration, MethodCall methodCall) {
+		if(parent!=null) {
+			parent.transpileInlineMethodCall(transpiler, declaration, methodCall);
+			transpiler.append('.');
+		}
+		transpiler.append(name).append('(');
+		if(arguments!=null)
+			arguments.transpile(transpiler);
+		transpiler.append(')');
+	}
+
 	
 }

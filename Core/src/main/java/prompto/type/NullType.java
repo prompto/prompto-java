@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 
 public class NullType extends BaseType {
 
@@ -41,6 +42,10 @@ public class NullType extends BaseType {
 	public boolean isMoreSpecificThan(Context context, IType other) {
 		return false;
 	}
-		
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
 
 }

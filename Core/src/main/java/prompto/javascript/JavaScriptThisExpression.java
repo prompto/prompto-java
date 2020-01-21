@@ -22,6 +22,5 @@ public class JavaScriptThisExpression implements JavaScriptExpression {
 	public void transpileInlineMethodCall(Transpiler transpiler, IMethodDeclaration declaration, MethodCall methodCall) {
 		MethodSelector selector = methodCall.resolveSelector(transpiler, declaration);
 		selector.getParent().transpile(transpiler);
-		
 	}
 }

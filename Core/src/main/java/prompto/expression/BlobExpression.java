@@ -118,7 +118,7 @@ public class BlobExpression implements IExpression {
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    transpiler.append("Blob.ofValue(");
+	    transpiler.append("Blob.fromValue(");
 	    this.source.transpile(transpiler);
 	    transpiler.append(")");
 		return false;

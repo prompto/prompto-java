@@ -54,7 +54,9 @@ public interface IMethodDeclaration extends IDeclaration {
 		CategoryDeclaration category = getMemberOf();
 		return category!=null &&  category.hasLocalAnnotation(name);
 	}
-
+	default void declare(Transpiler transpiler, boolean isStart) {
+		declare(transpiler);
+	}
 	
 }
 

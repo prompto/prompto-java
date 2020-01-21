@@ -92,6 +92,11 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 	}
 	
 	@Override
+	public void declare(Transpiler transpiler) {
+		super.declare(transpiler);
+	}
+
+	@Override
 	public boolean transpile(Transpiler transpiler) {
 	    AttributeParameter arg = new AttributeParameter(this.getId());
 	    arg.register(transpiler.getContext());

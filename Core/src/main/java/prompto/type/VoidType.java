@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 
 
 public class VoidType extends NativeType {
@@ -28,4 +29,9 @@ public class VoidType extends NativeType {
 		throw new RuntimeException("Should never get there !");
 	}
 	
+	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
+
 }

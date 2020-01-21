@@ -78,6 +78,11 @@ public class IteratorType extends IterableType {
 			return super.getMemberMethods(context, id);
 		}
 	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		itemType.declare(transpiler);
+	}
 
 	final IMethodDeclaration TO_LIST_METHOD = new BuiltInMethodDeclaration("toList") {
 		

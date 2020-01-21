@@ -7,6 +7,7 @@ import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
 import prompto.runtime.Context;
 import prompto.statement.StatementList;
+import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
@@ -85,5 +86,12 @@ public class OperatorMethodDeclaration extends ConcreteMethodDeclaration impleme
 		writer.dedent();
 		writer.append("}\n");
 	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		super.declare(transpiler);
+	}
+	
+
 	
 }

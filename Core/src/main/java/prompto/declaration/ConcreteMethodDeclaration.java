@@ -400,10 +400,18 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	
 	@Override
 	public void declare(Transpiler transpiler) {
+		declare(transpiler, false);
+	}
+	
+	@Override
+	public void declare(Transpiler transpiler, boolean isStart) {
 		if(declaring)
 			return;
 		declaring = true;
 		try {
+			// TODO IType type = check(transpiler.getContext(), isStart);
+			if(returnType!=null)
+				returnType.declare(transpiler);
 		    if(this.memberOf==null) {
 		        transpiler = transpiler.newLocalTranspiler();
 		        transpiler.declare(this);
