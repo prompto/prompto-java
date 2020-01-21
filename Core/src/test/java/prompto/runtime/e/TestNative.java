@@ -60,11 +60,6 @@ public class TestNative extends BaseEParserTest {
 	}
 
 	@Test
-	public void testTranspiledAttribute() throws Exception {
-		checkTranspiledOutput("native/attribute.pec");
-	}
-
-	@Test
 	public void testInterpretedCategory() throws Exception {
 		checkInterpretedOutput("native/category.pec");
 	}
