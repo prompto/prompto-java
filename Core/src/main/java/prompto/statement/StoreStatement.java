@@ -186,6 +186,8 @@ public class StoreStatement extends BaseStatement {
 	        transpiler.append("var storablesToAdd = new Set();").newLine();
 	        this.storables.forEach(exp-> {
 	            exp.transpile(transpiler);
+	            transpiler.append(" && ");
+	            exp.transpile(transpiler);
 	            transpiler.append(".collectStorables(storablesToAdd);").newLine();
 	        });
 	        transpiler.append("return Array.from(storablesToAdd);").newLine();
@@ -200,6 +202,8 @@ public class StoreStatement extends BaseStatement {
 	        transpiler.append("(function() { ").indent();
 	        transpiler.append("var idsToDelete = new Set();").newLine();
 	        this.deletables.forEach(exp -> {
+	            exp.transpile(transpiler);
+	            transpiler.append(" && ");
 	            exp.transpile(transpiler);
 	            transpiler.append(".collectDbIds(idsToDelete);").newLine();
 	        });

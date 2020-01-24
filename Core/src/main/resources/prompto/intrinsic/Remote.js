@@ -90,7 +90,8 @@ function writeJSONValue(value, useDbRefs, formData) {
 				return writeJSONValue(value, useDbRefs);
 			});
 		case "Blob":
-			return writeJSONBlob(value, formData);
+		case "Image":
+			return writeJSONBinary(value, formData);
 		default:	
 			if(typeof($Root) !== 'undefined' && value instanceof $Root) {
 				if(useDbRefs) {
@@ -109,11 +110,11 @@ function writeJSONValue(value, useDbRefs, formData) {
 	}
 }
 
-function writeJSONBlob(blob, formData) {
-	if(blob.file) {
-		var partName = '@' + blob.file.name;
-		formData.append(partName, blob.file);
-		return { mimeType: blob.file.type, partName: partName };
+function writeJSONBinary(binary, formData) {
+	if(binary.file) {
+		var partName = '@' + binary.file.name;
+		formData.append(partName, binary.file);
+		return { mimeType: binary.file.type, partName: partName };
 	} else {
 		// TODO log
 		return null;

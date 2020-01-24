@@ -3,9 +3,6 @@ package prompto.code;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -38,7 +35,6 @@ import prompto.grammar.EqOp;
 import prompto.grammar.Identifier;
 import prompto.grammar.OrderByClause;
 import prompto.grammar.OrderByClauseList;
-import prompto.intrinsic.PromptoBinary;
 import prompto.intrinsic.PromptoVersion;
 import prompto.literal.TextLiteral;
 import prompto.literal.VersionLiteral;
@@ -198,31 +194,12 @@ public class QueryableCodeStore extends BaseCodeStore {
 			IStored stored = fetchOneInStore(new CategoryType(new Identifier("Resource")), version, "name", name, true);
 			if(stored==null)
 				return null;
-			return readResource(stored);
+			return ResourceReader.readResource(stored);
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 	
-	private Resource readResource(IStored stored) {
-		Resource resource = null;
-		String mimeType = (String)stored.getData("mimeType");
-		if(mimeType.startsWith("text/")) {
-			resource = new TextResource();
-			((TextResource)resource).setBody((String)stored.getData("body"));
-		} else {
-			resource = new BinaryResource();
-			((BinaryResource)resource).setData((PromptoBinary)stored.getData("data"));
-		}
-		resource.setMimeType(mimeType);
-		resource.setName((String)stored.getData("name"));
-		resource.setVersion((PromptoVersion)stored.getData("version"));
-		Long value = (Long)stored.getData("timeStamp");
-		if(value!=null)
-			resource.setLastModified(OffsetDateTime.ofInstant(Instant.ofEpochMilli(value), ZoneOffset.UTC));
-		return resource;
-	}
-
 	static ThreadLocal<Map<String, Iterable<IDeclaration>>> registering = new ThreadLocal<Map<String, Iterable<IDeclaration>>>() {
 		@Override protected Map<String, Iterable<IDeclaration>> initialValue() {
 	        return new HashMap<>();
