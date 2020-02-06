@@ -85,22 +85,22 @@ function writeJSONValue(value, useDbRefs, formData) {
 			return { type: "DateTime", value: value.toString() };
 		case "Version":
 			return { type: "Version", value: value.toString() };
+		case "Blob":
+		case "Image":
+			return { type: typeName, value: writeJSONBinary(value, formData) };
 		case "List":
 			return value.map(function(value) {
 				return writeJSONValue(value, useDbRefs);
 			});
-		case "Blob":
-		case "Image":
-			return writeJSONBinary(value, formData);
 		default:	
 			if(typeof($Root) !== 'undefined' && value instanceof $Root) {
 				if(useDbRefs) {
 					var dbId = value.getOrCreateDbId();
-					return { type: "%dbRef%", value: writeJSONValue(dbId, useDbRefs) };
+					return { type: "%dbRef%", value: writeJSONValue(dbId, useDbRefs, formData) };
 				} else {
 					var result = {};
 					value.getAttributeNames().forEach(function(attr) {
-						result[attr] = writeJSONValue(value[attr], useDbRefs);
+						result[attr] = writeJSONValue(value[attr], useDbRefs, formData);
 					});
 					return { type: typeName, value: result};
 				}
@@ -112,12 +112,16 @@ function writeJSONValue(value, useDbRefs, formData) {
 
 function writeJSONBinary(binary, formData) {
 	if(binary.file) {
-		var partName = '@' + binary.file.name;
-		formData.append(partName, binary.file);
-		return { mimeType: binary.file.type, partName: partName };
-	} else {
-		// TODO log
-		return null;
-	}
+		if(formData) {
+			var partName = '@' + binary.file.name;
+			formData.append(partName, binary.file);
+			return { mimeType: binary.file.type, partName: partName };
+		} else {
+			return { mimeType: binary.file.type, binaryFile: binary.file }; // for later processing
+		}
+	} else if (binary.mimeType && binary.url) {
+		return { mimeType: binary.mimeType, url: binary.url };
+	} else
+		return null; // TODO throw ?
 }
 
