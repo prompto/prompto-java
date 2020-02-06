@@ -62,24 +62,32 @@ public abstract class BinaryType extends NativeType {
 	
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
-		if(wasReceivedFromBrowser(value, parts))
+		PromptoBinary binary = readJSONValue(value, parts);
+		return binary==null ? NullValue.instance() : newInstance(binary);
+	}
+	
+	
+	public static PromptoBinary readJSONValue(JsonNode value, Map<String, byte[]> parts) {
+		if(value==null || value.isNull())
+			return null;
+		else if(wasReceivedFromBrowser(value, parts))
 			return readJSONValueReceivedFromBrowser(value, parts);
 		else if(wasCreatedInBrowser(value, parts))
 			return readJSONValueCreatedInBrowser(value, parts);
 		throw new ReadWriteError("Cannot read binary value from: " + value.toString());
 	}
 
-	private IValue readJSONValueCreatedInBrowser(JsonNode value, Map<String, byte[]> parts) {
+	private static PromptoBinary readJSONValueCreatedInBrowser(JsonNode value, Map<String, byte[]> parts) {
 		JsonNode partNode = value.get("partName");
 		String partName = partNode.asText();
 		byte[] bytes = parts.get(partName);
 		if(bytes==null)
-			return NullValue.instance(); // TODO throw ?
+			return null; // TODO throw ?
 		String mimeType = value.get("mimeType").asText();
-		return newInstance(new PromptoBinary(mimeType, bytes));
+		return new PromptoBinary(mimeType, bytes);
 	}
 	
-	private boolean wasCreatedInBrowser(JsonNode value, Map<String, byte[]> parts) {
+	private static boolean wasCreatedInBrowser(JsonNode value, Map<String, byte[]> parts) {
 		if(!value.isObject())
 			return false;
 		JsonNode partNode = value.get("partName");
@@ -87,7 +95,7 @@ public abstract class BinaryType extends NativeType {
 	}
 	
 	
-	private IValue readJSONValueReceivedFromBrowser(JsonNode value, Map<String, byte[]> parts) {
+	private static PromptoBinary readJSONValueReceivedFromBrowser(JsonNode value, Map<String, byte[]> parts) {
 		// use reverse logic from BinaryValue::toJson
 		JsonNode urlNode = value.get("url");
 		String url = urlNode.asText();
@@ -96,14 +104,14 @@ public abstract class BinaryType extends NativeType {
 		else {
 			byte[] bytes = parts.get(url);
 			if(bytes==null)
-				return NullValue.instance(); // TODO throw ?
+				return null; // TODO throw ?
 			String[] segments = url.split("/");
 			String mimeType = segments[segments.length-1].replaceAll("\\.", "/");
-			return newInstance(new PromptoBinary(mimeType, bytes));
+			return new PromptoBinary(mimeType, bytes);
 		}
 	}
 
-	private boolean wasReceivedFromBrowser(JsonNode value, Map<String, byte[]> parts) {
+	private static boolean wasReceivedFromBrowser(JsonNode value, Map<String, byte[]> parts) {
 		if(!value.isObject())
 			return false;
 		JsonNode urlNode = value.get("url");
