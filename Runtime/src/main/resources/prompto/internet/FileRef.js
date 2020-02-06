@@ -6,7 +6,7 @@ function FileRef(file) {
 }
 
 FileRef.prototype.readImage = function() {
-    return null;
+    return Image.fromFile(this.file);
 };
 
 FileRef.prototype.readBlob = function() {
