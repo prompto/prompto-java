@@ -142,8 +142,8 @@ define WidgetCallback as abstract method receiving any ref
 define alert as native method receiving Text text doing:
 	JavaScript: alert(text);
 
-define openWindow as native method receiving Text url, Text name = Nothing and Text methodName = "open" doing:
-	JavaScript: openWindow(methodName, url, name); from module: prompto/internet/Window.js
+define openBrowser as native method receiving Text url, Text name = Nothing and Text methodName = "open" doing:
+	JavaScript: openBrowser(methodName, url, name); from module: prompto/internet/Browser.js
 
 @Inlined
 define FileRef as native category with bindings:
