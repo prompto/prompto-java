@@ -70,9 +70,12 @@ public class JsxProperty extends Section {
 	        this.value.declare(transpiler, property);
 	}
 
-
 	public void transpile(Transpiler transpiler, Property property) {
 		String name = this.id.toString();
+		if("class".equals(name))
+			name = "className"; // required by React
+		else if("for".equals(name))
+			name = "htmlFor"; // required by React
 		if(name.contains("-"))
 			name = "\"" + name + "\"";
 	    transpiler.append(name);
