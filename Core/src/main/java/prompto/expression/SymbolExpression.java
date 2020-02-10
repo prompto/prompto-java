@@ -68,7 +68,7 @@ public class SymbolExpression implements IExpression {
 	}
 
 	public Type getJavaType(Context context) {
-		Symbol symbol = context.<Symbol>getRegisteredValue(Symbol.class, id);
+		Symbol symbol = context.getRegisteredSymbol(this.id, true);
 		if(symbol==null)
 			throw new SyntaxError("Unknown symbol:" + id);
 		return symbol.getJavaType(context);
@@ -76,13 +76,13 @@ public class SymbolExpression implements IExpression {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-		Symbol symbol = transpiler.getContext().getRegisteredValue(Symbol.class, this.id);
+		Symbol symbol = transpiler.getContext().getRegisteredSymbol(this.id, true);
 	    symbol.declare(transpiler);
 	}
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-		Symbol symbol = transpiler.getContext().getRegisteredValue(Symbol.class, this.id);
+		Symbol symbol = transpiler.getContext().getRegisteredSymbol(this.id, true);
 	    return symbol.transpile(transpiler);
 	}
 
