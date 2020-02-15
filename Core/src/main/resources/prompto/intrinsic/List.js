@@ -99,24 +99,23 @@ List.prototype.hasAny = function(items, noCheckEquals) {
 
 
 List.prototype.slice1Based = function(start, last) {
-    if(start) {
+    if(start && start != 0) {
         if (start < 1 || start > this.length)
             throw new RangeError();
         start = start - 1;
     } else
         start = 0;
-    if(!last)
-        return new List(false, this.slice(start));
     if(last >= 0) {
         if(last < start || last > this.length)
             throw new RangeError();
         return new List(false, this.slice(start, last));
-    } else {
+    } else if(last < 0) {
         last = this.length + 1 + last;
         if(last < start || last > this.length)
             throw new RangeError();
         return new List(false, this.slice(start, last));
-    }
+    } else
+        return new List(false, this.slice(start));
 };
 
 
