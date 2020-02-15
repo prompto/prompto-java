@@ -31,7 +31,7 @@ public class CssType extends NativeType {
 
 	@Override
 	public void transpile(Transpiler transpiler) {
-		// nothing to do
+		transpiler.append("Object");
 	}
 
 
