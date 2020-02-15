@@ -7,10 +7,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.ShortOperand;
+import prompto.compiler.StackState;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
 import prompto.parser.ISection;
 import prompto.parser.Section;
@@ -232,6 +240,35 @@ public abstract class BaseType extends Section implements IType {
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		throw new InvalidParameterException(value.toString());
+	}
+
+	public static Opcode[] CMP_OPCODES = createOpcodes();
+
+	public static Opcode[] createOpcodes() {
+		Opcode[] opcodes = new Opcode[CmpOp.values().length];
+		opcodes[CmpOp.LT.ordinal()] = Opcode.IF_ICMPLT;
+		opcodes[CmpOp.LTE.ordinal()] = Opcode.IF_ICMPLE;
+		opcodes[CmpOp.GT.ordinal()] = Opcode.IF_ICMPGT;
+		opcodes[CmpOp.GTE.ordinal()] = Opcode.IF_ICMPGE;
+		return opcodes;
+	}
+
+	public static ResultInfo compileCompareToEpilogue(MethodInfo method, Flags flags) {
+		method.addInstruction(Opcode.ICONST_0);
+		Opcode opcode = CMP_OPCODES[flags.cmpOp().ordinal()];
+		method.addInstruction(opcode, new ShortOperand((short)7));
+		StackState branchState = method.captureStackState();
+		method.addInstruction(Opcode.ICONST_0);
+		method.addInstruction(Opcode.GOTO, new ShortOperand((short)4));
+		method.restoreFullStackState(branchState);
+		method.placeLabel(branchState);
+		method.addInstruction(Opcode.ICONST_1);
+		StackState lastState = method.captureStackState();
+		method.placeLabel(lastState);
+		if(flags.toPrimitive())
+			return new ResultInfo(boolean.class);
+		else
+			return CompilerUtils.booleanToBoolean(method);
 	}
 
 	public static BiFunction<IValue, IValue, Integer> getValuesComparator(boolean descending) {

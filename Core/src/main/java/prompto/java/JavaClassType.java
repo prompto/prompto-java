@@ -18,6 +18,7 @@ import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.type.AnyType;
 import prompto.type.BaseType;
+import prompto.type.ContainerType;
 import prompto.type.DictType;
 import prompto.type.DocumentType;
 import prompto.type.IType;
@@ -182,7 +183,7 @@ public class JavaClassType extends BaseType {
 		if(value instanceof List<?>) {
 			if(returnType instanceof ListType || returnType==AnyType.instance()) {
 				Type elemType = nthArgTypeFromParameterizedType(type, 0);
-				IType itemType = returnType instanceof ListType ? ((ListType)returnType).getItemType() : AnyType.instance();
+				IType itemType = returnType instanceof ListType ? ((ContainerType)returnType).getItemType() : AnyType.instance();
 				PromptoList<IValue> list = new PromptoList<IValue>(false);
 				for(Object obj : (List<Object>)value) {
 					IValue val = convertJavaValueToPromptoValue(context, obj, elemType, itemType);

@@ -1,13 +1,28 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.declaration.IMethodDeclaration;
+import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoTuple;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
+import prompto.value.IValue;
+import prompto.value.TupleValue;
 
 public class TupleType extends ContainerType {
 
@@ -73,6 +88,16 @@ public class TupleType extends ContainerType {
 		return BooleanType.instance(); 
 	}
 	
+	@Override
+	public Set<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
+		switch(id.toString()) {
+		case "join":
+			return new HashSet<>(Collections.singletonList(JOIN_METHOD));
+		default:
+			return super.getMemberMethods(context, id);
+		}
+	}
+
 	@Override
 	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
 	    if(other == TupleType.instance() || other instanceof ListType || other instanceof SetType) {
@@ -160,5 +185,65 @@ public class TupleType extends ContainerType {
 	    items.transpile(transpiler);
 	    transpiler.append(")");
 	}
+	
+	public static ResultInfo compileSlice(Context context, MethodInfo method, Flags flags, 
+			ResultInfo parent, IExpression first, IExpression last) {
+		ContainerType.compileSliceFirst(context, method, flags, first);
+		ContainerType.compileSliceLast(context, method, flags, last);
+		MethodConstant m = new MethodConstant(PromptoTuple.class, "slice", 
+				long.class, long.class, PromptoTuple.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		return parent;
+	}
+
+	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
+		right = CompilerUtils.numberToint(method, right);
+		// minus 1
+		method.addInstruction(Opcode.ICONST_M1);
+		method.addInstruction(Opcode.IADD);
+		// create result
+		IOperand oper = new MethodConstant(PromptoTuple.class, "get", 
+				int.class, Object.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return new ResultInfo(Object.class);
+	}
+
+	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		// TODO: return left if right is empty (or right if left is empty and is a list)
+		// create result
+		ResultInfo info = CompilerUtils.compileNewRawInstance(method, PromptoTuple.class);
+		method.addInstruction(Opcode.DUP);
+		method.addInstruction(Opcode.ICONST_0); // not mutable
+		CompilerUtils.compileCallConstructor(method, PromptoTuple.class, boolean.class);
+		// add left, current stack is: left, result, we need: result, result, left
+		method.addInstruction(Opcode.DUP_X1); // stack is: result, left, result
+		method.addInstruction(Opcode.SWAP); // stack is: result, result, left
+		IOperand oper = new MethodConstant(PromptoTuple.class, "addAll", 
+				Collection.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		method.addInstruction(Opcode.POP); // consume returned boolean
+		// add right, current stack is: result, we need: result, result, right
+		method.addInstruction(Opcode.DUP); // stack is: result, result 
+		exp.compile(context, method, flags); // stack is: result, result, right
+		oper = new MethodConstant(PromptoTuple.class, "addAll", 
+				Collection.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		method.addInstruction(Opcode.POP); // consume returned boolean
+		return info;
+	}
+
+	static final IMethodDeclaration JOIN_METHOD = new JoinMethod() {
+		
+		@Override
+		protected Collection<IValue> getItems(Context context) {
+			TupleValue tuple = (TupleValue)getValue(context);
+			return tuple.getItems();
+		}
+
+	};
+
 	
 }

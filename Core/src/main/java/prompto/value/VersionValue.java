@@ -5,17 +5,9 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.function.Function;
 
-import prompto.compiler.CompilerUtils;
-import prompto.compiler.Flags;
-import prompto.compiler.IOperand;
-import prompto.compiler.MethodConstant;
-import prompto.compiler.MethodInfo;
-import prompto.compiler.Opcode;
-import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
-import prompto.expression.IExpression;
 import prompto.intrinsic.PromptoVersion;
 import prompto.runtime.Context;
 import prompto.type.DateType;
@@ -56,17 +48,6 @@ public class VersionValue extends BaseValue implements Comparable<VersionValue> 
 
 	}
 	
-	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) {
-		exp.compile(context, method, flags);
-		IOperand oper = new MethodConstant(PromptoVersion.class, 
-				"compareTo", PromptoVersion.class, int.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return BaseValue.compileCompareToEpilogue(method, flags);
-	}
-
-
-
 	@Override
 	public Object convertTo(Context context, Type type) {
 		return value;
@@ -85,22 +66,6 @@ public class VersionValue extends BaseValue implements Comparable<VersionValue> 
 			return value.equals(obj);
 	}
 	
-	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) {
-		exp.compile(context, method, flags);
-		IOperand oper = new MethodConstant(
-				PromptoVersion.class, 
-				"equals",
-				Object.class, boolean.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		if(flags.isReverse())
-			CompilerUtils.reverseBoolean(method);
-		if(flags.toPrimitive())
-			return new ResultInfo(boolean.class);
-		else
-			return CompilerUtils.booleanToBoolean(method);
-	}
-
 	@Override
 	public int hashCode() {
 		return value.hashCode();

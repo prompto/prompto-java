@@ -12,11 +12,11 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
+import prompto.type.DecimalType;
 import prompto.type.IType;
+import prompto.type.IntegerType;
 import prompto.utils.CodeWriter;
-import prompto.value.DecimalValue;
 import prompto.value.IValue;
-import prompto.value.IntegerValue;
 
 public class DivideExpression implements IExpression {
 
@@ -53,10 +53,10 @@ public class DivideExpression implements IExpression {
 	
 	private static Map<Class<?>, IOperatorFunction> createDividers() {
 		Map<Class<?>, IOperatorFunction> map = new HashMap<>();
-		map.put(double.class, DecimalValue::compileDivide);
-		map.put(Double.class, DecimalValue::compileDivide);
-		map.put(long.class, IntegerValue::compileDivide);
-		map.put(Long.class, IntegerValue::compileDivide);
+		map.put(double.class, DecimalType::compileDivide);
+		map.put(Double.class, DecimalType::compileDivide);
+		map.put(long.class, IntegerType::compileDivide);
+		map.put(Long.class, IntegerType::compileDivide);
 		return map;
 	}
 

@@ -37,19 +37,19 @@ import prompto.store.IQueryBuilder;
 import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStore;
 import prompto.transpiler.Transpiler;
+import prompto.type.CharacterType;
+import prompto.type.DateTimeType;
+import prompto.type.DateType;
+import prompto.type.DecimalType;
 import prompto.type.IType;
+import prompto.type.IntegerType;
+import prompto.type.TextType;
+import prompto.type.TimeType;
+import prompto.type.VersionType;
 import prompto.utils.CodeWriter;
 import prompto.value.BooleanValue;
-import prompto.value.CharacterValue;
-import prompto.value.DateValue;
-import prompto.value.DateTimeValue;
-import prompto.value.DecimalValue;
 import prompto.value.IInstance;
 import prompto.value.IValue;
-import prompto.value.IntegerValue;
-import prompto.value.TextValue;
-import prompto.value.TimeValue;
-import prompto.value.VersionValue;
 
 public class CompareExpression extends Section implements IPredicateExpression, IAssertion {
 
@@ -111,17 +111,17 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 	
 	private static Map<Class<?>, IOperatorFunction> createTesters() {
 		Map<Class<?>, IOperatorFunction> map = new HashMap<>(); 
-		map.put(char.class, CharacterValue::compileCompareTo);
-		map.put(java.lang.Character.class, CharacterValue::compileCompareTo); 
-		map.put(String.class, TextValue::compileCompareTo); 
-		map.put(double.class, DecimalValue::compileCompareTo);
-		map.put(Double.class, DecimalValue::compileCompareTo); 
-		map.put(long.class, IntegerValue::compileCompareTo);
-		map.put(Long.class, IntegerValue::compileCompareTo); 
-		map.put(PromptoDate.class, DateValue::compileCompareTo); 
-		map.put(PromptoDateTime.class, DateTimeValue::compileCompareTo); 
-		map.put(PromptoTime.class, TimeValue::compileCompareTo); 
-		map.put(PromptoVersion.class, VersionValue::compileCompareTo); 
+		map.put(char.class, CharacterType::compileCompareTo);
+		map.put(java.lang.Character.class, CharacterType::compileCompareTo); 
+		map.put(String.class, TextType::compileCompareTo); 
+		map.put(double.class, DecimalType::compileCompareTo);
+		map.put(Double.class, DecimalType::compileCompareTo); 
+		map.put(long.class, IntegerType::compileCompareTo);
+		map.put(Long.class, IntegerType::compileCompareTo); 
+		map.put(PromptoDate.class, DateType::compileCompareTo); 
+		map.put(PromptoDateTime.class, DateTimeType::compileCompareTo); 
+		map.put(PromptoTime.class, TimeType::compileCompareTo); 
+		map.put(PromptoVersion.class, VersionType::compileCompareTo); 
 		return map;
 	}
 

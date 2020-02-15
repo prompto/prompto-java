@@ -2,6 +2,14 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.intrinsic.PromptoPeriod;
 import prompto.parser.ISection;
@@ -148,5 +156,55 @@ public class PeriodType extends NativeType {
 	@Override
 	public void transpileCode(Transpiler transpiler) {
 		transpiler.append(".toString()");
+	}
+
+	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags,
+			ResultInfo left, IExpression exp)
+			throws SyntaxError {
+		ResultInfo right = exp.compile(context, method, flags);
+		if (right.getType() != PromptoPeriod.class)
+			throw new SyntaxError("Illegal: Period + "
+					+ exp.getClass().getSimpleName());
+		MethodConstant c = new MethodConstant(PromptoPeriod.class, "plus",
+				PromptoPeriod.class, PromptoPeriod.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
+		return new ResultInfo(PromptoPeriod.class);
+	}
+
+	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags,
+			ResultInfo left, IExpression exp)
+			throws SyntaxError {
+		ResultInfo right = exp.compile(context, method, flags);
+		if (right.getType() != PromptoPeriod.class)
+			throw new SyntaxError("Illegal: Period - "
+					+ exp.getClass().getSimpleName());
+		MethodConstant c = new MethodConstant(PromptoPeriod.class, "minus",
+				PromptoPeriod.class, PromptoPeriod.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
+		return new ResultInfo(PromptoPeriod.class);
+	}
+
+	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		exp.compile(context, method, flags);
+		IOperand oper = new MethodConstant(
+				PromptoPeriod.class, 
+				"equals",
+				Object.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		if(flags.isReverse())
+			CompilerUtils.reverseBoolean(method);
+		if(flags.toPrimitive())
+			return new ResultInfo(boolean.class);
+		else
+			return CompilerUtils.booleanToBoolean(method);
+	}
+
+	public static ResultInfo compileNegate(Context context, MethodInfo method, Flags flags,
+			ResultInfo value) {
+		MethodConstant oper = new MethodConstant(PromptoPeriod.class, "negate",
+				PromptoPeriod.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return new ResultInfo(PromptoPeriod.class);
 	}
 }

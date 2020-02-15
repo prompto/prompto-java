@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.TreeSet;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("serial")
 public class PromptoSet<V> extends HashSet<V> implements Filterable<PromptoSet<V>, V> {
@@ -83,4 +84,11 @@ public class PromptoSet<V> extends HashSet<V> implements Filterable<PromptoSet<V
 		});
 		return filtered;
 	}
+	
+	public String join(String delimiter) {
+		return this.stream()
+			.map(Object::toString)
+			.collect(Collectors.joining(delimiter));
+	}
+
 }

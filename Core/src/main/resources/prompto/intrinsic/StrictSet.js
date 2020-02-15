@@ -14,6 +14,11 @@ StrictSet.prototype.toString = function() {
 };
 
 
+StrictSet.prototype.join = function(separator) {
+    return Array.from(this.set.values()).join(separator);
+};
+
+
 StrictSet.prototype.getText = StrictSet.prototype.toString;
 
 

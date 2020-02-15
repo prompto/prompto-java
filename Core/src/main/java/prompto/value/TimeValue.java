@@ -5,19 +5,10 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.function.Function;
 
-import prompto.compiler.CompilerUtils;
-import prompto.compiler.Flags;
-import prompto.compiler.IOperand;
-import prompto.compiler.MethodConstant;
-import prompto.compiler.MethodInfo;
-import prompto.compiler.Opcode;
-import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
-import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
-import prompto.intrinsic.PromptoPeriod;
 import prompto.intrinsic.PromptoTime;
 import prompto.runtime.Context;
 import prompto.type.TimeType;
@@ -57,16 +48,6 @@ public class TimeValue extends BaseValue implements Comparable<TimeValue> {
 			throw new SyntaxError("Illegal: Time + " + value.getClass().getSimpleName());
 	}
 
-	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) {
-		ResultInfo right = exp.compile(context, method, flags);
-		if(right.getType()!=PromptoPeriod.class)
-			throw new SyntaxError("Illegal: Date + " + exp.getClass().getSimpleName());
-		MethodConstant oper = new MethodConstant(PromptoTime.class, "plus", PromptoPeriod.class, PromptoTime.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(PromptoTime.class);
-	}
-	
 	@Override
 	public IValue minus(Context context, IValue value) throws PromptoError {
 		if (value instanceof TimeValue)
@@ -77,23 +58,6 @@ public class TimeValue extends BaseValue implements Comparable<TimeValue> {
 			throw new SyntaxError("Illegal: Time - " + value.getClass().getSimpleName());
 	}
 
-	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) {
-		ResultInfo right = exp.compile(context, method, flags);
-		if(right.getType()==PromptoTime.class) {
-			MethodConstant oper = new MethodConstant(PromptoTime.class, "minus", 
-					PromptoTime.class, PromptoPeriod.class);
-			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-			return new ResultInfo(PromptoPeriod.class);
-		} else if(right.getType()==PromptoPeriod.class) {
-			MethodConstant oper = new MethodConstant(PromptoTime.class, "minus", PromptoPeriod.class, PromptoTime.class);
-			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-			return new ResultInfo(PromptoTime.class);
-			
-		} else
-			throw new SyntaxError("Illegal: Date + " + exp.getClass().getSimpleName());
-	}
-
 	@Override
 	public int compareTo(Context context, IValue value) {
 		if (value instanceof TimeValue)
@@ -102,16 +66,6 @@ public class TimeValue extends BaseValue implements Comparable<TimeValue> {
 			throw new SyntaxError("Illegal comparison: Time + " + value.getClass().getSimpleName());
 	}
 	
-	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) {
-		exp.compile(context, method, flags);
-		IOperand oper = new MethodConstant(PromptoTime.class, 
-				"compareTo", PromptoTime.class, int.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return BaseValue.compileCompareToEpilogue(method, flags);
-	}
-
-
 	@Override
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
@@ -149,22 +103,6 @@ public class TimeValue extends BaseValue implements Comparable<TimeValue> {
 			return value.equals(obj);
 	}
 
-	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) {
-		exp.compile(context, method, flags);
-		IOperand oper = new MethodConstant(
-				PromptoTime.class, 
-				"equals",
-				Object.class, boolean.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		if(flags.isReverse()) 
-			CompilerUtils.reverseBoolean(method);
-		if(flags.toPrimitive())
-			return new ResultInfo(boolean.class);
-		else
-			return CompilerUtils.booleanToBoolean(method);
-	}
-	
 	@Override
 	public int hashCode() {
 		return value.hashCode();

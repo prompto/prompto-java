@@ -24,8 +24,8 @@ public class ArgumentList extends LinkedList<Argument> {
 		
 	}
 	
-	public ArgumentList(Collection<Argument> assignments) {
-		super(assignments);
+	public ArgumentList(Collection<Argument> arguments) {
+		super(arguments);
 	}
 
 	/* post-fix expression priority for final argument in E dialect */

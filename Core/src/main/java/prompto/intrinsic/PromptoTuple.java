@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("serial")
 public class PromptoTuple<V> extends ArrayList<V> {
@@ -97,6 +98,12 @@ public class PromptoTuple<V> extends ArrayList<V> {
 		if(!mutable)
 			PromptoException.throwEnumeratedException("NOT_MUTABLE");
 		return super.set(index, element);
+	}
+
+	public String join(String delimiter) {
+		return this.stream()
+			.map(Object::toString)
+			.collect(Collectors.joining(delimiter));
 	}
 
 }

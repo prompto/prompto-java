@@ -5,20 +5,11 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.function.Function;
 
-import prompto.compiler.CompilerUtils;
-import prompto.compiler.Flags;
-import prompto.compiler.IOperand;
-import prompto.compiler.MethodConstant;
-import prompto.compiler.MethodInfo;
-import prompto.compiler.Opcode;
-import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
-import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDateTime;
-import prompto.intrinsic.PromptoPeriod;
 import prompto.runtime.Context;
 import prompto.type.DateTimeType;
 
@@ -64,17 +55,6 @@ public class DateTimeValue extends BaseValue implements Comparable<DateTimeValue
 			throw new SyntaxError("Illegal: DateTime + " + value.getClass().getSimpleName());
 	}
 	
-	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression value) {
-		ResultInfo right = value.compile(context, method, flags);
-		if(right.getType()!=PromptoPeriod.class)
-			throw new SyntaxError("Illegal: DateTime + " + value.getClass().getSimpleName());
-		MethodConstant c = new MethodConstant(PromptoDateTime.class, "plus", 
-				PromptoPeriod.class, PromptoDateTime.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
-		return new ResultInfo(PromptoDateTime.class);
-	}
-
 	@Override
 	public IValue minus(Context context, IValue value) throws PromptoError {
 		if (value instanceof DateTimeValue)
@@ -82,23 +62,6 @@ public class DateTimeValue extends BaseValue implements Comparable<DateTimeValue
 		else if (value instanceof PeriodValue)
 			return new DateTimeValue(this.value.minus(((PeriodValue)value).value));
 		else
-			throw new SyntaxError("Illegal: DateTime - " + value.getClass().getSimpleName());
-	}
-
-	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression value) {
-		ResultInfo right = value.compile(context, method, flags);
-		if(right.getType()==PromptoDateTime.class) {
-			MethodConstant c = new MethodConstant(PromptoDateTime.class, "minus", 
-					PromptoDateTime.class, PromptoPeriod.class);
-			method.addInstruction(Opcode.INVOKEVIRTUAL, c);
-			return new ResultInfo(PromptoPeriod.class);
-		} else if(right.getType()==PromptoPeriod.class) {
-			MethodConstant c = new MethodConstant(PromptoDateTime.class, "minus", 
-					PromptoPeriod.class, PromptoDateTime.class);
-			method.addInstruction(Opcode.INVOKEVIRTUAL, c);
-			return new ResultInfo(PromptoDateTime.class);
-		} else
 			throw new SyntaxError("Illegal: DateTime - " + value.getClass().getSimpleName());
 	}
 
@@ -111,16 +74,6 @@ public class DateTimeValue extends BaseValue implements Comparable<DateTimeValue
 
 	}
 	
-	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) {
-		exp.compile(context, method, flags);
-		IOperand oper = new MethodConstant(PromptoDateTime.class, 
-				"compareTo", PromptoDateTime.class, int.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return BaseValue.compileCompareToEpilogue(method, flags);
-	}
-
-
 	@Override
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
@@ -170,23 +123,6 @@ public class DateTimeValue extends BaseValue implements Comparable<DateTimeValue
 			return value.equals(obj);
 	}
 	
-	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) {
-		exp.compile(context, method, flags);
-		IOperand oper = new MethodConstant(
-				PromptoDateTime.class, 
-				"equals",
-				Object.class, boolean.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		if(flags.isReverse())
-			CompilerUtils.reverseBoolean(method);
-		if(flags.toPrimitive())
-			return new ResultInfo(boolean.class);
-		else
-			return CompilerUtils.booleanToBoolean(method);
-	}
-
-
 	@Override
 	public int hashCode() {
 		return value.hashCode();

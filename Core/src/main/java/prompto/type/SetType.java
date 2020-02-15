@@ -1,13 +1,28 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.declaration.IMethodDeclaration;
+import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoSet;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
+import prompto.value.IValue;
+import prompto.value.SetValue;
 
 
 public class SetType extends ContainerType {
@@ -79,6 +94,16 @@ public class SetType extends ContainerType {
 	}
 	
 	
+	@Override
+	public Set<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
+		switch(id.toString()) {
+		case "join":
+			return new HashSet<>(Collections.singletonList(JOIN_METHOD));
+		default:
+			return super.getMemberMethods(context, id);
+		}
+	}
+
 	@Override
 	public String getTranspiledName(Context context) {
 		return itemType.getTranspiledName(context) + "_set";
@@ -191,4 +216,89 @@ public class SetType extends ContainerType {
 	    item.transpile(transpiler);
 	    transpiler.append("-1)");
 	}
+	
+	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
+		right = CompilerUtils.numberToint(method, right);
+		// minus 1
+		method.addInstruction(Opcode.ICONST_M1);
+		method.addInstruction(Opcode.IADD);
+		// create result
+		IOperand oper = new MethodConstant(PromptoSet.class, "get", 
+				int.class, Object.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return new ResultInfo(Object.class);
+	}
+
+	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		exp.compile(context, method, flags);
+		IOperand oper = new MethodConstant(
+				PromptoSet.class, 
+				"equals",
+				Object.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		if(flags.isReverse())
+			CompilerUtils.reverseBoolean(method);
+		if(flags.toPrimitive())
+			return new ResultInfo(boolean.class);
+		else
+			return CompilerUtils.booleanToBoolean(method);
+	}
+
+	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		// TODO: return left if right is empty (or right if left is empty and is a set)
+		// create result
+		ResultInfo info = CompilerUtils.compileNewInstance(method, PromptoSet.class); 
+		// add left, current stack is: left, result, we need: result, result, left
+		method.addInstruction(Opcode.DUP_X1); // stack is: result, left, result
+		method.addInstruction(Opcode.SWAP); // stack is: result, result, left
+		IOperand oper = new MethodConstant(PromptoSet.class, "addAll", 
+				Collection.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		method.addInstruction(Opcode.POP); // consume returned boolean
+		// add right, current stack is: result, we need: result, result, right
+		method.addInstruction(Opcode.DUP); // stack is: result, result 
+		exp.compile(context, method, flags); // stack is: result, result, right
+		oper = new MethodConstant(PromptoSet.class, "addAll", 
+				Collection.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		method.addInstruction(Opcode.POP); // consume returned boolean
+		return info;
+	}
+
+	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		// TODO: return left if right is empty (or right if left is empty and is a set)
+		// create result
+		ResultInfo info = CompilerUtils.compileNewInstance(method, PromptoSet.class); 
+		// add left, current stack is: left, result, we need: result, result, left
+		method.addInstruction(Opcode.DUP_X1); // stack is: result, left, result
+		method.addInstruction(Opcode.SWAP); // stack is: result, result, left
+		IOperand oper = new MethodConstant(PromptoSet.class, "addAll", 
+				Collection.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		method.addInstruction(Opcode.POP); // consume returned boolean
+		// add right, current stack is: result, we need: result, result, right
+		method.addInstruction(Opcode.DUP); // stack is: result, result 
+		exp.compile(context, method, flags); // stack is: result, result, right
+		oper = new MethodConstant(PromptoSet.class, "removeAll", 
+				Collection.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		method.addInstruction(Opcode.POP); // consume returned boolean
+		return info;
+	}
+
+	static final IMethodDeclaration JOIN_METHOD = new JoinMethod() {
+		
+		@Override
+		protected Collection<IValue> getItems(Context context) {
+			SetValue set = (SetValue)getValue(context);
+			return set.getItems();
+		}
+
+	};
+
 }

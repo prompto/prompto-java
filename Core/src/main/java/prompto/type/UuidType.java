@@ -4,6 +4,14 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.UUID;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.expression.IExpression;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
@@ -56,5 +64,21 @@ public class UuidType extends NativeType {
 	@Override
 	public void transpileCode(Transpiler transpiler) {
 		transpiler.append(".toString()");
+	}
+
+	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		exp.compile(context, method, flags);
+		IOperand oper = new MethodConstant(
+				UUID.class, 
+				"equals",
+				Object.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		if(flags.isReverse())
+			CompilerUtils.reverseBoolean(method);
+		if(flags.toPrimitive())
+			return new ResultInfo(boolean.class);
+		else
+			return CompilerUtils.booleanToBoolean(method);
 	}
 }

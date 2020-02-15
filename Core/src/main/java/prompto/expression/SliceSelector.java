@@ -16,13 +16,13 @@ import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.IntegerType;
+import prompto.type.ListType;
+import prompto.type.RangeType;
+import prompto.type.TextType;
 import prompto.utils.CodeWriter;
 import prompto.value.ISliceable;
 import prompto.value.IValue;
 import prompto.value.IntegerValue;
-import prompto.value.ListValue;
-import prompto.value.RangeBase;
-import prompto.value.TextValue;
 
 public class SliceSelector extends SelectorExpression {
 
@@ -96,13 +96,13 @@ public class SliceSelector extends SelectorExpression {
 	
 	private static Map<Class<?>, ISlicerFunction> createSlicers() {
 		Map<Class<?>, ISlicerFunction> map = new HashMap<>(); 
-		map.put(String.class, TextValue::compileSlice); 
-		map.put(PromptoRange.Character.class, RangeBase::compileSlice);
-		map.put(PromptoRange.Date.class, RangeBase::compileSlice);
-		map.put(PromptoRange.Time.class, RangeBase::compileSlice);
-		map.put(PromptoRange.Long.class, RangeBase::compileSlice);
+		map.put(String.class, TextType::compileSlice); 
+		map.put(PromptoRange.Character.class, RangeType::compileSlice);
+		map.put(PromptoRange.Date.class, RangeType::compileSlice);
+		map.put(PromptoRange.Time.class, RangeType::compileSlice);
+		map.put(PromptoRange.Long.class, RangeType::compileSlice);
 		/*map.put(PromptoTuple.class, RangeBase::compileSlice)*/;
-		map.put(PromptoList.class, ListValue::compileSlice);
+		map.put(PromptoList.class, ListType::compileSlice);
 		return map;
 	}
 

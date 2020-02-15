@@ -20,21 +20,21 @@ import prompto.intrinsic.PromptoTime;
 import prompto.intrinsic.PromptoTuple;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
+import prompto.type.CharacterType;
+import prompto.type.DateTimeType;
+import prompto.type.DateType;
+import prompto.type.DecimalType;
+import prompto.type.DictType;
 import prompto.type.IType;
+import prompto.type.IntegerType;
+import prompto.type.ListType;
+import prompto.type.PeriodType;
+import prompto.type.SetType;
+import prompto.type.TextType;
+import prompto.type.TimeType;
+import prompto.type.TupleType;
 import prompto.utils.CodeWriter;
-import prompto.value.CharacterValue;
-import prompto.value.DateValue;
-import prompto.value.DateTimeValue;
-import prompto.value.DecimalValue;
-import prompto.value.DictionaryValue;
 import prompto.value.IValue;
-import prompto.value.IntegerValue;
-import prompto.value.ListValue;
-import prompto.value.PeriodValue;
-import prompto.value.SetValue;
-import prompto.value.TextValue;
-import prompto.value.TimeValue;
-import prompto.value.TupleValue;
 
 public class PlusExpression implements IExpression {
 
@@ -76,20 +76,20 @@ public class PlusExpression implements IExpression {
 	
 	private static Map<Class<?>, IOperatorFunction> createAdders() {
 		Map<Class<?>, IOperatorFunction> map = new HashMap<>();
-		map.put(String.class, TextValue::compilePlus);
-		map.put(java.lang.Character.class, CharacterValue::compilePlus);
-		map.put(double.class, DecimalValue::compilePlus);
-		map.put(Double.class, DecimalValue::compilePlus);
-		map.put(long.class, IntegerValue::compilePlus);
-		map.put(Long.class, IntegerValue::compilePlus);
-		map.put(PromptoDate.class, DateValue::compilePlus);
-		map.put(PromptoDateTime.class, DateTimeValue::compilePlus);
-		map.put(PromptoTime.class, TimeValue::compilePlus);
-		map.put(PromptoPeriod.class, PeriodValue::compilePlus);
-		map.put(PromptoDict.class, DictionaryValue::compilePlus);
-		map.put(PromptoSet.class, SetValue::compilePlus);
-		map.put(PromptoTuple.class, TupleValue::compilePlus);
-		map.put(PromptoList.class, ListValue::compilePlus);
+		map.put(String.class, TextType::compilePlus);
+		map.put(java.lang.Character.class, CharacterType::compilePlus);
+		map.put(double.class, DecimalType::compilePlus);
+		map.put(Double.class, DecimalType::compilePlus);
+		map.put(long.class, IntegerType::compilePlus);
+		map.put(Long.class, IntegerType::compilePlus);
+		map.put(PromptoDate.class, DateType::compilePlus);
+		map.put(PromptoDateTime.class, DateTimeType::compilePlus);
+		map.put(PromptoTime.class, TimeType::compilePlus);
+		map.put(PromptoPeriod.class, PeriodType::compilePlus);
+		map.put(PromptoDict.class, DictType::compilePlus);
+		map.put(PromptoSet.class, SetType::compilePlus);
+		map.put(PromptoTuple.class, TupleType::compilePlus);
+		map.put(PromptoList.class, ListType::compilePlus);
 		return map;
 	}
 

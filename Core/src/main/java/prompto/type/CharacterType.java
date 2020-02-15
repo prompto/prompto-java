@@ -5,9 +5,18 @@ import java.security.InvalidParameterException;
 import java.util.Comparator;
 import java.util.Map;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.compiler.ShortOperand;
+import prompto.compiler.StackState;
 import prompto.expression.IExpression;
 import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoChar;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
@@ -199,5 +208,86 @@ public class CharacterType extends NativeType {
 	    left.transpile(transpiler);
 	    transpiler.append(" ").append(operator.toString()).append(" ");
 	    right.transpile(transpiler);
+	}
+
+	public static Opcode[] CMP_OPCODES = createOpcodes();
+
+	public static Opcode[] createOpcodes() {
+		Opcode[] opcodes = new Opcode[CmpOp.values().length];
+		opcodes[CmpOp.LT.ordinal()] = Opcode.IF_ICMPLT;
+		opcodes[CmpOp.LTE.ordinal()] = Opcode.IF_ICMPLE;
+		opcodes[CmpOp.GT.ordinal()] = Opcode.IF_ICMPGT;
+		opcodes[CmpOp.GTE.ordinal()] = Opcode.IF_ICMPGE;
+		return opcodes;
+	}
+
+	public static ResultInfo compileMultiply(Context context, MethodInfo method, Flags flags, ResultInfo left, IExpression exp) {
+		CompilerUtils.CharacterTochar(method);
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
+		if(Long.class==right.getType())
+			CompilerUtils.LongToint(method);
+		else if(long.class==right.getType())
+			CompilerUtils.longToint(method);
+		MethodConstant oper = new MethodConstant(PromptoChar.class, 
+				"multiply", 
+				char.class, int.class, String.class);
+		method.addInstruction(Opcode.INVOKESTATIC, oper);
+		return new ResultInfo(String.class);
+	}
+
+	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression right) {
+		// convert to String
+		MethodConstant c = new MethodConstant(java.lang.Character.class, 
+									"toString", 
+									String.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
+		// use Text::compileAdd
+		return TextType.compilePlus(context, method, flags, left, right);
+	}
+
+	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, ResultInfo left, IExpression exp) {
+		if(java.lang.Character.class==left.getType())
+			CompilerUtils.CharacterTochar(method);
+		ResultInfo right = exp.compile(context, method, flags);
+		if(java.lang.Character.class==right.getType())
+			CompilerUtils.CharacterTochar(method);
+		Opcode opcode = flags.isReverse() ? Opcode.IF_ICMPNE : Opcode.IF_ICMPEQ;
+		method.addInstruction(opcode, new ShortOperand((short)7));
+		StackState branchState = method.captureStackState();
+		method.addInstruction(Opcode.ICONST_0);
+		method.addInstruction(Opcode.GOTO, new ShortOperand((short)4));
+		method.restoreFullStackState(branchState);
+		method.placeLabel(branchState);
+		method.addInstruction(Opcode.ICONST_1);
+		StackState lastState = method.captureStackState();
+		method.placeLabel(lastState);
+		if(flags.toPrimitive())
+			return new ResultInfo(boolean.class);
+		else
+			return CompilerUtils.booleanToBoolean(method);
+	}
+
+	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		if(java.lang.Character.class==left.getType())
+			CompilerUtils.CharacterTochar(method);
+		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
+		if(java.lang.Character.class==right.getType())
+			CompilerUtils.CharacterTochar(method);
+		Opcode opcode = CMP_OPCODES[flags.cmpOp().ordinal()];
+		method.addInstruction(opcode, new ShortOperand((short)7));
+		StackState branchState = method.captureStackState();
+		method.addInstruction(Opcode.ICONST_0);
+		method.addInstruction(Opcode.GOTO, new ShortOperand((short)4));
+		method.restoreFullStackState(branchState);
+		method.placeLabel(branchState);
+		method.addInstruction(Opcode.ICONST_1);
+		StackState lastState = method.captureStackState();
+		method.placeLabel(lastState);
+		if(flags.toPrimitive())
+			return new ResultInfo(boolean.class);
+		else
+			return CompilerUtils.booleanToBoolean(method);
 	}
 }

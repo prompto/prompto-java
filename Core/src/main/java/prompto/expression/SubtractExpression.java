@@ -18,17 +18,17 @@ import prompto.intrinsic.PromptoSet;
 import prompto.intrinsic.PromptoTime;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
+import prompto.type.DateTimeType;
+import prompto.type.DateType;
+import prompto.type.DecimalType;
 import prompto.type.IType;
+import prompto.type.IntegerType;
+import prompto.type.ListType;
+import prompto.type.PeriodType;
+import prompto.type.SetType;
+import prompto.type.TimeType;
 import prompto.utils.CodeWriter;
-import prompto.value.DateValue;
-import prompto.value.DateTimeValue;
-import prompto.value.DecimalValue;
 import prompto.value.IValue;
-import prompto.value.IntegerValue;
-import prompto.value.ListValue;
-import prompto.value.PeriodValue;
-import prompto.value.SetValue;
-import prompto.value.TimeValue;
 
 public class SubtractExpression implements IExpression {
 
@@ -65,16 +65,16 @@ public class SubtractExpression implements IExpression {
 	
 	private static Map<Class<?>, IOperatorFunction> createMinusers() {
 		Map<Class<?>, IOperatorFunction> map = new HashMap<>();
-		map.put(double.class, DecimalValue::compileMinus);
-		map.put(Double.class, DecimalValue::compileMinus);
-		map.put(long.class, IntegerValue::compileMinus);
-		map.put(Long.class, IntegerValue::compileMinus);
-		map.put(PromptoDate.class, DateValue::compileMinus);
-		map.put(PromptoDateTime.class, DateTimeValue::compileMinus); 
-		map.put(PromptoTime.class, TimeValue::compileMinus);
-		map.put(PromptoPeriod.class, PeriodValue::compileMinus);
-		map.put(PromptoList.class, ListValue::compileMinus);
-		map.put(PromptoSet.class, SetValue::compileMinus);
+		map.put(double.class, DecimalType::compileMinus);
+		map.put(Double.class, DecimalType::compileMinus);
+		map.put(long.class, IntegerType::compileMinus);
+		map.put(Long.class, IntegerType::compileMinus);
+		map.put(PromptoDate.class, DateType::compileMinus);
+		map.put(PromptoDateTime.class, DateTimeType::compileMinus); 
+		map.put(PromptoTime.class, TimeType::compileMinus);
+		map.put(PromptoPeriod.class, PeriodType::compileMinus);
+		map.put(PromptoList.class, ListType::compileMinus);
+		map.put(PromptoSet.class, SetType::compileMinus);
 		return map;
 	}
 

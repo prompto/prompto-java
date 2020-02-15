@@ -275,6 +275,21 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedListJoin() throws Exception {
+		checkInterpretedOutput("builtins/listJoin.poc");
+	}
+
+	@Test
+	public void testCompiledListJoin() throws Exception {
+		checkCompiledOutput("builtins/listJoin.poc");
+	}
+
+	@Test
+	public void testTranspiledListJoin() throws Exception {
+		checkTranspiledOutput("builtins/listJoin.poc");
+	}
+
+	@Test
 	public void testInterpretedSetCount() throws Exception {
 		checkInterpretedOutput("builtins/setCount.poc");
 	}
@@ -287,6 +302,21 @@ public class TestBuiltins extends BaseOParserTest {
 	@Test
 	public void testTranspiledSetCount() throws Exception {
 		checkTranspiledOutput("builtins/setCount.poc");
+	}
+
+	@Test
+	public void testInterpretedSetJoin() throws Exception {
+		checkInterpretedOutput("builtins/setJoin.poc");
+	}
+
+	@Test
+	public void testCompiledSetJoin() throws Exception {
+		checkCompiledOutput("builtins/setJoin.poc");
+	}
+
+	@Test
+	public void testTranspiledSetJoin() throws Exception {
+		checkTranspiledOutput("builtins/setJoin.poc");
 	}
 
 	@Test
@@ -482,6 +512,21 @@ public class TestBuiltins extends BaseOParserTest {
 	@Test
 	public void testTranspiledTupleCount() throws Exception {
 		checkTranspiledOutput("builtins/tupleCount.poc");
+	}
+
+	@Test
+	public void testInterpretedTupleJoin() throws Exception {
+		checkInterpretedOutput("builtins/tupleJoin.poc");
+	}
+
+	@Test
+	public void testCompiledTupleJoin() throws Exception {
+		checkCompiledOutput("builtins/tupleJoin.poc");
+	}
+
+	@Test
+	public void testTranspiledTupleJoin() throws Exception {
+		checkTranspiledOutput("builtins/tupleJoin.poc");
 	}
 
 }

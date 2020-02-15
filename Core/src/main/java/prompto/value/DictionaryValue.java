@@ -14,17 +14,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import prompto.compiler.CompilerUtils;
-import prompto.compiler.Flags;
-import prompto.compiler.IOperand;
-import prompto.compiler.MethodConstant;
-import prompto.compiler.MethodInfo;
-import prompto.compiler.Opcode;
-import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
-import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.IterableWithCounts;
 import prompto.intrinsic.PromptoDict;
@@ -81,34 +73,6 @@ public class DictionaryValue extends BaseValue implements IContainer<IValue> {
 					+ value.getClass().getSimpleName());
 	}
 	
-	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) {
-		// TODO: return right if left is empty (or left if right is empty)
-		// create result (temporarily mutable)
-		ResultInfo info = CompilerUtils.compileNewRawInstance(method, PromptoDict.class);
-		method.addInstruction(Opcode.DUP);
-		method.addInstruction(Opcode.ICONST_1);
-		CompilerUtils.compileCallConstructor(method, PromptoDict.class, boolean.class);
-		// add left, current stack is: left, result, we need: result, result, left
-		method.addInstruction(Opcode.DUP_X1); // stack is: result, left, result
-		method.addInstruction(Opcode.SWAP); // stack is: result, result, left
-		IOperand oper = new MethodConstant(PromptoDict.class, "putAll", 
-				Map.class, void.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		// add right, current stack is: result, we need: result, result, right
-		method.addInstruction(Opcode.DUP); // stack is: result, result 
-		exp.compile(context, method, flags); // stack is: result, result, right
-		oper = new MethodConstant(PromptoDict.class, "putAll", 
-				Map.class, void.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		// set immutable
-		method.addInstruction(Opcode.DUP);
-		method.addInstruction(Opcode.ICONST_0);
-		MethodConstant m = new MethodConstant(PromptoDict.class, "setMutable", boolean.class, void.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
-		return info;
-	}
-
 	@Override
 	public boolean hasItem(Context context, IValue value) {
 		if (value instanceof TextValue)
@@ -162,15 +126,6 @@ public class DictionaryValue extends BaseValue implements IContainer<IValue> {
 	}
 
 
-	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) {
-		exp.compile(context, method, flags.withPrimitive(true));
-		IOperand oper = new MethodConstant(PromptoDict.class, "get", 
-				Object.class, Object.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(Object.class);
-	}
-	
 	@Override
 	public Object convertTo(Context context, Type type) {
 		Type itemType = Object.class;
@@ -193,22 +148,6 @@ public class DictionaryValue extends BaseValue implements IContainer<IValue> {
 		return dict.equals(((DictionaryValue) obj).dict);
 	}
 
-	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) {
-		exp.compile(context, method, flags);
-		IOperand oper = new MethodConstant(
-				PromptoDict.class, 
-				"equals",
-				Object.class, boolean.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		if(flags.isReverse())
-			CompilerUtils.reverseBoolean(method);
-		if(flags.toPrimitive())
-			return new ResultInfo(boolean.class);
-		else
-			return CompilerUtils.booleanToBoolean(method);
-	}
-	
 	@Override
 	public String toString() {
 		return dict.toString();

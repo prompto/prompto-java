@@ -12,18 +12,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
-import prompto.compiler.CompilerUtils;
-import prompto.compiler.Flags;
-import prompto.compiler.IOperand;
-import prompto.compiler.MethodConstant;
-import prompto.compiler.MethodInfo;
-import prompto.compiler.Opcode;
-import prompto.compiler.ResultInfo;
 import prompto.error.IndexOutOfRangeError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
-import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.IterableWithCounts;
 import prompto.intrinsic.PromptoTuple;
@@ -233,30 +225,6 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
 	}
 	
 	
-	public static ResultInfo compileSlice(Context context, MethodInfo method, Flags flags, 
-			ResultInfo parent, IExpression first, IExpression last) {
-		compileSliceFirst(context, method, flags, first);
-		compileSliceLast(context, method, flags, last);
-		MethodConstant m = new MethodConstant(PromptoTuple.class, "slice", 
-				long.class, long.class, PromptoTuple.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
-		return parent;
-	}
-
-	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) {
-		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
-		right = CompilerUtils.numberToint(method, right);
-		// minus 1
-		method.addInstruction(Opcode.ICONST_M1);
-		method.addInstruction(Opcode.IADD);
-		// create result
-		IOperand oper = new MethodConstant(PromptoTuple.class, "get", 
-				int.class, Object.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(Object.class);
-	}
-
 	@Override
 	public int compareTo(Context context, IValue value) throws PromptoError {
 		if(!(value instanceof TupleValue))
@@ -292,30 +260,5 @@ public class TupleValue extends BaseValue implements IContainer<IValue>, ISlicea
 			return descending ? 1 : -1;
 		else
 			return 0;
-	}
-
-	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) {
-		// TODO: return left if right is empty (or right if left is empty and is a list)
-		// create result
-		ResultInfo info = CompilerUtils.compileNewRawInstance(method, PromptoTuple.class);
-		method.addInstruction(Opcode.DUP);
-		method.addInstruction(Opcode.ICONST_0); // not mutable
-		CompilerUtils.compileCallConstructor(method, PromptoTuple.class, boolean.class);
-		// add left, current stack is: left, result, we need: result, result, left
-		method.addInstruction(Opcode.DUP_X1); // stack is: result, left, result
-		method.addInstruction(Opcode.SWAP); // stack is: result, result, left
-		IOperand oper = new MethodConstant(PromptoTuple.class, "addAll", 
-				Collection.class, boolean.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		method.addInstruction(Opcode.POP); // consume returned boolean
-		// add right, current stack is: result, we need: result, result, right
-		method.addInstruction(Opcode.DUP); // stack is: result, result 
-		exp.compile(context, method, flags); // stack is: result, result, right
-		oper = new MethodConstant(PromptoTuple.class, "addAll", 
-				Collection.class, boolean.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		method.addInstruction(Opcode.POP); // consume returned boolean
-		return info;
 	}
 }

@@ -2,23 +2,14 @@ package prompto.value;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.UUID;
 import java.util.function.Function;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
-import prompto.compiler.CompilerUtils;
-import prompto.compiler.Flags;
-import prompto.compiler.IOperand;
-import prompto.compiler.MethodConstant;
-import prompto.compiler.MethodInfo;
-import prompto.compiler.Opcode;
-import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
-import prompto.expression.IExpression;
 import prompto.runtime.Context;
 import prompto.type.UuidType;
 
@@ -53,23 +44,6 @@ public class UuidValue extends BaseValue {
 			return value.equals(obj);
 	}
 
-	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) {
-		exp.compile(context, method, flags);
-		IOperand oper = new MethodConstant(
-				UUID.class, 
-				"equals",
-				Object.class, boolean.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		if(flags.isReverse())
-			CompilerUtils.reverseBoolean(method);
-		if(flags.toPrimitive())
-			return new ResultInfo(boolean.class);
-		else
-			return CompilerUtils.booleanToBoolean(method);
-	}
-
-	
 	@Override
 	public String toString() {
 		return value.toString();

@@ -4,9 +4,18 @@ import java.lang.reflect.Type;
 import java.util.Comparator;
 import java.util.Map;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoPeriod;
 import prompto.intrinsic.PromptoTime;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
@@ -266,5 +275,57 @@ public class TimeType extends NativeType {
 	@Override
 	public void transpileCode(Transpiler transpiler) {
 		transpiler.append(".toString()");
+	}
+
+	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		ResultInfo right = exp.compile(context, method, flags);
+		if(right.getType()!=PromptoPeriod.class)
+			throw new SyntaxError("Illegal: Date + " + exp.getClass().getSimpleName());
+		MethodConstant oper = new MethodConstant(PromptoTime.class, "plus", PromptoPeriod.class, PromptoTime.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return new ResultInfo(PromptoTime.class);
+	}
+
+	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		ResultInfo right = exp.compile(context, method, flags);
+		if(right.getType()==PromptoTime.class) {
+			MethodConstant oper = new MethodConstant(PromptoTime.class, "minus", 
+					PromptoTime.class, PromptoPeriod.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+			return new ResultInfo(PromptoPeriod.class);
+		} else if(right.getType()==PromptoPeriod.class) {
+			MethodConstant oper = new MethodConstant(PromptoTime.class, "minus", PromptoPeriod.class, PromptoTime.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+			return new ResultInfo(PromptoTime.class);
+			
+		} else
+			throw new SyntaxError("Illegal: Date + " + exp.getClass().getSimpleName());
+	}
+
+	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		exp.compile(context, method, flags);
+		IOperand oper = new MethodConstant(PromptoTime.class, 
+				"compareTo", PromptoTime.class, int.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return BaseType.compileCompareToEpilogue(method, flags);
+	}
+
+	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		exp.compile(context, method, flags);
+		IOperand oper = new MethodConstant(
+				PromptoTime.class, 
+				"equals",
+				Object.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		if(flags.isReverse()) 
+			CompilerUtils.reverseBoolean(method);
+		if(flags.toPrimitive())
+			return new ResultInfo(boolean.class);
+		else
+			return CompilerUtils.booleanToBoolean(method);
 	}
 }

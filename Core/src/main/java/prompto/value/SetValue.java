@@ -12,18 +12,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
-import prompto.compiler.CompilerUtils;
-import prompto.compiler.Flags;
-import prompto.compiler.IOperand;
-import prompto.compiler.MethodConstant;
-import prompto.compiler.MethodInfo;
-import prompto.compiler.Opcode;
-import prompto.compiler.ResultInfo;
 import prompto.error.IndexOutOfRangeError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
-import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.Filterable;
 import prompto.intrinsic.IterableWithCounts;
@@ -84,20 +76,6 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IFilterab
 			throw new SyntaxError("No such item:" + index.toString());
 	}
 	
-	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) {
-		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
-		right = CompilerUtils.numberToint(method, right);
-		// minus 1
-		method.addInstruction(Opcode.ICONST_M1);
-		method.addInstruction(Opcode.IADD);
-		// create result
-		IOperand oper = new MethodConstant(PromptoSet.class, "get", 
-				int.class, Object.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(Object.class);
-	}
-
 	private IValue getNthItem(int idx) throws PromptoError {
 		Iterator<? extends IValue> it = items.iterator();
 		while(it.hasNext()) {
@@ -144,22 +122,6 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IFilterab
 		return items.equals(((SetValue)obj).items);
 	}
 
-	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) {
-		exp.compile(context, method, flags);
-		IOperand oper = new MethodConstant(
-				PromptoSet.class, 
-				"equals",
-				Object.class, boolean.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		if(flags.isReverse())
-			CompilerUtils.reverseBoolean(method);
-		if(flags.toPrimitive())
-			return new ResultInfo(boolean.class);
-		else
-			return CompilerUtils.booleanToBoolean(method);
-	}
-	
 	@Override
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) {
 		String name = id.toString();
@@ -206,51 +168,6 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IFilterab
 		return new SetValue(itemType, result);
 	}
 
-	
-	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) {
-		// TODO: return left if right is empty (or right if left is empty and is a set)
-		// create result
-		ResultInfo info = CompilerUtils.compileNewInstance(method, PromptoSet.class); 
-		// add left, current stack is: left, result, we need: result, result, left
-		method.addInstruction(Opcode.DUP_X1); // stack is: result, left, result
-		method.addInstruction(Opcode.SWAP); // stack is: result, result, left
-		IOperand oper = new MethodConstant(PromptoSet.class, "addAll", 
-				Collection.class, boolean.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		method.addInstruction(Opcode.POP); // consume returned boolean
-		// add right, current stack is: result, we need: result, result, right
-		method.addInstruction(Opcode.DUP); // stack is: result, result 
-		exp.compile(context, method, flags); // stack is: result, result, right
-		oper = new MethodConstant(PromptoSet.class, "addAll", 
-				Collection.class, boolean.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		method.addInstruction(Opcode.POP); // consume returned boolean
-		return info;
-	}
-	
-
-	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) {
-		// TODO: return left if right is empty (or right if left is empty and is a set)
-		// create result
-		ResultInfo info = CompilerUtils.compileNewInstance(method, PromptoSet.class); 
-		// add left, current stack is: left, result, we need: result, result, left
-		method.addInstruction(Opcode.DUP_X1); // stack is: result, left, result
-		method.addInstruction(Opcode.SWAP); // stack is: result, result, left
-		IOperand oper = new MethodConstant(PromptoSet.class, "addAll", 
-				Collection.class, boolean.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		method.addInstruction(Opcode.POP); // consume returned boolean
-		// add right, current stack is: result, we need: result, result, right
-		method.addInstruction(Opcode.DUP); // stack is: result, result 
-		exp.compile(context, method, flags); // stack is: result, result, right
-		oper = new MethodConstant(PromptoSet.class, "removeAll", 
-				Collection.class, boolean.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		method.addInstruction(Opcode.POP); // consume returned boolean
-		return info;
-	}
 	
 	@Override
 	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {

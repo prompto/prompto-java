@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import prompto.value.IMultiplyable;
 
@@ -102,6 +103,12 @@ public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoLi
 		if(!mutable)
 			PromptoException.throwEnumeratedException("NOT_MUTABLE");
 		return super.set(index, element);
+	}
+	
+	public String join(String delimiter) {
+		return this.stream()
+			.map(Object::toString)
+			.collect(Collectors.joining(delimiter));
 	}
 		
 }

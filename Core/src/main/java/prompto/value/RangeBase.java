@@ -7,17 +7,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import prompto.compiler.CompilerUtils;
-import prompto.compiler.Flags;
-import prompto.compiler.IOperand;
-import prompto.compiler.MethodConstant;
-import prompto.compiler.MethodInfo;
-import prompto.compiler.Opcode;
-import prompto.compiler.ResultInfo;
 import prompto.error.IndexOutOfRangeError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.expression.IExpression;
 import prompto.intrinsic.IterableWithCounts;
 import prompto.intrinsic.PromptoRange;
 import prompto.runtime.Context;
@@ -62,22 +54,6 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 		return obj instanceof RangeBase && range.equals(((RangeBase<?>)obj).range);
 	}
 		
-	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) {
-		exp.compile(context, method, flags);
-		IOperand oper = new MethodConstant(
-				PromptoRange.class, 
-				"equals",
-				Object.class, boolean.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		if(flags.isReverse()) 
-			CompilerUtils.reverseBoolean(method);
-		if(flags.toPrimitive())
-			return new ResultInfo(boolean.class);
-		else
-			return CompilerUtils.booleanToBoolean(method);
-	}
-
 	@Override
 	public boolean hasItem(Context context, IValue lval) {
 		return range.contains(lval);
@@ -96,17 +72,6 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 		  			
 	}
 	
-	public static ResultInfo compileItem(Context context, MethodInfo method, Flags flags, 
-			ResultInfo left, IExpression exp) {
-		ResultInfo right = exp.compile(context, method, flags.withPrimitive(true));
-		right = CompilerUtils.numberTolong(method, right);
-		// create result
-		IOperand oper = new MethodConstant(PromptoRange.class, "getItem", 
-				long.class, Object.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(Object.class);
-	}
-
 	@Override
 	public RangeBase<T> slice(IntegerValue fi, IntegerValue li) throws PromptoError {
 		try {
@@ -117,16 +82,6 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 		} catch (IndexOutOfBoundsException e) {
 			throw new IndexOutOfRangeError();
 		}
-	}
-
-	public static ResultInfo compileSlice(Context context, MethodInfo method, Flags flags, 
-			ResultInfo parent, IExpression first, IExpression last) {
-		compileSliceFirst(context, method, flags, first);
-		compileSliceLast(context, method, flags, last);
-		MethodConstant m = new MethodConstant(parent.getType(), "slice", 
-				long.class, long.class, parent.getType());
-		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
-		return parent;
 	}
 
 	@Override

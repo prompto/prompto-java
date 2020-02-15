@@ -4,10 +4,19 @@ import java.lang.reflect.Type;
 import java.util.Comparator;
 import java.util.Map;
 
+import prompto.compiler.CompilerUtils;
+import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
+import prompto.compiler.MethodConstant;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
+import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDate;
+import prompto.intrinsic.PromptoPeriod;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
@@ -269,6 +278,58 @@ public class DateType extends NativeType {
 	@Override
 	public void transpileCode(Transpiler transpiler) {
 		transpiler.append(".toString()");
+	}
+
+	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		ResultInfo right = exp.compile(context, method, flags);
+		if(right.getType()!=PromptoPeriod.class)
+			throw new SyntaxError("Illegal: Date + " + exp.getClass().getSimpleName());
+		MethodConstant oper = new MethodConstant(PromptoDate.class, "plus", PromptoPeriod.class, PromptoDate.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return new ResultInfo(PromptoDate.class);
+	}
+
+	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		ResultInfo right = exp.compile(context, method, flags);
+		if(right.getType()==PromptoDate.class) {
+			MethodConstant oper = new MethodConstant(PromptoDate.class, "minus", 
+					PromptoDate.class, PromptoPeriod.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+			return new ResultInfo(PromptoPeriod.class);
+		} else if(right.getType()==PromptoPeriod.class) {
+			MethodConstant oper = new MethodConstant(PromptoDate.class, "minus", 
+					PromptoPeriod.class, PromptoDate.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+			return new ResultInfo(PromptoDate.class);
+		} else
+			throw new SyntaxError("Illegal: Date - " + exp.getClass().getSimpleName());
+	}
+
+	public static ResultInfo compileEquals(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		exp.compile(context, method, flags);
+		IOperand oper = new MethodConstant(
+				PromptoDate.class, 
+				"equals",
+				Object.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		if(flags.isReverse())
+			CompilerUtils.reverseBoolean(method);
+		if(flags.toPrimitive())
+			return new ResultInfo(boolean.class);
+		else
+			return CompilerUtils.booleanToBoolean(method);
+	}
+
+	public static ResultInfo compileCompareTo(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		exp.compile(context, method, flags);
+		IOperand oper = new MethodConstant(PromptoDate.class, 
+				"compareTo", PromptoDate.class, int.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return BaseType.compileCompareToEpilogue(method, flags);
 	}
 
 }

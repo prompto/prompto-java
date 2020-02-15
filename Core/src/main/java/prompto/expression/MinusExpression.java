@@ -71,11 +71,11 @@ public class MinusExpression implements IUnaryExpression {
 	
 	private static Map<Class<?>, IUnaryFunction> createNegators() {
 		Map<Class<?>, IUnaryFunction> map = new HashMap<>();
-		map.put(double.class, DecimalValue::compileNegate);
-		map.put(Double.class, DecimalValue::compileNegate);
-		map.put(long.class, IntegerValue::compileNegate);
-		map.put(Long.class, IntegerValue::compileNegate);
-		map.put(PromptoPeriod.class, PeriodValue::compileNegate);
+		map.put(double.class, DecimalType::compileNegate);
+		map.put(Double.class, DecimalType::compileNegate);
+		map.put(long.class, IntegerType::compileNegate);
+		map.put(Long.class, IntegerType::compileNegate);
+		map.put(PromptoPeriod.class, PeriodType::compileNegate);
 		return map;
 	}
 

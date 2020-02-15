@@ -53,31 +53,27 @@ import prompto.type.AnyType;
 import prompto.type.BooleanType;
 import prompto.type.CharacterType;
 import prompto.type.ContainerType;
+import prompto.type.DateTimeType;
+import prompto.type.DateType;
 import prompto.type.DecimalType;
+import prompto.type.DictType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
+import prompto.type.ListType;
 import prompto.type.NullType;
+import prompto.type.PeriodType;
+import prompto.type.RangeType;
+import prompto.type.SetType;
 import prompto.type.TextType;
+import prompto.type.TimeType;
+import prompto.type.UuidType;
+import prompto.type.VersionType;
 import prompto.utils.CodeWriter;
 import prompto.value.BooleanValue;
-import prompto.value.CharacterValue;
-import prompto.value.DateValue;
-import prompto.value.DateTimeValue;
-import prompto.value.DecimalValue;
-import prompto.value.DictionaryValue;
 import prompto.value.IInstance;
 import prompto.value.IValue;
-import prompto.value.IntegerValue;
-import prompto.value.ListValue;
 import prompto.value.NullValue;
-import prompto.value.PeriodValue;
-import prompto.value.RangeBase;
-import prompto.value.SetValue;
-import prompto.value.TextValue;
-import prompto.value.TimeValue;
 import prompto.value.TypeValue;
-import prompto.value.UuidValue;
-import prompto.value.VersionValue;
 
 public class EqualsExpression implements IPredicateExpression, IAssertion {
 
@@ -416,30 +412,30 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 	
 	private static Map<Class<?>, IOperatorFunction> createEqualsCompilers() {
 		Map<Class<?>, IOperatorFunction> map = new HashMap<>();
-		map.put(boolean.class, BooleanValue::compileEquals); 
-		map.put(java.lang.Boolean.class, BooleanValue::compileEquals); 
-		map.put(char.class, CharacterValue::compileEquals);
-		map.put(java.lang.Character.class, CharacterValue::compileEquals);
-		map.put(String.class, TextValue::compileEquals); 
-		map.put(double.class, DecimalValue::compileEquals);
-		map.put(Double.class, DecimalValue::compileEquals); 
-		map.put(long.class, IntegerValue::compileEquals);
-		map.put(Long.class, IntegerValue::compileEquals); 
+		map.put(boolean.class, BooleanType::compileEquals); 
+		map.put(java.lang.Boolean.class, BooleanType::compileEquals); 
+		map.put(char.class, CharacterType::compileEquals);
+		map.put(java.lang.Character.class, CharacterType::compileEquals);
+		map.put(String.class, TextType::compileEquals); 
+		map.put(double.class, DecimalType::compileEquals);
+		map.put(Double.class, DecimalType::compileEquals); 
+		map.put(long.class, IntegerType::compileEquals);
+		map.put(Long.class, IntegerType::compileEquals); 
 		map.put(PromptoAny.class, AnyType::compileEquals); 
-		map.put(PromptoRange.Long.class, RangeBase::compileEquals); 
-		map.put(PromptoRange.Character.class, RangeBase::compileEquals); 
-		map.put(PromptoRange.Date.class, RangeBase::compileEquals); 
-		map.put(PromptoRange.Time.class, RangeBase::compileEquals); 
-		map.put(PromptoDate.class, DateValue::compileEquals); 
-		map.put(PromptoDateTime.class, DateTimeValue::compileEquals); 
-		map.put(PromptoTime.class, TimeValue::compileEquals); 
-		map.put(PromptoPeriod.class, PeriodValue::compileEquals); 
-		map.put(PromptoVersion.class, VersionValue::compileEquals); 
-		map.put(PromptoDict.class, DictionaryValue::compileEquals);
-		map.put(PromptoSet.class, SetValue::compileEquals);  /*
+		map.put(PromptoRange.Long.class, RangeType::compileEquals); 
+		map.put(PromptoRange.Character.class, RangeType::compileEquals); 
+		map.put(PromptoRange.Date.class, RangeType::compileEquals); 
+		map.put(PromptoRange.Time.class, RangeType::compileEquals); 
+		map.put(PromptoDate.class, DateType::compileEquals); 
+		map.put(PromptoDateTime.class, DateTimeType::compileEquals); 
+		map.put(PromptoTime.class, TimeType::compileEquals); 
+		map.put(PromptoPeriod.class, PeriodType::compileEquals); 
+		map.put(PromptoVersion.class, VersionType::compileEquals); 
+		map.put(PromptoDict.class, DictType::compileEquals);
+		map.put(PromptoSet.class, SetType::compileEquals);  /*
 		map.put(PromptoTuple.class, TupleValue::compileEquals); */
-		map.put(PromptoList.class, ListValue::compileEquals); 
-		map.put(UUID.class, UuidValue::compileEquals); 
+		map.put(PromptoList.class, ListType::compileEquals); 
+		map.put(UUID.class, UuidType::compileEquals); 
 		map.put(Object.class, AnyType::compileEquals); 
 		return map;
 	}
@@ -449,7 +445,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 	
 	private static Map<Class<?>, IOperatorFunction> createContainsCompilers() {
 		Map<Class<?>, IOperatorFunction> map = new HashMap<>();
-		map.put(String.class, TextValue::compileContains); 
+		map.put(String.class, TextType::compileContains); 
 		/*
 		map.put(PromptoRange.Long.class, RangeBase::compileContains); 
 		map.put(PromptoRange.Character.class, RangeBase::compileContains); 

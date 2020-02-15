@@ -102,8 +102,18 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
+	public void testListJoin() throws Exception {
+		compareResourceOMO("builtins/listJoin.poc");
+	}
+
+	@Test
 	public void testSetCount() throws Exception {
 		compareResourceOMO("builtins/setCount.poc");
+	}
+
+	@Test
+	public void testSetJoin() throws Exception {
+		compareResourceOMO("builtins/setJoin.poc");
 	}
 
 	@Test
@@ -169,6 +179,11 @@ public class TestBuiltins extends BaseOParserTest {
 	@Test
 	public void testTupleCount() throws Exception {
 		compareResourceOMO("builtins/tupleCount.poc");
+	}
+
+	@Test
+	public void testTupleJoin() throws Exception {
+		compareResourceOMO("builtins/tupleJoin.poc");
 	}
 
 }

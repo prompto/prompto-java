@@ -24,16 +24,16 @@ import prompto.intrinsic.PromptoSet;
 import prompto.intrinsic.PromptoTuple;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
+import prompto.type.DictType;
 import prompto.type.IType;
+import prompto.type.ListType;
+import prompto.type.RangeType;
+import prompto.type.SetType;
+import prompto.type.TextType;
+import prompto.type.TupleType;
 import prompto.utils.CodeWriter;
-import prompto.value.DictionaryValue;
 import prompto.value.IValue;
-import prompto.value.ListValue;
 import prompto.value.NullValue;
-import prompto.value.RangeBase;
-import prompto.value.SetValue;
-import prompto.value.TextValue;
-import prompto.value.TupleValue;
 
 public class ItemSelector extends SelectorExpression {
 
@@ -87,15 +87,15 @@ public class ItemSelector extends SelectorExpression {
 	
 	private static Map<Class<?>, IOperatorFunction> createGetters() {
 		Map<Class<?>, IOperatorFunction> map = new HashMap<>(); 
-		map.put(String.class, TextValue::compileItem); 
-		map.put(PromptoRange.Character.class, RangeBase::compileItem);
-		map.put(PromptoRange.Date.class, RangeBase::compileItem);
-		map.put(PromptoRange.Time.class, RangeBase::compileItem);
-		map.put(PromptoRange.Long.class, RangeBase::compileItem);
-		map.put(PromptoDict.class, DictionaryValue::compileItem);
-		map.put(PromptoTuple.class, TupleValue::compileItem);
-		map.put(PromptoSet.class, SetValue::compileItem);
-		map.put(PromptoList.class, ListValue::compileItem);
+		map.put(String.class, TextType::compileItem); 
+		map.put(PromptoRange.Character.class, RangeType::compileItem);
+		map.put(PromptoRange.Date.class, RangeType::compileItem);
+		map.put(PromptoRange.Time.class, RangeType::compileItem);
+		map.put(PromptoRange.Long.class, RangeType::compileItem);
+		map.put(PromptoDict.class, DictType::compileItem);
+		map.put(PromptoTuple.class, TupleType::compileItem);
+		map.put(PromptoSet.class, SetType::compileItem);
+		map.put(PromptoList.class, ListType::compileItem);
 		map.put(PromptoAny.class, ItemSelector::compileAnyItem);
 		map.put(PromptoDocument.class, ItemSelector::compileAnyItem);
 		return map;

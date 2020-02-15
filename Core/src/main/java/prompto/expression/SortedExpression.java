@@ -127,7 +127,7 @@ public class SortedExpression implements IExpression {
 	public IValue interpret(Context context) throws PromptoError {
 		IType type = source.check(context);
 		if(type instanceof ListType)
-			return interpretList(context, (ListType)type);
+			return interpretList(context, (ContainerType)type);
 		else if(type instanceof SetType)
 			return interpretSet(context, (SetType)type);
 		else
@@ -147,7 +147,7 @@ public class SortedExpression implements IExpression {
 		return new ListValue(itemType, sorted);
 	}
 
-	private IValue interpretList(Context context, ListType type) throws PromptoError {
+	private IValue interpretList(Context context, ContainerType type) throws PromptoError {
 		IValue value = source.interpret(context);
 		if(value==null)
 			throw new NullReferenceError();
