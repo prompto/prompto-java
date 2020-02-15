@@ -1103,7 +1103,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitCssText(CssTextContext ctx) {
-		String text = ctx.text.getText();
+		String text = input.getText(ctx.text.start, ctx.text.stop); // include WS
 		setNodeValue(ctx, new CssText(text));
 	}
 	
