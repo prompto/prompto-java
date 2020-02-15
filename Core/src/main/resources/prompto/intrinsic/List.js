@@ -108,12 +108,14 @@ List.prototype.slice1Based = function(start, last) {
     if(!last)
         return new List(false, this.slice(start));
     if(last >= 0) {
-        if(last<=start || last>= this.length - 1)
+        if(last <= start || last > this.length)
             throw new RangeError();
         return new List(false, this.slice(start, last));
     } else {
-        // TODO check Range
-        return new List(false, this.slice(start, 1 + last));
+        last = this.length + 1 + last;
+        if(last <= start || last > this.length)
+            throw new RangeError();
+        return new List(false, this.slice(start, last));
     }
 };
 
