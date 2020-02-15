@@ -52,6 +52,11 @@ public class TestJsx extends BaseOParserTest {
 	}
 
 	@Test
+	public void testNonAsciiTextElement() throws Exception {
+		compareResourceOEO("jsx/nonAsciiTextElement.poc");
+	}
+
+	@Test
 	public void testSelfClosingDiv() throws Exception {
 		compareResourceOEO("jsx/selfClosingDiv.poc");
 	}

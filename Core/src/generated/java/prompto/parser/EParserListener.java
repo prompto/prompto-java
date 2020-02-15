@@ -5210,6 +5210,16 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitJsx_text(EParser.Jsx_textContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link EParser#jsx_char}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsx_char(EParser.Jsx_charContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#jsx_char}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsx_char(EParser.Jsx_charContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link EParser#css_expression}.
 	 * @param ctx the parse tree
 	 */

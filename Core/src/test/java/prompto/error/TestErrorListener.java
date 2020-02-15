@@ -22,7 +22,7 @@ public class TestErrorListener {
 
 	@Test
 	public void testIllegalToken() throws Exception {
-		IProblem error = checkProblem("'%abc", 2, "Unrecognized character sequence:");
+		IProblem error = checkProblem("'%abc", 1, "Input mismatch, found:");
 		assertEquals(0, error.getStartIndex());
 	}
 

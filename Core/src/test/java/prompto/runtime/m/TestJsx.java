@@ -140,6 +140,21 @@ public class TestJsx extends BaseMParserTest {
 	}
 
 	@Test
+	public void testInterpretedNonAsciiTextElement() throws Exception {
+		checkInterpretedOutput("jsx/nonAsciiTextElement.pmc");
+	}
+
+	@Test
+	public void testCompiledNonAsciiTextElement() throws Exception {
+		checkCompiledOutput("jsx/nonAsciiTextElement.pmc");
+	}
+
+	@Test
+	public void testTranspiledNonAsciiTextElement() throws Exception {
+		checkTranspiledOutput("jsx/nonAsciiTextElement.pmc");
+	}
+
+	@Test
 	public void testInterpretedSelfClosingDiv() throws Exception {
 		checkInterpretedOutput("jsx/selfClosingDiv.pmc");
 	}

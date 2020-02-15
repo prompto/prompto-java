@@ -52,6 +52,11 @@ public class TestJsx extends BaseEParserTest {
 	}
 
 	@Test
+	public void testNonAsciiTextElement() throws Exception {
+		compareResourceEOE("jsx/nonAsciiTextElement.pec");
+	}
+
+	@Test
 	public void testSelfClosingDiv() throws Exception {
 		compareResourceEOE("jsx/selfClosingDiv.pec");
 	}

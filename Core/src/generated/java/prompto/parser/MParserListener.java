@@ -5014,6 +5014,16 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitJsx_text(MParser.Jsx_textContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MParser#jsx_char}.
+	 * @param ctx the parse tree
+	 */
+	void enterJsx_char(MParser.Jsx_charContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MParser#jsx_char}.
+	 * @param ctx the parse tree
+	 */
+	void exitJsx_char(MParser.Jsx_charContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MParser#css_expression}.
 	 * @param ctx the parse tree
 	 */

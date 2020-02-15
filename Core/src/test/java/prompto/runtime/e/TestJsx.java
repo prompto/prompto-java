@@ -140,6 +140,21 @@ public class TestJsx extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedNonAsciiTextElement() throws Exception {
+		checkInterpretedOutput("jsx/nonAsciiTextElement.pec");
+	}
+
+	@Test
+	public void testCompiledNonAsciiTextElement() throws Exception {
+		checkCompiledOutput("jsx/nonAsciiTextElement.pec");
+	}
+
+	@Test
+	public void testTranspiledNonAsciiTextElement() throws Exception {
+		checkTranspiledOutput("jsx/nonAsciiTextElement.pec");
+	}
+
+	@Test
 	public void testInterpretedSelfClosingDiv() throws Exception {
 		checkInterpretedOutput("jsx/selfClosingDiv.pec");
 	}
