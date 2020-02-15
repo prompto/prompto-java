@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.transpiler.Transpiler;
 
 public class CssType extends NativeType {
 
@@ -21,5 +22,18 @@ public class CssType extends NativeType {
 	public Type getJavaType(Context context) {
 		throw new UnsupportedOperationException("Should never get there!");
 	}
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		// nothing to do
+	}
+	
+
+	@Override
+	public void transpile(Transpiler transpiler) {
+		// nothing to do
+	}
+
+
 
 }
