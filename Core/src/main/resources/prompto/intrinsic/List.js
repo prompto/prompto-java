@@ -100,7 +100,7 @@ List.prototype.hasAny = function(items, noCheckEquals) {
 
 List.prototype.slice1Based = function(start, last) {
     if(start) {
-        if (start < 0 || start >= this.length)
+        if (start < 1 || start > this.length)
             throw new RangeError();
         start = start - 1;
     } else
@@ -108,12 +108,12 @@ List.prototype.slice1Based = function(start, last) {
     if(!last)
         return new List(false, this.slice(start));
     if(last >= 0) {
-        if(last <= start || last > this.length)
+        if(last < start || last > this.length)
             throw new RangeError();
         return new List(false, this.slice(start, last));
     } else {
         last = this.length + 1 + last;
-        if(last <= start || last > this.length)
+        if(last < start || last > this.length)
             throw new RangeError();
         return new List(false, this.slice(start, last));
     }
