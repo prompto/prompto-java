@@ -1167,8 +1167,20 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	        transpiler.append("this.$mutable = true;").newLine();
 	        transpiler.append("values = Object.assign({}, copyFrom, values);").newLine();
 	        attributes.forEach(attr -> {
+	        	AttributeDeclaration decl = transpiler.getContext().getRegisteredDeclaration(AttributeDeclaration.class, attr);
 	        	boolean isEnum = isEnumeratedAttribute(transpiler.getContext(), attr);
-	            transpiler.append("this.setMember('").append(attr.toString()).append("', values.").append(attr.toString()).append(" || null, mutable, ").append(isEnum).append(");").newLine();
+	            transpiler.append("this.setMember('")
+	            	.append(attr.toString())
+	            	.append("', values.")
+	            	.append(attr.toString())
+	            	.append(" || null")
+	            	.append(", ")
+	            	.append(decl.isStorable())
+	            	.append(", mutable")
+	            	.append(", ")
+	            	.append(isEnum)
+	            	.append(");")
+	            	.newLine();
 	        });
 	    }
 	}

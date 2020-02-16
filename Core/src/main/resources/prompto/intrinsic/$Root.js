@@ -64,11 +64,11 @@ $Root.prototype.getText = function() {
 };
 
 
-$Root.prototype.setMember = function(name, value, mutable, isEnum) {
+$Root.prototype.setMember = function(name, value, storable, mutable, isEnum) {
     if(!this.$mutable || (value && value.$mutable && !mutable))
         throw new NotMutableError();
     this[name] = value;
-    if(this.$storable) {
+    if(this.$storable && storable) {
     	if(name==="dbId")
     		this.$storable.setDbId(value);
     	else {

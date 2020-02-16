@@ -833,12 +833,19 @@ public class CategoryType extends BaseType {
 	
 	@Override
 	public void transpileAssignMemberValue(Transpiler transpiler, String name, IExpression expression) {
-	    transpiler.append(".setMember('").append(name).append("', ");
+	    transpiler.append(".setMember('")
+	    	.append(name)
+	    	.append("', ");
 	    expression.transpile(transpiler);
+	    AttributeDeclaration decl = transpiler.getContext().getRegisteredDeclaration(AttributeDeclaration.class, new Identifier(name));
+	    transpiler.append(", ")
+	        .append(decl.isStorable())
+	        .append(", false"); // not mutable
 	    IType type = expression.check(transpiler.getContext());
-	    if(type instanceof EnumeratedCategoryType || type instanceof EnumeratedNativeType) {
-	    	transpiler.append(", false, true"); // set isEnum flag
-	    }
+	    if(type instanceof EnumeratedCategoryType || type instanceof EnumeratedNativeType)
+	    	transpiler.append(", true"); // set isEnum flag
+	    else
+	    	transpiler.append(", false");
 	    transpiler.append(")");
 	}
 	
