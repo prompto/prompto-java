@@ -77,6 +77,12 @@ public abstract class PromptoString {
 		else
 			return o.toString();
 	}
+	
+	public static long indexOf(String s, String v, long i) {
+		int r = s.indexOf(v, (int)i -1);
+		return r + 1;
+	}
+
 
 
 }

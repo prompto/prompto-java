@@ -27,6 +27,7 @@ import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoString;
+import prompto.literal.IntegerLiteral;
 import prompto.literal.TextLiteral;
 import prompto.param.CategoryParameter;
 import prompto.param.IParameter;
@@ -182,7 +183,7 @@ public class TextType extends NativeType {
 		@Override
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
-			this.compileArguments(context, method, flags, arguments);
+			this.compileParameters(context, method, flags, arguments);
 			// call replace method
 			Descriptor.Method descriptor = new Descriptor.Method(String.class, String.class, String.class, String.class);
 			MethodConstant constant = new MethodConstant(StringUtils.class, "replaceOne", descriptor);
@@ -228,7 +229,7 @@ public class TextType extends NativeType {
 		@Override
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
-			this.compileArguments(context, method, flags, arguments);
+			this.compileParameters(context, method, flags, arguments);
 			// call replace method
 			Descriptor.Method descriptor = new Descriptor.Method(CharSequence.class, CharSequence.class, String.class);
 			MethodConstant constant = new MethodConstant(String.class, "replace", descriptor);
@@ -279,7 +280,7 @@ public class TextType extends NativeType {
 		@Override
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
-			this.compileArguments(context, method, flags, arguments);
+			this.compileParameters(context, method, flags, arguments);
 			// call split method
 			Descriptor.Method descriptor = new Descriptor.Method(String.class, String[].class);
 			MethodConstant constant = new MethodConstant(String.class, "split", descriptor);
@@ -336,7 +337,7 @@ public class TextType extends NativeType {
 		@Override
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
-			this.compileArguments(context, method, flags, arguments);
+			this.compileParameters(context, method, flags, arguments);
 			// call static method
 			Descriptor.Method descriptor = new Descriptor.Method(String.class, String.class);
 			MethodConstant constant = new MethodConstant(StringUtils.class, "capitalizeAll", descriptor);
@@ -439,7 +440,7 @@ public class TextType extends NativeType {
 		@Override
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
-			this.compileArguments(context, method, flags, arguments);
+			this.compileParameters(context, method, flags, arguments);
 			// call replace method
 			Descriptor.Method descriptor = new Descriptor.Method(String.class, boolean.class);
 			MethodConstant constant = new MethodConstant(String.class, "startsWith", descriptor);
@@ -483,7 +484,7 @@ public class TextType extends NativeType {
 		@Override
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
-			this.compileArguments(context, method, flags, arguments);
+			this.compileParameters(context, method, flags, arguments);
 			// call replace method
 			Descriptor.Method descriptor = new Descriptor.Method(String.class, boolean.class);
 			MethodConstant constant = new MethodConstant(String.class, "endsWith", descriptor);
@@ -504,14 +505,16 @@ public class TextType extends NativeType {
 		
 	};
 
+	static IParameter FROM_INDEX_ARGUMENT = new CategoryParameter(IntegerType.instance(), new Identifier("fromIndex"), new IntegerLiteral("1"));
 	
-	static final IMethodDeclaration INDEX_OF_METHOD = new BuiltInMethodDeclaration("startsWith", TEXT_VALUE_ARGUMENT) {
+	static final IMethodDeclaration INDEX_OF_METHOD = new BuiltInMethodDeclaration("indexOf", TEXT_VALUE_ARGUMENT, FROM_INDEX_ARGUMENT) {
 		
 		@Override
 		public IValue interpret(Context context) throws PromptoError {
 			TextValue text = (TextValue)getValue(context);
 			String value = (String)context.getValue(new Identifier("value")).getStorableData();
-			int indexOf = text.getStorableData().indexOf(value);
+			Long fromIndex = (Long)context.getValue(new Identifier("fromIndex")).getStorableData();
+			int indexOf = text.getStorableData().indexOf(value, fromIndex.intValue() - 1);
 			return new IntegerValue(indexOf + 1);
 		};
 		
@@ -528,26 +531,29 @@ public class TextType extends NativeType {
 		@Override
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
-			this.compileArguments(context, method, flags, arguments);
+			this.compileParameters(context, method, flags, arguments);
+			CompilerUtils.LongTolong(method);
 			// call indexOf method
-			Descriptor.Method descriptor = new Descriptor.Method(String.class, int.class);
-			MethodConstant constant = new MethodConstant(String.class, "indexOf", descriptor);
-			method.addInstruction(Opcode.INVOKEVIRTUAL, constant);
-			// add 1
-			method.addInstruction(Opcode.ICONST_1);
-			method.addInstruction(Opcode.IADD);
+			Descriptor.Method descriptor = new Descriptor.Method(String.class, String.class, long.class, long.class);
+			MethodConstant constant = new MethodConstant(PromptoString.class, "indexOf", descriptor);
+			method.addInstruction(Opcode.INVOKESTATIC, constant);
 			// done
 			if(flags.toPrimitive())
-				return CompilerUtils.intTolong(method);
+				return new ResultInfo(long.class);
 			else
-				return CompilerUtils.intToLong(method);
+				return CompilerUtils.longToLong(method);
 		};
 		
 		@Override
 		public void transpileCall(Transpiler transpiler, ArgumentList arguments) {
 	        transpiler.append("indexOf1Based(");
 	        arguments.get(0).transpile(transpiler, null);
-	        transpiler.append(")");
+	        if(arguments.size()>1) {
+	        	transpiler.append(",");
+		        arguments.get(1).transpile(transpiler, null);
+		        transpiler.append(")");
+	        } else
+	        	transpiler.append(",0)");
 		}
 	};
 	
