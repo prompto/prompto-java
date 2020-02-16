@@ -18,7 +18,7 @@ public class TestJsx extends BaseEParserTest {
 		CharStream stream = CharStreams.fromString("Création");
 		EIndentingLexer lexer = new EIndentingLexer(stream);
 		Token t1 = lexer.nextToken();
-		Token t2 = lexer.nextToken();
+		/* Token t2 = */lexer.nextToken();
 		Token t3 = lexer.nextToken();
 		assertEquals("Création", lexer.getInputStream().getText(new Interval(t1.getStartIndex(), t3.getStopIndex())));
 	
