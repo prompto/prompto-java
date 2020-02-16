@@ -1175,7 +1175,7 @@ public class Context implements IContext {
 			// params and variables have precedence over members
 			// so first look in context values, ignoring members
 			Context context = super.contextForValue(id);
-			if(context!=null && !(context instanceof InstanceContext)) 
+			if(context!=null) 
 				return context;
 			CategoryDeclaration decl = getDeclaration();
 			if(decl.hasAttribute(this, id) || decl.hasMethod(this, id))
