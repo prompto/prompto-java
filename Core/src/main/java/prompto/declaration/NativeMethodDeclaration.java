@@ -137,7 +137,7 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 	public ResultInfo compileMember(Context context, MethodInfo method, Flags flags, ArgumentList assignments) {
 		try {
 			// push arguments on the stack
-			compileArguments(context, method, flags, assignments);
+			compileParameters(context, method, flags, assignments);
 			return statement.compile(context, method, new Flags().withMember(true).withInline(true));
 		} catch (PromptoError e) {
 			throw new CompilerException(e);

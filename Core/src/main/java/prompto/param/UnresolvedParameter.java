@@ -110,9 +110,9 @@ public class UnresolvedParameter extends BaseParameter implements INamedParamete
 	}
 	
 	@Override
-	public void compileArgument(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
+	public void compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
 		resolve(context);
-		resolved.compileArgument(context, method, flags, assignments, isFirst);
+		resolved.compileParameter(context, method, flags, assignments, isFirst);
 	}
 	
 	@Override

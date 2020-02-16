@@ -121,7 +121,7 @@ public class MethodParameter extends BaseParameter implements INamedParameter {
 	}
 	
 	@Override
-	public void compileArgument(Context context, MethodInfo method, Flags flags, ArgumentList arguments, boolean isFirst) {
+	public void compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList arguments, boolean isFirst) {
 		// 1st parameter is method reference
 		Argument argument = makeArgument(arguments, isFirst);
 		IExpression expression = argument.getExpression();

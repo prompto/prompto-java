@@ -130,7 +130,7 @@ public class AttributeParameter extends BaseParameter implements INamedParameter
 	}
 	
 	@Override
-	public void compileArgument(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
+	public void compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
 		Argument assign = makeArgument(assignments, isFirst);
 		IType itype = assign.getExpression().check(context.getCallingContext());
 		// if param is a category, assume it implements the required attribute interface

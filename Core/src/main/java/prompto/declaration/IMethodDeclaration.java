@@ -42,7 +42,7 @@ public interface IMethodDeclaration extends IDeclaration {
 	void compile(Context context, boolean isStart, ClassFile classFile);
 	void compilePrototype(Context context, boolean isStart, ClassFile classFile);
 	String compileTemplate(Context context, boolean isStart, ClassFile classFile);
-	void compileArguments(Context context, MethodInfo method, Flags flags, ArgumentList assignments);
+	void compileParameters(Context context, MethodInfo method, Flags flags, ArgumentList assignments);
 	@Override
 	String getTranspiledName(Context context);
 	default void fullDeclare(Transpiler transpiler, Identifier methodName) { throw new UnsupportedOperationException("fullDeclare " + this.getClass().getName()); }

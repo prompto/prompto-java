@@ -86,7 +86,7 @@ public abstract class BaseParameter implements IParameter {
 	}
 
 	@Override
-	public void compileArgument(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
+	public void compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
 		Argument assign = makeArgument(assignments, isFirst);
 		ResultInfo valueInfo = assign.getExpression().compile(context.getCallingContext(), method, flags);
 		// cast if required

@@ -156,8 +156,8 @@ public class ExtendedParameter extends CategoryParameter {
 	}
 
 	@Override
-	public void compileArgument(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
-		super.compileArgument(context, method, flags, assignments, isFirst);
+	public void compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
+		super.compileParameter(context, method, flags, assignments, isFirst);
 		// create a proxy to the required java type
 		ClassConstant c = new ClassConstant(getJavaType(context));
 		method.addInstruction(Opcode.LDC, c);

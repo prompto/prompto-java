@@ -31,7 +31,7 @@ public interface IParameter extends INamed {
 	Type getJavaType(Context context);
 	StackLocal registerLocal(Context context, MethodInfo method, Flags flags);
 	default void extractLocal(Context context, MethodInfo method, Flags flags) {}
-	void compileArgument(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst);
+	void compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst);
 	default void declare(Transpiler transpiler) { throw new UnsupportedOperationException("declare " + this.getClass().getName()); }
 	default void transpile(Transpiler transpiler) { throw new UnsupportedOperationException("transpile " + this.getClass().getName()); }
 	default String getTranspiledName(Context context) { throw new UnsupportedOperationException("getTranspiledName " + this.getClass().getName()); }
