@@ -51,6 +51,21 @@ public class Transpiler {
 		engine.getPolyfills().forEach(poly->this.require(poly));
  	}
 	
+	public Transpiler(Transpiler copyFrom, Context context) {
+		this.engine = copyFrom.engine;
+		this.context = context;
+	    this.declared = copyFrom.declared;
+	    this.required = copyFrom.required;
+	    this.registered = copyFrom.registered;
+	    this.escapeMode = copyFrom.escapeMode;
+	    this.lines = copyFrom.lines;
+	    this.line = copyFrom.line;
+	    this.indents = copyFrom.indents;
+	    this.parent = copyFrom;
+	    this.getterName = copyFrom.getterName;
+	    this.setterName = copyFrom.setterName;
+	}
+
 	public IJSEngine getEngine() {
 		return engine;
 	}
@@ -111,15 +126,7 @@ public class Transpiler {
 	}
 
 	public Transpiler copyTranspiler(Context context) {
-		Transpiler transpiler = new Transpiler(this.engine, context);
-	    transpiler.declared = this.declared;
-	    transpiler.required = this.required;
-	    transpiler.registered = this.registered;
-	    transpiler.escapeMode = this.escapeMode;
-	    transpiler.lines = this.lines;
-	    transpiler.line = this.line;
-	    transpiler.indents = this.indents;
-	    transpiler.parent = this;
+		Transpiler transpiler = new Transpiler(this, context);
 	    return transpiler;
 	}
 	
@@ -208,7 +215,15 @@ public class Transpiler {
 	public void declare(ITranspilable transpilable) {
 		if(transpilable instanceof IDeclaration && ((IDeclaration)transpilable).hasAnnotation(context, "Inlined"))
 			return;
-		declared.add(transpilable);
+		else
+			declared.add(transpilable);
+	}
+	
+	public boolean isDeclared(ITranspilable transpilable) {
+		if(transpilable instanceof IDeclaration && ((IDeclaration)transpilable).hasAnnotation(context, "Inlined"))
+			return true;
+		else
+			return declared.contains(transpilable);
 	}
 	
 	

@@ -1024,23 +1024,25 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 
 	@Override
 	public void declare(Transpiler transpiler) {
-	    transpiler.declare(this);
-	    declareAttributes(transpiler);
-	    Transpiler instance = transpiler.newInstanceTranspiler(getType(transpiler.getContext()));
-	    processAnnotations(instance.getContext(), true);
-	    if (this.derivedFrom != null) {
-	        this.derivedFrom.forEach(cat -> {
-	            CategoryDeclaration decl = instance.getContext().getRegisteredDeclaration(CategoryDeclaration.class, cat);
-	            decl.declare(instance);
-	        });
-	    } else
-	    	declareRoot(instance);
-	    if(this.storable) {
-	    	instance.require("DataStore");
-	    	instance.require("Remote");
-	    }
-	    this.declareMethods(instance);
-	    instance.flush();
+		if(!transpiler.isDeclared(this)) {
+		    transpiler.declare(this);
+		    declareAttributes(transpiler);
+		    Transpiler instance = transpiler.newInstanceTranspiler(getType(transpiler.getContext()));
+		    processAnnotations(instance.getContext(), true);
+		    if (this.derivedFrom != null) {
+		        this.derivedFrom.forEach(cat -> {
+		            CategoryDeclaration decl = instance.getContext().getRegisteredDeclaration(CategoryDeclaration.class, cat);
+		            decl.declare(instance);
+		        });
+		    } else
+		    	declareRoot(instance);
+		    if(this.storable) {
+		    	instance.require("DataStore");
+		    	instance.require("Remote");
+		    }
+		    this.declareMethods(instance);
+		    instance.flush();
+		}
 	}
 	
 	private void declareMethods(Transpiler transpiler) {

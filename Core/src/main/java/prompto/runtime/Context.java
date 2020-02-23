@@ -1090,6 +1090,7 @@ public class Context implements IContext {
 	
 	public static class InstanceContext extends Context {
 		
+		CategoryDeclaration declaration;
 		IInstance instance;
 		IType type;
 		Map<Identifier, WidgetField> widgetFields; // only used for widgets at this point
@@ -1189,10 +1190,13 @@ public class Context implements IContext {
 		}
 		
 		private CategoryDeclaration getDeclaration() {
-			if(instance!=null)
-				return instance.getDeclaration();
-			else
-				return getRegisteredDeclaration(ConcreteCategoryDeclaration.class, type.getTypeNameId());
+			if(declaration==null) {
+				if(instance!=null)
+					declaration = instance.getDeclaration();
+				else
+					declaration = getRegisteredDeclaration(ConcreteCategoryDeclaration.class, type.getTypeNameId());
+			}
+			return declaration;
 		}
 
 		@Override
