@@ -39,6 +39,7 @@ import prompto.value.TextValue;
 public class CategorySymbol extends Symbol implements IExpression  {
 	
 	ArgumentList arguments;
+	IInstance instance;
 	
 	public CategorySymbol(Identifier name, ArgumentList arguments) {
 		super(name);
@@ -90,6 +91,12 @@ public class CategorySymbol extends Symbol implements IExpression  {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
+		if(instance==null)
+			instance = createInstance(context);
+		return instance;
+	}
+	
+	private IInstance createInstance(Context context) {
 		EnumeratedCategoryType type = (EnumeratedCategoryType)this.getType(context);
 		IInstance instance = type.newInstance(context);
 		instance.setMutable(true);
@@ -104,7 +111,7 @@ public class CategorySymbol extends Symbol implements IExpression  {
 		instance.setMutable(false);
 		return instance;
 	}
-	
+
 	@Override
 	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
 		try {

@@ -428,6 +428,8 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 				}
 			}
 		}
+		if(value instanceof CategorySymbol)
+			value = ((CategorySymbol)value).interpret(context);
 		if(value instanceof TypeValue) {
 			return context.newChildContext(); 
 		} else if(value instanceof IInstance) {
