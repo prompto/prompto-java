@@ -1,6 +1,7 @@
 package prompto.expression;
 
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Set;
 
 import prompto.compiler.CompilerUtils;
@@ -32,6 +33,7 @@ import prompto.parser.Dialect;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.store.IStore;
+import prompto.transpiler.ITranspilable;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.DocumentType;
@@ -422,6 +424,11 @@ public class ConstructorExpression extends Section implements IExpression {
 	        this.arguments.declare(transpiler, null);
 	}
 	
+	public void ensureDeclarationOrder(Context context, List<ITranspilable> list, Set<ITranspilable> set) {
+		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
+		cd.ensureDeclarationOrder(context, list, set);
+	}
+
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 		CategoryDeclaration cd = transpiler.getContext().getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
@@ -483,6 +490,7 @@ public class ConstructorExpression extends Section implements IExpression {
 	    String bound = decl.getTranspiledBoundClass();
 	    transpiler.append("new ").append(bound).append("()");
 	}
+
 
 
 }

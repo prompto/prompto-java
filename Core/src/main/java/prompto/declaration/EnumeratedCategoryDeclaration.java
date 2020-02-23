@@ -354,8 +354,11 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 	        list.add(this);
 	        set.add(this);
 	        // don't declare inherited Error
-	    } else
+	    } else {
+	    	// types used by symbols must be declared before being used
+	    	this.symbolsList.forEach(symbol -> symbol.ensureDeclarationOrder(context, list, set));
 	        super.ensureDeclarationOrder(context, list, set);
+	    }
 	}
 
 	private boolean isUserError(Context context) {
@@ -368,6 +371,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 	        return;
 	    super.declare(transpiler);
 	    transpiler.require("List");
+	    this.symbolsList.forEach(symbol -> symbol.declareArguments(transpiler));
 	}
 	
 	@Override

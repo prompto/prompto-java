@@ -2,6 +2,8 @@ package prompto.grammar;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.SyntaxError;
@@ -11,6 +13,7 @@ import prompto.expression.UnresolvedIdentifier;
 import prompto.param.AttributeParameter;
 import prompto.param.IParameter;
 import prompto.runtime.Context;
+import prompto.transpiler.ITranspilable;
 import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 import prompto.value.ContextualExpression;
@@ -128,7 +131,10 @@ public class ArgumentList extends LinkedList<Argument> {
 
 	public void declare(Transpiler transpiler, IMethodDeclaration declaration) {
 		this.forEach(arg -> arg.declare(transpiler, declaration));
-		
+	}
+
+	public void ensureDeclarationOrder(Context context, List<ITranspilable> list, Set<ITranspilable> set) {
+		this.forEach(arg -> arg.ensureDeclarationOrder(context, list, set));
 	}
 
 	public ArgumentList makeArguments(Context context, IMethodDeclaration declaration) {
@@ -163,5 +169,6 @@ public class ArgumentList extends LinkedList<Argument> {
 	    }
 	    return resolved;
 	}
+
 
 }

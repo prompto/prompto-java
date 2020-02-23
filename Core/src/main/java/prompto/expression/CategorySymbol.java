@@ -2,7 +2,9 @@ package prompto.expression;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 
@@ -27,6 +29,7 @@ import prompto.grammar.Identifier;
 import prompto.literal.TextLiteral;
 import prompto.param.AttributeParameter;
 import prompto.runtime.Context;
+import prompto.transpiler.ITranspilable;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.EnumeratedCategoryType;
@@ -217,7 +220,15 @@ public class CategorySymbol extends Symbol implements IExpression  {
 	public void declare(Transpiler transpiler) {
 		this.type.declare(transpiler);
 	}
-	
+
+	public void declareArguments(Transpiler transpiler) {
+		this.arguments.declare(transpiler, null);
+	}
+
+	public void ensureDeclarationOrder(Context context, List<ITranspilable> list, Set<ITranspilable> set) {
+		this.arguments.ensureDeclarationOrder(context, list, set);
+	}
+
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 		transpiler.append(this.getName());
@@ -248,4 +259,6 @@ public class CategorySymbol extends Symbol implements IExpression  {
 	    exp.transpile(transpiler);
 	    transpiler.append(";").newLine();
 	}
+
+
 }

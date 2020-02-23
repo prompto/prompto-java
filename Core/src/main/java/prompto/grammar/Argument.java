@@ -1,15 +1,21 @@
 package prompto.grammar;
 
+import java.util.List;
+import java.util.Set;
+
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.ArrowExpression;
+import prompto.expression.ConstructorExpression;
 import prompto.expression.IExpression;
 import prompto.expression.InstanceExpression;
 import prompto.expression.MemberSelector;
 import prompto.param.IParameter;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
+import prompto.statement.UnresolvedCall;
+import prompto.transpiler.ITranspilable;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
@@ -205,6 +211,14 @@ public class Argument {
 			this.expression.declare(transpiler);
 	}
 
+	public void ensureDeclarationOrder(Context context, List<ITranspilable> list, Set<ITranspilable> set) {
+		IExpression expression = this.expression;
+		if(expression instanceof UnresolvedCall)
+			expression = ((UnresolvedCall)expression).resolve(context);
+		if(expression instanceof ConstructorExpression)
+			((ConstructorExpression)expression).ensureDeclarationOrder(context, list, set);
+		// TODO else if(expression instanceof MethodCall)
+	}
 
 	private boolean declareArrowExpression(Transpiler transpiler, IMethodDeclaration methodDeclaration) {
 		if(this.parameter==null || methodDeclaration==null)
@@ -230,4 +244,6 @@ public class Argument {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+
 }
