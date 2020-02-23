@@ -59,7 +59,7 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 	public IPredicateExpression getPredicate(Context context) {
 		IExpression predicate = this.predicate;
 		if(predicate instanceof UnresolvedCall)
-			predicate = ((UnresolvedCall)predicate).getResolved(context);
+			predicate = ((UnresolvedCall)predicate).resolve(context);
 		return (IPredicateExpression)predicate; // assume this was checked earlier
 	}
 

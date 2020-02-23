@@ -80,7 +80,7 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 	@Override
 	public void toDialect(CodeWriter writer) {
 		try {
-			resolve(writer.getContext());
+			doResolve(writer.getContext());
 			resolved.toDialect(writer);
 		} catch(SyntaxError error) {
 			caller.toDialect(writer);
@@ -138,13 +138,13 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 		}
 	}
 	
-	public IExpression getResolved(Context context) {
-		resolve(context);
+	public IExpression resolve(Context context) {
+		doResolve(context);
 		return resolved;
 	}
 	
 	protected IType resolveAndCheck(Context context) {
-		resolve(context);
+		doResolve(context);
 		if(resolved==null)
 			return null;
 		else
@@ -152,7 +152,7 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 	}
 	
 	
-	protected void resolve(Context context) {
+	protected void doResolve(Context context) {
 		if(resolved==null) {
 			if(caller instanceof UnresolvedIdentifier)
 				resolved = resolveUnresolvedIdentifier(context, (UnresolvedIdentifier)caller);
@@ -223,14 +223,14 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-	    this.resolve(transpiler.getContext());
+	    this.doResolve(transpiler.getContext());
 	    if(this.resolved!=null)
 	    	this.resolved.declare(transpiler);
 	}
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    this.resolve(transpiler.getContext());
+	    this.doResolve(transpiler.getContext());
 	    if(this.resolved!=null)
 	    	this.resolved.transpile(transpiler);
 	    return false;
