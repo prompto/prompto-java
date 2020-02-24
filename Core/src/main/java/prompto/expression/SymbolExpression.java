@@ -17,6 +17,7 @@ import prompto.value.IValue;
 public class SymbolExpression implements IExpression {
 
 	Identifier id;
+	Symbol symbol;
 	
 	public SymbolExpression(Identifier id) {
 		this.id = id;
@@ -40,9 +41,15 @@ public class SymbolExpression implements IExpression {
 		writer.append(id);
 	}
 	
+	public Symbol getSymbol(Context context) {
+		if(symbol==null) 
+			symbol = context.getGlobalsContext().getRegisteredSymbol(id, true);
+		return symbol;
+	}
+	
 	@Override
 	public IType check(Context context) {
-		Symbol symbol = context.getRegisteredSymbol(id, true);
+		Symbol symbol = getSymbol(context);
 		if(symbol==null)
 			throw new SyntaxError("Unknown symbol:" + id);
 		return symbol.check(context);
@@ -50,25 +57,22 @@ public class SymbolExpression implements IExpression {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		Context gc = context.getGlobalsContext();
-		return gc.getValue(id, ()-> {
-			Symbol symbol = gc.getRegisteredSymbol(id, true);
-			if(symbol==null)
-				throw new SyntaxError("Unknown symbol:" + id);
-			return symbol.interpret(context);	
-		});
+		Symbol symbol = getSymbol(context);
+		if(symbol==null)
+			throw new SyntaxError("Unknown symbol:" + id);
+		return symbol.interpret(context);	
 	}
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		Symbol symbol = context.getRegisteredSymbol(id, true);
+		Symbol symbol = getSymbol(context);
 		if(symbol==null)
 			throw new SyntaxError("Unknown symbol:" + id);
 		return symbol.compile(context, method, flags);			
 	}
 
 	public Type getJavaType(Context context) {
-		Symbol symbol = context.getRegisteredSymbol(this.id, true);
+		Symbol symbol = getSymbol(context);
 		if(symbol==null)
 			throw new SyntaxError("Unknown symbol:" + id);
 		return symbol.getJavaType(context);
@@ -76,13 +80,13 @@ public class SymbolExpression implements IExpression {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-		Symbol symbol = transpiler.getContext().getRegisteredSymbol(this.id, true);
+		Symbol symbol = getSymbol(transpiler.getContext());
 	    symbol.declare(transpiler);
 	}
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-		Symbol symbol = transpiler.getContext().getRegisteredSymbol(this.id, true);
+		Symbol symbol = getSymbol(transpiler.getContext());
 	    return symbol.transpile(transpiler);
 	}
 

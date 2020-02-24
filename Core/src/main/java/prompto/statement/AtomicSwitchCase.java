@@ -3,6 +3,8 @@ package prompto.statement;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.expression.Symbol;
+import prompto.expression.SymbolExpression;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
@@ -26,8 +28,12 @@ public class AtomicSwitchCase extends SwitchCase {
 	
 	@Override
 	public boolean matches(Context context,IValue value) throws PromptoError {
-		Object thisValue = expression.interpret(context);
-		return value.equals(thisValue);
+		if(value instanceof Symbol && expression instanceof SymbolExpression)
+			return value == ((SymbolExpression)expression).getSymbol(context);
+		else {
+			Object thisValue = expression.interpret(context);
+			return value.equals(thisValue);
+		}
 	}
 	
 	@Override
