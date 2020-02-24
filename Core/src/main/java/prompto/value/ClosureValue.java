@@ -32,16 +32,26 @@ public class ClosureValue extends BaseValue {
 	}
 	
 	public IValue interpret(Context context) throws PromptoError {
-		IMethodDeclaration declaration = getMethod();
-		this.context.enterMethod(declaration);
+		Context parentMost = this.context.getParentMostContext();
+		Context savedParent = parentMost.getParentContext();
+		parentMost.setParentContext(context);
+		Context local = this.context.newChildContext();
 		try {
-			Context parentMost = this.context.getParentMostContext();
-			parentMost.setParentContext(context);
-			IValue result = declaration.interpret(this.context);
-			parentMost.setParentContext(null);
-			return result;
+			return doInterpret(local);
 		} finally {
-			this.context.leaveSection(declaration);
+			parentMost.setParentContext(savedParent);
+		}
+	}
+	
+	
+	
+	private IValue doInterpret(Context local) {
+		IMethodDeclaration declaration = getMethod();
+		local.enterMethod(declaration);
+		try {
+			return declaration.interpret(local);
+		} finally {
+			local.leaveSection(declaration);
 		}
 	}
 
