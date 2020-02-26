@@ -5,10 +5,12 @@ import prompto.parser.ISection;
 public class UnknowAttributeError extends SyntaxProblemBase {
 
 	String name;
+	String hint;
 	
-	public UnknowAttributeError(String name, ISection section) {
+	public UnknowAttributeError(String name, String hint, ISection section) {
 		super(section);
 		this.name = name;
+		this.hint = hint;
 	}
 
 	@Override
@@ -18,7 +20,7 @@ public class UnknowAttributeError extends SyntaxProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return "Unknown attribute:" + name;
+		return "Unknown attribute: " + name + hint;
 	}
 
 }

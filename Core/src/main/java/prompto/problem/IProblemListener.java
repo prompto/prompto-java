@@ -15,7 +15,10 @@ public interface IProblemListener {
 	void reportUnknownProperty(ISection section, String name);
 	void reportMissingProperty(ISection section, String name);
 	void reportDuplicateProperty(ISection section, String name);
-	void reportUnknownAttribute(ISection section, String name);
+	default void reportUnknownAttribute(ISection section, String name) {
+		reportUnknownAttribute(section, name, "");
+	}
+	void reportUnknownAttribute(ISection section, String name, String hint);
 	void reportUnknownAnnotation(ISection section, String name);
 	void reportUnknownMethod(ISection section, String name);
 	void reportUnknownCategory(ISection section, String name);

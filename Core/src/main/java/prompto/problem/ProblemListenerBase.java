@@ -83,8 +83,8 @@ public abstract class ProblemListenerBase implements ANTLRErrorListener, IProble
 	}
 	
 	@Override
-	public void reportUnknownAttribute(ISection section, String name) {
-		addProblem(new UnknowAttributeError(name, section));
+	public void reportUnknownAttribute(ISection section, String name, String hint) {
+		addProblem(new UnknowAttributeError(name, hint, section));
 	}
 	
 	@Override

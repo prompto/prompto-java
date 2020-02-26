@@ -449,7 +449,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	protected void declareAttribute(Identifier attr, Transpiler transpiler) {
 		AttributeDeclaration decl = transpiler.getContext().getRegisteredDeclaration(AttributeDeclaration.class, attr);
 		if(decl==null)
-			transpiler.getContext().getProblemListener().reportUnknownAttribute(attr, attr.toString());
+			transpiler.getContext().getProblemListener().reportUnknownAttribute(attr, attr.toString(), " in category: " + this.getName());
 		else
 			decl.declare(transpiler);
 	}
