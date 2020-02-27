@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -100,6 +101,11 @@ public class ImmutableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
+	public void dropModule(Module module) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
 	public <T extends Module> T fetchModule(ModuleType type, String name, PromptoVersion version) throws PromptoError {
 		return null;
 	}
@@ -107,6 +113,11 @@ public class ImmutableCodeStore extends BaseCodeStore {
 	@Override
 	protected Module fetchModule(String name, PromptoVersion version) {
 		return null;
+	}
+	
+	@Override
+	public Iterable<Module> fetchAllModules() throws PromptoError {
+		return Collections.emptyList();
 	}
 	
 	@Override

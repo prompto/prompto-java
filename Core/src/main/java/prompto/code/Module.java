@@ -128,6 +128,22 @@ public abstract class Module {
 		return dependencies;
 	}
 	
+	public boolean hasDependency(String name) {
+		return dependencies==null 
+				? false 
+				: dependencies.stream()
+					.anyMatch(d->d.getName().equals(name));
+	}
+
+	public Dependency getDependency(String name) {
+		return dependencies==null 
+				? null 
+				: dependencies.stream()
+					.filter(d->d.getName().equals(name))
+					.findFirst()
+					.orElse(null);
+	}
+
 	public void setModuleStatus(ModuleStatus moduleStatus) {
 		this.moduleStatus = moduleStatus;
 	}
@@ -144,6 +160,7 @@ public abstract class Module {
 	public Boolean getParked() {
 		return parked;
 	}
+
 
 
 }

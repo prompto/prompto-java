@@ -16,6 +16,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import prompto.declaration.AttributeDeclaration;
@@ -134,6 +135,19 @@ public class QueryableCodeStore extends BaseCodeStore {
 		store.store(null, storables);
 	}
 	
+	@Override
+	public void dropModule(Module module) {
+		IQueryBuilder builder = store.newQueryBuilder();
+		AttributeInfo info = AttributeInfo.MODULE;
+		builder.verify(info, MatchOp.CONTAINS, module.getDbId());
+		Iterable<IStored> stuff = store.fetchMany(builder.build());
+		Stream<Object> stuffDbIds = StreamSupport.stream(stuff.spliterator(), false)
+				.map(IStored::getDbId);
+		List<Object> dbIds = Stream.concat(Stream.of(module.getDbId()), stuffDbIds)
+					.collect(Collectors.toList());
+		store.delete(dbIds);
+	}
+	
 	private Object storeDeclarationModule(IDeclaration decl) throws PromptoError {
 		ICodeStore origin = decl.getOrigin();
 		List<String> categories = Arrays.asList("Module", origin.getModuleType().getCategory().getTypeName());
@@ -144,6 +158,35 @@ public class QueryableCodeStore extends BaseCodeStore {
 		return storable.getOrCreateDbId();
 	}
 
+	@Override
+	public Iterable<Module> fetchAllModules() throws PromptoError {
+		try {
+			IQueryBuilder builder = store.newQueryBuilder();
+			AttributeInfo info = AttributeInfo.CATEGORY;
+			builder.verify(info, MatchOp.CONTAINS, "Module");
+			Iterator<IStored> iterator = store.fetchMany(builder.build()).iterator();
+			return () -> new Iterator<Module>() {
+
+				@Override
+				public boolean hasNext() {
+					return iterator.hasNext();
+				}
+
+				@Override
+				public Module next() {
+					try {
+						return moduleFromStored(iterator.next());
+					} catch(Exception e) {
+						throw new InternalError(e);
+					}
+				}
+			};
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends Module> T fetchModule(ModuleType type, String name, PromptoVersion version) throws PromptoError {
@@ -163,19 +206,23 @@ public class QueryableCodeStore extends BaseCodeStore {
 	public Module fetchModule(String name, PromptoVersion version) throws PromptoError {
 		try {
 			IStored stored = fetchOneNamedInStore(new CategoryType(new Identifier("Module")), version, name, false);
-			if(stored==null)
-				return null;
-			String[] categories = stored.getCategories();
-			String category = categories[categories.length-1];
-			ModuleType type = ModuleType.valueOf(category.toUpperCase());
-			Module module = type.getModuleClass().newInstance();
-			module.fromStored(store, stored);
-			return module;
+			return moduleFromStored(stored);
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 	
+	private Module moduleFromStored(IStored stored) throws Exception {
+		if(stored==null)
+			return null;
+		String[] categories = stored.getCategories();
+		String category = categories[categories.length-1];
+		ModuleType type = ModuleType.valueOf(category.toUpperCase());
+		Module module = type.getModuleClass().newInstance();
+		module.fromStored(store, stored);
+		return module;
+	}
+
 	@Override
 	public Object fetchModuleDbId(String name, PromptoVersion version) throws PromptoError {
 		try {

@@ -130,10 +130,13 @@ public interface ICodeStore {
 		return fetchModule(ModuleType.THESAURUS, ModuleType.THESAURUS.name(), version);
 	}
 	
+	public Iterable<Module> fetchAllModules() throws PromptoError;
 	<T extends Module> T fetchModule(ModuleType type, String name, PromptoVersion version) throws PromptoError;
 	Object fetchModuleDbId(String name, PromptoVersion version) throws PromptoError;
 	void storeModule(Module module) throws PromptoError;
-	
+	void dropModule(Module module);
+
+
 	void setMainModule(String name, PromptoVersion version);
 
 	void collectStorableAttributes(Map<String, AttributeDeclaration> columns) throws PromptoError;
@@ -165,6 +168,5 @@ public interface ICodeStore {
 					.orElse(null);
 		}
 	}
-
 
 }
