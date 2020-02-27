@@ -135,6 +135,7 @@ public interface ICodeStore {
 	Object fetchModuleDbId(String name, PromptoVersion version) throws PromptoError;
 	void storeModule(Module module) throws PromptoError;
 	void dropModule(Module module);
+	void storeDependency(Dependency dependency);
 
 
 	void setMainModule(String name, PromptoVersion version);
@@ -168,5 +169,6 @@ public interface ICodeStore {
 					.orElse(null);
 		}
 	}
+
 
 }

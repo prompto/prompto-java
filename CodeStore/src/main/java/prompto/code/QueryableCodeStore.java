@@ -134,6 +134,14 @@ public class QueryableCodeStore extends BaseCodeStore {
 		module.collectStorables(context, store, storables);
 		store.store(null, storables);
 	}
+
+	@Override
+	public void storeDependency(Dependency dependency) {
+		Context context = Context.newGlobalsContext();
+		List<IStorable> storables = new ArrayList<>();
+		dependency.collectStorables(context, store, storables);
+		store.store(null, storables);
+	}
 	
 	@Override
 	public void dropModule(Module module) {

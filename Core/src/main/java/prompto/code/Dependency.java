@@ -3,6 +3,7 @@ package prompto.code;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import prompto.intrinsic.PromptoVersion;
@@ -20,11 +21,14 @@ public class Dependency {
 		else
 			return ((Collection<Object>)data).stream()
 				.map(dbId->fromStored(store, dbId))
+				.filter(Objects::nonNull)
 				.collect(Collectors.toList());
 	}
 
 	public static Dependency fromStored(IStore store, Object data) {
 		IStored stored = store.fetchUnique(data);
+		if(stored==null)
+			return null;
 		Dependency result = new Dependency();
 		result.fromStored(stored);
 		return result;
@@ -69,10 +73,9 @@ public class Dependency {
 
 	public IStorable collectStorables(Context context, IStore store, List<IStorable> storables) {
 		List<String> categories = Arrays.asList("Dependency");
-		IStorable storable = store.newStorable(categories, null); 
+		IStorable storable = store.newStorable(categories, dbId -> this.dbId = dbId); 
 		storables.add(storable);
-		setDbId(storable.getOrCreateDbId());
-		storable.setData("name", name);
+		storable.setData("name", name, ()->dbId);
 		storable.setData("version", version);
 		return storable;
 	}

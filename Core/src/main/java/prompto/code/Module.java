@@ -67,10 +67,9 @@ public abstract class Module {
 	}
 
 	public IStorable collectStorables(Context context, IStore store, List<IStorable> storables) throws PromptoError {
-		IStorable storable = store.newStorable(getCategories(), null); 
+		IStorable storable = store.newStorable(getCategories(), dbId -> this.dbId = dbId); 
 		storables.add(storable);
-		setDbId(storable.getOrCreateDbId());
-		storable.setData("name", name);
+		storable.setData("name", name, () -> dbId);
 		storable.setData("version", version);
 		if(description!=null)
 			storable.setData("description", description);

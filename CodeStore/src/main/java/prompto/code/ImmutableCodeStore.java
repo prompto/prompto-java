@@ -105,6 +105,12 @@ public class ImmutableCodeStore extends BaseCodeStore {
 		throw new UnsupportedOperationException();
 	}
 	
+	
+	@Override
+	public void storeDependency(Dependency dependency) {
+		throw new UnsupportedOperationException();
+	}
+	
 	@Override
 	public <T extends Module> T fetchModule(ModuleType type, String name, PromptoVersion version) throws PromptoError {
 		return null;
