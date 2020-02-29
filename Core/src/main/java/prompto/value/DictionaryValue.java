@@ -128,17 +128,26 @@ public class DictionaryValue extends BaseValue implements IContainer<IValue> {
 
 	@Override
 	public Object convertTo(Context context, Type type) {
-		Type itemType = Object.class;
-		if(type instanceof ParameterizedType)
-			itemType = ((ParameterizedType)type).getActualTypeArguments()[1];
-		PromptoDict<String, Object> dict = new PromptoDict<>(true);
-		for(Map.Entry<TextValue, IValue> entry : this.dict.entrySet()) {
-			String key = entry.getKey().toString();
-			Object value = entry.getValue().convertTo(context, itemType);
-			dict.put(key, value);
-		}
-		dict.setMutable(this.isMutable());
-		return dict;
+		if(canConvertTo(type)) {
+			Type itemType = getItemType(type);
+			PromptoDict<String, Object> dict = new PromptoDict<>(true);
+			for(Map.Entry<TextValue, IValue> entry : this.dict.entrySet()) {
+				String key = entry.getKey().toString();
+				Object value = entry.getValue().convertTo(context, itemType);
+				dict.put(key, value);
+			}
+			dict.setMutable(this.isMutable());
+			return dict;
+		} else
+			return super.convertTo(context, type);
+	}
+
+	private boolean canConvertTo(Type type) {
+		return type==PromptoDict.class || (type instanceof Class<?> && ((Class<?>)type).isAssignableFrom(PromptoDict.class));
+	}
+
+	private Type getItemType(Type type) {
+		return type instanceof ParameterizedType ? ((ParameterizedType)type).getActualTypeArguments()[1] : Object.class;
 	}
 
 	@Override

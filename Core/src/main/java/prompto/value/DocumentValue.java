@@ -1,10 +1,17 @@
 package prompto.value;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.Function;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
@@ -15,11 +22,6 @@ import prompto.runtime.Context;
 import prompto.store.InvalidValueError;
 import prompto.type.AnyType;
 import prompto.type.DocumentType;
-
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class DocumentValue extends BaseValue {
 	
@@ -121,7 +123,23 @@ public class DocumentValue extends BaseValue {
 			return false;
 	}
 	
+	@Override
+	public Object convertTo(Context context, Type type) {
+		if(canConvertTo(type)) {
+			PromptoDocument<String, Object> result = new PromptoDocument<>();
+			result.putAll(values.entrySet().stream()
+					.collect(Collectors.toMap(e->e.getKey().toString(), e->e.getValue().convertTo(context, Object.class))));
+			return result;
+		} else
+			return super.convertTo(context, type);
+				
+	}
 	
+	private boolean canConvertTo(Type type) {
+		return type==PromptoDocument.class || (type instanceof Class<?> && ((Class<?>)type).isAssignableFrom(PromptoDocument.class));
+	}
+
+
 	@Override
 	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
 		ObjectNode result = JsonNodeFactory.instance.objectNode();
