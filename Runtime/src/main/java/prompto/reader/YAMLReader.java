@@ -58,8 +58,16 @@ public abstract class YAMLReader {
 		try {
 			return Long.parseLong(value);
 		} catch(NumberFormatException e) {
-			return value;
+			return convertBoolean(value);
 		}
+	}
+
+	private static Object convertBoolean(String value) {
+		boolean bool = Boolean.parseBoolean(value); // always succeeds
+		if(value.equals(String.valueOf(bool)))
+			return bool;
+		else
+			return value;
 	}
 
 	private static Object convertMap(Map<String, Object> value) {
