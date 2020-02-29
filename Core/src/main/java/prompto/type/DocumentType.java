@@ -140,6 +140,7 @@ public class DocumentType extends NativeType {
 	public void declare(Transpiler transpiler) {
 		transpiler.register("Document");
 		transpiler.register("List");
+		transpiler.require("Utils"); // equals etc...
 	}
 	
 	@Override

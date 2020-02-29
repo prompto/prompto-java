@@ -8,6 +8,20 @@ Document.prototype.toString = function() {
     return JSON.stringify(this);
 };
 
+Document.prototype.equals = function(other) {
+    if(this==other)
+        return true;
+    if(!(other instanceof Document))
+        return false;
+    var thisNames = Object.getOwnPropertyNames(this);
+    var otherNames = Object.getOwnPropertyNames(other);
+    if(!equalArrays(thisNames,otherNames))
+        return false;
+    return thisNames.every(function(name) {
+        return this[name]===other[name] || (this[name].equals && this[name].equals(other[name]));
+    }, this);
+};
+
 Document.prototype.getText = function() {
     if(this.hasOwnProperty("text"))
         return this.text;

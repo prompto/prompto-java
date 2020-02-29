@@ -18,6 +18,31 @@ function equalObjects(o1, o2) {
 
 }
 
+function equalArrays(o1, o2) {
+	o1 = o1 || null;
+	o2 = o2 || null;
+	if(o1===o2) {
+		return true;
+	}
+	if(o1===null || o2===null) {
+		return false;
+	}
+	if(o1.length !== o2.length) {
+		return false;
+	}
+	for(var i=0;i<o1.length;i++) {
+		if(!equalObjects(o1[i], o2[i])) {
+			return false;
+		}
+	}
+	return true;
+}
+
+Array.prototype.equals = function(o) {
+    return equalArrays(this, o);
+};
+
+
 TypeError.prototype.getText = function() { return 'Null reference!'; };
 ReferenceError.prototype.getText = function() { return 'Null reference!'; };
 RangeError.prototype.getText = function() { return 'Index out of range!'; };
