@@ -97,3 +97,36 @@ and verifying:
 	docs[2].id = "2"
 	docs[2].name = "Riou, Sylvie"
 
+define readYaml as native method receiving text returning Document[] doing:
+	Java: return prompto.reader.YAMLReader.read(text);
+	C#: return prompto.reader.YAMLReader.read(text); 
+	Python2: return yamlRead(text) from module: prompto.reader.YAMLReader
+	Python3: return yamlRead(text) from module: prompto.reader.YAMLReader
+	JavaScript: return yamlRead(text); from module: prompto/reader/YAMLReader.js
+
+
+define "test that readYaml returns a complex Document" as test method doing:
+    yaml = "field: 122\ndata:\n  list:\n  - field: 123\n  - doc:\n      name: John\n      doc:\n        list:\n        - 122\n        - 233\n        - 344"
+	o = readYaml yaml
+and verifying:
+	o is a Document[]
+	o[1].field = 122
+
+
+define writeYaml as native method receiving Document[] docs returning Text doing:
+	Java: return prompto.writer.YAMLWriter.write(docs);
+	C#: return prompto.writer.YAMLWriter.write(docs); 
+	Python2: return yamlWrite(docs) from module: prompto.writer.YAMLWriter
+	Python3: return yamlWrite(docs) from module: prompto.writer.YAMLWriter
+	JavaScript: return yamlWrite(docs); from module: prompto/writer/YAMLWriter.js
+
+
+define "test that writeYaml writes a complex Document" as test method doing:
+	src = [{ field: 122, list: [ { field: 123 }, { doc: { name: "John", doc: { list: [ 122, 233, 344 ] } } } ] }]
+	yaml = writeYaml src
+    dst = readYaml yaml
+and verifying:
+	dst is a Document[]
+	dst = src
+
+
