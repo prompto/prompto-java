@@ -153,6 +153,10 @@ public class DocumentType extends NativeType {
 		// nothing to do
 	}
 	
+	@Override
+	public void declareItem(Transpiler transpiler, IType itemType, IExpression item) {
+		// nothing to do
+	}
 	
 	@Override
 	public void transpileMember(Transpiler transpiler, Identifier name) {
