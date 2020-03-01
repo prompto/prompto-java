@@ -38,11 +38,6 @@ function equalArrays(o1, o2) {
 	return true;
 }
 
-Array.prototype.equals = function(o) {
-    return equalArrays(this, o);
-};
-
-
 TypeError.prototype.getText = function() { return 'Null reference!'; };
 ReferenceError.prototype.getText = function() { return 'Null reference!'; };
 RangeError.prototype.getText = function() { return 'Index out of range!'; };
