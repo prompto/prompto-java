@@ -1,5 +1,4 @@
-var yaml = require("js-yaml");
-
+var yaml = require("/js/lib/js-yaml.min.js", null, null, function(m) { return {id: m, uri: m}; });
 
 exports.yamlRead = function (text) {
     var docs = yaml.safeLoadAll(text);

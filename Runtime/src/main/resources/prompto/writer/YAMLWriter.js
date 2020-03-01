@@ -1,4 +1,4 @@
-var yaml = require("js-yaml");
+var yaml = require("/js/lib/js-yaml.min.js", null, null, function(m) { return {id: m, uri: m}; });
 
 function convert(obj) {
     /* global intrinsic */
