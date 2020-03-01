@@ -134,17 +134,18 @@ public class ItemSelector extends SelectorExpression {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-		IType parentType = this.parent.check(transpiler.getContext());
-		IType itemType = this.item.check(transpiler.getContext());
-		parentType.declareItem(transpiler, itemType, this.item);
+		parent.declare(transpiler);
+		IType parentType = parent.check(transpiler.getContext());
+		IType itemType = item.check(transpiler.getContext());
+		parentType.declareItem(transpiler, itemType, item);
 	}
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    this.parent.transpile(transpiler);
-	    IType parentType = this.parent.check(transpiler.getContext());
-	    IType itemType = this.item.check(transpiler.getContext());
-	    parentType.transpileItem(transpiler, itemType, this.item);
+	    parent.transpile(transpiler);
+	    IType parentType = parent.check(transpiler.getContext());
+	    IType itemType = item.check(transpiler.getContext());
+	    parentType.transpileItem(transpiler, itemType, item);
 	    return false;
 	}
 	
