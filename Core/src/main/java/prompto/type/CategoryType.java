@@ -136,7 +136,7 @@ public class CategoryType extends BaseType {
 						onError.accept(type);
 						return null;
 					} else
-						throw new SyntaxError("Unkown type:" + type.getTypeNameId());
+						throw new SyntaxError("Unknown type:" + type.getTypeNameId());
 				} else if(decl instanceof MethodDeclarationMap)
 					resolved = new MethodType(((MethodDeclarationMap)decl).getFirst());
 				else {
