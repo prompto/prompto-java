@@ -149,12 +149,21 @@ public class DocumentType extends NativeType {
 	}
 	
 	@Override
-	public void declareMember(Transpiler transpiler, Identifier name) {
-		// nothing to do
+	public void declareItem(Transpiler transpiler, IType itemType, IExpression item) {
+		itemType.declare(transpiler);
+	    item.declare(transpiler);
 	}
 	
 	@Override
-	public void declareItem(Transpiler transpiler, IType itemType, IExpression item) {
+	public void transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
+	    transpiler.append(".item(");
+	    item.transpile(transpiler);
+	    transpiler.append(")");
+	}
+	
+	
+	@Override
+	public void declareMember(Transpiler transpiler, Identifier name) {
 		// nothing to do
 	}
 	
@@ -163,7 +172,7 @@ public class DocumentType extends NativeType {
 	    if ("text".equals(name.toString())) {
 	        transpiler.append("getText()");
 	    } else {
-	        transpiler.append(name);
+	        transpiler.append("getMember('").append(name).append("', false)");
 	    }
 	}
 	
@@ -181,12 +190,6 @@ public class DocumentType extends NativeType {
 	}
 	
 	
-	@Override
-	public void transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
-	    transpiler.append(".item(");
-	    item.transpile(transpiler);
-	    transpiler.append(")");
-	}
 	
 	@Override
 	public void transpileAssignItemValue(Transpiler transpiler, IExpression item, IExpression expression) {
