@@ -47,12 +47,12 @@ public class AnyType extends NativeType {
 	
 	@Override
 	public IType checkItem(Context context, IType itemType) {
-		return AnyType.instance(); // needed to support lists in Documents
+		return DocumentType.instance().checkItem(context,  itemType); // needed to support lists in Documents
 	}
 	
 	@Override
 	public IType checkMember(Context context, Identifier name) {
-		return AnyType.instance(); // needed to support members in Documents
+		return DocumentType.instance().checkMember(context, name); // needed to support members in Documents
 	}
 
 	@Override
@@ -111,17 +111,22 @@ public class AnyType extends NativeType {
 	
 	@Override
 	public void declareItem(Transpiler transpiler, IType itemType, IExpression item) {
-	    // required to support Document items
-		itemType.declare(transpiler);
-	    item.declare(transpiler);
+		DocumentType.instance().declareItem(transpiler, itemType, item);;
 	}
 	
 	@Override
 	public void transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
-	    // required to support Document items
-	    transpiler.append(".item(");
-	    item.transpile(transpiler);
-	    transpiler.append(")");
+		DocumentType.instance().transpileItem(transpiler, itemType, item);
+	}
+	
+	@Override
+	public void declareMember(Transpiler transpiler, Identifier name) {
+		DocumentType.instance().declareMember(transpiler, name);
+	}
+	
+	@Override
+	public void transpileMember(Transpiler transpiler, Identifier name) {
+		DocumentType.instance().transpileMember(transpiler, name);
 	}
 	
 	@Override
