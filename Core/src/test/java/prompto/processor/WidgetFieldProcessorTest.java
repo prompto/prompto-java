@@ -28,6 +28,6 @@ public class WidgetFieldProcessorTest extends BaseOParserTest {
 		try(OutputStream output = new FileOutputStream("transpiled.js")) {
 			output.write(js.getBytes());
 		}
-		assertTrue(js.contains("this.state.stuff"));
+		assertTrue(js.contains("this.state.getMember('stuff', false)"));
 	}
 }
