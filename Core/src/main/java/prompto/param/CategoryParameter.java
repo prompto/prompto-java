@@ -17,6 +17,7 @@ import prompto.utils.CodeWriter;
 public class CategoryParameter extends BaseParameter implements ITypedParameter {
 	
 	IType type;
+	IType resolved;
 	
 	public CategoryParameter(IType type, Identifier id) {
 		super(id);
@@ -32,6 +33,10 @@ public class CategoryParameter extends BaseParameter implements ITypedParameter 
 	@Override
 	public IType getType() {
 		return type;
+	}
+	
+	public IType getResolved() {
+		return resolved;
 	}
 	
 	@Override
@@ -128,9 +133,16 @@ public class CategoryParameter extends BaseParameter implements ITypedParameter 
 	
 	@Override
 	public void check(Context context) {
-		type.checkExists(context);
+		resolve(context);
+		resolved.checkExists(context);
 	}
 	
+	private void resolve(Context context) {
+		if(resolved==null)
+			resolved = type.resolve(context, null);
+		
+	}
+
 	@Override
 	public IType getType(Context context) {
 		return type;
