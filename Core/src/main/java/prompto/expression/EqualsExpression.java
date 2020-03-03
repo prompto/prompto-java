@@ -45,6 +45,7 @@ import prompto.runtime.LinkedValue;
 import prompto.runtime.LinkedVariable;
 import prompto.runtime.Variable;
 import prompto.store.AttributeInfo;
+import prompto.store.DataStore;
 import prompto.store.IQueryBuilder;
 import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStore;
@@ -346,9 +347,14 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		}
 		if(value instanceof IInstance)
 			value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
+		Object data = null;
+		if(value!=null)
+		if(IStore.dbIdName.equals(name))
+			data = DataStore.getInstance().convertToDbId(value);
+		else
+			data = value.getStorableData();
 		AttributeDeclaration decl = context.findAttribute(name);
 		AttributeInfo info = decl==null ? null : decl.getAttributeInfo(context);
-		Object data = value==null ? null : value.getStorableData();
 		MatchOp match = getMatchOp();
 		query.<Object>verify(info, match, data);
 		if(operator==EqOp.NOT_EQUALS || operator==EqOp.NOT_CONTAINS)
