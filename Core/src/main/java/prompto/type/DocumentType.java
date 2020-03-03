@@ -87,7 +87,10 @@ public class DocumentType extends NativeType {
 
 	@Override
 	public IType checkMember(Context context, Identifier name) {
-		return AnyType.instance();
+		if("text".equals(name.toString()))
+			return TextType.instance();
+		else
+			return AnyType.instance();
 	}
 	
 	@Override

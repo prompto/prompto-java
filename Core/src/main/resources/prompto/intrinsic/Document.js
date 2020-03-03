@@ -44,15 +44,6 @@ Document.prototype.item = function(item) {
 };
 
 
-// the below is required to properly support React widget fields 'state' and 'props'
-// the React implementation is an object, seen by prompto as a document, so we mimic the behavior
-// this is not necessary or possible for lvalues, because state and props are read-only
-if(Object.prototype) {
-	Object.prototype.getMember = Document.prototype.getMember;
-	Object.prototype.item = Document.prototype.item;
-}
-
-
 Document.prototype.setMember = function(name, value) {
     this[name] = value;
 };
