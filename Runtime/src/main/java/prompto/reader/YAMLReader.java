@@ -43,20 +43,20 @@ public abstract class YAMLReader {
 	}
 	
 	private static Object convertString(String value) {
-		return convertDouble(value);
-	}
-
-	private static Object convertDouble(String value) {
-		try {
-			return Double.parseDouble(value);
-		} catch(NumberFormatException e) {
-			return convertLong(value);
-		}
+		return convertLong(value);
 	}
 
 	private static Object convertLong(String value) {
 		try {
 			return Long.parseLong(value);
+		} catch(NumberFormatException e) {
+			return convertDouble(value);
+		}
+	}
+
+	private static Object convertDouble(String value) {
+		try {
+			return Double.parseDouble(value);
 		} catch(NumberFormatException e) {
 			return convertBoolean(value);
 		}

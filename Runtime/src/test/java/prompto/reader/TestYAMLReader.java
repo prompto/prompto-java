@@ -18,6 +18,7 @@ public class TestYAMLReader {
 		String yaml1 = ResourceUtils.getResourceAsString("samples/configSample.yml");
 		PromptoList<PromptoDocument<String,Object>> docs1 = YAMLReader.read(yaml1);
 		String yaml2 = YAMLWriter.write(docs1);
+		// assertEquals(yaml1, yaml2); not possible to compare
 		Object docs2 = YAMLReader.read(yaml2);
 		assertEquals(docs1, docs2);
 	}
