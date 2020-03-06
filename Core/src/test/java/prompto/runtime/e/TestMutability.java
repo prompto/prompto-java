@@ -200,21 +200,6 @@ public class TestMutability extends BaseEParserTest {
 	}
 
 	@Test
-	public void testInterpretedMutableMember() throws Exception {
-		checkInterpretedOutput("mutability/mutableMember.pec");
-	}
-
-	@Test
-	public void testCompiledMutableMember() throws Exception {
-		checkCompiledOutput("mutability/mutableMember.pec");
-	}
-
-	@Test
-	public void testTranspiledMutableMember() throws Exception {
-		checkTranspiledOutput("mutability/mutableMember.pec");
-	}
-
-	@Test
 	public void testInterpretedMutableTuple() throws Exception {
 		checkInterpretedOutput("mutability/mutableTuple.pec");
 	}

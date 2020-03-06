@@ -57,11 +57,6 @@ public class TestMutability extends BaseOParserTest {
 	}
 
 	@Test
-	public void testMutableMember() throws Exception {
-		compareResourceOEO("mutability/mutableMember.poc");
-	}
-
-	@Test
 	public void testMutableTuple() throws Exception {
 		compareResourceOEO("mutability/mutableTuple.poc");
 	}

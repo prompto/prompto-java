@@ -67,11 +67,6 @@ public class TestMutability extends BaseEParserTest {
 	}
 
 	@Test
-	public void testMutableMember() throws Exception {
-		compareResourceEME("mutability/mutableMember.pec");
-	}
-
-	@Test
 	public void testMutableTuple() throws Exception {
 		compareResourceEME("mutability/mutableTuple.pec");
 	}

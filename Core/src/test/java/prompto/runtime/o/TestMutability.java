@@ -170,21 +170,6 @@ public class TestMutability extends BaseOParserTest {
 	}
 
 	@Test
-	public void testInterpretedMutableMember() throws Exception {
-		checkInterpretedOutput("mutability/mutableMember.poc");
-	}
-
-	@Test
-	public void testCompiledMutableMember() throws Exception {
-		checkCompiledOutput("mutability/mutableMember.poc");
-	}
-
-	@Test
-	public void testTranspiledMutableMember() throws Exception {
-		checkTranspiledOutput("mutability/mutableMember.poc");
-	}
-
-	@Test
 	public void testInterpretedMutableTuple() throws Exception {
 		checkInterpretedOutput("mutability/mutableTuple.poc");
 	}
