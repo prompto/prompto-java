@@ -32,9 +32,12 @@ import prompto.type.IType;
 import prompto.type.TypeMap;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
+import prompto.utils.Logger;
 import prompto.value.IValue;
 
 public class SwitchErrorStatement extends BaseSwitchStatement {
+
+	private static Logger logger = new Logger();
 
 	Identifier errorId;
 	StatementList statements;
@@ -173,8 +176,11 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 		try {
 			result = statements.interpret(context);
 		} catch (ExecutionError e) {
+			logger.error(()->"Whild interpreting try/catch body", e);
 			IValue switchValue = e.interpret(context, errorId);
 			result = interpretSwitch(context, switchValue, e);
+		} catch(Throwable t) {
+			logger.error(()->"Whild interpreting try/catch body", t);
 		} finally {
 			if(finallyStatements!=null)
 				finallyStatements.interpret(context);
