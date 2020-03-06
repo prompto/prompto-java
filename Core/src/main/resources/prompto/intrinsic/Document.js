@@ -89,3 +89,13 @@ Document.prototype.readJsonField = function(node, parts) {
         throw new Error(typeof(node).toString());
 };
 
+// ensure objects created from Documents exhibit the same behaviour
+Object.defineProperty(Object.prototype, "getMember", {
+    get: function() {
+        return Document.prototype.getMember;
+    },
+    set: function() {
+    	// pass
+    }
+});
+

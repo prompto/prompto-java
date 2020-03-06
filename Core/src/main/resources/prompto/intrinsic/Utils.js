@@ -124,10 +124,5 @@ String.prototype.equals = function(value) {
 };
 intrinsic = {};
 
-function setReactWidgetState(widget, state, andThen) {
-	state.getMember = Document.prototype.getMember;
-	widget.setState(state, andThen);
-}
-
 
 

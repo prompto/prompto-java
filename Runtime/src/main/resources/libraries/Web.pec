@@ -64,7 +64,7 @@ define getReactWidgetState as native method receiving ReactWidget w returning Do
 
 
 define setReactWidgetState as native method receiving ReactWidget w and Document state doing:
-	JavaScript: setReactWidgetState(w, state);
+	JavaScript: w.setState(state);
 
 
 define forceReactWidgetRender as native method receiving ReactWidget w doing:

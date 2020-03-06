@@ -70,19 +70,19 @@ public class ConcreteWidgetDeclaration extends ConcreteCategoryDeclaration imple
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 	    Identifier parent = this.derivedFrom!=null && this.derivedFrom.size()>0 ? this.derivedFrom.get(0) : null;
-	    transpiler.append("function ").append(this.getName()).append("(props) {");
-	    transpiler.indent();
+	    transpiler.append("function ").append(this.getName()).append("(props) {")
+	    	.indent();
 	    this.transpileGetterSetterAttributes(transpiler);
-	    this.transpileSuperConstructor(transpiler);
+	    this.transpileSuperConstructor(transpiler, parent);
 	    this.transpileLocalAttributes(transpiler);
 	    if(this.hasMethod(transpiler.getContext(), new Identifier("getInitialState")))
 	    	transpiler.append("this.state = this.getInitialState();").newLine();
 	    else
 	    	transpiler.append("this.state = {};").newLine();
-	    transpiler.append("return this;");
-	    transpiler.dedent();
-	    transpiler.append("}");
-	    transpiler.newLine();
+	    transpiler.append("return this;")
+	    	.dedent()
+	    	.append("}")
+	    	.newLine();
 	    if(parent!=null)
 	        transpiler.append(this.getName()).append(".prototype = Object.create(").append(parent.toString()).append(".prototype);").newLine();
 	    else
@@ -100,6 +100,11 @@ public class ConcreteWidgetDeclaration extends ConcreteCategoryDeclaration imple
 	@Override
 	protected void transpileSuperConstructor(Transpiler transpiler) {
 	    Identifier parent = this.derivedFrom!=null && this.derivedFrom.size()>0 ? this.derivedFrom.get(0) : null;
+	    transpileSuperConstructor(transpiler, parent);
+	}
+
+
+	private void transpileSuperConstructor(Transpiler transpiler, Identifier parent) {
 	    if (parent!=null)
 	    	transpiler.append(parent.toString()).append(".call(this, props);").newLine();
 	    else
