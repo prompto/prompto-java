@@ -2,11 +2,13 @@ package prompto.problem;
 
 import prompto.parser.ISection;
 
-public class IllegalReturnError extends SyntaxProblemBase {
+public class IllegalAnnotation extends SyntaxProblemBase {
 
-	public IllegalReturnError(ISection section) {
+	String message;
+	
+	public IllegalAnnotation(String message, ISection section) {
 		super(section);
-		this.section = section;
+		this.message = message;
 	}
 
 	@Override
@@ -16,7 +18,7 @@ public class IllegalReturnError extends SyntaxProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return "Illegal return statement in test method body!";
+		return message;
 	}
 
 }

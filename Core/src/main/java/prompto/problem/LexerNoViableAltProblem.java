@@ -3,11 +3,11 @@ package prompto.problem;
 import org.antlr.v4.runtime.LexerNoViableAltException;
 import org.antlr.v4.runtime.misc.Interval;
 
-public class LexerNoViableAltError extends ParserProblemBase {
+public class LexerNoViableAltProblem extends ParserProblemBase {
 
 	LexerNoViableAltException e;
 	
-	public LexerNoViableAltError(String path, int line, int column, LexerNoViableAltException e) {
+	public LexerNoViableAltProblem(String path, int line, int column, LexerNoViableAltException e) {
 		super(path, line, column);
 		this.e = e;
 	}

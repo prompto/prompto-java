@@ -2,11 +2,11 @@ package prompto.problem;
 
 import prompto.parser.UnwantedTokenException;
 
-public class UnwantedTokenError extends ParserProblemBase {
+public class UnwantedTokenProblem extends ParserProblemBase {
 
 	UnwantedTokenException e;
 	
-	public UnwantedTokenError(String path, int line, int column, UnwantedTokenException e) {
+	public UnwantedTokenProblem(String path, int line, int column, UnwantedTokenException e) {
 		super(path, line, column);
 		this.e = e;
 	}

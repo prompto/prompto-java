@@ -2,15 +2,13 @@ package prompto.problem;
 
 import prompto.parser.ISection;
 
-public class UnknowAttributeError extends SyntaxProblemBase {
+public class UnknownMemberProblem extends SyntaxProblemBase {
 
 	String name;
-	String hint;
 	
-	public UnknowAttributeError(String name, String hint, ISection section) {
+	public UnknownMemberProblem(String name, ISection section) {
 		super(section);
 		this.name = name;
-		this.hint = hint;
 	}
 
 	@Override
@@ -20,7 +18,7 @@ public class UnknowAttributeError extends SyntaxProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return "Unknown attribute: " + name + hint;
+		return "Cannot read member: " + name;
 	}
 
 }

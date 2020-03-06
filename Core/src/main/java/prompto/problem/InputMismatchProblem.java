@@ -2,11 +2,11 @@ package prompto.problem;
 
 import org.antlr.v4.runtime.InputMismatchException;
 
-public class InputMismatchError extends ParserProblemBase {
+public class InputMismatchProblem extends ParserProblemBase {
 
 	InputMismatchException e;
 
-	public InputMismatchError(String path, int line, int column, InputMismatchException e) {
+	public InputMismatchProblem(String path, int line, int column, InputMismatchException e) {
 		super(path, line, column);
 		this.e = e;
 	}

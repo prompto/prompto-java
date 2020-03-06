@@ -2,11 +2,11 @@ package prompto.problem;
 
 import prompto.parser.ISection;
 
-public class UnknownIdentifierError extends SyntaxProblemBase {
+public class UnknownMethodProblem extends SyntaxProblemBase {
 
 	String name;
 	
-	public UnknownIdentifierError(String name, ISection section) {
+	public UnknownMethodProblem(String name, ISection section) {
 		super(section);
 		this.name = name;
 	}
@@ -18,7 +18,7 @@ public class UnknownIdentifierError extends SyntaxProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return "Unknown identifier: " + name;
+		return "Unknown method: " + name;
 	}
 
 }

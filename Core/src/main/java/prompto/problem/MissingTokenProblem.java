@@ -2,11 +2,11 @@ package prompto.problem;
 
 import prompto.parser.MissingTokenException;
 
-public class MissingTokenError extends ParserProblemBase {
+public class MissingTokenProblem extends ParserProblemBase {
 
 	MissingTokenException e;
 	
-	public MissingTokenError(String path, int line, int column, MissingTokenException e) {
+	public MissingTokenProblem(String path, int line, int column, MissingTokenException e) {
 		super(path, line, column);
 		this.e = e;
 	}

@@ -2,23 +2,23 @@ package prompto.problem;
 
 import prompto.parser.ISection;
 
-public class UnknownMethodError extends SyntaxProblemBase {
+public class DuplicatePropertyProblem extends SyntaxProblemBase {
 
 	String name;
 	
-	public UnknownMethodError(String name, ISection section) {
+	public DuplicatePropertyProblem(String name, ISection section) {
 		super(section);
 		this.name = name;
 	}
 
 	@Override
 	public Type getType() {
-		return Type.ERROR;
+		return Type.WARNING;
 	}
 	
 	@Override
 	public String getMessage() {
-		return "Unknown method: " + name;
+		return "Duplicate property:" + name;
 	}
 
 }

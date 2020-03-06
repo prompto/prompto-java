@@ -2,23 +2,23 @@ package prompto.problem;
 
 import prompto.parser.ISection;
 
-public class MissingPropertyError extends SyntaxProblemBase {
+public class UnknownCategoryProblem extends SyntaxProblemBase {
 
 	String name;
 	
-	public MissingPropertyError(String name, ISection section) {
+	public UnknownCategoryProblem(String name, ISection section) {
 		super(section);
 		this.name = name;
 	}
 
 	@Override
 	public Type getType() {
-		return Type.WARNING;
+		return Type.ERROR;
 	}
 	
 	@Override
 	public String getMessage() {
-		return "Missing property:" + name;
+		return "Unknown category: " + name;
 	}
 
 }

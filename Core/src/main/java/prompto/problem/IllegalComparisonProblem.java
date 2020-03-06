@@ -3,11 +3,11 @@ package prompto.problem;
 import prompto.parser.ISection;
 import prompto.type.IType;
 
-public class IllegalComparisonError extends SyntaxProblemBase {
+public class IllegalComparisonProblem extends SyntaxProblemBase {
 
 	IType t1, t2;
 	
-	public IllegalComparisonError(IType t1, IType t2, ISection section) {
+	public IllegalComparisonProblem(IType t1, IType t2, ISection section) {
 		super(section);
 		this.t1 = t1;
 		this.t2 = t2;

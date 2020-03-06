@@ -2,13 +2,15 @@ package prompto.problem;
 
 import prompto.parser.ISection;
 
-public class UnknownCategoryError extends SyntaxProblemBase {
+public class UnknowAttributeProblem extends SyntaxProblemBase {
 
 	String name;
+	String hint;
 	
-	public UnknownCategoryError(String name, ISection section) {
+	public UnknowAttributeProblem(String name, String hint, ISection section) {
 		super(section);
 		this.name = name;
+		this.hint = hint;
 	}
 
 	@Override
@@ -18,7 +20,7 @@ public class UnknownCategoryError extends SyntaxProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return "Unknown category: " + name;
+		return "Unknown attribute: " + name + hint;
 	}
 
 }

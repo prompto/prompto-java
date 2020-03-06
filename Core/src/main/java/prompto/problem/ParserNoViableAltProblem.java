@@ -4,11 +4,11 @@ import org.antlr.v4.runtime.NoViableAltException;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenStream;
 
-public class ParserNoViableAltError extends ParserProblemBase {
+public class ParserNoViableAltProblem extends ParserProblemBase {
 
 	NoViableAltException e;
 	
-	public ParserNoViableAltError(String path, int line, int column, NoViableAltException e) {
+	public ParserNoViableAltProblem(String path, int line, int column, NoViableAltException e) {
 		super(path, line, column);
 		this.e = e;
 	}

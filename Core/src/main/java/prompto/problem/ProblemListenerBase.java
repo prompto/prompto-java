@@ -39,42 +39,48 @@ public abstract class ProblemListenerBase implements ANTLRErrorListener, IProble
 	public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int column, String msg, RecognitionException e) {
 		String path = recognizer.getInputStream().getSourceName();
 		if(e instanceof LexerNoViableAltException)
-			addProblem(new LexerNoViableAltError(path, line, column, (LexerNoViableAltException)e));
+			addProblem(new LexerNoViableAltProblem(path, line, column, (LexerNoViableAltException)e));
 		else if(e instanceof UnwantedTokenException)
-			addProblem(new UnwantedTokenError(path, line, column, (UnwantedTokenException)e));
+			addProblem(new UnwantedTokenProblem(path, line, column, (UnwantedTokenException)e));
 		else if(e instanceof MissingTokenException)
-			addProblem(new MissingTokenError(path, line, column, (MissingTokenException)e));
+			addProblem(new MissingTokenProblem(path, line, column, (MissingTokenException)e));
 		else if(e instanceof NoViableAltException)
-			addProblem(new ParserNoViableAltError(path, line, column, (NoViableAltException)e));
+			addProblem(new ParserNoViableAltProblem(path, line, column, (NoViableAltException)e));
 		else if(e instanceof InputMismatchException)
-			addProblem(new InputMismatchError(path, line, column, (InputMismatchException)e));
+			addProblem(new InputMismatchProblem(path, line, column, (InputMismatchException)e));
 		else
 			throw e;
 	}
 	
 	@Override
 	public void reportDuplicate(ISection section, String name, ISection existing) {
-		addProblem(new DuplicateError(name, section, existing));
+		addProblem(new DuplicateProblem(name, section, existing));
+	}
+	
+	
+	@Override
+	public void reportNotMutable(ISection section, String name) {
+		addProblem(new NotMutableProblem(name, section));
 	}
 	
 	@Override
 	public void reportIllegalAssignment(ISection section, IType expected, IType actual) {
-		addProblem(new IllegalAssignmentError(section, expected, actual));
+		addProblem(new IllegalAssignmentProblem(section, expected, actual));
 	}
 	
 	@Override
 	public void reportIllegalAssignment(ISection section, Set<IType> expected, IType actual) {
-		addProblem(new IllegalAssignmentError(section, expected, actual));
+		addProblem(new IllegalAssignmentProblem(section, expected, actual));
 	}
 
 	@Override
 	public void reportIllegalReturn(ISection section) {
-		addProblem(new IllegalReturnError(section));
+		addProblem(new IllegalReturnProblem(section));
 	}
 	
 	@Override
 	public void reportUnknownIdentifier(ISection section, String name) {
-		addProblem(new UnknownIdentifierError(name, section));
+		addProblem(new UnknownIdentifierProblem(name, section));
 	}
 	
 	@Override
@@ -84,76 +90,76 @@ public abstract class ProblemListenerBase implements ANTLRErrorListener, IProble
 	
 	@Override
 	public void reportUnknownAttribute(ISection section, String name, String hint) {
-		addProblem(new UnknowAttributeError(name, hint, section));
+		addProblem(new UnknowAttributeProblem(name, hint, section));
 	}
 	
 	@Override
 	public void reportUnknownProperty(ISection section, String name) {
-		addProblem(new UnknowPropertyError(name, section));
+		addProblem(new UnknowPropertyProblem(name, section));
 	}
 	
 	@Override
 	public void reportDuplicateProperty(ISection section, String name) {
-		addProblem(new DuplicatePropertyError(name, section));
+		addProblem(new DuplicatePropertyProblem(name, section));
 	}
 
 	@Override
 	public void reportMissingProperty(ISection section, String name) {
-		addProblem(new MissingPropertyError(name, section));
+		addProblem(new MissingPropertyProblem(name, section));
 	}
 
 	@Override
 	public void reportUnknownAnnotation(ISection section, String name) {
-		addProblem(new UnknowAnnotationError(name, section));
+		addProblem(new UnknowAnnotationProblem(name, section));
 	}
 	
 	@Override
 	public void reportUnknownMethod(ISection section, String name) {
-		addProblem(new UnknownMethodError(name, section));
+		addProblem(new UnknownMethodProblem(name, section));
 	}
 	
 	@Override
 	public void reportUnknownCategory(ISection section, String name) {
-		addProblem(new UnknownCategoryError(name, section));
+		addProblem(new UnknownCategoryProblem(name, section));
 	}
 
 	@Override
 	public void reportNoMatchingPrototype(ISection section, String proto) {
-		addProblem(new NoMatchingPrototypeError(proto, section));
+		addProblem(new NoMatchingPrototypeProblem(proto, section));
 	}
 	
 	@Override
 	public void reportIllegalComparison(ISection section, IType type, IType other) {
-		addProblem(new IllegalComparisonError(type, other, section));
+		addProblem(new IllegalComparisonProblem(type, other, section));
 	}
 	
 	@Override
 	public void reportUnknownMember(ISection section, String name) {
-		addProblem(new UnknownMemberError(name, section));
+		addProblem(new UnknownMemberProblem(name, section));
 	}
 	
 	@Override
 	public void reportIllegalOperation(ISection section, String message) {
-		addProblem(new IllegalOperationError(message, section));
+		addProblem(new IllegalOperationProblem(message, section));
 	}
 	
 	@Override
 	public void reportIllegalRemoteCall(ISection section, String message) {
-		addProblem(new IllegalRemoteCallError(message, section));
+		addProblem(new IllegalRemoteCallProblem(message, section));
 	}
 	
 	@Override
 	public void reportIllegalAnnotation(ISection section, String message) {
-		addProblem(new IllegalAnnotationError(message, section));
+		addProblem(new IllegalAnnotation(message, section));
 	}
 	
 	@Override
 	public void reportIllegalValue(ISection section, String message) {
-		addProblem(new IllegalValueError(message, section));
+		addProblem(new IllegalValueProblem(message, section));
 	}
 	
 	@Override
 	public void reportNoSuperType(ISection section, IType actual) {
-		addProblem(new NoSuperTypeError(actual, section));
+		addProblem(new NoSuperCategoryProblem(actual, section));
 	}
 }

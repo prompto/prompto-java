@@ -2,11 +2,11 @@ package prompto.problem;
 
 import prompto.parser.ISection;
 
-public class IllegalRemoteCallError extends SyntaxProblemBase {
+public class IllegalOperationProblem extends SyntaxProblemBase {
 
 	String message;
 	
-	public IllegalRemoteCallError(String message, ISection section) {
+	public IllegalOperationProblem(String message, ISection section) {
 		super(section);
 		this.message = message;
 	}

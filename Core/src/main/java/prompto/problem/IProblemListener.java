@@ -32,5 +32,6 @@ public interface IProblemListener {
 	void reportIllegalAnnotation(ISection section, String message);
 	void reportIllegalValue(ISection section, String message);
 	void reportNoSuperType(ISection section, IType actual);
+	void reportNotMutable(ISection section, String name);
 
 }

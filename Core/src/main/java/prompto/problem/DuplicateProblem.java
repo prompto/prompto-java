@@ -2,12 +2,12 @@ package prompto.problem;
 
 import prompto.parser.ISection;
 
-public class DuplicateError extends SyntaxProblemBase {
+public class DuplicateProblem extends SyntaxProblemBase {
 
 	String name;
 	ISection other;
 	
-	public DuplicateError(String name, ISection section, ISection other) {
+	public DuplicateProblem(String name, ISection section, ISection other) {
 		super(section);
 		this.name = name;
 		this.other = other;

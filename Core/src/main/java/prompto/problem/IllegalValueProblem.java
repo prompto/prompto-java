@@ -2,13 +2,13 @@ package prompto.problem;
 
 import prompto.parser.ISection;
 
-public class UnknowPropertyError extends SyntaxProblemBase {
+public class IllegalValueProblem extends SyntaxProblemBase {
 
-	String name;
+	String message;
 	
-	public UnknowPropertyError(String name, ISection section) {
+	public IllegalValueProblem(String message, ISection section) {
 		super(section);
-		this.name = name;
+		this.message = message;
 	}
 
 	@Override
@@ -18,7 +18,7 @@ public class UnknowPropertyError extends SyntaxProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return "Unknown property:" + name;
+		return message;
 	}
 
 }

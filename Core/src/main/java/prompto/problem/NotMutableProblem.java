@@ -1,15 +1,14 @@
 package prompto.problem;
 
 import prompto.parser.ISection;
-import prompto.type.IType;
 
-public class NoSuperTypeError extends SyntaxProblemBase {
+public class NotMutableProblem extends SyntaxProblemBase {
 
 	String message;
 	
-	public NoSuperTypeError(IType type, ISection section) {
+	public NotMutableProblem(String name, ISection section) {
 		super(section);
-		this.message = type.getTypeName() + " has no parent type";
+		this.message = name + " is not mutable";
 	}
 
 	@Override

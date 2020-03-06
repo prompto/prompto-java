@@ -2,11 +2,11 @@ package prompto.problem;
 
 import prompto.parser.ISection;
 
-public class UnknowAnnotationError extends SyntaxProblemBase {
+public class UnknowPropertyProblem extends SyntaxProblemBase {
 
 	String name;
 	
-	public UnknowAnnotationError(String name, ISection section) {
+	public UnknowPropertyProblem(String name, ISection section) {
 		super(section);
 		this.name = name;
 	}
@@ -18,7 +18,7 @@ public class UnknowAnnotationError extends SyntaxProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return "Unknown annotation:" + name;
+		return "Unknown property:" + name;
 	}
 
 }

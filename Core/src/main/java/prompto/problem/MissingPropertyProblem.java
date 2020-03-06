@@ -2,11 +2,11 @@ package prompto.problem;
 
 import prompto.parser.ISection;
 
-public class DuplicatePropertyError extends SyntaxProblemBase {
+public class MissingPropertyProblem extends SyntaxProblemBase {
 
 	String name;
 	
-	public DuplicatePropertyError(String name, ISection section) {
+	public MissingPropertyProblem(String name, ISection section) {
 		super(section);
 		this.name = name;
 	}
@@ -18,7 +18,7 @@ public class DuplicatePropertyError extends SyntaxProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return "Duplicate property:" + name;
+		return "Missing property:" + name;
 	}
 
 }

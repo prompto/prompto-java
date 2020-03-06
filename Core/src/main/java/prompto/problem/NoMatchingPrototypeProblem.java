@@ -2,11 +2,11 @@ package prompto.problem;
 
 import prompto.parser.ISection;
 
-public class NoMatchingPrototypeError extends SyntaxProblemBase {
+public class NoMatchingPrototypeProblem extends SyntaxProblemBase {
 
 	String proto;
 	
-	public NoMatchingPrototypeError(String proto, ISection section) {
+	public NoMatchingPrototypeProblem(String proto, ISection section) {
 		super(section);
 		this.proto = proto;
 	}
