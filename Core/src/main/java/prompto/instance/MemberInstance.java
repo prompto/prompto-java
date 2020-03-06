@@ -70,7 +70,8 @@ public class MemberInstance implements IAssignableSelector {
 	
 	@Override
 	public IType checkAssignMember(Context context, Identifier memberName, IType valueType, ISection section) {
-		return parent.checkAssignMember(context, id, valueType, section); // TODO
+		parent.checkAssignMember(context, id, valueType, section); // TODO
+		return valueType;
 	}
 	
 	@Override

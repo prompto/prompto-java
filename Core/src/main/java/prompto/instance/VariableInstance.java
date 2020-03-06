@@ -120,7 +120,7 @@ public class VariableInstance implements IAssignableInstance {
 		}
 		IType thisType = actual.getType(context);
 		if(thisType == DocumentType.instance())
-			return thisType;
+			return valueType;
 		else {
 			if(thisType instanceof CategoryType && !((CategoryType)thisType).isMutable())
 				context.getProblemListener().reportNotMutable(section, id.toString());
