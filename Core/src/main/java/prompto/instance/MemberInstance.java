@@ -19,6 +19,7 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.IMutable;
 import prompto.intrinsic.PromptoAny;
 import prompto.intrinsic.PromptoDocument;
+import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.AnyType;
@@ -61,19 +62,19 @@ public class MemberInstance implements IAssignableSelector {
 	}
 	
 	@Override
-	public IType checkAssignValue(Context context, IType valueType) {
-		IType type = parent.checkAssignMember(context, id, valueType);
+	public IType checkAssignValue(Context context, IType valueType, ISection section) {
+		IType type = parent.checkAssignMember(context, id, valueType, section);
 		type.checkAssignableFrom(context, valueType);
 		return type;
 	}
 	
 	@Override
-	public IType checkAssignMember(Context context, Identifier memberName, IType valueType) {
-		return parent.checkAssignMember(context, id, valueType); // TODO
+	public IType checkAssignMember(Context context, Identifier memberName, IType valueType, ISection section) {
+		return parent.checkAssignMember(context, id, valueType, section); // TODO
 	}
 	
 	@Override
-	public IType checkAssignItem(Context context, IType itemType, IType valueType) {
+	public IType checkAssignItem(Context context, IType itemType, IType valueType, ISection section) {
 		return AnyType.instance(); // TODO
 	}
 	

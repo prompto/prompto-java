@@ -43,7 +43,7 @@ public class AssignInstanceStatement extends SimpleStatement {
 	@Override
 	public IType check(Context context) {
 		IType valueType = expression.check(context);
-		instance.checkAssignValue(context, valueType);
+		instance.checkAssignValue(context, valueType, this);
 		// Code expressions need to be interpreted as part of full check
 		if(valueType==CodeType.instance())
 			instance.assign(context, expression);

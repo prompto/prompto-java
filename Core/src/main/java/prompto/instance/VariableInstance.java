@@ -12,13 +12,16 @@ import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
+import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Variable;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.CodeType;
+import prompto.type.DocumentType;
 import prompto.type.IType;
+import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
@@ -71,7 +74,7 @@ public class VariableInstance implements IAssignableInstance {
 			assign(context, expression);
 			return new ResultInfo(void.class);
 		} else {
-			checkAssignValue(context, valueType);
+			checkAssignValue(context, valueType, this.id); // id: any section will do for now
 			ResultInfo info = expression.compile(context, method, flags);
 			StackLocal local = method.registerLocal(id.toString(), VerifierType.ITEM_Object, new ClassConstant(info.getType()));
 			CompilerUtils.compileASTORE(method, local);
@@ -93,7 +96,7 @@ public class VariableInstance implements IAssignableInstance {
 	}
 	
 	@Override
-	public IType checkAssignValue(Context context, IType valueType) {
+	public IType checkAssignValue(Context context, IType valueType, ISection section) {
 		// called for a=x
 		INamed actual = context.getRegisteredValue(INamed.class,id);
 		if(actual==null)
@@ -108,17 +111,28 @@ public class VariableInstance implements IAssignableInstance {
 	}
 	
 	@Override
-	public IType checkAssignMember(Context context, Identifier memberName, IType valueType) {
+	public IType checkAssignMember(Context context, Identifier memberName, IType valueType, ISection section) {
 		// called for a.x = y
 		INamed actual = context.getRegisteredValue(INamed.class, id);
-		if(actual==null) 
-			throw new SyntaxError("Unknown variable:" + this.id);
-		IType parentType = actual.getType(context);
-		return parentType.checkMember(context, memberName);
+		if(actual==null) {
+			context.getProblemListener().reportUnknownIdentifier(this.id, id.toString());
+			return VoidType.instance();
+		}
+		IType thisType = actual.getType(context);
+		if(thisType == DocumentType.instance())
+			return thisType;
+		else {
+			if(thisType instanceof CategoryType && !((CategoryType)thisType).isMutable())
+				context.getProblemListener().reportNotMutable(section, id.toString());
+			IType requiredType = thisType.checkMember(context, memberName);
+	       if (requiredType!=null && !requiredType.isAssignableFrom(context, valueType))
+	            context.getProblemListener().reportIllegalAssignment(section, requiredType, valueType);
+	        return valueType;
+		}
 	}
 	
 	@Override
-	public IType checkAssignItem(Context context, IType itemType, IType valueType) {
+	public IType checkAssignItem(Context context, IType itemType, IType valueType, ISection section) {
 		// called for a[x] = y
 		INamed actual = context.getRegisteredValue(INamed.class, id);
 		if(actual==null) 

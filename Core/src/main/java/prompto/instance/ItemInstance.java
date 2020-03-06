@@ -18,6 +18,7 @@ import prompto.intrinsic.PromptoDict;
 import prompto.intrinsic.PromptoDocument;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoTuple;
+import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.AnyType;
@@ -53,23 +54,23 @@ public class ItemInstance implements IAssignableSelector {
 	}
 	
 	@Override
-	public IType checkAssignValue(Context context, IType valueType) {
+	public IType checkAssignValue(Context context, IType valueType, ISection section) {
 		// called when a[3] = value
 		IType itemType = item.check(context);
-		return parent.checkAssignItem(context, itemType, valueType);
+		return parent.checkAssignItem(context, itemType, valueType, section);
 	}
 	
 	@Override
-	public IType checkAssignMember(Context context, Identifier memberName, IType valueType) {
+	public IType checkAssignMember(Context context, Identifier memberName, IType valueType, ISection section) {
 		// called when a[3].member = value
 		return AnyType.instance(); // TODO 
 	}
 	
 	@Override
-	public IType checkAssignItem(Context context, IType itemType, IType valueType) {
+	public IType checkAssignItem(Context context, IType itemType, IType valueType, ISection section) {
 		// called when a[3][x] = value
 		IType thisItemType = item.check(context);
-		IType parentType = parent.checkAssignItem(context, thisItemType, valueType);
+		IType parentType = parent.checkAssignItem(context, thisItemType, valueType, section);
 		return parentType.checkItem(context, itemType); 
 	}
 	
