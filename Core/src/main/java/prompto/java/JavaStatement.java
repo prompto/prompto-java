@@ -8,6 +8,7 @@ import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
+import prompto.error.NativeError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
@@ -15,11 +16,14 @@ import prompto.runtime.VoidResult;
 import prompto.type.IType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
+import prompto.utils.Logger;
 import prompto.value.IValue;
 import prompto.value.NullValue;
 
 public class JavaStatement {
 
+	static Logger logger = new Logger();
+	
 	JavaExpression expression;
 	boolean isReturn;
 	
@@ -36,7 +40,7 @@ public class JavaStatement {
 	}
 
 	public IValue interpret(Context context, IType returnType) throws PromptoError {
-		Object result = expression.interpret(context);
+		Object result = interpret(context); 
 		if(result==null) {
 			if(isReturn) {
 				if(returnType==null)
@@ -55,6 +59,16 @@ public class JavaStatement {
 		}
 	}
 	
+	private Object interpret(Context context) {
+		// map native error to Prompto one
+		try {
+			return expression.interpret(context);
+		} catch(Throwable t) {
+			logger.error(()->"While interpreting: " + this.toString(), t);
+			throw new NativeError("While interpreting: " + this.toString(), t);
+		}
+	}
+
 	@Override
 	public String toString() {
 		return "" + (isReturn ? "return " : "") + expression.toString() + ";";
