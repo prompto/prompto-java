@@ -31,6 +31,8 @@ public class PromptoStoreQuery {
 			IStore store = DataStore.getInstance();
 			try {
 				store.store(deletables, storables==null ? null : storables.values());
+				if(storables!=null)
+					storables.values().forEach(IStorable::clear);
 			} catch(PromptoError e) {
 				throw new RuntimeException(e); // TODO for now
 			} 

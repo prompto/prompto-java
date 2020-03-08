@@ -6,6 +6,8 @@ public interface IStandaloneConfiguration extends IRuntimeConfiguration {
 
 	String getMainMethod();
 	String getTestMethod();
+	IStandaloneConfiguration withMainMethod(String method);
+	IStandaloneConfiguration withTestMethod(String method);
 
 	public static class Inline extends IRuntimeConfiguration.Inline implements IStandaloneConfiguration {
 
@@ -14,7 +16,16 @@ public interface IStandaloneConfiguration extends IRuntimeConfiguration {
 		
 		@Override public String getMainMethod() { return mainMethod.get(); }
 		@Override public String getTestMethod() { return testMethod.get(); }
-	
+		@Override
+		public IStandaloneConfiguration withMainMethod(String method) {
+			mainMethod = ()->method;
+			return this;
+		}
+		@Override
+		public IStandaloneConfiguration withTestMethod(String method) {
+			testMethod = ()->method;
+			return this;
+		}
 	}
 
 }

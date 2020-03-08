@@ -74,12 +74,16 @@ public abstract class Standalone {
 	
 	public static void main(String[] args) throws Throwable {
 		IStandaloneConfiguration config = loadConfiguration(args);
+		main(config);
+	}
+
+	
+	public static void main(IStandaloneConfiguration config) throws Throwable {
 		initialize(config);
 		run(config);
 	}
 
-	
-	private static void run(IStandaloneConfiguration config) throws Throwable {
+	public static void run(IStandaloneConfiguration config) throws Throwable {
 		IDebugConfiguration debug = config.getDebugConfiguration();
 		String testMethod = config.getTestMethod();
 		if(testMethod!=null) {
@@ -131,8 +135,12 @@ public abstract class Standalone {
 	public static void initialize(IRuntimeConfiguration config) throws Throwable {
 		Mode.set(config.getRuntimeMode());
 		TempDirectories.create();
-		ICodeStore codeStore = initializeCodeStore(config);
-		IStore dataStore = initializeDataStore(config);
+		ICodeStore codeStore = ICodeStore.getInstance();
+		if(codeStore==null)
+			codeStore = initializeCodeStore(config);
+		IStore dataStore = DataStore.getInstance();
+		if(dataStore==null)
+			dataStore = initializeDataStore(config);
 		synchronizeSchema(codeStore, dataStore);
 	}
 	
@@ -198,6 +206,7 @@ public abstract class Standalone {
 	
 	private static void runApplication(Context context, String mainMethod, IExpression args) {
 		try {
+			// TODO use args
 			Interpreter.interpretMethod(context, new Identifier(mainMethod), "");
 		} finally {
 			context.notifyCompleted();

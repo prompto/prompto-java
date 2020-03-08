@@ -1,0 +1,39 @@
+storable category Audit(description);
+storable attribute audits: Audit[];
+storable category Child(name, audits);
+storable attribute children: Child[];
+storable category Parent(name, children) {
+    
+    method addChild(Text name) {
+        audit = Audit(description="created");
+        child = Child(name, audits=[audit]);
+        if(children is null) {
+            children = [child];
+        } else {
+           children = children + [child];
+        }
+    }
+    
+    method setChildName(Text oldName, Text newName) {
+        existing = filtered(children) where (c=> oldName==c.name);
+        child = existing[1];
+        audits = child.audits + [Audit(description="renamed")];
+        newChild = Child(name=newName, audits);
+        remaining = filtered(children) where (c=>name!=c.oldName);
+        children = remaining + [newChild];
+    }
+}
+
+method onStart() {
+}
+
+method theProblem() {
+	parent = mutable Parent(name="eric");
+	store(parent);
+	parent.addChild("Paul");
+	store(parent);
+	parent.addChild("Orsonx");
+	store(parent);
+	parent.setChildName(oldName="Orsonx", newName="Orson");
+	store(parent);
+}
