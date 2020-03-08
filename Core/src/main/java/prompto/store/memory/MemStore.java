@@ -1,13 +1,14 @@
 package prompto.store.memory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
@@ -28,7 +29,7 @@ import prompto.store.IStoredIterable;
 /* a utility class for running unit tests only */
 public final class MemStore implements IStore {
 
-	private Map<Long, StorableDocument> documents = new HashMap<>();
+	private Map<Long, StoredDocument> documents = new HashMap<>();
 	private AtomicLong lastDbId = new AtomicLong(0);
 	private Map<String, AttributeInfo> attributes = new HashMap<>();
 	
@@ -89,7 +90,7 @@ public final class MemStore implements IStore {
 			dbId = Long.valueOf(lastDbId.incrementAndGet());
 			storable.setData(dbIdName, dbId);
 		}
-		documents.put((Long)dbId, storable);
+		documents.put((Long)dbId, new StoredDocument(storable.getCategories(), storable.getDocument()));
 	}
 	
 	@Override
@@ -107,7 +108,7 @@ public final class MemStore implements IStore {
 	public PromptoBinary fetchBinary(Object dbId, String attr) {
 		if(!(dbId instanceof Long))
 			dbId = Long.decode(dbId.toString());
-		StorableDocument doc = documents.get(dbId);
+		StoredDocument doc = documents.get(dbId);
 		if(doc==null)
 			return null;
 		else
@@ -128,7 +129,7 @@ public final class MemStore implements IStore {
 	@Override
 	public IStored fetchOne(IQuery query) throws PromptoError {
 		Query q = (Query)query;
-		for(StorableDocument doc : documents.values()) {
+		for(StoredDocument doc : documents.values()) {
 			if(doc.matches(q.getPredicate()))
 				return doc;
 		}
@@ -138,8 +139,8 @@ public final class MemStore implements IStore {
 	@Override
 	public IStoredIterable fetchMany(IQuery query) throws PromptoError {
 		Query q = (Query)query;
-		final List<StorableDocument> allDocs = fetchManyDocs(q);
-		final List<StorableDocument> slicedDocs = slice(q, allDocs);
+		final List<StoredDocument> allDocs = fetchManyDocs(q);
+		final List<StoredDocument> slicedDocs = slice(q, allDocs);
 		return new IStoredIterable() {
 			@Override
 			public long count() {
@@ -157,14 +158,14 @@ public final class MemStore implements IStore {
 		};
 	}
 	
-	private List<StorableDocument> fetchManyDocs(Query query) throws PromptoError {
-		List<StorableDocument> docs = filterDocs(query==null ? null : query.getPredicate());
+	private List<StoredDocument> fetchManyDocs(Query query) throws PromptoError {
+		List<StoredDocument> docs = filterDocs(query==null ? null : query.getPredicate());
 		if(query!=null)
 			docs = sort(query.getOrdering(), docs);
 		return docs;
 	}
 
-	private List<StorableDocument> filterDocs(IPredicate predicate) throws PromptoError {
+	private List<StoredDocument> filterDocs(IPredicate predicate) throws PromptoError {
 		if(predicate==null)
 			return new ArrayList<>(documents.values()); // need a copy to avoid concurrent modification;
 		else
@@ -173,7 +174,7 @@ public final class MemStore implements IStore {
 					.collect(Collectors.toList());
 	}
 	
-	private List<StorableDocument> slice(Query query, List<StorableDocument> docs) {
+	private List<StoredDocument> slice(Query query, List<StoredDocument> docs) {
 		if(docs==null || docs.isEmpty() || query==null)
 			return docs;
 		Long first = query.getFirst();
@@ -185,19 +186,19 @@ public final class MemStore implements IStore {
 		if(last==null || last>docs.size())
 			last = new Long(docs.size());
 		if(first > last)
-			return new ArrayList<StorableDocument>();
+			return new ArrayList<StoredDocument>();
 		return docs.subList(first.intValue() - 1, last.intValue());
 	}
 
-	private List<StorableDocument> sort(Collection<IOrderBy> orderBy, List<StorableDocument> docs) {
+	private List<StoredDocument> sort(Collection<IOrderBy> orderBy, List<StoredDocument> docs) {
 		if(orderBy==null || orderBy.isEmpty() || docs.size()<2)
 			return docs;
 		List<java.lang.Boolean> directions = orderBy.stream().map((o)->
 				o.isDescending()).collect(Collectors.toList());
-		docs.sort(new Comparator<StorableDocument>() {
+		docs.sort(new Comparator<StoredDocument>() {
 
 			@Override
-			public int compare(StorableDocument o1, StorableDocument o2) {
+			public int compare(StoredDocument o1, StoredDocument o2) {
 				try {
 					PromptoTuple<Comparable<?>> v1 = readTuple(o1, orderBy);
 					PromptoTuple<Comparable<?>> v2 = readTuple(o2, orderBy);
@@ -211,7 +212,7 @@ public final class MemStore implements IStore {
 		return docs;
 	}
 	
-	private PromptoTuple<Comparable<?>> readTuple(StorableDocument doc, Collection<IOrderBy> orderBy) throws PromptoError {
+	private PromptoTuple<Comparable<?>> readTuple(StoredDocument doc, Collection<IOrderBy> orderBy) throws PromptoError {
 		PromptoTuple<Comparable<?>> tuple = new PromptoTuple<>(false);
 		orderBy.forEach((o)->
 			tuple.add((Comparable<?>)doc.getData(o.getAttributeInfo().getName())));
@@ -230,7 +231,8 @@ public final class MemStore implements IStore {
 		// nothing to do
 	}
 	
-	class StorableDocument implements IStored, IStorable {
+	
+	class StorableDocument implements IStorable {
 
 		Map<String, Object> document = null;
 		IDbIdListener listener;
@@ -241,18 +243,12 @@ public final class MemStore implements IStore {
 			this.listener = listener;
 		}
 
-		public boolean matches(IPredicate predicate) {
-			if(predicate==null)
-				return true;
-			else
-				return predicate.matches(document);
+
+		public Map<String, Object> getDocument() {
+			return document;
 		}
-		
-		@Override
-		public void setCategories(String[] categories) throws PromptoError {
-			this.categories = categories;
-		}
-		
+
+
 		@Override
 		public String[] getCategories() {
 			return categories;
@@ -260,14 +256,42 @@ public final class MemStore implements IStore {
 
 		
 		@Override
-		public void setDbId(Object dbId) {
-			if(document!=null)
-				document.put(dbIdName, dbId);
+		public boolean equals(Object obj) {
+			if(obj instanceof StoredDocument)
+				return equals((StoredDocument)obj);
+			else if(obj instanceof StorableDocument)
+				return equals((StorableDocument)obj);
+			else
+				return false;
+		}
+		
+		public boolean equals(StoredDocument doc) {
+			return Arrays.deepEquals(categories, doc.categories)
+					&& Objects.deepEquals(document, doc.document);
+		}		
+
+		public boolean equals(StorableDocument doc) {
+			return Arrays.deepEquals(categories, doc.categories)
+					&& Objects.deepEquals(document, doc.document);
+		}		
+
+		public Object getData(String fieldName) {
+			if(document==null)
+				return null;
+			else
+				return document.get(fieldName);
+		}
+
+
+		@Override
+		public void setCategories(String[] categories) throws PromptoError {
+			this.categories = categories;
 		}
 		
 		@Override
-		public Object getDbId() {
-			return getData(dbIdName);
+		public void setDbId(Object dbId) {
+			if(document!=null)
+				document.put(dbIdName, dbId);
 		}
 		
 		@Override
@@ -287,42 +311,9 @@ public final class MemStore implements IStore {
 			document = null;
 		}
 
-		private Map<String, Object> newDocument() {
-			Map<String, Object> doc = new HashMap<>();
-			if(categories!=null) {
-				PromptoList<String> value = new PromptoList<>(false);
-				for(String name : categories)
-					value.add(name);
-				doc.put("category", value);
-			}
-			return doc;
-		}
-
 		@Override
 		public boolean isDirty() {
 			return document!=null;
-		}
-		
-		
-		@Override
-		public boolean hasData(String name) {
-			if(document==null)
-				return false;
-			else
-				return document.containsKey(name);
-		}
-
-		@Override
-		public Object getRawData(String fieldName) {
-			return getData(fieldName);
-		}
-		
-		@Override
-		public Object getData(String fieldName) {
-			if(document==null)
-				return null;
-			else
-				return document.get(fieldName);
 		}
 		
 		@Override
@@ -337,16 +328,97 @@ public final class MemStore implements IStore {
 			document.put(fieldName, value);
 		}
 		
+		private Map<String, Object> newDocument() {
+			Map<String, Object> doc = new HashMap<>();
+			if(categories!=null) {
+				PromptoList<String> value = new PromptoList<>(false);
+				for(String name : categories)
+					value.add(name);
+				doc.put("category", value);
+			}
+			return doc;
+		}
+
+		public boolean matches(IPredicate predicate) {
+			if(predicate==null)
+				return true;
+			else
+				return predicate.matches(document);
+		}
+		
+
+
+	}
+
+	class StoredDocument implements IStored {
+
+		final Map<String, Object> document;
+		final String[] categories;
+		
+		public StoredDocument(String[] categories, Map<String, Object> document) {
+			this.categories = categories;
+			this.document = document;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if(obj instanceof StoredDocument)
+				return equals((StoredDocument)obj);
+			else if(obj instanceof StorableDocument)
+				return equals((StorableDocument)obj);
+			else
+				return false;
+		}
+		
+		public boolean equals(StoredDocument doc) {
+			return Arrays.deepEquals(categories, doc.categories)
+					&& Objects.deepEquals(document, doc.document);
+		}		
+
+		public boolean equals(StorableDocument doc) {
+			return Arrays.deepEquals(categories, doc.categories)
+					&& Objects.deepEquals(document, doc.document);
+		}		
+
+		@Override
+		public String[] getCategories() {
+			return categories;
+		}
+
+		
+		@Override
+		public Object getDbId() {
+			return getData(dbIdName);
+		}
+		
+		public boolean matches(IPredicate predicate) {
+			if(predicate==null)
+				return true;
+			else
+				return predicate.matches(document);
+		}
+
+		@Override
+		public boolean hasData(String name) {
+			return document.containsKey(name);
+		}
+
+		@Override
+		public Object getRawData(String fieldName) {
+			return getData(fieldName);
+		}
+		
+		@Override
+		public Object getData(String fieldName) {
+			return document.get(fieldName);
+		}
+		
 		@Override
 		public Set<String> getNames() throws PromptoError {
-			if(document==null)
-				return Collections.emptySet();
-			else {
-				Set<String> names = document.keySet();
-				names.remove("category");
-				names.remove("dbId");
-				return names;
-			}
+			Set<String> names = document.keySet();
+			names.remove("category");
+			names.remove("dbId");
+			return names;
 		}
 		
 	}
