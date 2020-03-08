@@ -3,6 +3,9 @@ package prompto.config;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import com.esotericsoftware.yamlbeans.YamlException;
+import com.esotericsoftware.yamlbeans.document.YamlMapping;
+
 public class StandaloneConfiguration extends RuntimeConfiguration implements IStandaloneConfiguration {
 
 	Supplier<String> mainMethod = ()->null;
@@ -34,6 +37,13 @@ public class StandaloneConfiguration extends RuntimeConfiguration implements ISt
 		return this;
 	}
 
-
+	@Override
+	public YamlMapping toYaml() throws YamlException {
+		YamlMapping yaml = super.toYaml();
+		String main = mainMethod.get();
+		if(main!=null)
+			yaml.setEntry("mainMethod", main);
+		return yaml;
+	}
 
 }

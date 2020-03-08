@@ -13,12 +13,16 @@ import prompto.intrinsic.PromptoList;
 public abstract class YAMLWriter {
 
 	public static String write(PromptoList<PromptoDocument<String, Object>> docs) throws IOException {
+		Object data = docs.size()==1 ? docs.get(0) : docs;
+		return write(data);
+	}
+	
+	public static String write(Object data) throws IOException {
 		StringWriter yaml = new StringWriter();
 		YamlConfig config = new YamlConfig();
 		config.writeConfig.setWriteClassname(WriteClassName.NEVER);
 		config.writeConfig.setWriteRootTags(false);
 		YamlWriter writer = new YamlWriter(yaml, config);
-		Object data = docs.size()==1 ? docs.get(0) : docs;
 		writer.write(data);
 		writer.close();
 		yaml.flush();

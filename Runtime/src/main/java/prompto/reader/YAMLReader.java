@@ -29,7 +29,7 @@ public abstract class YAMLReader {
 		}
 	}
 
-	private static Object convert(Object value) {
+	public static Object convert(Object value) {
 		if(value==null)
 			return null;
 		else if(value instanceof String)

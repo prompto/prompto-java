@@ -5,6 +5,9 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.security.KeyStore;
 
+import com.esotericsoftware.yamlbeans.YamlException;
+import com.esotericsoftware.yamlbeans.document.YamlMapping;
+
 import prompto.config.IConfigurationReader;
 import prompto.config.IKeyStoreFactoryConfiguration;
 import prompto.utils.Logger;
@@ -49,6 +52,14 @@ public class FileKeyStoreFactory implements IKeyStoreFactory {
 		@Override
 		public IKeyStoreFactory getKeyStoreFactory() {
 			return new FileKeyStoreFactory();
+		}
+		
+		@Override
+		public YamlMapping toYaml() throws YamlException {
+			YamlMapping yaml = new YamlMapping();
+			yaml.setEntry("factory", FileKeyStoreFactory.class.getName());
+			yaml.setEntry("file", getFile());
+			return yaml;
 		}
 		
 	}

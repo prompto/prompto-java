@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.esotericsoftware.yamlbeans.document.YamlMapping;
+
 import prompto.code.ICodeStore;
 import prompto.code.ImmutableCodeStore;
 import prompto.code.QueryableCodeStore;
@@ -45,9 +47,11 @@ import prompto.expression.ValueExpression;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDict;
+import prompto.intrinsic.PromptoDocument;
 import prompto.intrinsic.PromptoVersion;
 import prompto.java.JavaIdentifierExpression;
 import prompto.libraries.Libraries;
+import prompto.reader.YAMLReader;
 import prompto.store.AttributeInfo;
 import prompto.store.DataStore;
 import prompto.store.IStore;
@@ -64,6 +68,7 @@ import prompto.utils.TypeUtils;
 import prompto.value.DictionaryValue;
 import prompto.value.IValue;
 import prompto.value.TextValue;
+import prompto.writer.YAMLWriter;
 
 public abstract class Standalone {
 
@@ -71,15 +76,16 @@ public abstract class Standalone {
 	private static PromptoClassLoader classLoader;
 	private static IDebugRequestListener debugRequestListener;
 	private static IDebugEventAdapter debugEventAdapter;
+	public static IRuntimeConfiguration configuration;
 	
 	public static void main(String[] args) throws Throwable {
 		IStandaloneConfiguration config = loadConfiguration(args);
-		main(config);
+		main(config, null, null);
 	}
 
 	
-	public static void main(IStandaloneConfiguration config) throws Throwable {
-		initialize(config);
+	public static void main(IStandaloneConfiguration config, ICodeStore codeStore, IStore dataStore) throws Throwable {
+		initialize(config, codeStore, dataStore);
 		run(config);
 	}
 
@@ -131,14 +137,27 @@ public abstract class Standalone {
 			throw new FileNotFoundException(path);
 	}
 
+	public static PromptoDocument<String, Object> getApplicationConfiguration() {
+		try {
+			YamlMapping mapping = configuration.toYaml();
+			String yaml = YAMLWriter.write(mapping);
+			List<PromptoDocument<String, Object>> docs = YAMLReader.read(yaml);
+			return docs.get(0);
+		} catch(Throwable t) {
+			throw new InternalError("getApplicationConfiguration failed!", t);
+		}
+	}
 
 	public static void initialize(IRuntimeConfiguration config) throws Throwable {
+		initialize(config, null, null);
+	}
+	
+	public static void initialize(IRuntimeConfiguration config, ICodeStore codeStore, IStore dataStore) throws Throwable {
+		configuration = config;
 		Mode.set(config.getRuntimeMode());
 		TempDirectories.create();
-		ICodeStore codeStore = ICodeStore.getInstance();
 		if(codeStore==null)
 			codeStore = initializeCodeStore(config);
-		IStore dataStore = DataStore.getInstance();
 		if(dataStore==null)
 			dataStore = initializeDataStore(config);
 		synchronizeSchema(codeStore, dataStore);

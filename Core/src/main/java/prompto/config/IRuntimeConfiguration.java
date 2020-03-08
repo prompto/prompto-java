@@ -6,6 +6,10 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import com.esotericsoftware.yamlbeans.YamlException;
+import com.esotericsoftware.yamlbeans.document.YamlMapping;
+import com.esotericsoftware.yamlbeans.document.YamlSequence;
+
 import prompto.intrinsic.PromptoVersion;
 import prompto.runtime.Mode;
 
@@ -21,6 +25,7 @@ public interface IRuntimeConfiguration {
 	URL[] getAddOnURLs();
 	URL[] getResourceURLs();
 	boolean isLoadRuntime();
+	YamlMapping toYaml() throws YamlException;
 	
 	<T extends IRuntimeConfiguration> T withRuntimeLibs(Supplier<Collection<URL>> supplier);
 	<T extends IRuntimeConfiguration> T withCodeStoreConfiguration(IStoreConfiguration supplier);
@@ -121,6 +126,45 @@ public interface IRuntimeConfiguration {
 			return (T)this;
 		}
 		
+		@Override
+		public YamlMapping toYaml() throws YamlException {
+			YamlMapping yaml = new YamlMapping();
+			String value = applicationName.get();
+			if(value!=null)
+				yaml.setEntry("applicationName", value);
+			if(applicationVersion.get()!=null)
+				yaml.setEntry("applicationVersion", applicationVersion.get().toString());
+			IStoreConfiguration config = codeStoreConfiguration.get();
+			if(config!=null)
+				yaml.setEntry("codeStore", config.toYaml());
+			config = dataStoreConfiguration.get();
+			if(config!=null)
+				yaml.setEntry("dataStore", config.toYaml());
+			Mode mode = runtimeMode.get();
+			if(mode!=null)
+				yaml.setEntry("runtimeMode", mode.name());
+			URL[] urls = addOnURLs.get();
+			if(urls!=null) {
+				YamlSequence sequence = new YamlSequence();
+				for(URL url : urls)
+					sequence.addElement(url.toExternalForm());
+				yaml.setEntry("addOnURLs", sequence);
+			}
+			urls = resourceURLs.get();
+			if(urls!=null) {
+				YamlSequence sequence = new YamlSequence();
+				for(URL url : urls)
+					sequence.addElement(url.toExternalForm());
+				yaml.setEntry("resourceURLs", sequence);
+			}
+			return yaml;
+		}
+		
 	}
+
+
+	
+
+
 
 }
