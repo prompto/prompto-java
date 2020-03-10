@@ -1,5 +1,8 @@
 package prompto.jsx;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import prompto.grammar.Identifier;
 import prompto.parser.Section;
 import prompto.property.Property;
@@ -69,13 +72,20 @@ public class JsxProperty extends Section {
 	    if(this.value!=null)
 	        this.value.declare(transpiler, property);
 	}
+	
+	private static Map<String, String> REACT_REPLACEMENTS = getReactReplacements();
+	
+	private static Map<String, String> getReactReplacements() {
+		Map<String, String> result = new HashMap<>();
+		result.put("class", "className");
+		result.put("for", "htmlFor");
+		result.put("readonly", "readOnly");
+		return result;
+	}
 
 	public void transpile(Transpiler transpiler, Property property) {
 		String name = this.id.toString();
-		if("class".equals(name))
-			name = "className"; // required by React
-		else if("for".equals(name))
-			name = "htmlFor"; // required by React
+		name = REACT_REPLACEMENTS.getOrDefault(name, name);
 		if(name.contains("-"))
 			name = "\"" + name + "\"";
 	    transpiler.append(name);
