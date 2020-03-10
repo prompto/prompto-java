@@ -47,6 +47,11 @@ public class AndExpression implements IPredicateExpression, IAssertion {
 	}
 	
 	@Override
+	public String toString() {
+		return left.toString() + " and " + right.toString();
+	}
+	
+	@Override
 	public void toDialect(CodeWriter writer) {
 		left.toDialect(writer);
 		writer.append(operatorToDialect(writer.getDialect()));

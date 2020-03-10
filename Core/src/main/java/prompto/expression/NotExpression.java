@@ -33,6 +33,12 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 	}
 	
 	@Override
+	public String toString() {
+		return "not " + expression.toString();
+	}
+	
+
+	@Override
 	public void toDialect(CodeWriter writer) {
 		writer.append(operatorToDialect(writer.getDialect()));
 		expression.toDialect(writer);

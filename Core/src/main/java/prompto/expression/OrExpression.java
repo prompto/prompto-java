@@ -47,6 +47,11 @@ public class OrExpression implements IPredicateExpression, IAssertion {
 	}
 	
 	@Override
+	public String toString() {
+		return left.toString() + " or " + right.toString();
+	}
+	
+	@Override
 	public void toDialect(CodeWriter writer) {
 		left.toDialect(writer);
 		writer.append(operatorToDialect(writer.getDialect()));
