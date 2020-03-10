@@ -17,6 +17,13 @@ public class NativeCategoryType extends CategoryType {
 	}
 
 	@Override
+	public IType asMutable(boolean mutable) {
+		if(mutable)
+			; // TODO throw ?
+		return this;
+	}
+	
+	@Override
 	public Type getJavaType(Context context) {
 		try {
 			return decl.getBoundClass(true);

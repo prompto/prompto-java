@@ -27,6 +27,13 @@ public class EnumeratedCategoryType extends CategoryType {
 	}
 	
 	@Override
+	public IType asMutable(boolean mutable) {
+		if(mutable)
+			; // TODO throw ?
+		return this;
+	}
+	
+	@Override
 	public IType checkStaticMember(Context context, Identifier id) {
 		String name = id.toString();
 		if ("symbols".equals(name))

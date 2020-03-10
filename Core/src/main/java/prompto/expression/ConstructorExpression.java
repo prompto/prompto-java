@@ -175,7 +175,7 @@ public class ConstructorExpression extends Section implements IExpression {
 				argument.check(context);
 			}
 		}
-		return cd.getType(context); // could be a resource rather than a category;
+		return cd.getType(context).asMutable(type.isMutable()); // could be a resource rather than a category;
 	}
 	
 	@Override

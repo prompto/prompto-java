@@ -123,6 +123,13 @@ public class CategoryType extends BaseType {
 			return this;
 	}
 	
+	public IType asMutable(boolean mutable) {
+		if(mutable==this.mutable)
+			return this;
+		else 
+			return new CategoryType(this, mutable);
+	}
+	
 	@Override
 	public IType resolve(Context context, Consumer<IType> onError) {
 		if(resolved==null) {
@@ -1203,7 +1210,6 @@ public class CategoryType extends BaseType {
 			return call.compile(context, method, new Flags());
 		}
 	}
-
 
 
 }
