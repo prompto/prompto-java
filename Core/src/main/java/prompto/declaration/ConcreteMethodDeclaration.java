@@ -36,6 +36,7 @@ import prompto.param.CodeParameter;
 import prompto.param.IParameter;
 import prompto.param.ValuedCodeParameter;
 import prompto.parser.ISection;
+import prompto.problem.IProblemListener;
 import prompto.runtime.Context;
 import prompto.statement.DeclarationStatement;
 import prompto.statement.StatementList;
@@ -182,13 +183,19 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 
 	private IType fullCheck(Context context, boolean isStart) {
-		if(isStart) {
-			context = context.newLocalContext();
-			registerParameters(context);
+		IProblemListener listener = context.getProblemListener();
+		listener.pushDeclaration(this);
+		try {
+			if(isStart) {
+				context = context.newLocalContext();
+				registerParameters(context);
+			}
+			if(parameters!=null)
+				parameters.check(context);
+			return checkStatements(context);
+		} finally {
+			listener.popDeclaration();
 		}
-		if(parameters!=null)
-			parameters.check(context);
-		return checkStatements(context);
 	}
 
 	protected IType checkStatements(Context context) {
@@ -197,11 +204,17 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 
 	@Override
 	public IType checkChild(Context context) {
-		if(parameters!=null)
-			parameters.check(context);
-		Context child = context.newChildContext();
-		registerParameters(child);
-		return checkStatements(child);
+		IProblemListener listener = context.getProblemListener();
+		listener.pushDeclaration(this);
+		try {
+			if(parameters!=null)
+				parameters.check(context);
+			Context child = context.newChildContext();
+			registerParameters(child);
+			return checkStatements(child);
+		} finally {
+			listener.popDeclaration();
+		}
 	}
 
 	@Override
@@ -407,6 +420,8 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	public void declare(Transpiler transpiler, boolean isStart) {
 		if(declaring)
 			return;
+		IProblemListener listener = transpiler.getContext().getProblemListener();
+		listener.pushDeclaration(this);
 		declaring = true;
 		try {
 			// TODO IType type = check(transpiler.getContext(), isStart);
@@ -421,7 +436,9 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		    this.statements.declare(transpiler);
 		} finally {
 			declaring = false;
+			listener.popDeclaration();
 		}
+			
 	}
 	
 	@Override

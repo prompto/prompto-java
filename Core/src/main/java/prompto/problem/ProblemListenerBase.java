@@ -2,6 +2,7 @@ package prompto.problem;
 
 import java.util.BitSet;
 import java.util.Set;
+import java.util.Stack;
 
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.InputMismatchException;
@@ -13,6 +14,9 @@ import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
 
+import prompto.declaration.CategoryDeclaration;
+import prompto.declaration.IDeclaration;
+import prompto.declaration.IMethodDeclaration;
 import prompto.parser.ISection;
 import prompto.parser.MissingTokenException;
 import prompto.parser.UnwantedTokenException;
@@ -20,6 +24,35 @@ import prompto.type.IType;
 
 public abstract class ProblemListenerBase implements ANTLRErrorListener, IProblemListener {
 
+	Stack<IDeclaration> stack = new Stack<>();
+	
+	@Override
+	public void pushDeclaration(IDeclaration declaration) {
+		stack.push(declaration);
+	}
+	
+	@Override
+	public IDeclaration popDeclaration() {
+		return stack.pop();
+	}
+	
+	@Override
+	public String getEnclosingDeclaration() {
+		if(stack.empty())
+			return "";
+		IDeclaration top = stack.peek();
+		if(top instanceof IMethodDeclaration) {
+			IDeclaration parent = ((IMethodDeclaration)top).getMemberOf();
+			if(parent==null)
+				return " in method '" + top.getName() + "'";
+			else
+				return " in method '" + top.getName() + "' of category or widget '" + parent.getName() + "'";
+		} else if (top instanceof CategoryDeclaration)
+			return " in category or widget '" + top.getName() + "'";
+		else
+			return " in '" + top.getName() + "'";
+	}
+	
 	abstract void addProblem(IProblem problem);
 
 

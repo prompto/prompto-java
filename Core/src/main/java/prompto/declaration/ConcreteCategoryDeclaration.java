@@ -39,6 +39,7 @@ import prompto.grammar.Operator;
 import prompto.intrinsic.PromptoEnum;
 import prompto.intrinsic.PromptoRoot;
 import prompto.parser.ISection;
+import prompto.problem.IProblemListener;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.store.DataStore;
@@ -255,11 +256,17 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 
 	@Override
 	public IType check(Context context, boolean isStart) {
-		context = context.newInstanceContext(getType(context), false);
-		checkDerived(context);
-		processAnnotations(context, true);
-		checkMethods(context);
-		return super.check(context, isStart);
+		IProblemListener listener = context.getProblemListener();
+		listener.pushDeclaration(this);
+		try {
+			context = context.newInstanceContext(getType(context), false);
+			checkDerived(context);
+			processAnnotations(context, true);
+			checkMethods(context);
+			return super.check(context, isStart);
+		} finally {
+			listener.popDeclaration();
+		}
 	}
 
 	private void checkMethods(Context context) {
@@ -1025,26 +1032,36 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	@Override
 	public void declare(Transpiler transpiler) {
 		if(!transpiler.isDeclared(this)) {
-		    transpiler.declare(this);
-		    declareAttributes(transpiler);
-		    Transpiler instance = transpiler.newInstanceTranspiler(getType(transpiler.getContext()));
-		    processAnnotations(instance.getContext(), true);
-		    if (this.derivedFrom != null) {
-		        this.derivedFrom.forEach(cat -> {
-		            CategoryDeclaration decl = instance.getContext().getRegisteredDeclaration(CategoryDeclaration.class, cat);
-		            decl.declare(instance);
-		        });
-		    } else
-		    	declareRoot(instance);
-		    if(this.storable) {
-		    	instance.require("DataStore");
-		    	instance.require("Remote");
-		    }
-		    this.declareMethods(instance);
-		    instance.flush();
+			IProblemListener listener = transpiler.getContext().getProblemListener();
+			listener.pushDeclaration(this);
+			try {
+				doDeclare(transpiler);
+			} finally {
+				listener.popDeclaration();
+			}
 		}
 	}
 	
+	private void doDeclare(Transpiler transpiler) {
+	    transpiler.declare(this);
+	    declareAttributes(transpiler);
+	    Transpiler instance = transpiler.newInstanceTranspiler(getType(transpiler.getContext()));
+	    processAnnotations(instance.getContext(), true);
+	    if (this.derivedFrom != null) {
+	        this.derivedFrom.forEach(cat -> {
+	            CategoryDeclaration decl = instance.getContext().getRegisteredDeclaration(CategoryDeclaration.class, cat);
+	            decl.declare(instance);
+	        });
+	    } else
+	    	declareRoot(instance);
+	    if(this.storable) {
+	    	instance.require("DataStore");
+	    	instance.require("Remote");
+	    }
+	    this.declareMethods(instance);
+	    instance.flush();
+	}
+
 	private void declareMethods(Transpiler transpiler) {
 	    this.methods.stream().filter(decl -> {
 	        return !(decl instanceof SetterMethodDeclaration || decl instanceof GetterMethodDeclaration);

@@ -2,6 +2,7 @@ package prompto.problem;
 
 import java.util.Set;
 
+import prompto.declaration.IDeclaration;
 import prompto.parser.ISection;
 import prompto.type.IType;
 
@@ -33,5 +34,9 @@ public interface IProblemListener {
 	void reportIllegalValue(ISection section, String message);
 	void reportNoSuperType(ISection section, IType actual);
 	void reportNotMutable(ISection section, String name);
+
+	void pushDeclaration(IDeclaration declaration);
+	IDeclaration popDeclaration();
+	String getEnclosingDeclaration();
 
 }

@@ -8,6 +8,6 @@ public class ProblemListener extends ProblemListenerBase {
 	@Override
 	void addProblem(IProblem problem) {
 		if(problem.getType()==Type.ERROR)
-			throw new SyntaxError(problem.getMessage());
+			throw new SyntaxError(problem.getMessage() + getEnclosingDeclaration());
 	}
 }
