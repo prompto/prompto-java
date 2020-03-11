@@ -38,13 +38,14 @@ import prompto.grammar.MethodDeclarationList;
 import prompto.grammar.Operator;
 import prompto.intrinsic.PromptoEnum;
 import prompto.intrinsic.PromptoRoot;
+import prompto.intrinsic.PromptoStorableBase;
 import prompto.parser.ISection;
 import prompto.problem.IProblemListener;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.store.DataStore;
 import prompto.store.IStorable;
-import prompto.store.IStorable.IDbIdListener;
+import prompto.store.IStorable.IDbIdFactory;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.transpiler.ITranspilable;
@@ -992,8 +993,10 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		method.addInstruction(Opcode.INVOKESTATIC, m); // -> this, IStore
 		FieldConstant f = new FieldConstant(thisClass, "category", String[].class);
 		method.addInstruction(Opcode.GETSTATIC, f); // -> this, IStore, String[]
-		method.addInstruction(Opcode.ALOAD_0, thisClass); // -> this, IStore, String[], this (as listener)
-		InterfaceConstant i = new InterfaceConstant(IStore.class, "newStorable", String[].class, IDbIdListener.class, IStorable.class);
+		method.addInstruction(Opcode.ALOAD_0, thisClass); // -> this, IStore, String[], this )
+		m = new MethodConstant(new ClassConstant(PromptoStorableBase.class), "getDbIdFactory", IDbIdFactory.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m); // -> this, IStore, String[], IDbIdFactory
+		InterfaceConstant i = new InterfaceConstant(IStore.class, "newStorable", String[].class, IDbIdFactory.class, IStorable.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, i); // this, IStorable
 		f = new FieldConstant(thisClass, "storable", IStorable.class);
 		method.addInstruction(Opcode.PUTFIELD, f);

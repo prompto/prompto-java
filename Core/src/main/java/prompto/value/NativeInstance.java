@@ -229,7 +229,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 			Object data = value.convertTo(context, nativeSetter.getParameterTypes()[0]);
 			setValue(nativeSetter, data);
 			if(storable!=null && decl.isStorable()) {
-				storable.setData(attrName.toString(), data, this::getDbId);
+				storable.setData(attrName.toString(), data);
 			}
 		}
 	}

@@ -8,14 +8,14 @@ import java.util.stream.Collectors;
 import prompto.error.PromptoError;
 import prompto.intrinsic.PromptoBinary;
 import prompto.intrinsic.PromptoVersion;
+import prompto.intrinsic.PromptoStorableBase;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.store.IStore;
 import prompto.store.IStored;
 
-public abstract class Module {
+public abstract class Module extends PromptoStorableBase{
 	
-	private Object dbId;
 	private String name;
 	private PromptoVersion version;
 	private String description;
@@ -26,14 +26,6 @@ public abstract class Module {
 	
 	public abstract ModuleType getType();
 
-	public Object getDbId() {
-		return dbId;
-	}
-	
-	public void setDbId(Object dbId) {
-		this.dbId = dbId;
-	}
-	
 	public String getName() {
 		return name;
 	}
@@ -67,9 +59,9 @@ public abstract class Module {
 	}
 
 	public IStorable collectStorables(Context context, IStore store, List<IStorable> storables) throws PromptoError {
-		IStorable storable = store.newStorable(getCategories(), dbId -> this.dbId = dbId); 
+		IStorable storable = store.newStorable(getCategories(), getDbIdFactory()); 
 		storables.add(storable);
-		storable.setData("name", name, () -> dbId);
+		storable.setData("name", name);
 		storable.setData("version", version);
 		if(description!=null)
 			storable.setData("description", description);

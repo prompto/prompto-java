@@ -7,12 +7,13 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import prompto.intrinsic.PromptoVersion;
+import prompto.intrinsic.PromptoStorableBase;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.store.IStore;
 import prompto.store.IStored;
 
-public class Dependency {
+public class Dependency extends PromptoStorableBase {
 	
 	@SuppressWarnings("unchecked")
 	public static List<Dependency> listFromStored(IStore store, Object data) {
@@ -34,7 +35,6 @@ public class Dependency {
 		return result;
 	}
 
-	private Object dbId;
 	private String name;
 	private PromptoVersion version;
 
@@ -47,14 +47,6 @@ public class Dependency {
 		this.version = version;
 	}
 
-	public Object getDbId() {
-		return dbId;
-	}
-	
-	public void setDbId(Object dbId) {
-		this.dbId = dbId;
-	}
-	
 	public String getName() {
 		return name;
 	}
@@ -73,9 +65,9 @@ public class Dependency {
 
 	public IStorable collectStorables(Context context, IStore store, List<IStorable> storables) {
 		List<String> categories = Arrays.asList("Dependency");
-		IStorable storable = store.newStorable(categories, dbId -> this.dbId = dbId); 
+		IStorable storable = store.newStorable(categories, getDbIdFactory()); 
 		storables.add(storable);
-		storable.setData("name", name, ()->dbId);
+		storable.setData("name", name);
 		storable.setData("version", version);
 		return storable;
 	}

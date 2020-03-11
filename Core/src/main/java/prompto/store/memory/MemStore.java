@@ -21,6 +21,7 @@ import prompto.store.AttributeInfo;
 import prompto.store.IQuery;
 import prompto.store.IQueryBuilder;
 import prompto.store.IStorable;
+import prompto.store.IStorable.IDbIdFactory;
 import prompto.store.IStorable.IDbIdListener;
 import prompto.store.IStore;
 import prompto.store.IStored;
@@ -221,11 +222,26 @@ public final class MemStore implements IStore {
 
 	
 	@Override
-	public IStorable newStorable(String[] categories, IDbIdListener listener) {
-		return new StorableDocument(categories, listener);
+	public IStorable newStorable(String[] categories, IDbIdFactory dbIdFactory) {
+		return new StorableDocument(categories, dbIdFactory);
 	}
 	
+	// for testing
+	public IStorable newStorable(List<String> categories, IDbIdListener listener) {
+		return newStorable(categories.toArray(new String[0]), listener);
+	}
 	
+	// for testing
+	public IStorable newStorable(String[] categories, IDbIdListener listener) {
+		IDbIdFactory factory = new IDbIdFactory() {
+			@Override public void accept(Object dbId) { listener.accept(dbId); }
+			@Override public Object get() { return null; }
+			@Override public boolean isUpdate() { return false; }
+		};
+		return newStorable(categories, factory);
+	}
+
+
 	@Override
 	public void flush() throws PromptoError {
 		// nothing to do
@@ -235,18 +251,33 @@ public final class MemStore implements IStore {
 	class StorableDocument implements IStorable {
 
 		Map<String, Object> document = null;
-		IDbIdListener listener;
+		IDbIdFactory dbIdFactory;
 		String[] categories;
 		
-		public StorableDocument(String[] categories, IDbIdListener listener) {
+		public StorableDocument(String[] categories, IDbIdFactory dbIdFactory) {
 			this.categories = categories;
-			this.listener = listener;
+			this.dbIdFactory = dbIdFactory;
 		}
 
 
 		public Map<String, Object> getDocument() {
 			return document;
 		}
+		
+		private void ensureDocument() {
+			if(document==null) {
+				document = newDocument();
+				Object dbId = null;
+				if(dbIdFactory!=null)
+					dbId = dbIdFactory.get();
+				if(dbId==null) {
+					dbId = Long.valueOf(lastDbId.incrementAndGet());
+					if(dbIdFactory!=null)
+						dbIdFactory.accept(dbId);
+				}
+				setData(dbIdName, dbId);
+			}
+			}
 
 
 		@Override
@@ -298,10 +329,14 @@ public final class MemStore implements IStore {
 		public Object getOrCreateDbId() {
 			Object dbId = getData(dbIdName);
 			if(dbId==null) {
-				Object newDbId = dbId = Long.valueOf(lastDbId.incrementAndGet());
-				setData(dbIdName, newDbId, ()->newDbId);
-				if(listener!=null)
-					listener.accept(dbId);
+				if(dbIdFactory!=null)
+					dbId = dbIdFactory.get();
+				if(dbId==null) {
+					dbId = Long.valueOf(lastDbId.incrementAndGet());
+					if(dbIdFactory!=null)
+						dbIdFactory.accept(dbId);
+				}
+				setData(dbIdName, dbId);
 			}
 			return dbId;
 		}
@@ -317,14 +352,8 @@ public final class MemStore implements IStore {
 		}
 		
 		@Override
-		public void setData(String fieldName, Object value, IDbIdProvider provider) {
-			if(document==null) {
-				Object dbId = provider==null ? null : provider.get();
-				if(dbId==null)
-					dbId = getOrCreateDbId();
-				document = newDocument();
-				document.put(dbIdName, dbId);
-			}
+		public void setData(String fieldName, Object value) {
+			ensureDocument();
 			document.put(fieldName, value);
 		}
 		
@@ -422,6 +451,7 @@ public final class MemStore implements IStore {
 		}
 		
 	}
+
 
 	
 }

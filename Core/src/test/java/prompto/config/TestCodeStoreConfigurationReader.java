@@ -1,6 +1,8 @@
 package prompto.config;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,13 +15,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import prompto.store.IStorable;
-import prompto.store.IStore;
 import prompto.store.memory.MemStore;
 
 
 public class TestCodeStoreConfigurationReader {
 
-	IStore store;
+	MemStore store;
 	Object dbId;
 	
 	@Before

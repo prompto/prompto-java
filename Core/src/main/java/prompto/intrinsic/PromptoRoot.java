@@ -19,14 +19,12 @@ import prompto.grammar.Identifier;
 import prompto.runtime.ApplicationContext;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
-import prompto.store.IStorable.IDbIdListener;
-import prompto.store.IStorable.IDbIdProvider;
 import prompto.store.DataStore;
 import prompto.store.IStored;
 import prompto.store.IStoredIterable;
 import prompto.store.InvalidValueError;
 
-public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMutable {
+public abstract class PromptoRoot extends PromptoStorableBase implements IMutable {
 
 	public static PromptoRoot newInstance(IStored stored) {
 		if(stored==null) // happens on an unsuccessful fetchOne
@@ -110,7 +108,6 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 			throw new InvalidValueError("Expected a " + klass.getSimpleName() +", got " + o.getClass().getSimpleName());
 	}
 
-	protected Object dbId;
 	protected IStorable storable;
 	protected boolean mutable;
 	
@@ -133,25 +130,6 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 		return parts[parts.length-1];
 	}
 
-	public final Object getDbId() {
-		return dbId;
-	}
-	
-	@Override // of IDbIdProvider
-	public Object get() {
-		return dbId;
-	}
-
-	public final void setDbId(Object dbId) {
-		this.dbId = dbId;
-	}
-	
-	
-	@Override // of IDbIdListener
-	public final void accept(Object dbId) {
-		this.dbId = dbId;
-	}
-	
 	public IStorable getStorable() {
 		return storable;
 	}
@@ -177,7 +155,7 @@ public abstract class PromptoRoot implements IDbIdProvider, IDbIdListener, IMuta
 	/* not a great name, but avoids collision with field setters */
 	protected final void setStorable(String name, Object value) {
 		if(storable!=null)
-			storable.setData(name, value, this);
+			storable.setData(name, value);
 	}
 	
 	@Override

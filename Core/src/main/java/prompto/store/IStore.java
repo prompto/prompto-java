@@ -6,7 +6,7 @@ import java.util.List;
 
 import prompto.error.PromptoError;
 import prompto.intrinsic.PromptoBinary;
-import prompto.store.IStorable.IDbIdListener;
+import prompto.store.IStorable.IDbIdFactory;
 
 /* a mean to store and fetch data */
 public interface IStore {
@@ -21,9 +21,9 @@ public interface IStore {
 	AttributeInfo getAttributeInfo(String name) throws PromptoError;
 	void createOrUpdateAttributes(Collection<AttributeInfo> attributes) throws PromptoError;
 	
-	IStorable newStorable(String[] categories, IDbIdListener listener);
-	default IStorable newStorable(List<String> categories, IDbIdListener listener) {
-		return newStorable(categories.toArray(new String[0]), listener);
+	IStorable newStorable(String[] categories, IDbIdFactory dbIdFactory);
+	default IStorable newStorable(List<String> categories, IDbIdFactory dbIdFactory) {
+		return newStorable(categories.toArray(new String[0]), dbIdFactory);
 	}
 	
 	void store(Collection<?> deletables, Collection<IStorable> storables) throws PromptoError;

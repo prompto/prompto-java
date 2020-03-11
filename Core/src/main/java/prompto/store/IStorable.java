@@ -16,16 +16,16 @@ public interface IStorable {
 	void setCategories(String[] categories) throws PromptoError;
 	String[] getCategories();
 	
-	default void setData(String name, Object value) throws PromptoError {
-		setData(name, value, null);
-	}
-	
-	void setData(String name, Object value, IDbIdProvider provider) throws PromptoError;
+	void setData(String name, Object value) throws PromptoError;
 
 	@FunctionalInterface
 	public static interface IDbIdProvider extends Supplier<Object>  {}
 	
 	@FunctionalInterface
 	public static interface IDbIdListener extends Consumer<Object> {}
+	
+	public static interface IDbIdFactory extends IDbIdProvider, IDbIdListener {
+		boolean isUpdate();
+	}
 
 }
