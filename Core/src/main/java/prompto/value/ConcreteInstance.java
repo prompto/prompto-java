@@ -34,6 +34,7 @@ import prompto.runtime.Variable;
 import prompto.store.DataStore;
 import prompto.store.IStorable;
 import prompto.store.IStore;
+import prompto.store.IStorable.IDbIdFactory;
 import prompto.type.CategoryType;
 import prompto.type.DecimalType;
 import prompto.type.IType;
@@ -52,26 +53,32 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		this.declaration = declaration;
 		if(declaration.isStorable()) {
 			List<String> categories = declaration.collectCategories(context);
-			storable = DataStore.getInstance().newStorable(categories, null);
+			storable = DataStore.getInstance().newStorable(categories, new DbIdFactory());
 		}
 	}
 	
-	private ConcreteInstance(CategoryType copyFrom, boolean mutable) {
-		super(new CategoryType(copyFrom, mutable));
-		this.mutable = mutable;
+	class DbIdFactory implements IDbIdFactory {
+
+		@Override public Object get() { return getDbId(); }
+		@Override public void accept(Object dbId) { setDbId(dbId); }
+		// sensitive topic: isUpdate is called only when getDbId() returns non-null
+		@Override public boolean isUpdate() { return true; }
+	}
+	
+	private ConcreteInstance(CategoryType copyFrom, CategoryDeclaration declaration, Map<Identifier,IValue> values) {
+		super(new CategoryType(copyFrom, true));
+		this.declaration = declaration;
+		if(declaration.isStorable()) {
+			String[] categories = this.storable.getCategories();
+			storable = DataStore.getInstance().newStorable(categories, new DbIdFactory());
+		}
+		this.values.putAll(values);
+		this.mutable = true;
 	}
 	
 	@Override
 	public IValue toMutable() {
-		ConcreteInstance instance = new ConcreteInstance(this.getType(), true);
-		instance.declaration = this.declaration;
-		instance.values = new HashMap<>(values);
-		if(instance.declaration.isStorable()) {
-			String[] categories = this.storable.getCategories();
-			instance.storable = DataStore.getInstance().newStorable(categories, null);
-		}
-		instance.mutable = true;
-		return instance;
+		return new ConcreteInstance(this.getType(), this.declaration, this.values);
 	}
 	
 	@Override
@@ -230,16 +237,20 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		}
 	}
 	
+	private void setDbId(Object dbId) {
+		IValue value = new DbIdValue(dbId);
+		values.put(new Identifier(IStore.dbIdName), value);
+	}
+
 	private Object getOrCreateDbId() throws NotStorableError {
 		Object dbId = getDbId();
 		if(dbId==null) {
 			dbId = this.storable.getOrCreateDbId();
-			IValue value = new DbIdValue(dbId);
-			values.put(new Identifier(IStore.dbIdName), value);
+			setDbId(dbId);
 		}
 		return dbId;
 	}
-
+	
 	private IValue autocast(AttributeDeclaration decl, IValue value) {
 		if(value!=null && value instanceof IntegerValue && decl.getType()==DecimalType.instance())
 			value = new DecimalValue(((IntegerValue)value).doubleValue());
