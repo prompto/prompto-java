@@ -65,20 +65,19 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		@Override public boolean isUpdate() { return true; }
 	}
 	
-	private ConcreteInstance(CategoryType copyFrom, CategoryDeclaration declaration, Map<Identifier,IValue> values) {
+	private ConcreteInstance(CategoryType copyFrom, CategoryDeclaration declaration, Map<Identifier,IValue> values, String[] categories) {
 		super(new CategoryType(copyFrom, true));
 		this.declaration = declaration;
-		if(declaration.isStorable()) {
-			String[] categories = this.storable.getCategories();
+		if(declaration.isStorable())
 			storable = DataStore.getInstance().newStorable(categories, new DbIdFactory());
-		}
 		this.values.putAll(values);
 		this.mutable = true;
 	}
 	
 	@Override
 	public IValue toMutable() {
-		return new ConcreteInstance(this.getType(), this.declaration, this.values);
+		String[] categories = this.storable!=null ? this.storable.getCategories() : null;
+		return new ConcreteInstance(this.getType(), this.declaration, this.values, categories);
 	}
 	
 	@Override
