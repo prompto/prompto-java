@@ -38,15 +38,17 @@ public class CastExpression implements IExpression {
 	
 	IExpression expression;
 	IType type;
+	boolean mutable;
 	
-	public CastExpression(IExpression expression, IType type) {
+	public CastExpression(IExpression expression, IType type, boolean mutable) {
 		this.expression = expression;
 		this.type = type.anyfy();
+		this.mutable = mutable;
 	}
 	
 	@Override
 	public String toString() {
-		return expression.toString() + " as " + type.toString();
+		return expression.toString() + " as " + (mutable ? "mutable " : "") + type.toString();
 	}
 	
 	@Override
@@ -66,20 +68,20 @@ public class CastExpression implements IExpression {
 	}
 
 	private IType getTargetType(Context context) {
-		return getTargetType(context, type);
+		return getTargetType(context, type, mutable);
 	}
 	
-	private static IType getTargetType(Context context, IType type) {
+	private static IType getTargetType(Context context, IType type, boolean mutable) {
 		if(type instanceof IterableType) {
-			IType itemType = getTargetType(context, ((IterableType)type).getItemType());
-			return ((IterableType)type).withItemType(itemType);
+			IType itemType = getTargetType(context, ((IterableType)type).getItemType(), false);
+			return ((IterableType)type).withItemType(itemType).asMutable(context, mutable);
 		} else if(type instanceof NativeType)
-			return type;
+			return type.asMutable(context, mutable);
 		else
-			return getTargetAtomicType(context, type);
+			return getTargetAtomicType(context, type, mutable);
 	}
 	
-	private static IType getTargetAtomicType(Context context, IType type) {
+	private static IType getTargetAtomicType(Context context, IType type, boolean mutable) {
 		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, type.getTypeNameId());
 		if(decl==null) {
 			context.getProblemListener().reportUnknownIdentifier(type, type.getTypeName());
@@ -93,7 +95,7 @@ public class CastExpression implements IExpression {
 				return null;
 			}
 		} else
-			return decl.getType(context);
+			return decl.getType(context).asMutable(context, mutable);
 	}
 
 	@Override
@@ -163,10 +165,14 @@ public class CastExpression implements IExpression {
 		case M:
 			expression.toDialect(writer);
 			writer.append(" as ");
+			if(mutable)
+				writer.append("mutable ");
 			type.toDialect(writer);
 			break;
 		case O:
 			writer.append("(");
+			if(mutable)
+				writer.append("mutable ");
 			type.toDialect(writer);
 			writer.append(")");
 			expression.toDialect(writer);

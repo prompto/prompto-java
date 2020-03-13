@@ -72,6 +72,13 @@ public interface IType extends ISection {
 	IType checkSlice(Context context);
 	IType checkMember(Context context, Identifier name);
 	IType checkStaticMember(Context context, Identifier name);
+
+	default IType asMutable(Context context, boolean mutable) {
+		if(mutable)
+			throw new UnsupportedOperationException("Mutable not supported for " + this.getClass());
+		else
+			return this;
+	}
 	
 	void checkUnique(Context context);
 	void checkExists(Context context);

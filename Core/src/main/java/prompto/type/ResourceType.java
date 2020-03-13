@@ -1,6 +1,7 @@
 package prompto.type;
 
 import prompto.grammar.Identifier;
+import prompto.runtime.Context;
 import prompto.store.Family;
 
 public class ResourceType extends CategoryType {
@@ -10,7 +11,7 @@ public class ResourceType extends CategoryType {
 	}
 	
 	@Override
-	public IType asMutable(boolean mutable) {
+	public IType asMutable(Context context, boolean mutable) {
 		if(mutable)
 			; // TODO throw ?
 		return this;

@@ -648,7 +648,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitCastExpression(CastExpressionContext ctx) {
 		IExpression left = getNodeValue(ctx.left);
 		IType type = getNodeValue(ctx.right);
-		setNodeValue(ctx, new CastExpression(left, type));
+		setNodeValue(ctx, new CastExpression(left, type, ctx.MUTABLE()!=null));
 	}
 	
 	

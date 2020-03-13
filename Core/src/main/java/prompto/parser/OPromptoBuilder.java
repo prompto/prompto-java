@@ -632,7 +632,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	public void exitCastExpression(CastExpressionContext ctx) {
 		IExpression exp = getNodeValue(ctx.left);
 		IType type = getNodeValue(ctx.right);
-		setNodeValue(ctx, new CastExpression(exp, type));
+		setNodeValue(ctx, new CastExpression(exp, type, ctx.MUTABLE()!=null));
 	}
 
 	

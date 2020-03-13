@@ -17,7 +17,7 @@ public class NativeCategoryType extends CategoryType {
 	}
 
 	@Override
-	public IType asMutable(boolean mutable) {
+	public IType asMutable(Context context, boolean mutable) {
 		if(mutable)
 			; // TODO throw ?
 		return this;
