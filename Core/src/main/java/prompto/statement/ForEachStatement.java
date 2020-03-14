@@ -415,7 +415,7 @@ public class ForEachStatement extends BaseStatement {
 	    Transpiler child = transpiler.newChildTranspiler(null);
 	    child.indent();
 	    child.getContext().registerValue(new Variable(this.v1, elemType));
-	    child.append("var ").append(this.v1.toString()).append(" = ").append(itemsName).append("[").append(idxName).append("];");
+	    child.append("var ").append(this.v1.toString()).append(" = ").append(itemsName).append("[").append(idxName).append("];").newLine();
 	    this.statements.transpile(child);
 	    child.dedent();
 	    child.flush();
