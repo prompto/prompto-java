@@ -4,11 +4,22 @@ function Blob() {
     return this;
 }
 
+Blob.fromJSON = function(value) {
+	var blob = new Blob();
+	blob.mimeType = value.mimeType;
+	blob.url = value.url;
+	return blob;
+}
+
+
 Blob.fromFile = function(file) {
     var blob = new Blob();
+	blob.mimeType = file.type;
     blob.file = file;
     return blob;
 };
+
+// TODO move the below to an Archive type
 
 Blob.fromValue = function(value) {
     var binaries = {};

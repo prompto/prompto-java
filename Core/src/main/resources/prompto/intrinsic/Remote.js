@@ -22,6 +22,8 @@ function readJSONValue(value) {
 				return Version.parse(value.value);
 			case "Image":
 				return Image.fromJSON(value.value);
+			case "Blob":
+				return Blob.fromJSON(value.value);
 			default:
 				return readInstance(value);
 		}
