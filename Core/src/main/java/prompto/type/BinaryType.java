@@ -62,8 +62,13 @@ public abstract class BinaryType extends NativeType {
 	
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
-		PromptoBinary binary = readJSONValue(value, parts);
-		return binary==null ? NullValue.instance() : newInstance(binary);
+		if(value.isNull())
+			return NullValue.instance();
+		else {
+			PromptoBinary binary = readJSONValue(value, parts);
+			// by convention, if value is a ref, we return null (rather than NullValue), for the consumer to know the value did not change
+			return binary==null ? null : newInstance(binary);
+		}
 	}
 	
 	
