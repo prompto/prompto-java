@@ -63,8 +63,8 @@ define getReactWidgetState as native method receiving ReactWidget w returning Do
 	JavaScript: return w.state;
 
 
-define setReactWidgetState as native method receiving ReactWidget w and Document state doing:
-	JavaScript: w.setState(state);
+define setReactWidgetState as native method receiving ReactWidget w, Document state and Callback callback = nothing doing:
+	JavaScript: w.setState(state, callback);
 
 
 define forceReactWidgetRender as native method receiving ReactWidget w doing:
@@ -131,8 +131,8 @@ define ReactWidget as widget with methods:
 	define getState as method doing:
 		return getReactWidgetState self
 	
-	define setState as method receiving Document state doing:
-		setReactWidgetState self with state
+	define setState as method receiving Document state and Callback callback = nothing doing:
+		setReactWidgetState self with state and callback
 
 	define forceRender as method doing:
 		forceReactWidgetRender self
