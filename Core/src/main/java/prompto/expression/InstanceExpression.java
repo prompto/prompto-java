@@ -14,8 +14,10 @@ import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.grammar.EqOp;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
+import prompto.literal.BooleanLiteral;
 import prompto.param.IParameter;
 import prompto.parser.Dialect;
 import prompto.parser.Section;
@@ -25,14 +27,19 @@ import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.runtime.LinkedVariable;
 import prompto.runtime.Variable;
+import prompto.store.AttributeInfo;
+import prompto.store.IQueryBuilder;
+import prompto.store.IQueryBuilder.MatchOp;
 import prompto.transpiler.Transpiler;
+import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
+import prompto.value.BooleanValue;
 import prompto.value.ClosureValue;
 import prompto.value.IValue;
 
-public class InstanceExpression extends Section implements IExpression {
+public class InstanceExpression extends Section implements IPredicateExpression {
 
 	Identifier id;
 	
@@ -217,6 +224,47 @@ public class InstanceExpression extends Section implements IExpression {
 		    transpiler.append(this.getName());
 		}
 		return false;
+	}
+	
+	private EqualsExpression toPredicate(Context context) {
+	    AttributeDeclaration decl = context.findAttribute(id.toString());
+		if(decl==null) {
+			context.getProblemListener().reportUnknownIdentifier(id, id.toString());
+			return null;
+		} else if(!(decl instanceof AttributeDeclaration) || ((AttributeDeclaration)decl).getType()!=BooleanType.instance()) {
+			context.getProblemListener().reportIllegalValue(id, "Expected a Boolean, got " + decl.getType().getTypeName());
+			return null;
+		} else
+			return new EqualsExpression(this, EqOp.EQUALS, new BooleanLiteral("true"));
+	}
+
+	@Override
+	public void interpretQuery(Context context, IQueryBuilder query) throws PromptoError {
+		IPredicateExpression predicate = toPredicate(context);
+		if(predicate!=null)
+			predicate.interpretQuery(context, query);
+	}
+	
+	@Override
+	public void compileQuery(Context context, MethodInfo method, Flags flags) {
+		IPredicateExpression predicate = toPredicate(context);
+		if(predicate!=null)
+			predicate.compileQuery(context, method, flags);
+	}
+	
+
+	@Override
+	public void declareQuery(Transpiler transpiler) {
+		IPredicateExpression predicate = toPredicate(transpiler.getContext());
+		if(predicate!=null)
+			predicate.declareQuery(transpiler);
+	}
+	
+	@Override
+	public void transpileQuery(Transpiler transpiler, String builderName) {
+		IPredicateExpression predicate = toPredicate(transpiler.getContext());
+		if(predicate!=null)
+			predicate.transpileQuery(transpiler, builderName);
 	}
 
 }

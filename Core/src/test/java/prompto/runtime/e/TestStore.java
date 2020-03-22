@@ -80,6 +80,66 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedFetchAnd() throws Exception {
+		checkInterpretedOutput("store/fetchAnd.pec");
+	}
+
+	@Test
+	public void testCompiledFetchAnd() throws Exception {
+		checkCompiledOutput("store/fetchAnd.pec");
+	}
+
+	@Test
+	public void testTranspiledFetchAnd() throws Exception {
+		checkTranspiledOutput("store/fetchAnd.pec");
+	}
+
+	@Test
+	public void testInterpretedFetchBoolean() throws Exception {
+		checkInterpretedOutput("store/fetchBoolean.pec");
+	}
+
+	@Test
+	public void testCompiledFetchBoolean() throws Exception {
+		checkCompiledOutput("store/fetchBoolean.pec");
+	}
+
+	@Test
+	public void testTranspiledFetchBoolean() throws Exception {
+		checkTranspiledOutput("store/fetchBoolean.pec");
+	}
+
+	@Test
+	public void testInterpretedFetchNotBoolean() throws Exception {
+		checkInterpretedOutput("store/fetchNotBoolean.pec");
+	}
+
+	@Test
+	public void testCompiledFetchNotBoolean() throws Exception {
+		checkCompiledOutput("store/fetchNotBoolean.pec");
+	}
+
+	@Test
+	public void testTranspiledFetchNotBoolean() throws Exception {
+		checkTranspiledOutput("store/fetchNotBoolean.pec");
+	}
+
+	@Test
+	public void testInterpretedFetchOr() throws Exception {
+		checkInterpretedOutput("store/fetchOr.pec");
+	}
+
+	@Test
+	public void testCompiledFetchOr() throws Exception {
+		checkCompiledOutput("store/fetchOr.pec");
+	}
+
+	@Test
+	public void testTranspiledFetchOr() throws Exception {
+		checkTranspiledOutput("store/fetchOr.pec");
+	}
+
+	@Test
 	public void testInterpretedFlush() throws Exception {
 		checkInterpretedOutput("store/flush.pec");
 	}

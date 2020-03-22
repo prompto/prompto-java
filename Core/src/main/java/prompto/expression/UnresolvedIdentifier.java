@@ -15,6 +15,7 @@ import prompto.problem.IProblemListener;
 import prompto.problem.ProblemListener;
 import prompto.runtime.Context;
 import prompto.statement.MethodCall;
+import prompto.store.IQueryBuilder;
 import prompto.transpiler.Transpiler;
 import prompto.type.AnyType;
 import prompto.type.CategoryType;
@@ -22,7 +23,7 @@ import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
-public class UnresolvedIdentifier extends Section implements IExpression {
+public class UnresolvedIdentifier extends Section implements IPredicateExpression {
 
 	Identifier id;
 	IExpression resolved;
@@ -76,9 +77,27 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 	}
 	
 	@Override
+	public void interpretQuery(Context context, IQueryBuilder query) throws PromptoError {
+		resolveAndCheck(context, false);
+		if(resolved instanceof IPredicateExpression)
+			((IPredicateExpression)resolved).interpretQuery(context, query);
+		else
+			throw new SyntaxError("Filtering expression must be a predicate !");
+	}
+	
+	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		resolveAndCheck(context, false);
 		return resolved.compile(context, method, flags);
+	}
+	
+	@Override
+	public void compileQuery(Context context, MethodInfo method, Flags flags) {
+		resolveAndCheck(context, false);
+		if(resolved instanceof IPredicateExpression)
+			((IPredicateExpression)resolved).compileQuery(context, method, flags);
+		else
+			IPredicateExpression.super.compileQuery(context, method, flags);
 	}
 	
 	private IType resolveAndCheck(Context context, boolean forMember) {
@@ -177,13 +196,25 @@ public class UnresolvedIdentifier extends Section implements IExpression {
 
 	@Override
 	public void declare(Transpiler transpiler) {
-	    this.resolve(transpiler.getContext(), false, true);
-	    this.resolved.declare(transpiler);
+	    resolve(transpiler.getContext(), false, true);
+	    resolved.declare(transpiler);
 	}
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    this.resolve(transpiler.getContext(), false, true);
-	    return this.resolved.transpile(transpiler);
+	    resolve(transpiler.getContext(), false, true);
+	    return resolved.transpile(transpiler);
+	}
+	
+	@Override
+	public void declareQuery(Transpiler transpiler) {
+	    resolve(transpiler.getContext(), false, true);
+	    resolved.declareQuery(transpiler);
+	}
+	
+	@Override
+	public void transpileQuery(Transpiler transpiler, String builderName) {
+	    resolve(transpiler.getContext(), false, true);
+	    resolved.transpileQuery(transpiler, builderName);
 	}
 }

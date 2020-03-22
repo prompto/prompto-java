@@ -78,14 +78,6 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 	}
 	
 	@Override
-	public void interpretQuery(Context context, IQueryBuilder query) throws PromptoError {
-		if(!(expression instanceof IPredicateExpression))
-			throw new SyntaxError("Not a predicate: " + expression.toString());
-		((IPredicateExpression)expression).interpretQuery(context, query);
-		query.not();
-	}
-
-	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		ResultInfo info = expression.compile(context, method, flags.withPrimitive(true));
 		if(BooleanValue.class==info.getType())
@@ -97,14 +89,6 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 			return CompilerUtils.booleanToBoolean(method);
 	}
 	
-	@Override
-	public void compileQuery(Context context, MethodInfo method, Flags flags) {
-		((IPredicateExpression)expression).compileQuery(context, method, flags);
-		InterfaceConstant m = new InterfaceConstant(IQueryBuilder.class, "not", void.class);
-		method.addInstruction(Opcode.INVOKEINTERFACE, m);
-	}
-
-
 	@Override
 	public boolean interpretAssert(Context context, TestMethodDeclaration test) throws PromptoError {
 		IValue val = expression.interpret(context);
@@ -169,5 +153,34 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 	@Override
 	public void transpileFound(Transpiler transpiler, Dialect dialect) {
 		this.transpile(transpiler);
+	}
+
+	@Override
+	public void interpretQuery(Context context, IQueryBuilder query) throws PromptoError {
+		if(!(expression instanceof IPredicateExpression))
+			throw new SyntaxError("Not a predicate: " + expression.toString());
+		((IPredicateExpression)expression).interpretQuery(context, query);
+		query.not();
+	}
+
+	@Override
+	public void compileQuery(Context context, MethodInfo method, Flags flags) {
+		if(!(expression instanceof IPredicateExpression))
+			throw new SyntaxError("Not a predicate: " + expression.toString());
+		((IPredicateExpression)expression).compileQuery(context, method, flags);
+		InterfaceConstant m = new InterfaceConstant(IQueryBuilder.class, "not", IQueryBuilder.class);
+		method.addInstruction(Opcode.INVOKEINTERFACE, m);
+	}
+
+
+	@Override
+	public void declareQuery(Transpiler transpiler) {
+	    this.expression.declare(transpiler);
+	}
+	
+	@Override
+	public void transpileQuery(Transpiler transpiler, String builderName) {
+	    this.expression.transpileQuery(transpiler, builderName);
+	    transpiler.append(builderName).append(".not();").newLine();
 	}
 }

@@ -106,6 +106,21 @@ public class TestCore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedConfig() throws Exception {
+		runInterpretedTests("core/config.pec");
+	}
+
+	@Test
+	public void testCompiledConfig() throws Exception {
+		runCompiledTests("core/config.pec");
+	}
+
+	@Test
+	public void testTranspiledConfig() throws Exception {
+		runTranspiledTests("core/config.pec");
+	}
+
+	@Test
 	public void testInterpretedError() throws Exception {
 		runInterpretedTests("core/error.pec");
 	}

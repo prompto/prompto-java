@@ -27,6 +27,26 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testFetchAnd() throws Exception {
+		compareResourceEME("store/fetchAnd.pec");
+	}
+
+	@Test
+	public void testFetchBoolean() throws Exception {
+		compareResourceEME("store/fetchBoolean.pec");
+	}
+
+	@Test
+	public void testFetchNotBoolean() throws Exception {
+		compareResourceEME("store/fetchNotBoolean.pec");
+	}
+
+	@Test
+	public void testFetchOr() throws Exception {
+		compareResourceEME("store/fetchOr.pec");
+	}
+
+	@Test
 	public void testFlush() throws Exception {
 		compareResourceEME("store/flush.pec");
 	}
