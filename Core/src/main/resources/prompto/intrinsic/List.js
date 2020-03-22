@@ -148,6 +148,9 @@ List.prototype.iterate = function (fn, instance) {
         },
         getText: function() {
         	return this.toArray().join(", ");
+        },
+        collectStorables:  function(storablesToAdd) {
+        	this.toList().collectStorables(storablesToAdd);
         }
     }
 };
