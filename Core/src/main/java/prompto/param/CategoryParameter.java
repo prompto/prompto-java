@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.expression.ArrowExpression;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
@@ -12,7 +13,9 @@ import prompto.transpiler.Transpiler;
 import prompto.type.DecimalType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
+import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
+import prompto.value.ContextualExpression;
 
 public class CategoryParameter extends BaseParameter implements ITypedParameter {
 	
@@ -150,13 +153,32 @@ public class CategoryParameter extends BaseParameter implements ITypedParameter 
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-		this.type.declare(transpiler);
+		resolve(transpiler.getContext());
+		resolved.declare(transpiler);
 	}
 	
 	@Override
 	public void transpileCall(Transpiler transpiler, IExpression expression) {
+		resolve(transpiler.getContext());
+		if(!transpileArrowExpressionCall(transpiler, expression))
+			transpileValue(transpiler, expression);
+	}
+	
+	private boolean transpileArrowExpressionCall(Transpiler transpiler, IExpression expression) {
+		if(resolved instanceof MethodType) {
+			if(expression instanceof ContextualExpression)
+				expression = ((ContextualExpression)expression).getExpression();
+			if(expression instanceof ArrowExpression) {
+				((MethodType)resolved).transpileArrowExpression(transpiler, (ArrowExpression)expression);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	void transpileValue(Transpiler transpiler, IExpression expression) {
 		IType expType = expression.check(transpiler.getContext());
-	    if (this.type == IntegerType.instance() && expType == DecimalType.instance()) {
+	    if (resolved == IntegerType.instance() && expType == DecimalType.instance()) {
 	        transpiler.append("Math.round(");
 	        expression.transpile(transpiler);
 	        transpiler.append(")");
