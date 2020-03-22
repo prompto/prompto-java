@@ -27,15 +27,12 @@ import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.runtime.LinkedVariable;
 import prompto.runtime.Variable;
-import prompto.store.AttributeInfo;
 import prompto.store.IQueryBuilder;
-import prompto.store.IQueryBuilder.MatchOp;
 import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
-import prompto.value.BooleanValue;
 import prompto.value.ClosureValue;
 import prompto.value.IValue;
 
