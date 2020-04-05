@@ -1302,6 +1302,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitConstructorExpression(EParser.ConstructorExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code ReadBlobExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterReadBlobExpression(EParser.ReadBlobExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ReadBlobExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitReadBlobExpression(EParser.ReadBlobExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code MultiplyExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
@@ -3647,6 +3659,16 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitSorted_key(EParser.Sorted_keyContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link EParser#read_blob_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterRead_blob_expression(EParser.Read_blob_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#read_blob_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitRead_blob_expression(EParser.Read_blob_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link EParser#read_all_expression}.
 	 * @param ctx the parse tree

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 
+import prompto.intrinsic.PromptoBinary;
 import prompto.value.IResource;
 
 public class Buffer  implements IResource {
@@ -48,6 +49,12 @@ public class Buffer  implements IResource {
 	@Override
 	public String readFully() throws IOException {
 		return buffer.toString();
+	}
+	
+	@Override
+	public PromptoBinary readBlob() throws IOException {
+		byte[] bytes = readFully().getBytes();
+		return new PromptoBinary("text/plain", bytes);
 	}
 	
 	@Override

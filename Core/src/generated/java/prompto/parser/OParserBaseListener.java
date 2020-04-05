@@ -3748,6 +3748,18 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterRead_blob_expression(OParser.Read_blob_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRead_blob_expression(OParser.Read_blob_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterRead_all_expression(OParser.Read_all_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}

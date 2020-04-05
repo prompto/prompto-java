@@ -3712,6 +3712,18 @@ public class MParserBaseListener implements MParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterRead_blob_expression(MParser.Read_blob_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRead_blob_expression(MParser.Read_blob_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterRead_all_expression(MParser.Read_all_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}

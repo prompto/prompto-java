@@ -6,6 +6,7 @@ import java.io.StringReader;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import prompto.intrinsic.PromptoBinary;
 import prompto.value.IResource;
 
 public class MyResource implements IResource {
@@ -50,6 +51,12 @@ public class MyResource implements IResource {
 		} finally {
 			reader = null;
 		}
+	}
+	
+	@Override
+	public PromptoBinary readBlob() throws IOException {
+		byte[] bytes = readFully().getBytes();
+		return new PromptoBinary("text/plain", bytes);
 	}
 	
 	@Override

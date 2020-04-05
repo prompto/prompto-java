@@ -93,6 +93,7 @@ import prompto.expression.OrExpression;
 import prompto.expression.ParenthesisExpression;
 import prompto.expression.PlusExpression;
 import prompto.expression.ReadAllExpression;
+import prompto.expression.ReadBlobExpression;
 import prompto.expression.ReadOneExpression;
 import prompto.expression.SelectorExpression;
 import prompto.expression.SliceSelector;
@@ -2830,9 +2831,23 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	
 	@Override
+	public void exitReadBlobExpression(ReadBlobExpressionContext ctx) {
+		IExpression exp = getNodeValue(ctx.exp);
+		setNodeValue(ctx, exp);
+	}
+	
+	
+	@Override
 	public void exitRead_all_expression(Read_all_expressionContext ctx) {
 		IExpression source = getNodeValue(ctx.source);
 		setNodeValue(ctx, new ReadAllExpression(source));
+	}
+	
+	
+	@Override
+	public void exitRead_blob_expression(Read_blob_expressionContext ctx) {
+		IExpression source = getNodeValue(ctx.source);
+		setNodeValue(ctx, new ReadBlobExpression(source));
 	}
 	
 	@Override

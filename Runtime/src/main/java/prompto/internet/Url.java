@@ -7,7 +7,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 
+import prompto.intrinsic.PromptoBinary;
 import prompto.value.IResource;
 
 public class Url implements IResource {
@@ -63,14 +65,30 @@ public class Url implements IResource {
 		}
 	}
 	
+	
 	@Override
-	public String readFully() throws IOException {
-		try( InputStream input = url.openStream() ) {
-			return readFully(input);
+	public PromptoBinary readBlob() throws IOException {
+		URLConnection connection = url.openConnection();
+		try( InputStream input = connection.getInputStream()) {
+			ByteArrayOutputStream data = readBytesFully(input);
+			return new PromptoBinary(connection.getContentType(), data.toByteArray());
 		}
 	}
 	
-	private String readFully(InputStream input) throws IOException {
+	
+	@Override
+	public String readFully() throws IOException {
+		try( InputStream input = url.openStream() ) {
+			return readStringFully(input);
+		}
+	}
+	
+	private String readStringFully(InputStream input) throws IOException {
+		ByteArrayOutputStream data = readBytesFully(input);
+		return data.toString(encoding);
+	}
+	
+	private ByteArrayOutputStream readBytesFully(InputStream input) throws IOException {
 		ByteArrayOutputStream data = new ByteArrayOutputStream();
 		byte[] buffer = new byte[4096];
 		for(;;) {
@@ -79,7 +97,7 @@ public class Url implements IResource {
 				break;
 			data.write(buffer, 0, read);
 		}
-		return data.toString(encoding);
+		return data;
 	}
 
 	@Override

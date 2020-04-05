@@ -1384,6 +1384,18 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterReadBlobExpression(EParser.ReadBlobExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitReadBlobExpression(EParser.ReadBlobExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterMultiplyExpression(EParser.MultiplyExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -3899,6 +3911,18 @@ public class EParserBaseListener implements EParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitSorted_key(EParser.Sorted_keyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRead_blob_expression(EParser.Read_blob_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRead_blob_expression(EParser.Read_blob_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

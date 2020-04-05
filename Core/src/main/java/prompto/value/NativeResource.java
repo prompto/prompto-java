@@ -3,6 +3,7 @@ package prompto.value;
 import java.io.IOException;
 
 import prompto.declaration.NativeResourceDeclaration;
+import prompto.intrinsic.PromptoBinary;
 import prompto.runtime.Context;
 
 public class NativeResource extends NativeInstance implements IResource {
@@ -20,6 +21,13 @@ public class NativeResource extends NativeInstance implements IResource {
 	public boolean isWritable() {
 		return ((IResource)instance).isWritable();
 	}
+	
+	
+	@Override
+	public PromptoBinary readBlob() throws IOException {
+		return ((IResource)instance).readBlob();
+	}
+	
 	
 	@Override
 	public String readFully() throws IOException {

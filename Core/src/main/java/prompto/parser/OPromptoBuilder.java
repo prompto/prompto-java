@@ -90,6 +90,7 @@ import prompto.expression.OrExpression;
 import prompto.expression.ParenthesisExpression;
 import prompto.expression.PlusExpression;
 import prompto.expression.ReadAllExpression;
+import prompto.expression.ReadBlobExpression;
 import prompto.expression.ReadOneExpression;
 import prompto.expression.SelectorExpression;
 import prompto.expression.SliceSelector;
@@ -204,6 +205,7 @@ import prompto.param.UnresolvedParameter;
 import prompto.parser.OParser.CssTypeContext;
 import prompto.parser.OParser.Jsx_fragmentContext;
 import prompto.parser.OParser.Member_identifierContext;
+import prompto.parser.OParser.Read_blob_expressionContext;
 import prompto.parser.OParser.SymbolLiteralContext;
 import prompto.parser.OParser.TypeLiteralContext;
 import prompto.parser.OParser.Type_literalContext;
@@ -2827,6 +2829,14 @@ public class OPromptoBuilder extends OParserBaseListener {
 		IExpression source = getNodeValue(ctx.source);
 		setNodeValue(ctx, new ReadAllExpression(source));
 	}
+	
+	
+	@Override
+	public void exitRead_blob_expression(Read_blob_expressionContext ctx) {
+		IExpression source = getNodeValue(ctx.source);
+		setNodeValue(ctx, new ReadBlobExpression(source));
+	}
+	
 	
 	@Override
 	public void exitRead_one_expression(Read_one_expressionContext ctx) {

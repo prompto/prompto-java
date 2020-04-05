@@ -3452,6 +3452,16 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitSorted_key(MParser.Sorted_keyContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MParser#read_blob_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterRead_blob_expression(MParser.Read_blob_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MParser#read_blob_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitRead_blob_expression(MParser.Read_blob_expressionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MParser#read_all_expression}.
 	 * @param ctx the parse tree
 	 */

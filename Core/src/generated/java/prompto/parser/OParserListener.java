@@ -3496,6 +3496,16 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitSorted_key(OParser.Sorted_keyContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link OParser#read_blob_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterRead_blob_expression(OParser.Read_blob_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#read_blob_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitRead_blob_expression(OParser.Read_blob_expressionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link OParser#read_all_expression}.
 	 * @param ctx the parse tree
 	 */
