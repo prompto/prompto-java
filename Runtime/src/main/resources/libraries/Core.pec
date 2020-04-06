@@ -283,6 +283,14 @@ define fetchTextResource as native method receiving path returning Text doing:
 	Python2: return $context.fetchTextResource(path)
 	Python3: return $context.fetchTextResource(path)
 	JavaScript: return $context.fetchTextResource(path);
+
+
+define fetchBinaryResource as native method receiving path returning Blob doing:
+	Java: return $context.fetchBinaryResource(path);
+	C#: return $context.fetchBinaryResource(path);
+	Python2: return $context.fetchBinaryResource(path)
+	Python3: return $context.fetchBinaryResource(path)
+	JavaScript: return $context.fetchBinaryResource(path);
  
 
 define "randomUuid is not null" as test method doing:

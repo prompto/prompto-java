@@ -13,6 +13,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import prompto.code.BinaryResource;
 import prompto.code.ICodeStore;
 import prompto.code.Resource;
 import prompto.code.TextResource;
@@ -34,6 +35,7 @@ import prompto.expression.Symbol;
 import prompto.grammar.Annotation;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoBinary;
 import prompto.intrinsic.PromptoList;
 import prompto.parser.Dialect;
 import prompto.parser.ILocation;
@@ -1023,6 +1025,16 @@ public class Context implements IContext {
 			return ((TextResource)resource).getBody();
 		else
 			return "Not a Text resource: " + path; // TODO raise exception
+	}
+
+	public PromptoBinary fetchBinaryResource(String path) {
+		Resource resource = ICodeStore.getInstance().fetchLatestResource(path);
+		if(resource==null)
+			return null;
+		else if(resource instanceof BinaryResource)
+			return ((BinaryResource)resource).getData();
+		else
+			return null; // TODO raise exception
 	}
 
 	public static class ResourceContext extends Context {

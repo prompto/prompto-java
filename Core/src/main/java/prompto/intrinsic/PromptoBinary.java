@@ -14,6 +14,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 
 /** a data structure which ties a piece of binary data to a mime type 
  * This is a bridge between BinaryValue and any IStore implementation
+ * It is also a valid response type for user defined services
  */
 public class PromptoBinary {
 

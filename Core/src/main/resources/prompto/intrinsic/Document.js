@@ -77,7 +77,6 @@ Document.prototype.fromJson = function(node, parts) {
     }
 };
 
-
 Document.prototype.readJsonField = function(node, parts) {
     if(!node || typeof(node)===typeof(true) || typeof(node)===typeof(1) || typeof(node)===typeof(1.0) || typeof(node)===typeof(""))
         return node;
@@ -88,6 +87,7 @@ Document.prototype.readJsonField = function(node, parts) {
     else
         throw new Error(typeof(node).toString());
 };
+
 
 // ensure objects created from Documents exhibit the same behaviour
 Object.defineProperty(Object.prototype, "getMember", {

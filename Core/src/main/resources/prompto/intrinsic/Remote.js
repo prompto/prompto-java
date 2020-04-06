@@ -24,6 +24,8 @@ function readJSONValue(value) {
 				return Image.fromJSON(value.value);
 			case "Blob":
 				return Blob.fromJSON(value.value);
+			case "Document":
+				return readDocument(value.value);
 			default:
 				return readInstance(value);
 		}
@@ -32,6 +34,15 @@ function readJSONValue(value) {
 	} else
 		return value; // a string, boolean or number
 }
+
+function readDocument(value) {
+	var document = new Document();
+	Object.getOwnPropertyNames(value).forEach(function(name) {
+		document.setMember(name, this.readJSONValue(value[name]));
+	}, this);
+	return document;
+}
+
 
 function readList(value) {
 	var items = value.map(readJSONValue);
