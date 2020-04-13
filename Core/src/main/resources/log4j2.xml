@@ -24,7 +24,7 @@
         <Logger name="log4j.test.Log4jTest" level="trace">
             <AppenderRef ref="Console"/>
         </Logger>
-        <Root level="info">
+        <Root level="debug">
             <AppenderRef ref="Console"/>
         </Root>
     </Loggers>
