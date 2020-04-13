@@ -112,7 +112,9 @@ public class YamlConfigurationReader implements IConfigurationReader {
 			IConfigurationReader reader = new YamlConfigurationReader(new ByteArrayInputStream(yamlConfig.getBytes()));
 			IStoreConfiguration storeConfig = reader.readStoreConfiguration();
 			IStore store = IStoreFactory.newStoreFromConfig(storeConfig);
-			return store.checkConnection();
+			boolean valid = store.checkConnection();
+			store.close();
+			return valid;
 		} catch(Throwable t) {
 			logger.error(()->"Failed to connect!", t);
 			return false;
