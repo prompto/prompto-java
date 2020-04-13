@@ -1,5 +1,6 @@
 package prompto.store;
 
+import java.io.Closeable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -9,7 +10,7 @@ import prompto.intrinsic.PromptoBinary;
 import prompto.store.IStorable.IDbIdFactory;
 
 /* a mean to store and fetch data */
-public interface IStore {
+public interface IStore extends Closeable {
 	
 	public static final String dbIdName = "dbId";
 	

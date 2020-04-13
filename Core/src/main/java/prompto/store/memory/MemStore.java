@@ -1,5 +1,6 @@
 package prompto.store.memory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -244,6 +245,11 @@ public final class MemStore implements IStore {
 
 	@Override
 	public void flush() throws PromptoError {
+		// nothing to do
+	}
+	
+	@Override
+	public void close() throws IOException {
 		// nothing to do
 	}
 	
