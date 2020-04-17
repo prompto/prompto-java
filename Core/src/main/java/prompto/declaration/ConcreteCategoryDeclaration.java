@@ -1193,9 +1193,11 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	        	boolean isEnum = isEnumeratedAttribute(transpiler.getContext(), attr);
 	            transpiler.append("this.setMember('")
 	            	.append(attr.toString())
-	            	.append("', values.")
+	            	.append("', values.hasOwnProperty('")
 	            	.append(attr.toString())
-	            	.append(" || null")
+	            	.append("') ? values.")
+	             	.append(attr.toString())
+	             	.append(" : null")
 	            	.append(", ")
 	            	.append(decl.isStorable())
 	            	.append(", mutable")
