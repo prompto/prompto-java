@@ -109,5 +109,20 @@ public class TestCategories extends BaseOParserTest {
 		checkTranspiledOutput("categories/copyFromStored.poc");
 	}
 
+	@Test
+	public void testInterpretedPopulateFalse() throws Exception {
+		checkInterpretedOutput("categories/populateFalse.poc");
+	}
+
+	@Test
+	public void testCompiledPopulateFalse() throws Exception {
+		checkCompiledOutput("categories/populateFalse.poc");
+	}
+
+	@Test
+	public void testTranspiledPopulateFalse() throws Exception {
+		checkTranspiledOutput("categories/populateFalse.poc");
+	}
+
 }
 
