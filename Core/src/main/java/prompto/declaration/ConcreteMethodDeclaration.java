@@ -427,7 +427,9 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			// TODO IType type = check(transpiler.getContext(), isStart);
 			if(returnType!=null)
 				returnType.declare(transpiler);
-		    if(this.memberOf==null) {
+		    if(this.memberOf!=null)
+		    	this.memberOf.declare(transpiler);
+		    else {
 		        transpiler = transpiler.newLocalTranspiler();
 		        transpiler.declare(this);
 		        this.declareParameters(transpiler);
