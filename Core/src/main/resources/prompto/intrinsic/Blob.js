@@ -14,7 +14,7 @@ Blob.fromJSON = function(value) {
 
 Blob.fromFile = function(file) {
     var blob = new Blob();
-	blob.mimeType = file.type;
+	blob.mimeType = file.type ? file.type : "application/octet-stream";
     blob.file = file;
     return blob;
 };

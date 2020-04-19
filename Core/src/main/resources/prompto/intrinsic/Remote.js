@@ -128,9 +128,9 @@ function writeJSONBinary(binary, formData) {
 		if(formData) {
 			var partName = '@' + binary.file.name;
 			formData.append(partName, binary.file);
-			return { mimeType: binary.file.type, partName: partName };
+			return { mimeType: binary.mimeType, partName: partName };
 		} else {
-			return { mimeType: binary.file.type, binaryFile: binary.file }; // for later processing
+			return { mimeType: binary.mimeType, binaryFile: binary.file }; // for later processing
 		}
 	} else if (binary.mimeType && binary.url) {
 		return { mimeType: binary.mimeType, url: binary.url };
