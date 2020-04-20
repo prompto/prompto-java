@@ -61,7 +61,7 @@ public class DocumentExpression implements IExpression {
 	
 	private DocumentValue documentFromBlob(Context context, BlobValue blob) {
 		if(!"application/zip".equals(blob.getMimeType()))
-			throw new UnsupportedOperationException();
+			throw new UnsupportedOperationException("Unsupported mime type: " + blob.getMimeType());
 		try {
 			Map<String, byte[]> parts = PromptoDocument.readParts(blob.getData());
 			JsonNode value = PromptoDocument.readValue(parts);
