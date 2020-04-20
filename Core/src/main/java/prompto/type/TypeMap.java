@@ -20,6 +20,8 @@ public class TypeMap extends HashMap<Identifier, IType> {
 		for(IType t : values()) {
 			if(type==null)
 				type = t;
+			else if(type==NullType.instance())
+				continue;
 			else if(type.isAssignableFrom(context, t))
 				continue;
 			else if(t.isAssignableFrom(context, type))
