@@ -48,3 +48,26 @@ define "reads from www.google.com" as test method doing:
 and verifying: 
 	content contains "doctype"
 
+
+define encodeURI as native method receiving Text uri returning Text doing:
+    Java: return java.net.URLEncoder.encode(uri, "UTF-8");
+    C#: return System.Web.HttpUtility.UrlEncode(uri);
+    Python2: return quote(uri) from module: urllib
+    Python3: return quote(uri) from module: urllib.parse
+    JavaScript: return encodeURIComponent(uri);
+
+
+define decodeURI as native method receiving Text uri returning Text doing:
+    Java: return java.net.URLDecoder.decode(uri, "UTF-8");
+    C#: return System.Web.HttpUtility.UrlDecode(uri);
+    Python2: return unquote(uri) from module: urllib
+    Python3: return unquote(uri) from module: urllib.parse
+    JavaScript: return decodeURIComponent(uri);
+
+define "encodes and decodes uri" as test method doing:
+	uri = "Black Mamba"
+	encoded = encodeURI uri
+	decoded = decodeURI encoded
+and verifying: 
+	encoded = "Black%20Mamba" or encoded = "Black+Mamba"
+	uri = decoded
