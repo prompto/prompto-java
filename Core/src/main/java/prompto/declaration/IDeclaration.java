@@ -25,7 +25,7 @@ public interface IDeclaration extends ITranspilable, INamed, ISection {
 	}
 	
 	void register(Context context);
-	IType check(Context context, boolean isStart);
+	IType check(Context context);
 	void toDialect(CodeWriter writer);
 	void setOrigin(ICodeStore origin);
 	ICodeStore getOrigin();

@@ -21,6 +21,11 @@ public class OperatorMethodDeclaration extends ConcreteMethodDeclaration impleme
 		this.operator = op;
 	}
 
+	@Override
+	public IType check(Context context) {
+		return ((IMethodDeclaration)this).check(context);
+	}
+	
 	public static String getNameAsKey(Operator operator) {
 		return "operator_" + operator.name();
 	}
@@ -30,12 +35,6 @@ public class OperatorMethodDeclaration extends ConcreteMethodDeclaration impleme
 		return getNameAsKey(operator);
 	}
 
-	@Override
-	public IType check(Context context) {
-		// called as IExpression::check
-		return check(context, false);
-	}
-	
 	@Override
 	protected void toMDialect(CodeWriter writer) {
 		writer.append("def operator ");

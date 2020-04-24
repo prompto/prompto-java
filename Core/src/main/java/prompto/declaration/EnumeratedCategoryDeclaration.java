@@ -181,8 +181,8 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 	}
 	
 	@Override
-	public IType check(Context context, boolean isStart) {
-		super.check(context, isStart);
+	public IType check(Context context) {
+		super.check(context);
 		for(Symbol s : symbolsList)
 			s.check(context); // TODO
 		return getType(context);

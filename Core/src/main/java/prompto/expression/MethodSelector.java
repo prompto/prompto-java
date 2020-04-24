@@ -48,6 +48,7 @@ import prompto.java.JavaClassType;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Context.MethodDeclarationMap;
+import prompto.runtime.ContextFlags;
 import prompto.runtime.Variable;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
@@ -172,7 +173,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		declaration.compileParameters(context, method, flags, assignments);
 		// call global method in current class
 		Type classType = method.getClassFile().getThisClass().getType();
-		IType returnType = declaration.check(context, false);
+		IType returnType = declaration.check(context, ContextFlags.NONE);
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getParameters(), returnType);
 		MethodConstant constant = new MethodConstant(classType, methodName, descriptor);
 		method.addInstruction(Opcode.INVOKESTATIC, constant);
@@ -211,7 +212,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		MethodHandleConstant mhc = new MethodHandleConstant(mc);
 		BootstrapMethod bsm = new BootstrapMethod(mhc);
 		method.getClassFile().addBootstrapMethod(bsm);
-		IType returnType = declaration.check(context, false);
+		IType returnType = declaration.check(context, ContextFlags.NONE);
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getParameters(), returnType);
 		NameAndTypeConstant nameAndType = new NameAndTypeConstant(methodName, descriptor);
 		CallSiteConstant constant = new CallSiteConstant(bsm, nameAndType);
@@ -235,7 +236,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		// call global method in its own class
 		Type classType = CompilerUtils.getGlobalMethodType(declaration.getName());
 		String methodName = declaration.getName();
-		IType returnType = declaration.check(context, false);
+		IType returnType = declaration.check(context, ContextFlags.NONE);
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getParameters(), returnType);
 		InterfaceConstant constant = new InterfaceConstant(classType, methodName, descriptor);
 		method.addInstruction(Opcode.INVOKEINTERFACE, constant);
@@ -249,7 +250,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		// push arguments on the stack
 		declaration.compileParameters(context, method, flags, assignments);
 		// call global method through FunctionalInterface
-		IType returnIType = declaration.check(context, false);
+		IType returnIType = declaration.check(context, ContextFlags.NONE);
 		InterfaceType intf = new InterfaceType(declaration.getParameters(), returnIType);
 		Type classType = intf.getInterfaceType();
 		String methodName = intf.getInterfaceMethodName();
@@ -292,7 +293,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		// call global method in its own class
 		Type classType = CompilerUtils.getGlobalMethodType(declaration.getName());
 		String methodName = declaration.getName();
-		IType returnType = declaration.check(context, false);
+		IType returnType = declaration.check(context, ContextFlags.NONE);
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getParameters(), returnType);
 		MethodConstant constant = new MethodConstant(classType, methodName, descriptor);
 		method.addInstruction(Opcode.INVOKESTATIC, constant);
@@ -312,7 +313,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		declaration.compileParameters(context, method, flags, arguments);
 		// call virtual method
 		ClassConstant klass = new ClassConstant(info.getType());
-		IType returnType = declaration.check(context, false);
+		IType returnType = declaration.check(context, ContextFlags.NONE);
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getParameters(), returnType);
 		if(info.isSuper()) {
 			MethodConstant constant = new MethodConstant(klass, declaration.getName(), descriptor);
@@ -341,7 +342,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 	
 	private IType checkStaticMemberReturntype(Context context, IMethodDeclaration declaration) {
-		IType returnType = declaration.check(context, false);
+		IType returnType = declaration.check(context, ContextFlags.NONE);
 		if(returnType instanceof EnumeratedNativeType)
 			returnType = new JavaClassType(PromptoNativeSymbol.class);
 		return returnType;

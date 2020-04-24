@@ -36,6 +36,7 @@ import prompto.param.CategoryParameter;
 import prompto.param.IParameter;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
+import prompto.runtime.ContextFlags;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
@@ -176,7 +177,7 @@ public class IntegerType extends NativeType implements INumberType {
 		
 		
 		@Override
-		public IType check(Context context, boolean isStart) {
+		public IType check(Context context, ContextFlags flags) {
 			return TextType.instance();
 		}
 

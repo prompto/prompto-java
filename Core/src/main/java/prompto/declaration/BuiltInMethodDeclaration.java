@@ -10,6 +10,7 @@ import prompto.param.IParameter;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.runtime.Context.BuiltInContext;
+import prompto.runtime.ContextFlags;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -40,12 +41,12 @@ public abstract class BuiltInMethodDeclaration extends BaseMethodDeclaration {
 	}
 
 	@Override
-	public void compile(Context context, boolean isStart, ClassFile classFile) {
+	public void compile(Context context, ContextFlags flags, ClassFile classFile) {
 		throw new UnsupportedOperationException("Should never get there!");
 	}
 
 	@Override
-	public String compileTemplate(Context context, boolean isStart, ClassFile classFile) {
+	public String compileTemplate(Context context, ContextFlags flags, ClassFile classFile) {
 		throw new UnsupportedOperationException("Should never get there!");
 	}
 	
@@ -70,7 +71,12 @@ public abstract class BuiltInMethodDeclaration extends BaseMethodDeclaration {
 	public void declarationToDialect(CodeWriter writer) {
 		throw new UnsupportedOperationException();
 	}
-
+	
+	@Override
+	public void declare(Transpiler transpiler, ContextFlags flags) {
+		// override only of required
+		
+	}
 	public void declareCall(Transpiler transpiler) {
 		// override only of required
 	}

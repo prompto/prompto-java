@@ -62,6 +62,7 @@ import prompto.runtime.MethodFinder;
 import prompto.runtime.Score;
 import prompto.runtime.Variable;
 import prompto.runtime.Context.MethodDeclarationMap;
+import prompto.runtime.ContextFlags;
 import prompto.statement.MethodCall;
 import prompto.store.DataStore;
 import prompto.store.Family;
@@ -291,7 +292,7 @@ public class CategoryType extends BaseType {
 			context = context.newInstanceContext(this, false);
 			Context local = context.newLocalContext();
 			method.registerParameters(local);
-			return method.check(local, false);
+			return method.check(local, ContextFlags.NONE);
 		} catch(SyntaxError e) {
 			// ok to pass, will try reverse
 		}

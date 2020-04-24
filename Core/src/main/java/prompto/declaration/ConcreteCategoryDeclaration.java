@@ -42,6 +42,7 @@ import prompto.intrinsic.PromptoStorableBase;
 import prompto.parser.ISection;
 import prompto.problem.IProblemListener;
 import prompto.runtime.Context;
+import prompto.runtime.ContextFlags;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.store.DataStore;
 import prompto.store.IStorable;
@@ -256,7 +257,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	
 
 	@Override
-	public IType check(Context context, boolean isStart) {
+	public IType check(Context context) {
 		IProblemListener listener = context.getProblemListener();
 		listener.pushDeclaration(this);
 		try {
@@ -264,7 +265,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			checkDerived(context);
 			processAnnotations(context, true);
 			checkMethods(context);
-			return super.check(context, isStart);
+			return super.check(context);
 		} finally {
 			listener.popDeclaration();
 		}
@@ -666,7 +667,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		try {
 			context = context.newInstanceContext(getType(context), false).newChildContext();
 			method.registerParameters(context);
-			method.compilePrototype(context, false, classFile);
+			method.compilePrototype(context, ContextFlags.NONE, classFile);
 		} catch(SyntaxError e) {
 			throw new CompilerException(e);
 		}
@@ -1014,7 +1015,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 				continue;
 			context = context.newMemberContext(getType(context));
 			method.registerParameters(context);
-			method.compile(context, false, classFile);
+			method.compile(context, ContextFlags.NONE, classFile);
 		}
 	}
 	
@@ -1070,7 +1071,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	        return !(decl instanceof SetterMethodDeclaration || decl instanceof GetterMethodDeclaration);
 	    }).forEach(method -> {
 			Transpiler t = transpiler.newChildTranspiler(null);
-	        method.declare(t);
+	        method.declare(t, ContextFlags.MEMBER);
 	        t.flush();
 	    });
 	}

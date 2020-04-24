@@ -180,7 +180,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 	}
 	
 	@Override
-	public IType check(Context context, boolean isStart) {
+	public IType check(Context context) {
 		type.checkExists(context);
 		return type;
 	}

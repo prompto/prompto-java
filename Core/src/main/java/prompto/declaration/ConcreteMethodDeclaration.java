@@ -38,6 +38,7 @@ import prompto.param.ValuedCodeParameter;
 import prompto.parser.ISection;
 import prompto.problem.IProblemListener;
 import prompto.runtime.Context;
+import prompto.runtime.ContextFlags;
 import prompto.statement.DeclarationStatement;
 import prompto.statement.StatementList;
 import prompto.transpiler.Transpiler;
@@ -159,15 +160,15 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 
 	@Override
-	public IType check(Context context, boolean isStart) {
-		if(canBeChecked(context, isStart))
-			return fullCheck(context, isStart);
+	public IType check(Context context, ContextFlags flags) {
+		if(canBeChecked(context, flags))
+			return fullCheck(context, flags);
 		else
 			return VoidType.instance();
 	}
 	
-	private boolean canBeChecked(Context context, boolean isStart) {
-		if(isStart)
+	private boolean canBeChecked(Context context, ContextFlags flags) {
+		if(flags.isStart())
 			return !isTemplate();
 		else
 			return true;
@@ -182,14 +183,15 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			return parameters.stream().anyMatch(param -> param instanceof CodeParameter);
 	}
 
-	private IType fullCheck(Context context, boolean isStart) {
+	private IType fullCheck(Context context, ContextFlags flags) {
 		IProblemListener listener = context.getProblemListener();
 		listener.pushDeclaration(this);
 		try {
-			if(isStart) {
+			if(flags.isStart()) {
 				context = context.newLocalContext();
 				registerParameters(context);
-			}
+			} else if(this.memberOf!=null && !flags.isMember())
+				this.memberOf.processAnnotations(context, true);
 			if(parameters!=null)
 				parameters.check(context);
 			return checkStatements(context);
@@ -223,13 +225,13 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 	
 	@Override
-	public void compile(Context context, boolean isStart, ClassFile classFile) {
-		compile(context, isStart, classFile, getName());
+	public void compile(Context context, ContextFlags flags, ClassFile classFile) {
+		compile(context, flags, classFile, getName());
 	}
 	
-	public void compile(Context context, boolean isStart, ClassFile classFile, String methodName) {
-		context = prepareContext(context, isStart);
-		IType returnType = check(context, false);
+	public void compile(Context context, ContextFlags flags, ClassFile classFile, String methodName) {
+		context = prepareContext(context, flags);
+		IType returnType = check(context, flags);
 		MethodInfo method = createMethodInfo(context, classFile, returnType, methodName);
 		registerLocals(context, classFile, method);
 		produceByteCode(context, method, returnType);
@@ -255,9 +257,9 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 
 	@Override
-	public String compileTemplate(Context context, boolean isStart, ClassFile classFile) {
+	public String compileTemplate(Context context, ContextFlags flags, ClassFile classFile) {
 		String methodName = computeTemplateName(classFile);
-		compile(context, isStart, classFile, methodName);
+		compile(context, flags, classFile, methodName);
 		return methodName;
 	}
 
@@ -300,7 +302,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		compileClosureConstructor(context, classFile, locals);
 		context = context.newClosureContext(new MethodType(this));
 		registerParameters(context);
-		compile(context, false, classFile, intf.getInterfaceMethodName());
+		compile(context, ContextFlags.NONE, classFile, intf.getInterfaceMethodName());
 		method.getClassFile().addInnerClass(classFile);
 		return innerType;
 	}
@@ -412,12 +414,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 	
 	@Override
-	public void declare(Transpiler transpiler) {
-		declare(transpiler, false);
-	}
-	
-	@Override
-	public void declare(Transpiler transpiler, boolean isStart) {
+	public void declare(Transpiler transpiler, ContextFlags flags) {
 		if(declaring)
 			return;
 		IProblemListener listener = transpiler.getContext().getProblemListener();
@@ -427,9 +424,12 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			// TODO IType type = check(transpiler.getContext(), isStart);
 			if(returnType!=null)
 				returnType.declare(transpiler);
-		    if(this.memberOf!=null)
-		    	this.memberOf.declare(transpiler);
-		    else {
+		    if(this.memberOf!=null) {
+		    	if(!flags.isMember()) {
+		    		this.memberOf.declare(transpiler);
+		    		this.memberOf.processAnnotations(transpiler.getContext(), true);
+		    	}
+		    } else {
 		        transpiler = transpiler.newLocalTranspiler();
 		        transpiler.declare(this);
 		        this.declareParameters(transpiler);

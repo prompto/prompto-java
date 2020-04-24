@@ -60,7 +60,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	}
 	
 	@Override
-	public IType check(Context context, boolean isStart) {
+	public IType check(Context context) {
 		context = context.newLocalContext();
 		for(IStatement statement : statements)
 			checkStatement(context, statement);

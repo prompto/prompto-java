@@ -43,6 +43,7 @@ import prompto.param.IParameter;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
+import prompto.runtime.ContextFlags;
 import prompto.runtime.MethodFinder;
 import prompto.transpiler.Transpiler;
 import prompto.type.CodeType;
@@ -157,7 +158,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 
 	private IType lightCheck(IMethodDeclaration declaration, Context parent, Context local) {
 		declaration.registerParameters(local);
-		return declaration.check(local, false);
+		return declaration.check(local, ContextFlags.NONE);
 	}
 
 	private IType fullCheck(ConcreteMethodDeclaration declaration, Context parent, Context local) {
@@ -169,7 +170,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 				IValue value = argument.getParameter().checkValue(parent, expression);
 				local.setValue(argument.getParameterId(), value);
 			}
-			return declaration.check(local, false);
+			return declaration.check(local, ContextFlags.NONE);
 		} catch (PromptoError e) {
 			throw new SyntaxError(e.getMessage());
 		}
@@ -233,7 +234,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		Context local = context.newLocalContext();
 		declaration.registerParameters(local);
 		registerCodeAssignments(context, local, declaration);
-		String methodName = declaration.compileTemplate(local, false, method.getClassFile());
+		String methodName = declaration.compileTemplate(local, ContextFlags.NONE, method.getClassFile());
 		// compile the method call
 		IExpression parent = method.isStatic() ? null : new ThisExpression();
 		MethodSelector selector = new MethodSelector(parent, new Identifier(methodName));
@@ -407,7 +408,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 
 	private void lightDeclareDeclaration(IMethodDeclaration declaration, Transpiler transpiler, Context local) {
 	    transpiler = transpiler.copyTranspiler(local);
-	    declaration.declare(transpiler, true);
+	    declaration.declare(transpiler, ContextFlags.START);
 	}
 	
 	@Override

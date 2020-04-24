@@ -134,6 +134,8 @@ public class AssignTupleStatement extends SimpleStatement {
 		Identifier name = names.get(i);
 		StackLocal local = method.registerLocal(name.toString(), VerifierType.ITEM_Object, new ClassConstant(Object.class));
 		CompilerUtils.compileASTORE(method, local);
+		if(context.getRegisteredValue(INamed.class, name)==null)
+			context.registerValue(new Variable(name, AnyType.instance()));
 	}
 	
 	@Override

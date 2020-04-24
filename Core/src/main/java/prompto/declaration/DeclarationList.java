@@ -3,6 +3,7 @@ package prompto.declaration;
 import java.util.LinkedList;
 
 import prompto.runtime.Context;
+import prompto.runtime.ContextFlags;
 import prompto.utils.CodeWriter;
 
 
@@ -67,7 +68,10 @@ public class DeclarationList extends LinkedList<IDeclaration> {
 
 	public void check(Context context) {
 		for(IDeclaration declaration : this) {
-			declaration.check(context, true);
+			if(declaration instanceof IMethodDeclaration)
+				((IMethodDeclaration)declaration).check(context, ContextFlags.START);
+			else
+				declaration.check(context);
 		}
 	}
 	

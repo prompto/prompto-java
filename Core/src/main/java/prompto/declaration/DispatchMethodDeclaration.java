@@ -11,6 +11,7 @@ import prompto.param.CategoryParameter;
 import prompto.param.IParameter;
 import prompto.param.UnresolvedParameter;
 import prompto.runtime.Context;
+import prompto.runtime.ContextFlags;
 import prompto.statement.MethodCall;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
@@ -35,6 +36,12 @@ public class DispatchMethodDeclaration extends BaseMethodDeclaration {
 	@Override
 	public String getTranspiledName(Context context) {
 		return "$dispatch$" + this.declaration.getTranspiledName(context);
+	}
+	
+	
+	@Override
+	public void declare(Transpiler transpiler, ContextFlags flags) {
+		// nothing to do
 	}
 	
 	@Override
@@ -141,17 +148,17 @@ public class DispatchMethodDeclaration extends BaseMethodDeclaration {
 	}
 
 	@Override
-	public void compile(Context context, boolean isStart, ClassFile classFile) {
+	public void compile(Context context, ContextFlags flags, ClassFile classFile) {
 		throw new UnsupportedOperationException("Should never get there!");
 	}
 
 	@Override
-	public String compileTemplate(Context context, boolean isStart, ClassFile classFile) {
+	public String compileTemplate(Context context, ContextFlags flags, ClassFile classFile) {
 		throw new UnsupportedOperationException("Should never get there!");
 	}
 
 	@Override
-	public IType check(Context context, boolean isStart) {
+	public IType check(Context context, ContextFlags flags) {
 		throw new UnsupportedOperationException("Should never get there!");
 	}
 	
