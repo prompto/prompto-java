@@ -232,14 +232,16 @@ public class Context implements IContext {
 	public Context newInstanceContext(IInstance instance, boolean isChild) {
 		InstanceContext context = initInstanceContext(new InstanceContext(instance), isChild);
 		CategoryDeclaration decl = context.getDeclaration();
-		decl.processAnnotations(context, true);
+		if(decl!=null)
+			decl.processAnnotations(context, true);
 		return context;
 	}
 	
 	public Context newInstanceContext(CategoryType type, boolean isChild) {
 		InstanceContext context = initInstanceContext(new InstanceContext(type), isChild);
 		CategoryDeclaration decl = context.getDeclaration();
-		decl.processAnnotations(context, true);
+		if(decl!=null)
+			decl.processAnnotations(context, true);
 		return context;
 	}
 	
