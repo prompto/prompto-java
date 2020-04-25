@@ -89,7 +89,6 @@ public class ConcreteWidgetDeclaration extends ConcreteCategoryDeclaration imple
 	        transpiler.append(this.getName()).append(".prototype = Object.create(React.Component.prototype);").newLine();
 	    transpiler.append(this.getName()).append(".prototype.constructor = ").append(this.getName()).append(";").newLine();
 	    transpiler = transpiler.newInstanceTranspiler(new CategoryType(this.getId()));
-		processAnnotations(transpiler.getContext(), true);
 		this.transpileLoaders(transpiler);
 	    this.transpileMethods(transpiler);
 	    this.transpileGetterSetters(transpiler);

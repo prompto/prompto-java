@@ -263,7 +263,6 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		try {
 			context = context.newInstanceContext(getType(context), false);
 			checkDerived(context);
-			processAnnotations(context, true);
 			checkMethods(context);
 			return super.check(context);
 		} finally {
@@ -1054,7 +1053,6 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    transpiler.declare(this);
 	    declareAttributes(transpiler);
 	    Transpiler instance = transpiler.newInstanceTranspiler(getType(transpiler.getContext()));
-	    processAnnotations(instance.getContext(), true);
 	    if (this.derivedFrom != null) {
 	        this.derivedFrom.forEach(cat -> {
 	            CategoryDeclaration decl = instance.getContext().getRegisteredDeclaration(CategoryDeclaration.class, cat);
@@ -1088,7 +1086,6 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	public boolean transpile(Transpiler transpiler) {
 		transpileConstructor(transpiler);
 	    transpiler = transpiler.newInstanceTranspiler(new CategoryType(getId()));
-		processAnnotations(transpiler.getContext(), true);
 	    transpileLoaders(transpiler);
 	    transpileMethods(transpiler);
 	    transpileGetterSetters(transpiler);

@@ -407,7 +407,6 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		if(type instanceof CategoryType) {
 			CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 			context = context.newInstanceContext((CategoryType)type, decl instanceof SingletonCategoryDeclaration);
-			decl.processAnnotations(context, true);
 			return context.newChildContext();
 		} else if(type instanceof NativeType) {
 			context = context.newBuiltInContext((NativeType)type);

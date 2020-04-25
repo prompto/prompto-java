@@ -194,7 +194,6 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	@Override
 	public void declarationToDialect(CodeWriter writer) {
 		writer = writer.newInstanceWriter(getType(writer.getContext()));
-		processAnnotations(writer.getContext(), true);
 		switch(writer.getDialect()) {
 		case E:
 			toEDialect(writer);

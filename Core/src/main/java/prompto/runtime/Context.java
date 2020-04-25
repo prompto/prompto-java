@@ -230,11 +230,17 @@ public class Context implements IContext {
 	}
 
 	public Context newInstanceContext(IInstance instance, boolean isChild) {
-		return initInstanceContext(new InstanceContext(instance), isChild);
+		InstanceContext context = initInstanceContext(new InstanceContext(instance), isChild);
+		CategoryDeclaration decl = context.getDeclaration();
+		decl.processAnnotations(context, true);
+		return context;
 	}
 	
 	public Context newInstanceContext(CategoryType type, boolean isChild) {
-		return initInstanceContext(new InstanceContext(type), isChild);
+		InstanceContext context = initInstanceContext(new InstanceContext(type), isChild);
+		CategoryDeclaration decl = context.getDeclaration();
+		decl.processAnnotations(context, true);
+		return context;
 	}
 	
 	public Context newDocumentContext(boolean isChild) {
@@ -255,7 +261,7 @@ public class Context implements IContext {
 	}
 
 
-	private Context initInstanceContext(Context context, boolean isChild) {
+	private <T extends Context> T initInstanceContext(T context, boolean isChild) {
 		context.globals = this.globals;
 		context.calling = isChild ? this.calling : this;
 		context.parent = isChild ? this : null;
@@ -1108,8 +1114,8 @@ public class Context implements IContext {
 		Map<Identifier, WidgetField> widgetFields; // only used for widgets at this point
 		
 		InstanceContext(IInstance instance) {
+			this(instance.getType());
 			this.instance = instance;
-			this.type = instance.getType();
 		}
 		
 		InstanceContext(IType type) {

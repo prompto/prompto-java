@@ -424,10 +424,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 				returnType.declare(transpiler);
 		    if(this.memberOf!=null) {
 		    	if(!flags.isMember()) {
-		    		if(transpiler.isDeclared(this.memberOf))
-		    	  		this.memberOf.processAnnotations(transpiler.getContext(), true);
-		    		else
-		    			this.memberOf.declare(transpiler);
+		    		this.memberOf.declare(transpiler);
 		    	}
 		    } else {
 		        transpiler = transpiler.newLocalTranspiler();
