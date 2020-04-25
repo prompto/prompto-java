@@ -1036,12 +1036,16 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	@Override
 	public void declare(Transpiler transpiler) {
 		if(!transpiler.isDeclared(this)) {
+			if(declaring)
+				return;
+			declaring = true;
 			IProblemListener listener = transpiler.getContext().getProblemListener();
 			listener.pushDeclaration(this);
 			try {
 				doDeclare(transpiler);
 			} finally {
 				listener.popDeclaration();
+				declaring = false;
 			}
 		}
 	}
