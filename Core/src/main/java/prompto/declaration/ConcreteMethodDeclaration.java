@@ -190,7 +190,8 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 				context = context.newLocalContext();
 				registerParameters(context);
 			}
-			parameters.check(context);
+			if(parameters!=null)
+				parameters.check(context);
 			return checkStatements(context);
 		} finally {
 			listener.popDeclaration();
@@ -421,9 +422,9 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			// TODO IType type = check(transpiler.getContext(), isStart);
 			if(returnType!=null)
 				returnType.declare(transpiler);
-		    if(this.memberOf!=null) {
+		    if(this.memberOf!=null)
 		    	this.memberOf.declare(transpiler);
-		    } else {
+		    else {
 		        transpiler = transpiler.newLocalTranspiler();
 		        transpiler.declare(this);
 		        this.declareParameters(transpiler);
