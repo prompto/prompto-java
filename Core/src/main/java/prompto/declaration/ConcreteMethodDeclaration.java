@@ -190,10 +190,8 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			if(flags.isStart()) {
 				context = context.newLocalContext();
 				registerParameters(context);
-			} else if(this.memberOf!=null && !flags.isMember())
-				this.memberOf.processAnnotations(context, true);
-			if(parameters!=null)
-				parameters.check(context);
+			}
+			parameters.check(context);
 			return checkStatements(context);
 		} finally {
 			listener.popDeclaration();
@@ -426,8 +424,10 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 				returnType.declare(transpiler);
 		    if(this.memberOf!=null) {
 		    	if(!flags.isMember()) {
-		    		this.memberOf.declare(transpiler);
-		    		this.memberOf.processAnnotations(transpiler.getContext(), true);
+		    		if(transpiler.isDeclared(this.memberOf))
+		    	  		this.memberOf.processAnnotations(transpiler.getContext(), true);
+		    		else
+		    			this.memberOf.declare(transpiler);
 		    	}
 		    } else {
 		        transpiler = transpiler.newLocalTranspiler();
