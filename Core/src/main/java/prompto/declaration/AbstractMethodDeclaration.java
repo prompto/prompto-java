@@ -6,10 +6,9 @@ import java.lang.reflect.Type;
 import prompto.compiler.ClassFile;
 import prompto.compiler.InterfaceType;
 import prompto.error.SyntaxError;
-import prompto.grammar.ParameterList;
 import prompto.grammar.Identifier;
+import prompto.grammar.ParameterList;
 import prompto.runtime.Context;
-import prompto.runtime.ContextFlags;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.VoidType;
@@ -33,10 +32,10 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 
 	@Override
-	public IType check(Context context, ContextFlags flags) {
+	public IType check(Context context, boolean isStart) {
 		if(parameters!=null)
 			parameters.check(context);
-		if(flags.isStart()) {
+		if(isStart) {
 			Context local = context.newLocalContext();
 			registerParameters(local); // will check them
 		}
@@ -56,15 +55,15 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 	
 	@Override
-	public void compile(Context context, ContextFlags flags, ClassFile classFile) {
+	public void compile(Context context, boolean isStart, ClassFile classFile) {
 		if(memberOf==null)
 			throw new SyntaxError("Should never get there !");
 		else
-			compilePrototype(context, flags, classFile);
+			compilePrototype(context, isStart, classFile);
 	}
 
 	@Override
-	public String compileTemplate(Context context, ContextFlags flags, ClassFile classFile) {
+	public String compileTemplate(Context context, boolean isStart, ClassFile classFile) {
 		throw new SyntaxError("Should never get there !");
 	}
 
@@ -130,7 +129,7 @@ public class AbstractMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 	
 	@Override
-	public void declare(Transpiler transpiler, ContextFlags flags) {
+	public void declare(Transpiler transpiler) {
 		this.declareParameters(transpiler);
 	}
 	

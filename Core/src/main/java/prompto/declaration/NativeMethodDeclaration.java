@@ -9,11 +9,10 @@ import prompto.compiler.ResultInfo;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.grammar.ArgumentList;
-import prompto.grammar.ParameterList;
 import prompto.grammar.Identifier;
+import prompto.grammar.ParameterList;
 import prompto.java.JavaNativeCall;
 import prompto.runtime.Context;
-import prompto.runtime.ContextFlags;
 import prompto.statement.IStatement;
 import prompto.statement.NativeCall;
 import prompto.statement.StatementList;
@@ -112,7 +111,7 @@ public class NativeMethodDeclaration extends ConcreteMethodDeclaration {
 	}
 	
 	@Override
-	public void compile(Context context, ContextFlags flags, ClassFile classFile) {
+	public void compile(Context context, boolean isStart, ClassFile classFile) {
 		compileGlobal(context, classFile);
 	}
 	

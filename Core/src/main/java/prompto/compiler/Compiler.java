@@ -24,13 +24,12 @@ import prompto.declaration.EnumeratedNativeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
-import prompto.grammar.ParameterList;
 import prompto.grammar.Identifier;
+import prompto.grammar.ParameterList;
 import prompto.intrinsic.PromptoCallSite;
 import prompto.param.IParameter;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
-import prompto.runtime.ContextFlags;
 import prompto.type.IType;
 import prompto.utils.IOUtils;
 import prompto.verifier.ClassVerifier;
@@ -162,7 +161,7 @@ public class Compiler {
 			ClassFile classFile = new ClassFile(type);
 			classFile.addModifier(Modifier.ABSTRACT);
 			decls.forEach((m) -> 
-				m.compile(context, ContextFlags.START, classFile));
+				m.compile(context, true, classFile));
 			if(decls.size()>1) {
 				createGlobalMethodHandles(classFile);
 				populateGlobalMethodHandles(context, classFile, decls);
@@ -201,7 +200,7 @@ public class Compiler {
 		for(IMethodDeclaration decl : decls) {
 			method.addInstruction(Opcode.DUP); // the array
 			method.addInstruction(Opcode.ILOAD_0); // the index
-			createGlobalMethodHandle(context, ContextFlags.START,  method, decl); // the value
+			createGlobalMethodHandle(context, true,  method, decl); // the value
 			method.addInstruction(Opcode.AASTORE);
 			method.addInstruction(Opcode.IINC, new ByteOperand((byte)0), new ByteOperand((byte)1)); 
 		}
@@ -210,7 +209,7 @@ public class Compiler {
 		method.addInstruction(Opcode.RETURN);
 	}
 	
-	private void createGlobalMethodHandle(Context context, ContextFlags flags, MethodInfo method, IMethodDeclaration decl) {
+	private void createGlobalMethodHandle(Context context, boolean isStart, MethodInfo method, IMethodDeclaration decl) {
 		// MethodHandles.lookup().findStatic(klass, "print",  MethodType.methodType(void.class, k1))
 		MethodConstant mc = new MethodConstant(MethodHandles.class, "lookup", Lookup.class);
 		method.addInstruction(Opcode.INVOKESTATIC, mc);
@@ -219,7 +218,7 @@ public class Compiler {
 		// name
 		method.addInstruction(Opcode.LDC, new StringConstant(decl.getName()));
 		// descriptor
-		IType returnType = decl.check(context, flags);
+		IType returnType = decl.check(context, isStart);
 		String descriptor = CompilerUtils.createMethodDescriptor(context, decl.getParameters(), returnType).toString();
 		method.addInstruction(Opcode.LDC, new StringConstant(descriptor));
 		// loader

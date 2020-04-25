@@ -12,7 +12,6 @@ import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.param.AttributeParameter;
 import prompto.runtime.Context;
-import prompto.runtime.ContextFlags;
 import prompto.runtime.Variable;
 import prompto.statement.IStatement;
 import prompto.statement.StatementList;
@@ -74,7 +73,7 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 	}
 
 	@Override
-	public void compile(Context context, ContextFlags flags, ClassFile classFile) {
+	public void compile(Context context, boolean isStart, ClassFile classFile) {
 		throw new UnsupportedOperationException();
 	}
 

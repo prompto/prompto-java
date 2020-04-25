@@ -23,7 +23,6 @@ import prompto.grammar.Specificity;
 import prompto.param.IParameter;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
-import prompto.runtime.ContextFlags;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.value.IValue;
@@ -115,7 +114,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	@Override
 	public IType getType(Context context) {
 		try {
-			return check(context, ContextFlags.NONE);
+			return check(context, false);
 		} catch (SyntaxError e) {
 			throw new RuntimeException(e);
 		}
@@ -226,10 +225,10 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	}
 	
 	@Override
-	public void compilePrototype(Context context, ContextFlags flags, ClassFile classFile) {
+	public void compilePrototype(Context context, boolean isStart, ClassFile classFile) {
 		try {
-			context = prepareContext(context, flags);
-			IType returnType = check(context, ContextFlags.NONE);
+			context = prepareContext(context, isStart);
+			IType returnType = check(context, false);
 			MethodInfo method = createMethodInfo(context, classFile, returnType, getName());
 			method.addModifier(Modifier.ABSTRACT);
 		} catch (PromptoError e) {
@@ -237,8 +236,8 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 		}
 	}
 
-	protected Context prepareContext(Context context, ContextFlags flags) {
-		if(flags.isStart()) {
+	protected Context prepareContext(Context context, boolean isStart) {
+		if(isStart) {
 			// coming from nowhere, so need a clean context in which to register parameters
 			context = context.newLocalContext();
 			registerParameters(context);

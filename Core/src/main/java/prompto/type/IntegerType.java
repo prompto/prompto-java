@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Descriptor;
 import prompto.compiler.Flags;
@@ -36,19 +38,16 @@ import prompto.param.CategoryParameter;
 import prompto.param.IParameter;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
-import prompto.runtime.ContextFlags;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 import prompto.value.DecimalValue;
 import prompto.value.IMultiplyable;
 import prompto.value.IValue;
-import prompto.value.IntegerValue;
 import prompto.value.IntegerRange;
+import prompto.value.IntegerValue;
 import prompto.value.RangeBase;
 import prompto.value.TextValue;
-
-import com.fasterxml.jackson.databind.JsonNode;
 
 public class IntegerType extends NativeType implements INumberType {
 
@@ -177,7 +176,7 @@ public class IntegerType extends NativeType implements INumberType {
 		
 		
 		@Override
-		public IType check(Context context, ContextFlags flags) {
+		public IType check(Context context) {
 			return TextType.instance();
 		}
 

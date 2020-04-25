@@ -19,7 +19,6 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.IterableWithCounts;
 import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
-import prompto.runtime.ContextFlags;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
 import prompto.value.IValue;
@@ -96,7 +95,7 @@ public class IteratorType extends IterableType {
 		
 		
 		@Override
-		public IType check(Context context, ContextFlags flags) {
+		public IType check(Context context) {
 			return new ListType(itemType);
 		}
 

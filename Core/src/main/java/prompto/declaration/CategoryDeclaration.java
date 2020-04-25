@@ -23,7 +23,6 @@ import prompto.grammar.Identifier;
 import prompto.grammar.MethodDeclarationList;
 import prompto.grammar.Operator;
 import prompto.runtime.Context;
-import prompto.runtime.ContextFlags;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.store.IStore;
 import prompto.store.IStored;
@@ -402,7 +401,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 			throw new SyntaxError("No " + oper.getToken() + " operator method defined!");
 		Context local = context.newInstanceContext(decl.getType(context), false).newChildContext();
 		operator.registerParameters(local);
-		IType resultType = operator.check(local, ContextFlags.NONE);
+		IType resultType = operator.check(local, false);
 		String methodName = "operator_" + oper.name();
 		InterfaceConstant c = new InterfaceConstant(left.getType(), methodName, argType.getJavaType(context), resultType.getJavaType(context));
 		method.addInstruction(Opcode.INVOKEINTERFACE, c);

@@ -42,7 +42,6 @@ import prompto.intrinsic.PromptoStorableBase;
 import prompto.parser.ISection;
 import prompto.problem.IProblemListener;
 import prompto.runtime.Context;
-import prompto.runtime.ContextFlags;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.store.DataStore;
 import prompto.store.IStorable;
@@ -666,7 +665,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		try {
 			context = context.newInstanceContext(getType(context), false).newChildContext();
 			method.registerParameters(context);
-			method.compilePrototype(context, ContextFlags.NONE, classFile);
+			method.compilePrototype(context, false, classFile);
 		} catch(SyntaxError e) {
 			throw new CompilerException(e);
 		}
@@ -1014,7 +1013,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 				continue;
 			context = context.newMemberContext(getType(context));
 			method.registerParameters(context);
-			method.compile(context, ContextFlags.NONE, classFile);
+			method.compile(context, false, classFile);
 		}
 	}
 	
@@ -1073,7 +1072,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	        return !(decl instanceof SetterMethodDeclaration || decl instanceof GetterMethodDeclaration);
 	    }).forEach(method -> {
 			Transpiler t = transpiler.newChildTranspiler(null);
-	        method.declare(t, ContextFlags.MEMBER);
+	        method.declare(t);
 	        t.flush();
 	    });
 	}

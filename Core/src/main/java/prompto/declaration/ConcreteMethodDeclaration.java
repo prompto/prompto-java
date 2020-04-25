@@ -22,14 +22,14 @@ import prompto.compiler.LocalVariableTableAttribute;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.NameAndTypeConstant;
-import prompto.compiler.Opcode;
 import prompto.compiler.NamedType;
+import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.compiler.StringConstant;
 import prompto.error.PromptoError;
-import prompto.grammar.ParameterList;
 import prompto.grammar.Identifier;
+import prompto.grammar.ParameterList;
 import prompto.intrinsic.PromptoMethod;
 import prompto.param.CategoryParameter;
 import prompto.param.CodeParameter;
@@ -38,7 +38,6 @@ import prompto.param.ValuedCodeParameter;
 import prompto.parser.ISection;
 import prompto.problem.IProblemListener;
 import prompto.runtime.Context;
-import prompto.runtime.ContextFlags;
 import prompto.statement.DeclarationStatement;
 import prompto.statement.StatementList;
 import prompto.transpiler.Transpiler;
@@ -160,15 +159,15 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 
 	@Override
-	public IType check(Context context, ContextFlags flags) {
-		if(canBeChecked(context, flags))
-			return fullCheck(context, flags);
+	public IType check(Context context, boolean isStart) {
+		if(canBeChecked(context, isStart))
+			return fullCheck(context, isStart);
 		else
 			return VoidType.instance();
 	}
 	
-	private boolean canBeChecked(Context context, ContextFlags flags) {
-		if(flags.isStart())
+	private boolean canBeChecked(Context context, boolean isStart) {
+		if(isStart)
 			return !isTemplate();
 		else
 			return true;
@@ -183,11 +182,11 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			return parameters.stream().anyMatch(param -> param instanceof CodeParameter);
 	}
 
-	private IType fullCheck(Context context, ContextFlags flags) {
+	private IType fullCheck(Context context, boolean isStart) {
 		IProblemListener listener = context.getProblemListener();
 		listener.pushDeclaration(this);
 		try {
-			if(flags.isStart()) {
+			if(isStart) {
 				context = context.newLocalContext();
 				registerParameters(context);
 			}
@@ -223,13 +222,13 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 	
 	@Override
-	public void compile(Context context, ContextFlags flags, ClassFile classFile) {
-		compile(context, flags, classFile, getName());
+	public void compile(Context context, boolean isStart, ClassFile classFile) {
+		compile(context, isStart, classFile, getName());
 	}
 	
-	public void compile(Context context, ContextFlags flags, ClassFile classFile, String methodName) {
-		context = prepareContext(context, flags);
-		IType returnType = check(context, flags);
+	public void compile(Context context, boolean isStart, ClassFile classFile, String methodName) {
+		context = prepareContext(context, isStart);
+		IType returnType = check(context, false);
 		MethodInfo method = createMethodInfo(context, classFile, returnType, methodName);
 		registerLocals(context, classFile, method);
 		produceByteCode(context, method, returnType);
@@ -255,9 +254,9 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 
 	@Override
-	public String compileTemplate(Context context, ContextFlags flags, ClassFile classFile) {
+	public String compileTemplate(Context context, boolean isStart, ClassFile classFile) {
 		String methodName = computeTemplateName(classFile);
-		compile(context, flags, classFile, methodName);
+		compile(context, isStart, classFile, methodName);
 		return methodName;
 	}
 
@@ -300,7 +299,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		compileClosureConstructor(context, classFile, locals);
 		context = context.newClosureContext(new MethodType(this));
 		registerParameters(context);
-		compile(context, ContextFlags.NONE, classFile, intf.getInterfaceMethodName());
+		compile(context, false, classFile, intf.getInterfaceMethodName());
 		method.getClassFile().addInnerClass(classFile);
 		return innerType;
 	}
@@ -412,7 +411,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 	
 	@Override
-	public void declare(Transpiler transpiler, ContextFlags flags) {
+	public void declare(Transpiler transpiler) {
 		if(declaring)
 			return;
 		IProblemListener listener = transpiler.getContext().getProblemListener();
@@ -423,9 +422,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			if(returnType!=null)
 				returnType.declare(transpiler);
 		    if(this.memberOf!=null) {
-		    	if(!flags.isMember()) {
-		    		this.memberOf.declare(transpiler);
-		    	}
+		    	this.memberOf.declare(transpiler);
 		    } else {
 		        transpiler = transpiler.newLocalTranspiler();
 		        transpiler.declare(this);

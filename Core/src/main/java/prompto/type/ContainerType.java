@@ -16,7 +16,6 @@ import prompto.grammar.Identifier;
 import prompto.literal.TextLiteral;
 import prompto.param.CategoryParameter;
 import prompto.runtime.Context;
-import prompto.runtime.ContextFlags;
 import prompto.runtime.Variable;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
@@ -44,7 +43,7 @@ public abstract class ContainerType extends IterableType {
 			protected abstract Collection<IValue> getItems(Context context);
 	
 			@Override
-			public IType check(Context context, ContextFlags flags) {
+			public IType check(Context context) {
 				return TextType.instance();
 			}
 			

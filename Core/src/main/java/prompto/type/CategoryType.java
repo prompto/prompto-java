@@ -58,11 +58,10 @@ import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoRoot;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
+import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.runtime.MethodFinder;
 import prompto.runtime.Score;
 import prompto.runtime.Variable;
-import prompto.runtime.Context.MethodDeclarationMap;
-import prompto.runtime.ContextFlags;
 import prompto.statement.MethodCall;
 import prompto.store.DataStore;
 import prompto.store.Family;
@@ -292,7 +291,7 @@ public class CategoryType extends BaseType {
 			context = context.newInstanceContext(this, false);
 			Context local = context.newLocalContext();
 			method.registerParameters(local);
-			return method.check(local, ContextFlags.NONE);
+			return method.check(local, false);
 		} catch(SyntaxError e) {
 			// ok to pass, will try reverse
 		}

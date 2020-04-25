@@ -5,12 +5,11 @@ import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
 import prompto.grammar.ArgumentList;
+import prompto.grammar.Identifier;
 import prompto.grammar.ParameterList;
 import prompto.param.IParameter;
-import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.runtime.Context.BuiltInContext;
-import prompto.runtime.ContextFlags;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -39,14 +38,19 @@ public abstract class BuiltInMethodDeclaration extends BaseMethodDeclaration {
 	public boolean isTemplate() {
 		return false;
 	}
+	
+	@Override
+	public IType check(Context context, boolean isStart) {
+		return check(context);
+	}
 
 	@Override
-	public void compile(Context context, ContextFlags flags, ClassFile classFile) {
+	public void compile(Context context, boolean isStart, ClassFile classFile) {
 		throw new UnsupportedOperationException("Should never get there!");
 	}
 
 	@Override
-	public String compileTemplate(Context context, ContextFlags flags, ClassFile classFile) {
+	public String compileTemplate(Context context, boolean isStart, ClassFile classFile) {
 		throw new UnsupportedOperationException("Should never get there!");
 	}
 	
@@ -73,7 +77,7 @@ public abstract class BuiltInMethodDeclaration extends BaseMethodDeclaration {
 	}
 	
 	@Override
-	public void declare(Transpiler transpiler, ContextFlags flags) {
+	public void declare(Transpiler transpiler) {
 		// override only of required
 		
 	}
