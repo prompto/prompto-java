@@ -53,6 +53,12 @@ public class NativeWidgetDeclaration extends NativeCategoryDeclaration implement
 	}
 	
 	@Override
+	public void declare(Transpiler transpiler) {
+		processAnnotations(transpiler.getContext(), true);
+		super.declare(transpiler);
+	}
+
+	@Override
 	public boolean transpile(Transpiler transpiler) {
 		JavaScriptNativeCategoryBinding binding = this.getJavaScriptBinding();
 	    binding.transpileWidget(transpiler, getName());
