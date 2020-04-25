@@ -408,7 +408,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 
 	private void lightDeclareDeclaration(IMethodDeclaration declaration, Transpiler transpiler, Context local) {
 	    transpiler = transpiler.copyTranspiler(local);
-	    declaration.declare(transpiler, ContextFlags.START);
+	    declaration.declare(transpiler, ContextFlags.NONE);
 	}
 	
 	@Override

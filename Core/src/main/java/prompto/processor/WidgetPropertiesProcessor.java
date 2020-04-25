@@ -63,7 +63,7 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 		InstanceContext instance = context.getClosestInstanceContext();
 		if(instance==null)
 			throw new InternalError("Expected an instance context. Please report this bug.");
-		instance.registerWidgetField(new Identifier(name.substring(1, name.length() -1)), type, true);
+		instance.overrideWidgetFieldType(new Identifier(name.substring(1, name.length() -1)), type, this);
 	}
 
 	private Annotation findWidgetPropertiesFieldAnnotation(Context context, CategoryDeclaration declaration) {

@@ -70,7 +70,6 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		}
 		return widget;
 	}
-
 	
 	public void setStorable(boolean storable) {
 		this.storable = storable;
@@ -234,7 +233,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		return stream.get();
 	}
 
-	protected void processAnnotations(Context context, boolean processDerivedFrom) {
+	public void processAnnotations(Context context, boolean processDerivedFrom) {
 		Stream<Annotation> stream = processDerivedFrom ? getAllAnnotationsAsStream(context) : annotations==null ? Stream.empty() : annotations.stream();
 		stream.forEach(a->a.processCategory(context, this));
 	}

@@ -5,8 +5,13 @@ import prompto.type.IType;
 
 public class WidgetField extends Variable {
 
-	public WidgetField(Identifier name, IType type) {
+	Object createdBy;
+	Object updatedBy;
+	
+	public WidgetField(Identifier name, IType type, Object createdBy) {
 		super(name, type);
+		this.createdBy = createdBy;
+		this.updatedBy = null;
 	}
 
 }

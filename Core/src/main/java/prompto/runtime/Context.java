@@ -30,8 +30,8 @@ import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.expression.ValueExpression;
 import prompto.expression.Symbol;
+import prompto.expression.ValueExpression;
 import prompto.grammar.Annotation;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
@@ -1248,14 +1248,27 @@ public class Context implements IContext {
 				return super.getInstance(name, includeParent);
 		}
 
-		public void registerWidgetField(Identifier identifier, IType type, boolean override) {
+		public void registerWidgetField(Identifier identifier, IType type, Object createdBy) {
 			if(widgetFields==null)
 				widgetFields = new HashMap<>();
-			if(override || !widgetFields.containsKey(identifier)) 	
-				widgetFields.put(identifier, new WidgetField(identifier, type));
-			else {
+			WidgetField widgetField = widgetFields.get(identifier);
+			if(widgetField!=null) {
+				// we control reentrance by registering which processor created the widgetField 
+				if(widgetField.createdBy == createdBy)
+					return;
 				Identifier existing = widgetFields.keySet().stream().filter(id->id.equals(identifier)).findFirst().orElse(null);
 				getProblemListener().reportDuplicate(identifier, identifier.toString(), existing);
+			} else 
+				widgetFields.put(identifier, new WidgetField(identifier, type, createdBy));
+		}
+
+		public void overrideWidgetFieldType(Identifier identifier, IType type, Object updatedBy) {
+			WidgetField widgetField = widgetFields==null ? null : widgetFields.get(identifier);
+			if(widgetField==null ) {
+				getProblemListener().reportUnknownIdentifier(identifier, identifier.toString());
+			} else {
+				widgetField.type = type;
+				widgetField.updatedBy = updatedBy; 
 			}
 		}
 

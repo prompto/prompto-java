@@ -28,7 +28,6 @@ public class WidgetFieldProcessor extends AnnotationProcessor {
 			context.getProblemListener().reportIllegalAnnotation(annotation,  "WidgetField requires a Text value for argument 'name'");
 		if (!(fieldType instanceof TypeLiteral || fieldType instanceof TypeExpression))
 			context.getProblemListener().reportIllegalAnnotation(annotation,  "WidgetField requires a Type value for argument 'type'");
-	
 		else {
 			InstanceContext instance = context.getClosestInstanceContext();
 			if(instance==null)
@@ -36,7 +35,7 @@ public class WidgetFieldProcessor extends AnnotationProcessor {
 			else {
 				String name = ((TextLiteral)fieldName).toString();
 				IType type = fieldType instanceof TypeLiteral ? ((TypeLiteral)fieldType).getType() : ((TypeExpression)fieldType).getType();
-				instance.registerWidgetField(new Identifier(name.substring(1, name.length() -1)), type, false);
+				instance.registerWidgetField(new Identifier(name.substring(1, name.length() -1)), type, this);
 			}
 		}
 	}
