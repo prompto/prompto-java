@@ -146,8 +146,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 	@Override
 	public void dropModule(Module module) {
 		IQueryBuilder builder = store.newQueryBuilder();
-		AttributeInfo info = AttributeInfo.MODULE;
-		builder.verify(info, MatchOp.CONTAINS, module.getDbId());
+		builder.verify(AttributeInfo.MODULE, MatchOp.HAS, module.getDbId());
 		Iterable<IStored> stuff = store.fetchMany(builder.build());
 		Stream<Object> stuffDbIds = StreamSupport.stream(stuff.spliterator(), false)
 				.map(IStored::getDbId);
@@ -170,8 +169,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 	public Iterable<Module> fetchAllModules() throws PromptoError {
 		try {
 			IQueryBuilder builder = store.newQueryBuilder();
-			AttributeInfo info = AttributeInfo.CATEGORY;
-			builder.verify(info, MatchOp.CONTAINS, "Module");
+			builder.verify(AttributeInfo.CATEGORY, MatchOp.HAS, "Module");
 			Iterator<IStored> iterator = store.fetchMany(builder.build()).iterator();
 			return () -> new Iterator<Module>() {
 
@@ -373,10 +371,10 @@ public class QueryableCodeStore extends BaseCodeStore {
 	}
 
 	private IStoredIterable fetchStoredDeclarationsBySymbol(String name, PromptoVersion version, boolean filterOnModules) {
-		IQueryBuilder builder = store.newQueryBuilder();
-		builder.verify(AttributeInfo.CATEGORY, MatchOp.CONTAINS, "EnumeratedDeclaration");
-		builder.verify(AttributeInfo.SYMBOLS, MatchOp.HAS, name);
-		builder.and();
+		IQueryBuilder builder = store.newQueryBuilder()
+				.verify(AttributeInfo.CATEGORY, MatchOp.HAS, "EnumeratedDeclaration")
+				.verify(AttributeInfo.SYMBOLS, MatchOp.HAS, name)
+				.and();
 		builder = filterOnModules(builder, filterOnModules);
 		if(PromptoVersion.LATEST.equals(version)) {
 			IdentifierList names = IdentifierList.parse("prototype,version");
@@ -492,8 +490,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 		if(uniqueDecls.contains(type.toString().toUpperCase())) {
 			builder.first(1L).last(1L);
 		}
-		AttributeInfo info = AttributeInfo.CATEGORY;
-		builder.verify(info, MatchOp.CONTAINS, type.getTypeName());
+		builder.verify(AttributeInfo.CATEGORY, MatchOp.HAS, type.getTypeName());
 		IPredicateExpression filter = buildFilter(version, attribute, value);
 		filter.interpretQuery(context, builder);
 		builder.and();
@@ -514,8 +511,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 	
 	private IStored fetchOneInStore(CategoryType type, PromptoVersion version, String attribute, String value, boolean filterOnModules) throws PromptoError {
 		IQueryBuilder builder = store.newQueryBuilder();
-		AttributeInfo info = AttributeInfo.CATEGORY;
-		builder.verify(info, MatchOp.CONTAINS, type.getTypeName());
+		builder.verify(AttributeInfo.CATEGORY, MatchOp.HAS, type.getTypeName());
 		IPredicateExpression filter = buildFilter(version, attribute, value);
 		filter.interpretQuery(context, builder);
 		builder.and();
@@ -537,10 +533,8 @@ public class QueryableCodeStore extends BaseCodeStore {
 		super.collectStorableAttributes(map);
 		if(store!=null) {
 			IQueryBuilder builder = store.newQueryBuilder();
-			AttributeInfo info = AttributeInfo.CATEGORY;
-			builder.verify(info, MatchOp.CONTAINS, "AttributeDeclaration");
-			info = AttributeInfo.STORABLE;
-			builder.verify(info, MatchOp.EQUALS, true);
+			builder.verify(AttributeInfo.CATEGORY, MatchOp.HAS, "AttributeDeclaration");
+			builder.verify(AttributeInfo.STORABLE, MatchOp.EQUALS, true);
 			builder.and();
 			builder = filterOnModules(builder, true);
 			IStoredIterable iterable = store.fetchMany(builder.build());
