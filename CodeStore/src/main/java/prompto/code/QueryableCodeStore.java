@@ -375,7 +375,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 	private IStoredIterable fetchStoredDeclarationsBySymbol(String name, PromptoVersion version, boolean filterOnModules) {
 		IQueryBuilder builder = store.newQueryBuilder();
 		builder.verify(AttributeInfo.CATEGORY, MatchOp.CONTAINS, "EnumeratedDeclaration");
-		builder.verify(AttributeInfo.SYMBOLS, MatchOp.CONTAINS, name);
+		builder.verify(AttributeInfo.SYMBOLS, MatchOp.HAS, name);
 		builder.and();
 		builder = filterOnModules(builder, filterOnModules);
 		if(PromptoVersion.LATEST.equals(version)) {
