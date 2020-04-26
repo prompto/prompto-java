@@ -447,17 +447,17 @@ public class Context implements IContext {
 		}		
 	}
 
-	private IDeclaration fetchAndRegisterDeclaration(Identifier name) {
+	private IDeclaration fetchAndRegisterDeclaration(Identifier id) {
 		ICodeStore store = ICodeStore.getInstance();
 		if(store==null)
 			return null;
 		// fetch and register atomically
 		synchronized(this) {
-			IDeclaration decl = declarations.get(name); // may have happened in another thread
+			IDeclaration decl = declarations.get(id); // may have happened in another thread
 			if(decl!=null)
 				return decl;
 			try {
-				Iterable<IDeclaration> decls = store.fetchLatestDeclarations(name.toString());
+				Iterable<IDeclaration> decls = store.fetchLatestDeclarations(id.toString());
 				if(decls==null)
 					return null;
 				decls.forEach((d)-> {
@@ -468,7 +468,7 @@ public class Context implements IContext {
 					} else
 						d.register(this);
 				});
-				return declarations.get(name);
+				return declarations.get(id);
 			} catch(PromptoError e) {
 				throw new RuntimeException(e); // TODO define a strategy
 			}
