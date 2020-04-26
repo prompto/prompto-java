@@ -140,8 +140,7 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 	public IQuery buildFetchOneQuery(Context context, IStore store) {
 		IQueryBuilder builder = store.newQueryBuilder();
 		if(type!=null) {
-			AttributeInfo info = AttributeInfo.CATEGORY;
-			builder.verify(info, MatchOp.CONTAINS, type.getTypeName());
+			builder.verify(AttributeInfo.CATEGORY, MatchOp.HAS, type.getTypeName());
 		}
 		if(predicate!=null) {
 			if(!(predicate instanceof IPredicateExpression))
@@ -187,7 +186,7 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 		if(type!=null) {
 			AttributeInfo info = AttributeInfo.CATEGORY;
 			CompilerUtils.compileAttributeInfo(context, method, flags, info);
-			CompilerUtils.compileJavaEnum(context, method, flags, MatchOp.CONTAINS);
+			CompilerUtils.compileJavaEnum(context, method, flags, MatchOp.HAS);
 			method.addInstruction(Opcode.LDC, new StringConstant(type.toString()));
 			InterfaceConstant i = new InterfaceConstant(IQueryBuilder.class, "verify", 
 					AttributeInfo.class, MatchOp.class, Object.class, IQueryBuilder.class);
@@ -247,7 +246,7 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 	protected void transpileQuery(Transpiler transpiler) {
 	    transpiler.append("var builder = $DataStore.instance.newQueryBuilder();").newLine();
 	    if (this.type != null)
-	        transpiler.append("builder.verify(new AttributeInfo('category', TypeFamily.TEXT, true, null), MatchOp.CONTAINS, '").append(this.type.getTypeName()).append("');").newLine();
+	        transpiler.append("builder.verify(new AttributeInfo('category', TypeFamily.TEXT, true, null), MatchOp.HAS, '").append(this.type.getTypeName()).append("');").newLine();
 	    if (this.predicate != null)
 	        this.predicate.transpileQuery(transpiler, "builder");
 	    if (this.type != null && this.predicate != null)

@@ -324,7 +324,7 @@ public class FetchManyExpression extends FetchOneExpression {
 	protected void transpileQuery(Transpiler transpiler) {
 	    transpiler.append("var builder = $DataStore.instance.newQueryBuilder();").newLine();
 	    if (this.type != null)
-	        transpiler.append("builder.verify(new AttributeInfo('category', TypeFamily.TEXT, true, null), MatchOp.CONTAINS, '").append(this.type.getTypeName()).append("');").newLine();
+	        transpiler.append("builder.verify(new AttributeInfo('category', TypeFamily.TEXT, true, null), MatchOp.HAS, '").append(this.type.getTypeName()).append("');").newLine();
 	    if (this.predicate != null)
 	        this.predicate.transpileQuery(transpiler, "builder");
 	    if (this.type != null && this.predicate != null)
