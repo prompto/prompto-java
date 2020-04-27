@@ -338,7 +338,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	}
 	
 	@Override
-	public void interpretQuery(Context context, IQueryBuilder query) throws PromptoError {
+	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
 		IValue value = null;
 		String name = readFieldName(left);
 		boolean reverse = name==null;
@@ -354,12 +354,20 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 		MatchOp matchOp = getMatchOp(context, getAttributeType(context, name), value.getType(), this.operator, reverse);
 		if(value instanceof IInstance)
 			value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
-		AttributeInfo info = context.findAttribute(name).getAttributeInfo(context);
+		AttributeInfo info = getAttributeInfo(context, name, store);
 		Object data = value==null ? null : value.getStorableData();
 		query.<Object>verify(info, matchOp, data);
 		if(operator.name().startsWith("NOT_"))
 			query.not();
 	}
+	
+	private AttributeInfo getAttributeInfo(Context context, String name, IStore store) {
+		if(store!=null)
+			return store.getAttributeInfo(name);
+		AttributeDeclaration decl = context.findAttribute(name);
+		return decl==null ? null : decl.getAttributeInfo(context);
+	}
+
 	
 	@Override
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {

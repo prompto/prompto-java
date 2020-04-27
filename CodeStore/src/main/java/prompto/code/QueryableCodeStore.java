@@ -492,7 +492,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 		}
 		builder.verify(AttributeInfo.CATEGORY, MatchOp.HAS, type.getTypeName());
 		IPredicateExpression filter = buildFilter(version, attribute, value);
-		filter.interpretQuery(context, builder);
+		filter.interpretQuery(context, builder, null);
 		builder.and();
 		builder = filterOnModules(builder, filterOnModules);
 		if(PromptoVersion.LATEST.equals(version)) {
@@ -513,7 +513,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 		IQueryBuilder builder = store.newQueryBuilder();
 		builder.verify(AttributeInfo.CATEGORY, MatchOp.HAS, type.getTypeName());
 		IPredicateExpression filter = buildFilter(version, attribute, value);
-		filter.interpretQuery(context, builder);
+		filter.interpretQuery(context, builder, null);
 		builder.and();
 		builder = filterOnModules(builder, filterOnModules);
 		if(PromptoVersion.LATEST.equals(version)) {

@@ -225,7 +225,7 @@ public class FetchManyExpression extends FetchOneExpression {
 		if(predicate!=null) {
 			if(!(predicate instanceof IPredicateExpression))
 				throw new SyntaxError("Filtering expression must be a predicate !");
-			((IPredicateExpression)predicate).interpretQuery(context, builder);
+			((IPredicateExpression)predicate).interpretQuery(context, builder, store);
 		}
 		if(type!=null && predicate!=null)
 			builder.and();

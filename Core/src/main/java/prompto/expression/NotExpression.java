@@ -17,6 +17,7 @@ import prompto.error.SyntaxError;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.store.IQueryBuilder;
+import prompto.store.IStore;
 import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.IType;
@@ -156,10 +157,10 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 	}
 
 	@Override
-	public void interpretQuery(Context context, IQueryBuilder query) throws PromptoError {
+	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
 		if(!(expression instanceof IPredicateExpression))
 			throw new SyntaxError("Not a predicate: " + expression.toString());
-		((IPredicateExpression)expression).interpretQuery(context, query);
+		((IPredicateExpression)expression).interpretQuery(context, query, store);
 		query.not();
 	}
 

@@ -21,6 +21,7 @@ import prompto.error.SyntaxError;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.store.IQueryBuilder;
+import prompto.store.IStore;
 import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.IType;
@@ -93,13 +94,13 @@ public class OrExpression implements IPredicateExpression, IAssertion {
 	}
 	
 	@Override
-	public void interpretQuery(Context context, IQueryBuilder query) throws PromptoError {
+	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
 		if(!(left instanceof IPredicateExpression))
 			throw new SyntaxError("Not a predicate: " + left.toString());
-		((IPredicateExpression)left).interpretQuery(context, query);
+		((IPredicateExpression)left).interpretQuery(context, query, store);
 		if(!(right instanceof IPredicateExpression))
 			throw new SyntaxError("Not a predicate: " + left.toString());
-		((IPredicateExpression)right).interpretQuery(context, query);
+		((IPredicateExpression)right).interpretQuery(context, query, store);
 		query.or();
 	}
 	

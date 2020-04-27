@@ -64,7 +64,7 @@ public class TestMemStore {
 	public void testFetchOneEmpty() throws Exception {
 		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test__");
-		filter.interpretQuery(context, builder);
+		filter.interpretQuery(context, builder, null);
 		IStored d = DataStore.getInstance().fetchOne(builder.build());
 		assertNull(d);
 	}
@@ -75,7 +75,7 @@ public class TestMemStore {
 		IStorable d1 = store("__id__", "__test__");
 		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test__");
-		filter.interpretQuery(context, builder);
+		filter.interpretQuery(context, builder, null);
 		IStored d2 = DataStore.getInstance().fetchOne(builder.build());
 		assertEquals(d1,  d2);
 	}
@@ -85,7 +85,7 @@ public class TestMemStore {
 		store("__id__", "__test__");
 		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test1__");
-		filter.interpretQuery(context, builder);
+		filter.interpretQuery(context, builder, null);
 		IStored d2 = DataStore.getInstance().fetchOne(builder.build());
 		assertNull(d2);
 	}
@@ -97,7 +97,7 @@ public class TestMemStore {
 		store("__id__", "__test3__");
 		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test2__");
-		filter.interpretQuery(context, builder);
+		filter.interpretQuery(context, builder, null);
 		IStored d4 = DataStore.getInstance().fetchOne(builder.build());
 		assertEquals(d2,  d4);
 	}
@@ -106,7 +106,7 @@ public class TestMemStore {
 	public void testFetchManyEmpty() throws Exception {
 		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test__");
-		filter.interpretQuery(context, builder);
+		filter.interpretQuery(context, builder, null);
 		IStoredIterable iterable = DataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertFalse(docs.hasNext());
@@ -118,7 +118,7 @@ public class TestMemStore {
 		store("__id__", "__test2__");
 		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test1__");
-		filter.interpretQuery(context, builder);
+		filter.interpretQuery(context, builder, null);
 		IStoredIterable iterable = DataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());
@@ -131,7 +131,7 @@ public class TestMemStore {
 		store("__id__", "__test1__");
 		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test2__");
-		filter.interpretQuery(context, builder);
+		filter.interpretQuery(context, builder, null);
 		IStoredIterable iterable = DataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertFalse(docs.hasNext());
@@ -145,7 +145,7 @@ public class TestMemStore {
 		store("__id__", "__test2__");
 		IQueryBuilder builder = new QueryBuilder();
 		IPredicateExpression filter = createPredicate("__id__", EqOp.EQUALS, "__test1__");
-		filter.interpretQuery(context, builder);
+		filter.interpretQuery(context, builder, null);
 		IStoredIterable iterable = DataStore.getInstance().fetchMany(builder.build());
 		Iterator<IStored> docs = iterable.iterator();
 		assertTrue(docs.hasNext());

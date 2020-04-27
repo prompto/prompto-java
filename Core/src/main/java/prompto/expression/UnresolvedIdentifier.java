@@ -16,6 +16,7 @@ import prompto.problem.ProblemListener;
 import prompto.runtime.Context;
 import prompto.statement.MethodCall;
 import prompto.store.IQueryBuilder;
+import prompto.store.IStore;
 import prompto.transpiler.Transpiler;
 import prompto.type.AnyType;
 import prompto.type.CategoryType;
@@ -77,10 +78,10 @@ public class UnresolvedIdentifier extends Section implements IPredicateExpressio
 	}
 	
 	@Override
-	public void interpretQuery(Context context, IQueryBuilder query) throws PromptoError {
+	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
 		resolveAndCheck(context, false);
 		if(resolved instanceof IPredicateExpression)
-			((IPredicateExpression)resolved).interpretQuery(context, query);
+			((IPredicateExpression)resolved).interpretQuery(context, query, store);
 		else
 			throw new SyntaxError("Filtering expression must be a predicate !");
 	}

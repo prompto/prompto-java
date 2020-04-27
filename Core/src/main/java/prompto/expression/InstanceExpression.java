@@ -28,6 +28,7 @@ import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.runtime.LinkedVariable;
 import prompto.runtime.Variable;
 import prompto.store.IQueryBuilder;
+import prompto.store.IStore;
 import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.IType;
@@ -236,10 +237,10 @@ public class InstanceExpression extends Section implements IPredicateExpression 
 	}
 
 	@Override
-	public void interpretQuery(Context context, IQueryBuilder query) throws PromptoError {
+	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
 		IPredicateExpression predicate = toPredicate(context);
 		if(predicate!=null)
-			predicate.interpretQuery(context, query);
+			predicate.interpretQuery(context, query, store);
 	}
 	
 	@Override

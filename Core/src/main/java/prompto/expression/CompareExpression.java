@@ -137,7 +137,7 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 	}
 	
 	@Override
-	public void interpretQuery(Context context, IQueryBuilder query) throws PromptoError {
+	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
 		String name = null;
 		IValue value = null;
 		if(left instanceof UnresolvedIdentifier) {
@@ -156,8 +156,7 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 		if(name==null)
 			throw new SyntaxError("Unable to interpret predicate");
 		else {
-			AttributeDeclaration decl = context.findAttribute(name);
-			AttributeInfo info = decl==null ? null : decl.getAttributeInfo(context);
+			AttributeInfo info = getAttributeInfo(context, name, store);
 			if(value instanceof IInstance)
 				value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
 			MatchOp matchOp = getMatchOp();
@@ -172,6 +171,14 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 			}
 		}
 	}
+	
+	private AttributeInfo getAttributeInfo(Context context, String name, IStore store) {
+		if(store!=null)
+			return store.getAttributeInfo(name);
+		AttributeDeclaration decl = context.findAttribute(name);
+		return decl==null ? null : decl.getAttributeInfo(context);
+	}
+
 	
 	private MatchOp getMatchOp() {
 		switch(operator) {

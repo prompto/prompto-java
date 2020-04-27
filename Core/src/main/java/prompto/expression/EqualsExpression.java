@@ -333,7 +333,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 	}
 	
 	@Override
-	public void interpretQuery(Context context, IQueryBuilder query) throws PromptoError {
+	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
 		IValue value = null;
 		String name = readFieldName(left);
 		if(name!=null)
@@ -353,14 +353,21 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 			data = DataStore.getInstance().convertToDbId(value);
 		else
 			data = value.getStorableData();
-		AttributeDeclaration decl = context.findAttribute(name);
-		AttributeInfo info = decl==null ? null : decl.getAttributeInfo(context);
+		
+		AttributeInfo info = getAttributeInfo(context, name, store);
 		MatchOp match = getMatchOp();
 		query.<Object>verify(info, match, data);
 		if(operator==EqOp.NOT_EQUALS || operator==EqOp.NOT_CONTAINS)
 			query.not();
 	}
 	
+	private AttributeInfo getAttributeInfo(Context context, String name, IStore store) {
+		if(store!=null)
+			return store.getAttributeInfo(name);
+		AttributeDeclaration decl = context.findAttribute(name);
+		return decl==null ? null : decl.getAttributeInfo(context);
+	}
+
 	private MatchOp getMatchOp() {
 		switch(operator) {
 		case EQUALS:
