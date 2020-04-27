@@ -196,18 +196,28 @@ public class VariableInstance implements IAssignableInstance {
 	        transpiler.append("var ");
 	    }
 	    context = context.contextForValue(this.id);
-	    if(context instanceof InstanceContext) {
-	        ((InstanceContext)context).getInstanceType().transpileInstance(transpiler);
-	        transpiler.append(".setMember('").append(this.getName()).append("', ");
-	        expression.transpile(transpiler);
-	        transpiler.append(")");
-	    } else {
+	    if(context instanceof InstanceContext)
+	    	transpileAssignInstance(transpiler, expression, (InstanceContext)context);
+	    else {
 	        transpiler.append(this.getName());
 	        transpiler.append(" = ");
 	        expression.transpile(transpiler);
 	    }
     }
 	
+	private void transpileAssignInstance(Transpiler transpiler, IExpression expression, InstanceContext context) {
+		IType type = context.getInstanceType();
+		type.transpileInstance(transpiler);
+		if(type instanceof CategoryType)
+			((CategoryType)type).transpileAssignMemberValue(transpiler, this.id.toString(), expression);
+		else {
+				
+			transpiler.append(".setMember('").append(this.getName()).append("', ");
+	        expression.transpile(transpiler);
+	        transpiler.append(")");
+		}
+	}
+
 	@Override
 	public void transpileAssignParent(Transpiler transpiler) {
 		transpiler.append(this.getName());
