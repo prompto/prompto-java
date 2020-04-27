@@ -38,6 +38,7 @@ import prompto.type.ContainerType;
 import prompto.type.IType;
 import prompto.type.TextType;
 import prompto.utils.CodeWriter;
+import prompto.utils.StoreUtils;
 import prompto.value.BooleanValue;
 import prompto.value.IContainer;
 import prompto.value.IInstance;
@@ -354,20 +355,12 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 		MatchOp matchOp = getMatchOp(context, getAttributeType(context, name), value.getType(), this.operator, reverse);
 		if(value instanceof IInstance)
 			value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
-		AttributeInfo info = getAttributeInfo(context, name, store);
+		AttributeInfo info = StoreUtils.getAttributeInfo(context, name, store);
 		Object data = value==null ? null : value.getStorableData();
 		query.<Object>verify(info, matchOp, data);
 		if(operator.name().startsWith("NOT_"))
 			query.not();
 	}
-	
-	private AttributeInfo getAttributeInfo(Context context, String name, IStore store) {
-		if(store!=null)
-			return store.getAttributeInfo(name);
-		AttributeDeclaration decl = context.findAttribute(name);
-		return decl==null ? null : decl.getAttributeInfo(context);
-	}
-
 	
 	@Override
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {

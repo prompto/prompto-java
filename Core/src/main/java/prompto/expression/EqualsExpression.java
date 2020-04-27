@@ -70,6 +70,7 @@ import prompto.type.TimeType;
 import prompto.type.UuidType;
 import prompto.type.VersionType;
 import prompto.utils.CodeWriter;
+import prompto.utils.StoreUtils;
 import prompto.value.BooleanValue;
 import prompto.value.IInstance;
 import prompto.value.IValue;
@@ -354,20 +355,13 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		else
 			data = value.getStorableData();
 		
-		AttributeInfo info = getAttributeInfo(context, name, store);
+		AttributeInfo info = StoreUtils.getAttributeInfo(context, name, store);
 		MatchOp match = getMatchOp();
 		query.<Object>verify(info, match, data);
 		if(operator==EqOp.NOT_EQUALS || operator==EqOp.NOT_CONTAINS)
 			query.not();
 	}
 	
-	private AttributeInfo getAttributeInfo(Context context, String name, IStore store) {
-		if(store!=null)
-			return store.getAttributeInfo(name);
-		AttributeDeclaration decl = context.findAttribute(name);
-		return decl==null ? null : decl.getAttributeInfo(context);
-	}
-
 	private MatchOp getMatchOp() {
 		switch(operator) {
 		case EQUALS:
