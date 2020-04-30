@@ -22,7 +22,9 @@ import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
 import prompto.value.IValue;
+import prompto.value.IterableValue;
 import prompto.value.IteratorValue;
+import prompto.value.NullValue;
 
 public class IteratorType extends IterableType {
 
@@ -88,8 +90,14 @@ public class IteratorType extends IterableType {
 		
 		@Override
 		public IValue interpret(Context context) throws PromptoError {
-			IteratorValue value = (IteratorValue)getValue(context);
-			return value.toListValue();
+			IValue value = getValue(context);
+			IType type = value.getType();
+			if(type instanceof IterableType) 
+				value = new IteratorValue(((IterableType)type).getItemType(), ((IterableValue)value).iterator());
+			if(value instanceof IteratorValue)
+				return ((IteratorValue)value).toListValue();
+			else
+				return NullValue.instance();
 		};
 		
 		
