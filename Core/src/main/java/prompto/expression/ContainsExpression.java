@@ -30,14 +30,12 @@ import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.store.AttributeInfo;
 import prompto.store.Family;
+import prompto.store.FamilyInfo;
 import prompto.store.IQueryBuilder;
-import prompto.store.IStore;
 import prompto.store.IQueryBuilder.MatchOp;
+import prompto.store.IStore;
 import prompto.transpiler.Transpiler;
-import prompto.type.CharacterType;
-import prompto.type.ContainerType;
 import prompto.type.IType;
-import prompto.type.TextType;
 import prompto.utils.CodeWriter;
 import prompto.utils.StoreUtils;
 import prompto.value.BooleanValue;
@@ -354,7 +352,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 				throw new SyntaxError("Unable to interpret predicate");
 		}
 		AttributeInfo fieldInfo = StoreUtils.getAttributeInfo(context, name, store);
-		AttributeInfo valueInfo = value.getType().toAttributeInfo(context, name);
+		FamilyInfo valueInfo = value.getType().getFamilyInfo();
 		MatchOp matchOp = getMatchOp(context, fieldInfo, valueInfo, this.operator, reverse);
 		if(value instanceof IInstance)
 			value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
@@ -380,7 +378,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 		}
 		AttributeInfo fieldInfo = context.findAttribute(name).getAttributeInfo(context);
 		CompilerUtils.compileAttributeInfo(context, method, flags, fieldInfo);
-		AttributeInfo valueInfo = valueType.toAttributeInfo(context, name);
+		FamilyInfo valueInfo = valueType.getFamilyInfo();
 		MatchOp match = getMatchOp(context, fieldInfo, valueInfo, this.operator, reverse);
 		CompilerUtils.compileJavaEnum(context, method, flags, match);
 		if(reverse)
@@ -397,15 +395,14 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	}
 	
 	
-	private MatchOp getMatchOp(Context context, AttributeInfo fieldType, AttributeInfo valueType, ContOp operator, boolean reverse) {
+	private MatchOp getMatchOp(Context context, FamilyInfo fieldInfo, FamilyInfo valueInfo, ContOp operator, boolean reverse) {
 		if(reverse) {
 			operator = operator.reverse();
 			if(operator==null)
 				context.getProblemListener().reportIllegalOperation(this, "Cannot reverse " + this.operator);
-			return getMatchOp(context, valueType, fieldType, operator, false);
+			return getMatchOp(context, valueInfo, fieldInfo, operator, false);
 		}
-		if((fieldType.getFamily()==Family.TEXT || valueType.getFamily()==Family.CHARACTER) &&
-				(valueType.getFamily()==Family.TEXT || valueType.getFamily()==Family.CHARACTER)) {
+		if(fieldInfo.getFamily()==Family.TEXT && (valueInfo.getFamily()==Family.TEXT || valueInfo.getFamily()==Family.CHARACTER)) {
 			switch(operator) {
 			case HAS:
 			case NOT_HAS:
@@ -414,7 +411,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 				// throw below
 			}
 		} 
-		if(valueType.isCollection()) {
+		if(valueInfo.isCollection()) {
 			switch(operator) {
 			case IN:
 			case NOT_IN:
@@ -423,7 +420,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 				// throw below
 			}
 		} 
-		if(fieldType.isCollection()) {
+		if(fieldInfo.isCollection()) {
 			switch(operator) {
 			case HAS:
 			case NOT_HAS:
@@ -510,7 +507,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	    AttributeDeclaration decl = transpiler.getContext().findAttribute(name);
 	    AttributeInfo fieldInfo = decl.getAttributeInfo(transpiler.getContext());
 	    IType valueType = value.check(transpiler.getContext());
-	    AttributeInfo valueInfo = valueType.toAttributeInfo(transpiler.getContext(), name);
+	    FamilyInfo valueInfo = valueType.getFamilyInfo();
 	    // TODO check for dbId field of instance value
 	    MatchOp matchOp = this.getMatchOp(transpiler.getContext(), fieldInfo, valueInfo, this.operator, reverse);
 	    transpiler.append(builderName).append(".verify(").append(fieldInfo.toTranspiled()).append(", MatchOp.").append(matchOp.name()).append(", ");

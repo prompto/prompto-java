@@ -24,6 +24,7 @@ import prompto.parser.ISection;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.store.Family;
+import prompto.store.FamilyInfo;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 import prompto.value.RangeBase;
@@ -39,8 +40,8 @@ public abstract class BaseType extends Section implements IType {
 	}
 
 	@Override
-	public Family getFamily() {
-		return family;
+	public FamilyInfo getFamilyInfo() {
+		return new FamilyInfo(family, false);
 	}
 
 	@Override

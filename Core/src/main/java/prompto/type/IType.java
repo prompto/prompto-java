@@ -1,7 +1,6 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
@@ -19,8 +18,7 @@ import prompto.grammar.Identifier;
 import prompto.parser.ECleverParser;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
-import prompto.store.AttributeInfo;
-import prompto.store.Family;
+import prompto.store.FamilyInfo;
 import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 import prompto.utils.StringUtils;
@@ -40,7 +38,7 @@ public interface IType extends ISection {
 			return context.findAttribute(typeName).getType();
 	}
 
-	Family getFamily();
+	FamilyInfo getFamilyInfo();
 	
 	default IType anyfy() {
 		return this;
@@ -51,7 +49,7 @@ public interface IType extends ISection {
 	}
 
 	default String getTypeName() {
-		return StringUtils.capitalizeFirst(getFamily().name());
+		return StringUtils.capitalizeFirst(getFamilyInfo().getFamily().name());
 	}
 	
 	default Identifier getTypeNameId() {
@@ -314,10 +312,6 @@ public interface IType extends ISection {
 
 	default ResultInfo compileGetStaticMember(Context context, MethodInfo method, Flags flags, Identifier id) {
 		throw new UnsupportedOperationException("compileGetStaticMember " + this.getClass().getName());
-	}
-
-	default AttributeInfo toAttributeInfo(Context context, String name) {
-		return new AttributeInfo(name, getFamily(), false, Collections.emptyList());
 	}
 
 }

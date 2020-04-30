@@ -25,10 +25,10 @@ import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.AttributeInfo;
-import prompto.store.Family;
+import prompto.store.FamilyInfo;
 import prompto.transpiler.Transpiler;
-import prompto.type.ContainerType;
 import prompto.type.IType;
+import prompto.type.IterableType;
 import prompto.type.NativeType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
@@ -80,18 +80,22 @@ public class AttributeDeclaration extends BaseDeclaration {
 					indexTypes.stream()
 						.map((id)->id.toString())
 						.collect(Collectors.toList());
-		boolean collection = type instanceof ContainerType;
-		Family family = getFamily(locator, collection);
-		return new AttributeInfo(getName(), family, collection, list);
+		FamilyInfo family = getFamilyInfo(locator);
+		return new AttributeInfo(getName(), family.getFamily(), family.isCollection(), list);
 	}
 	
-	private Family getFamily(Function<Identifier, IDeclaration> locator, boolean collection) {
-		IType familyType = collection ? ((ContainerType)type).getItemType() : type;
-		if(familyType instanceof NativeType)
-			return familyType.getFamily();
-		Identifier typeName = familyType.getTypeNameId();
-		IDeclaration decl = locator.apply(typeName);
-		return decl.getType(null).getFamily();
+	private FamilyInfo getFamilyInfo(Function<Identifier, IDeclaration> locator) {
+		IType type = this.type;
+		if(type instanceof NativeType)
+			return type.getFamilyInfo();
+		if(type instanceof IterableType) {
+			FamilyInfo info = ((IterableType)type).getItemType().getFamilyInfo();
+			return new FamilyInfo(info.getFamily(), true);
+		} else {
+			Identifier typeName = type.getTypeNameId();
+			IDeclaration decl = locator.apply(typeName);
+			return decl.getType(null).getFamilyInfo();
+		}
 	}
 
 	public IType getType() {

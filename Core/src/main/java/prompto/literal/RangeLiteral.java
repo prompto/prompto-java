@@ -65,8 +65,8 @@ public class RangeLiteral implements IExpression {
 		Type itemKlass = itemType.getJavaType(context);
 		Type rangeKlass = rangeClassMap.get(itemKlass);
 		if(rangeKlass==null) {
-			System.err.println("Missing PromptoRange for = " + itemType.getFamily());
-			throw new SyntaxError("Cannot build Range of " + itemType.getFamily());
+			System.err.println("Missing PromptoRange for = " + itemType.getFamilyInfo());
+			throw new SyntaxError("Cannot build Range of " + itemType.getFamilyInfo());
 		}
 		CompilerUtils.compileNewRawInstance(method, rangeKlass);
 		method.addInstruction(Opcode.DUP); // need to keep a reference on top of stack

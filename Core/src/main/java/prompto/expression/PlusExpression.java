@@ -101,7 +101,7 @@ public class PlusExpression implements IExpression {
 			adder = CategoryDeclaration::compilePlus;
 		if(adder==null) {
 			System.err.println("Missing IOperatorFunction for add " + lval.getType().getTypeName());
-			throw new SyntaxError("Cannot add " + lval.getType().getTypeName() + " to " + right.check(context).getFamily());
+			throw new SyntaxError("Cannot add " + lval.getType().getTypeName() + " to " + right.check(context).getFamilyInfo());
 		}
 		return adder.compile(context, method, flags, lval, right);
 	}

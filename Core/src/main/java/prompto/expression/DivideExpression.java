@@ -68,7 +68,7 @@ public class DivideExpression implements IExpression {
 			divider = CategoryDeclaration::compileDivide;
 		if(divider==null) {
 			System.err.println("Missing IOperatorFunction for divide " + lval.getType().getTypeName());
-			throw new SyntaxError("Cannot divide " + lval.getType().getTypeName() + " by " + right.check(context).getFamily());
+			throw new SyntaxError("Cannot divide " + lval.getType().getTypeName() + " by " + right.check(context).getFamilyInfo());
 		}
 		return divider.compile(context, method, flags, lval, right);
 	}

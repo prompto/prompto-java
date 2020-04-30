@@ -2,7 +2,7 @@ package prompto.store;
 
 import java.util.Collection;
 
-public class AttributeInfo {
+public class AttributeInfo extends FamilyInfo {
 
 	public static final AttributeInfo CATEGORY = new AttributeInfo("category", Family.TEXT, true, null);
 	public static final AttributeInfo NAME = new AttributeInfo("name", Family.TEXT, false, null);
@@ -15,16 +15,13 @@ public class AttributeInfo {
 	public static final String WORDS = "words";
 
 	protected String name;
-	protected Family family;
-	protected boolean collection;
 	protected boolean key = false;
 	protected boolean value = false;
 	protected boolean words = false;
 	
 	public AttributeInfo(String name, Family family, boolean collection, Collection<String> indexTypes) {
+		super(family, collection);
 		this.name = name;
-		this.family = family;
-		this.collection = collection;
 		if(indexTypes!=null) {
 			key = indexTypes.contains(KEY);
 			value = indexTypes.contains(VALUE);
@@ -33,18 +30,16 @@ public class AttributeInfo {
 	}
 	
 	public AttributeInfo(String name, Family family, boolean collection, boolean key, boolean value, boolean words) {
+		super(family, collection);
 		this.name = name;
-		this.family = family;
-		this.collection = collection;
 		this.key = key;
 		this.value = value;
 		this.words = words;
 	}
 
 	public AttributeInfo(AttributeInfo info) {
+		super(info.getFamily(), info.isCollection());
 		this.name = info.getName();
-		this.family = info.getFamily();
-		this.collection = info.isCollection();
 		this.key = info.isKey();
 		this.value = info.isValue();
 		this.words = info.isWords();
@@ -57,14 +52,6 @@ public class AttributeInfo {
 	
 	public String getName() {
 		return name;
-	}
-	
-	public Family getFamily() {
-		return family;
-	}
-
-	public boolean isCollection() {
-		return collection;
 	}
 	
 	public boolean isKey() {
