@@ -29,6 +29,7 @@ import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.store.AttributeInfo;
+import prompto.store.Family;
 import prompto.store.IQueryBuilder;
 import prompto.store.IStore;
 import prompto.store.IQueryBuilder.MatchOp;
@@ -352,12 +353,13 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 			else
 				throw new SyntaxError("Unable to interpret predicate");
 		}
-		MatchOp matchOp = getMatchOp(context, getAttributeType(context, name), value.getType(), this.operator, reverse);
+		AttributeInfo fieldInfo = StoreUtils.getAttributeInfo(context, name, store);
+		AttributeInfo valueInfo = value.getType().toAttributeInfo(context, name);
+		MatchOp matchOp = getMatchOp(context, fieldInfo, valueInfo, this.operator, reverse);
 		if(value instanceof IInstance)
 			value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
-		AttributeInfo info = StoreUtils.getAttributeInfo(context, name, store);
 		Object data = value==null ? null : value.getStorableData();
-		query.<Object>verify(info, matchOp, data);
+		query.<Object>verify(fieldInfo, matchOp, data);
 		if(operator.name().startsWith("NOT_"))
 			query.not();
 	}
@@ -376,9 +378,10 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 			else
 				throw new SyntaxError("Unable to interpret predicate");
 		}
-		AttributeInfo info = context.findAttribute(name).getAttributeInfo(context);
-		CompilerUtils.compileAttributeInfo(context, method, flags, info);
-		MatchOp match = getMatchOp(context, getAttributeType(context, name), valueType, this.operator, reverse);
+		AttributeInfo fieldInfo = context.findAttribute(name).getAttributeInfo(context);
+		CompilerUtils.compileAttributeInfo(context, method, flags, fieldInfo);
+		AttributeInfo valueInfo = valueType.toAttributeInfo(context, name);
+		MatchOp match = getMatchOp(context, fieldInfo, valueInfo, this.operator, reverse);
 		CompilerUtils.compileJavaEnum(context, method, flags, match);
 		if(reverse)
 			left.compile(context, method, flags);
@@ -394,19 +397,15 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	}
 	
 	
-	private IType getAttributeType(Context context, String name) {
-		return context.getRegisteredDeclaration(AttributeDeclaration.class, new Identifier(name)).getType();
-	}
-
-	private MatchOp getMatchOp(Context context, IType fieldType, IType valueType, ContOp operator, boolean reverse) {
+	private MatchOp getMatchOp(Context context, AttributeInfo fieldType, AttributeInfo valueType, ContOp operator, boolean reverse) {
 		if(reverse) {
 			operator = operator.reverse();
 			if(operator==null)
 				context.getProblemListener().reportIllegalOperation(this, "Cannot reverse " + this.operator);
 			return getMatchOp(context, valueType, fieldType, operator, false);
 		}
-		if((fieldType==TextType.instance() || valueType==CharacterType.instance()) &&
-				(valueType==TextType.instance() || valueType==CharacterType.instance())) {
+		if((fieldType.getFamily()==Family.TEXT || valueType.getFamily()==Family.CHARACTER) &&
+				(valueType.getFamily()==Family.TEXT || valueType.getFamily()==Family.CHARACTER)) {
 			switch(operator) {
 			case HAS:
 			case NOT_HAS:
@@ -415,7 +414,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 				// throw below
 			}
 		} 
-		if(valueType instanceof ContainerType) {
+		if(valueType.isCollection()) {
 			switch(operator) {
 			case IN:
 			case NOT_IN:
@@ -424,7 +423,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 				// throw below
 			}
 		} 
-		if(fieldType instanceof ContainerType) {
+		if(fieldType.isCollection()) {
 			switch(operator) {
 			case HAS:
 			case NOT_HAS:
@@ -509,11 +508,12 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	            throw new SyntaxError("Unable to transpile predicate");
 	    }
 	    AttributeDeclaration decl = transpiler.getContext().findAttribute(name);
-	    AttributeInfo info = decl.getAttributeInfo(transpiler.getContext());
-	    IType type = value.check(transpiler.getContext());
+	    AttributeInfo fieldInfo = decl.getAttributeInfo(transpiler.getContext());
+	    IType valueType = value.check(transpiler.getContext());
+	    AttributeInfo valueInfo = valueType.toAttributeInfo(transpiler.getContext(), name);
 	    // TODO check for dbId field of instance value
-	    MatchOp matchOp = this.getMatchOp(transpiler.getContext(), decl.getType(), type, this.operator, reverse);
-	    transpiler.append(builderName).append(".verify(").append(info.toTranspiled()).append(", MatchOp.").append(matchOp.name()).append(", ");
+	    MatchOp matchOp = this.getMatchOp(transpiler.getContext(), fieldInfo, valueInfo, this.operator, reverse);
+	    transpiler.append(builderName).append(".verify(").append(fieldInfo.toTranspiled()).append(", MatchOp.").append(matchOp.name()).append(", ");
 	    value.transpile(transpiler);
 	    transpiler.append(");").newLine();
 	    if (this.operator.name().indexOf("NOT_")==0)

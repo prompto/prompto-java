@@ -1,6 +1,9 @@
 package prompto.type;
 
+import java.util.Collections;
+
 import prompto.runtime.Context;
+import prompto.store.AttributeInfo;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
 
@@ -53,5 +56,10 @@ public abstract class IterableType extends NativeType {
 	public void transpileCode(Transpiler transpiler) {
 		transpiler.append(".toArray()");
 	}
+	
+	public AttributeInfo toAttributeInfo(Context context, String name) {
+		return new AttributeInfo(name, getFamily(), true, Collections.emptyList());
+	}
+
 	
 }
