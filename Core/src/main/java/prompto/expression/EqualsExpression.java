@@ -551,7 +551,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		IOperatorFunction compiler = getEqualsCompiler(lval.getType());
 		if(compiler==null) {
 			System.err.println("Missing IOperatorFunction for = " + lval.getType().getTypeName());
-			throw new SyntaxError("Cannot check equality of " + lval.getType().getTypeName() + " with " + right.check(context).getFamilyInfo());
+			throw new SyntaxError("Cannot check equality of " + lval.getType().getTypeName() + " with " + right.check(context).getFamilyInfo(context));
 		}
 		return compiler.compile(context, method, flags, lval, right);
 	}
@@ -568,7 +568,7 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		IOperatorFunction compiler = CONTAINS_COMPILERS.get(lval.getType());
 		if(compiler==null) {
 			System.err.println("Missing IOperatorFunction for 'contains' " + lval.getType().getTypeName());
-			throw new SyntaxError("Cannot check that " + lval.getType().getTypeName() + " contains " + right.check(context).getFamilyInfo());
+			throw new SyntaxError("Cannot check that " + lval.getType().getTypeName() + " contains " + right.check(context).getFamilyInfo(context));
 		}
 		return compiler.compile(context, method, flags, lval, right);
 	}

@@ -81,7 +81,7 @@ public class MultiplyExpression implements IExpression {
 			return compileMultiplyable(context, method, lval, flags);
 		else {
 			System.err.println("Missing IOperatorFunction for multiply " + lval.getType().getTypeName());
-			throw new SyntaxError("Cannot multiply " + lval.getType().getTypeName() + " with " + right.check(context).getFamilyInfo());
+			throw new SyntaxError("Cannot multiply " + lval.getType().getTypeName() + " with " + right.check(context).getFamilyInfo(context));
 		}
 	}
 

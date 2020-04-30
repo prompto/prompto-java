@@ -352,7 +352,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 				throw new SyntaxError("Unable to interpret predicate");
 		}
 		AttributeInfo fieldInfo = StoreUtils.getAttributeInfo(context, name, store);
-		FamilyInfo valueInfo = value.getType().getFamilyInfo();
+		FamilyInfo valueInfo = value.getType().getFamilyInfo(context);
 		MatchOp matchOp = getMatchOp(context, fieldInfo, valueInfo, this.operator, reverse);
 		if(value instanceof IInstance)
 			value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
@@ -378,7 +378,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 		}
 		AttributeInfo fieldInfo = context.findAttribute(name).getAttributeInfo(context);
 		CompilerUtils.compileAttributeInfo(context, method, flags, fieldInfo);
-		FamilyInfo valueInfo = valueType.getFamilyInfo();
+		FamilyInfo valueInfo = valueType.getFamilyInfo(context);
 		MatchOp match = getMatchOp(context, fieldInfo, valueInfo, this.operator, reverse);
 		CompilerUtils.compileJavaEnum(context, method, flags, match);
 		if(reverse)
@@ -507,7 +507,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	    AttributeDeclaration decl = transpiler.getContext().findAttribute(name);
 	    AttributeInfo fieldInfo = decl.getAttributeInfo(transpiler.getContext());
 	    IType valueType = value.check(transpiler.getContext());
-	    FamilyInfo valueInfo = valueType.getFamilyInfo();
+	    FamilyInfo valueInfo = valueType.getFamilyInfo(transpiler.getContext());
 	    // TODO check for dbId field of instance value
 	    MatchOp matchOp = this.getMatchOp(transpiler.getContext(), fieldInfo, valueInfo, this.operator, reverse);
 	    transpiler.append(builderName).append(".verify(").append(fieldInfo.toTranspiled()).append(", MatchOp.").append(matchOp.name()).append(", ");

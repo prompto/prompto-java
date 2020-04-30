@@ -71,30 +71,30 @@ public class AttributeDeclaration extends BaseDeclaration {
 	}
 	
 	public AttributeInfo getAttributeInfo(Context context) {
-		return getAttributeInfo(id->context.getRegisteredDeclaration(IDeclaration.class, id));
+		return getAttributeInfo(context, id->context.getRegisteredDeclaration(IDeclaration.class, id));
 	}
 	
 	
-	public AttributeInfo getAttributeInfo(Function<Identifier, IDeclaration> locator) {
+	public AttributeInfo getAttributeInfo(Context context, Function<Identifier, IDeclaration> locator) {
 		List<String> list = indexTypes==null ?  null : 
 					indexTypes.stream()
 						.map((id)->id.toString())
 						.collect(Collectors.toList());
-		FamilyInfo family = getFamilyInfo(locator);
+		FamilyInfo family = getFamilyInfo(context, locator);
 		return new AttributeInfo(getName(), family.getFamily(), family.isCollection(), list);
 	}
 	
-	private FamilyInfo getFamilyInfo(Function<Identifier, IDeclaration> locator) {
+	private FamilyInfo getFamilyInfo(Context context, Function<Identifier, IDeclaration> locator) {
 		IType type = this.type;
 		if(type instanceof NativeType)
-			return type.getFamilyInfo();
+			return type.getFamilyInfo(context);
 		if(type instanceof IterableType) {
-			FamilyInfo info = ((IterableType)type).getItemType().getFamilyInfo();
+			FamilyInfo info = ((IterableType)type).getItemType().getFamilyInfo(context);
 			return new FamilyInfo(info.getFamily(), true);
 		} else {
 			Identifier typeName = type.getTypeNameId();
 			IDeclaration decl = locator.apply(typeName);
-			return decl.getType(null).getFamilyInfo();
+			return decl.getType(null).getFamilyInfo(context);
 		}
 	}
 

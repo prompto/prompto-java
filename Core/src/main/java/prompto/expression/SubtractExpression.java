@@ -86,7 +86,7 @@ public class SubtractExpression implements IExpression {
 			minuser = CategoryDeclaration::compileMinus;
 		if(minuser==null) {
 			System.err.println("Missing IOperatorFunction for minus " + lval.getType().getTypeName());
-			throw new SyntaxError("Cannot sub " + right.check(context).getFamilyInfo()  + " from " + lval.getType().getTypeName() );
+			throw new SyntaxError("Cannot sub " + right.check(context).getFamilyInfo(context)  + " from " + lval.getType().getTypeName() );
 		}
 		return minuser.compile(context, method, flags, lval, right);
 	}

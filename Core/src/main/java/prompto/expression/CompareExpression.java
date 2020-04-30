@@ -132,7 +132,7 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 		IOperatorFunction tester = testers.get(lval.getType());
 		if(tester==null) {
 			System.err.println("Missing IOperatorFunction for compare " + lval.getType().getTypeName());
-			throw new SyntaxError("Cannot compare " + lval.getType().getTypeName() + " with " + right.check(context).getFamilyInfo());
+			throw new SyntaxError("Cannot compare " + lval.getType().getTypeName() + " with " + right.check(context).getFamilyInfo(context));
 		}
 		return tester.compile(context, method, flags.withCmpOp(operator), lval, right);
 	}

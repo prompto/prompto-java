@@ -68,7 +68,7 @@ public class ModuloExpression implements IExpression {
 			divider = CategoryDeclaration::compileModulo;
 		if(divider==null) {
 			System.err.println("Missing IOperatorFunction for modulo " + lval.getType().getTypeName());
-			throw new SyntaxError("Cannot modulo " + lval.getType().getTypeName() + " by " + right.check(context).getFamilyInfo());
+			throw new SyntaxError("Cannot modulo " + lval.getType().getTypeName() + " by " + right.check(context).getFamilyInfo(context));
 		}
 		return divider.compile(context, method, flags, lval, right);
 	}

@@ -339,7 +339,8 @@ public abstract class Standalone {
 			Iterator<IDeclaration> decls = found.iterator();
 			return decls.hasNext() ? decls.next() : null;
 		};
-		List<AttributeInfo> infos = columns.values().stream().map((c)->c.getAttributeInfo(locator)).collect(Collectors.toList());
+		Context context = Context.newGlobalsContext();
+		List<AttributeInfo> infos = columns.values().stream().map((c)->c.getAttributeInfo(context, locator)).collect(Collectors.toList());
 		dataStore.createOrUpdateAttributes(infos);
 		logger.info(()->"Schema successfully initialized.");
 	}

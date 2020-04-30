@@ -17,8 +17,10 @@ public abstract class IterableType extends NativeType {
 	}
 	
 	@Override
-	public FamilyInfo getFamilyInfo() {
-		return new FamilyInfo(family, true);
+	public FamilyInfo getFamilyInfo(Context context) {
+		// TODO only works with one dimensional arrays
+		FamilyInfo info = itemType.getFamilyInfo(context);
+		return new FamilyInfo(info.getFamily(), true);
 	}
 	
 	@Override

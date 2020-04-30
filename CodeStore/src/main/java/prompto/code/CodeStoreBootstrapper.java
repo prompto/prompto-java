@@ -62,7 +62,7 @@ public class CodeStoreBootstrapper {
 				Iterator<IDeclaration> decls = next.fetchLatestDeclarations(id.toString()).iterator();
 				return decls.hasNext() ? decls.next() : null;
 			};
-			List<AttributeInfo> infos = columns.values().stream().map(c->c.getAttributeInfo(locator)).collect(Collectors.toList());
+			List<AttributeInfo> infos = columns.values().stream().map(c->c.getAttributeInfo(context, locator)).collect(Collectors.toList());
 			store.createOrUpdateAttributes(infos);
 		}
 	}

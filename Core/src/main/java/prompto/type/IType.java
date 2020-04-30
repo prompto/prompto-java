@@ -38,7 +38,7 @@ public interface IType extends ISection {
 			return context.findAttribute(typeName).getType();
 	}
 
-	FamilyInfo getFamilyInfo();
+	FamilyInfo getFamilyInfo(Context context);
 	
 	default IType anyfy() {
 		return this;
@@ -49,7 +49,7 @@ public interface IType extends ISection {
 	}
 
 	default String getTypeName() {
-		return StringUtils.capitalizeFirst(getFamilyInfo().getFamily().name());
+		return StringUtils.capitalizeFirst(getFamilyInfo(null).getFamily().name());
 	}
 	
 	default Identifier getTypeNameId() {

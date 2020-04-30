@@ -40,8 +40,12 @@ public abstract class BaseType extends Section implements IType {
 	}
 
 	@Override
-	public FamilyInfo getFamilyInfo() {
-		return new FamilyInfo(family, false);
+	public FamilyInfo getFamilyInfo(Context context) {
+		IType resolved = resolve(context, null);
+		if(resolved==null || resolved==this)
+			return new FamilyInfo(family, false);
+		else
+			return resolved.getFamilyInfo(context);
 	}
 
 	@Override
