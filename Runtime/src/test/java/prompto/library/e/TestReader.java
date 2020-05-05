@@ -22,6 +22,21 @@ public class TestReader extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedCsv() throws Exception {
+		runInterpretedTests("reader/csv.pec");
+	}
+
+	@Test
+	public void testCompiledCsv() throws Exception {
+		runCompiledTests("reader/csv.pec");
+	}
+
+	@Test
+	public void testTranspiledCsv() throws Exception {
+		runTranspiledTests("reader/csv.pec");
+	}
+
+	@Test
 	public void testInterpretedJson() throws Exception {
 		runInterpretedTests("reader/json.pec");
 	}
@@ -34,21 +49,6 @@ public class TestReader extends BaseEParserTest {
 	@Test
 	public void testTranspiledJson() throws Exception {
 		runTranspiledTests("reader/json.pec");
-	}
-
-	@Test
-	public void testInterpretedReader() throws Exception {
-		runInterpretedTests("reader/reader.pec");
-	}
-
-	@Test
-	public void testCompiledReader() throws Exception {
-		runCompiledTests("reader/reader.pec");
-	}
-
-	@Test
-	public void testTranspiledReader() throws Exception {
-		runTranspiledTests("reader/reader.pec");
 	}
 
 	@Test
