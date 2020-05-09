@@ -10,6 +10,7 @@ import java.util.Set;
 import prompto.declaration.AnyNativeCategoryDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
+import prompto.intrinsic.PromptoBinary;
 import prompto.intrinsic.PromptoDict;
 import prompto.intrinsic.PromptoDocument;
 import prompto.intrinsic.PromptoList;
@@ -27,6 +28,7 @@ import prompto.type.ListType;
 import prompto.type.SetType;
 import prompto.type.TextType;
 import prompto.utils.TypeUtils;
+import prompto.value.BinaryValue;
 import prompto.value.DictionaryValue;
 import prompto.value.DocumentValue;
 import prompto.value.IValue;
@@ -146,20 +148,14 @@ public class JavaClassType extends BaseType {
     	val = convertIterator(context, value, type, returnType);
     	if(val!=null)
     		return val;
+    	val = convertBinary(context, value, type, returnType);
+    	if(val!=null)
+    		return val;
     	if(returnType==AnyType.instance())
 	    	return new NativeInstance(AnyNativeCategoryDeclaration.getInstance(), value);
 	    else
 	        throw new InternalError("Unable to convert:" + value.getClass().getSimpleName());
     }
-
-	private static IValue convertDocument(Context context, Object value, Type type, IType returnType) {
-		if(value instanceof PromptoDocument<?,?>) {
-			if(returnType==DocumentType.instance() || returnType==AnyType.instance()) {
-				return new DocumentValue(context, (PromptoDocument<?,?>)value);
-			}
-		}
-		return null;
-	}
 
 	private static IValue convertIValue(Object value) {
 	    return value instanceof IValue ? (IValue)value : null;
@@ -176,6 +172,15 @@ public class JavaClassType extends BaseType {
 		context.getRegisteredDeclaration(IDeclaration.class, returnType.getTypeNameId());
  		NativeCategoryDeclaration decl = context.getNativeBinding(type);
 		return decl!=null ? new NativeInstance(decl, value) : null;
+	}
+
+	private static IValue convertDocument(Context context, Object value, Type type, IType returnType) {
+		if(value instanceof PromptoDocument<?,?>) {
+			if(returnType==DocumentType.instance() || returnType==AnyType.instance()) {
+				return new DocumentValue(context, (PromptoDocument<?,?>)value);
+			}
+		}
+		return null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -243,6 +248,13 @@ public class JavaClassType extends BaseType {
 		return new IteratorValue(itemType, convertingIterator);
 	}
 
+
+	private static IValue convertBinary(Context context, Object value, Type type, IType returnType) {
+		if(value instanceof PromptoBinary)
+			return BinaryValue.newInstance((PromptoBinary)value);
+		else
+			return null;
+	}
 
 	@Override
 	public void checkUnique(Context context) { }
