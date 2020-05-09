@@ -49,5 +49,20 @@ public class TestIterate extends BaseOParserTest {
 		checkTranspiledOutput("iterate/forEachIntegerList.poc");
 	}
 
+	@Test
+	public void testInterpretedForEachIntegerRange() throws Exception {
+		checkInterpretedOutput("iterate/forEachIntegerRange.poc");
+	}
+
+	@Test
+	public void testCompiledForEachIntegerRange() throws Exception {
+		checkCompiledOutput("iterate/forEachIntegerRange.poc");
+	}
+
+	@Test
+	public void testTranspiledForEachIntegerRange() throws Exception {
+		checkTranspiledOutput("iterate/forEachIntegerRange.poc");
+	}
+
 }
 

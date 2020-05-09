@@ -12,6 +12,36 @@ Range.prototype.toString = function() {
 Range.prototype.getText = Range.prototype.toString;
 
 
+Range.prototype.iterate = function (fn, instance) {
+    if(instance)
+        fn = fn.bind(instance);
+    var self = this;
+    return {
+        length: self.length,
+        iterator: function() {
+            var iterator = self.iterator();
+            return {
+                hasNext: function() { return iterator.hasNext(); },
+                next: function() { return fn(iterator.next()); }
+            };
+        },
+        toArray: function() {
+            var array = [];
+            var iterator = this.iterator();
+            while(iterator.hasNext())
+                array.push(iterator.next());
+            return array;
+        },
+        toList: function() {
+            return new List(false, this.toArray());
+        },
+        getText: function() {
+            return this.toArray().join(", ");
+        }
+    };
+};
+
+
 Range.prototype.iterator = function() {
     var self = this;
     return {
