@@ -7,7 +7,7 @@ import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
-import prompto.declaration.IDeclaration;
+import prompto.declaration.CategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.OrderByClauseList;
@@ -170,9 +170,12 @@ public class FetchManyExpression extends FetchOneExpression {
 		if(type==null)
 			type = AnyType.instance();
 		else {
-			IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, type.getTypeNameId());
+			CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 			if(decl==null)
 				throw new SyntaxError("Expecting a type type !");
+			if(!decl.isStorable(context))
+				context.getProblemListener().reportNotStorable(this, type.getTypeName());
+			context = context.newInstanceContext(decl.getType(context), true);
 		}
 		checkPredicate(context);
 		checkOrderBy(context);

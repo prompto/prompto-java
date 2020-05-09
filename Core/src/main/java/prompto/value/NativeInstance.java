@@ -44,7 +44,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 		super(new NativeCategoryType(declaration));
 		this.declaration = declaration;
 		this.instance = makeInstance(context);
-		if(declaration.isStorable()) {
+		if(declaration.isStorable(context)) {
 			List<String> categories = Arrays.asList(declaration.getName()); 
 			storable = DataStore.getInstance().newStorable(categories, null);
 		}
@@ -54,7 +54,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 		super(new NativeCategoryType(declaration));
 		this.declaration = declaration;
 		this.instance = instance;
-		if(declaration.isStorable()) {
+		if(declaration.isStorable(null)) {
 			List<String> categories = Arrays.asList(declaration.getName()); 
 			storable = DataStore.getInstance().newStorable(categories, null);
 		}
@@ -228,7 +228,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 			Method nativeSetter = getSetter(attrName);
 			Object data = value.convertTo(context, nativeSetter.getParameterTypes()[0]);
 			setValue(nativeSetter, data);
-			if(storable!=null && decl.isStorable()) {
+			if(storable!=null && decl.isStorable(context)) {
 				storable.setData(attrName.toString(), data);
 			}
 		}

@@ -104,6 +104,8 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 			CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 			if(decl==null)
 				context.getProblemListener().reportUnknownCategory(type, type.getTypeName());
+			if(!decl.isStorable(context))
+				context.getProblemListener().reportNotStorable(this, type.getTypeName());
 			context = context.newInstanceContext(decl.getType(context), true);
 		}
 		if(!(predicate instanceof IPredicateExpression))

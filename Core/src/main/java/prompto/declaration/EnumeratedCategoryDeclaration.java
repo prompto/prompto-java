@@ -230,7 +230,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 	}
 
 	@Override
-	protected boolean needsClassConstructor() {
+	protected boolean needsClassConstructor(Context context) {
 		return true;
 	}
 	
@@ -259,7 +259,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 
 	@Override
 	protected void compileClassConstructorBody(Context context, MethodInfo method, Flags flags) {
-		if(isStorable())
+		if(isStorable(context))
 			compilePopulateCategoryField(context, method, flags);
 		for(CategorySymbol s : getSymbolsList())
 			compilePopulateSymbolField(context, method, flags, s);

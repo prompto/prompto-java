@@ -97,6 +97,11 @@ public abstract class ProblemListenerBase implements ANTLRErrorListener, IProble
 	}
 	
 	@Override
+	public void reportNotStorable(ISection section, String name) {
+		addProblem(new NotStorableProblem(name, section));
+	}
+
+	@Override
 	public void reportIllegalAssignment(ISection section, IType expected, IType actual) {
 		addProblem(new IllegalAssignmentProblem(section, expected, actual));
 	}

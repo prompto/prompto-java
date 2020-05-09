@@ -111,7 +111,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 	}
 	
 	@Override
-	public boolean isStorable() {
+	public boolean isStorable(Context context) {
 		return storable;
 	}
 	

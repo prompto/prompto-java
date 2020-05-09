@@ -12,7 +12,9 @@ import prompto.intrinsic.PromptoStoreQuery;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
+import prompto.type.AnyType;
 import prompto.type.IType;
+import prompto.type.IterableType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.utils.ExpressionList;
@@ -91,13 +93,44 @@ public class StoreStatement extends BaseStatement {
 	
 	@Override
 	public IType check(Context context) {
+		checkDeletables(context);
+		checkStorables(context);
+		checkFuture(context);
+		return VoidType.instance();
+	}
+	
+	private void checkDeletables(Context context) {
+		if(deletables!=null) 
+			deletables.forEach(exp->checkStorable(context, exp));
+	}
+
+	private void checkStorables(Context context) {
+		if(storables!=null) 
+			storables.forEach(exp->checkStorable(context, exp));
+	}
+
+	private void checkStorable(Context context, IExpression exp) {
+		IType type = exp.check(context);
+		if(type instanceof IterableType)
+			type = ((IterableType)type).getItemType();
+		// on certain scenarios the type will be vague, we skip checking
+		if(type == AnyType.instance())
+			return;
+		else if(!type.isStorable(context)) {
+			String name = exp.toString();
+			if(name.contains(" ") || name.contains(","))
+				name = type.getTypeName();
+			context.getProblemListener().reportNotStorable(this, name);
+		}
+	}
+
+	private void checkFuture(Context context) {
 		if(andThen!=null) {
 			context = context.newChildContext();
 			andThen.check(context, VoidType.instance());
 		}
-		return VoidType.instance();
 	}
-	
+
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		PromptoStoreQuery query = new PromptoStoreQuery();

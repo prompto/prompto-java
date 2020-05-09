@@ -59,7 +59,6 @@ import prompto.value.IInstance;
 
 public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	
-	IdentifierList derivedFrom;
 	MethodDeclarationList methods;
 	Map<String,IDeclaration> methodsMap = null;
 	
@@ -552,7 +551,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 
 	protected void compileClassConstructor(Context context, ClassFile classFile, Flags flags) {
-		if(needsClassConstructor()) {
+		if(needsClassConstructor(context)) {
 			MethodInfo method = classFile.newMethod("<clinit>", new Descriptor.Method(void.class));
 			method.addModifier(Modifier.STATIC);
 			compileClassConstructorBody(context, method, flags);
@@ -587,8 +586,8 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		method.addInstruction(Opcode.PUTSTATIC, f);
 	}
 
-	protected boolean needsClassConstructor() {
-		return isStorable();
+	protected boolean needsClassConstructor(Context context) {
+		return isStorable(context);
 	}
 
 	@Override
@@ -695,7 +694,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 
 	protected void compileCategoryField(Context context, ClassFile classFile, Flags flags) {
-		if(isStorable()) {
+		if(isStorable(context)) {
 			// store array of category names in static String[] field
 			// use reserved 'category' keyword which can't collide with any field
 			FieldInfo field = new FieldInfo("category", String[].class); 
@@ -841,7 +840,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 
 	private boolean isStorableAttribute(Context context, Identifier id) {
-		return context.getRegisteredDeclaration(AttributeDeclaration.class, id).isStorable();
+		return context.getRegisteredDeclaration(AttributeDeclaration.class, id).isStorable(context);
 	}
 
 	private void compileGetStorableData(Context context, MethodInfo method, Flags flags, Identifier id) {
@@ -883,7 +882,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 
 	protected void compileEmptyConstructor(Context context, ClassFile classFile, Flags flags) {
-		if(isStorable()) {
+		if(isStorable(context)) {
 			Descriptor.Method proto = new Descriptor.Method(void.class);
 			MethodInfo method = classFile.newMethod("<init>", proto);
 			method.registerLocal("this", VerifierType.ITEM_UninitializedThis, classFile.getThisClass());
@@ -900,7 +899,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 
 	private void compileCopyConstructor(Context context, ClassFile classFile, Flags flags) {
-		if(!isStorable())
+		if(!isStorable(context))
 			return;
 		Descriptor.Method proto = new Descriptor.Method(IStored.class, void.class);
 		MethodInfo method = classFile.newMethod("<init>", proto);
@@ -1004,7 +1003,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	boolean isSuperClassStorable(Context context) {
 		if(derivedFrom==null || derivedFrom.isEmpty())
 			return false;
-		return context.getRegisteredDeclaration(CategoryDeclaration.class, derivedFrom.getFirst()).isStorable();
+		return context.getRegisteredDeclaration(CategoryDeclaration.class, derivedFrom.getFirst()).isStorable(context);
 	}
 
 	protected void compileMethods(Context context, ClassFile classFile, Flags flags) {
@@ -1200,7 +1199,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	             	.append(attr.toString())
 	             	.append(" : null")
 	            	.append(", ")
-	            	.append(decl.isStorable())
+	            	.append(decl.isStorable(transpiler.getContext()))
 	            	.append(", mutable")
 	            	.append(", ")
 	            	.append(isEnum)

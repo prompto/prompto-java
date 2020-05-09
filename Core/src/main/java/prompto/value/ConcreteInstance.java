@@ -51,7 +51,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	public ConcreteInstance(Context context, CategoryDeclaration declaration) {
 		super(new CategoryType(declaration.getId()));
 		this.declaration = declaration;
-		if(declaration.isStorable()) {
+		if(declaration.isStorable(context)) {
 			List<String> categories = declaration.collectCategories(context);
 			storable = DataStore.getInstance().newStorable(categories, new DbIdFactory());
 		}
@@ -68,7 +68,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	private ConcreteInstance(CategoryType copyFrom, CategoryDeclaration declaration, Map<Identifier,IValue> values, String[] categories) {
 		super(new CategoryType(copyFrom, true));
 		this.declaration = declaration;
-		if(declaration.isStorable())
+		if(declaration.isStorable(null))
 			storable = DataStore.getInstance().newStorable(categories, new DbIdFactory());
 		this.values.putAll(values);
 		this.mutable = true;
@@ -222,7 +222,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		}
 		value = autocast(decl, value);
 		values.put(attrName, value);
-		if(storable!=null && decl.isStorable()) {
+		if(storable!=null && decl.isStorable(context)) {
 			storable.setData(attrName.toString(), value.getStorableData());
 		}
 	}

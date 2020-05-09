@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -41,6 +42,7 @@ import prompto.value.IValue;
 public abstract class CategoryDeclaration extends BaseDeclaration {
 	
 	IWidgetDeclaration widget;
+	IdentifierList derivedFrom = null;
 	IdentifierList attributes;
 	boolean storable = false;
 	
@@ -75,8 +77,18 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	}
 	
 	@Override
-	public boolean isStorable() {
-		return storable;
+	public boolean isStorable(Context context) {
+		return storable || isDerivedFromStorable(context);
+	}
+
+	private boolean isDerivedFromStorable(Context context) {
+		if(context == null || derivedFrom == null)
+			return false;
+		else
+			return derivedFrom.stream()
+					.map(id -> context.getRegisteredDeclaration(CategoryDeclaration.class, id))
+					.filter(Objects::nonNull)
+					.anyMatch(decl->decl.isStorable(context));	
 	}
 
 	public void setAttributes(IdentifierList attributes) {
@@ -124,7 +136,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 
 	public boolean hasAttribute(Context context, Identifier id) {
 		if(IStore.dbIdName.equals(id.toString()))
-			return isStorable();
+			return isStorable(context);
 		else
 			return attributes!=null && attributes.contains(id);
 	}
@@ -174,7 +186,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 
 	private void populateMember(Context context, IStored stored, IInstance instance, Identifier name) throws PromptoError {
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, name);
-		if(!decl.isStorable())
+		if(!decl.isStorable(context))
 			return;
 		Object data = stored.getData(name.toString());
 		populateMember(context, data, instance, decl);

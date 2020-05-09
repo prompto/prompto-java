@@ -34,6 +34,7 @@ public interface IProblemListener {
 	void reportIllegalValue(ISection section, String message);
 	void reportNoSuperType(ISection section, IType actual);
 	void reportNotMutable(ISection section, String name);
+	void reportNotStorable(ISection section, String name);
 
 	void pushDeclaration(IDeclaration declaration);
 	IDeclaration popDeclaration();

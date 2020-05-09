@@ -45,7 +45,7 @@ public interface IDeclaration extends ITranspilable, INamed, ISection {
 	boolean removeAnnotation(String name);
 	default void setClosureOf(IMethodDeclaration declaration) { throw new UnsupportedOperationException(); }
 	default IMethodDeclaration getClosureOf() { throw new UnsupportedOperationException(); }
-	default boolean isStorable() { return false; }
+	default boolean isStorable(Context context) { return false; }
 	default String getTranspiledName(Context context) { throw new UnsupportedOperationException("getTranspiledName " + this.getClass().getName()); }
 	default void declare(Transpiler transpiler) { throw new UnsupportedOperationException("declare " + this.getClass().getName()); }
 	default void declareChild(Transpiler transpiler) { throw new UnsupportedOperationException("declareChild " + this.getClass().getName()); }

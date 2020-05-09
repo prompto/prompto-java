@@ -132,6 +132,12 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
+	public boolean isStorable(Context context) {
+		IDeclaration decl = getDeclaration(context);
+		return decl!=null && decl instanceof CategoryDeclaration && ((CategoryDeclaration)decl).isStorable(context);
+	}
+	
+	@Override
 	public IType resolve(Context context, Consumer<IType> onError) {
 		if(resolved==null) {
 			IType type = this.anyfy();
@@ -322,7 +328,7 @@ public class CategoryType extends BaseType {
     }
 	
 	private IType checkMember(Context context, CategoryDeclaration decl, Identifier id) {
-       	if(decl.isStorable() && IStore.dbIdName.equals(id.toString()))
+       	if(decl.isStorable(context) && IStore.dbIdName.equals(id.toString()))
     		return AnyType.instance();
     	else if (decl.hasAttribute(context, id)) {
             AttributeDeclaration ad = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
@@ -847,7 +853,7 @@ public class CategoryType extends BaseType {
 	    expression.transpile(transpiler);
 	    AttributeDeclaration decl = transpiler.getContext().getRegisteredDeclaration(AttributeDeclaration.class, new Identifier(name));
 	    transpiler.append(", ")
-	        .append(decl.isStorable())
+	        .append(decl.isStorable(transpiler.getContext()))
 	        .append(", false"); // not mutable
 	    IType type = expression.check(transpiler.getContext());
 	    if(type instanceof EnumeratedCategoryType || type instanceof EnumeratedNativeType)

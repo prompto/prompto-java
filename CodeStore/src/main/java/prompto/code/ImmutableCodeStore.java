@@ -299,7 +299,7 @@ public class ImmutableCodeStore extends BaseCodeStore {
 		loadResource();
 		declarations.values().forEach( (decls) -> {
 			decls.stream().filter( (decl) -> decl instanceof AttributeDeclaration)
-			.filter( (decl) -> ((AttributeDeclaration)decl).isStorable())
+			.filter( (decl) -> ((AttributeDeclaration)decl).isStorable(null))
 			.forEach( (decl) -> columns.put(decl.getName(), (AttributeDeclaration)decl));
 		});
 	}

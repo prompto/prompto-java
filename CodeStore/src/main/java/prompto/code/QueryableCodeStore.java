@@ -450,7 +450,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 						.collect(Collectors.toList());
 				storable.setData("symbols",  symbols);
 			}
-			if(decl.isStorable())
+			if(decl.isStorable(null))
 				storable.setData("storable", true);
 			return storable;
 		} catch(PromptoError e) {

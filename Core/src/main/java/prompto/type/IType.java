@@ -55,6 +55,11 @@ public interface IType extends ISection {
 	default Identifier getTypeNameId() {
 		return new Identifier(getTypeName());
 	}
+	
+	default boolean isStorable(Context context) {
+		return false;
+	}
+	
 	Type getJavaType(Context context);
 
 	IType checkAdd(Context context, IType other, boolean tryReverse);
@@ -313,6 +318,7 @@ public interface IType extends ISection {
 	default ResultInfo compileGetStaticMember(Context context, MethodInfo method, Flags flags, Identifier id) {
 		throw new UnsupportedOperationException("compileGetStaticMember " + this.getClass().getName());
 	}
+
 
 }
  
