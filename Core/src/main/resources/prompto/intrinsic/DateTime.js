@@ -238,3 +238,6 @@ DateTime.prototype.getDate = function(value) {
 DateTime.prototype.getTime = function(value) {
     return new LocalTime(this.date);
 };
+
+
+DateTime.prototype.toDocument = DateTime.prototype.toString;

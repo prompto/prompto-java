@@ -143,4 +143,9 @@ public class DateValue extends BaseValue implements Comparable<DateValue> {
 		}
 	}
 	
+	@Override
+	public IValue toDocumentValue(Context context) {
+		return new TextValue(this.toString());
+	}
+
 }

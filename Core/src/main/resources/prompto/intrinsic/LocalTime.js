@@ -100,3 +100,5 @@ LocalTime.prototype.getSecond = function(value) {
 LocalTime.prototype.getMillisecond = function(value) {
     return this.getUTCMilliseconds();
 };
+
+LocalTime.prototype.toDocument = LocalTime.prototype.toString;

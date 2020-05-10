@@ -92,3 +92,5 @@ LocalDate.prototype.getDayOfYear = function() {
     var numDays = (this - first) / (1000 * 60 * 60 * 24);
     return 1 + Math.floor(numDays);
 };
+
+LocalDate.prototype.toDocument = LocalDate.prototype.toString;

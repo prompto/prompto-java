@@ -115,7 +115,7 @@ public interface IValue {
 	}
 
 	default Object convertTo(Context context, Type type) throws PromptoError {
-		throw new UnsupportedOperationException("convertTo not supported by " + this.getClass().getSimpleName());
+		throw new UnsupportedOperationException("convertTo " + type.getTypeName() + " not supported by " + this.getClass().getSimpleName());
 	}
 
 	default JsonNode toTypedJsonNode(Context context) throws PromptoError {

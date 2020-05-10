@@ -135,4 +135,10 @@ public class TimeValue extends BaseValue implements Comparable<TimeValue> {
 		}
 	}
 	
+	@Override
+	public IValue toDocumentValue(Context context) {
+		return new TextValue(this.toString());
+	}
+
+	
 }

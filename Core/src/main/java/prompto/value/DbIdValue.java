@@ -64,6 +64,11 @@ public class DbIdValue implements IValue {
 	public void collectStorables(Consumer<IStorable> collector) throws NotStorableError {
 		// nothing to do
 	}
+	
+	@Override
+	public IValue toDocumentValue(Context context) {
+		return new TextValue(this.toString());
+	}
 
 
 }
