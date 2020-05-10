@@ -260,5 +260,9 @@ public class CategorySymbol extends Symbol implements IExpression  {
 	    transpiler.append(";").newLine();
 	}
 
+	@Override
+	public IValue toDocumentValue(Context context) {
+		return new TextValue(symbol.toString());
+	}
 
 }

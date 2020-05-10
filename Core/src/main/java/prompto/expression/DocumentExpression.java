@@ -25,6 +25,7 @@ import prompto.value.BlobValue;
 import prompto.value.ConcreteInstance;
 import prompto.value.DocumentValue;
 import prompto.value.IValue;
+import prompto.value.NullValue;
 
 public class DocumentExpression implements IExpression {
 
@@ -58,6 +59,9 @@ public class DocumentExpression implements IExpression {
 			return documentFromBlob(context, (BlobValue)value);
 		else if(value instanceof ConcreteInstance)
 			return (DocumentValue)value.toDocumentValue(context);
+		// gracefuly support non-defensive programming
+		else if(value == NullValue.instance())
+			return new DocumentValue();
 		else
 			throw new UnsupportedOperationException();
 	}

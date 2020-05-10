@@ -131,6 +131,6 @@ public abstract class Symbol extends Section implements IExpression, INamed, IVa
 	public void collectStorables(Consumer<IStorable> collector) throws NotStorableError {
 		// nothing to do
 	}
-
+	
 
 }

@@ -32,6 +32,6 @@ public abstract class PromptoCategorySymbol {
 			return null;
 		}
 	}
-
+	
 
 }

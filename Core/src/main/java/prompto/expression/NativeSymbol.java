@@ -164,5 +164,10 @@ public class NativeSymbol extends Symbol implements IExpression {
 	    transpiler.append(");");
 	    transpiler.newLine();
 	}
+	
+	@Override
+	public IValue toDocumentValue(Context context) {
+		return new TextValue(expression.toString());
+	}
 
 }

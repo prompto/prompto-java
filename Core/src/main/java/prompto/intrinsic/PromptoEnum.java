@@ -2,7 +2,7 @@ package prompto.intrinsic;
 
 import java.lang.reflect.Field;
 
-public interface PromptoEnum {
+public interface PromptoEnum extends IDocumentable {
 
 	public static PromptoEnum getInstance(Object name, Class<?> klass) {
 		try {
@@ -13,8 +13,10 @@ public interface PromptoEnum {
 		}
 	}
 	
-
 	String getName();
 	Object getValue();
+	default Object toDocument() {
+		return getName();
+	}
 	
 }

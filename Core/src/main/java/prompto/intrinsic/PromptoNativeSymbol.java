@@ -47,4 +47,9 @@ public abstract class PromptoNativeSymbol implements PromptoEnum {
 	public String toString() {
 		return getName();
 	}
+	
+	@Override
+	public Object toDocument() {
+		return getValue();
+	}
 }
