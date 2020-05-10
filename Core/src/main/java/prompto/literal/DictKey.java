@@ -6,6 +6,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StringConstant;
+import prompto.grammar.Identifier;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
@@ -15,6 +16,7 @@ import prompto.value.TextValue;
 public abstract class DictKey extends Section {
 
 	protected abstract String asKey();
+	protected abstract Identifier asIdentifier();
 	public void toDialect(CodeWriter writer) {
 		writer.append(this.toString());
 	}

@@ -133,7 +133,9 @@ public interface IValue {
 		throw new UnsupportedOperationException("toJsonStream not supported by " + this.getClass().getSimpleName());
 	}
 
-
+	default IValue toDocumentValue(Context context) {
+		return this;
+	}
 
 	
 }

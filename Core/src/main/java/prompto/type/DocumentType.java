@@ -130,7 +130,7 @@ public class DocumentType extends NativeType {
 	@Override
 	public IValue convertJavaValueToIValue(Context context, Object value) {
 		if(value instanceof PromptoDocument)
-			return new DocumentValue(context, (PromptoDocument<?,?>)value);
+			return new DocumentValue(context, (PromptoDocument<?,?>)value, true);
 		else
 			return super.convertJavaValueToIValue(context, value);
 	}

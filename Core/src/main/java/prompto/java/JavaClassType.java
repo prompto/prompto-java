@@ -177,7 +177,7 @@ public class JavaClassType extends BaseType {
 	private static IValue convertDocument(Context context, Object value, Type type, IType returnType) {
 		if(value instanceof PromptoDocument<?,?>) {
 			if(returnType==DocumentType.instance() || returnType==AnyType.instance()) {
-				return new DocumentValue(context, (PromptoDocument<?,?>)value);
+				return new DocumentValue(context, (PromptoDocument<?,?>)value, true);
 			}
 		}
 		return null;

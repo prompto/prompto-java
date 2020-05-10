@@ -50,6 +50,21 @@ public class TestDocuments extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedInstance() throws Exception {
+		checkInterpretedOutput("documents/instance.poc");
+	}
+
+	@Test
+	public void testCompiledInstance() throws Exception {
+		checkCompiledOutput("documents/instance.poc");
+	}
+
+	@Test
+	public void testTranspiledInstance() throws Exception {
+		checkTranspiledOutput("documents/instance.poc");
+	}
+
+	@Test
 	public void testInterpretedItem() throws Exception {
 		checkInterpretedOutput("documents/item.poc");
 	}

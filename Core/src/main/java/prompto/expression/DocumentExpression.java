@@ -3,6 +3,8 @@ package prompto.expression;
 import java.security.InvalidParameterException;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
@@ -20,10 +22,9 @@ import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.utils.Logger;
 import prompto.value.BlobValue;
+import prompto.value.ConcreteInstance;
 import prompto.value.DocumentValue;
 import prompto.value.IValue;
-
-import com.fasterxml.jackson.databind.JsonNode;
 
 public class DocumentExpression implements IExpression {
 
@@ -55,10 +56,12 @@ public class DocumentExpression implements IExpression {
 	private DocumentValue documentFromValue(Context context, IValue value) {
 		if(value instanceof BlobValue)
 			return documentFromBlob(context, (BlobValue)value);
+		else if(value instanceof ConcreteInstance)
+			return (DocumentValue)value.toDocumentValue(context);
 		else
 			throw new UnsupportedOperationException();
 	}
-	
+		
 	private DocumentValue documentFromBlob(Context context, BlobValue blob) {
 		if(!"application/zip".equals(blob.getMimeType()))
 			throw new UnsupportedOperationException("Unsupported mime type: " + blob.getMimeType());
@@ -106,8 +109,10 @@ public class DocumentExpression implements IExpression {
 		case O:
 		case M:
 			writer.append('(');
-			if(source!=null)
+			if(source!=null) {
+				writer.append("from = ");
 				source.toDialect(writer);
+			}
 			writer.append(')');
 			break;
 		}

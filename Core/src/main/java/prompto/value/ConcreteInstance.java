@@ -28,13 +28,14 @@ import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
+import prompto.intrinsic.PromptoDocument;
 import prompto.param.IParameter;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.store.DataStore;
 import prompto.store.IStorable;
-import prompto.store.IStore;
 import prompto.store.IStorable.IDbIdFactory;
+import prompto.store.IStore;
 import prompto.type.CategoryType;
 import prompto.type.DecimalType;
 import prompto.type.IType;
@@ -398,6 +399,18 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 			value.toJsonStream(context, generator, id, entry.getKey().toString(), withType, data);
 			if(wrap) 
 				generator.writeEndObject();
+	}
+
+	public DocumentValue toDocumentValue(Context context) {
+		PromptoDocument<Identifier, IValue> doc = new PromptoDocument<>();
+		for(Entry<Identifier, IValue> entry : values.entrySet()) {
+			IValue value = entry.getValue();
+			if(value==null)
+				value = NullValue.instance();
+			value = value.toDocumentValue(context);
+			doc.put(entry.getKey(), value);
+		}
+		return new DocumentValue(context, doc, false);
 	}
 }
 

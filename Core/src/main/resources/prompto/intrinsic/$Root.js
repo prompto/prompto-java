@@ -110,3 +110,18 @@ $Root.prototype.collectDbIds = function(idsToDelete) {
     	idsToDelete.add(dbId);
     }
 };
+
+
+$Root.prototype.toDocument = function() {
+    var doc = new Document();
+    var names = this.getAttributeNames();
+    names.forEach(function(name) {
+        if(this.hasOwnProperty(name)) {
+            var value = this[name];
+            if(value && value.toDocument)
+                value = value.toDocument();
+            doc[name] = value;
+        }
+    }, this);
+    return doc;
+};

@@ -32,8 +32,17 @@ public class DocumentValue extends BaseValue {
 	}
 	
 
-	public DocumentValue(Context context, PromptoDocument<?, ?> doc) {
+	@SuppressWarnings("unchecked")
+	public DocumentValue(Context context, PromptoDocument<?, ?> doc, boolean docNeedsConversion) {
 		super(DocumentType.instance());
+		if(docNeedsConversion)
+			this.convertPromptoDocument(context, doc);
+		else
+			values = (PromptoDocument<Identifier, IValue>) doc;
+	}
+
+
+	private void convertPromptoDocument(Context context, PromptoDocument<?, ?> doc) {
 		for(Object key : doc.keySet()) {
 			Object value = doc.get(key);
 			IValue item = value==null ? NullValue.instance() :

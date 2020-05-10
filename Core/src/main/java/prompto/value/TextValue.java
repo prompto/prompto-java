@@ -227,6 +227,12 @@ public class TextValue extends BaseValue implements Comparable<TextValue>, ICont
 			throw new ReadWriteError(e.getMessage());
 		}
 	}
+	
+	@Override
+	public IValue toDocumentValue(Context context) {
+		// necessary to avoid splitting into chars
+		return this;
+	}
 
 }
 

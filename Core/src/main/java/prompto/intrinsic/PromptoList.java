@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import prompto.value.IMultiplyable;
 
 @SuppressWarnings("serial")
-public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoList<V>, V>, IMultiplyable {
+public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoList<V>, V>, IMultiplyable, IDocumentable {
 
 	boolean mutable;
 	
@@ -111,4 +112,18 @@ public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoLi
 			.collect(Collectors.joining(delimiter));
 	}
 		
+	@SuppressWarnings("unchecked")
+	@Override
+	public PromptoList<? extends V> toDocument() {
+		List<? extends V> items = (List<? extends V>)this.stream()
+				.map(item -> {
+					if(item instanceof IDocumentable)
+						return ((IDocumentable)item).toDocument();
+					else
+						return item;
+				})
+				.collect(Collectors.toList());
+		return new PromptoList<V>(items, false); 
+	}
+
 }

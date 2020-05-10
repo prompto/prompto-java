@@ -17,6 +17,11 @@ public class TestDocuments extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInstance() throws Exception {
+		compareResourceOMO("documents/instance.poc");
+	}
+
+	@Test
 	public void testItem() throws Exception {
 		compareResourceOMO("documents/item.poc");
 	}

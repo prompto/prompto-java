@@ -65,6 +65,21 @@ public class TestDocuments extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedInstance() throws Exception {
+		checkInterpretedOutput("documents/instance.pec");
+	}
+
+	@Test
+	public void testCompiledInstance() throws Exception {
+		checkCompiledOutput("documents/instance.pec");
+	}
+
+	@Test
+	public void testTranspiledInstance() throws Exception {
+		checkTranspiledOutput("documents/instance.pec");
+	}
+
+	@Test
 	public void testInterpretedItem() throws Exception {
 		checkInterpretedOutput("documents/item.pec");
 	}

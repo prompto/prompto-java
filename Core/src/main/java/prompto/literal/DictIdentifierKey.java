@@ -19,5 +19,10 @@ public class DictIdentifierKey extends DictKey {
 	protected String asKey() {
 		return id.toString();
 	}
+	
+	@Override
+	protected Identifier asIdentifier() {
+		return id;
+	}
 
 }

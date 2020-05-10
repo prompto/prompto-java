@@ -73,7 +73,7 @@ public class AnyType extends NativeType {
 		map.put(Long.class, (c,o)->new prompto.value.IntegerValue((Long)o));
 		map.put(Double.class, (c,o)->new prompto.value.DecimalValue((Double)o));
 		map.put(String.class, (c,o)->new prompto.value.TextValue((String)o));
-		map.put(PromptoDocument.class, (c,o)->new prompto.value.DocumentValue(c, (PromptoDocument<?,?>)o));
+		map.put(PromptoDocument.class, (c,o)->new prompto.value.DocumentValue(c, (PromptoDocument<?,?>)o, true));
 		map.put(PromptoList.class, (c,o)->new prompto.value.ListValue(c, (PromptoList<?>)o));
 		return map;
 	}

@@ -24,7 +24,7 @@ import prompto.store.IStored;
 import prompto.store.IStoredIterable;
 import prompto.store.InvalidValueError;
 
-public abstract class PromptoRoot extends PromptoStorableBase implements IMutable {
+public abstract class PromptoRoot extends PromptoStorableBase implements IMutable, IDocumentable {
 
 	public static PromptoRoot newInstance(IStored stored) {
 		if(stored==null) // happens on an unsuccessful fetchOne
@@ -210,13 +210,7 @@ public abstract class PromptoRoot extends PromptoStorableBase implements IMutabl
 		fields.forEach(field-> {
 			sb.append(field.getName());
 			sb.append(':');
-			try {
-				field.setAccessible(true);
-				sb.append(String.valueOf(field.get(this)));
-				field.setAccessible(false);
-			} catch (Exception e) {
-				sb.append("<unreadable>");
-			} 
+			sb.append(String.valueOf(getFieldValue(field)));
 			sb.append(", ");
 		});
 		if(sb.length()>1)
@@ -225,6 +219,29 @@ public abstract class PromptoRoot extends PromptoStorableBase implements IMutabl
 		return sb.toString();
 	}
 
+	protected Object getFieldValue(Field field) {
+		boolean accessible = field.isAccessible();
+		return accessible ? getAccessibleFieldValue(field) : getInaccessibleFieldValue(field);
+	}
+	
+	private Object getInaccessibleFieldValue(Field field) {
+		try {
+			field.setAccessible(true);
+			return getAccessibleFieldValue(field);
+		} finally {
+			field.setAccessible(false);
+		}
+	}
+
+
+	private Object getAccessibleFieldValue(Field field) {
+		try {
+			return field.get(this);
+		} catch (Exception e) {
+			return "<unreadable>";
+		} 
+	}
+	
 	private List<Field> collectFields() {
 		List<Field> list = new ArrayList<>();
 		collectFields(list, this.getClass());
@@ -250,6 +267,19 @@ public abstract class PromptoRoot extends PromptoStorableBase implements IMutabl
 			getOrCreateDbId();
 			collector.accept(storable);
 		}
+	}
+
+	@Override
+	public PromptoDocument<String, Object> toDocument() {
+		PromptoDocument<String, Object> doc = new PromptoDocument<>(); 
+		List<Field> fields = collectFields();
+		fields.forEach(field-> {
+			Object value = getFieldValue(field);
+			if(value instanceof IDocumentable)
+				value = ((IDocumentable)value).toDocument();
+			doc.put(field.getName(), value);
+		});
+		return doc;
 	}
 	
 }

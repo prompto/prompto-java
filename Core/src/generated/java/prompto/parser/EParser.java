@@ -7601,6 +7601,7 @@ public class EParser extends AbstractParser {
 	}
 
 	public static class Document_expressionContext extends ParserRuleContext {
+		public ExpressionContext exp;
 		public TerminalNode DOCUMENT() { return getToken(EParser.DOCUMENT, 0); }
 		public TerminalNode FROM() { return getToken(EParser.FROM, 0); }
 		public ExpressionContext expression() {
@@ -7636,7 +7637,7 @@ public class EParser extends AbstractParser {
 				setState(1406);
 				match(FROM);
 				setState(1407);
-				expression(0);
+				((Document_expressionContext)_localctx).exp = expression(0);
 				}
 				break;
 			}

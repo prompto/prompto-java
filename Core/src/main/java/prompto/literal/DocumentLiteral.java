@@ -7,6 +7,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
+import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDocument;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
@@ -15,7 +16,6 @@ import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.DocumentValue;
 import prompto.value.IValue;
-import prompto.value.TextValue;
 
 
 public class DocumentLiteral extends Literal<DocumentValue> {
@@ -52,13 +52,13 @@ public class DocumentLiteral extends Literal<DocumentValue> {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		if(entries.size()>0) {
-			PromptoDocument<TextValue,IValue> doc = new PromptoDocument<TextValue, IValue>();
+			PromptoDocument<Identifier,IValue> doc = new PromptoDocument<Identifier, IValue>();
 			for(DictEntry e : entries) {
-				TextValue key = e.getKey().asText();
+				Identifier key = e.getKey().asIdentifier();
 				IValue val = e.getValue().interpret(context); 
 				doc.put(key, val);
 			}
-			return new DocumentValue(context, doc);
+			return new DocumentValue(context, doc, false);
 		} else
 			return value;
 	}

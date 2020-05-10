@@ -192,3 +192,14 @@ List.prototype.toString = function() {
 };
 
 List.prototype.getText = List.prototype.toString;
+
+
+List.prototype.toDocument = function() {
+    var items = this.map(function(item) {
+        if(item && item.toDocument)
+            return item.toDocument();
+        else
+            return item;
+    });
+    return new List(false, items);
+};

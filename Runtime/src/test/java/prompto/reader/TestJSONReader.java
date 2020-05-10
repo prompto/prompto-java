@@ -29,7 +29,7 @@ public class TestJSONReader {
 		String json1 = ResourceUtils.getResourceAsString("samples/gitPushSample.json");
 		Object obj1 = JSONReader.read(json1);
 		assertTrue(obj1 instanceof PromptoDocument);
-		IValue doc1 = new DocumentValue(Context.newGlobalsContext(), (PromptoDocument<?,?>)obj1);  
+		IValue doc1 = new DocumentValue(Context.newGlobalsContext(), (PromptoDocument<?,?>)obj1, true);  
 		String json2 = doc1.toString();
 		Object obj2 = JSONReader.read(json2);
 		assertEquals(obj1, obj2);

@@ -101,10 +101,14 @@ public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable 
 			throw new UnsupportedOperationException("valueToJson for " + value.getClass().getName());
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void populateFrom(Object value) {
 		if(value instanceof PromptoBinary)
 			populateFromBinary((PromptoBinary)value);
-		else
+		else if(value instanceof PromptoRoot) {
+			PromptoDocument<String,Object> doc = ((PromptoRoot)value).toDocument();
+			putAll((Map<? extends K, ? extends V>) doc);
+		} else
 			throw new UnsupportedOperationException();
 	}
 

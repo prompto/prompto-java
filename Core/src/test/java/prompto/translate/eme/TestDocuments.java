@@ -22,6 +22,11 @@ public class TestDocuments extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInstance() throws Exception {
+		compareResourceEME("documents/instance.pec");
+	}
+
+	@Test
 	public void testItem() throws Exception {
 		compareResourceEME("documents/item.pec");
 	}
