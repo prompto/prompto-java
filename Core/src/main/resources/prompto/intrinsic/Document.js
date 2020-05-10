@@ -53,6 +53,14 @@ Document.prototype.setItem = function(item, value) {
     this[item] = value;
 };
 
+
+Document.prototype.add = function(other) {
+    var result = Object.assign({}, this, other);
+    result.__proto__ = Document.prototype;
+    return result;
+};
+
+
 Document.prototype.toJson = function(json, instanceId, fieldName, withType, binaries) {
     var values = {};
     Object.getOwnPropertyNames(this).forEach(function (key) {

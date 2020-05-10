@@ -95,6 +95,21 @@ public class TestAdd extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedAddDocument() throws Exception {
+		checkInterpretedOutput("add/addDocument.poc");
+	}
+
+	@Test
+	public void testCompiledAddDocument() throws Exception {
+		checkCompiledOutput("add/addDocument.poc");
+	}
+
+	@Test
+	public void testTranspiledAddDocument() throws Exception {
+		checkTranspiledOutput("add/addDocument.poc");
+	}
+
+	@Test
 	public void testInterpretedAddInteger() throws Exception {
 		checkInterpretedOutput("add/addInteger.poc");
 	}

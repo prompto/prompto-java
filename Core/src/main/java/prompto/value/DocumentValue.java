@@ -114,6 +114,15 @@ public class DocumentValue extends BaseValue {
 		return values.getOrDefault(new Identifier(item.toString()), NullValue.instance());
 	}
 	
+	
+	@Override
+	public IValue plus(Context context, IValue value) throws PromptoError {
+		if(value instanceof DocumentValue) {
+			PromptoDocument<Identifier,IValue> result = values.add(((DocumentValue)value).values);
+			return new DocumentValue(context, result, false);
+		} else
+			return super.plus(context, value);
+	}
 
 	@Override
 	public String toString() {

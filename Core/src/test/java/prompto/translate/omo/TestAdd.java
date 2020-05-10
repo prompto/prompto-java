@@ -32,6 +32,11 @@ public class TestAdd extends BaseOParserTest {
 	}
 
 	@Test
+	public void testAddDocument() throws Exception {
+		compareResourceOMO("add/addDocument.poc");
+	}
+
+	@Test
 	public void testAddInteger() throws Exception {
 		compareResourceOMO("add/addInteger.poc");
 	}

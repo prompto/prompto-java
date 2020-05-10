@@ -52,7 +52,7 @@ Dictionary.prototype.toString = function() {
     var vals = this.$keys.map(function (name) {
         return '"' + name + '":' + this[name];
     }, this);
-    return "{" + vals.join(", ") + "}";
+    return "<" + vals.join(", ") + ">";
 };
 
 

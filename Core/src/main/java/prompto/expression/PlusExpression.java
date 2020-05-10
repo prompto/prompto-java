@@ -13,6 +13,7 @@ import prompto.error.SyntaxError;
 import prompto.intrinsic.PromptoDate;
 import prompto.intrinsic.PromptoDateTime;
 import prompto.intrinsic.PromptoDict;
+import prompto.intrinsic.PromptoDocument;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoPeriod;
 import prompto.intrinsic.PromptoSet;
@@ -25,6 +26,7 @@ import prompto.type.DateTimeType;
 import prompto.type.DateType;
 import prompto.type.DecimalType;
 import prompto.type.DictType;
+import prompto.type.DocumentType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
 import prompto.type.ListType;
@@ -90,6 +92,7 @@ public class PlusExpression implements IExpression {
 		map.put(PromptoSet.class, SetType::compilePlus);
 		map.put(PromptoTuple.class, TupleType::compilePlus);
 		map.put(PromptoList.class, ListType::compilePlus);
+		map.put(PromptoDocument.class, DocumentType::compilePlus);
 		return map;
 	}
 

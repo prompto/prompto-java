@@ -7,11 +7,14 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.function.BiFunction;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import prompto.compiler.ByteOperand;
 import prompto.compiler.ClassConstant;
 import prompto.compiler.ClassFile;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
+import prompto.compiler.IOperand;
 import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
@@ -25,10 +28,10 @@ import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.expression.DocumentExpression;
-import prompto.expression.ValueExpression;
 import prompto.expression.IExpression;
 import prompto.expression.MethodSelector;
 import prompto.expression.UnresolvedIdentifier;
+import prompto.expression.ValueExpression;
 import prompto.grammar.Argument;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
@@ -45,8 +48,6 @@ import prompto.utils.ObjectUtils;
 import prompto.value.DocumentValue;
 import prompto.value.IValue;
 import prompto.value.NullValue;
-
-import com.fasterxml.jackson.databind.JsonNode;
 
 public class DocumentType extends NativeType {
 	
@@ -93,6 +94,51 @@ public class DocumentType extends NativeType {
 			return AnyType.instance();
 	}
 	
+	@Override
+	public IType checkAdd(Context context, IType other, boolean tryReverse) {
+		if(other==this)
+			return this;
+		else
+			return super.checkAdd(context, other, tryReverse);
+	}
+	
+	@Override
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+		left.declare(transpiler);
+		right.declare(transpiler);
+	}
+	
+	@Override
+	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	    if(other instanceof DocumentType) {
+	        left.transpile(transpiler);
+	        transpiler.append(".add(");
+	        right.transpile(transpiler);
+	        transpiler.append(")");
+	    } else 
+	        super.transpileAdd(transpiler, other, tryReverse, left, right);
+    }
+	
+	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
+			ResultInfo left, IExpression exp) {
+		// TODO: return right if left is empty (or left if right is empty)
+		// create result (temporarily mutable)
+		ResultInfo info = CompilerUtils.compileNewInstance(method, PromptoDocument.class);
+		// add left, current stack is: left, result, we need: result, result, left
+		method.addInstruction(Opcode.DUP_X1); // stack is: result, left, result
+		method.addInstruction(Opcode.SWAP); // stack is: result, result, left
+		IOperand oper = new MethodConstant(PromptoDocument.class, "putAll", 
+				Map.class, void.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		// add right, current stack is: result, we need: result, result, right
+		method.addInstruction(Opcode.DUP); // stack is: result, result 
+		exp.compile(context, method, flags); // stack is: result, result, right
+		oper = new MethodConstant(PromptoDocument.class, "putAll", 
+				Map.class, void.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return info;
+	}
+
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		DocumentValue instance = new DocumentValue();

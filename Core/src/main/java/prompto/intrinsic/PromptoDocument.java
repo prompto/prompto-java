@@ -27,6 +27,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @SuppressWarnings("serial")
 public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable {
 
+	public PromptoDocument<K, V> add(PromptoDocument<K, V> toAdd) {
+		PromptoDocument<K, V> doc = new PromptoDocument<>();
+		doc.putAll(this);
+		doc.putAll(toAdd);
+		return doc;
+	}
+
 	@SuppressWarnings("unchecked")
 	public V getOrCreate(K key, Class<? extends V> autoCreate) {
 		if(super.containsKey(key))
@@ -220,4 +227,5 @@ public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable 
 			return "<error:" + t.getMessage() + ">";
 		}
 	}
+
 }
