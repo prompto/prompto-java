@@ -41,6 +41,18 @@ Dictionary.prototype.iterator = function() {
     };
 };
 
+Dictionary.prototype.swap = function() {
+	var swapped = new Dictionary(true);
+	this.$keys.forEach(function(name) {
+		var key = this[name];
+		if(key)
+			key = key.toString();
+		swapped[key] = name;
+	},this);
+	swapped.mutable = false;
+	return swapped;
+};
+
 Dictionary.prototype.add = function(dict) {
     var result = Object.assign({}, this, dict);
     result.__proto__ = Dictionary.prototype;

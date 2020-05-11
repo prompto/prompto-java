@@ -21,14 +21,28 @@ public class PromptoDict<K,V> extends HashMap<K,V> implements Iterable<PromptoDi
 		this.mutable = mutable;
 	}
 	
+	public PromptoDict<String,String> swap() {
+		PromptoDict<String,String> swapped = new PromptoDict<>(true);
+		for (HashMap.Entry<K,V> kvp : entrySet()) {
+			String key = String.valueOf(kvp.getValue());
+			String value = String.valueOf(kvp.getKey());
+			swapped.put(key, value);	
+		}
+		swapped.setMutable(false);
+		return swapped;
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<");
 		for (HashMap.Entry<K,V> kvp : entrySet()) {
-			sb.append('"');
-			sb.append(kvp.getKey().toString());
-			sb.append('"');
+			String key = kvp.getKey().toString();
+			if(!key.startsWith("\""))
+				sb.append('"');
+			sb.append(key);
+			if(!key.endsWith("\""))
+				sb.append('"');
 			sb.append(":");
 			sb.append(kvp.getValue().toString());
 			sb.append(", ");

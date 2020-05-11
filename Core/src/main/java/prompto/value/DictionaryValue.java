@@ -59,6 +59,18 @@ public class DictionaryValue extends BaseValue implements IContainer<IValue> {
 		return new DictionaryValue(((ContainerType) dict1.type).getItemType(), dict); 
 	}
 
+	public DictionaryValue swap(Context context) {
+		Identifier text = new Identifier("text"); 
+		PromptoDict<TextValue, IValue> swapped = new PromptoDict<>(true);
+		dict.forEach((k,v)->{
+			if(!(v instanceof TextValue))
+				v = v.getMember(context, text, false);
+			swapped.put((TextValue)v, k);
+		});
+		swapped.setMutable(false);
+		return new DictionaryValue(TextType.instance(), swapped);
+	}
+
 	@Override
 	public long getLength() {
 		return dict.size();
@@ -267,4 +279,5 @@ public class DictionaryValue extends BaseValue implements IContainer<IValue> {
 		}
 		
 	}
+
 }

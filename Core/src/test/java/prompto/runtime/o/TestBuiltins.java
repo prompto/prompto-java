@@ -200,6 +200,21 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedDictSwap() throws Exception {
+		checkInterpretedOutput("builtins/dictSwap.poc");
+	}
+
+	@Test
+	public void testCompiledDictSwap() throws Exception {
+		checkCompiledOutput("builtins/dictSwap.poc");
+	}
+
+	@Test
+	public void testTranspiledDictSwap() throws Exception {
+		checkTranspiledOutput("builtins/dictSwap.poc");
+	}
+
+	@Test
 	public void testInterpretedEnumName() throws Exception {
 		checkInterpretedOutput("builtins/enumName.poc");
 	}

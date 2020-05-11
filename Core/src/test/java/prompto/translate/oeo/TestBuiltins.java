@@ -77,6 +77,11 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
+	public void testDictSwap() throws Exception {
+		compareResourceOEO("builtins/dictSwap.poc");
+	}
+
+	@Test
 	public void testEnumName() throws Exception {
 		compareResourceOEO("builtins/enumName.poc");
 	}

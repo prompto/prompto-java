@@ -1,21 +1,31 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Descriptor;
 import prompto.compiler.Flags;
 import prompto.compiler.IOperand;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
+import prompto.declaration.BuiltInMethodDeclaration;
+import prompto.declaration.IMethodDeclaration;
+import prompto.error.PromptoError;
 import prompto.expression.IExpression;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDict;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
+import prompto.value.DictionaryValue;
+import prompto.value.IValue;
 
 public class DictType extends ContainerType {
 	
@@ -98,6 +108,14 @@ public class DictType extends ContainerType {
             return new ListType(getItemType());
         else
         	return super.checkMember(context, id);
+	}
+	
+	@Override
+	public Set<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
+		if("swap".equals(id.toString()))
+			return new HashSet<>(Collections.singletonList(SWAP_METHOD));
+		else
+			return super.getMemberMethods(context, id);
 	}
 	
 	@Override
@@ -275,4 +293,39 @@ public class DictType extends ContainerType {
 			return CompilerUtils.booleanToBoolean(method);
 	}
 	
+	static final IMethodDeclaration SWAP_METHOD = new BuiltInMethodDeclaration("swap") {
+		
+		@Override
+		public IValue interpret(Context context) throws PromptoError {
+			DictionaryValue dict = (DictionaryValue)getValue(context);
+			return dict.swap(context);
+		};
+		
+		@Override
+		public IType check(Context context) {
+			return new DictType(TextType.instance());
+		}
+
+		@Override
+		public boolean hasCompileExactInstanceMember() {
+			return true;
+		};
+		
+		@Override
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
+			// push arguments on the stack
+			this.compileParameters(context, method, flags, arguments);
+			// call replace method
+			Descriptor.Method descriptor = new Descriptor.Method(PromptoDict.class);
+			MethodConstant constant = new MethodConstant(PromptoDict.class, "swap", descriptor);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, constant);
+			// done
+			return new ResultInfo(PromptoDict.class);
+		};
+		
+		@Override
+		public void transpileCall(Transpiler transpiler, ArgumentList arguments) {
+	        transpiler.append("swap()");
+		}
+	};
 }
