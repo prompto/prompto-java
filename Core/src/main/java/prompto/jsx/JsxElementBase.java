@@ -292,7 +292,7 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 			if(decl==null)
 				transpiler.getContext().getProblemListener().reportUnknownIdentifier(id, id.toString());
 			else
-				decl.declare(transpiler);
+				decl.declare(transpiler.newLocalTranspiler());
 		}
 		if(this.properties!=null) {
 			PropertyMap propertyMap = getPropertyMap(transpiler.getContext());
