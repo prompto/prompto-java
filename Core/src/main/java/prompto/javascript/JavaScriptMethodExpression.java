@@ -1,6 +1,10 @@
 package prompto.javascript;
 
 import prompto.declaration.IMethodDeclaration;
+import prompto.expression.IExpression;
+import prompto.grammar.Argument;
+import prompto.grammar.Identifier;
+import prompto.param.IParameter;
 import prompto.statement.MethodCall;
 import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
@@ -46,11 +50,15 @@ public class JavaScriptMethodExpression extends JavaScriptSelectorExpression {
 			transpiler.append('.');
 		}
 		transpiler.append(name).append('(');
-		if(arguments!=null)
-			arguments.transpile(transpiler);
+		transpileArguments(transpiler);
 		transpiler.append(')');
 	}
 	
+	private void transpileArguments(Transpiler transpiler) {
+		if(arguments!=null) 
+			arguments.transpile(transpiler);
+	}
+
 	@Override
 	public void transpileRoot(Transpiler transpiler) {
 		if(parent!=null)
@@ -65,11 +73,39 @@ public class JavaScriptMethodExpression extends JavaScriptSelectorExpression {
 			parent.transpileInlineMethodCall(transpiler, declaration, methodCall);
 			transpiler.append('.');
 		}
-		transpiler.append(name).append('(');
-		if(arguments!=null)
-			arguments.transpile(transpiler);
-		transpiler.append(')');
+		transpiler.append(name).append("(");
+		transpileInlineArguments(transpiler, declaration, methodCall);
+		transpiler.append(")");
 	}
 
+	private void transpileInlineArguments(Transpiler transpiler, IMethodDeclaration declaration, MethodCall methodCall) {
+		if(arguments!=null && arguments.size()>0) {
+			arguments.forEach(exp -> {
+				transpileInlineArgument(transpiler, exp, declaration, methodCall);
+				transpiler.append(", ");
+			});
+			transpiler.trimLast(", ".length());
+		}
+	}
+
+	private void transpileInlineArgument(Transpiler transpiler, JavaScriptExpression exp, IMethodDeclaration declaration, MethodCall methodCall) {
+		// special case for arguments receiving method references and arrow expressions
+		if(exp instanceof JavaScriptIdentifierExpression && ((JavaScriptIdentifierExpression)exp).getParent()==null) {
+			Identifier id = new Identifier(exp.toString());
+			Argument argument = methodCall.getArguments().find(id);
+			if(argument==null && declaration.getParameters().size()==1)
+				argument = methodCall.getArguments().get(0);
+			if(argument==null)
+				exp.transpile(transpiler); // fallback
+			else {
+				IParameter parameter = argument.getParameter();
+				if(parameter==null && declaration.getParameters().size()==1)
+					parameter = declaration.getParameters().get(0);
+	            IExpression expression = argument.getExpression();
+	            parameter.transpileCall(transpiler, expression);
+			}
+		} else
+			exp.transpile(transpiler);
+	}
 	
 }
