@@ -451,7 +451,11 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	
 	
 	private void transpileArguments(Transpiler transpiler, IMethodDeclaration declaration, boolean allowDerived) {
-		List<Argument> arguments = this.makeArguments(transpiler.getContext(), declaration);
+		List<Argument> arguments = makeArguments(transpiler.getContext(), declaration);
+		transpileArguments(transpiler, arguments, declaration, allowDerived);
+	}
+	
+	public void transpileArguments(Transpiler transpiler, List<Argument> arguments, IMethodDeclaration declaration, boolean allowDerived) {
 	    arguments = arguments.stream().filter(argument->!(argument.getParameter() instanceof CodeParameter)).collect(Collectors.toList());
 	    if(!arguments.isEmpty()) {
 	        transpiler.append("(");
