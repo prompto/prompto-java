@@ -49,7 +49,7 @@ if(!Object.values) {
 	    return values;
 	}; 
 }
-
+/*
 Object.defineProperty(Object.prototype, "getText", {
     get: function() {
         return function() { return this.text || ""; };
@@ -58,7 +58,7 @@ Object.defineProperty(Object.prototype, "getText", {
     	// pass
     }
 });
-
+*/
 Boolean.prototype.getText = Boolean.prototype.toString;
 Boolean.prototype.equals = function(value) {
 	return this == value;
