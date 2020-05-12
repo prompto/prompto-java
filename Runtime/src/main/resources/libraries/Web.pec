@@ -186,8 +186,8 @@ and methods:
 	define getSize as method returning Integer doing:
 		JavaScript: return this.file.size;
 
-	define readText as method returning Text doing:
-		JavaScript: return this.readText();
+	define readText as method receiving TextCallback callback doing:
+		JavaScript: this.readText(callback);
 
 	define readImage as method returning Image doing:
 		JavaScript: return this.readImage();
