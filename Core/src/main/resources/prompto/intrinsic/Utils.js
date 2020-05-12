@@ -50,6 +50,15 @@ if(!Object.values) {
 	}; 
 }
 
+Object.defineProperty(Object.prototype, "getText", {
+    get: function() {
+        return function() { return this.text || ""; };
+    },
+    set: function() {
+    	// pass
+    }
+});
+
 Boolean.prototype.getText = Boolean.prototype.toString;
 Boolean.prototype.equals = function(value) {
 	return this == value;
