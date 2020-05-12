@@ -9,6 +9,11 @@ import prompto.utils.CodeWriter;
 public class JavaScriptThisExpression implements JavaScriptExpression {
 	
 	@Override
+	public String toString() {
+		return "this";
+	}
+	
+	@Override
 	public void toDialect(CodeWriter writer) {
 		writer.append("this");
 	}
