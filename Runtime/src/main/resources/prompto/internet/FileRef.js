@@ -13,6 +13,10 @@ FileRef.prototype.readBlob = function() {
     return Blob.fromFile(this.file);
 };
 
+FileRef.prototype.readText = function() {
+    return FileReaderSync.readAsText(this.file);
+};
+
 exports.FileRef = FileRef;
 
 exports.selectFileRef = function(callback, mimeTypes) {

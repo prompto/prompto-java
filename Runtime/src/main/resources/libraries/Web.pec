@@ -187,7 +187,7 @@ and methods:
 		JavaScript: return this.file.size;
 
 	define readText as method returning Text doing:
-		JavaScript: return this.file.text();
+		JavaScript: return this.readText();
 
 	define readImage as method returning Image doing:
 		JavaScript: return this.readImage();
