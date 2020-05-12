@@ -1,5 +1,7 @@
 define Callback as abstract method
-
+define BooleanCallback as abstract method receiving Boolean value
+define IntegerCallback as abstract method receiving Integer value
+define TextCallback as abstract method receiving Text value
 define Any as native category with attributes id and text, and bindings:
 
 	define category bindings as:
