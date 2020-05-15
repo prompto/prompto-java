@@ -33,6 +33,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.DecimalValue;
 import prompto.value.IValue;
 import prompto.value.IntegerValue;
+import prompto.value.NullValue;
 
 public class CastExpression implements IExpression {
 	
@@ -101,7 +102,7 @@ public class CastExpression implements IExpression {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		IValue value = expression.interpret(context);
-		if(value!=null) {
+		if(value!=null && value!=NullValue.instance()) {
 			IType target = getTargetType(context);
 			if(target==DecimalType.instance() && value instanceof IntegerValue)
 				value = new DecimalValue(((IntegerValue)value).doubleValue());
