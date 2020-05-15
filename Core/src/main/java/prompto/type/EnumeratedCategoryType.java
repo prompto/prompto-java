@@ -18,6 +18,7 @@ import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
 import prompto.value.IValue;
+import prompto.value.NullValue;
 
 
 public class EnumeratedCategoryType extends CategoryType {
@@ -81,7 +82,8 @@ public class EnumeratedCategoryType extends CategoryType {
 			if(!(decl instanceof IEnumeratedDeclaration))
 				throw new SyntaxError(typeNameId + " is not an enumerated type!");
 			String name = (String)context.getValue(new Identifier("name")).getStorableData();
-			return ((IEnumeratedDeclaration<?>)decl).getSymbol(name);
+			IValue value = ((IEnumeratedDeclaration<?>)decl).getSymbol(name);
+			return value!=null ? value : NullValue.instance();
 		};
 		
 		@Override
