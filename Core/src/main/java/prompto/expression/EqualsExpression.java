@@ -609,17 +609,30 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
         case IS_A:
             this.transpileIsA(transpiler);
             break;
+        case IS_NOT_A:
+            this.transpileIsNotA(transpiler);
+            break;
         default:
             throw new Error("Cannot transpile:" + this.operator.toString());
 	    }
 	    return false;
     }
 
+	private void transpileIsNotA(Transpiler transpiler) {
+		transpiler.append("!(");
+		transpileIsA(transpiler);
+		transpiler.append(")");
+	}
+	
 	private void transpileIsA(Transpiler transpiler) {
 		if(!(this.right instanceof TypeExpression))
 			throw new Error("Cannot transpile:" + this.right.getClass().getName());
 		IType type = ((TypeExpression)this.right).getType();
-	    if(type==IntegerType.instance()) {
+		if(type==BooleanType.instance()) {
+	        transpiler.append("isABoolean(");
+	        this.left.transpile(transpiler);
+	        transpiler.append(")");
+	    } else if(type==IntegerType.instance()) {
 	        transpiler.append("isAnInteger(");
 	        this.left.transpile(transpiler);
 	        transpiler.append(")");

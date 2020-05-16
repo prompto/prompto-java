@@ -1,3 +1,7 @@
+function isABoolean(o) {
+    return typeof(o) === "boolean";
+}
+
 function isAnInteger(o) {
     return typeof(o) === "number" && o === Math.floor(o);
 }

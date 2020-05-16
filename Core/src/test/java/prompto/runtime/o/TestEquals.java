@@ -230,6 +230,21 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedIsABoolean() throws Exception {
+		checkInterpretedOutput("equals/isABoolean.poc");
+	}
+
+	@Test
+	public void testCompiledIsABoolean() throws Exception {
+		checkCompiledOutput("equals/isABoolean.poc");
+	}
+
+	@Test
+	public void testTranspiledIsABoolean() throws Exception {
+		checkTranspiledOutput("equals/isABoolean.poc");
+	}
+
+	@Test
 	public void testInterpretedIsBoolean() throws Exception {
 		checkInterpretedOutput("equals/isBoolean.poc");
 	}
@@ -257,6 +272,21 @@ public class TestEquals extends BaseOParserTest {
 	@Test
 	public void testTranspiledIsInstance() throws Exception {
 		checkTranspiledOutput("equals/isInstance.poc");
+	}
+
+	@Test
+	public void testInterpretedIsNotABoolean() throws Exception {
+		checkInterpretedOutput("equals/isNotABoolean.poc");
+	}
+
+	@Test
+	public void testCompiledIsNotABoolean() throws Exception {
+		checkCompiledOutput("equals/isNotABoolean.poc");
+	}
+
+	@Test
+	public void testTranspiledIsNotABoolean() throws Exception {
+		checkTranspiledOutput("equals/isNotABoolean.poc");
 	}
 
 	@Test
