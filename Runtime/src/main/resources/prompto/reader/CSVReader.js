@@ -16,6 +16,14 @@ function csvRead(text, columns, separator, encloser) {
     return list;
 }
 
+
+function csvReadHeaders(text, separator, encloser) {
+    var iter = new CSVIterator(text, null, separator, encloser);
+    var headers = iter.readHeaders();
+    return new intrinsic.List(false, headers);
+}
+
+
 function CSVIterator(text, columns, separator, encloser) {
     this.text = text || null;
     this.index = 0;
@@ -38,11 +46,19 @@ CSVIterator.prototype.iterator = function() {
     return this;
 };
 
+
+CSVIterator.prototype.readHeaders = function() {
+    if(this.nextChar==0)
+        this.fetchChar(true);
+    return this.parseHeaders();
+};
+
+
 CSVIterator.prototype.hasNext = function() {
     if(this.nextChar==0)
         this.fetchChar(true);
     if(this.headers==null)
-        this.parseHeaders();
+        this.headers = this.parseHeaders();
     return this.nextChar>0;
 };
 
@@ -93,11 +109,12 @@ CSVIterator.prototype.peekChar = function() {
 
 
 CSVIterator.prototype.parseHeaders = function() {
-    this.headers = this.parseLine();
+    var headers = this.parseLine();
     if(this.columns!=null)
-        this.headers = this.headers.map(function(header) {
+        headers = headers.map(function(header) {
             return this.columns[header] || header;
         }, this);
+    return headers;
 };
 
 CSVIterator.prototype.parseLine = function() {
@@ -214,3 +231,4 @@ CSVIterator.prototype.handleNewLine = function(chars, endChar, list) {
 
 exports.csvIterate = csvIterate;
 exports.csvRead = csvRead;
+exports.csvReadHeaders = csvReadHeaders;
