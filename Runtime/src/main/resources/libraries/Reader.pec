@@ -13,6 +13,13 @@ define readCsv as native method receiving text, Text<:> columnNames = nothing, C
 	Python3: return csvRead(text, columnNames, separator, quote) from module: prompto.reader.CSVReader
 	JavaScript: return csvRead(text, columnNames, separator, quote); from module: prompto/reader/CSVReader.js
 
+define readCsvHeaders as native method receiving text, Character separator = ',', Character quote = '"' returning Text[] doing:
+	Java: return prompto.reader.CSVReader.readHeaders(text, separator, quote);
+	C#: return prompto.reader.CSVReader.readHeaders(text, separator, quote); 
+	Python2: return csvReadHeaders(text, separator, quote) from module: prompto.reader.CSVReader
+	Python3: return csvReadHeaders(text, separator, quote) from module: prompto.reader.CSVReader
+	JavaScript: return csvReadHeaders(text, separator, quote); from module: prompto/reader/CSVReader.js
+
 
 define "reads from csv text" as test method doing:
 	docs = readCsv with "id,name\n1,John\n2,Riou\\, Sylvie\n" as text
@@ -22,6 +29,13 @@ and verifying:
 	docs[1].name = "John"
 	docs[2].id = "2"
 	docs[2].name = "Riou, Sylvie"
+
+define "reads headers from csv text" as test method doing:
+	headers = readCsvHeaders with "id,name\n1,John\n2,Riou\\, Sylvie\n" as text
+and verifying: 
+	headers.count = 2
+	headers[1] = "id"
+	headers[2] = "name"
 
 define "iterates from csv text" as test method doing:
 	iterCsv = iterateCsv with "id,name\n1,John\n2,Riou\\, Sylvie\n" as text

@@ -13,21 +13,30 @@ import prompto.intrinsic.PromptoList;
 
 public abstract class CSVReader {
 	
+	public static PromptoList<String> readHeaders(String data, Character separator, Character encloser) throws IOException {
+		try(StringReader reader = data==null ? null : new StringReader(data)) {
+			CSVIterable iterable = iterator(reader, null, separator, encloser);
+			ArrayList<String> headers = iterable.readHeaders();
+			return new PromptoList<>(headers, false);
+		}
+	}
+
 	public static PromptoList<PromptoDocument<String, Object>> read(String data, PromptoDict<String, String> columns, Character separator, Character encloser) throws IOException {
 		try(StringReader reader = data==null ? null : new StringReader(data)) {
 			return read(reader, columns, separator, encloser);
 		}
 	}
 	
-	public static PromptoList<PromptoDocument<String, Object>> read(final Reader buffered, PromptoDict<String, String> columns, Character separator, Character encloser) {
+	public static PromptoList<PromptoDocument<String, Object>> read(final Reader reader, PromptoDict<String, String> columns, Character separator, Character encloser) {
 		PromptoList<PromptoDocument<String, Object>> list = new PromptoList<>(false);
-		Iterator<PromptoDocument<String, Object>> iter = iterator(buffered, columns, separator, encloser);
+		Iterator<PromptoDocument<String, Object>> iter = iterator(reader, columns, separator, encloser);
 		while(iter.hasNext())
 			list.add(iter.next());
 		return list;
 	}
 	
 	static interface CSVIterable extends Iterable<PromptoDocument<String, Object>>, Iterator<PromptoDocument<String, Object>> {
+		ArrayList<String> readHeaders();
 	}
 	
 	public static CSVIterable iterator(String data, PromptoDict<String, String> columns, Character separator, Character encloser) throws IOException {
@@ -53,11 +62,18 @@ public abstract class CSVReader {
 			}
 			
 			@Override
+			public ArrayList<String> readHeaders() {
+				if(nextChar==0)
+					fetchChar(true);
+				return parseHeaders(null);
+			}
+
+			@Override
 			public boolean hasNext() {
 				if(nextChar==0)
 					fetchChar(true);
 				if(headers==null)
-					parseHeaders(columns);
+					headers = parseHeaders(columns);
 				return nextChar>0;
 			}
 			
@@ -97,16 +113,17 @@ public abstract class CSVReader {
 
 
 
-			private void parseHeaders(PromptoDict<String, String> columns) {
-				headers = parseLine();
+			private ArrayList<String> parseHeaders(PromptoDict<String, String> columns) {
+				ArrayList<String> list = parseLine();
 				if(columns!=null) {
-					for(int i=0;i<headers.size(); i++) {
-						String header = headers.get(i);
+					for(int i=0;i<list.size(); i++) {
+						String header = list.get(i);
 						String value = columns.get(header);
 						if(value!=null)
-							headers.set(i, value.toString());
+							list.set(i, value.toString());
 					}
 				}
+				return list;
 			}
 
 			private ArrayList<String> parseLine() {
@@ -225,6 +242,7 @@ public abstract class CSVReader {
 				}
 				return doc;
 			}
+
 		};
 	}
 }
