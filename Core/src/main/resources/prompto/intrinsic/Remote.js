@@ -7,6 +7,8 @@ function readJSONValue(value) {
 	} else if(value.type) {
 		if(value.type.endsWith("[]"))
 			return readList(value.value);
+		else if(value.type.endsWith("<>"))
+			return readSet(value.value);
 		else if(value.type.startsWith("Cursor<"))
 			return readCursor(value.value);
 		else switch(value.type) {
@@ -48,6 +50,13 @@ function readList(value) {
 	var items = value.map(readJSONValue);
 	return new List(false, items);
 }
+
+
+function readSet(value) {
+	var items = value.map(readJSONValue);
+	return new StrictSet(items);
+}
+
 
 function readCursor(value) {
 	var iterable = {
