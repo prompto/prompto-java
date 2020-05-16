@@ -95,7 +95,7 @@ public class DocumentValue extends BaseValue {
     	return values.keySet();
     }
 
-    public IValue getMember(Identifier id, boolean autoCreate) {
+    private IValue getMember(Identifier id, boolean autoCreate) {
     	if(values.containsKey(id))
     		return values.get(id);
     	else if("text".equals(id.toString()))

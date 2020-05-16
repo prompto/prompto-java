@@ -97,7 +97,7 @@ public class DocumentType extends NativeType {
         case "values":
             return new ListType(AnyType.instance());
         default:
-        	return super.checkMember(context, id);
+        	return AnyType.instance();
         }
 	}
 	
@@ -227,7 +227,7 @@ public class DocumentType extends NativeType {
 	        transpiler.require("List");
 	        break;
        default: 
-	    	super.declareMember(transpiler, name);
+	    	// nothing to do;
 	    }
 	}
 	
