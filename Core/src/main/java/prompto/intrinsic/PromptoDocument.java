@@ -34,6 +34,20 @@ public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable 
 		return doc;
 	}
 
+	public Long getCount() {
+		return (long)size();
+	}
+	
+	public PromptoSet<K> getKeys() {
+		PromptoSet<K> set = new PromptoSet<K>();
+		set.addAll(keySet()); // TODO worth the copy?
+		return set;
+	}
+	
+	public PromptoList<V> getValues() {
+		return new PromptoList<V>(values(), false); // TODO worth the copy?
+	}
+	
 	@SuppressWarnings("unchecked")
 	public V getOrCreate(K key, Class<? extends V> autoCreate) {
 		if(super.containsKey(key))

@@ -87,11 +87,18 @@ public class DocumentType extends NativeType {
 	}
 
 	@Override
-	public IType checkMember(Context context, Identifier name) {
-		if("text".equals(name.toString()))
-			return TextType.instance();
-		else
-			return AnyType.instance();
+	public IType checkMember(Context context, Identifier id) {
+		String name = id.toString();
+        switch(name) {
+        case "count":
+            return IntegerType.instance();
+        case "keys":
+            return new SetType(TextType.instance());
+        case "values":
+            return new ListType(AnyType.instance());
+        default:
+        	return super.checkMember(context, id);
+        }
 	}
 	
 	@Override
@@ -210,15 +217,36 @@ public class DocumentType extends NativeType {
 	
 	@Override
 	public void declareMember(Transpiler transpiler, Identifier name) {
-		// nothing to do
+		switch(name.toString()) {
+		case "count":
+			break;
+		case "keys":
+	        transpiler.require("StrictSet");
+	        break;
+		case "values":
+	        transpiler.require("List");
+	        break;
+       default: 
+	    	super.declareMember(transpiler, name);
+	    }
 	}
 	
 	@Override
-	public void transpileMember(Transpiler transpiler, Identifier name) {
-	    if ("text".equals(name.toString())) {
-	        transpiler.append("getText()");
-	    } else {
-	        transpiler.append("getMember('").append(name).append("', false)");
+	public void transpileMember(Transpiler transpiler, Identifier id) {
+		String name = id.toString();
+		switch(name.toString()) {
+		case "count":
+	        transpiler.append("length");
+			break;
+		case "keys":
+		case "values":
+			transpiler.append(name);
+			break;
+		case "text":
+			transpiler.append("getText()");
+			break;
+	    default:
+	        transpiler.append("getMember('").append(id).append("', false)");
 	    }
 	}
 	

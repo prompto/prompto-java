@@ -82,6 +82,11 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
+	public void testDocumentCount() throws Exception {
+		compareResourceOMO("builtins/documentCount.poc");
+	}
+
+	@Test
 	public void testEnumName() throws Exception {
 		compareResourceOMO("builtins/enumName.poc");
 	}

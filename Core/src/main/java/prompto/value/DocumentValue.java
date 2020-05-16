@@ -17,11 +17,13 @@ import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDocument;
+import prompto.intrinsic.PromptoSet;
 import prompto.java.JavaClassType;
 import prompto.runtime.Context;
 import prompto.store.InvalidValueError;
 import prompto.type.AnyType;
 import prompto.type.DocumentType;
+import prompto.type.TextType;
 
 public class DocumentValue extends BaseValue {
 	
@@ -63,24 +65,44 @@ public class DocumentValue extends BaseValue {
 		return true;
 	}
 	
-    @Override
-    public IValue getMember(Context context, Identifier id, boolean autoCreate) {
-    	return getMember(id, autoCreate);
- 	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
+		String name = id.toString();
+		switch(name) {
+		case "count":
+			return new IntegerValue(this.values.size());
+		case "keys":
+			return getKeysValue();
+		case "values":
+			return new ListValue(AnyType.instance(), this.values.values());
+		default:
+	    	return getMember(id, autoCreate);
+		}
+	}
     
     
-    public Set<Identifier> getMemberIds() {
+    private IValue getKeysValue() {
+    	PromptoSet<IValue> keys = this.values.keySet().stream()
+    			.map(Identifier::toString)
+    			.map(TextValue::new)
+    			.collect(Collectors.toCollection(()->new PromptoSet<IValue>()));
+    	return new SetValue(TextType.instance(), keys);
+	}
+
+
+	public Set<Identifier> getMemberIds() {
     	return values.keySet();
     }
 
-    public IValue getMember(Identifier name, boolean autoCreate) {
-    	if(values.containsKey(name))
-    		return values.get(name);
-    	else if("text".equals(name.toString()))
+    public IValue getMember(Identifier id, boolean autoCreate) {
+    	if(values.containsKey(id))
+    		return values.get(id);
+    	else if("text".equals(id.toString()))
     		return new TextValue(this.toString());
     	else if(autoCreate) {
             IValue result = new DocumentValue();
-            values.put(name, result);
+            values.put(id, result);
             return result;
         } else
         	return NullValue.instance();

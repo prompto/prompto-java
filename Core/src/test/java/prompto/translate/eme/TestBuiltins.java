@@ -152,8 +152,23 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testDocumentCount() throws Exception {
+		compareResourceEME("builtins/documentCount.pec");
+	}
+
+	@Test
+	public void testDocumentKeys() throws Exception {
+		compareResourceEME("builtins/documentKeys.pec");
+	}
+
+	@Test
 	public void testDocumentText() throws Exception {
 		compareResourceEME("builtins/documentText.pec");
+	}
+
+	@Test
+	public void testDocumentValues() throws Exception {
+		compareResourceEME("builtins/documentValues.pec");
 	}
 
 	@Test

@@ -162,7 +162,8 @@ public class MemberSelector extends SelectorExpression {
 	}
 
 	private ResultInfo compileInstanceMember(Context context, MethodInfo method, Flags flags, ResultInfo info) {
-		Type resultType = check(context).getJavaType(context);
+		IType type = check(context);
+		Type resultType = type.getJavaType(context);
 		// special case for char.codePoint() to avoid wrapping char.class for just one member
 		if(Character.class==info.getType() && "codePoint".equals(getName()))
 			return compileCharacterCodePoint(method, flags);
@@ -171,7 +172,7 @@ public class MemberSelector extends SelectorExpression {
 			return compileStringLength(method, flags);
 		else if(PromptoAny.class==info.getType()) 
 			return compileGetMember(context, method, flags, info, resultType);
-		else if(PromptoDocument.class==info.getType())
+		else if(shouldCompileToGetOrCreate(info.getType()))
 			return compileGetOrCreate(context, method, flags, info, resultType);		
 		// special case for o.text which translates to toString
 		else if(shouldCompileToObjectToString(context, parent))
@@ -196,6 +197,19 @@ public class MemberSelector extends SelectorExpression {
 		}
 	}
 		
+	private boolean shouldCompileToGetOrCreate(Type type) {
+		if(PromptoDocument.class!=type)
+			return false;
+		else switch(getName()) {
+		case "count":
+		case "keys":
+		case "values":
+			return false;
+		default:
+			return true;
+		}
+	}
+
 	private boolean shouldCompileToObjectToString(Context context, IExpression parent) {
 		if(!"text".equals(getName()))
 			return false;

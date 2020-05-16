@@ -4,6 +4,33 @@ function Document(entries) {
     return this;
 }
 
+Object.defineProperty(Document.prototype, "$keys", {
+    get : function() {
+        return Object.getOwnPropertyNames(this).filter(function(name) { return name!=="mutable"; });
+    }
+});
+
+
+Object.defineProperty(Document.prototype, "length", {
+    get : function() {
+        return this.$keys.length;
+    }
+});
+
+Object.defineProperty(Document.prototype, "keys", {
+    get : function() {
+        return new StrictSet(this.$keys);
+    }
+});
+
+
+Object.defineProperty(Document.prototype, "values", {
+    get : function() {
+        var names = this.$keys.map(function(name) { return this[name]; }, this);
+        return new List(false, names);
+    }
+});
+
 Document.prototype.toString = function() {
     return JSON.stringify(this);
 };

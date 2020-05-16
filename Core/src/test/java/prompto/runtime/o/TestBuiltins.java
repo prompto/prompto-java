@@ -215,6 +215,21 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedDocumentCount() throws Exception {
+		checkInterpretedOutput("builtins/documentCount.poc");
+	}
+
+	@Test
+	public void testCompiledDocumentCount() throws Exception {
+		checkCompiledOutput("builtins/documentCount.poc");
+	}
+
+	@Test
+	public void testTranspiledDocumentCount() throws Exception {
+		checkTranspiledOutput("builtins/documentCount.poc");
+	}
+
+	@Test
 	public void testInterpretedEnumName() throws Exception {
 		checkInterpretedOutput("builtins/enumName.poc");
 	}

@@ -425,6 +425,36 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedDocumentCount() throws Exception {
+		checkInterpretedOutput("builtins/documentCount.pec");
+	}
+
+	@Test
+	public void testCompiledDocumentCount() throws Exception {
+		checkCompiledOutput("builtins/documentCount.pec");
+	}
+
+	@Test
+	public void testTranspiledDocumentCount() throws Exception {
+		checkTranspiledOutput("builtins/documentCount.pec");
+	}
+
+	@Test
+	public void testInterpretedDocumentKeys() throws Exception {
+		checkInterpretedOutput("builtins/documentKeys.pec");
+	}
+
+	@Test
+	public void testCompiledDocumentKeys() throws Exception {
+		checkCompiledOutput("builtins/documentKeys.pec");
+	}
+
+	@Test
+	public void testTranspiledDocumentKeys() throws Exception {
+		checkTranspiledOutput("builtins/documentKeys.pec");
+	}
+
+	@Test
 	public void testInterpretedDocumentText() throws Exception {
 		checkInterpretedOutput("builtins/documentText.pec");
 	}
@@ -437,6 +467,21 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testTranspiledDocumentText() throws Exception {
 		checkTranspiledOutput("builtins/documentText.pec");
+	}
+
+	@Test
+	public void testInterpretedDocumentValues() throws Exception {
+		checkInterpretedOutput("builtins/documentValues.pec");
+	}
+
+	@Test
+	public void testCompiledDocumentValues() throws Exception {
+		checkCompiledOutput("builtins/documentValues.pec");
+	}
+
+	@Test
+	public void testTranspiledDocumentValues() throws Exception {
+		checkTranspiledOutput("builtins/documentValues.pec");
 	}
 
 	@Test

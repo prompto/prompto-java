@@ -100,14 +100,16 @@ public class DictType extends ContainerType {
 	@Override
 	public IType checkMember(Context context, Identifier id) {
 		String name = id.toString();
-        if ("count".equals(name))
+        switch(name) {
+        case "count":
             return IntegerType.instance();
-        else if("keys".equals(name))
+        case "keys":
             return new SetType(TextType.instance());
-        else if ("values".equals(name))
+        case "values":
             return new ListType(getItemType());
-        else
+        default:
         	return super.checkMember(context, id);
+        }
 	}
 	
 	@Override

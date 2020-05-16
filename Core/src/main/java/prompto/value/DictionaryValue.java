@@ -3,7 +3,6 @@ package prompto.value;
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -98,21 +97,20 @@ public class DictionaryValue extends BaseValue implements IContainer<IValue> {
 		return this.dict.isMutable();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
-		if ("count".equals(name))
+		switch(name) {
+		case "count":
 			return new IntegerValue(this.dict.size());
-		else if ("keys".equals(name)) {
-			@SuppressWarnings("unchecked")
-			PromptoSet<IValue> values = (PromptoSet<IValue>)(Object)new PromptoSet<TextValue>(this.dict.keySet());
-			return new SetValue(TextType.instance(), values);
-		} else if ("values".equals(name)) {
-			IType itemType = ((ContainerType) this.type).getItemType();
-			Collection<IValue> values = this.dict.values();
-			return new ListValue(itemType, values);
-		} else
+		case "keys":
+			return new SetValue(TextType.instance(), (PromptoSet<IValue>)(Object)new PromptoSet<TextValue>(this.dict.keySet()));
+		case "values":
+			return new ListValue(((ContainerType) this.type).getItemType(), this.dict.values());
+		default:
 			return super.getMember(context, id, autoCreate);
+		}
 	}
 	
 	
