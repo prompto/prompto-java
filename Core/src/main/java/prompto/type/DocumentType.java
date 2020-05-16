@@ -96,6 +96,8 @@ public class DocumentType extends NativeType {
             return new SetType(TextType.instance());
         case "values":
             return new ListType(AnyType.instance());
+        case "text":
+            return TextType.instance();
         default:
         	return AnyType.instance();
         }
