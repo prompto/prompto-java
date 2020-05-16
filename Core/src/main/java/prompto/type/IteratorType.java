@@ -85,7 +85,24 @@ public class IteratorType extends IterableType {
 	public void declare(Transpiler transpiler) {
 		itemType.declare(transpiler);
 	}
+	
+	@Override
+	public void declareMember(Transpiler transpiler, Identifier id) {
+		String name = id.toString();
+        if (!"count".equals(name))
+        	super.declareMember(transpiler, id);
+	}
 
+	@Override
+	public void transpileMember(Transpiler transpiler, Identifier id) {
+		String name = id.toString();
+        if ("count".equals(name))
+        	transpiler.append("count");
+        else
+        	super.transpileMember(transpiler, id);
+	}
+	
+	
 	final IMethodDeclaration TO_LIST_METHOD = new BuiltInMethodDeclaration("toList") {
 		
 		@Override
