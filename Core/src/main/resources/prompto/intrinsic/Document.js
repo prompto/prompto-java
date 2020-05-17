@@ -88,6 +88,12 @@ Document.prototype.add = function(other) {
 };
 
 
+Document.prototype.toDocument = function() {
+    var result = Object.assign({}, other);
+    result.__proto__ = Document.prototype;
+    return result;
+};
+
 Document.prototype.toJson = function(json, instanceId, fieldName, withType, binaries) {
     var values = {};
     Object.getOwnPropertyNames(this).forEach(function (key) {
