@@ -51,14 +51,17 @@ public class TupleLiteral extends Literal<TupleValue> {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		if(value.isEmpty() && expressions!=null) {
+		if(expressions==null || expressions.isEmpty())
+			return value;
+		else {
+			check(context); // force computation of itemType
 			PromptoTuple<IValue> list = new PromptoTuple<IValue>(mutable);
-			for(IExpression exp : expressions) 
-				list.add(exp.interpret(context));
-			value = new TupleValue(list);
-			// don't dispose of expressions, they are required by translation 
+			for(IExpression exp : expressions) {
+				IValue item = exp.interpret(context);
+				list.add(item);
+			}
+			return new TupleValue(list);
 		}
-		return value;
 	}
 
 	public ExpressionList getExpressions() {

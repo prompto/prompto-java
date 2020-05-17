@@ -41,7 +41,9 @@ public class SetLiteral extends ContainerLiteral<SetValue> {
 	
 	@Override
 	public SetValue interpret(Context context) throws PromptoError {
-		if(value.isEmpty() && expressions!=null && !expressions.isEmpty()) {
+		if(expressions==null || expressions.isEmpty())
+			return value;
+		else {
 			check(context); // force computation of itemType
 			PromptoSet<IValue> set = new PromptoSet<IValue>();
 			for(IExpression exp : expressions) {
@@ -49,10 +51,8 @@ public class SetLiteral extends ContainerLiteral<SetValue> {
 				item = interpretPromotion(item);
 				set.add(item);
 			}
-			value = new SetValue(itemType, set);
-			// don't dispose of expressions, they are required by translation 
+			return new SetValue(itemType, set);
 		}
-		return value;
 	}
 
 	@Override

@@ -47,7 +47,9 @@ public class ListLiteral extends ContainerLiteral<ListValue> {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		if(expressions!=null) {
+		if(expressions==null || expressions.isEmpty())
+			return value;
+		else {
 			check(context); // force computation of itemType
 			PromptoList<IValue> list = new PromptoList<IValue>(mutable);
 			for(IExpression exp : expressions) {
@@ -56,8 +58,7 @@ public class ListLiteral extends ContainerLiteral<ListValue> {
 				list.add(item);
 			}
 			return new ListValue(itemType, list);
-		} else
-			return value;
+		}
 	}
 
 	@Override
