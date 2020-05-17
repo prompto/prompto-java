@@ -110,7 +110,7 @@ String.prototype.splitToList = function(separator) {
 
 String.prototype.slice1Based = function(start, last) {
     if(start) {
-        if (start < 0 || start >= this.length)
+        if (start < 1 || start > this.length)
             throw new RangeError();
         start = start - 1;
     } else
