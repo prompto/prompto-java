@@ -45,6 +45,7 @@ import prompto.problem.IProblemListener;
 import prompto.problem.ProblemListener;
 import prompto.statement.CommentStatement;
 import prompto.statement.IStatement;
+import prompto.store.DataStore;
 import prompto.type.CategoryType;
 import prompto.type.DecimalType;
 import prompto.type.IType;
@@ -1043,6 +1044,10 @@ public class Context implements IContext {
 			return ((BinaryResource)resource).getData();
 		else
 			return null; // TODO raise exception
+	}
+	
+	public long nextSequenceValue(String prefix) {
+		return DataStore.getInstance().nextSequenceValue(prefix);
 	}
 
 	public static class ResourceContext extends Context {

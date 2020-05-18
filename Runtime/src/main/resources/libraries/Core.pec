@@ -295,6 +295,14 @@ define fetchBinaryResource as native method receiving path returning Blob doing:
 	JavaScript: return $context.fetchBinaryResource(path);
  
 
+define nextSequenceValue as native method receiving Text name returning Integer doing:
+	Java: return $context.nextSequenceValue(name);
+	C#: return $context.nextSequenceValue(name);
+	Python2: return $context.nextSequenceValue(name)
+	Python3: return $context.nextSequenceValue(name)
+	JavaScript: return $context.nextSequenceValue(name);
+
+
 define "randomUuid is not null" as test method doing:
 	uuid = randomUuid
 and verifying: 
@@ -307,3 +315,13 @@ define "sleeps for 1 second" as test method doing:
 	end = now
 and verifying: 
 	end >= start + 'PT1S'
+
+
+define "nextSequenceValue increases" as test method doing:
+	v1 = nextSequenceValue "BIG"
+	v2 = nextSequenceValue "BIG"
+	v3 = nextSequenceValue "BIG"
+and verifying: 
+	v1 = 1
+	v2 = 2
+	v3 = 3

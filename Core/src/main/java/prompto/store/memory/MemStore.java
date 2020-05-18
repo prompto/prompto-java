@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
@@ -34,6 +35,7 @@ public final class MemStore implements IStore {
 	private Map<Long, StoredDocument> documents = new HashMap<>();
 	private AtomicLong lastDbId = new AtomicLong(0);
 	private Map<String, AttributeInfo> attributes = new HashMap<>();
+	private Map<String, AtomicLong> sequences = new ConcurrentHashMap<>();
 	
 	@Override
 	public boolean checkConnection() {
@@ -251,6 +253,12 @@ public final class MemStore implements IStore {
 	@Override
 	public void close() throws IOException {
 		// nothing to do
+	}
+	
+	@Override
+	public long nextSequenceValue(String prefix) {
+		AtomicLong value = sequences.computeIfAbsent(prefix, k->new AtomicLong(0));
+		return value.incrementAndGet();
 	}
 	
 	

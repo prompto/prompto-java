@@ -51,6 +51,8 @@ public interface IStore extends Closeable {
 	IStored fetchOne(IQuery query) throws PromptoError;
 	IStoredIterable fetchMany(IQuery query) throws PromptoError;
 	
-	void flush()  throws PromptoError;
+	void flush() throws PromptoError;
+
+	long nextSequenceValue(String name);
 	
 }
