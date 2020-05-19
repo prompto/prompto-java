@@ -70,7 +70,10 @@ public class JavaScriptIdentifierExpression implements JavaScriptExpression {
 			parent.transpile(transpiler);
 			transpiler.append('.');
 		}
-		transpiler.append(identifier);
+		if("$store".equals(identifier))
+			transpiler.append("$DataStore.instance");
+		else
+			transpiler.append(identifier);
 	}
 	
 	@Override
