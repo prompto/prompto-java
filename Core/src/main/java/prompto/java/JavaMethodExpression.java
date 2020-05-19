@@ -7,6 +7,7 @@ import java.lang.reflect.Type;
 import prompto.compiler.CompilerException;
 import prompto.compiler.Descriptor;
 import prompto.compiler.IConstantOperand;
+import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
@@ -84,11 +85,16 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 			}
 			// write method call
 			Descriptor.Method dm = new Descriptor.Method(toCall.getParameterTypes(), toCall.getReturnType());
-			IConstantOperand operand = new MethodConstant(parentType.getType(), toCall.getName(), dm);
-			if(parentType.isStatic())
-				method.addInstruction(Opcode.INVOKESTATIC, operand);
-			else
-				method.addInstruction(Opcode.INVOKEVIRTUAL, operand);
+			if(parentType.isInterface()) {
+				IConstantOperand operand = new InterfaceConstant(parentType.getType(), toCall.getName(), dm);
+				method.addInstruction(Opcode.INVOKEINTERFACE, operand);
+			} else {
+				IConstantOperand operand = new MethodConstant(parentType.getType(), toCall.getName(), dm);
+				if(parentType.isStatic())
+					method.addInstruction(Opcode.INVOKESTATIC, operand);
+				else
+					method.addInstruction(Opcode.INVOKEVIRTUAL, operand);
+			}
 			return new ResultInfo(toCall.getReturnType());
 		} catch(ClassNotFoundException e) {
 			throw new CompilerException(e);
