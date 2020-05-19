@@ -80,7 +80,7 @@ public class Instruction implements IInstruction {
 						writer.writeU2(0);
 					} else {
 						writer.writeU2(((IConstantOperand)operands[0]).getIndexInConstantPool());
-						writer.writeU1(((InterfaceConstant)operands[0]).getArgsCount());
+						writer.writeU1(((InterfaceConstant)operands[0]).getArgumentsCount());
 						writer.writeU1(0);
 					}
 					break;

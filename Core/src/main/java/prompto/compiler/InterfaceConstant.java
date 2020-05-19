@@ -21,7 +21,7 @@ public class InterfaceConstant extends MethodConstant {
 	}
 	
 
-	public int getArgsCount() {
+	public int getArgumentsCount() {
 		return methodNameAndType.getDescriptor().getTypes().length; // this + args.count - result
 	}
 
