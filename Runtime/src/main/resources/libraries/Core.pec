@@ -296,11 +296,11 @@ define fetchBinaryResource as native method receiving path returning Blob doing:
  
 
 define nextSequenceValue as native method receiving Text name returning Integer doing:
-	Java: return $context.nextSequenceValue(name);
-	C#: return $context.nextSequenceValue(name);
-	Python2: return $context.nextSequenceValue(name)
-	Python3: return $context.nextSequenceValue(name)
-	JavaScript: return $context.nextSequenceValue(name);
+	Java: return $store.nextSequenceValue(name);
+	C#: return $store.nextSequenceValue(name);
+	Python2: return $store.nextSequenceValue(name)
+	Python3: return $store.nextSequenceValue(name)
+	JavaScript: return $store.nextSequenceValue(name);
 
 
 define "randomUuid is not null" as test method doing:
