@@ -297,7 +297,7 @@ define fetchBinaryResource as native method receiving path returning Blob doing:
 
 define nextSequenceValue as native method receiving Text name returning Integer doing:
 	Java: return $store.nextSequenceValue(name);
-	C#: return $store.nextSequenceValue(name);
+	C#: return $store.NextSequenceValue(name);
 	Python2: return $store.nextSequenceValue(name)
 	Python3: return $store.nextSequenceValue(name)
 	JavaScript: return $store.nextSequenceValue(name);
