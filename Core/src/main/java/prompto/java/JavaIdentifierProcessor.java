@@ -9,6 +9,8 @@ import prompto.compiler.Opcode;
 import prompto.compiler.PromptoClassLoader;
 import prompto.compiler.ResultInfo;
 import prompto.runtime.Context;
+import prompto.store.DataStore;
+import prompto.store.IStore;
 import prompto.type.IType;
 
 public abstract class JavaIdentifierProcessor {
@@ -17,6 +19,7 @@ public abstract class JavaIdentifierProcessor {
 	
 	static {
 		processors.put("$context", new ContextIdentifierProcessor());
+		processors.put("$store", new DataStoreIdentifierProcessor());
 	}
 	
 	public abstract IType check(Context context);
@@ -45,5 +48,27 @@ public abstract class JavaIdentifierProcessor {
 			return new ResultInfo(Context.class);
 		}
 	}
+	
+	static class DataStoreIdentifierProcessor extends JavaIdentifierProcessor {
+		
+		@Override
+		public IType check(Context context) {
+			return new JavaClassType(IStore.class);
+		}
+		
+		@Override
+		public Object interpret(Context context) {
+			return DataStore.getInstance();
+		}
+		
+		@Override
+		public ResultInfo compile(Context context, MethodInfo method) {
+			// DataStore.getInstance()
+			MethodConstant m = new MethodConstant(DataStore.class, "getInstance", IStore.class);
+			method.addInstruction(Opcode.INVOKESTATIC, m);
+			return new ResultInfo(IStore.class);
+		}
+	}
+
 	
 }
