@@ -17,6 +17,11 @@ public class AtomicSwitchCase extends SwitchCase {
 	public AtomicSwitchCase(IExpression expression, StatementList list) {
 		super(expression,list);
 	}
+	
+	@Override
+	public String toString() {
+		return "case " + expression.toString() + ":";
+	}
 
 	@Override
 	public void checkSwitchType(Context context, IType type) {
