@@ -59,6 +59,8 @@ public class JavaScriptIdentifierExpression implements JavaScriptExpression {
 			parent.declare(transpiler);
 		if("$context".equals(identifier))
 			transpiler.require("Context");
+		else if("$store".equals(identifier))
+			transpiler.require("DataStore");
 	}
 	
 
