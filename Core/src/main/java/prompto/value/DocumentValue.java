@@ -65,7 +65,6 @@ public class DocumentValue extends BaseValue {
 		return true;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		String name = id.toString();
