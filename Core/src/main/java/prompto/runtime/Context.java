@@ -524,6 +524,15 @@ public class Context implements IContext {
 		return current==null;
 	}
 	
+	public Collection<CategoryDeclaration> fetchDerivedCategoryDeclarations(Identifier id) {
+		ICodeStore store = ICodeStore.getInstance();
+		if(store==null)
+			return Collections.emptyList();
+		else
+			return store.fetchDerivedCategoryDeclarations(id);
+		
+	}
+	
 	public static class MethodDeclarationMap extends HashMap<String,IMethodDeclaration> implements IDeclaration {
 
 		private static final long serialVersionUID = 1L;
@@ -1299,10 +1308,5 @@ public class Context implements IContext {
 		}
 		
 	}
-
-
-
-
-
 
 }

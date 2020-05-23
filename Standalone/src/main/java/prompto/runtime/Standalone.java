@@ -353,6 +353,7 @@ public abstract class Standalone {
 		logger.info(()->"Bootstrapping prompto...");
 		ICodeStore runtime = config.getRuntimeLibs() == null ? null : ImmutableCodeStore.bootstrapRuntime(config.getRuntimeLibs());
 		ICodeStore codeStore = newQueryableCodeStore(store, runtime, config);
+		codeStore.upgradeIfRequired();
 		ICodeStore.setInstance(codeStore);
 		logger.info(()->"Bootstrapping successful.");
 		codeStore.setMainModule(config.getApplicationName(), config.getApplicationVersion());
