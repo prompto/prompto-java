@@ -12,14 +12,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import prompto.declaration.AttributeDeclaration;
+import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IEnumeratedDeclaration;
 import prompto.error.InvalidResourceError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
+import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoVersion;
 import prompto.parser.Dialect;
 import prompto.parser.ISection;
@@ -190,11 +194,24 @@ public class ImmutableCodeStore extends BaseCodeStore {
 		loadResource();
 		return declarations.values().stream()
 				.flatMap(Collection::stream)
-				.filter((d)->d instanceof IEnumeratedDeclaration)
-				.map((d)->(IEnumeratedDeclaration<?>)d)
+				.filter(d->d instanceof IEnumeratedDeclaration)
+				.map(d->(IEnumeratedDeclaration<?>)d)
 				.filter((d)->d.hasSymbol(name))
 				.findFirst()
 				.orElse(null);
+	}
+	
+	@Override
+	public Collection<CategoryDeclaration> fetchDerivedCategoryDeclarations(Identifier id) {
+		Stream<CategoryDeclaration> stream1 = super.fetchDerivedCategoryDeclarations(id).stream();
+		loadResource();
+		Stream<CategoryDeclaration> stream2 = declarations.values().stream()
+				.flatMap(Collection::stream)
+				.filter(d->d instanceof CategoryDeclaration)
+				.map(d->(CategoryDeclaration)d)
+				.filter(d->d.getDerivedFrom()!=null)
+				.filter(d->d.getDerivedFrom().contains(id));
+		return Stream.concat(stream1, stream2).collect(Collectors.toList());
 	}
 
 	@Override
@@ -316,4 +333,5 @@ public class ImmutableCodeStore extends BaseCodeStore {
 			return names;
 		}
 	}
+	
 }

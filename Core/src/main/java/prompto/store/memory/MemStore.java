@@ -36,6 +36,7 @@ public final class MemStore implements IStore {
 	private AtomicLong lastDbId = new AtomicLong(0);
 	private Map<String, AttributeInfo> attributes = new HashMap<>();
 	private Map<String, AtomicLong> sequences = new ConcurrentHashMap<>();
+	private Map<String, Map<String, Object>> configs = new ConcurrentHashMap<>();
 	
 	@Override
 	public boolean checkConnection() {
@@ -291,7 +292,7 @@ public final class MemStore implements IStore {
 				}
 				setData(dbIdName, dbId);
 			}
-			}
+		}
 
 
 		@Override
@@ -466,6 +467,15 @@ public final class MemStore implements IStore {
 		
 	}
 
+	@Override
+	public Map<String, Object> fetchConfiguration(String name) {
+		return configs.get(name);
+	}
+	
+	@Override
+	public void storeConfiguration(String name, Map<String, Object> data) {
+		configs.put(name, data);
+	}
 
 	
 }

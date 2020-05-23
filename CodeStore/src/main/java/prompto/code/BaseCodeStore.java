@@ -5,8 +5,10 @@ import java.util.Collections;
 import java.util.Map;
 
 import prompto.declaration.AttributeDeclaration;
+import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
+import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoVersion;
 import prompto.parser.ISection;
 
@@ -43,6 +45,11 @@ public abstract class BaseCodeStore implements ICodeStore {
 	public Iterable<IDeclaration> fetchLatestDeclarations(String name) throws PromptoError {
 		Iterable<IDeclaration> decls = ICodeStore.super.fetchLatestDeclarations(name);
 		return decls != null ? decls : (next==null ? null : next.fetchLatestDeclarations(name));
+	}
+	
+	@Override
+	public Collection<CategoryDeclaration> fetchDerivedCategoryDeclarations(Identifier id) {
+		return next==null ? Collections.emptyList() : next.fetchDerivedCategoryDeclarations(id);
 	}
 	
 	@Override
@@ -100,5 +107,11 @@ public abstract class BaseCodeStore implements ICodeStore {
 	}
 	
 	protected abstract Module fetchModule(String name, PromptoVersion version);
+	
+	@Override
+	public void upgradeIfRequired() {
+		if(next!=null)
+			next.upgradeIfRequired();
+	}
 
 }

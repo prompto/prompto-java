@@ -3,7 +3,9 @@ package prompto.store;
 import java.io.Closeable;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import prompto.error.PromptoError;
 import prompto.intrinsic.PromptoBinary;
@@ -32,7 +34,7 @@ public interface IStore extends Closeable {
 		store(null, storables);
 	}
 	default void store(IStorable storable) throws PromptoError {
-		store(null, Arrays.asList(storable));
+		store(null, Collections.singletonList(storable));
 	}
 	
 	default void delete(Collection<?> dbIds) throws PromptoError {
@@ -54,5 +56,8 @@ public interface IStore extends Closeable {
 	void flush() throws PromptoError;
 
 	long nextSequenceValue(String name);
+
+	Map<String, Object> fetchConfiguration(String name);
+	void storeConfiguration(String name, Map<String, Object> data);
 	
 }

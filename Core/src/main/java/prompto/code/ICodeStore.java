@@ -10,9 +10,11 @@ import java.util.Set;
 import java.util.stream.StreamSupport;
 
 import prompto.declaration.AttributeDeclaration;
+import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
+import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoVersion;
 import prompto.parser.AbstractParser;
 import prompto.parser.Dialect;
@@ -106,6 +108,10 @@ public interface ICodeStore {
 
 	IDeclaration fetchSpecificSymbol(String name, PromptoVersion version) throws PromptoError;
 
+
+	Collection<CategoryDeclaration> fetchDerivedCategoryDeclarations(Identifier id);
+
+	
 	default public Batch fetchBatch(String name, PromptoVersion version) throws PromptoError {
 		return fetchModule(ModuleType.BATCH, name, version);
 	}
@@ -169,6 +175,9 @@ public interface ICodeStore {
 					.orElse(null);
 		}
 	}
+
+	void upgradeIfRequired();
+
 
 
 }
