@@ -8,6 +8,7 @@ public class AttributeInfo extends FamilyInfo {
 	public static final AttributeInfo NAME = new AttributeInfo("name", Family.TEXT, false, null);
 	public static final AttributeInfo STORABLE = new AttributeInfo("storable", Family.BOOLEAN, false, null);
 	public static final AttributeInfo SYMBOLS = new AttributeInfo("symbols", Family.TEXT, true, null);
+	public static final AttributeInfo DERIVED_FROM = new AttributeInfo("derivedFrom", Family.TEXT, true, null);
 	public static final AttributeInfo MODULE = new AttributeInfo("module", Family.CATEGORY, false, null);
 	
 	public static final String KEY = "key";

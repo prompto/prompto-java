@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import prompto.declaration.AttributeDeclaration;
+import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IDeclaration.DeclarationType;
@@ -47,6 +48,7 @@ import prompto.store.Family;
 import prompto.store.IQueryBuilder;
 import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStorable;
+import prompto.store.IStorable.IDbIdFactory;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.store.IStoredIterable;
@@ -387,11 +389,31 @@ public class QueryableCodeStore extends BaseCodeStore {
 	}
 
 	private IQueryBuilder filterOnModules(IQueryBuilder builder, boolean filterOnModules) {
-		if(ICodeStore.getModuleDbIds().isEmpty() || !filterOnModules)
+		if(!filterOnModules || ICodeStore.getModuleDbIds().isEmpty())
 			return builder;
 		AttributeInfo info = new AttributeInfo("module", Family.CATEGORY, false, null);
 		builder.verify(info, MatchOp.IN, ICodeStore.getModuleDbIds());
 		return builder.and();
+	}
+	
+	
+	@Override
+	public Collection<CategoryDeclaration> fetchDerivedCategoryDeclarations(Identifier id) {
+		IQueryBuilder builder = store.newQueryBuilder()
+				.verify(AttributeInfo.CATEGORY, MatchOp.HAS, "CategoryDeclaration")
+				.verify(AttributeInfo.DERIVED_FROM, MatchOp.HAS, id.toString())
+				.and();
+		builder = filterOnModules(builder, true);
+		IdentifierList names = IdentifierList.parse("version");
+		OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
+		orderBy.interpretQuery(context, builder);
+		IStoredIterable stored = store.fetchMany(builder.build());
+		IStoredIterable distinct = fetchDistinct(stored);
+		return StreamSupport.stream(distinct.spliterator(), false)
+				.map(s->parseDeclaration(s))
+				.filter(d->d instanceof CategoryDeclaration)
+				.map(d->(CategoryDeclaration)d)
+				.collect(Collectors.toList());
 	}
 
 	private Iterable<IDeclaration> storeDeclarations(Iterable<IDeclaration> decls) throws PromptoError {
@@ -593,6 +615,47 @@ public class QueryableCodeStore extends BaseCodeStore {
 			return decls.isEmpty() ? null : (T)decls.get(0);
 		} catch (Exception e) {
 			throw new RuntimeException(e); // TODO
+		}
+	}
+	
+	@Override
+	public void upgradeIfRequired() {
+		upgradeDerivedFrom();
+		super.upgradeIfRequired();
+	}
+
+	private void upgradeDerivedFrom() {
+		Map<String, Object> config = store.fetchConfiguration("CodeStoreConfiguration");
+		if(config==null)
+			config = new HashMap<>();
+		if(config.containsKey("derivedFrom"))
+			return;
+		logger.info(()->"Upgrading code store for derivedFrom attribute...");
+		IQueryBuilder builder = store.newQueryBuilder()
+				.verify(AttributeInfo.CATEGORY, MatchOp.HAS, "CategoryDeclaration");
+		IStoredIterable stored = store.fetchMany(builder.build());
+		StreamSupport.stream(stored.spliterator(), false)
+				.forEach(this::upgradeDerivedFrom);
+		config.put("derivedFrom", true);
+		store.storeConfiguration("CodeStoreConfiguration", config);
+		logger.info(()->"Code store upgraded");
+	}
+
+	private void upgradeDerivedFrom(IStored stored) {
+		IDeclaration decl = parseDeclaration(stored);
+		if(decl instanceof CategoryDeclaration) {
+			IdentifierList derivedFrom = ((CategoryDeclaration)decl).getDerivedFrom();
+			if(derivedFrom!=null && !derivedFrom.isEmpty()) {
+				List<String> names = derivedFrom.stream().map(Object::toString).collect(Collectors.toList());
+				IStorable storable = store.newStorable(stored.getCategories(), new IDbIdFactory() {
+					@Override public void accept(Object t) { }
+					@Override public Object get() { return stored.getDbId(); }
+					@Override public boolean isUpdate() { return true; }
+				});
+				storable.setData("derivedFrom", names);
+				stored.getNames().forEach(name->storable.setData(name, stored.getData(name)));
+				store.store(storable);
+			}
 		}
 	}
 
