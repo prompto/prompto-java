@@ -399,17 +399,34 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	public MethodDeclarationMap getMemberMethods(Context context, Identifier name) {
 		registerMethods(context);
 		MethodDeclarationMap result = new MethodDeclarationMap(name);
-		registerMemberMethods(context,result);
+		collectMemberMethods(context, result);
 		return result; 
 	}
 	
-	private void registerMemberMethods(Context context, MethodDeclarationMap result) {
-		registerThisMemberMethods(context,result);
-		registerDerivedMemberMethods(context,result);
+	private void collectMemberMethods(Context context, MethodDeclarationMap result) {
+		collectInheritedMemberMethods(context, result);
+		collectThisMemberMethods(context, result);
 	}
 
 	
-	private void registerThisMemberMethods(Context context, MethodDeclarationMap result) {
+	private void collectInheritedMemberMethods(Context context, MethodDeclarationMap result) {
+		if(derivedFrom==null) 
+			return;
+		for(Identifier ancestor : derivedFrom)
+			collectInheritedMemberMethods(ancestor, context, result); 
+	}
+	
+
+	private void collectInheritedMemberMethods(Identifier ancestor, Context context, MethodDeclarationMap result) {
+		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, ancestor);
+		if(actual==null || !(actual instanceof ConcreteCategoryDeclaration))
+			return;
+		ConcreteCategoryDeclaration cd = (ConcreteCategoryDeclaration)actual;
+		cd.registerMethods(context);
+		cd.collectMemberMethods(context, result);
+	}
+
+	private void collectThisMemberMethods(Context context, MethodDeclarationMap result) {
 		if(methodsMap==null)
 			return;
 		IDeclaration actual = methodsMap.get(result.getId().toString()); 
@@ -419,21 +436,6 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			throw new SyntaxError("Not a member method!");
 		for(IMethodDeclaration method : ((MethodDeclarationMap)actual).values())
 			result.registerIfMissing(method, context);
-	}
-
-	private void registerDerivedMemberMethods(Context context, MethodDeclarationMap result) {
-		if(derivedFrom==null) 
-			return;
-		for(Identifier ancestor : derivedFrom)
-			registerAncestorMemberMethods(ancestor,context,result); 
-	}
-	
-	private void registerAncestorMemberMethods(Identifier ancestor, Context context, MethodDeclarationMap result) {
-		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, ancestor);
-		if(actual==null || !(actual instanceof ConcreteCategoryDeclaration))
-			return;
-		ConcreteCategoryDeclaration cd = (ConcreteCategoryDeclaration)actual;
-		cd.registerMemberMethods(context, result);
 	}
 
 	@Override
@@ -1050,6 +1052,11 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	private void doDeclare(Transpiler transpiler) {
 	    transpiler.declare(this);
 	    declareAttributes(transpiler);
+	    declareDerivedBy(transpiler);
+	    declareMembers(transpiler);
+	}
+
+	private void declareMembers(Transpiler transpiler) {
 	    Transpiler instance = transpiler.newInstanceTranspiler(getType(transpiler.getContext()));
 	    if (this.derivedFrom != null) {
 	        this.derivedFrom.forEach(cat -> {
@@ -1064,6 +1071,15 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    }
 	    this.declareMethods(instance);
 	    instance.flush();
+	}
+
+	private void declareDerivedBy(Transpiler transpiler) {
+		if(isAWidget(transpiler.getContext()))
+			return;
+		else
+			transpiler.getContext().fetchDerivedCategoryDeclarations(this.id)
+				.forEach(decl->decl.declare(transpiler));
+		
 	}
 
 	private void declareMethods(Transpiler transpiler) {
