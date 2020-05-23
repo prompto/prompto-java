@@ -102,7 +102,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			IType type = instance.getInstanceType();
 			ConcreteCategoryDeclaration cd = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, type.getTypeNameId());
 			if(cd!=null) {
-				MethodDeclarationMap members = cd.getMemberMethods(context, id);
+				MethodDeclarationMap members = cd.getMemberMethods(context, id, true);
 				if(members!=null)
 					methods.addAll(members.values());
 			}

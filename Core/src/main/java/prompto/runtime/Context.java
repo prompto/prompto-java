@@ -493,7 +493,7 @@ public class Context implements IContext {
 			current = new MethodDeclarationMap(declaration.getId());
 			declarations.put(declaration.getId(), (MethodDeclarationMap)current);
 		}
-		current.register(declaration,this);
+		current.register(declaration, this, false);
 	}
 	
 	public void registerDeclarationIfMissing(IMethodDeclaration declaration) {
@@ -639,15 +639,15 @@ public class Context implements IContext {
 			throw new RuntimeException("Should never get there!");
 		}
 		
-		public void register(IMethodDeclaration declaration, Context context) {
+		public void register(IMethodDeclaration declaration, Context context, boolean override) {
 			String proto = declaration.getProto();
-			if(this.containsKey(proto))
+			if(this.containsKey(proto) && !override)
 				context.getProblemListener().reportDuplicate(declaration, declaration.getId().toString(), this.get(proto));
 			else
 				this.put(proto, declaration);
 		}
 		
-		public void registerIfMissing(IMethodDeclaration declaration,Context context) {
+		public void registerIfMissing(IMethodDeclaration declaration, Context context) {
 			String proto = declaration.getProto();
 			if(!this.containsKey(proto))
 				this.put(proto, declaration);
@@ -1157,7 +1157,7 @@ public class Context implements IContext {
 			if(actual!=null) 
 				return actual;
 			CategoryDeclaration decl = getDeclaration();
-			MethodDeclarationMap methods = decl.getMemberMethods(this, id);
+			MethodDeclarationMap methods = decl.getMemberMethods(this, id, true);
 			if(methods!=null && !methods.isEmpty())
 				return methods;
 			else if(decl.hasAttribute(this, id))
@@ -1172,7 +1172,7 @@ public class Context implements IContext {
 			if(klass==MethodDeclarationMap.class) {
 				CategoryDeclaration decl = getDeclaration();
 				if(decl!=null) {
-					MethodDeclarationMap methods = decl.getMemberMethods(this, id);
+					MethodDeclarationMap methods = decl.getMemberMethods(this, id, true);
 					if(methods!=null && !methods.isEmpty())
 						return (T)methods;
 				}
@@ -1237,7 +1237,7 @@ public class Context implements IContext {
 				IValue value = instance.getMember(calling, name, false);
 				return value!=null ? value : supplier.get();
 			} else if (decl.hasMethod(this, name)) {
-				IMethodDeclaration method = decl.getMemberMethods(this, name).getFirst();
+				IMethodDeclaration method = decl.getMemberMethods(this, name, false).getFirst();
 				MethodType type = new MethodType(method);
 				return new ClosureValue(this, type);
 		

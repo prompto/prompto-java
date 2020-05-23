@@ -295,7 +295,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 				actual = new MethodDeclarationMap(method.getId());
 				methodsMap.put(methodKey, actual);
 			}
-			((MethodDeclarationMap)actual).register(method, context);
+			((MethodDeclarationMap)actual).register(method, context, false);
 		}
 	}
 
@@ -396,37 +396,37 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 	
 	@Override
-	public MethodDeclarationMap getMemberMethods(Context context, Identifier name) {
+	public MethodDeclarationMap getMemberMethods(Context context, Identifier name, boolean allowAbstract) {
 		registerMethods(context);
 		MethodDeclarationMap result = new MethodDeclarationMap(name);
-		collectMemberMethods(context, result);
+		collectMemberMethods(context, result, allowAbstract);
 		return result; 
 	}
 	
-	private void collectMemberMethods(Context context, MethodDeclarationMap result) {
-		collectInheritedMemberMethods(context, result);
-		collectThisMemberMethods(context, result);
+	private void collectMemberMethods(Context context, MethodDeclarationMap result, boolean allowAbstract) {
+		collectInheritedMemberMethods(context, result, allowAbstract);
+		collectThisMemberMethods(context, result, allowAbstract);
 	}
 
 	
-	private void collectInheritedMemberMethods(Context context, MethodDeclarationMap result) {
+	private void collectInheritedMemberMethods(Context context, MethodDeclarationMap result, boolean allowAbstract) {
 		if(derivedFrom==null) 
 			return;
 		for(Identifier ancestor : derivedFrom)
-			collectInheritedMemberMethods(ancestor, context, result); 
+			collectInheritedMemberMethods(ancestor, context, result, allowAbstract); 
 	}
 	
 
-	private void collectInheritedMemberMethods(Identifier ancestor, Context context, MethodDeclarationMap result) {
+	private void collectInheritedMemberMethods(Identifier ancestor, Context context, MethodDeclarationMap result, boolean allowAbstract) {
 		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, ancestor);
 		if(actual==null || !(actual instanceof ConcreteCategoryDeclaration))
 			return;
 		ConcreteCategoryDeclaration cd = (ConcreteCategoryDeclaration)actual;
 		cd.registerMethods(context);
-		cd.collectMemberMethods(context, result);
+		cd.collectMemberMethods(context, result, allowAbstract);
 	}
 
-	private void collectThisMemberMethods(Context context, MethodDeclarationMap result) {
+	private void collectThisMemberMethods(Context context, MethodDeclarationMap result, boolean allowAbstract) {
 		if(methodsMap==null)
 			return;
 		IDeclaration actual = methodsMap.get(result.getId().toString()); 
@@ -434,14 +434,16 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			return;
 		if(!(actual instanceof MethodDeclarationMap))
 			throw new SyntaxError("Not a member method!");
-		for(IMethodDeclaration method : ((MethodDeclarationMap)actual).values())
-			result.registerIfMissing(method, context);
+		for(IMethodDeclaration method : ((MethodDeclarationMap)actual).values()) {
+			if(allowAbstract || !(method instanceof AbstractMethodDeclaration))
+				result.register(method, context, true);
+		}
 	}
 
 	@Override
 	public IMethodDeclaration findOperator(Context context, Operator operator, IType type) {
 		Identifier methodName = new Identifier(OperatorMethodDeclaration.getNameAsKey(operator));
-		MethodDeclarationMap methods = getMemberMethods(context, methodName);
+		MethodDeclarationMap methods = getMemberMethods(context, methodName, false);
 		if(methods==null)
 			return null;
 		// find best candidate

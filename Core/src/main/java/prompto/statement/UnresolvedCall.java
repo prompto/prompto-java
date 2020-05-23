@@ -208,7 +208,7 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 
 	private IDeclaration resolveUnresolvedMember(InstanceContext context, Identifier name) {
 		ConcreteCategoryDeclaration decl = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, context.getInstanceType().getTypeNameId());
-		MethodDeclarationMap methods = decl.getMemberMethods(context, name);
+		MethodDeclarationMap methods = decl.getMemberMethods(context, name, true);
 		if(methods!=null && methods.size()>0)
 			return methods;
 		else

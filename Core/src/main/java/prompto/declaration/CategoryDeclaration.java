@@ -420,7 +420,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		return new ResultInfo(resultType.getJavaType(context)); 
 	}
 
-	public MethodDeclarationMap getMemberMethods(Context context, Identifier name) {
+	public MethodDeclarationMap getMemberMethods(Context context, Identifier name, boolean allowAbstract) {
 		throw new UnsupportedOperationException(); // TODO -> abstract
 	}
 

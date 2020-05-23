@@ -337,7 +337,7 @@ public class CategoryType extends BaseType {
             else
                 throw new SyntaxError("Missing atttribute:" + id);
         } else if(decl.hasMethod(context, id)) {
-        	IMethodDeclaration method = decl.getMemberMethods(context, id).getFirst();
+        	IMethodDeclaration method = decl.getMemberMethods(context, id, true).getFirst();
         	return new MethodType(method);
         } else if("text".equals(id.toString()))
         	return TextType.instance();
@@ -390,7 +390,7 @@ public class CategoryType extends BaseType {
 		IDeclaration decl = getDeclaration(context);
 		if(!(decl instanceof ConcreteCategoryDeclaration))
 			context.getProblemListener().reportUnknownCategory(id, id.toString());
-		Collection<IMethodDeclaration> methods = ((ConcreteCategoryDeclaration)decl).getMemberMethods(context, id).values();
+		Collection<IMethodDeclaration> methods = ((ConcreteCategoryDeclaration)decl).getMemberMethods(context, id, true).values();
 		if(methods instanceof Set)
 			return (Set<IMethodDeclaration>)methods;
 		else
