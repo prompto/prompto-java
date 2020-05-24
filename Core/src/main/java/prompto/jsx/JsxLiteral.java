@@ -18,6 +18,11 @@ public class JsxLiteral implements IJsxValue {
 	}
 	
 	@Override
+	public String toString() {
+		return text;
+	}
+	
+	@Override
 	public boolean isLiteral() {
 		return true;
 	}

@@ -23,6 +23,11 @@ public class TypeValidator implements IPropertyValidator {
 	public IType getType(Context context) {
 		return type;
 	}
+	
+	@Override
+	public String toString() {
+		return type.toString();
+	}
 
 	@Override
 	public void validate(Context context, JsxProperty property) {

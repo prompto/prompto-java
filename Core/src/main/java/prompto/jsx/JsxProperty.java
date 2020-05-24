@@ -38,6 +38,12 @@ public class JsxProperty extends Section {
 		return value;
 	}
 
+	@Override
+	public String toString() {
+		return id.toString() + (value==null ? "" : "=" + value.toString());
+	}
+	
+	
 	public IType check(Context context) {
 		if(value!=null)
 			return value.check(context);
