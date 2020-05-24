@@ -196,9 +196,9 @@ public abstract class BaseType extends Section implements IType {
 	public abstract boolean isMoreSpecificThan(Context context, IType other);
 
 	@Override
-	public final void checkAssignableFrom(Context context, IType other) {
+	public final void checkAssignableFrom(Context context, IType other, ISection section) {
 		if (!isAssignableFrom(context, other))
-			throw new SyntaxError("Type: " + other.getTypeName() + " is not compatible with: " + this.getTypeName());
+			context.getProblemListener().reportIllegalAssignment(section, this, other);
 	}
 
 	@Override

@@ -88,7 +88,7 @@ public interface IType extends ISection {
 	void checkUnique(Context context);
 	void checkExists(Context context);
 
-	void checkAssignableFrom(Context context, IType other);
+	void checkAssignableFrom(Context context, IType other, ISection section);
 	boolean isAssignableFrom(Context context, IType other);
 	boolean isMoreSpecificThan(Context context, IType other);
 	

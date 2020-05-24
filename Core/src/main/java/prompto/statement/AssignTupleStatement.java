@@ -89,7 +89,7 @@ public class AssignTupleStatement extends SimpleStatement {
 			else {
 				// need to check type compatibility
 				IType actualType = actual.getType(context);
-				actualType.checkAssignableFrom(context, AnyType.instance());
+				actualType.checkAssignableFrom(context, AnyType.instance(), this);
 			}
 		}
 		return VoidType.instance();

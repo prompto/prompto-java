@@ -64,7 +64,7 @@ public class MemberInstance implements IAssignableSelector {
 	@Override
 	public IType checkAssignValue(Context context, IType valueType, ISection section) {
 		IType type = parent.checkAssignMember(context, id, valueType, section);
-		type.checkAssignableFrom(context, valueType);
+		type.checkAssignableFrom(context, valueType, section);
 		return type;
 	}
 	

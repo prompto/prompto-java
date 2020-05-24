@@ -12,6 +12,7 @@ import prompto.expression.IExpression;
 import prompto.expression.InstanceExpression;
 import prompto.expression.MemberSelector;
 import prompto.param.IParameter;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.statement.UnresolvedCall;
@@ -25,7 +26,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.ContextualExpression;
 import prompto.value.IInstance;
 
-public class Argument {
+public class Argument extends Section {
 	
 	IParameter parameter;
 	IExpression expression;
@@ -132,7 +133,7 @@ public class Argument {
 			// need to check type compatibility
 			IType actualType = actual.getType(context);
 			IType newType = expression.check(context);
-			actualType.checkAssignableFrom(context, newType);
+			actualType.checkAssignableFrom(context, newType, this);
 		}
 		return VoidType.instance();
 	}
