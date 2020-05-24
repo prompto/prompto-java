@@ -39,7 +39,6 @@ import prompto.declaration.NativeMethodDeclaration;
 import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
@@ -442,27 +441,9 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 
 	private Context newLocalInstanceContext(Context context, IMethodDeclaration declaration) {
-		InstanceContext instance = locateInstanceContext(context, declaration);
-		if(instance==null)
-			throw new SyntaxError("Not in instance context !");
-		context = context.newLocalContext();
-		context.setParentContext(instance); // make local context child of the existing instance
-		return context;
-	}
-
-	private InstanceContext locateInstanceContext(Context context, IMethodDeclaration declaration) {
 		CategoryType declaring = declaration.getMemberOf().getType(context);
-		Context parent = context;
-		while(parent!=null) {
-			InstanceContext instance = parent.getClosestInstanceContext();
-			if(instance==null)
-				return null;
-			if(declaring.isAssignableFrom(context, instance.getInstanceType()))
-				return instance;
-			else
-				parent = instance.getParentContext();
-		}
-		return null;
+		context = context.newInstanceContext(declaring, false);
+		return context.newChildContext();
 	}
 
 	public IExpression toInstanceExpression() {
