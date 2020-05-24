@@ -175,14 +175,8 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 	private IExpression resolveUnresolvedIdentifier(Context context, UnresolvedIdentifier caller) {
 		Identifier id = caller.getId();
 		IExpression call = null;
-		IDeclaration decl = null;
-		// if this happens in the context of a member method, then we need to check for category members first
-		InstanceContext instance = context.getClosestInstanceContext();
-		if(instance!=null) {
-			decl = resolveUnresolvedMember(instance, id);
-			if(decl!=null)
-				call = new MethodCall(new MethodSelector(id), arguments);
-		}
+		// if this happens in the context of an instance, then we need to check for category members first
+		call = resolveUnresolvedMemberMethod(context, id);
 		if(call==null) {
 			INamed named = context.getRegisteredValue(INamed.class, id);
 			if(named!=null) {
@@ -194,7 +188,7 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 			}
 		}
 		if(call==null) {
-			decl = context.getRegisteredDeclaration(IDeclaration.class, id);
+			IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, id);
 			if(decl==null) {
 				context.getProblemListener().reportUnknownMethod(id, id.toString());
 				return null;
@@ -204,6 +198,20 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 				call = new MethodCall(new MethodSelector(id), arguments);
 		}
 		return call;
+	}
+
+	private IExpression resolveUnresolvedMemberMethod(Context context, Identifier id) {
+		while(context!=null) {
+			InstanceContext instance = context.getClosestInstanceContext();
+			if(instance==null)
+				return null;
+			IDeclaration decl = resolveUnresolvedMember(instance, id);
+			if(decl!=null)
+				return new MethodCall(new MethodSelector(id), arguments);
+			else
+				context = instance.getParentContext();
+		}
+		return null;
 	}
 
 	private IDeclaration resolveUnresolvedMember(InstanceContext context, Identifier name) {
