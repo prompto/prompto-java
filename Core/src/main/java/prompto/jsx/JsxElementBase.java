@@ -20,6 +20,7 @@ import prompto.property.PropertyMap;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.AnyType;
+import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.type.JsxType;
 
@@ -41,7 +42,10 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 	@Override
 	public IType check(Context context) {
 		if(Character.isUpperCase(id.toString().charAt(0))) {
-			PropertyMap propertyMap = getPropertyMap(context);
+			CategoryType type = new CategoryType(id);
+			Context instance = context.newInstanceContext(type, true);
+			PropertyMap propertyMap = getPropertyMap(instance);
+			// check props in calling context, not widget context
 			checkWidgetProperties(context, propertyMap);
 		} else
 			checkHtmlProperties(context);
