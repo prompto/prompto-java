@@ -387,7 +387,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		if(parent!=null)
 			return newInstanceContext(context);
 		else if(declaration.getMemberOf()!=null)
-			return newLocalInstanceContext(context);
+			return newLocalInstanceContext(context, declaration);
 		else
 			return context.newLocalContext();
 	}
@@ -396,7 +396,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		if(parent!=null)
 			return newInstanceCheckContext(context);
 		else if(declaration.getMemberOf()!=null)
-			return newLocalInstanceContext(context);
+			return newLocalInstanceContext(context, declaration);
 		else
 			return context.newLocalContext();
 	}
@@ -441,13 +441,28 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		}
 	}
 
-	private Context newLocalInstanceContext(Context context) {
-		Context instance = context.getClosestInstanceContext();
+	private Context newLocalInstanceContext(Context context, IMethodDeclaration declaration) {
+		InstanceContext instance = locateInstanceContext(context, declaration);
 		if(instance==null)
 			throw new SyntaxError("Not in instance context !");
 		context = context.newLocalContext();
 		context.setParentContext(instance); // make local context child of the existing instance
 		return context;
+	}
+
+	private InstanceContext locateInstanceContext(Context context, IMethodDeclaration declaration) {
+		CategoryType declaring = declaration.getMemberOf().getType(context);
+		Context parent = context;
+		while(parent!=null) {
+			InstanceContext instance = parent.getClosestInstanceContext();
+			if(instance==null)
+				return null;
+			if(declaring.isAssignableFrom(context, instance.getInstanceType()))
+				return instance;
+			else
+				parent = instance.getParentContext();
+		}
+		return null;
 	}
 
 	public IExpression toInstanceExpression() {
