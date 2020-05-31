@@ -618,9 +618,13 @@ public class TextType extends NativeType {
 	    // can add anything to text
 	    left.transpile(transpiler);
 	    transpiler.append(" + ");
-	    right.transpile(transpiler);
-	    if(other == DecimalType.instance())
-	        transpiler.append(".toDecimalString()");
+	    // fix js precedence issue with negative literals
+	    if(other == DecimalType.instance()) {
+	    	transpiler.append("(");
+	    	right.transpile(transpiler);
+	    	transpiler.append(").toDecimalString()");
+	    } else
+	    	right.transpile(transpiler);
 	}
 	
 	@Override
