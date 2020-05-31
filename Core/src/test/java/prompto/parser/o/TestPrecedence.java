@@ -32,7 +32,7 @@ public class TestPrecedence extends BaseOParserTest {
 
 	@Test
 	public void test3Minuses() throws Exception {
-		IExpression exp = parseExpression("1 - 2 - 3 - 4");
+		IExpression exp = parseExpression("1-2-3-4");
 		Context context = Context.newGlobalsContext();
 		IValue value = exp.interpret(context);
 		assertEquals(-8L,((IntegerValue)value).longValue());
@@ -40,7 +40,7 @@ public class TestPrecedence extends BaseOParserTest {
 	
 	@Test
 	public void test2Plus3Minuses() throws Exception {
-		IExpression exp = parseExpression("1 + 2 - 3 + 4 - 5 - 6");
+		IExpression exp = parseExpression("1+2-3+4-5-6");
 		Context context = Context.newGlobalsContext();
 		IValue value = exp.interpret(context);
 		assertEquals(-7L,((IntegerValue)value).longValue());
@@ -48,7 +48,7 @@ public class TestPrecedence extends BaseOParserTest {
 	
 	@Test
 	public void test1Star1Plus() throws Exception {
-		IExpression exp = parseExpression("1 * 2 + 3");
+		IExpression exp = parseExpression("1*2+3");
 		Context context = Context.newGlobalsContext();
 		IValue value = exp.interpret(context);
 		assertEquals(5L,((IntegerValue)value).longValue());
