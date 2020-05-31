@@ -15,6 +15,9 @@
         <Logger name="org.eclipse.jetty" level="warn">
             <AppenderRef ref="Console"/>
         </Logger>
+        <Logger name="org.eclipse.jetty.jaas.JAASLoginService" level="error">
+            <AppenderRef ref="Console"/>
+        </Logger>
         <Logger name="org.mongodb" level="warn">
             <AppenderRef ref="Console"/>
         </Logger>
