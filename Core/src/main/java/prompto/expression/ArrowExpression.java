@@ -135,7 +135,7 @@ public class ArrowExpression extends Section implements IExpression {
 	}
 
 	public void setExpression(IExpression expression) {
-		IStatement stmt = new ReturnStatement(expression);
+		IStatement stmt = new ReturnStatement(expression, true);
 		this.statements = new StatementList(stmt);
 	}
 	

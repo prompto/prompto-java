@@ -28,9 +28,16 @@ import prompto.value.NullValue;
 public class ReturnStatement extends SimpleStatement {
 	
 	IExpression expression;
+	boolean fromArrowExpression;
 	
 	public ReturnStatement(IExpression expression) {
+		this(expression, false);
+	}
+
+	public ReturnStatement(IExpression expression, boolean fromArrowExpression) {
 		this.expression = expression;
+		this.fromArrowExpression = fromArrowExpression;
+		
 	}
 
 	public IExpression getExpression() {
@@ -73,7 +80,7 @@ public class ReturnStatement extends SimpleStatement {
 		if(expression==null)
 			return VoidType.instance();
 		IType type = expression.check(context);
-		if(type==VoidType.instance())
+		if(type==VoidType.instance() && !fromArrowExpression)
 			context.getProblemListener().reportReturningVoidType(this);
 		return type;
 	}
