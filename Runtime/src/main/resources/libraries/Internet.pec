@@ -1,3 +1,70 @@
+define Email as native category with bindings:
+	
+	define category bindings as:
+		Java: prompto.internet.Email
+		C#: prompto.internet.Email
+		Python2: Email from module: prompto.internet.Email
+		Python3: Email from module: prompto.internet.Email
+		JavaScript: Email from module: prompto/internet/Email.js
+
+and methods:
+
+	define setFrom as method receiving email doing:
+		Java: this.setFrom(email);
+		C#: this.setFrom(email);
+		Python2: this.setFrom(email)
+		Python3: this.setFrom(email);
+		JavaScript: this.setFrom(email);
+
+
+	define addTo as method receiving email doing:
+		Java: this.addTo(email);
+		C#: this.addTo(email);
+		Python2: this.addTo(email)
+		Python3: this.addTo(email);
+		JavaScript: this.addTo(email);
+
+
+	define addCC as method receiving email doing:
+		Java: this.addCC(email);
+		C#: this.addCC(email);
+		Python2: this.addCC(email)
+		Python3: this.addCC(email);
+		JavaScript: this.addCC(email);
+
+
+	define addBCC as method receiving email doing:
+		Java: this.addBCC(email);
+		C#: this.addBCC(email);
+		Python2: this.addBCC(email)
+		Python3: this.addBCC(email);
+		JavaScript: this.addBCC(email);
+
+
+	define setSubject as method receiving Text subject doing:
+		Java: this.setSubject(subject);
+		C#: this.setSubject(subject);
+		Python2: this.setSubject(subject)
+		Python3: this.setSubject(subject);
+		JavaScript: this.setSubject(subject);
+
+
+	define addBody as method receiving Text body and Text mimeType doing:
+		Java: this.addBody(body, mimeType);
+		C#: this.addBody(body, mimeType);
+		Python2: this.addBody(body, mimeType)
+		Python3: this.addBody(body, mimeType);
+		JavaScript: this.addBody(body, mimeType);
+
+
+	define send as method receiving Text hostName = Nothing, Integer port = -1, Boolean useTLS = false, login = Nothing, password = Nothing and Boolean useSSL = false doing:
+		Java: this.send(hostName, port, useTLS, login, password, useSSL);
+		C#: this.send(hostName, port, useTLS, login, password, useSSL);
+		Python2: this.send(hostName, useTLS, port, login, password, useSSL)
+		Python3: this.send(hostName, useTLS, port, login, password, useSSL);
+		JavaScript: this.send(hostName, useTLS, port, login, password, useSSL);
+
+
 define htmlEncode as native method receiving Text value returning Text doing:
 	Java: return prompto.internet.Html.encode(value);
 	C#: return System.Net.WebUtility.HtmlEncode(value);

@@ -1,0 +1,11 @@
+method sendEmail() {
+	email = Email();
+	email.setFrom("abc@def.com");
+	email.addTo("to1@def.com");
+	email.addTo("to2@def.com");
+	email.addCC("cc@def.com");
+	email.addBCC("bcc@def.com");
+	email.setSubject("Hello général");
+	email.addBody(body="<html><body>Hello général</body></html>", mimeType="text/html");
+	email.send();
+}

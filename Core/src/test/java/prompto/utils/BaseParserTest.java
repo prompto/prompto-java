@@ -1,8 +1,6 @@
 package prompto.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -35,7 +33,7 @@ import prompto.store.DataStore;
 import prompto.store.memory.MemStore;
 import prompto.transpiler.Nashorn8Engine;
 
-public abstract class BaseParserTest extends BaseTest {
+public class BaseParserTest extends BaseTest {
 
 	protected Context coreContext;
 	protected Context context;
@@ -81,9 +79,17 @@ public abstract class BaseParserTest extends BaseTest {
 		decls.check(context);
 	}
 
-	public abstract DeclarationList parseString(String code) throws Exception;
-	public abstract DeclarationList parseFile(File file) throws Exception;
-	public abstract DeclarationList parseResource(String resourceName) throws Exception;
+	public DeclarationList parseString(String code) throws Exception {
+		throw new UnsupportedOperationException("Should never get there!");
+	}
+	
+	public DeclarationList parseFile(File file) throws Exception {
+		throw new UnsupportedOperationException("Should never get there!");
+	}
+	
+	public DeclarationList parseResource(String resourceName) throws Exception{
+		throw new UnsupportedOperationException("Should never get there!");
+	}
 
 	static interface ResourceRunner {
 		boolean runResource(String resourceName, boolean catchExceptions) throws PromptoError;
