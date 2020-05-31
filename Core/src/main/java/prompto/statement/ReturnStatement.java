@@ -70,7 +70,12 @@ public class ReturnStatement extends SimpleStatement {
 	
 	@Override
 	public IType check(Context context) {
-		return expression==null ? VoidType.instance() : expression.check(context);
+		if(expression==null)
+			return VoidType.instance();
+		IType type = expression.check(context);
+		if(type==VoidType.instance())
+			context.getProblemListener().reportReturningVoidType(this);
+		return type;
 	}
 	
 	@Override

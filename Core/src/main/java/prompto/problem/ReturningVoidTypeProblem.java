@@ -2,9 +2,9 @@ package prompto.problem;
 
 import prompto.parser.ISection;
 
-public class IllegalReturnProblem extends SyntaxProblemBase {
+public class ReturningVoidTypeProblem extends SyntaxProblemBase {
 
-	public IllegalReturnProblem(ISection section) {
+	public ReturningVoidTypeProblem(ISection section) {
 		super(section);
 		this.section = section;
 	}
@@ -16,7 +16,7 @@ public class IllegalReturnProblem extends SyntaxProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return "Illegal return statement in method body!";
+		return "Cannot return void expression!";
 	}
 
 }

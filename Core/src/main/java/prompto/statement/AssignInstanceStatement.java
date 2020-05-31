@@ -43,6 +43,8 @@ public class AssignInstanceStatement extends SimpleStatement {
 	@Override
 	public IType check(Context context) {
 		IType valueType = expression.check(context);
+		if(valueType==VoidType.instance())
+			context.getProblemListener().reportAssigningVoidType(this);
 		instance.checkAssignValue(context, valueType, this);
 		// Code expressions need to be interpreted as part of full check
 		if(valueType==CodeType.instance())

@@ -35,6 +35,8 @@ public interface IProblemListener {
 	void reportNoSuperType(ISection section, IType actual);
 	void reportNotMutable(ISection section, String name);
 	void reportNotStorable(ISection section, String name);
+	void reportAssigningVoidType(ISection section);
+	void reportReturningVoidType(ISection section);
 
 	void pushDeclaration(IDeclaration declaration);
 	IDeclaration popDeclaration();

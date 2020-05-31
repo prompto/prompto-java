@@ -200,4 +200,14 @@ public abstract class ProblemListenerBase implements ANTLRErrorListener, IProble
 	public void reportNoSuperType(ISection section, IType actual) {
 		addProblem(new NoSuperCategoryProblem(actual, section));
 	}
+	
+	@Override
+	public void reportAssigningVoidType(ISection section) {
+		addProblem(new AssigningVoidTypeProblem(section));
+	}
+	
+	@Override
+	public void reportReturningVoidType(ISection section) {
+		addProblem(new ReturningVoidTypeProblem(section));
+	}
 }
