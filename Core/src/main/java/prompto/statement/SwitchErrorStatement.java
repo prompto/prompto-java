@@ -181,6 +181,8 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 			result = interpretSwitch(context, switchValue, e);
 		} catch(Throwable t) {
 			logger.error(()->"While interpreting try/catch body", t);
+			if(defaultCase!=null)
+				return defaultCase.interpret(context);
 		} finally {
 			if(finallyStatements!=null)
 				finallyStatements.interpret(context);
