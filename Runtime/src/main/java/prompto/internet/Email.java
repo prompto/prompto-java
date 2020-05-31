@@ -18,9 +18,13 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import prompto.error.ReadWriteError;
+import prompto.utils.Logger;
+
 public class Email {
 	
 	public static Session DEFAULT_SESSION = null;
+	public static Logger logger = new Logger();
 	
 	String subject = "";
 	InternetAddress from = null;
@@ -58,7 +62,16 @@ public class Email {
 		content.addBodyPart(part);
 	}
 	
-	public void send(String hostName, long port, boolean useTLS, String login, String password, boolean useSSL) throws MessagingException {
+	public void send(String hostName, long port, boolean useTLS, String login, String password, boolean useSSL) throws ReadWriteError {
+		try {
+			doSend(hostName, port, useTLS, login, password, useSSL);
+		} catch(Throwable t) {
+			logger.error(()->"Failed to send email", t);
+			throw new ReadWriteError("Failed to send email");
+		}
+	}
+	
+	public void doSend(String hostName, long port, boolean useTLS, String login, String password, boolean useSSL) throws MessagingException {
 		if(DEFAULT_SESSION!=null)
 			send(DEFAULT_SESSION);
 		else {
