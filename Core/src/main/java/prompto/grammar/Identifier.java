@@ -22,9 +22,6 @@ public class Identifier extends Section {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof Identifier)
-			return value.equals(((Identifier)obj).value);
-		else
-			return false;
+		return obj instanceof Identifier && value.equals(((Identifier)obj).value);
 	}
 }
