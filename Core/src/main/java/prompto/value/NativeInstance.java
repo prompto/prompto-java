@@ -282,7 +282,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 				+ attrName.toString().substring(1);
 		Method m = getMethod(attrName, setterName);
 		if(m==null)
-			throw new SyntaxError("Missing getter for:" + attrName);
+			throw new SyntaxError("Missing getter for: " + attrName + " of native category: " + this.declaration.getName());
 		else
 			return m;
 	}
