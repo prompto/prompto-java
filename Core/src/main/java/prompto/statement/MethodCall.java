@@ -346,9 +346,16 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	private IMethodDeclaration findRegistered(Context context) {
 		if(selector.getParent()==null) try {
 			Object o = context.getValue(selector.getId());
-			if (o instanceof ClosureValue)
-				return new ClosureDeclaration((ClosureValue)o);
-			else if (o instanceof ArrowValue)
+			if (o instanceof ClosureValue) {
+				ClosureValue cv = (ClosureValue)o;
+				// the closure could reference a member method (useful when a method reference is needed)
+				// in which case simply return that method to avoid spilling context into method body
+				IMethodDeclaration decl = cv.getMethod();
+				if(decl.getMemberOf()!=null)
+					return decl;
+				else
+					return new ClosureDeclaration(cv);
+			} else if (o instanceof ArrowValue)
 				return new ArrowDeclaration((ArrowValue)o);
 		} catch (PromptoError e) {
 		}
