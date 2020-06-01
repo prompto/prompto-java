@@ -39,6 +39,20 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 		this.parameters = parameters!=null ? parameters : new ParameterList();
 		this.returnType = returnType;
 	}
+	
+	@Override
+	public int hashCode() {
+		return (getName() + "/" + getProto()).hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof IMethodDeclaration && equals((IMethodDeclaration)obj);
+	}
+	
+	public boolean equals(IMethodDeclaration method) {
+		return (getName() + "/" + getProto()).equals(method.getId() + "" + method.getProto());
+	}
 
 	@Override
 	public DeclarationType getDeclarationType() {

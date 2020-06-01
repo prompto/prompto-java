@@ -24,7 +24,17 @@ public abstract class BaseDeclaration extends Section implements IDeclaration {
 	protected BaseDeclaration(Identifier id) {
 		this.id = id;
 	}
-		
+	
+	@Override
+	public int hashCode() {
+		return getId().hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof IDeclaration && getId().equals(((IDeclaration)obj).getId());
+	}
+	
 	@Override
 	public Identifier getId() {
 		return id;
@@ -48,11 +58,6 @@ public abstract class BaseDeclaration extends Section implements IDeclaration {
 	@Override
 	public String getName() {
 		return id.toString();
-	}
-	
-	@Override
-	public int hashCode() {
-		return getId().hashCode();
 	}
 	
 	@Override
