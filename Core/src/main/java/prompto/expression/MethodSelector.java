@@ -441,9 +441,18 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 
 	private Context newLocalInstanceContext(Context context, IMethodDeclaration declaration) {
-		CategoryType declaring = declaration.getMemberOf().getType(context);
-		context = context.newInstanceContext(declaring, false);
-		return context.newChildContext();
+		InstanceContext instance = context.getClosestInstanceContext();
+		if(instance!=null) {
+			CategoryType required = declaration.getMemberOf().getType(context);
+			IType actual = instance.getInstanceType();
+			if(!required.isAssignableFrom(context, actual))
+				instance = null;
+		}
+		if(instance==null) {
+			CategoryType declaring = declaration.getMemberOf().getType(context);
+			instance = context.newInstanceContext(declaring, false);
+		}
+		return instance.newChildContext();
 	}
 
 	public IExpression toInstanceExpression() {

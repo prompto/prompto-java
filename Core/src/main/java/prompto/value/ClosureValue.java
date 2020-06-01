@@ -27,6 +27,10 @@ public class ClosureValue extends BaseValue {
 			return super.convertTo(context, type);
 	}
 	
+	public Context getContext() {
+		return context;
+	}
+	
 	public IMethodDeclaration getMethod() {
 		return ((MethodType)type).getMethod();
 	}

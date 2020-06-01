@@ -346,20 +346,28 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	private IMethodDeclaration findRegistered(Context context) {
 		if(selector.getParent()==null) try {
 			Object o = context.getValue(selector.getId());
-			if (o instanceof ClosureValue) {
-				ClosureValue cv = (ClosureValue)o;
-				// the closure could reference a member method (useful when a method reference is needed)
-				// in which case simply return that method to avoid spilling context into method body
-				IMethodDeclaration decl = cv.getMethod();
-				if(decl.getMemberOf()!=null)
-					return decl;
-				else
-					return new ClosureDeclaration(cv);
-			} else if (o instanceof ArrowValue)
+			if (o instanceof ClosureValue)
+				return getClosureDeclaration(context, (ClosureValue)o);
+			else if (o instanceof ArrowValue)
 				return new ArrowDeclaration((ArrowValue)o);
 		} catch (PromptoError e) {
 		}
 		return null;
+	}
+
+	private IMethodDeclaration getClosureDeclaration(Context context, ClosureValue closure) {
+		IMethodDeclaration decl = closure.getMethod();
+		if(decl.getMemberOf()!=null) {
+			// the closure references a member method (useful when a method reference is needed)
+			// in which case we may simply want to return that method to avoid spilling context into method body
+			// this is only true if the closure comes straight from the method's instance context
+			// if the closure comes from an accessible context that is not the instance context
+			// then it is a local variable that needs the closure context to be interpreted
+			Context declaring = context.contextForValue(selector.getId());
+			if( declaring == closure.getContext())
+				return decl;
+		}
+		return new ClosureDeclaration(closure);
 	}
 
 	@Override
