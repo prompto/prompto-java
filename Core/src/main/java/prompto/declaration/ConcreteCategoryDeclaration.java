@@ -66,9 +66,9 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		super(id);
 	}
 	
-	public ConcreteCategoryDeclaration(Identifier name, IdentifierList attributes, 
+	public ConcreteCategoryDeclaration(Identifier id, IdentifierList attributes, 
 			IdentifierList derivedFrom, MethodDeclarationList methods) {
-		super(name, attributes);
+		super(id, attributes);
 		this.derivedFrom = derivedFrom;
 		this.methods = methods!=null ? methods : new MethodDeclarationList();
 		this.methods.forEach(method->method.setMemberOf(this));
