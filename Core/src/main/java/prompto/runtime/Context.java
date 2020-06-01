@@ -237,7 +237,7 @@ public class Context implements IContext {
 		return context;
 	}
 	
-	public Context newInstanceContext(CategoryType type, boolean isChild) {
+	public InstanceContext newInstanceContext(CategoryType type, boolean isChild) {
 		InstanceContext context = initInstanceContext(new InstanceContext(type), isChild);
 		CategoryDeclaration decl = context.getDeclaration();
 		if(decl!=null)
@@ -820,12 +820,12 @@ public class Context implements IContext {
 			values.put(name, value);
 	}
 
-	private IValue autocast(Identifier name, IValue value) {
+	private IValue autocast(Identifier id, IValue value) {
 		if(value!=null) {
 			if(value instanceof ValueExpression)
 				value = ((ValueExpression)value).getValue();
 			if(value instanceof prompto.value.IntegerValue) {
-				INamed actual = instances.get(name);
+				INamed actual = instances.get(id);
 				if(actual.getType(this)==DecimalType.instance())
 					value = new DecimalValue(((prompto.value.IntegerValue)value).doubleValue());
 			}
@@ -833,15 +833,15 @@ public class Context implements IContext {
 		return value;
 	}
 
-	public Context contextForValue(Identifier name) {
+	public Context contextForValue(Identifier id) {
 		// resolve upwards, since local names override global ones
-		INamed actual = instances.get(name);
+		INamed actual = instances.get(id);
 		if(actual!=null)
 			return this;
 		if(parent!=null)
-			return parent.contextForValue(name);
+			return parent.contextForValue(id);
 		if(globals!=this)
-			return globals.contextForValue(name);
+			return globals.contextForValue(id);
 		return null;
 	}
 	
@@ -1143,7 +1143,7 @@ public class Context implements IContext {
 		}
 		
 		public IType getInstanceType() {
-			return type;
+			return type!=null ? type : instance.getType();
 		}
 		
 		@Override
