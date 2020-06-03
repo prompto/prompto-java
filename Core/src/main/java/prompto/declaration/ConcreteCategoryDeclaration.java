@@ -1040,12 +1040,14 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 			if(declaring)
 				return;
 			declaring = true;
+			transpiler = transpiler.newLocalTranspiler();
 			IProblemListener listener = transpiler.getContext().getProblemListener();
 			listener.pushDeclaration(this);
 			try {
 				doDeclare(transpiler);
 			} finally {
 				listener.popDeclaration();
+				transpiler.flush();
 				declaring = false;
 			}
 		}
