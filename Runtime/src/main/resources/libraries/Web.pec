@@ -200,14 +200,17 @@ define FileRefCallback as abstract method receiving FileRef file
 define selectFile as native method receiving FileRefCallback callback and Text<> mimeTypes = nothing doing:
 	JavaScript: selectFileRef(callback, mimeTypes); from module: prompto/internet/FileRef.js
 
-define windowHistoryBack as native method doing:
+define browserHistoryBack as native method doing:
 	JavaScript: window.history.back();
 
-define windowHistoryForward as native method doing:
+define browserHistoryForward as native method doing:
 	JavaScript: window.history.forward();
 
-define windowHistoryFo as native method receiving Integer count doing:
+define browserHistoryGo as native method receiving Integer count doing:
 	JavaScript: window.history.go(count);
 
-define windowHistoryCount as native method returning Integer doing:
+define browserHistoryCount as native method returning Integer doing:
 	JavaScript: return window.history.length;
+
+define browserGoto as native method receiving Text location doing:
+	JavaScript: browserGoto(location); from module: prompto/internet/Browser.js
