@@ -245,6 +245,7 @@ import prompto.statement.IfStatement.IfElement;
 import prompto.statement.IfStatement.IfElementList;
 import prompto.statement.MethodCall;
 import prompto.statement.RaiseStatement;
+import prompto.statement.ReadStatement;
 import prompto.statement.RemoteCall;
 import prompto.statement.ReturnStatement;
 import prompto.statement.StatementList;
@@ -2856,6 +2857,16 @@ public class EPromptoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, new ReadOneExpression(source));
 	}
 	
+	
+	@Override
+	public void exitRead_statement(Read_statementContext ctx) {
+		IExpression source = getNodeValue(ctx.source);
+		setNodeValue(ctx, new ReadAllExpression(source));
+		Identifier name = getNodeValue(ctx.name);
+		StatementList stmts = 	getNodeValue(ctx.stmts);
+		setNodeValue(ctx, new ReadStatement(source, name, stmts));
+	}
+	
 	@Override
 	public void exitReadAllExpression(ReadAllExpressionContext ctx) {
 		IExpression exp = getNodeValue(ctx.exp);
@@ -2866,6 +2877,12 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitReadOneExpression(ReadOneExpressionContext ctx) {
 		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
+	}
+	
+	@Override
+	public void exitReadStatement(ReadStatementContext ctx) {
+		ReadStatement stmt = getNodeValue(ctx.stmt);
+		setNodeValue(ctx, stmt);
 	}
 	
 	@Override

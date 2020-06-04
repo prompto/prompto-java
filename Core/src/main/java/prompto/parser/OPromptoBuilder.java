@@ -205,7 +205,9 @@ import prompto.param.UnresolvedParameter;
 import prompto.parser.OParser.CssTypeContext;
 import prompto.parser.OParser.Jsx_fragmentContext;
 import prompto.parser.OParser.Member_identifierContext;
+import prompto.parser.OParser.ReadStatementContext;
 import prompto.parser.OParser.Read_blob_expressionContext;
+import prompto.parser.OParser.Read_statementContext;
 import prompto.parser.OParser.SymbolLiteralContext;
 import prompto.parser.OParser.TypeLiteralContext;
 import prompto.parser.OParser.Type_literalContext;
@@ -250,6 +252,7 @@ import prompto.statement.IfStatement;
 import prompto.statement.IfStatement.IfElement;
 import prompto.statement.IfStatement.IfElementList;
 import prompto.statement.RaiseStatement;
+import prompto.statement.ReadStatement;
 import prompto.statement.RemoteCall;
 import prompto.statement.ReturnStatement;
 import prompto.statement.StatementList;
@@ -2842,6 +2845,22 @@ public class OPromptoBuilder extends OParserBaseListener {
 	public void exitRead_one_expression(Read_one_expressionContext ctx) {
 		IExpression source = getNodeValue(ctx.source);
 		setNodeValue(ctx, new ReadOneExpression(source));
+	}
+	
+	
+	@Override
+	public void exitRead_statement(Read_statementContext ctx) {
+		IExpression source = getNodeValue(ctx.source);
+		setNodeValue(ctx, new ReadAllExpression(source));
+		Identifier name = getNodeValue(ctx.name);
+		StatementList stmts = 	getNodeValue(ctx.stmts);
+		setNodeValue(ctx, new ReadStatement(source, name, stmts));
+	}
+	
+	@Override
+	public void exitReadStatement(ReadStatementContext ctx) {
+		ReadStatement stmt = getNodeValue(ctx.stmt);
+		setNodeValue(ctx, stmt);
 	}
 	
 	@Override

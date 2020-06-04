@@ -12,6 +12,11 @@ public class TestResource extends BaseEParserTest {
 	}
 
 	@Test
+	public void testReadResourceThen() throws Exception {
+		compareResourceEME("resource/readResourceThen.pec");
+	}
+
+	@Test
 	public void testReadWithResource() throws Exception {
 		compareResourceEME("resource/readWithResource.pec");
 	}

@@ -12,6 +12,11 @@ public class TestResource extends BaseOParserTest {
 	}
 
 	@Test
+	public void testReadResourceThen() throws Exception {
+		compareResourceOEO("resource/readResourceThen.poc");
+	}
+
+	@Test
 	public void testReadWithResource() throws Exception {
 		compareResourceOEO("resource/readWithResource.poc");
 	}

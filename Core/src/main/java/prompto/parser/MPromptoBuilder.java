@@ -201,9 +201,6 @@ import prompto.param.CodeParameter;
 import prompto.param.ExtendedParameter;
 import prompto.param.IParameter;
 import prompto.param.UnresolvedParameter;
-import prompto.parser.MParser.Member_identifierContext;
-import prompto.parser.MParser.Read_blob_expressionContext;
-import prompto.parser.MParser.SymbolLiteralContext;
 
 import static prompto.parser.MParser.*;
 import prompto.python.Python2NativeCall;
@@ -245,6 +242,7 @@ import prompto.statement.IfStatement;
 import prompto.statement.IfStatement.IfElement;
 import prompto.statement.IfStatement.IfElementList;
 import prompto.statement.RaiseStatement;
+import prompto.statement.ReadStatement;
 import prompto.statement.RemoteCall;
 import prompto.statement.ReturnStatement;
 import prompto.statement.StatementList;
@@ -2819,6 +2817,23 @@ public class MPromptoBuilder extends MParserBaseListener {
 		setNodeValue(ctx, new ReadOneExpression(source));
 	}
 	
+	
+	@Override
+	public void exitRead_statement(Read_statementContext ctx) {
+		IExpression source = getNodeValue(ctx.source);
+		setNodeValue(ctx, new ReadAllExpression(source));
+		Identifier name = getNodeValue(ctx.name);
+		StatementList stmts = 	getNodeValue(ctx.stmts);
+		setNodeValue(ctx, new ReadStatement(source, name, stmts));
+	}
+	
+	@Override
+	public void exitReadStatement(ReadStatementContext ctx) {
+		ReadStatement stmt = getNodeValue(ctx.stmt);
+		setNodeValue(ctx, stmt);
+	}
+	
+
 	@Override
 	public void exitResource_declaration(Resource_declarationContext ctx) {
 		IDeclaration decl = getNodeValue(ctx.native_resource_declaration());

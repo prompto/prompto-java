@@ -23,6 +23,21 @@ public class TestInternet extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedEmail() throws Exception {
+		runInterpretedTests("internet/email.pec");
+	}
+
+	@Test
+	public void testCompiledEmail() throws Exception {
+		runCompiledTests("internet/email.pec");
+	}
+
+	@Test
+	public void testTranspiledEmail() throws Exception {
+		runTranspiledTests("internet/email.pec");
+	}
+
+	@Test
 	public void testInterpretedHtml() throws Exception {
 		runInterpretedTests("internet/html.pec");
 	}

@@ -394,6 +394,18 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitFetchStatement(OParser.FetchStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code ReadStatement}
+	 * labeled alternative in {@link OParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterReadStatement(OParser.ReadStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ReadStatement}
+	 * labeled alternative in {@link OParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitReadStatement(OParser.ReadStatementContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code FlushStatement}
 	 * labeled alternative in {@link OParser#statement}.
 	 * @param ctx the parse tree
@@ -1535,6 +1547,16 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFetchManyAsync(OParser.FetchManyAsyncContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#read_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterRead_statement(OParser.Read_statementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#read_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitRead_statement(OParser.Read_statementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#sorted_expression}.
 	 * @param ctx the parse tree

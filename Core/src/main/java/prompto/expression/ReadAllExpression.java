@@ -12,6 +12,7 @@ import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
@@ -22,9 +23,9 @@ import prompto.value.IResource;
 import prompto.value.IValue;
 import prompto.value.TextValue;
 
-public class ReadAllExpression implements IExpression {
+public class ReadAllExpression extends Section implements IExpression {
 
-	IExpression resource;
+	protected IExpression resource;
 	
 	public ReadAllExpression(IExpression resource) {
 		this.resource = resource;
