@@ -97,7 +97,20 @@ define "decode Html charcode" as test method doing:
 and verifying:
 	encoded = "a1b"
 
-define Url as storable native resource with attributes path and encoding, and bindings:
+define HttpRequestMethod as enumerated Text with symbols:
+	CONNECT with "CONNECT" as value
+	DELETE with "DELETE" as value
+	GET with "GET" as value
+	HEAD with "HEAD" as value
+	OPTIONS with "OPTIONS" as value
+	PATCH with "PATCH" as value
+	POST with "POST" as value
+	PUT with "PUT" as value
+	TRACE with "TRACE" as value
+
+define httpRequestMethod as storable HttpRequestMethod attribute
+
+define Url as storable native resource with attributes path, encoding and httpRequestMethod, and bindings:
 	
 	define category bindings as:
 		Java: prompto.internet.Url
@@ -112,6 +125,15 @@ define url as storable Url attribute
 define "reads from www.google.com" as test method doing:
 	// need a cross-domain enabled page for browser testing
 	content = read all from Url with "https://www.google.com/" as path
+and verifying: 
+	content contains "doctype"
+
+
+define "reads async from www.google.com" as test method doing:
+	// need a cross-domain enabled page for browser testing
+	content = ""
+	read all from Url with "https://www.google.com/" as path then with result:
+		content = result
 and verifying: 
 	content contains "doctype"
 
