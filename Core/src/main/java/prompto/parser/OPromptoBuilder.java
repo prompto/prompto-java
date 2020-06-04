@@ -2851,7 +2851,6 @@ public class OPromptoBuilder extends OParserBaseListener {
 	@Override
 	public void exitRead_statement(Read_statementContext ctx) {
 		IExpression source = getNodeValue(ctx.source);
-		setNodeValue(ctx, new ReadAllExpression(source));
 		Identifier name = getNodeValue(ctx.name);
 		StatementList stmts = 	getNodeValue(ctx.stmts);
 		setNodeValue(ctx, new ReadStatement(source, name, stmts));
