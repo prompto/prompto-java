@@ -27,7 +27,7 @@ Url.prototype.readFullyAsync = function(callback) {
 	var self = this;
 	var xhr = this.createHttpRequest(true);
 	xhr.onload = function() {
-		self.checkstatus(xhr);
+		self.checkStatus(xhr);
 		callback(xhr.responseText);
 	};
 	xhr.send();
