@@ -387,6 +387,7 @@ public class EnumeratedCategoryDeclaration extends ConcreteCategoryDeclaration
 	    super.transpile(transpiler);
 	    transpiler.newLine();
 	    transpiler.append(this.getName()).append(".prototype.toString = function() { return this.name; };").newLine();
+	    transpiler.append(this.getName()).append(".prototype.equals = function(other) { return this == other; };").newLine();
 	    if(this.hasAttribute(transpiler.getContext(), new Identifier("text")))
 	        transpiler.append(this.getName()).append(".prototype.getText = function() { return this.text; };").newLine();
 	    else
