@@ -1,59 +1,67 @@
 function Url(path, encoding, method) {
-    this.path = path;
-    this.encoding = encoding || "utf-8";
-    this.method = method || "POST";
-    return this;
+	this.path = path;
+	this.encoding = encoding || "utf-8";
+	this.httpRequestMethod = method || "GET";
+	return this;
 }
 
 Url.prototype.isReadable = function() {
-    return true;
+	return true;
 };
 
 Url.prototype.isWritable = function() {
-    return false;
+	return false;
 };
 
 Url.prototype.close = function() {
 };
 
 Url.prototype.readFully = function() {
-    var xhr = new XMLHttpRequest();
-    xhr.overrideMimeType('text/plain');
-    xhr.open(this.method, this.path, false);
-    xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-    xhr.send();
-    if (xhr.status != 200) {
-        var rwe = eval("prompto.error.ReadWriteError"); // assume it's already defined
-        throw new rwe("Request failed, status: " + xhr.status +", " + xhr.statusText);
-    }
-    return xhr.responseText;
+	var xhr = this.createHttpRequest(false);
+	xhr.send();
+	this.checkStatus(xhr);
+	return xhr.responseText;
 };
 
-
 Url.prototype.readFullyAsync = function(callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.overrideMimeType('text/plain');
-    xhr.onload = function() {
-    	   if (xhr.status != 200) {
-    	        var rwe = eval("prompto.error.ReadWriteError"); // assume it's already defined
-    	        throw new rwe("Request failed, status: " + xhr.status +", " + xhr.statusText);
-    	    }
-    	   callback(xhr.responseText);
-   };
-    xhr.open(this.method, this.path, true);
-    xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-    xhr.send();
- };
+	var self = this;
+	var xhr = this.createHttpRequest(true);
+	xhr.onload = function() {
+		self.checkstatus(xhr);
+		callback(xhr.responseText);
+	};
+	xhr.send();
+};
+
+Url.prototype.checkStatus = function(xhr) {
+	if (xhr.status != 200) {
+		try {
+			var rwe = eval("prompto.error.ReadWriteError"); // assume it's already defined
+			throw new rwe("Request failed, status: " + xhr.status + ", " + xhr.statusText);
+		} catch (error) {
+			throw new Error("Request failed, status: " + xhr.status + ", " + xhr.statusText);
+		}
+	}
+};
+
+Url.prototype.createHttpRequest = function(async) {
+	var xhr = new XMLHttpRequest();
+	xhr.overrideMimeType('text/plain');
+	xhr.open(this.httpRequestMethod, this.path, async);
+	xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	return xhr;
+};
 
 Url.prototype.readLine = function() {
-    if(!this.lines) {
-        var full = this.readFully() || "";
-        this.lines = full.split("\n");
-    }
-    if(this.lines.length>0)
-        return this.lines.shift();
-    else
-        return null;
+	if (!this.lines) {
+		var full = this.readFully() || "";
+		this.lines = full.split("\n");
+	}
+	if (this.lines.length > 0)
+		return this.lines.shift();
+	else
+		return null;
 }
 
 Url.prototype.writeFully = function(data) {
