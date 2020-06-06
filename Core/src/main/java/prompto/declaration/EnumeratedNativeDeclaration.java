@@ -294,12 +294,9 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    transpiler.append("function " + this.getName() + "(name, value) { this.name = name; this.value = value; return this; };");
-	    transpiler.newLine();
-	    transpiler.append(this.getName()).append(".prototype.toString = function() { return this.name; };");
-	    transpiler.newLine();
-	    transpiler.append(this.getName()).append(".prototype.equals = function(other) { return this == other; };");
-	    transpiler.newLine();
+	    transpiler.append("function " + this.getName() + "(name, value) { this.name = name; this.value = value; return this; };").newLine();
+	    transpiler.append(this.getName()).append(".prototype.toString = function() { return this.name; };").newLine();
+	    transpiler.append(this.getName()).append(".prototype.equals = function(other) { return this == other; };").newLine();
 	    this.symbolsList.forEach(symbol->symbol.initialize(transpiler));
 	    List<String> names = this.symbolsList.stream().map(Symbol::getName).collect(Collectors.toList());
 	    transpiler.append(this.getName()).append(".symbols = new List(false, [").append(names.stream().collect(Collectors.joining(", "))).append("]);").newLine();
