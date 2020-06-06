@@ -45,9 +45,10 @@ Url.prototype.checkStatus = function(xhr) {
 };
 
 Url.prototype.createHttpRequest = function(async) {
+	var method = this.httpRequestMethod || "GET";
 	var xhr = new XMLHttpRequest();
 	xhr.overrideMimeType('text/plain');
-	xhr.open(this.httpRequestMethod, this.path, async);
+	xhr.open(method, this.path, async);
 	xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 	return xhr;
