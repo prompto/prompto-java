@@ -47,6 +47,11 @@ public class TestAdd extends BaseOParserTest {
 	}
 
 	@Test
+	public void testAddListDerived() throws Exception {
+		compareResourceOMO("add/addListDerived.poc");
+	}
+
+	@Test
 	public void testAddPeriod() throws Exception {
 		compareResourceOMO("add/addPeriod.poc");
 	}

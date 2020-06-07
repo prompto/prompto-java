@@ -73,7 +73,7 @@ public class ListType extends ContainerType {
 	@Override
 	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		if(	(other instanceof ListType || other instanceof SetType) &&
-			this.getItemType().equals(((ContainerType)other).getItemType()) )
+			this.getItemType().isAssignableFrom(context, ((ContainerType)other).getItemType()) )
 				return this;
 		return super.checkAdd(context, other, tryReverse);
 	}
@@ -216,7 +216,7 @@ public class ListType extends ContainerType {
 	
 	@Override
 	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
-	    if((other instanceof ListType || other instanceof SetType) && this.getItemType().equals(((ContainerType)other).getItemType())) {
+	    if((other instanceof ListType || other instanceof SetType) && this.getItemType().isAssignableFrom(transpiler.getContext(), ((ContainerType)other).getItemType())) {
 	        left.declare(transpiler);
 	        right.declare(transpiler);
 	    } else {
@@ -226,7 +226,7 @@ public class ListType extends ContainerType {
 	
 	@Override
 	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
-	    if((other instanceof ListType || other instanceof SetType) && this.getItemType().equals(((ContainerType)other).getItemType())) {
+	    if((other instanceof ListType || other instanceof SetType) && this.getItemType().isAssignableFrom(transpiler.getContext(), ((ContainerType)other).getItemType())) {
 	        left.transpile(transpiler);
 	        transpiler.append(".add(");
 	        right.transpile(transpiler);

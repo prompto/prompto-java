@@ -140,6 +140,21 @@ public class TestAdd extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedAddListDerived() throws Exception {
+		checkInterpretedOutput("add/addListDerived.poc");
+	}
+
+	@Test
+	public void testCompiledAddListDerived() throws Exception {
+		checkCompiledOutput("add/addListDerived.poc");
+	}
+
+	@Test
+	public void testTranspiledAddListDerived() throws Exception {
+		checkTranspiledOutput("add/addListDerived.poc");
+	}
+
+	@Test
 	public void testInterpretedAddPeriod() throws Exception {
 		checkInterpretedOutput("add/addPeriod.poc");
 	}
