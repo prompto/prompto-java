@@ -185,6 +185,21 @@ public class TestAdd extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedAddSetDerived() throws Exception {
+		checkInterpretedOutput("add/addSetDerived.poc");
+	}
+
+	@Test
+	public void testCompiledAddSetDerived() throws Exception {
+		checkCompiledOutput("add/addSetDerived.poc");
+	}
+
+	@Test
+	public void testTranspiledAddSetDerived() throws Exception {
+		checkTranspiledOutput("add/addSetDerived.poc");
+	}
+
+	@Test
 	public void testInterpretedAddTextCharacter() throws Exception {
 		checkInterpretedOutput("add/addTextCharacter.poc");
 	}

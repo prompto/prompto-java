@@ -62,6 +62,11 @@ public class TestAdd extends BaseOParserTest {
 	}
 
 	@Test
+	public void testAddSetDerived() throws Exception {
+		compareResourceOMO("add/addSetDerived.poc");
+	}
+
+	@Test
 	public void testAddTextCharacter() throws Exception {
 		compareResourceOMO("add/addTextCharacter.poc");
 	}
