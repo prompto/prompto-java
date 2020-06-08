@@ -10,7 +10,6 @@ import prompto.compiler.StackLocal;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteMethodDeclaration;
-import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -81,8 +80,6 @@ public class InstanceExpression extends Section implements IPredicateExpression 
 	@Override
 	public IType check(Context context) {
 		INamed named = context.getRegistered(id);
-		if(named==null) 
-			named = context.getRegisteredDeclaration(IDeclaration.class, id, true);
 		if(named==null) {
 			context.getProblemListener().reportUnknownIdentifier(id, id.toString());
 			return null;
