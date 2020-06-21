@@ -13,6 +13,11 @@ exports.browserGoto = function(location) {
 };
 
 
+exports.browserGetQueryParameter = function(name) {
+	var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+	return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+};
+
 exports.downloadFile = function(url, name) {
 	var document = window.document;
 	var a = document.createElement("a");
