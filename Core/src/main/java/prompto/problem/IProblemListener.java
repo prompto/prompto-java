@@ -37,6 +37,7 @@ public interface IProblemListener {
 	void reportNotStorable(ISection section, String name);
 	void reportAssigningVoidType(ISection section);
 	void reportReturningVoidType(ISection section);
+	void reportMissingBinding(ISection section, String name);
 
 	void pushDeclaration(IDeclaration declaration);
 	IDeclaration popDeclaration();

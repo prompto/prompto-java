@@ -60,7 +60,7 @@ public class NativeWidgetDeclaration extends NativeCategoryDeclaration implement
 
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-		JavaScriptNativeCategoryBinding binding = this.getJavaScriptBinding();
+		JavaScriptNativeCategoryBinding binding = this.getJavaScriptBinding(true);
 	    binding.transpileWidget(transpiler, getName());
 	    return true;
 	}

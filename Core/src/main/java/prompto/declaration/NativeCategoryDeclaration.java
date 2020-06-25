@@ -151,23 +151,34 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 			return null;
 	}
 	
-	protected JavaScriptNativeCategoryBinding getJavaScriptBinding() {
+	protected JavaScriptNativeCategoryBinding getJavaScriptBinding(boolean fail) {
 		for(NativeCategoryBinding mapping : categoryBindings) {
 			if(mapping instanceof JavaScriptNativeCategoryBinding)
 				return (JavaScriptNativeCategoryBinding)mapping;
 		}
-		throw new SyntaxError("Missing JAVASCRIPT mapping !");
+		if(fail)
+			throw new SyntaxError("Missing JAVASCRIPT mapping !");
+		else
+			return null;
 	}
 
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-		transpiler.declare(this);
+		JavaScriptNativeCategoryBinding binding = this.getJavaScriptBinding(false);
+		if(binding==null)
+			transpiler.getContext().getProblemListener().reportMissingBinding(this, this.getName());
+		else
+			transpiler.declare(this);
 	}
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-		JavaScriptNativeCategoryBinding binding = this.getJavaScriptBinding();
+		JavaScriptNativeCategoryBinding binding = this.getJavaScriptBinding(false);
+		if(binding==null) {
+			transpiler.getContext().getProblemListener().reportMissingBinding(this, this.getName());
+			return false;
+		}
 	    binding.transpile(transpiler);
 	    String name = binding.getBoundName();
 	    transpiler.append("function ").append("new_").append(this.getName()).append("(values) {").indent();
@@ -186,7 +197,7 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 	}
 
 	public String getTranspiledBoundClass() {
-		JavaScriptNativeCategoryBinding binding = this.getJavaScriptBinding();
+		JavaScriptNativeCategoryBinding binding = this.getJavaScriptBinding(true);
 	    return binding.getBoundName();
 	}
 

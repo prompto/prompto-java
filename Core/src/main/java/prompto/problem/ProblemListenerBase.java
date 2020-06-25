@@ -210,4 +210,9 @@ public abstract class ProblemListenerBase implements ANTLRErrorListener, IProble
 	public void reportReturningVoidType(ISection section) {
 		addProblem(new ReturningVoidTypeProblem(section));
 	}
+	
+	@Override
+	public void reportMissingBinding(ISection section, String name) {
+		addProblem(new MissingBindingProblem(section, name));
+	}
 }
