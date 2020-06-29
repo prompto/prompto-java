@@ -126,7 +126,11 @@ public class CategoryParameter extends BaseParameter implements ITypedParameter 
 		Context actual = context.contextForValue(id);
 		if(actual==context)
 			throw new SyntaxError("Duplicate argument: \"" + id + "\"");
-		context.registerValue(this);
+		resolve(context);
+		if(resolved==type)
+			context.registerValue(this);
+		else
+			context.registerValue(new CategoryParameter(resolved, id));
 		if(defaultExpression!=null) try {
 			context.setValue(id, defaultExpression.interpret(context));
 		} catch(PromptoError error) {
@@ -143,7 +147,6 @@ public class CategoryParameter extends BaseParameter implements ITypedParameter 
 	private void resolve(Context context) {
 		if(resolved==null)
 			resolved = type.resolve(context, null);
-		
 	}
 
 	@Override
