@@ -16,6 +16,12 @@ public abstract class ApplicationContext {
 			loader.setContext(instance);
 	}
 
+	public static Context set(Context context) {
+		Context replaced = instance;
+		instance = context;
+		return replaced;
+	}
+
 	public static Context get() {
 		return instance;
 	}
