@@ -18,6 +18,11 @@ public class DefaultExpression implements IExpression {
 	public DefaultExpression(IExpression expression) {
 		this.expression = expression;
 	}
+	
+	@Override
+	public String toString() {
+		return expression.toString();
+	}
 
 	@Override
 	public IType check(Context context) {

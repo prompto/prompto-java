@@ -32,8 +32,8 @@ public class ParameterList extends ObjectList<IParameter> {
 	}
 
 	public void check(Context context) {
-		for(IParameter argument : this) 
-			argument.check(context);
+		for(IParameter param : this) 
+			param.check(context);
 	}
 
 	public IParameter find(Identifier name) {
