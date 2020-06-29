@@ -232,6 +232,18 @@ public class BaseParserTest extends BaseTest {
 		runTests(resource, this::testTranspiled, false);
 	}
 	
+	protected void runInterpretedTests(String resource, boolean register) throws Exception {
+		runTests(resource, this::testInterpreted, register);
+	}
+	
+	protected void runCompiledTests(String resource, boolean register) throws Exception {
+		runTests(resource, this::testCompiled, register);
+	}
+	
+	protected void runTranspiledTests(String resource, boolean register) throws Exception {
+		runTests(resource, this::testTranspiled, register);
+	}
+
 	protected void runTests(String resource, Consumer<Identifier> runner, boolean register) throws Exception {
 		DeclarationList decls = parseResource(resource);
 		if(register)
