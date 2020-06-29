@@ -254,14 +254,6 @@ define "today is a Date" as test method doing:
 and verifying: 
 	a is a Date 
 
-// returns a random UUID as defined by http://www.ietf.org/rfc/rfc4122.txt
-define randomUuid as native method returning Uuid doing:
-	Java: return java.util.UUID.randomUUID();
-	C#: return System.Guid.NewGuid();
-	Python2: return uuid4() from module: uuid
-	Python3: return uuid4() from module: uuid
-	JavaScript: return UUID.create(); from module: prompto/intrinsic/UUID.js
-
 // waits for n milliseconds (consuming all CPU in JavaScript)
 define sleep as native method receiving Integer millis doing:
 	Java: java.lang.Thread.sleep(millis);
@@ -269,6 +261,39 @@ define sleep as native method receiving Integer millis doing:
 	Python2: sleep(millis) from module: prompto.utils.Utils
 	Python3: sleep(millis) from module: prompto.utils.Utils
 	JavaScript: sleep(millis); from module: prompto/utils/Utils.js
+
+define "sleeps for 1 second" as test method doing:
+	start = now
+	sleep 1000
+	end = now
+and verifying: 
+	end >= start + 'PT1S'
+
+define scheduleJob as native method receiving Callback callback, DateTime executeAt, Period repeatEvery = Nothing and Text jobName = Nothing returning Integer doing:
+	Java: return prompto.runtime.Scheduler.schedule(callback, executeAt, repeatEvery, jobName);
+	C#: return rompto.runtime.Scheduler.schedule(callback, executeAt, repeatEvery, jobName);
+	Python2: return Scheduler.schedule(callback, executeAt, repeatEvery, jobName) from module: prompto.runtime.Scheduler
+	Python3: return Scheduler.schedule(callback, executeAt, repeatEvery, jobName) from module: prompto.runtime.Scheduler
+	JavaScript: return Scheduler.schedule(callback, executeAt, repeatEvery, jobName); from module: prompto/runtime/Scheduler.js
+
+define cancelJob as native method receiving Integer jobId doing:
+	Java: return prompto.runtime.Scheduler.cancel(jobId);
+	C#: return rompto.runtime.Scheduler.cancel(jobId);
+	Python2: return Scheduler.cancel(jobId) from module: prompto.runtime.Scheduler
+	Python3: return Scheduler.cancel(jobId) from module: prompto.runtime.Scheduler
+	JavaScript: return Scheduler.cancel(jobId); from module: prompto/runtime/Scheduler.js
+	// returns a random UUID as defined by http://www.ietf.org/rfc/rfc4122.txt
+define randomUuid as native method returning Uuid doing:
+	Java: return java.util.UUID.randomUUID();
+	C#: return System.Guid.NewGuid();
+	Python2: return uuid4() from module: uuid
+	Python3: return uuid4() from module: uuid
+	JavaScript: return UUID.create(); from module: prompto/intrinsic/UUID.js
+
+define "randomUuid is not null" as test method doing:
+	uuid = randomUuid
+and verifying: 
+	uuid is not Nothing
 
 
 define isServer as native method returning Boolean doing:
@@ -301,20 +326,6 @@ define nextSequenceValue as native method receiving Text name returning Integer 
 	Python2: return $store.nextSequenceValue(name)
 	Python3: return $store.nextSequenceValue(name)
 	JavaScript: return $store.nextSequenceValue(name);
-
-
-define "randomUuid is not null" as test method doing:
-	uuid = randomUuid
-and verifying: 
-	uuid is not Nothing
-
-
-define "sleeps for 1 second" as test method doing:
-	start = now
-	sleep 1000
-	end = now
-and verifying: 
-	end >= start + 'PT1S'
 
 
 define "nextSequenceValue increases" as test method doing:
