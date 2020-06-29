@@ -1,0 +1,54 @@
+define Sink as singleton with attribute text
+
+define "schedules" as test method doing:
+	with Sink, do:
+		text = ""
+	define AppendToSink as method doing:
+		with Sink, do:
+			text = text + "/callback1"
+	callback = Method: AppendToSink	
+	scheduleJob with callback and (now + 'PT1S') as executeAt
+	sleep 500
+	with Sink, do:
+		text = text + "/main"
+	sleep 1000
+and verifying: 
+	Sink.text = "/main/callback1"
+
+	
+define "repeats" as test method doing:
+	with Sink, do:
+		text = ""
+	define AppendToSink as method doing:
+		with Sink, do:
+			text = text + "/callback2"
+	callback = Method: AppendToSink	
+	job = scheduleJob with callback, (now + 'PT1S') as executeAt and 'PT1S' as repeatEvery
+	sleep 500
+	with Sink, do:
+		text = text + "/main"
+	sleep 3000
+	cancelJob job	
+and verifying: 
+	Sink.text = "/main/callback2/callback2/callback2"
+	
+
+define "cancels" as test method doing:
+	with Sink, do:
+		text = ""
+	define AppendToSink as method doing:
+		with Sink, do:
+			text = text + "/callback3"
+	callback = Method: AppendToSink	
+	job = scheduleJob with callback and (now + 'PT3S') as executeAt
+	sleep 500
+	with Sink, do:
+		text = text + "/main"
+	cancelJob job	
+	sleep 3000
+and verifying: 
+	Sink.text = "/main"
+
+	
+
+	
