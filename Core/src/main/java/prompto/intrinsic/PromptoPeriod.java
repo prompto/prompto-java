@@ -1,5 +1,6 @@
 package prompto.intrinsic;
 
+import org.joda.time.Instant;
 import org.joda.time.Period;
 
 import prompto.value.IMultiplyable;
@@ -96,6 +97,10 @@ public class PromptoPeriod implements IMultiplyable, IDocumentable {
 		return new PromptoPeriod(-getNativeYears(),-getNativeMonths(),-getNativeWeeks(),
 					-getNativeDays(),-getNativeHours(), -getNativeMinutes(),
 					-getNativeSeconds(),-getNativeMillis());
+	}
+	
+	public long toJavaTime() {
+		return wrapped.toDurationFrom(new Instant(0)).getMillis();
 	}
 
 	@Override
