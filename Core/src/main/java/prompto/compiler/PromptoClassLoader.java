@@ -33,7 +33,7 @@ public class PromptoClassLoader extends URLClassLoader {
 	
 	private static PromptoClassLoader instance = null;
 	
-	/* during testing, mutiple threads may refer to different paths */
+	/* during testing, multiple threads may refer to different paths */
 	private static Boolean testMode;
 	private static ThreadLocal<PromptoClassLoader> testInstance;
 	public static PromptoClassLoader getInstance() {
