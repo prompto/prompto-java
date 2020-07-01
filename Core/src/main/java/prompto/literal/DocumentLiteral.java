@@ -20,9 +20,9 @@ import prompto.value.IValue;
 
 public class DocumentLiteral extends Literal<DocumentValue> {
 
-	// we can only compute keys by evaluating key expressions
-	// so we can't just inherit from Map<String,Expression>. 
-	// so we keep the full entry list.
+	// we need to keep the entries in the order they are declared
+	// so we can't just inherit from Map<String,Expression>
+	// we also need to keep them as parsed
 	DocEntryList entries;
 	
 	public DocumentLiteral() {
@@ -53,7 +53,7 @@ public class DocumentLiteral extends Literal<DocumentValue> {
 	public IValue interpret(Context context) throws PromptoError {
 		if(entries.size()>0) {
 			PromptoDocument<Identifier,IValue> doc = new PromptoDocument<Identifier, IValue>();
-			for(DictEntry e : entries) {
+			for(DocEntry e : entries) {
 				Identifier key = e.getKey().asIdentifier();
 				IValue val = e.getValue().interpret(context); 
 				doc.put(key, val);
@@ -71,7 +71,7 @@ public class DocumentLiteral extends Literal<DocumentValue> {
 	}
 
 	private void addEntries(Context context, MethodInfo method, Flags flags) {
-		for(DictEntry e : entries) {
+		for(DocEntry e : entries) {
 			method.addInstruction(Opcode.DUP); // need to keep a reference to the map on top of stack
 			ResultInfo info = e.getKey().compile(context, method, flags);
 			if(info.getType()!=String.class) {

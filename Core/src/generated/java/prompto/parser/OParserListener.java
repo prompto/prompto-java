@@ -3312,6 +3312,50 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitExpression_tuple(OParser.Expression_tupleContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link OParser#doc_entry_list}.
+	 * @param ctx the parse tree
+	 */
+	void enterDoc_entry_list(OParser.Doc_entry_listContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#doc_entry_list}.
+	 * @param ctx the parse tree
+	 */
+	void exitDoc_entry_list(OParser.Doc_entry_listContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#doc_entry}.
+	 * @param ctx the parse tree
+	 */
+	void enterDoc_entry(OParser.Doc_entryContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#doc_entry}.
+	 * @param ctx the parse tree
+	 */
+	void exitDoc_entry(OParser.Doc_entryContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code DocKeyIdentifier}
+	 * labeled alternative in {@link OParser#doc_key}.
+	 * @param ctx the parse tree
+	 */
+	void enterDocKeyIdentifier(OParser.DocKeyIdentifierContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code DocKeyIdentifier}
+	 * labeled alternative in {@link OParser#doc_key}.
+	 * @param ctx the parse tree
+	 */
+	void exitDocKeyIdentifier(OParser.DocKeyIdentifierContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code DocKeyText}
+	 * labeled alternative in {@link OParser#doc_key}.
+	 * @param ctx the parse tree
+	 */
+	void enterDocKeyText(OParser.DocKeyTextContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code DocKeyText}
+	 * labeled alternative in {@link OParser#doc_key}.
+	 * @param ctx the parse tree
+	 */
+	void exitDocKeyText(OParser.DocKeyTextContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link OParser#dict_entry_list}.
 	 * @param ctx the parse tree
 	 */

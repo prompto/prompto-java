@@ -3,8 +3,8 @@ package prompto.grammar;
 import java.util.Optional;
 
 import prompto.declaration.CategoryDeclaration;
-import prompto.literal.DictEntry;
-import prompto.literal.DictEntryList;
+import prompto.literal.DocEntry;
+import prompto.literal.DocEntryList;
 import prompto.parser.Section;
 import prompto.processor.AnnotationProcessor;
 import prompto.runtime.Context;
@@ -16,9 +16,9 @@ public class Annotation extends Section {
 	static Logger logger = new Logger();
 	
 	Identifier id;
-	DictEntryList arguments;
+	DocEntryList arguments;
 	
-	public Annotation(Identifier id, DictEntryList arguments) {
+	public Annotation(Identifier id, DocEntryList arguments) {
 		this.id = id;
 		this.arguments = arguments;
 	}
@@ -32,13 +32,13 @@ public class Annotation extends Section {
 		return name.equals(id.toString());
 	}
 	
-	public DictEntryList getArguments() {
+	public DocEntryList getArguments() {
 		return arguments;
 	}
 	
 	public Object getArgument(String name) {
-		Optional<DictEntry> entry = arguments.stream()
-				.filter(arg->arg.getKey().asText().getStorableData().equals(name))
+		Optional<DocEntry> entry = arguments.stream()
+				.filter(arg->arg.getKey().asIdentifier().toString().equals(name))
 				.findFirst();
 		if(entry.isPresent())
 			return entry.get().getValue();

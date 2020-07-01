@@ -9,7 +9,7 @@ import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
-import prompto.literal.DictEntry;
+import prompto.literal.DocEntry;
 import prompto.literal.DocEntryList;
 import prompto.literal.TypeLiteral;
 import prompto.parser.OCleverParser;
@@ -282,7 +282,7 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 			DocEntryList types = parser.parse_document_literal().getEntries();
 		    if(HTML_TEST_MODE.get()) {
 		        IExpression any = new TypeLiteral(AnyType.instance());
-		        types = new DocEntryList(types.stream().map(e->new DictEntry(e.getKey(), any)).collect(Collectors.toList()));
+		        types = new DocEntryList(types.stream().map(e->new DocEntry(e.getKey(), any)).collect(Collectors.toList()));
 		    }
 			HTML_PROPERTIES_MAP.set(new WidgetPropertiesProcessor().loadProperties(null, context, types));
 		}

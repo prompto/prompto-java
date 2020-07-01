@@ -5,11 +5,12 @@ import java.util.stream.Collectors;
 
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
-public abstract class Literal<T extends IValue> implements IExpression {
+public abstract class Literal<T extends IValue> extends Section implements IExpression {
 	
 	Supplier<String> text;
 	protected T value;

@@ -12,43 +12,37 @@ import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 import prompto.value.TextValue;
 
-public class DictTextKey extends DictKey {
+public class DocIdentifierKey extends DocKey {
 
-	String text;
+	Identifier id;
 	
-	public DictTextKey(String text) {
-		this.text = text;
+	public DocIdentifierKey(Identifier id) {
+		this.id = id;
 	}
 	
 	@Override
 	public String toString() {
-		return text;
-	}
-	
-	protected String stringValue() {
-		return text.substring(1, text.length() - 1);
-	}
-	
-	@Override
-	public Identifier asIdentifier() {
-		Identifier id = new Identifier(stringValue());
-		id.setFrom(this);
-		return id;
+		return id.toString();
 	}
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
-		writer.append(text); 
+		writer.append(id.toString());
+	}
+	
+	@Override
+	public Identifier asIdentifier() {
+		return id;
 	}
 	
 	@Override
 	public TextValue interpret(Context context) {
-		return new TextLiteral(text).getValue();
+		return new TextLiteral(id.toString()).getValue();
 	}
-
+	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		IConstantOperand operand = new StringConstant(stringValue());
+		IConstantOperand operand = new StringConstant(id.toString());
 		method.addInstruction(Opcode.LDC_W, operand);
 		return new ResultInfo(String.class);
 	}
@@ -60,7 +54,7 @@ public class DictTextKey extends DictKey {
 	
 	@Override
 	public void transpile(Transpiler transpiler) {
-		transpiler.append(text);
+		transpiler.append(id.toString());
 	}
 
 }

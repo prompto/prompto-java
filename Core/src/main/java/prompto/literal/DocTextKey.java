@@ -12,11 +12,11 @@ import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 import prompto.value.TextValue;
 
-public class DictTextKey extends DictKey {
+public class DocTextKey extends DocKey {
 
 	String text;
 	
-	public DictTextKey(String text) {
+	public DocTextKey(String text) {
 		this.text = text;
 	}
 	

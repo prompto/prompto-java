@@ -182,7 +182,11 @@ import prompto.literal.DictIdentifierKey;
 import prompto.literal.DictKey;
 import prompto.literal.DictLiteral;
 import prompto.literal.DictTextKey;
+import prompto.literal.DocEntry;
 import prompto.literal.DocEntryList;
+import prompto.literal.DocIdentifierKey;
+import prompto.literal.DocKey;
+import prompto.literal.DocTextKey;
 import prompto.literal.DocumentLiteral;
 import prompto.literal.HexaLiteral;
 import prompto.literal.IntegerLiteral;
@@ -387,12 +391,12 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitAnnotation_constructor(Annotation_constructorContext ctx) {
 		Identifier name = getNodeValue(ctx.name);
-		DictEntryList args = new DictEntryList();
+		DocEntryList args = new DocEntryList();
 		IExpression exp = getNodeValue(ctx.exp);
 		if(exp!=null)
-			args.add(new DictEntry(null, exp));
+			args.add(new DocEntry(null, exp));
 		ctx.annotation_argument().forEach(argCtx->{
-			DictEntry arg = getNodeValue(argCtx);
+			DocEntry arg = getNodeValue(argCtx);
 			args.add(arg);
 		});
 		setNodeValue(ctx, new Annotation(name, args));
@@ -402,7 +406,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitAnnotation_argument(Annotation_argumentContext ctx) {
 		Identifier name = getNodeValue(ctx.name);
 		IExpression exp = getNodeValue(ctx.exp);
-		setNodeValue(ctx, new DictEntry(new DictIdentifierKey(name), exp));
+		setNodeValue(ctx, new DocEntry(new DocIdentifierKey(name), exp));
 	}
 	
 	@Override
@@ -1266,10 +1270,43 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitDocument_literal(Document_literalContext ctx) {
-		DictEntryList entries = getNodeValue(ctx.dict_entry_list());
-		DocEntryList items = entries!=null ? new DocEntryList(entries) : new DocEntryList();
-		setNodeValue(ctx, new DocumentLiteral(items));
+		DocEntryList entries = getNodeValue(ctx.doc_entry_list());
+		if(entries==null)
+			entries = new DocEntryList();
+		setNodeValue(ctx, new DocumentLiteral(entries));
 	}
+	
+	@Override
+	public void exitDoc_entry_list(Doc_entry_listContext ctx) {
+		DocEntryList items = new DocEntryList();
+		ctx.doc_entry().forEach((e)->{
+			DocEntry item = getNodeValue(e);
+			items.add(item);
+		});
+		setNodeValue(ctx, items);
+	}
+	
+	@Override
+	public void exitDoc_entry(Doc_entryContext ctx) {
+		DocKey key = getNodeValue(ctx.key);
+		IExpression value = getNodeValue(ctx.value);
+		DocEntry entry = new DocEntry(key, value);
+		setNodeValue(ctx, entry);
+	}
+	
+	@Override
+	public void exitDocKeyIdentifier(DocKeyIdentifierContext ctx) {
+		String text = ctx.name.getText();
+		setNodeValue(ctx, new DocIdentifierKey(new Identifier(text)));
+	}
+	
+
+	@Override
+	public void exitDocKeyText(DocKeyTextContext ctx) {
+		String text = ctx.name.getText();
+		setNodeValue(ctx, new DocTextKey(text));
+	}
+		
 	
 	@Override
 	public void exitDoWhileStatement(DoWhileStatementContext ctx) {

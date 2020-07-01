@@ -3268,6 +3268,50 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitExpression_tuple(MParser.Expression_tupleContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MParser#doc_entry_list}.
+	 * @param ctx the parse tree
+	 */
+	void enterDoc_entry_list(MParser.Doc_entry_listContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MParser#doc_entry_list}.
+	 * @param ctx the parse tree
+	 */
+	void exitDoc_entry_list(MParser.Doc_entry_listContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MParser#doc_entry}.
+	 * @param ctx the parse tree
+	 */
+	void enterDoc_entry(MParser.Doc_entryContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MParser#doc_entry}.
+	 * @param ctx the parse tree
+	 */
+	void exitDoc_entry(MParser.Doc_entryContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code DocKeyIdentifier}
+	 * labeled alternative in {@link MParser#doc_key}.
+	 * @param ctx the parse tree
+	 */
+	void enterDocKeyIdentifier(MParser.DocKeyIdentifierContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code DocKeyIdentifier}
+	 * labeled alternative in {@link MParser#doc_key}.
+	 * @param ctx the parse tree
+	 */
+	void exitDocKeyIdentifier(MParser.DocKeyIdentifierContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code DocKeyText}
+	 * labeled alternative in {@link MParser#doc_key}.
+	 * @param ctx the parse tree
+	 */
+	void enterDocKeyText(MParser.DocKeyTextContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code DocKeyText}
+	 * labeled alternative in {@link MParser#doc_key}.
+	 * @param ctx the parse tree
+	 */
+	void exitDocKeyText(MParser.DocKeyTextContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MParser#dict_entry_list}.
 	 * @param ctx the parse tree
 	 */

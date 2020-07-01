@@ -9,7 +9,7 @@ import prompto.error.InternalError;
 import prompto.grammar.Annotation;
 import prompto.grammar.Identifier;
 import prompto.literal.BooleanLiteral;
-import prompto.literal.DictEntry;
+import prompto.literal.DocEntry;
 import prompto.literal.DocEntryList;
 import prompto.literal.DocumentLiteral;
 import prompto.literal.SetLiteral;
@@ -86,7 +86,7 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 	
 	public PropertyMap loadProperties(Annotation annotation, Context context, DocEntryList entries) {
 		PropertyMap props = new PropertyMap();
-		for(DictEntry entry : entries) {
+		for(DocEntry entry : entries) {
 			Property prop = loadProperty(annotation, context, entry);
 			if(prop==null)
 				continue;
@@ -98,7 +98,7 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 		return props;
 	}
 	
-	private Property loadProperty(Annotation annotation, Context context, DictEntry entry) {
+	private Property loadProperty(Annotation annotation, Context context, DocEntry entry) {
 		Property prop = new Property();
 		prop.setName(entry.getKey().toString());
 		Object value = entry.getValue();
@@ -114,8 +114,8 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 		}
 	}
 			
-	private Property loadProperty(Annotation annotation, Context context, DictEntry entry, Property prop, DocumentLiteral doc) {
-		for(DictEntry child : doc.getEntries()) {
+	private Property loadProperty(Annotation annotation, Context context, DocEntry entry, Property prop, DocumentLiteral doc) {
+		for(DocEntry child : doc.getEntries()) {
 			String name = child.getKey().toString();
 			Object value = child.getValue();
 			switch(name) {
@@ -190,7 +190,7 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 		return prop;
 	}
 
-	private Property loadProperty(Annotation annotation, Context context, DictEntry entry, Property prop, SetLiteral literal) {
+	private Property loadProperty(Annotation annotation, Context context, DocEntry entry, Property prop, SetLiteral literal) {
 		SetValue values = literal.interpret(context);
 		IType itemType = values.getItemType();
 		if(itemType instanceof TypeType) {
@@ -219,7 +219,7 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 		}
 	}
 
-	private Property loadProperty(Annotation annotation, Context context, DictEntry entry, Property prop, TypeLiteral value) {
+	private Property loadProperty(Annotation annotation, Context context, DocEntry entry, Property prop, TypeLiteral value) {
 		IType type = value.getType().resolve(context, t->context.getProblemListener().reportIllegalAnnotation(annotation, "Unkown type: " + t.getTypeName()));
 		if(type==null)
 			return null;

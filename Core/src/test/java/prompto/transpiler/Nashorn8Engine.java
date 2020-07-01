@@ -98,6 +98,11 @@ public class Nashorn8Engine implements IJSEngine {
 		return false;
 	}
 	
+	@Override
+	public boolean supportsComputedPropertyNames() {
+		return false;
+	}
+	
 
 	static class ResourceFolder implements Folder {
 

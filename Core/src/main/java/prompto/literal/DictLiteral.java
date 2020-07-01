@@ -76,7 +76,7 @@ public class DictLiteral extends Literal<DictionaryValue> {
 			check(context); // to compute itemType
 			PromptoDict<TextValue,IValue> dict = new PromptoDict<TextValue, IValue>(true);
 			for(DictEntry e : entries) {
-				TextValue key = e.getKey().asText();
+				TextValue key = e.getKey().interpret(context);
 				IValue val = e.getValue().interpret(context); 
 				dict.put(key, val);
 			}
@@ -127,9 +127,25 @@ public class DictLiteral extends Literal<DictionaryValue> {
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    transpiler.append("new Dictionary(").append(this.mutable).append(", ");
-	    this.entries.transpile(transpiler);
-	    transpiler.append(")");
+		boolean simple = transpiler.getEngine().supportsComputedPropertyNames();
+		if(!simple)
+			simple = entries.stream().allMatch(e->e.getKey() instanceof DictTextKey);
+		if(simple) {
+		   transpiler.append("new Dictionary(").append(this.mutable).append(", ");
+			entries.transpile(transpiler);
+		    transpiler.append(")");
+		} else {
+			transpiler.append("(function() {")
+				.append("var $entries = {};");
+			entries.forEach(entry->{
+				transpiler.append("$entries[");
+				entry.getKey().transpile(transpiler);
+				transpiler.append("] = ");
+				entry.getValue().transpile(transpiler);
+				transpiler.append(";");
+			});
+			transpiler.append("return new Dictionary(").append(this.mutable).append(", $entries);}())");
+		}
 	    return false;
 	}
 	

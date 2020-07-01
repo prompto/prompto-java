@@ -6,7 +6,7 @@ import java.util.List;
 import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 
-public class DocEntryList extends LinkedList<DictEntry> {
+public class DocEntryList extends LinkedList<DocEntry> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -14,12 +14,12 @@ public class DocEntryList extends LinkedList<DictEntry> {
 	}
 	
 	
-	public DocEntryList(List<DictEntry> entries) {
+	public DocEntryList(List<DocEntry> entries) {
 		super(entries);
 	}
 	
 
-	public DocEntryList(DictEntry entry) {
+	public DocEntryList(DocEntry entry) {
 		this.add(entry);
 	}
 	
@@ -33,7 +33,7 @@ public class DocEntryList extends LinkedList<DictEntry> {
 	public void toDialect(CodeWriter writer) {
 		writer.append('{');
 		if(this.size()>0) {
-			for(DictEntry entry : this) {
+			for(DocEntry entry : this) {
 				entry.toDialect(writer);
 				writer.append(", ");
 			}
