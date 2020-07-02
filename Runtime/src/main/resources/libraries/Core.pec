@@ -282,7 +282,8 @@ define cancelJob as native method receiving Integer jobId doing:
 	Python2: return Scheduler.cancel(jobId) from module: prompto.runtime.Scheduler
 	Python3: return Scheduler.cancel(jobId) from module: prompto.runtime.Scheduler
 	JavaScript: return Scheduler.cancel(jobId); from module: prompto/runtime/Scheduler.js
-	// returns a random UUID as defined by http://www.ietf.org/rfc/rfc4122.txt
+
+// returns a random UUID as defined by http://www.ietf.org/rfc/rfc4122.txt
 define randomUuid as native method returning Uuid doing:
 	Java: return java.util.UUID.randomUUID();
 	C#: return System.Guid.NewGuid();
