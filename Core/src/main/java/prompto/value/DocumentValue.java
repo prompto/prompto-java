@@ -2,6 +2,7 @@ package prompto.value;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -167,7 +168,8 @@ public class DocumentValue extends BaseValue {
 		if(canConvertTo(type)) {
 			PromptoDocument<String, Object> result = new PromptoDocument<>();
 			result.putAll(values.entrySet().stream()
-					.collect(Collectors.toMap(e->e.getKey().toString(), e->e.getValue().convertTo(context, Object.class))));
+					// can't use Collectors.toMap because it rejects null values
+					.collect(HashMap::new, (m, e)->m.put(e.getKey().toString(), e.getValue().convertTo(context, Object.class)), HashMap::putAll));
 			return result;
 		} else
 			return super.convertTo(context, type);
