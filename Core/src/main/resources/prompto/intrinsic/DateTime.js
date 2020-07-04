@@ -231,12 +231,16 @@ DateTime.prototype.getTzName = function(value) {
 };
 
 DateTime.prototype.getDate = function(value) {
-    return new LocalDate(this.date);
+    var value = this.date.valueOf();
+    value = value - ( value % 24 * 60 * 60 * 1000 );
+    return new LocalDate(new Date(value));
 };
 
 
 DateTime.prototype.getTime = function(value) {
-    return new LocalTime(this.date);
+	var value = this.date.valueOf();
+    value = value % 24 * 60 * 60 * 1000;
+    return new LocalTime(new Date(value));
 };
 
 
