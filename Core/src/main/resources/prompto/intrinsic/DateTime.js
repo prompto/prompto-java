@@ -232,14 +232,14 @@ DateTime.prototype.getTzName = function() {
 
 DateTime.prototype.getDate = function() {
     var epoch = this.date.valueOf();
-    epoch = epoch - ( epoch % 24 * 60 * 60 * 1000 );
+    epoch = epoch - ( epoch % ( 24 * 60 * 60 * 1000 ));
     return new LocalDate(new Date(epoch));
 };
 
 
 DateTime.prototype.getTime = function() {
 	var epoch = this.date.valueOf();
-	epoch = epoch % 24 * 60 * 60 * 1000;
+	epoch = epoch % ( 24 * 60 * 60 * 1000 );
     return new LocalTime(new Date(epoch));
 };
 
