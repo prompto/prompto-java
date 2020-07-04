@@ -13,7 +13,7 @@ public class PromptoTime implements Comparable<PromptoTime>, IDocumentable {
 		return new PromptoTime(LocalTime.fromMillisOfDay(utc));
 	}
 
-	private LocalTime wrapped;
+	LocalTime wrapped;
 
 	public PromptoTime(LocalTime wrapped) {
 		this.wrapped = wrapped;

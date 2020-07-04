@@ -88,6 +88,10 @@ public class PromptoDate implements Comparable<PromptoDate>, IDocumentable {
 		return new PromptoDate(wrapped.plus(period.wrapped));
 	}
 
+	public PromptoDateTime plus(PromptoTime time) {
+		return new PromptoDateTime(wrapped.toDateTime(time.wrapped, DateTimeZone.UTC));
+	}
+
 	public PromptoDate minus(PromptoPeriod period) {
 		return new PromptoDate(wrapped.minus(period.wrapped));
 	}

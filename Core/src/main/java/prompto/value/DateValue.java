@@ -47,6 +47,8 @@ public class DateValue extends BaseValue implements Comparable<DateValue> {
 	public IValue plus(Context context, IValue value) throws PromptoError {
 		if (value instanceof PeriodValue)
 			return new DateValue(this.value.plus(((PeriodValue)value).value));
+		else if (value instanceof TimeValue)
+			return new DateTimeValue(this.value.plus(((TimeValue)value).value));
 		else
 			throw new SyntaxError("Illegal: Date + " + value.getClass().getSimpleName());
 	}

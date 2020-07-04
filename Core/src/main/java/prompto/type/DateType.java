@@ -16,7 +16,9 @@ import prompto.expression.IExpression;
 import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDate;
+import prompto.intrinsic.PromptoDateTime;
 import prompto.intrinsic.PromptoPeriod;
+import prompto.intrinsic.PromptoTime;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
@@ -63,8 +65,11 @@ public class DateType extends NativeType {
 	@Override
 	public IType checkAdd(Context context, IType other, boolean tryReverse) {
 		if (other instanceof PeriodType)
-			return this; // ignore time section
-		return super.checkAdd(context, other, tryReverse);
+			return this; // ignore time section since it cannot be guessed
+		else if (other instanceof TimeType)
+			return DateTimeType.instance(); 
+		else
+			return super.checkAdd(context, other, tryReverse);
 	}
 
 	@Override
@@ -81,9 +86,10 @@ public class DateType extends NativeType {
 	public IType checkCompare(Context context, IType other, ISection section) {
 		if (other instanceof DateType)
 			return BooleanType.instance();
-		if (other instanceof DateTimeType)
+		else if (other instanceof DateTimeType)
 			return BooleanType.instance();
-		return super.checkCompare(context, other, section);
+		else
+			return super.checkCompare(context, other, section);
 	}
 
 	@Override
@@ -157,19 +163,24 @@ public class DateType extends NativeType {
 
 	@Override
 	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
-	    if (other == PeriodType.instance()) {
+	    if (other == PeriodType.instance() || other == TimeType.instance()) {
 	        left.declare(transpiler);
 	        right.declare(transpiler);
+	        if(other == TimeType.instance())
+	        	transpiler.require("DateTime");
 	    } else
 	        super.declareAdd(transpiler, other, tryReverse, left, right);
 	}
 	
 	@Override
 	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
-	    if (other == PeriodType.instance()) {
+	    if (other == PeriodType.instance() || other == TimeType.instance()) {
 	        left.transpile(transpiler);
-	        transpiler.append(".addPeriod(");
-	        right.transpile(transpiler);
+	        if(other == PeriodType.instance())
+	        	transpiler.append(".addPeriod(");
+	        else
+	        	transpiler.append(".addTime(");
+        	right.transpile(transpiler);
 	        transpiler.append(")");
 	    } else
 	        super.transpileAdd(transpiler, other, tryReverse, left, right);
@@ -283,11 +294,17 @@ public class DateType extends NativeType {
 	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, IExpression exp) {
 		ResultInfo right = exp.compile(context, method, flags);
-		if(right.getType()!=PromptoPeriod.class)
+		if(right.getType()!=PromptoPeriod.class && right.getType()!=PromptoTime.class)
 			throw new SyntaxError("Illegal: Date + " + exp.getClass().getSimpleName());
-		MethodConstant oper = new MethodConstant(PromptoDate.class, "plus", PromptoPeriod.class, PromptoDate.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(PromptoDate.class);
+		if(right.getType()==PromptoPeriod.class) {
+			MethodConstant oper = new MethodConstant(PromptoDate.class, "plus", PromptoPeriod.class, PromptoDate.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+			return new ResultInfo(PromptoDate.class);
+		} else {
+			MethodConstant oper = new MethodConstant(PromptoDate.class, "plus", PromptoTime.class, PromptoDateTime.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+			return new ResultInfo(PromptoDateTime.class);
+		}
 	}
 
 	public static ResultInfo compileMinus(Context context, MethodInfo method, Flags flags, 

@@ -1,5 +1,6 @@
 function LocalTime(value) {
-    var time = value ? new Date(value) : new Date();
+    value = value != null ? value : ((new Date().valueOf()) % ( 24 * 60 * 60 * 1000));
+    var time = new Date(value);
     time.__proto__ = LocalTime.prototype;
     return time;
 }

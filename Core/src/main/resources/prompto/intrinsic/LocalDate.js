@@ -39,6 +39,7 @@ LocalDate.prototype.lte = function(other) {
     return other instanceof LocalDate && this.valueOf() <= other.valueOf();
 };
 
+
 LocalDate.prototype.addPeriod = function (period) {
     var result = new LocalDate();
     var year = this.getUTCFullYear() + (period.years || 0);
@@ -51,6 +52,14 @@ LocalDate.prototype.addPeriod = function (period) {
 };
 
 
+LocalDate.prototype.addTime = function (time) {
+    v1 = this.valueOf();
+    v2 = time.valueOf();
+    var dateTime = new Date(this.valueOf() + time.valueOf());
+    return new DateTime(dateTime, 0);
+};
+
+
 LocalDate.prototype.subtractDate = function(value) {
     var data = [];
     data[0] = this.getUTCFullYear() - value.getUTCFullYear();
@@ -58,7 +67,6 @@ LocalDate.prototype.subtractDate = function(value) {
     data[3] = this.getUTCDate() - value.getUTCDate();
     return new Period(data);
 };
-
 
 
 LocalDate.prototype.subtractPeriod = function(value) {
