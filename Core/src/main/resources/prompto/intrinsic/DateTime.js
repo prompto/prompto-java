@@ -84,35 +84,35 @@ DateTime.prototype.addPeriod = function (period) {
 };
 
 
-DateTime.prototype.subtractDateTime = function(other) {
+DateTime.prototype.subtractDateTime = function(dateTime) {
     var thisValue = this.date.valueOf() + this.tzOffset*1000;
-    var otherValue = other.date.valueOf() + other.tzOffset*1000;
+    var otherValue = dateTime.date.valueOf() + dateTime.tzOffset*1000;
     var numDays = ( thisValue - otherValue)/(24*60*60*1000);
     var data = [];
     data[3] = Math.floor(numDays);
-    data[4] = this.date.getUTCHours() - other.date.getUTCHours();
-    data[5] = this.date.getUTCMinutes() - other.date.getUTCMinutes();
-    data[6] = this.date.getUTCSeconds() - other.date.getUTCSeconds();
-    data[7] = this.date.getUTCMilliseconds() - other.date.getUTCMilliseconds();
+    data[4] = this.date.getUTCHours() - dateTime.date.getUTCHours();
+    data[5] = this.date.getUTCMinutes() - dateTime.date.getUTCMinutes();
+    data[6] = this.date.getUTCSeconds() - dateTime.date.getUTCSeconds();
+    data[7] = this.date.getUTCMilliseconds() - dateTime.date.getUTCMilliseconds();
     return new Period(data);
 };
 
 
-DateTime.prototype.subtractPeriod = function(value) {
+DateTime.prototype.subtractPeriod = function(period) {
     var date = new Date();
-    var year = this.date.getUTCFullYear() - (value.years || 0);
+    var year = this.date.getUTCFullYear() - (period.years || 0);
     date.setUTCFullYear(year);
-    var month = this.date.getUTCMonth() - (value.months || 0);
+    var month = this.date.getUTCMonth() - (period.months || 0);
     date.setUTCMonth(month);
-    var day = this.date.getUTCDate() - ((value.weeks || 0) * 7) - (value.days || 0);
+    var day = this.date.getUTCDate() - ((period.weeks || 0) * 7) - (period.days || 0);
     date.setUTCDate(day);
-    var hour = this.date.getUTCHours() - (value.hours || 0);
+    var hour = this.date.getUTCHours() - (period.hours || 0);
     date.setUTCHours(hour);
-    var minute = this.date.getUTCMinutes() - (value.minutes || 0);
+    var minute = this.date.getUTCMinutes() - (period.minutes || 0);
     date.setUTCMinutes(minute);
-    var second = this.date.getUTCSeconds() - (value.seconds || 0);
+    var second = this.date.getUTCSeconds() - (period.seconds || 0);
     date.setUTCSeconds(second);
-    var millis = this.date.getUTCMilliseconds() - (value.millis || 0);
+    var millis = this.date.getUTCMilliseconds() - (period.millis || 0);
     date.setUTCMilliseconds(millis);
     return new DateTime(date, this.tzOffset);
 };
@@ -152,8 +152,8 @@ DateTime.prototype.toString = function() {
 DateTime.prototype.getText = DateTime.prototype.toString;
 
 
-DateTime.prototype.equals = function(value) {
-    return value instanceof DateTime && this.date.valueOf() == value.date.valueOf() && this.tzOffset == value.tzOffset;
+DateTime.prototype.equals = function(other) {
+    return other instanceof DateTime && this.date.valueOf() == other.date.valueOf() && this.tzOffset == other.tzOffset;
 };
 
 DateTime.prototype.gt = function(other) {
@@ -183,16 +183,16 @@ DateTime.prototype.compareTo = function(date, tzOffset) {
 };
 
 
-DateTime.prototype.getYear = function(value) {
+DateTime.prototype.getYear = function() {
     return this.date.getUTCFullYear();
 };
 
-DateTime.prototype.getMonth = function(value) {
+DateTime.prototype.getMonth = function() {
     return this.date.getUTCMonth() + 1;
 };
 
 
-DateTime.prototype.getDayOfMonth = function(value) {
+DateTime.prototype.getDayOfMonth = function() {
     return this.date.getUTCDate();
 };
 
@@ -203,44 +203,44 @@ DateTime.prototype.getDayOfYear = function() {
     return 1 + Math.floor(numDays);
 };
 
-DateTime.prototype.getHour = function(value) {
+DateTime.prototype.getHour = function() {
     return this.date.getUTCHours();
 };
 
 
-DateTime.prototype.getMinute = function(value) {
+DateTime.prototype.getMinute = function() {
     return this.date.getUTCMinutes();
 };
 
 
-DateTime.prototype.getSecond = function(value) {
+DateTime.prototype.getSecond = function() {
     return this.date.getUTCSeconds();
 };
 
 
-DateTime.prototype.getMillisecond = function(value) {
+DateTime.prototype.getMillisecond = function() {
     return this.date.getUTCMilliseconds();
 };
 
-DateTime.prototype.getTzOffset = function(value) {
+DateTime.prototype.getTzOffset = function() {
     return this.date.tzOffset;
 };
 
-DateTime.prototype.getTzName = function(value) {
+DateTime.prototype.getTzName = function() {
     return "Z";
 };
 
-DateTime.prototype.getDate = function(value) {
-    var value = this.date.valueOf();
-    value = value - ( value % 24 * 60 * 60 * 1000 );
-    return new LocalDate(new Date(value));
+DateTime.prototype.getDate = function() {
+    var epoch = this.date.valueOf();
+    epoch = epoch - ( epoch % 24 * 60 * 60 * 1000 );
+    return new LocalDate(new Date(epoch));
 };
 
 
-DateTime.prototype.getTime = function(value) {
-	var value = this.date.valueOf();
-    value = value % 24 * 60 * 60 * 1000;
-    return new LocalTime(new Date(value));
+DateTime.prototype.getTime = function() {
+	var epoch = this.date.valueOf();
+	epoch = epoch % 24 * 60 * 60 * 1000;
+    return new LocalTime(new Date(epoch));
 };
 
 
