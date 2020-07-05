@@ -114,6 +114,10 @@ function writeJSONValue(value, useDbRefs, formData) {
 			return value.map(function(value) {
 				return writeJSONValue(value, useDbRefs);
 			});
+		case "StrictSet":
+			return Array.from(value.set).map(function(value) {
+				return writeJSONValue(value, useDbRefs);
+			});
 		default:	
 			if(typeof($Root) !== 'undefined' && value instanceof $Root) {
 				if(useDbRefs) {
