@@ -50,6 +50,21 @@ public class TestPredicate extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedEqualsError() throws Exception {
+		checkInterpretedOutput("predicate/equalsError.pec");
+	}
+
+	@Test
+	public void testCompiledEqualsError() throws Exception {
+		checkCompiledOutput("predicate/equalsError.pec");
+	}
+
+	@Test
+	public void testTranspiledEqualsError() throws Exception {
+		checkTranspiledOutput("predicate/equalsError.pec");
+	}
+
+	@Test
 	public void testInterpretedGreater() throws Exception {
 		checkInterpretedOutput("predicate/greater.pec");
 	}

@@ -17,6 +17,11 @@ public class TestPredicate extends BaseEParserTest {
 	}
 
 	@Test
+	public void testEqualsError() throws Exception {
+		compareResourceEOE("predicate/equalsError.pec");
+	}
+
+	@Test
 	public void testGreater() throws Exception {
 		compareResourceEOE("predicate/greater.pec");
 	}

@@ -40,6 +40,7 @@ import prompto.intrinsic.PromptoTime;
 import prompto.intrinsic.PromptoVersion;
 import prompto.literal.NullLiteral;
 import prompto.parser.Dialect;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.LinkedValue;
 import prompto.runtime.LinkedVariable;
@@ -77,7 +78,7 @@ import prompto.value.IValue;
 import prompto.value.NullValue;
 import prompto.value.TypeValue;
 
-public class EqualsExpression implements IPredicateExpression, IAssertion {
+public class EqualsExpression extends Section implements IPredicateExpression, IAssertion {
 
 	IExpression left;
 	EqOp operator;
@@ -333,29 +334,33 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 		method.inhibitOffsetListener(finalListener);
 	}
 	
+	
+	@Override
+	public IType checkQuery(Context context) throws PromptoError {
+		AttributeDeclaration decl = checkAttribute(context, left);
+		if(decl==null)
+			return NullType.instance();
+		right.check(context);
+		return BooleanType.instance(); // can compare equality of all objects
+	}
+	
+	
 	@Override
 	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
-		IValue value = null;
-		String name = readFieldName(left);
-		if(name!=null)
-			value = right.interpret(context);
-		else {
-			name = readFieldName(right);
-			if(name!=null)
-				value = left.interpret(context);
-			else
-				throw new SyntaxError("Unable to interpret predicate");
-		}
+		AttributeDeclaration decl = checkAttribute(context, left);
+		if(decl==null)
+			throw new SyntaxError("Unable to interpret predicate");
+		IValue value = right.interpret(context);
 		if(value instanceof IInstance)
 			value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
 		Object data = null;
 		if(value!=null)
-		if(IStore.dbIdName.equals(name))
+		if(IStore.dbIdName.equals(decl.getName()))
 			data = DataStore.getInstance().convertToDbId(value);
 		else
 			data = value.getStorableData();
 		
-		AttributeInfo info = StoreUtils.getAttributeInfo(context, name, store);
+		AttributeInfo info = StoreUtils.getAttributeInfo(context, decl.getName(), store);
 		MatchOp match = getMatchOp();
 		query.<Object>verify(info, match, data);
 		if(operator==EqOp.NOT_EQUALS || operator==EqOp.NOT_CONTAINS)
@@ -379,13 +384,10 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 
 	@Override
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {
-		boolean reverse = compileAttributeInfo(context, method, flags);
+		compileAttributeInfo(context, method, flags);
 		MatchOp match = getMatchOp();
 		CompilerUtils.compileJavaEnum(context, method, flags, match);
-		if(reverse)
-			left.compile(context, method, flags);
-		else
-			right.compile(context, method, flags);
+		right.compile(context, method, flags);
 		InterfaceConstant m = new InterfaceConstant(IQueryBuilder.class,
 				"verify", AttributeInfo.class, MatchOp.class, Object.class, IQueryBuilder.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
@@ -396,23 +398,12 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 	}
 	
 
-	private boolean compileAttributeInfo(Context context, MethodInfo method, Flags flags) {
-		String name = readFieldName(left);
-		boolean reverse = name==null;
-		if(reverse)
-			name = readFieldName(right);
-		AttributeInfo info = context.findAttribute(name).getAttributeInfo(context);
+	private void compileAttributeInfo(Context context, MethodInfo method, Flags flags) {
+		AttributeDeclaration decl = checkAttribute(context, left);
+		if(decl==null)
+			return;
+		AttributeInfo info = context.findAttribute(decl.getName()).getAttributeInfo(context);
 		CompilerUtils.compileAttributeInfo(context, method, flags, info);
-		return reverse;
-	}
-
-	private String readFieldName(IExpression exp) {
-		if(exp instanceof UnresolvedIdentifier
-			|| exp instanceof InstanceExpression
-			|| exp instanceof MemberSelector)
-			return exp.toString();
-		else
-			return null;
 	}
 
 	static Map<Class<?>, IOperatorFunction> EQUALS_COMPILERS = createEqualsCompilers();
@@ -727,23 +718,14 @@ public class EqualsExpression implements IPredicateExpression, IAssertion {
 	
 	@Override
 	public void transpileQuery(Transpiler transpiler, String builderName) {
-	    IExpression value = null;
-	    String name = this.readFieldName(this.left);
-	    if (name != null)
-	        value = this.right;
-	    else {
-	        name = this.readFieldName(this.right);
-	        if (name != null)
-	            value = this.left;
-	        else
-	            throw new SyntaxError("Unable to interpret predicate");
-	    }
-	    AttributeDeclaration decl = transpiler.getContext().findAttribute(name);
-	    AttributeInfo info = decl.getAttributeInfo(transpiler.getContext());
+	    AttributeDeclaration decl = checkAttribute(transpiler.getContext(), left);
+        if(decl==null)
+        	throw new SyntaxError("Unable to interpret predicate");
+    	    AttributeInfo info = decl.getAttributeInfo(transpiler.getContext());
 	    MatchOp matchOp = this.getMatchOp();
 	    // TODO check for dbId field of instance value
 	    transpiler.append(builderName).append(".verify(").append(info.toTranspiled()).append(", MatchOp.").append(matchOp.name()).append(", ");
-	    value.transpile(transpiler);
+	    right.transpile(transpiler);
 	    transpiler.append(");").newLine();
 	    if (this.operator == EqOp.NOT_EQUALS)
 	        transpiler.append(builderName).append(".not();").newLine();

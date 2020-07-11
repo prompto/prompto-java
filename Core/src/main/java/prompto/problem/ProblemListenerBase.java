@@ -147,6 +147,12 @@ public abstract class ProblemListenerBase implements ANTLRErrorListener, IProble
 	}
 
 	@Override
+	public void reportMissingAttribute(ISection section, String message) {
+		addProblem(new MissingAttributeProblem(section, message));
+	}
+	
+	
+	@Override
 	public void reportUnknownAnnotation(ISection section, String name) {
 		addProblem(new UnknowAnnotationProblem(name, section));
 	}

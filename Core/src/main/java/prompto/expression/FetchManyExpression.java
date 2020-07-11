@@ -200,7 +200,7 @@ public class FetchManyExpression extends FetchOneExpression {
 			return;
 		if(!(predicate instanceof IPredicateExpression))
 			throw new SyntaxError("Filtering expression must be a predicate !");
-		IType filterType = predicate.check(context);
+		IType filterType = ((IPredicateExpression)predicate).checkQuery(context);
 		if(filterType!=BooleanType.instance())
 			throw new SyntaxError("Filtering expression must return a boolean !");
 	}

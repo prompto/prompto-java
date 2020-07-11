@@ -15,6 +15,7 @@ import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.parser.Dialect;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.store.IQueryBuilder;
 import prompto.store.IStore;
@@ -25,7 +26,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.BooleanValue;
 import prompto.value.IValue;
 
-public class NotExpression implements IUnaryExpression, IPredicateExpression, IAssertion {
+public class NotExpression extends Section implements IUnaryExpression, IPredicateExpression, IAssertion {
 
 	IExpression expression;
 	
@@ -64,6 +65,12 @@ public class NotExpression implements IUnaryExpression, IPredicateExpression, IA
 			throw new SyntaxError("Cannot negate " + type.getTypeName());
 		return BooleanType.instance();
 	}
+	
+	@Override
+	public IType checkQuery(Context context) throws PromptoError {
+		return check(context);
+	}
+
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {

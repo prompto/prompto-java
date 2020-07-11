@@ -36,6 +36,7 @@ import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStore;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
+import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.utils.StoreUtils;
 import prompto.value.BooleanValue;
@@ -74,6 +75,10 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	public IType check(Context context) {
 		IType lt = left.check(context);
 		IType rt = right.check(context);
+		return checkOperator(context, lt, rt);
+	}
+	
+	private IType checkOperator(Context context, IType lt, IType rt) {
 		switch(operator) {
 		case IN:
 		case NOT_IN:
@@ -338,22 +343,23 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	}
 	
 	@Override
+	public IType checkQuery(Context context) throws PromptoError {
+		AttributeDeclaration decl = checkAttribute(context, left);
+		if(decl==null)
+			return VoidType.instance();
+		IType rt = right.check(context);
+		return checkOperator(context, decl.getType(), rt);
+	}
+	
+	@Override
 	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
-		IValue value = null;
-		String name = readFieldName(left);
-		boolean reverse = name==null;
-		if(name!=null)
-			value = right.interpret(context);
-		else {
-			name = readFieldName(right);
-			if(name!=null)
-				value = left.interpret(context);
-			else
-				throw new SyntaxError("Unable to interpret predicate");
-		}
-		AttributeInfo fieldInfo = StoreUtils.getAttributeInfo(context, name, store);
+		AttributeDeclaration decl = checkAttribute(context, left);
+		if(decl==null)
+			throw new SyntaxError("Unable to interpret predicate");
+		IValue value = right.interpret(context);
+		AttributeInfo fieldInfo = StoreUtils.getAttributeInfo(context, decl.getName(), store);
 		FamilyInfo valueInfo = value.getType().getFamilyInfo(context);
-		MatchOp matchOp = getMatchOp(context, fieldInfo, valueInfo, this.operator, reverse);
+		MatchOp matchOp = getMatchOp(context, fieldInfo, valueInfo, this.operator, false);
 		if(value instanceof IInstance)
 			value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
 		Object data = value==null ? null : value.getStorableData();
@@ -364,27 +370,16 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	
 	@Override
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {
-		IType valueType = null;
-		String name = readFieldName(left);
-		boolean reverse = name==null;
-		if(name!=null)
-			valueType = right.check(context);
-		else {
-			name = readFieldName(right);
-			if(name!=null)
-				valueType = left.check(context);
-			else
-				throw new SyntaxError("Unable to interpret predicate");
-		}
-		AttributeInfo fieldInfo = context.findAttribute(name).getAttributeInfo(context);
+		AttributeDeclaration decl = checkAttribute(context, left);
+		if(decl==null)
+			throw new SyntaxError("Unable to compile predicate");
+		IType valueType = right.check(context);
+		AttributeInfo fieldInfo = context.findAttribute(decl.getName()).getAttributeInfo(context);
 		CompilerUtils.compileAttributeInfo(context, method, flags, fieldInfo);
 		FamilyInfo valueInfo = valueType.getFamilyInfo(context);
-		MatchOp match = getMatchOp(context, fieldInfo, valueInfo, this.operator, reverse);
+		MatchOp match = getMatchOp(context, fieldInfo, valueInfo, this.operator, false);
 		CompilerUtils.compileJavaEnum(context, method, flags, match);
-		if(reverse)
-			left.compile(context, method, flags);
-		else
-			right.compile(context, method, flags);
+		right.compile(context, method, flags);
 		InterfaceConstant m = new InterfaceConstant(IQueryBuilder.class,
 				"verify", AttributeInfo.class, MatchOp.class, Object.class, IQueryBuilder.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
@@ -430,15 +425,6 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 			}
 		} 
 		throw new SyntaxError("Unsupported operator: " + operator.name());
-	}
-
-	private String readFieldName(IExpression exp) {
-		if(exp instanceof UnresolvedIdentifier
-			|| exp instanceof InstanceExpression
-			|| exp instanceof MemberSelector)
-			return exp.toString();
-		else
-			return null;
 	}
 
 	@Override
@@ -491,27 +477,14 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	
 	@Override
 	public void transpileQuery(Transpiler transpiler, String builderName) {
-	    boolean reverse = false;
-	    IExpression value = null;
-	    String name = this.readFieldName(this.left);
-	    if (name != null)
-	        value = this.right;
-	    else {
-	        reverse = true;
-	        name = this.readFieldName(this.right);
-	        if (name != null)
-	            value = this.left;
-	        else
-	            throw new SyntaxError("Unable to transpile predicate");
-	    }
-	    AttributeDeclaration decl = transpiler.getContext().findAttribute(name);
+		AttributeDeclaration decl = checkAttribute(transpiler.getContext(), left);
 	    AttributeInfo fieldInfo = decl.getAttributeInfo(transpiler.getContext());
-	    IType valueType = value.check(transpiler.getContext());
+	    IType valueType = right.check(transpiler.getContext());
 	    FamilyInfo valueInfo = valueType.getFamilyInfo(transpiler.getContext());
 	    // TODO check for dbId field of instance value
-	    MatchOp matchOp = this.getMatchOp(transpiler.getContext(), fieldInfo, valueInfo, this.operator, reverse);
+	    MatchOp matchOp = this.getMatchOp(transpiler.getContext(), fieldInfo, valueInfo, this.operator, false);
 	    transpiler.append(builderName).append(".verify(").append(fieldInfo.toTranspiled()).append(", MatchOp.").append(matchOp.name()).append(", ");
-	    value.transpile(transpiler);
+	    right.transpile(transpiler);
 	    transpiler.append(");").newLine();
 	    if (this.operator.name().indexOf("NOT_")==0)
 	        transpiler.append(builderName).append(".not();").newLine();

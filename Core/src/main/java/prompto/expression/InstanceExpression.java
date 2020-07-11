@@ -33,6 +33,7 @@ import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.type.MethodType;
+import prompto.type.NullType;
 import prompto.utils.CodeWriter;
 import prompto.value.ClosureValue;
 import prompto.value.IValue;
@@ -236,6 +237,17 @@ public class InstanceExpression extends Section implements IPredicateExpression 
 			return new EqualsExpression(this, EqOp.EQUALS, new BooleanLiteral("true"));
 	}
 
+
+	@Override
+	public IType checkQuery(Context context) throws PromptoError {
+		IPredicateExpression predicate = toPredicate(context);
+		if(predicate!=null)
+			return predicate.checkQuery(context);
+		else
+			return NullType.instance();
+	}
+	
+	
 	@Override
 	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
 		IPredicateExpression predicate = toPredicate(context);

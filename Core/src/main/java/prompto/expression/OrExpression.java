@@ -19,6 +19,7 @@ import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.parser.Dialect;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.store.IQueryBuilder;
 import prompto.store.IStore;
@@ -29,7 +30,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.BooleanValue;
 import prompto.value.IValue;
 
-public class OrExpression implements IPredicateExpression, IAssertion {
+public class OrExpression extends Section implements IPredicateExpression, IAssertion {
 	
 	IExpression left;
 	IExpression right;
@@ -79,6 +80,12 @@ public class OrExpression implements IPredicateExpression, IAssertion {
 			throw new SyntaxError("Cannot combine " + lt.getTypeName() + " and " + rt.getTypeName());
 		return BooleanType.instance();
 	}
+	
+	@Override
+	public IType checkQuery(Context context) throws PromptoError {
+		return check(context);
+	}
+
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {

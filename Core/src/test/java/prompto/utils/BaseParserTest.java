@@ -105,9 +105,13 @@ public class BaseParserTest extends BaseTest {
 				Interpreter.interpretMainNoArgs(context);
 				return false;
 			}
+		} catch(PromptoError e) {
+			if(reThrow)
+				throw e;	
+			else
+				System.out.println(e.getMessage());
+			return true;
 		} catch(Exception e) {
-			if(reThrow && e instanceof PromptoError)
-				throw (PromptoError)e;
 			e.printStackTrace(System.err);
 			fail(e.getMessage());
 			return false;
@@ -125,9 +129,13 @@ public class BaseParserTest extends BaseTest {
 				Executor.executeMainNoArgs(context);
 				return false;
 			}
+		} catch(PromptoError e) {
+			if(reThrow)
+				throw e;	
+			else
+				System.out.println(e.getMessage());
+			return true;
 		} catch(Exception e) {
-			if(reThrow && e instanceof PromptoError)
-				throw (PromptoError)e;
 			e.printStackTrace(System.err);
 			fail(e.getMessage());
 			return false;
@@ -143,9 +151,13 @@ public class BaseParserTest extends BaseTest {
 				Nashorn8Engine.executeMainNoArgs(context);
 			}
 			return true;
+		} catch(PromptoError e) {
+			if(reThrow)
+				throw e;	
+			else
+				System.out.println(e.getMessage());
+			return true;
 		} catch(Exception e) {
-			if(reThrow && e instanceof PromptoError)
-				throw (PromptoError)e;
 			e.printStackTrace(System.err);
 			fail(e.getMessage());
 			return false;

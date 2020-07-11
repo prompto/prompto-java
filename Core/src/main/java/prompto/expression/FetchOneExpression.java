@@ -110,7 +110,7 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 		}
 		if(!(predicate instanceof IPredicateExpression))
 			throw new SyntaxError("Filtering expression must be a predicate !");
-		IType filterType = predicate.check(context);
+		IType filterType = ((IPredicateExpression)predicate).checkQuery(context);
 		if(filterType!=BooleanType.instance())
 			throw new SyntaxError("Filtering expression must return a boolean !");
 		return type!=null ? type : AnyType.instance();

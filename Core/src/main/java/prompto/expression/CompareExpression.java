@@ -46,6 +46,7 @@ import prompto.type.IntegerType;
 import prompto.type.TextType;
 import prompto.type.TimeType;
 import prompto.type.VersionType;
+import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.utils.StoreUtils;
 import prompto.value.BooleanValue;
@@ -138,38 +139,32 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 	}
 	
 	@Override
+	public IType checkQuery(Context context) throws PromptoError {
+		AttributeDeclaration decl = checkAttribute(context, left);
+		if(decl==null)
+			return VoidType.instance();
+		IType rt = right.check(context);
+		return decl.getType().checkCompare(context, rt, this);
+	}
+	
+	@Override
 	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
-		String name = null;
-		IValue value = null;
-		if(left instanceof UnresolvedIdentifier) {
-			name = ((UnresolvedIdentifier)left).getName();
-			value = right.interpret(context);
-		} else if(left instanceof InstanceExpression) {
-			name = ((InstanceExpression)left).getName();
-			value = right.interpret(context);
-		} else if(right instanceof UnresolvedIdentifier) {
-			name = ((UnresolvedIdentifier)right).getName();
-			value = left.interpret(context);
-		} else if(right instanceof InstanceExpression) {
-			name = ((InstanceExpression)right).getName();
-			value = left.interpret(context);
-		}
-		if(name==null)
-			throw new SyntaxError("Unable to interpret predicate");
-		else {
-			AttributeInfo info = StoreUtils.getAttributeInfo(context, name, store);
-			if(value instanceof IInstance)
-				value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
-			MatchOp matchOp = getMatchOp();
-			query.verify(info, matchOp, value==null ? null : value.getStorableData());
-			switch(operator) {
-			case GTE:
-			case LTE:
-				query.not();
-				break;
-			default:
-				// nothing to do
-			}
+		AttributeDeclaration decl = checkAttribute(context, left);
+		if(decl==null)
+			throw new SyntaxError("Unable to interpret predicate: " + this.toString());
+		AttributeInfo info = StoreUtils.getAttributeInfo(context, decl.getName(), store);
+		IValue value = right.interpret(context);
+		if(value instanceof IInstance)
+			value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
+		MatchOp matchOp = getMatchOp();
+		query.verify(info, matchOp, value==null ? null : value.getStorableData());
+		switch(operator) {
+		case GTE:
+		case LTE:
+			query.not();
+			break;
+		default:
+			// nothing to do
 		}
 	}
 	
