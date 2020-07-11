@@ -70,7 +70,6 @@ import prompto.type.TextType;
 import prompto.type.TimeType;
 import prompto.type.UuidType;
 import prompto.type.VersionType;
-import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.utils.StoreUtils;
 import prompto.value.BooleanValue;
@@ -337,16 +336,15 @@ public class EqualsExpression extends Section implements IPredicateExpression, I
 	
 	
 	@Override
-	public IType checkQuery(Context context) throws PromptoError {
+	public void checkQuery(Context context) throws PromptoError {
 		AttributeDeclaration decl = left.checkAttribute(context, this);
 		if(decl==null)
-			return VoidType.instance();
+			return;
 		if(!decl.isStorable(context)) {
 			context.getProblemListener().reportNotStorable(this, decl.getName());	
-			return VoidType.instance();
+			return;
 		}
 		right.check(context);
-		return BooleanType.instance(); // can compare equality of all objects
 	}
 	
 	

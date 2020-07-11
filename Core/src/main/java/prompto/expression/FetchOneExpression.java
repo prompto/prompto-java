@@ -28,7 +28,6 @@ import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.transpiler.Transpiler;
 import prompto.type.AnyType;
-import prompto.type.BooleanType;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -108,11 +107,10 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 				context.getProblemListener().reportNotStorable(this, type.getTypeName());
 			context = context.newInstanceContext(decl.getType(context), true);
 		}
-		if(!(predicate instanceof IPredicateExpression))
-			throw new SyntaxError("Filtering expression must be a predicate !");
-		IType filterType = ((IPredicateExpression)predicate).checkQuery(context);
-		if(filterType!=BooleanType.instance())
-			throw new SyntaxError("Filtering expression must return a boolean !");
+		if(predicate instanceof IPredicateExpression)
+			((IPredicateExpression)predicate).checkQuery(context);
+		else
+			context.getProblemListener().reportIllegalOperation(this, "Filtering expression must be a predicate !");
 		return type!=null ? type : AnyType.instance();
 	}
 	

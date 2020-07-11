@@ -37,6 +37,7 @@ import prompto.store.IQueryBuilder;
 import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStore;
 import prompto.transpiler.Transpiler;
+import prompto.type.BooleanType;
 import prompto.type.CharacterType;
 import prompto.type.DateTimeType;
 import prompto.type.DateType;
@@ -46,7 +47,6 @@ import prompto.type.IntegerType;
 import prompto.type.TextType;
 import prompto.type.TimeType;
 import prompto.type.VersionType;
-import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.utils.StoreUtils;
 import prompto.value.BooleanValue;
@@ -83,7 +83,8 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 	public IType check(Context context) {
 		IType lt = left.check(context);
 		IType rt = right.check(context);
-		return lt.checkCompare(context, rt, this);
+		lt.checkCompare(context, rt, this);
+		return BooleanType.instance();
 	}
 
 	@Override
@@ -139,16 +140,16 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 	}
 	
 	@Override
-	public IType checkQuery(Context context) throws PromptoError {
+	public void checkQuery(Context context) throws PromptoError {
 		AttributeDeclaration decl = left.checkAttribute(context, this);
 		if(decl==null)
-			return VoidType.instance();
+			return;
 		if(!decl.isStorable(context)) {
 			context.getProblemListener().reportNotStorable(this, decl.getName());	
-			return VoidType.instance();
+			return;
 		}
 		IType rt = right.check(context);
-		return decl.getType().checkCompare(context, rt, this);
+		decl.getType().checkCompare(context, rt, this);
 	}
 	
 	@Override

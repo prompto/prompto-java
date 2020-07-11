@@ -79,13 +79,13 @@ public class TupleType extends ContainerType {
 	}
 	
 	@Override
-	public IType checkContains(Context context, IType other) {
-		return BooleanType.instance(); 
+	public void checkContains(Context context, IType other) {
+		// nothing to do
 	}
 	
 	@Override
-	public IType checkContainsAllOrAny(Context context, IType other) {
-		return BooleanType.instance(); 
+	public void checkContainsAllOrAny(Context context, IType other) {
+		// nothing to do
 	}
 	
 	@Override

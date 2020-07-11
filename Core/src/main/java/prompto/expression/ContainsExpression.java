@@ -35,8 +35,8 @@ import prompto.store.IQueryBuilder;
 import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStore;
 import prompto.transpiler.Transpiler;
+import prompto.type.BooleanType;
 import prompto.type.IType;
-import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.utils.StoreUtils;
 import prompto.value.BooleanValue;
@@ -75,19 +75,22 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	public IType check(Context context) {
 		IType lt = left.check(context);
 		IType rt = right.check(context);
-		return checkOperator(context, lt, rt);
+		checkOperator(context, lt, rt);
+		return BooleanType.instance();
 	}
 	
-	private IType checkOperator(Context context, IType lt, IType rt) {
+	private void checkOperator(Context context, IType lt, IType rt) {
 		switch(operator) {
 		case IN:
 		case NOT_IN:
-			return rt.checkContains(context,lt);
+			rt.checkContains(context,lt);
+			break;
 		case HAS:
 		case NOT_HAS:
-			return lt.checkContains(context, rt);
+			lt.checkContains(context, rt);
+			break;
 		default:
-			return lt.checkContainsAllOrAny(context, rt);
+			lt.checkContainsAllOrAny(context, rt);
 		}
 	}
 	
@@ -343,16 +346,16 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	}
 	
 	@Override
-	public IType checkQuery(Context context) throws PromptoError {
+	public void checkQuery(Context context) throws PromptoError {
 		AttributeDeclaration decl = left.checkAttribute(context, this);
 		if(decl==null)
-			return VoidType.instance();
+			return;
 		if(!decl.isStorable(context)) {
 			context.getProblemListener().reportNotStorable(this, decl.getName());	
-			return VoidType.instance();
+			return;
 		}
 		IType rt = right.check(context);
-		return checkOperator(context, decl.getType(), rt);
+		checkOperator(context, decl.getType(), rt);
 	}
 	
 	@Override

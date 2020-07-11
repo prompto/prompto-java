@@ -11,7 +11,6 @@ import prompto.store.IQueryBuilder;
 import prompto.store.IStore;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
-import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
@@ -45,13 +44,11 @@ public class ParenthesisExpression extends Section implements IPredicateExpressi
 	}
 	
 	@Override
-	public IType checkQuery(Context context) throws PromptoError {
+	public void checkQuery(Context context) throws PromptoError {
 		if(expression instanceof IPredicateExpression)
-			return ((IPredicateExpression)expression).checkQuery(context);
-		else {
+			((IPredicateExpression)expression).checkQuery(context);
+		else
 			context.getProblemListener().reportIllegalOperation(this, "Expected a predicate, got: " + expression.toString());
-			return VoidType.instance();
-		}
 	}
 
 	@Override

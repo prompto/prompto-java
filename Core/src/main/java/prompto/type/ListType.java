@@ -107,8 +107,8 @@ public class ListType extends ContainerType {
 	}
 	
 	@Override
-	public IType checkContainsAllOrAny(Context context, IType other) {
-		return BooleanType.instance();
+	public void checkContainsAllOrAny(Context context, IType other) {
+		// nothing to do
 	}
 	
 	@Override

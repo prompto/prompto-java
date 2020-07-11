@@ -59,10 +59,11 @@ public class CharacterType extends NativeType {
 	}
 
 	@Override
-	public IType checkCompare(Context context, IType other, ISection section) {
+	public void checkCompare(Context context, IType other, ISection section) {
 		if (other instanceof CharacterType || other instanceof TextType)
-			return BooleanType.instance();
-		return super.checkCompare(context, other, section);
+			return;
+		else
+			super.checkCompare(context, other, section);
 	}
 
 	@Override

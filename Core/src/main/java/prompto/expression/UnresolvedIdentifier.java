@@ -23,7 +23,6 @@ import prompto.transpiler.Transpiler;
 import prompto.type.AnyType;
 import prompto.type.CategoryType;
 import prompto.type.IType;
-import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
@@ -80,12 +79,12 @@ public class UnresolvedIdentifier extends Section implements IPredicateExpressio
 	
 	
 	@Override
-	public IType checkQuery(Context context) throws PromptoError {
+	public void checkQuery(Context context) throws PromptoError {
 		resolveAndCheck(context, false);
 		if(resolved instanceof IPredicateExpression)
-			return ((IPredicateExpression)resolved).checkQuery(context);
+			((IPredicateExpression)resolved).checkQuery(context);
 		else
-			return VoidType.instance();
+			context.getProblemListener().reportIllegalOperation(this, "Expectced a predicate, got: " + this.toString());
 	}
 	
 	public IType checkMember(Context context) {

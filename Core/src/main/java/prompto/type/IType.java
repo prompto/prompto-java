@@ -68,11 +68,11 @@ public interface IType extends ISection {
 	IType checkIntDivide(Context context, IType other);
 	IType checkMultiply(Context context, IType other, boolean tryReverse);
 	IType checkModulo(Context context, IType rt);
-	IType checkCompare(Context context, IType other, ISection section);
+	void checkCompare(Context context, IType other, ISection section);
 	IType checkItem(Context context, IType itemType) ;
 	IType checkRange(Context context, IType other);
-	IType checkContains(Context context, IType other);
-	IType checkContainsAllOrAny(Context context, IType other);
+	void checkContains(Context context, IType other);
+	void checkContainsAllOrAny(Context context, IType other);
 	IType checkIterator(Context context);
 	IType checkSlice(Context context);
 	IType checkMember(Context context, Identifier name);

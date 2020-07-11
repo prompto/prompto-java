@@ -218,12 +218,11 @@ public class IntegerType extends NativeType implements INumberType {
 	};
 	
 	@Override
-	public IType checkCompare(Context context, IType other, ISection section) {
-		if(other instanceof IntegerType)
-			return BooleanType.instance();
-		if(other instanceof DecimalType)
-			return BooleanType.instance();
-		return super.checkCompare(context, other, section);
+	public void checkCompare(Context context, IType other, ISection section) {
+		if(other instanceof IntegerType || other instanceof DecimalType)
+			return;
+		else
+			super.checkCompare(context, other, section);
 	}
 	
 	@Override

@@ -79,10 +79,11 @@ public class TimeType extends NativeType {
 	}
 
 	@Override
-	public IType checkCompare(Context context, IType other, ISection section) {
+	public void checkCompare(Context context, IType other, ISection section) {
 		if (other instanceof TimeType)
-			return BooleanType.instance();
-		return super.checkCompare(context, other, section);
+			return;
+		else
+			super.checkCompare(context, other, section);
 	}
 
 	@Override

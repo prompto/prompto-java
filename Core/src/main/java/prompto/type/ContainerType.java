@@ -62,11 +62,11 @@ public abstract class ContainerType extends IterableType {
 	}
 	
 	@Override
-	public IType checkContains(Context context, IType other) {
+	public void checkContains(Context context, IType other) {
 		if(itemType.isAssignableFrom(context, other))
-			return BooleanType.instance();
+			return;
 		else
-			return super.checkContains(context, other);
+			super.checkContains(context, other);
 	}
 	
 	@Override

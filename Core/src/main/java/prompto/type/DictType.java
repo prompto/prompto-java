@@ -77,11 +77,11 @@ public class DictType extends ContainerType {
 	}
 	
 	@Override
-	public IType checkContains(Context context, IType other) {
+	public void checkContains(Context context, IType other) {
 		if(other==TextType.instance())
-			return BooleanType.instance();
+			return;
 		else
-			return super.checkContains(context, other);
+			super.checkContains(context, other);
 	}
 	
 	@Override
@@ -121,8 +121,8 @@ public class DictType extends ContainerType {
 	}
 	
 	@Override
-	public IType checkContainsAllOrAny(Context context, IType other) {
-		return BooleanType.instance();
+	public void checkContainsAllOrAny(Context context, IType other) {
+		// nothing to do
 	}
 	
 	@Override

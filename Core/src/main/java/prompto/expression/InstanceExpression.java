@@ -34,7 +34,6 @@ import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.type.MethodType;
-import prompto.type.NullType;
 import prompto.utils.CodeWriter;
 import prompto.value.ClosureValue;
 import prompto.value.IValue;
@@ -249,12 +248,10 @@ public class InstanceExpression extends Section implements IPredicateExpression 
 
 
 	@Override
-	public IType checkQuery(Context context) throws PromptoError {
+	public void checkQuery(Context context) throws PromptoError {
 		IPredicateExpression predicate = toPredicate(context);
 		if(predicate!=null)
-			return predicate.checkQuery(context);
-		else
-			return NullType.instance();
+			predicate.checkQuery(context);
 	}
 	
 	

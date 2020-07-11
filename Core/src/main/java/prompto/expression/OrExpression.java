@@ -82,14 +82,17 @@ public class OrExpression extends Section implements IPredicateExpression, IAsse
 	}
 	
 	@Override
-	public IType checkQuery(Context context) throws PromptoError {
-		if(!(left instanceof IPredicateExpression))
+	public void checkQuery(Context context) throws PromptoError {
+		if(!(left instanceof IPredicateExpression)) {
 			context.getProblemListener().reportIllegalOperation(this, "Expected a predicate, got: " + left.toString());
+			return;
+		}
 		((IPredicateExpression)left).checkQuery(context);
-		if(!(right instanceof IPredicateExpression))
+		if(!(right instanceof IPredicateExpression)) {
 			context.getProblemListener().reportIllegalOperation(this, "Expected a predicate, got: " + right.toString());
+			return;
+		}
 		((IPredicateExpression)right).checkQuery(context);
-		return BooleanType.instance();
 	}
 
 	

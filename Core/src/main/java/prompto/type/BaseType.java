@@ -128,26 +128,25 @@ public abstract class BaseType extends Section implements IType {
 	}
 	
 	@Override
-	public IType checkCompare(Context context, IType other, ISection section) {
+	public void checkCompare(Context context, IType other, ISection section) {
 		if(other instanceof EnumeratedNativeType)
-			return checkCompare(context, ((EnumeratedNativeType)other).getDerivedFrom(), section);
+			checkCompare(context, ((EnumeratedNativeType)other).getDerivedFrom(), section);
 		else 		
 			context.getProblemListener().reportIllegalComparison(section, this, other);
-		return BooleanType.instance();
 	}
 
 	@Override
-	public IType checkContains(Context context, IType other) {
+	public void checkContains(Context context, IType other) {
 		if(other instanceof EnumeratedNativeType)
-			return checkContains(context, ((EnumeratedNativeType)other).getDerivedFrom());
+			checkContains(context, ((EnumeratedNativeType)other).getDerivedFrom());
 		else 		
 			throw new SyntaxError(this.getTypeName() + " cannot contain " + other.getTypeName());
 	}
 
 	@Override
-	public IType checkContainsAllOrAny(Context context, IType other) {
+	public void checkContainsAllOrAny(Context context, IType other) {
 		if(other instanceof EnumeratedNativeType)
-			return checkContainsAllOrAny(context, ((EnumeratedNativeType)other).getDerivedFrom());
+			checkContainsAllOrAny(context, ((EnumeratedNativeType)other).getDerivedFrom());
 		else 		
 			throw new SyntaxError(this.getTypeName() + " cannot contain " + other.getTypeName());
 	}

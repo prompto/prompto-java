@@ -89,8 +89,8 @@ public class SetType extends ContainerType {
 	}
 
 	@Override
-	public IType checkContainsAllOrAny(Context context, IType other) {
-		return BooleanType.instance();
+	public void checkContainsAllOrAny(Context context, IType other) {
+		// nothing to do
 	}
 	
 	

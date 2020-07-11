@@ -75,12 +75,13 @@ public class DateTimeType extends NativeType {
 	}
 
 	@Override
-	public IType checkCompare(Context context, IType other, ISection section) {
+	public void checkCompare(Context context, IType other, ISection section) {
 		if (other instanceof DateType)
-			return BooleanType.instance();
-		if (other instanceof DateTimeType)
-			return BooleanType.instance();
-		return super.checkCompare(context, other, section);
+			return;
+		else if (other instanceof DateTimeType)
+			return;
+		else
+			super.checkCompare(context, other, section);
 	}
 
 	@Override

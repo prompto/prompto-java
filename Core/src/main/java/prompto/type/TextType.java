@@ -85,10 +85,11 @@ public class TextType extends NativeType {
 	}
 	
 	@Override
-	public IType checkCompare(Context context, IType other, ISection section) {
+	public void checkCompare(Context context, IType other, ISection section) {
 		if(other instanceof TextType || other instanceof CharacterType)
-			return BooleanType.instance();
-		return super.checkCompare(context, other, section);
+			return;
+		else
+			super.checkCompare(context, other, section);
 	}
 	
 	@Override
@@ -110,15 +111,16 @@ public class TextType extends NativeType {
 
 	
 	@Override
-	public IType checkContains(Context context, IType other) {
+	public void checkContains(Context context, IType other) {
 		if(other instanceof TextType || other instanceof CharacterType)
-			return BooleanType.instance();
-		return super.checkContains(context, other);
+			return;
+		else
+			super.checkContains(context, other);
 	}
 	
 	@Override
-	public IType checkContainsAllOrAny(Context context, IType other) {
-		return BooleanType.instance();
+	public void checkContainsAllOrAny(Context context, IType other) {
+		// nothing to do
 	}
 	
 	@Override

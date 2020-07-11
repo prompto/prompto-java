@@ -24,7 +24,6 @@ import prompto.store.IStoredIterable;
 import prompto.store.InvalidValueError;
 import prompto.transpiler.Transpiler;
 import prompto.type.AnyType;
-import prompto.type.BooleanType;
 import prompto.type.CategoryType;
 import prompto.type.CursorType;
 import prompto.type.IType;
@@ -198,11 +197,10 @@ public class FetchManyExpression extends FetchOneExpression {
 	private void checkPredicate(Context context) {
 		if(predicate==null)
 			return;
-		if(!(predicate instanceof IPredicateExpression))
-			throw new SyntaxError("Filtering expression must be a predicate !");
-		IType filterType = ((IPredicateExpression)predicate).checkQuery(context);
-		if(filterType!=BooleanType.instance())
-			throw new SyntaxError("Filtering expression must return a boolean !");
+		if(predicate instanceof IPredicateExpression)
+			((IPredicateExpression)predicate).checkQuery(context);
+		else
+			context.getProblemListener().reportIllegalOperation(this, "Filtering expression must be a predicate !");
 	}
 
 	@Override
