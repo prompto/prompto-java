@@ -340,7 +340,7 @@ public class EqualsExpression extends Section implements IPredicateExpression, I
 	public IType checkQuery(Context context) throws PromptoError {
 		AttributeDeclaration decl = left.checkAttribute(context, this);
 		if(decl==null)
-			return NullType.instance();
+			return VoidType.instance();
 		if(!decl.isStorable(context)) {
 			context.getProblemListener().reportNotStorable(this, decl.getName());	
 			return VoidType.instance();
