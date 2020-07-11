@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.IDeclaration;
@@ -106,29 +107,30 @@ public class CodeStoreBootstrapper {
 	}
 
 	private Map<String, AttributeDeclaration> getMinimalColumns(IStore store) {
-		IType dbIdIType = store==null ? IntegerType.instance() : TypeUtils.typeToIType(store.getDbIdClass());
-		Map<String, AttributeDeclaration> columns = new HashMap<>();
-		// attributes with reserved names, the below declarations will be used
-		columns.put(IStore.dbIdName, new AttributeDeclaration(new Identifier(IStore.dbIdName), dbIdIType));
-		columns.put("storable", new AttributeDeclaration(new Identifier("storable"), BooleanType.instance()));
-		columns.put("category", new AttributeDeclaration(new Identifier("category"), 
-				new ListType(TextType.instance()), new IdentifierList(new Identifier("key"))));
-		// also add 'module' to avoid dependency on DevCenter
-		columns.put("module", new AttributeDeclaration(new Identifier("module"), dbIdIType));
-		// more required attributes which will be overridden by a prompto declaration
-		columns.put("author", new AttributeDeclaration(new Identifier("author"), TextType.instance()));
-		columns.put("timeStamp", new AttributeDeclaration(new Identifier("timeStamp"), DateTimeType.instance()));
-		columns.put("name", new AttributeDeclaration(new Identifier("name"), TextType.instance()));
-		columns.put("description", new AttributeDeclaration(new Identifier("description"), TextType.instance()));
-		columns.put("version", new AttributeDeclaration(new Identifier("version"), TextType.instance())); // TODO add VersionType ?
-		columns.put("prototype", new AttributeDeclaration(new Identifier("prototype"), TextType.instance()));
-		columns.put("dialect", new AttributeDeclaration(new Identifier("dialect"), TextType.instance()));
-		columns.put("body", new AttributeDeclaration(new Identifier("body"), TextType.instance()));
-		columns.put("data", new AttributeDeclaration(new Identifier("data"), BlobType.instance()));
-		columns.put("mimeType", new AttributeDeclaration(new Identifier("mimeType"), TextType.instance()));
-		columns.put("moduleStatus", new AttributeDeclaration(new Identifier("moduleStatus"), TextType.instance())); // for bootstrapping TextType is good enough
-		columns.put("parked", new AttributeDeclaration(new Identifier("parked"), BooleanType.instance()));
-		return columns;
+		final IType dbIdIType = store==null ? IntegerType.instance() : TypeUtils.typeToIType(store.getDbIdClass());
+		return Stream.of(
+				// attributes with reserved names, the below declarations will be used
+				new AttributeDeclaration(new Identifier(IStore.dbIdName), dbIdIType),
+				new AttributeDeclaration(new Identifier("storable"), BooleanType.instance()),
+				new AttributeDeclaration(new Identifier("category"), 
+						new ListType(TextType.instance()), new IdentifierList(new Identifier("key"))),
+				// also add 'module' to avoid dependency on DevCenter
+				new AttributeDeclaration(new Identifier("module"), dbIdIType),
+				// more required attributes which will be overridden by a prompto declaration
+				new AttributeDeclaration(new Identifier("author"), TextType.instance()),
+				new AttributeDeclaration(new Identifier("timeStamp"), DateTimeType.instance()),
+				new AttributeDeclaration(new Identifier("name"), TextType.instance()),
+				new AttributeDeclaration(new Identifier("description"), TextType.instance()),
+				new AttributeDeclaration(new Identifier("version"), TextType.instance()), // TODO add VersionType ?
+				new AttributeDeclaration(new Identifier("prototype"), TextType.instance()),
+				new AttributeDeclaration(new Identifier("dialect"), TextType.instance()),
+				new AttributeDeclaration(new Identifier("body"), TextType.instance()),
+				new AttributeDeclaration(new Identifier("data"), BlobType.instance()),
+				new AttributeDeclaration(new Identifier("mimeType"), TextType.instance()),
+				new AttributeDeclaration(new Identifier("moduleStatus"), TextType.instance()), // for bootstrapping TextType is good enough
+				new AttributeDeclaration(new Identifier("parked"), BooleanType.instance()))
+			.map(attr->attr.withStorable(true))
+			.collect(Collectors.toMap(attr->attr.getName(), Function.identity()));
 	}
 
 

@@ -374,7 +374,7 @@ public abstract class Standalone {
 		Map<String, AttributeDeclaration> columns = new HashMap<String, AttributeDeclaration>();
 		// attributes with reserved names, the below declarations will be used
 		IType dbIdIType = TypeUtils.typeToIType(dataStore.getDbIdClass());
-		columns.put(IStore.dbIdName, new AttributeDeclaration(new Identifier(IStore.dbIdName), dbIdIType));
+		columns.put(IStore.dbIdName, new AttributeDeclaration(new Identifier(IStore.dbIdName), dbIdIType).withStorable(true));
 		columns.put("category", new AttributeDeclaration(new Identifier("category"), 
 				new ListType(TextType.instance()), new IdentifierList(new Identifier("key"))));
 		return columns;

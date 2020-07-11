@@ -60,6 +60,11 @@ public class AttributeDeclaration extends BaseDeclaration {
 		this.indexTypes = indexTypes;
 	}
 
+	public AttributeDeclaration withStorable(boolean set) {
+		this.storable = set;
+		return this;
+	}
+
 	@Override
 	public DeclarationType getDeclarationType() {
 		return DeclarationType.ATTRIBUTE;
@@ -318,5 +323,6 @@ public class AttributeDeclaration extends BaseDeclaration {
 	    if(this.constraint!=null)
 	        this.constraint.declare(transpiler, this.getName(), this.type);
 	}
+
 
 }

@@ -77,7 +77,7 @@ and verifying:
 // runtime reference of any object
 define id as Any attribute
 // database reference of stored object
-define dbId as Any attribute
+define dbId as storable Any attribute
 // any object has a text attribute, used for display 
 define text as storable Text attribute with value and words index
 // many objects have a name, it is not unique 
