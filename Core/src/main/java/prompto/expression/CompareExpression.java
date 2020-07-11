@@ -140,7 +140,7 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 	
 	@Override
 	public IType checkQuery(Context context) throws PromptoError {
-		AttributeDeclaration decl = context.checkAttribute(this, left);
+		AttributeDeclaration decl = left.checkAttribute(context, this);
 		if(decl==null)
 			return VoidType.instance();
 		if(!decl.isStorable(context)) {
@@ -153,7 +153,7 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 	
 	@Override
 	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
-		AttributeDeclaration decl = context.checkAttribute(this, left);
+		AttributeDeclaration decl = left.checkAttribute(context, this);
 		if(decl==null || !decl.isStorable(context))
 			throw new SyntaxError("Unable to interpret predicate: " + this.toString());
 		AttributeInfo info = StoreUtils.getAttributeInfo(context, decl.getName(), store);

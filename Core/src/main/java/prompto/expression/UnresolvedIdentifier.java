@@ -3,6 +3,7 @@ package prompto.expression;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
+import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IEnumeratedDeclaration;
 import prompto.declaration.SingletonCategoryDeclaration;
@@ -10,6 +11,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
+import prompto.parser.ISection;
 import prompto.parser.Section;
 import prompto.problem.IProblemListener;
 import prompto.problem.ProblemListener;
@@ -64,9 +66,18 @@ public class UnresolvedIdentifier extends Section implements IPredicateExpressio
 	}
 	
 	@Override
+	public AttributeDeclaration checkAttribute(Context context, ISection section) {
+		AttributeDeclaration decl = context.findAttribute(id.toString());
+		if(decl==null)
+			context.getProblemListener().reportMissingAttribute(this, this.toString());
+		return decl;
+	}
+
+	@Override
 	public IType check(Context context) {
 		return resolveAndCheck(context, false);
 	}
+	
 	
 	@Override
 	public IType checkQuery(Context context) throws PromptoError {

@@ -3,8 +3,10 @@ package prompto.expression;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
+import prompto.declaration.AttributeDeclaration;
 import prompto.error.PromptoError;
 import prompto.parser.Dialect;
+import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
@@ -54,6 +56,10 @@ public interface IExpression {
 	}
 	default void transpileFound(Transpiler transpiler, Dialect dialect) {
 		throw new UnsupportedOperationException("transpileFound " + this.getClass().getName());
+	}
+	default AttributeDeclaration checkAttribute(Context context, ISection section) {
+		context.getProblemListener().reportMissingAttribute(section, this.toString());
+		return null;
 	}
 	
 	

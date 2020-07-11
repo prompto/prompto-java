@@ -20,6 +20,7 @@ import prompto.grammar.Identifier;
 import prompto.literal.BooleanLiteral;
 import prompto.param.IParameter;
 import prompto.parser.Dialect;
+import prompto.parser.ISection;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Context.ClosureContext;
@@ -79,6 +80,15 @@ public class InstanceExpression extends Section implements IPredicateExpression 
 		return false;
 	}
 
+	@Override
+	public AttributeDeclaration checkAttribute(Context context, ISection section) {
+		AttributeDeclaration decl = context.findAttribute(id.toString());
+		if(decl==null)
+			context.getProblemListener().reportMissingAttribute(this, this.toString());
+		return decl;
+	}
+	
+	
 	@Override
 	public IType check(Context context) {
 		INamed named = context.getRegistered(id);

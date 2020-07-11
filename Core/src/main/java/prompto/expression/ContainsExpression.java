@@ -344,7 +344,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	
 	@Override
 	public IType checkQuery(Context context) throws PromptoError {
-		AttributeDeclaration decl = context.checkAttribute(this, left);
+		AttributeDeclaration decl = left.checkAttribute(context, this);
 		if(decl==null)
 			return VoidType.instance();
 		if(!decl.isStorable(context)) {
@@ -357,7 +357,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	
 	@Override
 	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
-		AttributeDeclaration decl = context.checkAttribute(this, left);
+		AttributeDeclaration decl = left.checkAttribute(context, this);
 		if(decl==null || !decl.isStorable(context))
 			throw new SyntaxError("Unable to interpret predicate");
 		IValue value = right.interpret(context);
@@ -374,7 +374,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	
 	@Override
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {
-		AttributeDeclaration decl = context.checkAttribute(this, left);
+		AttributeDeclaration decl = left.checkAttribute(context, this);
 		if(decl==null || !decl.isStorable(context))
 			throw new SyntaxError("Unable to compile predicate");
 		IType valueType = right.check(context);
@@ -481,7 +481,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	
 	@Override
 	public void transpileQuery(Transpiler transpiler, String builderName) {
-		AttributeDeclaration decl = transpiler.getContext().checkAttribute(this, left);
+		AttributeDeclaration decl = left.checkAttribute(transpiler.getContext(), this);
 		if(decl==null || !decl.isStorable(transpiler.getContext()))
 			throw new SyntaxError("Unable to compile predicate");
 	    AttributeInfo fieldInfo = decl.getAttributeInfo(transpiler.getContext());

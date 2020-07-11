@@ -30,10 +30,7 @@ import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.expression.IExpression;
-import prompto.expression.InstanceExpression;
 import prompto.expression.Symbol;
-import prompto.expression.UnresolvedIdentifier;
 import prompto.expression.ValueExpression;
 import prompto.grammar.Annotation;
 import prompto.grammar.INamed;
@@ -534,20 +531,6 @@ public class Context implements IContext {
 		else
 			return store.fetchDerivedCategoryDeclarations(id);
 		
-	}
-	
-	public AttributeDeclaration checkAttribute(ISection section, IExpression exp) {
-		String name = null;
-		AttributeDeclaration decl = null;
-		if(exp instanceof UnresolvedIdentifier)
-			name = ((UnresolvedIdentifier)exp).getName();
-		else if(exp instanceof InstanceExpression)
-			name = ((InstanceExpression)exp).getName();
-		if(name!=null)
-			decl = findAttribute(name);
-		if(decl==null)		
-			getProblemListener().reportMissingAttribute(section, exp.toString());
-		return decl;
 	}
 	
 	public static class MethodDeclarationMap extends HashMap<String,IMethodDeclaration> implements IDeclaration {
