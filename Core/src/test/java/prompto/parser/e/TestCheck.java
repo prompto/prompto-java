@@ -132,7 +132,7 @@ public class TestCheck extends BaseEParserTest {
 	
 	@Test
 	public void testFetchOne() throws Exception {
-		DeclarationList decls = parseString("define name as Text attribute\r\n" +
+		DeclarationList decls = parseString("define name as storable Text attribute\r\n" +
 				"define Person as category with attribute name\r\n" +
 				"define testMethod as method doing:\r\n" +
 					"\ta = \"john\"\r\n" +
@@ -143,7 +143,7 @@ public class TestCheck extends BaseEParserTest {
 	
 	@Test
 	public void testFetchAll() throws Exception {
-		DeclarationList decls = parseString("define name as Text attribute\r\n" +
+		DeclarationList decls = parseString("define name as storable Text attribute\r\n" +
 				"define Person as category with attribute name\r\n" +
 				"define testMethod as method doing:\r\n" +
 					"\ta = \"john\"\r\n" +

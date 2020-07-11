@@ -42,6 +42,7 @@ public class TestMemStore {
 		DataStore.setInstance(new MemStore());
 		context = Context.newGlobalsContext();
 		AttributeDeclaration attr = new AttributeDeclaration(new Identifier("__id__"), TextType.instance());
+		attr.setStorable(true);
 		attr.register(context);
 	}
 	
