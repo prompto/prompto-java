@@ -20,6 +20,36 @@ public class TestPredicate extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedAnd() throws Exception {
+		checkInterpretedOutput("predicate/and.pec");
+	}
+
+	@Test
+	public void testCompiledAnd() throws Exception {
+		checkCompiledOutput("predicate/and.pec");
+	}
+
+	@Test
+	public void testTranspiledAnd() throws Exception {
+		checkTranspiledOutput("predicate/and.pec");
+	}
+
+	@Test
+	public void testInterpretedAndError() throws Exception {
+		checkInterpretedOutput("predicate/andError.pec");
+	}
+
+	@Test
+	public void testCompiledAndError() throws Exception {
+		checkCompiledOutput("predicate/andError.pec");
+	}
+
+	@Test
+	public void testTranspiledAndError() throws Exception {
+		checkTranspiledOutput("predicate/andError.pec");
+	}
+
+	@Test
 	public void testInterpretedContainsItem() throws Exception {
 		checkInterpretedOutput("predicate/containsItem.pec");
 	}
@@ -137,6 +167,66 @@ public class TestPredicate extends BaseEParserTest {
 	@Test
 	public void testTranspiledNotEquals() throws Exception {
 		checkTranspiledOutput("predicate/notEquals.pec");
+	}
+
+	@Test
+	public void testInterpretedOr() throws Exception {
+		checkInterpretedOutput("predicate/or.pec");
+	}
+
+	@Test
+	public void testCompiledOr() throws Exception {
+		checkCompiledOutput("predicate/or.pec");
+	}
+
+	@Test
+	public void testTranspiledOr() throws Exception {
+		checkTranspiledOutput("predicate/or.pec");
+	}
+
+	@Test
+	public void testInterpretedOrError() throws Exception {
+		checkInterpretedOutput("predicate/orError.pec");
+	}
+
+	@Test
+	public void testCompiledOrError() throws Exception {
+		checkCompiledOutput("predicate/orError.pec");
+	}
+
+	@Test
+	public void testTranspiledOrError() throws Exception {
+		checkTranspiledOutput("predicate/orError.pec");
+	}
+
+	@Test
+	public void testInterpretedParenthesis() throws Exception {
+		checkInterpretedOutput("predicate/parenthesis.pec");
+	}
+
+	@Test
+	public void testCompiledParenthesis() throws Exception {
+		checkCompiledOutput("predicate/parenthesis.pec");
+	}
+
+	@Test
+	public void testTranspiledParenthesis() throws Exception {
+		checkTranspiledOutput("predicate/parenthesis.pec");
+	}
+
+	@Test
+	public void testInterpretedParenthesisError() throws Exception {
+		checkInterpretedOutput("predicate/parenthesisError.pec");
+	}
+
+	@Test
+	public void testCompiledParenthesisError() throws Exception {
+		checkCompiledOutput("predicate/parenthesisError.pec");
+	}
+
+	@Test
+	public void testTranspiledParenthesisError() throws Exception {
+		checkTranspiledOutput("predicate/parenthesisError.pec");
 	}
 
 	@Test

@@ -7,6 +7,16 @@ import prompto.parser.e.BaseEParserTest;
 public class TestPredicate extends BaseEParserTest {
 
 	@Test
+	public void testAnd() throws Exception {
+		compareResourceEME("predicate/and.pec");
+	}
+
+	@Test
+	public void testAndError() throws Exception {
+		compareResourceEME("predicate/andError.pec");
+	}
+
+	@Test
 	public void testContainsItem() throws Exception {
 		compareResourceEME("predicate/containsItem.pec");
 	}
@@ -44,6 +54,26 @@ public class TestPredicate extends BaseEParserTest {
 	@Test
 	public void testNotEquals() throws Exception {
 		compareResourceEME("predicate/notEquals.pec");
+	}
+
+	@Test
+	public void testOr() throws Exception {
+		compareResourceEME("predicate/or.pec");
+	}
+
+	@Test
+	public void testOrError() throws Exception {
+		compareResourceEME("predicate/orError.pec");
+	}
+
+	@Test
+	public void testParenthesis() throws Exception {
+		compareResourceEME("predicate/parenthesis.pec");
+	}
+
+	@Test
+	public void testParenthesisError() throws Exception {
+		compareResourceEME("predicate/parenthesisError.pec");
 	}
 
 	@Test
