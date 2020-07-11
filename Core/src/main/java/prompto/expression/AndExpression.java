@@ -83,7 +83,13 @@ public class AndExpression extends Section implements IPredicateExpression, IAss
 	
 	@Override
 	public IType checkQuery(Context context) throws PromptoError {
-		return check(context);
+		if(!(left instanceof IPredicateExpression))
+			context.getProblemListener().reportIllegalOperation(this, "Expected a predicate, got: " + left.toString());
+		((IPredicateExpression)left).checkQuery(context);
+		if(!(right instanceof IPredicateExpression))
+			context.getProblemListener().reportIllegalOperation(this, "Expected a predicate, got: " + right.toString());
+		((IPredicateExpression)right).checkQuery(context);
+		return BooleanType.instance();
 	}
 	
 	@Override

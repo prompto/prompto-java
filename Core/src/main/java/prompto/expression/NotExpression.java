@@ -68,7 +68,10 @@ public class NotExpression extends Section implements IUnaryExpression, IPredica
 	
 	@Override
 	public IType checkQuery(Context context) throws PromptoError {
-		return check(context);
+		if(!(expression instanceof IPredicateExpression))
+			context.getProblemListener().reportIllegalOperation(this, "Expected a predicate, got: " + expression.toString());
+		((IPredicateExpression)expression).checkQuery(context);
+		return BooleanType.instance();
 	}
 
 	
