@@ -347,6 +347,10 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 		AttributeDeclaration decl = context.checkAttribute(this, left);
 		if(decl==null)
 			return VoidType.instance();
+		if(!decl.isStorable(context)) {
+			context.getProblemListener().reportNotStorable(this, decl.getName());	
+			return VoidType.instance();
+		}
 		IType rt = right.check(context);
 		return checkOperator(context, decl.getType(), rt);
 	}
@@ -354,7 +358,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	@Override
 	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
 		AttributeDeclaration decl = context.checkAttribute(this, left);
-		if(decl==null)
+		if(decl==null || !decl.isStorable(context))
 			throw new SyntaxError("Unable to interpret predicate");
 		IValue value = right.interpret(context);
 		AttributeInfo fieldInfo = StoreUtils.getAttributeInfo(context, decl.getName(), store);
@@ -371,10 +375,10 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	@Override
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {
 		AttributeDeclaration decl = context.checkAttribute(this, left);
-		if(decl==null)
+		if(decl==null || !decl.isStorable(context))
 			throw new SyntaxError("Unable to compile predicate");
 		IType valueType = right.check(context);
-		AttributeInfo fieldInfo = context.findAttribute(decl.getName()).getAttributeInfo(context);
+		AttributeInfo fieldInfo = decl.getAttributeInfo(context);
 		CompilerUtils.compileAttributeInfo(context, method, flags, fieldInfo);
 		FamilyInfo valueInfo = valueType.getFamilyInfo(context);
 		MatchOp match = getMatchOp(context, fieldInfo, valueInfo, this.operator, false);
@@ -478,6 +482,8 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	@Override
 	public void transpileQuery(Transpiler transpiler, String builderName) {
 		AttributeDeclaration decl = transpiler.getContext().checkAttribute(this, left);
+		if(decl==null || !decl.isStorable(transpiler.getContext()))
+			throw new SyntaxError("Unable to compile predicate");
 	    AttributeInfo fieldInfo = decl.getAttributeInfo(transpiler.getContext());
 	    IType valueType = right.check(transpiler.getContext());
 	    FamilyInfo valueInfo = valueType.getFamilyInfo(transpiler.getContext());

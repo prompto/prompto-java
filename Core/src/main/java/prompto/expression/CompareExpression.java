@@ -143,6 +143,10 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 		AttributeDeclaration decl = context.checkAttribute(this, left);
 		if(decl==null)
 			return VoidType.instance();
+		if(!decl.isStorable(context)) {
+			context.getProblemListener().reportNotStorable(this, decl.getName());	
+			return VoidType.instance();
+		}
 		IType rt = right.check(context);
 		return decl.getType().checkCompare(context, rt, this);
 	}
@@ -150,7 +154,7 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 	@Override
 	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
 		AttributeDeclaration decl = context.checkAttribute(this, left);
-		if(decl==null)
+		if(decl==null || !decl.isStorable(context))
 			throw new SyntaxError("Unable to interpret predicate: " + this.toString());
 		AttributeInfo info = StoreUtils.getAttributeInfo(context, decl.getName(), store);
 		IValue value = right.interpret(context);

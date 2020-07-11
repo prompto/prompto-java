@@ -547,8 +547,6 @@ public class Context implements IContext {
 			decl = findAttribute(name);
 		if(decl==null)		
 			getProblemListener().reportMissingAttribute(section, exp.toString());
-		else if(!decl.isStorable(this))
-			getProblemListener().reportNotStorable(section, name);
 		return decl;
 	}
 	

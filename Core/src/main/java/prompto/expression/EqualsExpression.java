@@ -70,6 +70,7 @@ import prompto.type.TextType;
 import prompto.type.TimeType;
 import prompto.type.UuidType;
 import prompto.type.VersionType;
+import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.utils.StoreUtils;
 import prompto.value.BooleanValue;
@@ -340,6 +341,10 @@ public class EqualsExpression extends Section implements IPredicateExpression, I
 		AttributeDeclaration decl = context.checkAttribute(this, left);
 		if(decl==null)
 			return NullType.instance();
+		if(!decl.isStorable(context)) {
+			context.getProblemListener().reportNotStorable(this, decl.getName());	
+			return VoidType.instance();
+		}
 		right.check(context);
 		return BooleanType.instance(); // can compare equality of all objects
 	}
@@ -348,7 +353,7 @@ public class EqualsExpression extends Section implements IPredicateExpression, I
 	@Override
 	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
 		AttributeDeclaration decl = context.checkAttribute(this, left);
-		if(decl==null)
+		if(decl==null || !decl.isStorable(context))
 			throw new SyntaxError("Unable to interpret predicate");
 		IValue value = right.interpret(context);
 		if(value instanceof IInstance)
@@ -400,8 +405,12 @@ public class EqualsExpression extends Section implements IPredicateExpression, I
 
 	private void compileAttributeInfo(Context context, MethodInfo method, Flags flags) {
 		AttributeDeclaration decl = context.checkAttribute(this, left);
-		if(decl==null)
+		if(decl==null || !decl.isStorable(context))
+	    	throw new SyntaxError("Unable to compile predicate");
+	    if(!decl.isStorable(context)) {
+			context.getProblemListener().reportNotStorable(this, decl.getName());	
 			return;
+		}
 		AttributeInfo info = context.findAttribute(decl.getName()).getAttributeInfo(context);
 		CompilerUtils.compileAttributeInfo(context, method, flags, info);
 	}
@@ -719,9 +728,9 @@ public class EqualsExpression extends Section implements IPredicateExpression, I
 	@Override
 	public void transpileQuery(Transpiler transpiler, String builderName) {
 	    AttributeDeclaration decl = transpiler.getContext().checkAttribute(this, left);
-        if(decl==null)
-        	throw new SyntaxError("Unable to interpret predicate");
-    	    AttributeInfo info = decl.getAttributeInfo(transpiler.getContext());
+        if(decl==null || !decl.isStorable(transpiler.getContext()))
+        		throw new SyntaxError("Unable to interpret predicate");
+	    AttributeInfo info = decl.getAttributeInfo(transpiler.getContext());
 	    MatchOp matchOp = this.getMatchOp();
 	    // TODO check for dbId field of instance value
 	    transpiler.append(builderName).append(".verify(").append(info.toTranspiled()).append(", MatchOp.").append(matchOp.name()).append(", ");
