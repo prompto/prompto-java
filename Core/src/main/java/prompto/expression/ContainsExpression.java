@@ -344,7 +344,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	
 	@Override
 	public IType checkQuery(Context context) throws PromptoError {
-		AttributeDeclaration decl = checkAttribute(context, left);
+		AttributeDeclaration decl = context.checkAttribute(this, left);
 		if(decl==null)
 			return VoidType.instance();
 		IType rt = right.check(context);
@@ -353,7 +353,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	
 	@Override
 	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
-		AttributeDeclaration decl = checkAttribute(context, left);
+		AttributeDeclaration decl = context.checkAttribute(this, left);
 		if(decl==null)
 			throw new SyntaxError("Unable to interpret predicate");
 		IValue value = right.interpret(context);
@@ -370,7 +370,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	
 	@Override
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {
-		AttributeDeclaration decl = checkAttribute(context, left);
+		AttributeDeclaration decl = context.checkAttribute(this, left);
 		if(decl==null)
 			throw new SyntaxError("Unable to compile predicate");
 		IType valueType = right.check(context);
@@ -477,7 +477,7 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	
 	@Override
 	public void transpileQuery(Transpiler transpiler, String builderName) {
-		AttributeDeclaration decl = checkAttribute(transpiler.getContext(), left);
+		AttributeDeclaration decl = transpiler.getContext().checkAttribute(this, left);
 	    AttributeInfo fieldInfo = decl.getAttributeInfo(transpiler.getContext());
 	    IType valueType = right.check(transpiler.getContext());
 	    FamilyInfo valueInfo = valueType.getFamilyInfo(transpiler.getContext());

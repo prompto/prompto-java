@@ -337,7 +337,7 @@ public class EqualsExpression extends Section implements IPredicateExpression, I
 	
 	@Override
 	public IType checkQuery(Context context) throws PromptoError {
-		AttributeDeclaration decl = checkAttribute(context, left);
+		AttributeDeclaration decl = context.checkAttribute(this, left);
 		if(decl==null)
 			return NullType.instance();
 		right.check(context);
@@ -347,7 +347,7 @@ public class EqualsExpression extends Section implements IPredicateExpression, I
 	
 	@Override
 	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
-		AttributeDeclaration decl = checkAttribute(context, left);
+		AttributeDeclaration decl = context.checkAttribute(this, left);
 		if(decl==null)
 			throw new SyntaxError("Unable to interpret predicate");
 		IValue value = right.interpret(context);
@@ -399,7 +399,7 @@ public class EqualsExpression extends Section implements IPredicateExpression, I
 	
 
 	private void compileAttributeInfo(Context context, MethodInfo method, Flags flags) {
-		AttributeDeclaration decl = checkAttribute(context, left);
+		AttributeDeclaration decl = context.checkAttribute(this, left);
 		if(decl==null)
 			return;
 		AttributeInfo info = context.findAttribute(decl.getName()).getAttributeInfo(context);
@@ -718,7 +718,7 @@ public class EqualsExpression extends Section implements IPredicateExpression, I
 	
 	@Override
 	public void transpileQuery(Transpiler transpiler, String builderName) {
-	    AttributeDeclaration decl = checkAttribute(transpiler.getContext(), left);
+	    AttributeDeclaration decl = transpiler.getContext().checkAttribute(this, left);
         if(decl==null)
         	throw new SyntaxError("Unable to interpret predicate");
     	    AttributeInfo info = decl.getAttributeInfo(transpiler.getContext());
