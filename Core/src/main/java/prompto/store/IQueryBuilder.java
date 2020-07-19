@@ -9,6 +9,8 @@ public interface IQueryBuilder {
 		ROUGHLY, // caseless or rounded equality 
 		CONTAINS, // pattern matching
 		HAS, // collection contains value
+		HAS_ANY, // collection contains value
+		HAS_ALL, // collection contains value
 		IN, // value in collection 
 		GREATER,
 		LESSER

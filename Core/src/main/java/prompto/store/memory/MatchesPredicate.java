@@ -23,26 +23,30 @@ public class MatchesPredicate<T extends Object> implements IPredicate {
 		Object data = document.get(info.getName());
 		switch(match) {
 		case EQUALS:
-			return matchesEQUALS(data);
+			return matches_EQUALS(data);
 		case ROUGHLY:
-			return matchesROUGHLY(data);
+			return matches_ROUGHLY(data);
 		case CONTAINS:
-			return matchesCONTAINS(data);
+			return matches_CONTAINS(data);
 		case HAS:
-			return matchesHAS(data);
+			return matches_HAS(data);
+		case HAS_ANY:
+			return matches_HAS_ANY(data);
+		case HAS_ALL:
+			return matches_HAS_ALL(data);
 		case IN:
-			return matchesIN(data);
+			return matches_IN(data);
 		case GREATER:
-			return matchesGREATER(data);
+			return matches_GREATER(data);
 		case LESSER:
-			return matchesLESSER(data);
+			return matches_LESSER(data);
 		default:
 			return false;
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	private boolean matchesGREATER(Object data) {
+	private boolean matches_GREATER(Object data) {
 		if(data instanceof Comparable && value instanceof Comparable)
 			return ((Comparable<Object>)data).compareTo((Comparable<Object>)value)>0;
 		else
@@ -50,30 +54,49 @@ public class MatchesPredicate<T extends Object> implements IPredicate {
 	}
 
 	@SuppressWarnings("unchecked")
-	private boolean matchesLESSER(Object data) {
+	private boolean matches_LESSER(Object data) {
 		if(data instanceof Comparable && value instanceof Comparable)
 			return ((Comparable<Object>)data).compareTo((Comparable<Object>)value)<0;
 		else
 			return false;
 	}
 
-	private boolean matchesHAS(Object data) {
+	private boolean matches_HAS(Object data) {
 		if(data instanceof Collection)
 			return ((Collection<?>)data).contains(value);
 		else
 			return false;
 	}
 
-	private boolean matchesCONTAINS(Object data) {
+	private boolean matches_HAS_ANY(Object data) {
+		if(data instanceof Collection && value instanceof Collection) {
+			Collection<?> datas = (Collection<?>)data;
+			Collection<?> values = (Collection<?>)value;
+			return datas.stream().anyMatch(values::contains);
+		} else
+			return false;
+	}
+
+	private boolean matches_HAS_ALL(Object data) {
+		if(data instanceof Collection && value instanceof Collection) {
+			Collection<?> datas = (Collection<?>)data;
+			Collection<?> values = (Collection<?>)value;
+			return datas.containsAll(values);
+		} else
+			return false;
+	}
+	
+	private boolean matches_CONTAINS(Object data) {
 		if(data instanceof String && value instanceof String)
 			return ((String)data).contains((String)value);
+		// TODO clarify the below
 		else if(data instanceof Collection)
-			return ((Collection<?>)data).stream().anyMatch(this::matchesCONTAINS);
+			return ((Collection<?>)data).stream().anyMatch(this::matches_CONTAINS);
 		else
 			return false;
 	}
 
-	private boolean matchesIN(Object data) {
+	private boolean matches_IN(Object data) {
 		if(data instanceof String && value instanceof String)
 			return ((String)value).contains((String)data);
 		else if(value instanceof Collection)
@@ -82,14 +105,14 @@ public class MatchesPredicate<T extends Object> implements IPredicate {
 			return false;
 	}
 
-	private boolean matchesROUGHLY(Object data) {
+	private boolean matches_ROUGHLY(Object data) {
 		if(data instanceof String && value instanceof String)
 			return ((String)data).equalsIgnoreCase((String)value);
 		else
-			return matchesEQUALS(data);
+			return matches_EQUALS(data);
 	}
 
-	private boolean matchesEQUALS(Object data) {
+	private boolean matches_EQUALS(Object data) {
 		if(data==null) 
 			return value==null;
 		else
