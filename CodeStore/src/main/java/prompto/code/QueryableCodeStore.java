@@ -33,6 +33,7 @@ import prompto.expression.IExpression;
 import prompto.expression.IPredicateExpression;
 import prompto.expression.Symbol;
 import prompto.expression.UnresolvedIdentifier;
+import prompto.grammar.Annotation;
 import prompto.grammar.EqOp;
 import prompto.grammar.Identifier;
 import prompto.grammar.OrderByClause;
@@ -304,6 +305,21 @@ public class QueryableCodeStore extends BaseCodeStore {
 			return super.fetchSpecificDeclarations(name, version);
 	}
 	
+	@Override
+	public Iterable<IDeclaration> fetchDeclarationsWithAnnotations(Set<String> annotations) {
+		Iterator<IStored> fetched = fetchDeclarationsWithAnnotationsInStore(annotations).iterator();
+		Iterable<IDeclaration> parsed = () -> new Iterator<IDeclaration>() {
+			@Override public boolean hasNext() { return fetched.hasNext(); }
+			@Override public IDeclaration next() { return parseDeclaration(fetched.next()); }
+		};
+		if(next==null)
+			return parsed;
+		else {
+			Iterable<IDeclaration> decls = next.fetchDeclarationsWithAnnotations(annotations);
+			return Stream.concat(StreamSupport.stream(decls.spliterator(), false), StreamSupport.stream(parsed.spliterator(), false)).collect(Collectors.toList());
+		}
+	}
+	
 	private synchronized Iterable<IDeclaration> fetchAndStoreExternalSpecificDeclarations(String name, PromptoVersion version2) {
 		// when called from the AppServer, multiple threads may be attempting to do this
 		// TODO: need to deal with multiple cloud nodes doing this
@@ -474,6 +490,11 @@ public class QueryableCodeStore extends BaseCodeStore {
 			}
 			if(decl.isStorable(null))
 				storable.setData("storable", true);
+			Collection<Annotation> annotations = decl.getLocalAnnotations();
+			if(annotations!=null && !annotations.isEmpty()) {
+				List<String> data = annotations.stream().map(Annotation::toString).collect(Collectors.toList());
+				storable.setData("annotations", data);
+			}	
 			return storable;
 		} catch(PromptoError e) {
 			throw new RuntimeException(e);
@@ -486,7 +507,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 			return null;
 		else try {
 			CategoryType category = new CategoryType(new Identifier("Declaration"));
-			IStoredIterable iterable = fetchManyNamedInStore(name, category, version, true);
+			IStoredIterable iterable = fetchManyInStore(category, version, "name", name, true);
 			if(iterable.iterator().hasNext()) {
 				Iterator<IStored> iterator = iterable.iterator();
 				return () -> new Iterator<IDeclaration>() {
@@ -500,12 +521,29 @@ public class QueryableCodeStore extends BaseCodeStore {
 		}
 	}
 	
+	private IStoredIterable fetchDeclarationsWithAnnotationsInStore(Set<String> annotations) {
+		if(store==null)
+			return null;
+		else try {
+			IQueryBuilder builder = store.newQueryBuilder();
+			builder.verify(AttributeInfo.CATEGORY, MatchOp.HAS, "Declaration");
+			builder.verify(AttributeInfo.ANNOTATIONS, MatchOp.HAS_ANY, annotations);
+			builder.and();
+			builder = filterOnModules(builder, true);
+			IdentifierList names = new IdentifierList("prototype", "version");
+			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
+			orderBy.interpretQuery(context, builder);
+			IStoredIterable stored = store.fetchMany(builder.build());
+			return fetchDistinct(stored);
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	
 	private static Set<String> uniqueDecls = new HashSet<>(
 			Arrays.asList(DeclarationType.ATTRIBUTE.name(), DeclarationType.CATEGORY.name(), DeclarationType.TEST.name()));
 	
-	private IStoredIterable fetchManyNamedInStore(String name, CategoryType type, PromptoVersion version, boolean filterOnModules) throws PromptoError {
-		return fetchManyInStore(type, version, "name", name, filterOnModules);
-	}
 
 	private IStoredIterable fetchManyInStore(CategoryType type, PromptoVersion version, String attribute, String value, boolean filterOnModules) throws PromptoError {
 		IQueryBuilder builder = store.newQueryBuilder();
@@ -570,7 +608,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 
 
 	private IStoredIterable fetchDistinct(IStoredIterable iterable) {
-		/* we don't support distinct/group by yet, so need to do it "by hand" */
+		/* we don't support distinct/group by yet, so need to do it "by hand" on client side */
 		List<IStored> distinct = new ArrayList<>();
 		Object lastName = null;
 		Object lastProto = null;

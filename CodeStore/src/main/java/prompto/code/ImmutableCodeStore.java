@@ -11,9 +11,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
@@ -156,49 +158,57 @@ public class ImmutableCodeStore extends BaseCodeStore {
 	
 	@Override
 	public Iterable<IDeclaration> fetchLatestDeclarations(String name) throws PromptoError {
-		Iterable<IDeclaration> decls = fetchInResource(name);
-		if(decls!=null)
-			return decls;
+		Iterable<IDeclaration> fetched = fetchInResource(decls->decls.get(name));
+		if(fetched!=null)
+			return fetched;
 		else
 			return super.fetchLatestDeclarations(name);
 	}
 	
 	@Override
-	public Iterable<IDeclaration> fetchSpecificDeclarations(String name,PromptoVersion version) throws PromptoError {
-		Iterable<IDeclaration> decls = fetchInResource(name);
-		if(decls!=null)
-			return decls;
+	public Iterable<IDeclaration> fetchSpecificDeclarations(String name, PromptoVersion version) throws PromptoError {
+		Iterable<IDeclaration> fetched = fetchInResource(decls->decls.get(name));
+		if(fetched!=null)
+			return fetched;
 		else
 			return super.fetchSpecificDeclarations(name, version);
 	}
 	
 	@Override
+	public Iterable<IDeclaration> fetchDeclarationsWithAnnotations(Set<String> annotations) {
+		Iterable<IDeclaration> fetched = fetchInResource(decls->decls.values().stream()
+				.flatMap(Collection::stream)
+				.filter(d->d.hasAnyLocalAnnotation(annotations))
+				.collect(Collectors.toList()));
+		if(next==null)
+			return fetched;
+		else {
+			Iterable<IDeclaration> decls = next.fetchDeclarationsWithAnnotations(annotations);
+			return Stream.concat(StreamSupport.stream(decls.spliterator(), false), StreamSupport.stream(fetched.spliterator(), false)).collect(Collectors.toList());
+		}
+	}
+	
+	@Override
 	public IDeclaration fetchLatestSymbol(String name) throws PromptoError {
-		IDeclaration decl = fetchSymbolInResource(name);
-		if(decl!=null)
-			return decl;
+		Iterator<IDeclaration> fetched = fetchInResource(decls->decls.values().stream()
+				.flatMap(Collection::stream)
+				.filter(d->d instanceof IEnumeratedDeclaration)
+				.map(d->(IEnumeratedDeclaration<?>)d)
+				.filter(d->d.hasSymbol(name))
+				.collect(Collectors.toList())).iterator();
+		if(fetched.hasNext())
+			return fetched.next();
 		else
 			return super.fetchLatestSymbol(name);
 	}
 	
 	@Override
 	public IDeclaration fetchSpecificSymbol(String name, PromptoVersion version) throws PromptoError {
-		IDeclaration decl = fetchSymbolInResource(name);
+		IDeclaration decl = fetchLatestSymbol(name);
 		if(decl!=null)
 			return decl;
 		else
 			return super.fetchSpecificSymbol(name, version);
-	}
-	
-	private IDeclaration fetchSymbolInResource(String name) {
-		loadResource();
-		return declarations.values().stream()
-				.flatMap(Collection::stream)
-				.filter(d->d instanceof IEnumeratedDeclaration)
-				.map(d->(IEnumeratedDeclaration<?>)d)
-				.filter((d)->d.hasSymbol(name))
-				.findFirst()
-				.orElse(null);
 	}
 	
 	@Override
@@ -233,10 +243,9 @@ public class ImmutableCodeStore extends BaseCodeStore {
 				
 	}
 
-	private Iterable<IDeclaration> fetchInResource(String name) throws PromptoError {
+	private Iterable<IDeclaration> fetchInResource(Function<Map<String, List<IDeclaration>>, Iterable<IDeclaration>> filter) throws PromptoError {
 		loadResource();
-		List<IDeclaration> decls = declarations.get(name);
-		return decls==null ? null : decls;
+		return filter.apply(declarations);
 	}
 
 	private void loadResource() throws PromptoError {

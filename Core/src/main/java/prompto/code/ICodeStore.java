@@ -102,6 +102,8 @@ public interface ICodeStore {
 	
 	Iterable<IDeclaration> fetchSpecificDeclarations(String name, PromptoVersion version) throws PromptoError;
 
+	Iterable<IDeclaration> fetchDeclarationsWithAnnotations(Set<String> annotations);
+
 	default IDeclaration fetchLatestSymbol(String name) throws PromptoError {
 		return fetchSpecificSymbol(name, PromptoVersion.LATEST);
 	}
@@ -177,7 +179,5 @@ public interface ICodeStore {
 	}
 
 	void upgradeIfRequired();
-
-
 
 }

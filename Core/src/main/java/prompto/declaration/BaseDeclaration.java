@@ -2,6 +2,7 @@ package prompto.declaration;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -98,9 +99,9 @@ public abstract class BaseDeclaration extends Section implements IDeclaration {
 	@Override
 	public boolean removeAnnotation(String name) {
 		String prefixed = name.startsWith("@") ? name : "@" + name;
-		if(annotations==null || !annotations.stream().anyMatch(a->a.isNamed(prefixed)))
+		if(annotations==null || !annotations.stream().map(Annotation::toString).anyMatch(a->a.equals(prefixed)))
 			return false;
-		annotations = annotations.stream().filter(a->!a.isNamed(prefixed)).collect(Collectors.toList());
+		annotations = annotations.stream().filter(a->!a.toString().equals(prefixed)).collect(Collectors.toList());
 		return true;
 	}
 	
@@ -126,8 +127,17 @@ public abstract class BaseDeclaration extends Section implements IDeclaration {
 			return false;
 		else {
 			String prefixed = name.startsWith("@") ? name : "@" + name;
-			return annotations.stream().anyMatch(a->a.isNamed(prefixed));
+			return annotations.stream().map(Annotation::toString).anyMatch(a->a.equals(prefixed));
 		}
+	}
+	
+	@Override
+	public boolean hasAnyLocalAnnotation(Set<String> names) {
+		if(annotations==null)
+			return false;
+		else 
+			// assumption is that names is already cured
+			return annotations.stream().anyMatch(a->names.contains(a.toString()));
 	}
 	
 	@Override

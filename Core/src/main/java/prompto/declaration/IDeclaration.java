@@ -1,6 +1,7 @@
 package prompto.declaration;
 
 import java.util.Collection;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import prompto.code.ICodeStore;
@@ -41,6 +42,7 @@ public interface IDeclaration extends ITranspilable, INamed, ISection {
 		return hasLocalAnnotation(name) || hasInheritedAnnotation(context, name);
 	}
 	boolean hasLocalAnnotation(String name);
+	boolean hasAnyLocalAnnotation(Set<String> names);
 	boolean hasInheritedAnnotation(Context context, String name);
 	boolean removeAnnotation(String name);
 	default void setClosureOf(IMethodDeclaration declaration) { throw new UnsupportedOperationException(); }

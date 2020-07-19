@@ -28,10 +28,6 @@ public class Annotation extends Section {
 		return id.toString();
 	}
 	
-	public boolean isNamed(String name) {
-		return name.equals(id.toString());
-	}
-	
 	public DocEntryList getArguments() {
 		return arguments;
 	}
@@ -81,6 +77,7 @@ public class Annotation extends Section {
 			context.getProblemListener().reportUnknownAnnotation(this, id.toString());
 		}
 	}
+
 
 
 }

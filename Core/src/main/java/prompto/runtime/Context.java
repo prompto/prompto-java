@@ -2,9 +2,11 @@ package prompto.runtime;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -402,6 +404,17 @@ public class Context implements IContext {
 			return null;
 	}
 	
+	public Iterable<IDeclaration> getRegisteredDeclarationsWithAnnotations(String ... annotations) {
+		ICodeStore store = ICodeStore.getInstance();
+		if(store==null)
+			return Collections.emptyList();
+		else {
+			Set<String> set = new HashSet<>(Arrays.asList(annotations));
+			return store.fetchDeclarationsWithAnnotations(set);
+		}
+	}
+
+
 	public Symbol getRegisteredSymbol(Identifier id, boolean lookInStore) {
 		Symbol symbol = getRegisteredValue(Symbol.class, id);
 		if(symbol!=null || !lookInStore)
@@ -474,7 +487,7 @@ public class Context implements IContext {
 			}
 		}
 	}
-
+	
 	public void registerDeclaration(IDeclaration declaration) {
 		if(checkDuplicateDeclaration(declaration))
 			declarations.put(declaration.getId(), declaration);
@@ -586,6 +599,11 @@ public class Context implements IContext {
 		
 		@Override
 		public boolean hasLocalAnnotation(String name) {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override
+		public boolean hasAnyLocalAnnotation(Set<String> names) {
 			throw new UnsupportedOperationException();
 		}
 
@@ -1178,6 +1196,11 @@ public class Context implements IContext {
 				}
 			}
 			return super.getRegisteredDeclaration(klass, id, lookInStore);
+		}
+		
+		@Override
+		public Iterable<IDeclaration> getRegisteredDeclarationsWithAnnotations(String... annotations) {
+			return Collections.emptyList();
 		}
 		
 		

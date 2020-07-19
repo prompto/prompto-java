@@ -68,7 +68,7 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 
 	private Annotation findWidgetPropertiesFieldAnnotation(Context context, CategoryDeclaration declaration) {
 		return declaration.getAllAnnotationsAsStream(context)
-				.filter(a->a.isNamed("@WidgetField"))
+				.filter(a->a.toString().equals("@WidgetField"))
 				.filter(a->{
 					Object value = a.getArgument("isProperties");
 					return value instanceof BooleanLiteral && ((BooleanLiteral)value).getValue().getValue();
