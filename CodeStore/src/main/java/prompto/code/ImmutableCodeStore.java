@@ -190,21 +190,26 @@ public class ImmutableCodeStore extends BaseCodeStore {
 	
 	@Override
 	public IDeclaration fetchLatestSymbol(String name) throws PromptoError {
+		IDeclaration decl = fetchOneSymbol(name);
+		if(decl!=null)
+			return decl;
+		else
+			return super.fetchLatestSymbol(name);
+	}
+	
+	private IDeclaration fetchOneSymbol(String name) {
 		Iterator<IDeclaration> fetched = fetchInResource(decls->decls.values().stream()
 				.flatMap(Collection::stream)
 				.filter(d->d instanceof IEnumeratedDeclaration)
 				.map(d->(IEnumeratedDeclaration<?>)d)
 				.filter(d->d.hasSymbol(name))
 				.collect(Collectors.toList())).iterator();
-		if(fetched.hasNext())
-			return fetched.next();
-		else
-			return super.fetchLatestSymbol(name);
+		return fetched.hasNext() ? fetched.next() : null;
 	}
-	
+
 	@Override
 	public IDeclaration fetchSpecificSymbol(String name, PromptoVersion version) throws PromptoError {
-		IDeclaration decl = fetchLatestSymbol(name);
+		IDeclaration decl = fetchOneSymbol(name);
 		if(decl!=null)
 			return decl;
 		else
