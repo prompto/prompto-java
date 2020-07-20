@@ -63,6 +63,11 @@ public class CursorValue extends BaseValue implements IIterable<IValue>, Iterabl
 	public Long getTotalCount() {
 		return iterable.totalCount();
 	}
+	
+	// GraphQL accessor
+	public Iterable<IValue> getItems() {
+		return this;
+	}
 
 	@Override
 	public IterableWithCounts<IValue> getIterable(Context context) {
