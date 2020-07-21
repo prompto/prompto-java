@@ -35,6 +35,7 @@ import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 import prompto.utils.Instance;
 import prompto.utils.TypeUtils;
+import prompto.value.BinaryValue;
 import prompto.value.DbIdValue;
 import prompto.value.IInstance;
 import prompto.value.IValue;
@@ -194,8 +195,11 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	
 	protected void populateMember(Context context, Object data, IInstance instance, AttributeDeclaration decl) throws PromptoError {
 		IValue value = data==null ? null : decl.getType().convertJavaValueToIValue(context, data);
-		if(value!=null)
+		if(value!=null) {
+			if(value instanceof BinaryValue)
+				((BinaryValue)value).setSource(instance.getStorable().getOrCreateDbId(), decl.getName());
 			instance.setMember(context, decl.getId(), value);
+		}
 	}
 
 	public void checkConstructorContext(Context context) {

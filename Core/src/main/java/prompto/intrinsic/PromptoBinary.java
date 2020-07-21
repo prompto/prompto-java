@@ -20,6 +20,8 @@ public class PromptoBinary {
 
 	private String mimeType;
 	private byte[] bytes;
+	private Object sourceDbId;
+	private String sourceAttribute;
 	
 	public PromptoBinary() {
 	}
@@ -35,6 +37,18 @@ public class PromptoBinary {
 	
 	public byte[] getBytes() {
 		return bytes;
+	}
+	
+	public void setSource(Object dbId, String attribute) {
+		sourceDbId = dbId;
+		sourceAttribute = attribute;
+	}
+	
+	public String getSourceUrl() {
+		if(sourceDbId!=null && sourceAttribute!=null)
+			return "/ws/bin/data?dbId=" + sourceDbId + "&attribute=" + sourceAttribute;
+		else
+			return null;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -81,5 +95,4 @@ public class PromptoBinary {
 		return output.toByteArray();
 	}
 
-	
 }

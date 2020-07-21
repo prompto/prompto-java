@@ -49,6 +49,14 @@ public abstract class BinaryValue extends BaseValue {
 		this.data = data;
 	}
 
+	public void setSource(Object dbId, String attribute) {
+		data.setSource(dbId, attribute);
+	}
+	
+	public String getSourceUrl() {
+		return data.getSourceUrl();
+	}
+
 	@Override
 	public PromptoBinary getStorableData() {
 		return data;
@@ -137,5 +145,6 @@ public abstract class BinaryValue extends BaseValue {
 			throw new ReadWriteError(e.getMessage());
 		} 
 	}
+
 
 }
