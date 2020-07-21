@@ -141,7 +141,7 @@ public class CursorValue extends BaseValue implements IIterable<IValue>, Iterabl
 	}
 
 	@Override
-	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) {
+	public void toJsonStream(Context context, JsonGenerator generator, boolean withType, Map<String, byte[]> data) {
 		try {
 			if(withType) {
 				generator.writeStartObject();
@@ -157,7 +157,7 @@ public class CursorValue extends BaseValue implements IIterable<IValue>, Iterabl
 			generator.writeStartArray();
 			Iterator<IValue> iter = iterator();
 			while(iter.hasNext())
-				iter.next().toJsonStream(context, generator, null, null, withType, data);
+				iter.next().toJsonStream(context, generator, withType, data);
 			generator.writeEndArray();
 			generator.writeEndObject();
 			if(withType)

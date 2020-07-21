@@ -115,7 +115,7 @@ public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implem
 	}
 	
 	@Override
-	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
 			if(withType) {
 				generator.writeStartObject();
@@ -125,7 +125,7 @@ public abstract class SymbolList <T extends Symbol> extends ObjectList<T> implem
 			}
 			generator.writeStartArray();
 			for(Symbol symbol : this)
-				symbol.toJsonStream(context, generator, System.identityHashCode(this), null, withType, data);
+				symbol.toJsonStream(context, generator, withType, data);
 			generator.writeEndArray();
 			if(withType)
 				generator.writeEndObject();

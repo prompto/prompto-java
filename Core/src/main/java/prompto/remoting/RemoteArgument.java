@@ -111,7 +111,7 @@ public class RemoteArgument {
 			generator.writeNullField("value");
 		else {
 			generator.writeFieldName("value");
-			value.toJsonStream(context, generator, null, null, true, null);
+			value.toJsonStream(context, generator, true, null);
 		}
 		generator.writeEndObject();
 	}

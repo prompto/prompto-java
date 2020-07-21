@@ -220,7 +220,7 @@ public class TextValue extends BaseValue implements Comparable<TextValue>, ICont
 	}
 	
 	@Override
-	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
 			generator.writeString(value);
 		} catch(IOException e) {

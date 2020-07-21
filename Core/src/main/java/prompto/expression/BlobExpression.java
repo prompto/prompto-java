@@ -81,7 +81,7 @@ public class BlobExpression implements IExpression {
 		// create textual data
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		JsonGenerator generator = new JsonFactory().createGenerator(output);
-		value.toJsonStream(context, generator, null, null, true, binaries);
+		value.toJsonStream(context, generator, true, binaries);
 		generator.flush();
 		generator.close();
 		// add it

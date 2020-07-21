@@ -116,7 +116,7 @@ public class CategorySymbol extends Symbol implements IExpression  {
 	}
 
 	@Override
-	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
 		try {
 			generator.writeStartObject();
 			generator.writeFieldName("name");
@@ -126,7 +126,7 @@ public class CategorySymbol extends Symbol implements IExpression  {
 				for(Argument argument : arguments) {
 					generator.writeFieldName(argument.getParameter().getName());
 					IValue value = argument.getExpression().interpret(context);
-					value.toJsonStream(context, generator, instanceId, fieldName, withType, binaries);
+					value.toJsonStream(context, generator, withType, binaries);
 				}
 			}
 			generator.writeEndObject();

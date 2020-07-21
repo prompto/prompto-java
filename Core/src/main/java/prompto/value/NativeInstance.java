@@ -296,7 +296,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 	}
 
 	@Override
-	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
 			generator.writeStartObject();
 			for(Identifier attrName : declaration.getAllAttributes(context)) {
@@ -304,10 +304,8 @@ public class NativeInstance extends BaseValue implements IInstance {
 				IValue value = getMember(context, attrName, false);
 				if(value==null)
 					generator.writeNull();
-				else {
-					Object id = System.identityHashCode(this);
-					value.toJsonStream(context, generator, id, attrName.toString(), withType, data);
-				}
+				else 
+					value.toJsonStream(context, generator, withType, data);
 			}
 			generator.writeEndObject();
 		} catch(IOException e) {

@@ -39,6 +39,14 @@ public class PromptoBinary {
 		return bytes;
 	}
 	
+	public Object getSourceDbId() {
+		return sourceDbId;
+	}
+	
+	public String getSourceAttribute() {
+		return sourceAttribute;
+	}
+	
 	public void setSource(Object dbId, String attribute) {
 		sourceDbId = dbId;
 		sourceAttribute = attribute;

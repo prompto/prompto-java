@@ -129,7 +129,7 @@ public interface IValue {
 		throw new UnsupportedOperationException("valueToJsonNode not supported by " + this.getClass().getSimpleName());
 	}
 	
-	default void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
+	default void toJsonStream(Context context, JsonGenerator generator, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
 		throw new UnsupportedOperationException("toJsonStream not supported by " + this.getClass().getSimpleName());
 	}
 

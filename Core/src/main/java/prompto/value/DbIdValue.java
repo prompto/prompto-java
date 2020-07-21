@@ -36,7 +36,7 @@ public class DbIdValue implements IValue {
 	}
 	
 	@Override
-	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
 		try {
 			generator.writeString(dbId.toString());
 		} catch(IOException e) {

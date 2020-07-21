@@ -55,7 +55,7 @@ public class UuidValue extends BaseValue {
 	}
 	
 	@Override
-	public void toJsonStream(Context context, JsonGenerator generator, Object instanceId, String fieldName, boolean withType, Map<String, byte[]> data) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, boolean withType, Map<String, byte[]> data) throws PromptoError {
 		try {
 			if(withType) {
 				generator.writeStartObject();
