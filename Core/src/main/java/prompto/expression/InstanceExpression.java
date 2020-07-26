@@ -12,6 +12,7 @@ import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteMethodDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
+import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.EqOp;
@@ -32,6 +33,7 @@ import prompto.store.IQueryBuilder;
 import prompto.store.IStore;
 import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
+import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
@@ -139,10 +141,6 @@ public class InstanceExpression extends Section implements IPredicateExpression 
 		if(info!=null)
 			return info;
 		else
-			info = compileSingletonField(context, method, flags);
-		if(info!=null)
-			return info;
-		else
 			throw new SyntaxError("Unknown identifier: " + getName());
 	}
 
@@ -155,16 +153,17 @@ public class InstanceExpression extends Section implements IPredicateExpression 
 			return null;
 	}
 
-	private ResultInfo compileSingletonField(Context context, MethodInfo method, Flags flags) {
-		Context actual = context.contextForValue(getId());
+	private ResultInfo compileInstanceField(Context context, MethodInfo method, Flags flags) {
+		// deal with singleton fields
+		Context actual = context.contextForValue(id);
 		if(actual instanceof InstanceContext) {
 			IType type = ((InstanceContext)actual).getInstanceType();
-			return type.compileGetStaticMember(context, method, flags, id);
-		} else
-			return null;
-	}
-	
-	private ResultInfo compileInstanceField(Context context, MethodInfo method, Flags flags) {
+			if(type instanceof CategoryType) { // could be a closure
+				IDeclaration decl = ((CategoryType)type).getDeclaration(context);
+				if(decl instanceof SingletonCategoryDeclaration)
+					return type.compileGetStaticMember(context, method, flags, id);
+			}
+		}
 		StackLocal local = method.getRegisteredLocal("this");
 		if(local==null)
 			return null;
@@ -177,7 +176,7 @@ public class InstanceExpression extends Section implements IPredicateExpression 
 		MemberSelector selector = new MemberSelector(parent, id);
 		return selector.compile(context, method, flags);
 	}
-
+	
 	private ResultInfo compileLocal(Context context, MethodInfo method, Flags flags) {
 		StackLocal local = method.getRegisteredLocal(getName());
 		if(local==null)
