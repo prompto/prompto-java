@@ -151,7 +151,8 @@ public class CategoryParameter extends BaseParameter implements ITypedParameter 
 
 	@Override
 	public IType getType(Context context) {
-		return type;
+		resolve(context);
+		return resolved;
 	}
 	
 	@Override
