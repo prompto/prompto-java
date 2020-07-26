@@ -223,6 +223,8 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 	}
 	
 	boolean isCompatibleArgument(Context context, Class<?> klass, JavaExpression argument) {
+		if(klass==Object.class)
+			return true;
 		IType argIType = argument.check(context);
 		if(argIType instanceof MethodType && klass==IMethodDeclaration.class) {
 			return true;
