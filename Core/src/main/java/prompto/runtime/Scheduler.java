@@ -7,16 +7,32 @@ import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-import prompto.declaration.IMethodDeclaration;
 import prompto.intrinsic.PromptoDateTime;
 import prompto.intrinsic.PromptoPeriod;
+import prompto.value.ClosureValue;
 
 public abstract class Scheduler {
 
 	static AtomicLong JOB_COUNTER = new AtomicLong(0);
 	static Map<Long, Timer> JOB_TIMERS = new ConcurrentHashMap<>();
 	
-	public static Long schedule(IMethodDeclaration callback, PromptoDateTime executeAt, PromptoPeriod repeatEvery, String jobName) {
+	public static Long schedule(Object callback, PromptoDateTime executeAt, PromptoPeriod repeatEvery, String jobName) {
+		Runnable runnable = makeRunnable(callback);
+		return schedule(runnable, executeAt, repeatEvery, jobName);
+	}
+	
+	
+	private static Runnable makeRunnable(Object callback) {
+		if(callback instanceof Runnable) 
+			return (Runnable)callback;
+		else if(callback instanceof ClosureValue)
+			return () -> ((ClosureValue)callback).interpret(ApplicationContext.get());
+		else 
+			throw new UnsupportedOperationException("Unsupported callback type: " + callback.getClass().getName());
+	}
+
+
+	public static Long schedule(Runnable callback, PromptoDateTime executeAt, PromptoPeriod repeatEvery, String jobName) {
 		if(jobName==null)
 			jobName = "Prompto timer";
 		Timer timer = new Timer(jobName, true);
@@ -26,8 +42,7 @@ public abstract class Scheduler {
 			@Override
 			public void run() {
 				try {
-					Context context = ApplicationContext.get();
-					callback.interpret(context.newLocalContext());
+					callback.run();
 				} finally {
 					// gracefully dispose 1-time job timers (repeated jobs must call cancel)
 					if(repeatEvery==null)
