@@ -1,5 +1,8 @@
 package prompto.expression;
 
+import java.lang.reflect.Type;
+
+import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.IInstructionListener;
@@ -73,6 +76,7 @@ public class TernaryExpression implements IExpression {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		Type resultType = check(context).getJavaType(context);
 		StackState initialState = method.captureStackState();
 		ResultInfo li = condition.compile(context, method, flags.withPrimitive(true));
 		if(BooleanValue.class==li.getType())
@@ -80,19 +84,33 @@ public class TernaryExpression implements IExpression {
 		IInstructionListener branchListener = method.addOffsetListener(new OffsetListenerConstant());
 		method.activateOffsetListener(branchListener);
 		method.addInstruction(Opcode.IFEQ, branchListener);
-		ResultInfo result = ifTrue.compile(context, method, flags.withPrimitive(false));
+		ResultInfo trueResult = ifTrue.compile(context, method, flags.withPrimitive(false));
+		trueResult = compileDowncastIfRequired(context, method, trueResult, resultType);
 		IInstructionListener finalListener = method.addOffsetListener(new OffsetListenerConstant());
 		method.activateOffsetListener(finalListener);
 		method.addInstruction(Opcode.GOTO, finalListener);
 		method.restoreFullStackState(initialState);
 		method.placeLabel(initialState);
 		method.inhibitOffsetListener(branchListener);
-		ifFalse.compile(context, method, flags.withPrimitive(false));
+		ResultInfo falseResult = ifFalse.compile(context, method, flags.withPrimitive(false));
+		falseResult = compileDowncastIfRequired(context, method, falseResult, resultType);
 		method.inhibitOffsetListener(finalListener);
 		StackState finalState = method.captureStackState();
 		method.restoreFullStackState(finalState);
 		method.placeLabel(finalState);
-		return result;
+		return trueResult; // should be same as falseResult
+	}
+
+	private ResultInfo compileDowncastIfRequired(Context context, MethodInfo method, ResultInfo result, Type required) {
+		if(result.getType()==required)
+			return result;
+		if(!(required instanceof Class<?> && result.getType() instanceof Class<?>))
+			throw new SyntaxError("Cannot convert " + result.getType() + " to " + required);
+		if(((Class<?>)required).isAssignableFrom((Class<?>)result.getType()))
+				return result;
+		ClassConstant c = new ClassConstant(required);
+		method.addInstruction(Opcode.CHECKCAST, c);
+		return new ResultInfo(required);
 	}
 
 	@Override

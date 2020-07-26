@@ -18,10 +18,10 @@ public class TypeMap extends HashMap<Identifier, IType> {
 		IType type = null;
 		// first pass: get less specific type
 		for(IType t : values()) {
+			if(t==NullType.instance())
+				continue;
 			if(type==null)
 				type = t;
-			else if(type==NullType.instance())
-				continue;
 			else if(type.isAssignableFrom(context, t))
 				continue;
 			else if(t.isAssignableFrom(context, type))
