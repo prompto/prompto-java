@@ -2,12 +2,11 @@ package prompto.statement;
 
 import java.lang.reflect.Type;
 
+import prompto.compiler.ClassConstant;
 import prompto.compiler.Flags;
-import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
-import prompto.compiler.StringConstant;
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
@@ -51,12 +50,10 @@ public class WithSingletonStatement extends BaseStatement {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		Type thisType = type.getJavaType(context);
-		StringConstant s = new StringConstant(thisType.getTypeName());
-		method.addInstruction(Opcode.LDC_W, s);
-		MethodConstant m = new MethodConstant(Class.class, "forName", String.class, Class.class);
-		method.addInstruction(Opcode.INVOKESTATIC, m);
-		method.addInstruction(Opcode.DUP);
+		Type singletonType = type.getJavaType(context);
+		ClassConstant cc = new ClassConstant(singletonType);
+		method.addInstruction(Opcode.LDC, cc);
+		method.addInstruction(Opcode.DUP); // for MONITOREXIT
 		method.addInstruction(Opcode.MONITORENTER);
 		Context instanceContext = context.newInstanceContext(type, false);
 		Context childContext = instanceContext.newChildContext();

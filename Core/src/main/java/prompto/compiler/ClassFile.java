@@ -24,6 +24,11 @@ public class ClassFile {
 	public ClassFile(Type thisClassName) {
 		this.thisClass = new ClassConstant(thisClassName);
 	}
+	
+	@Override
+	public String toString() {
+		return thisClass.toString();
+	}
 
 	public ConstantsPool getConstantsPool() {
 		return constantsPool;
