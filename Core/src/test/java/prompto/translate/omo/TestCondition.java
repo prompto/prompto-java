@@ -17,6 +17,11 @@ public class TestCondition extends BaseOParserTest {
 	}
 
 	@Test
+	public void testLocalScope() throws Exception {
+		compareResourceOMO("condition/localScope.poc");
+	}
+
+	@Test
 	public void testReturnIf() throws Exception {
 		compareResourceOMO("condition/returnIf.poc");
 	}

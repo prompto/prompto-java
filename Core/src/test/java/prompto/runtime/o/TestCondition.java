@@ -50,6 +50,21 @@ public class TestCondition extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedLocalScope() throws Exception {
+		checkInterpretedOutput("condition/localScope.poc");
+	}
+
+	@Test
+	public void testCompiledLocalScope() throws Exception {
+		checkCompiledOutput("condition/localScope.poc");
+	}
+
+	@Test
+	public void testTranspiledLocalScope() throws Exception {
+		checkTranspiledOutput("condition/localScope.poc");
+	}
+
+	@Test
 	public void testInterpretedReturnIf() throws Exception {
 		checkInterpretedOutput("condition/returnIf.poc");
 	}
