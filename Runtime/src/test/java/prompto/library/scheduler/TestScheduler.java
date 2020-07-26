@@ -29,13 +29,13 @@ public class TestScheduler extends BaseEParserTest {
 
 	@Test
 	public void testInterpretedSchedule() throws Exception {
-		runInterpretedTests("prompto/scheduler.pec", true);
+		runInterpretedTests("manual/scheduler.pec", true);
 	}
 	
  
 	@Test
 	public void testCompiledSchedule() throws Exception {
-		runCompiledTests("prompto/scheduler.pec", true);
+		runCompiledTests("manual/scheduler.pec", true);
 	}
  /*
 	@Test
