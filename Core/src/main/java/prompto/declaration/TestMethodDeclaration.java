@@ -23,6 +23,7 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoException;
 import prompto.parser.Assertion;
 import prompto.runtime.Context;
+import prompto.statement.DeclarationStatement;
 import prompto.statement.IStatement;
 import prompto.statement.StatementList;
 import prompto.transpiler.Transpiler;
@@ -39,12 +40,24 @@ public class TestMethodDeclaration extends BaseDeclaration {
 	AssertionList assertions;
 	SymbolExpression error;
 	
-	public TestMethodDeclaration(Identifier name, StatementList stmts, AssertionList exps, SymbolExpression error) {
+	public TestMethodDeclaration(Identifier name, StatementList statements, AssertionList assertions, SymbolExpression error) {
 		super(name);
-		this.statements = stmts;
-		this.assertions = exps;
+		if(statements==null)
+			statements = new StatementList();
+		this.statements = statements;
+		this.assertions = assertions;
 		this.error = error;
+		registerClosures();
 	}
+
+	@SuppressWarnings("unchecked")
+	private void registerClosures() {
+		statements.stream()
+			.filter(s->s instanceof DeclarationStatement)
+			.map(s->(DeclarationStatement<IDeclaration>)s)
+			.forEach(s->s.getDeclaration().setClosureOf(this));
+	}
+
 	
 	@Override
 	public DeclarationType getDeclarationType() {
