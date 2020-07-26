@@ -109,5 +109,20 @@ public class TestCondition extends BaseOParserTest {
 		checkTranspiledOutput("condition/ternary.poc");
 	}
 
+	@Test
+	public void testInterpretedTernaryType() throws Exception {
+		checkInterpretedOutput("condition/ternaryType.poc");
+	}
+
+	@Test
+	public void testCompiledTernaryType() throws Exception {
+		checkCompiledOutput("condition/ternaryType.poc");
+	}
+
+	@Test
+	public void testTranspiledTernaryType() throws Exception {
+		checkTranspiledOutput("condition/ternaryType.poc");
+	}
+
 }
 

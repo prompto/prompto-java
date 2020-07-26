@@ -36,5 +36,10 @@ public class TestCondition extends BaseOParserTest {
 		compareResourceOMO("condition/ternary.poc");
 	}
 
+	@Test
+	public void testTernaryType() throws Exception {
+		compareResourceOMO("condition/ternaryType.poc");
+	}
+
 }
 
