@@ -56,12 +56,16 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	DeclarationStatement<IMethodDeclaration> declarationOf;
 	Map<Identifier, ValuedCodeParameter> codeParameters;
 	
-	@SuppressWarnings("unchecked")
 	public ConcreteMethodDeclaration(Identifier name, ParameterList parameters, IType returnType, StatementList statements) {
 		super(name, parameters, returnType);
 		if(statements==null)
 			statements = new StatementList();
 		this.statements = statements;
+		registerClosures();
+	}
+
+	@SuppressWarnings("unchecked")
+	private void registerClosures() {
 		statements.stream()
 			.filter(s->s instanceof DeclarationStatement)
 			.map(s->(DeclarationStatement<IDeclaration>)s)
@@ -307,7 +311,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 
 	private Type getClosureClassType(MethodInfo method) {
 		String innerClassName = method.getClassFile().getThisClass().getType().getTypeName();
-		if(closureOf!=null && closureOf.getMemberOf()!=null)
+		if(closureOf!=null && closureOf instanceof IMethodDeclaration && ((IMethodDeclaration)closureOf).getMemberOf()!=null)
 			innerClassName += "$" + closureOf.getName();
 		innerClassName += "$" + this.getName();
 		return new NamedType(innerClassName); 

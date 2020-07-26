@@ -30,7 +30,7 @@ import prompto.value.IValue;
 public abstract class BaseMethodDeclaration extends BaseDeclaration implements IMethodDeclaration {
 
 	CategoryDeclaration memberOf;
-	IMethodDeclaration closureOf;
+	IDeclaration closureOf;
 	ParameterList parameters;
 	IType returnType;
 	
@@ -70,12 +70,12 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	}
 	
 	@Override
-	public void setClosureOf(IMethodDeclaration declaration) {
+	public void setClosureOf(IDeclaration declaration) {
 		this.closureOf = declaration;
 	}
 	
 	@Override
-	public IMethodDeclaration getClosureOf() {
+	public IDeclaration getClosureOf() {
 		return closureOf;
 	}
 	

@@ -61,14 +61,17 @@ public class MethodType extends BaseType {
 	}
 
 	private Type getClosureJavaType(Context context) {
-		IMethodDeclaration embedding = method.getClosureOf();
-		if(embedding.getMemberOf()==null) {
-			Type outer = CompilerUtils.getGlobalMethodType(embedding.getId()); 
-			return new NamedType(outer.getTypeName() + '$' + method.getName());
-		} else {
-			Type outer = CompilerUtils.getCategoryConcreteType(embedding.getMemberOf().getId()); 
-			return new NamedType(outer.getTypeName() + '$' + embedding.getName() + '$' + method.getName());
-		}
+		if(method.getClosureOf() instanceof IMethodDeclaration) {
+			IMethodDeclaration embedding = (IMethodDeclaration)method.getClosureOf();
+			if(embedding.getMemberOf()==null) {
+				Type outer = CompilerUtils.getGlobalMethodType(embedding.getId()); 
+				return new NamedType(outer.getTypeName() + '$' + method.getName());
+			} else {
+				Type outer = CompilerUtils.getCategoryConcreteType(embedding.getMemberOf().getId()); 
+				return new NamedType(outer.getTypeName() + '$' + embedding.getName() + '$' + method.getName());
+			}
+		} else
+			throw new IllegalStateException("Should never get there!");
 	}
 	
 	@Override
