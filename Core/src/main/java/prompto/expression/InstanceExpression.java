@@ -44,8 +44,8 @@ public class InstanceExpression extends Section implements IPredicateExpression 
 
 	Identifier id;
 	
-	public InstanceExpression(Identifier name) {
-		this.id = name;
+	public InstanceExpression(Identifier id) {
+		this.id = id;
 	}
 
 	public Identifier getId() {
