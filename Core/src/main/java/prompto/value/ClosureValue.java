@@ -38,7 +38,8 @@ public class ClosureValue extends BaseValue {
 	public IValue interpret(Context context) throws PromptoError {
 		Context parentMost = this.context.getParentMostContext();
 		Context savedParent = parentMost.getParentContext();
-		parentMost.setParentContext(context);
+		if(!context.isChildOf(parentMost))
+			parentMost.setParentContext(context);
 		Context local = this.context.newChildContext();
 		try {
 			return doInterpret(local);
