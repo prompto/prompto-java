@@ -6,6 +6,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StringConstant;
+import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.expression.TypeExpression;
@@ -13,6 +14,7 @@ import prompto.intrinsic.PromptoType;
 import prompto.parser.Dialect;
 import prompto.parser.Section;
 import prompto.runtime.Context;
+import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.TypeType;
@@ -58,8 +60,13 @@ public class TypeLiteral extends Section implements IExpression {
 
 	@Override
 	public void toDialect(CodeWriter writer) {
-		if(writer.getDialect()==Dialect.E)
-			writer.append("Type: ");
+		if(writer.getDialect()==Dialect.E) {
+			IDeclaration decl = writer.getContext().getRegisteredDeclaration(IDeclaration.class, type.getTypeNameId());
+			if(decl instanceof MethodDeclarationMap)
+				writer.append("Method: ");
+			else
+				writer.append("Type: ");
+		}
 		type.toDialect(writer);
 	}
 	
