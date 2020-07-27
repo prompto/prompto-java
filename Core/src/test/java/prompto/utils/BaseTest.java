@@ -138,6 +138,10 @@ public class BaseTest {
 			idx = root.lastIndexOf("/CodeStore/");
 		if(idx>=0)
 			return root.substring(0, idx) + "/prompto-tests/Tests/resources/";
+		// try runtime modules
+		idx = root.lastIndexOf("/Runtime/");
+		if(idx>=0)
+			return root.substring(0, idx) + "/prompto-tests/Tests/resources/";
 		// try platform modules
 		idx = root.lastIndexOf("/Server/");
 		if(idx<0)
