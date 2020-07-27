@@ -2,10 +2,14 @@ package prompto.param;
 
 import java.util.Objects;
 
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.ArrowExpression;
 import prompto.expression.IExpression;
+import prompto.grammar.Argument;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
@@ -16,6 +20,7 @@ import prompto.type.IntegerType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
 import prompto.value.ContextualExpression;
+import prompto.value.IValue;
 
 public class CategoryParameter extends BaseParameter implements ITypedParameter {
 	
@@ -56,6 +61,26 @@ public class CategoryParameter extends BaseParameter implements ITypedParameter 
 	public String getTranspiledName(Context context) {
 		return type.getTranspiledName(context);
 	}
+	
+	@Override
+	public IValue checkValue(Context context, IExpression expression) throws PromptoError {
+		resolve(context);
+		if(resolved instanceof MethodType)
+			return expression.interpretReference(context);
+		else
+			return super.checkValue(context, expression);
+	}
+	
+	@Override
+	public void compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
+		resolve(context);
+		if(resolved instanceof MethodType) {
+			Argument assign = makeArgument(assignments, isFirst);
+			assign.getExpression().compileReference(context.getCallingContext(), method, flags);
+		} else
+			super.compileParameter(context, method, flags, assignments, isFirst);
+	}
+	
 	
 	@Override
 	public void toDialect(CodeWriter writer) {

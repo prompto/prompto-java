@@ -22,7 +22,13 @@ import prompto.value.IValue;
 public interface IExpression {
 	
 	IType check(Context context);
+	default IType checkReference(Context context) {
+		return check(context);
+	}
 	IValue interpret(Context context) throws PromptoError;
+	default IValue interpretReference(Context context) {
+		return interpret(context);
+	}
 	void toDialect(CodeWriter writer);
 	default void parentToDialect(CodeWriter writer) {
 		toDialect(writer);
@@ -30,6 +36,9 @@ public interface IExpression {
 
 	default ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		throw new UnsupportedOperationException("compile " + this.getClass().getName());
+	}
+	default ResultInfo compileReference(Context context, MethodInfo method, Flags flags) {
+		return compile(context, method, flags);
 	}
 	
 	default ResultInfo compileParent(Context context, MethodInfo method, Flags flags) {

@@ -159,8 +159,14 @@ public class Argument extends Section {
 	}
 
 	public IType checkActualType(Context context, IType requiredType, IExpression expression, boolean checkInstance) {
+		IType actualType = null;
 		boolean isArrow = isArrowExpression(requiredType, expression);
-		IType actualType = isArrow ? checkArrowExpression(context, (MethodType)requiredType, expression) : expression.check(context.getCallingContext());
+		if(isArrow)
+			actualType = checkArrowExpression(context, (MethodType)requiredType, expression);
+		else if(requiredType instanceof MethodType)
+			actualType = expression.checkReference(context.getCallingContext());
+		else
+			actualType = expression.check(context.getCallingContext());
 		if(checkInstance && actualType instanceof CategoryType) {
 			Object value = expression.interpret(context.getCallingContext());
 			if(value instanceof IInstance)

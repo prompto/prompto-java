@@ -44,10 +44,20 @@ public class ContextualExpression extends BaseValue implements IExpression {
 	public IType check(Context context) {
 		return expression.check(this.calling);
 	}
+	
+	@Override
+	public IType checkReference(Context context) {
+		return expression.checkReference(this.calling);
+	}
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		return expression.interpret(this.calling);
+	}
+	
+	@Override
+	public IValue interpretReference(Context context) {
+		return expression.interpretReference(this.calling);
 	}
 	
 	@Override

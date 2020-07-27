@@ -3,6 +3,7 @@ package prompto.expression;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
+import prompto.compiler.StackLocal;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IEnumeratedDeclaration;
@@ -77,6 +78,11 @@ public class UnresolvedIdentifier extends Section implements IPredicateExpressio
 		return resolveAndCheck(context, false);
 	}
 	
+	@Override
+	public IType checkReference(Context context) {
+		resolve(context, false, false);
+		return resolved!=null ? resolved.checkReference(context) : AnyType.instance();
+	}
 	
 	@Override
 	public void checkQuery(Context context) throws PromptoError {
@@ -98,6 +104,13 @@ public class UnresolvedIdentifier extends Section implements IPredicateExpressio
 	}
 	
 	@Override
+	public IValue interpretReference(Context context) {
+		resolve(context, false, false);
+		return resolved.interpretReference(context);
+	}
+	
+	
+	@Override
 	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
 		resolveAndCheck(context, false);
 		if(resolved instanceof IPredicateExpression)
@@ -110,6 +123,16 @@ public class UnresolvedIdentifier extends Section implements IPredicateExpressio
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		resolveAndCheck(context, false);
 		return resolved.compile(context, method, flags);
+	}
+	
+	@Override
+	public ResultInfo compileReference(Context context, MethodInfo method, Flags flags) {
+		StackLocal local = method.getRegisteredLocal(getName());
+		if(local!=null) {
+			return new InstanceExpression(id).compile(context, method, flags);
+			
+		} else
+			return compile(context, method, flags);
 	}
 	
 	@Override

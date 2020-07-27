@@ -47,6 +47,7 @@ import prompto.runtime.MethodFinder;
 import prompto.transpiler.Transpiler;
 import prompto.type.CodeType;
 import prompto.type.IType;
+import prompto.type.MethodType;
 import prompto.type.PropertiesType;
 import prompto.utils.CodeWriter;
 import prompto.value.ArrowValue;
@@ -129,6 +130,17 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	public IType check(Context context) {
 		return check(context, false);
 	}
+	
+	@Override
+	public IType checkReference(Context context) {
+		MethodFinder finder = new MethodFinder(context, this);
+		IMethodDeclaration method = finder.findBestMethod(false);
+		if(method!=null)
+			return new MethodType(method);
+		else
+			return null;
+	}
+	
 	
 	public IType check(Context context, boolean updateSelectorParent) {
 		MethodFinder finder = new MethodFinder(context, this);
@@ -261,19 +273,25 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		local.enterMethod(declaration);
 		try {
 			declaration.registerParameters(local);
-			registerArguments(context, local, declaration);
+			assignArguments(context, local, declaration);
 			return declaration.interpret(local);
 		} finally {
 			local.leaveSection(declaration);
 		}
 	}
+	
+	@Override
+	public IValue interpretReference(Context context) {
+		IMethodDeclaration declaration = findDeclaration(context, true);
+		return new ClosureValue(context, new MethodType(declaration));
+	}
 
-	private void registerArguments(Context context, Context local, IMethodDeclaration declaration) throws PromptoError {
-		ArgumentList arguments = makeArguments(context, declaration);
+	private void assignArguments(Context calling, Context local, IMethodDeclaration declaration) throws PromptoError {
+		ArgumentList arguments = makeArguments(calling, declaration);
 		for (Argument argument : arguments) {
 			IExpression expression = argument.resolve(local, declaration, true, false);
 			IParameter parameter = argument.getParameter();
-			IValue value = parameter.checkValue(context, expression);
+			IValue value = parameter.checkValue(calling, expression);
 			if(value!=null && parameter.isMutable() & !value.isMutable()) 
 				throw new NotMutableError();
 			local.setValue(argument.getParameterId(), value);
