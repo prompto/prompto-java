@@ -206,4 +206,10 @@ Period.prototype.toString = function() {
 };
 
 
+Period.prototype.totalMilliseconds = function() {
+    return this.millis + (this.seconds * 1000) + (this.minutes * 60 * 1000) + (this.hours * 60 * 60 * 1000)
+        + (this.days * 24 * 60 * 60 * 1000) + (this.weeks * 7 * 24 * 60 * 60 * 1000) + (this.months * (365 / 12) * 24 * 60 * 60 * 1000)
+        + (this.years * 365 * 24 * 60 * 60 * 1000)
+};
+
 Period.prototype.getText = Period.prototype.toString;
