@@ -15,28 +15,28 @@ public class TypeMap extends HashMap<Identifier, IType> {
 	public IType inferType(Context context) {
 		if(size()==0)
 			return VoidType.instance();
-		IType type = null;
+		IType inferred = null;
 		// first pass: get less specific type
 		for(IType t : values()) {
 			if(t==NullType.instance())
 				continue;
-			if(type==null)
-				type = t;
-			else if(type.isAssignableFrom(context, t))
+			if(inferred==null)
+				inferred = t;
+			else if(inferred.isAssignableFrom(context, t))
 				continue;
-			else if(t.isAssignableFrom(context, type))
-				type = t;
+			else if(t.isAssignableFrom(context, inferred))
+				inferred = t;
 			else
-				throw new SyntaxError("Incompatible types: " + type.getTypeName() + " and " + t.getTypeName());
+				throw new SyntaxError("Incompatible types: " + inferred.getTypeName() + " and " + t.getTypeName());
 		}
-		if(type==null)
+		if(inferred==null)
 			return NullType.instance();
 		// second pass: check compatible
 		for(IType t : values()) {
-			if(t!=type && !type.isAssignableFrom(context, t))
-				throw new SyntaxError("Incompatible types: " + type.getTypeName() + " and " + t.getTypeName());
+			if(t!=inferred && !inferred.isAssignableFrom(context, t))
+				throw new SyntaxError("Incompatible types: " + inferred.getTypeName() + " and " + t.getTypeName());
 		}
-		return type;
+		return inferred;
 	}
 	
 }
