@@ -29,6 +29,8 @@ public class TypeMap extends HashMap<Identifier, IType> {
 			else
 				throw new SyntaxError("Incompatible types: " + type.getTypeName() + " and " + t.getTypeName());
 		}
+		if(type==null)
+			return NullType.instance();
 		// second pass: check compatible
 		for(IType t : values()) {
 			if(t!=type && !type.isAssignableFrom(context, t))
@@ -36,5 +38,5 @@ public class TypeMap extends HashMap<Identifier, IType> {
 		}
 		return type;
 	}
-
+	
 }
