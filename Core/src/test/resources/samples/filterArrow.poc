@@ -1,0 +1,10 @@
+@WidgetField(name = "props", type = Document, isProperties = true)
+@WidgetProperties({stuff: Text})
+widget Stuff {
+
+    method componentDidMount() {
+        stuff = [ "321", "654" ];
+        things = filtered(stuff) where (thing => thing==props.stuff);
+    }
+    
+}

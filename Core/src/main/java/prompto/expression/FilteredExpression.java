@@ -234,9 +234,12 @@ public class FilteredExpression extends Section implements IExpression {
 	    IType manyType = this.source.check(transpiler.getContext());
 	    IType itemType = ((IterableType)manyType).getItemType() ;
 		this.source.transpile(transpiler);
-	    transpiler.append(".filtered(");
+	    transpiler.append(".filtered((");
 	    ArrowExpression arrow = toArrowExpression();
 	    arrow.transpileFilter(transpiler, itemType);
+	    transpiler.append(")");
+	    if(transpiler.getContext().getClosestInstanceContext()!=null)
+	    	transpiler.append(".bind(this)");
 	    transpiler.append(")");
 	    transpiler.flush();
 		return false;
