@@ -1,10 +1,10 @@
 package prompto.runtime;
 
-import prompto.grammar.INamed;
+import prompto.grammar.INamedInstance;
 import prompto.grammar.Identifier;
 import prompto.type.IType;
 
-public class Variable implements INamed {
+public class Variable implements INamedInstance {
 
 	Identifier name;
 	IType type;

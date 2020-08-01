@@ -49,6 +49,7 @@ import prompto.type.CodeType;
 import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.type.PropertiesType;
+import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.ArrowValue;
 import prompto.value.BooleanValue;
@@ -149,8 +150,12 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			return null;
 		if(updateSelectorParent && declaration.getMemberOf()!=null && this.selector.getParent()==null)
 			this.selector.setParent(new ThisExpression());
-		Context local = isLocalClosure(context) ? context : selector.newLocalCheckContext(context, declaration);
-		return check(declaration, context, local);
+		if(declaration instanceof AbstractMethodDeclaration)
+			return declaration.getReturnType()!=null ? declaration.getReturnType() : VoidType.instance();
+		else {
+			Context local = isLocalClosure(context) ? context : selector.newLocalCheckContext(context, declaration);
+			return check(declaration, context, local);
+		}
 	}
 
 	private boolean isLocalClosure(Context context) {
@@ -517,9 +522,10 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	    String name = null;
 	    if(this.variableName!=null)
 	        name = this.variableName;
-	    /*else if(this.fullSelector)
-	        name = this.fullSelector.name;*/
-	    // don't transpile name of method references in widget property value,  
+	    // don't transpile name of local abstract method references 
+	    else if(!selector.getName().equals(declaration.getName()))
+	        name = selector.getName();
+        // don't transpile name of method references in widget property value 
 	    else if(parent!=null && parent.check(transpiler.getContext()) instanceof PropertiesType)
 	    	name = selector.getName();
 	    else 
