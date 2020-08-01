@@ -84,15 +84,31 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	}
 	
 	public Set<IMethodDeclaration> getCandidates(Context context, boolean checkInstance) {
-		INamed named = context.getRegistered(id);
-		if(named instanceof INamedInstance && named.getType(context) instanceof prompto.type.MethodType)
-			return Collections.singleton(((prompto.type.MethodType)named.getType(context)).getMethod());
+		IMethodDeclaration decl = getMethodInstance(context);
+		if(decl!=null)
+			return Collections.singleton(decl);
 		else if(parent==null)
 			return getGlobalCandidates(context);
 		else
 			return getMemberCandidates(context, checkInstance);
 	}
 	
+	
+	private IMethodDeclaration getMethodInstance(Context context) {
+		INamed named = context.getRegistered(id);
+		if(named instanceof INamedInstance) {
+			IType type = named.getType(context);
+			if(type != null) {
+				type = type.resolve(context, null);
+				if(type instanceof prompto.type.MethodType) {
+					return ((prompto.type.MethodType)type).getMethod();
+				}
+			}
+		}
+		return null;
+	}
+	
+
 	private Set<IMethodDeclaration> getGlobalCandidates(Context context) {
 		Set<IMethodDeclaration> methods = new HashSet<>();
 		// if called from a member method, could be a member method called without this/self
