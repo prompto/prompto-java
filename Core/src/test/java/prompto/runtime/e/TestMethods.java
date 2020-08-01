@@ -260,6 +260,21 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedParameter() throws Exception {
+		checkInterpretedOutput("methods/parameter.pec");
+	}
+
+	@Test
+	public void testCompiledParameter() throws Exception {
+		checkCompiledOutput("methods/parameter.pec");
+	}
+
+	@Test
+	public void testTranspiledParameter() throws Exception {
+		checkTranspiledOutput("methods/parameter.pec");
+	}
+
+	@Test
 	public void testInterpretedPolymorphic_abstract() throws Exception {
 		checkInterpretedOutput("methods/polymorphic_abstract.pec");
 	}

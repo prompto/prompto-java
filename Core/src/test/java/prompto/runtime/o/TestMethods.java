@@ -215,6 +215,21 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedParameter() throws Exception {
+		checkInterpretedOutput("methods/parameter.poc");
+	}
+
+	@Test
+	public void testCompiledParameter() throws Exception {
+		checkCompiledOutput("methods/parameter.poc");
+	}
+
+	@Test
+	public void testTranspiledParameter() throws Exception {
+		checkTranspiledOutput("methods/parameter.poc");
+	}
+
+	@Test
 	public void testInterpretedPolymorphic_abstract() throws Exception {
 		checkInterpretedOutput("methods/polymorphic_abstract.poc");
 	}

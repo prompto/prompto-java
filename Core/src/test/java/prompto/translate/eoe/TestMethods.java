@@ -97,6 +97,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testParameter() throws Exception {
+		compareResourceEOE("methods/parameter.pec");
+	}
+
+	@Test
 	public void testPolymorphic_abstract() throws Exception {
 		compareResourceEOE("methods/polymorphic_abstract.pec");
 	}
