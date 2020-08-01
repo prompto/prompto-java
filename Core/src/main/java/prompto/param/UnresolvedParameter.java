@@ -19,15 +19,15 @@ import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
-public class UnresolvedParameter extends BaseParameter implements INamedParameter {
+public class UnresolvedParameter extends BaseParameter {
 
-	INamedParameter resolved = null;
+	IParameter resolved = null;
 	
 	public UnresolvedParameter(Identifier id) {
 		super(id);
 	}
 	
-	public INamedParameter getResolved() {
+	public IParameter getResolved() {
 		return resolved;
 	}
 	

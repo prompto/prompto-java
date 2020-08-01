@@ -40,7 +40,7 @@ import prompto.value.ArrowValue;
 import prompto.value.ContextualExpression;
 import prompto.value.IValue;
 
-public class MethodParameter extends BaseParameter implements INamedParameter {
+public class MethodParameter extends BaseParameter {
 	
 	public MethodParameter(Identifier id) {
 		super(id);

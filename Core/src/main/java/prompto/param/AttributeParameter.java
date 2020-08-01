@@ -29,7 +29,7 @@ import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
-public class AttributeParameter extends BaseParameter implements INamedParameter {
+public class AttributeParameter extends BaseParameter {
 	
 	public AttributeParameter(Identifier id) {
 		super(id);

@@ -180,7 +180,7 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 		if(call==null) {
 			INamed named = context.getRegisteredValue(INamed.class, id);
 			if(named!=null) {
-				IType type = named.getType(context);
+				IType type = named.getType(context).resolve(context, null);
 				if(type instanceof MethodType) {
 					call = new MethodCall(new MethodSelector(id), arguments);
 					((MethodCall)call).setVariableName(id.toString());
