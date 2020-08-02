@@ -151,7 +151,7 @@ public class MemStoreMirror {
 				Map<String, Object> mapResult = new HashMap<>();
 				((Map<String, Object>)value).forEach((k,v)->{
 					if(!isFunction(v))
-						mapResult.put(k, toJS(v));
+						mapResult.put(k, fromJS(v));
 				});
 				return mapResult;
 			} else
@@ -203,7 +203,7 @@ public class MemStoreMirror {
 		private Object fromJSObject(ScriptObjectMirror value) {
 			Map<String, Object> mapResult = new HashMap<>();
 			value.forEach((k,v)->{
-				if(!isFunction(v))
+				if(!isFunction(v) && !"$storable".equals(k) && !"$mutable".equals(k))
 					mapResult.put(k, fromJS(v));
 			});
 			return mapResult;
@@ -222,34 +222,41 @@ public class MemStoreMirror {
 
 
 		@SuppressWarnings("unchecked")
-		public Object toJS(Object value) {
+		public Object toJS(Object value, boolean isStorable) {
 			if(value==null || value instanceof Boolean || value instanceof Integer || value instanceof Long || value instanceof Double || value instanceof String || value instanceof StoredMirror || value instanceof StorableMirror)
 				return value;
 			else if(value instanceof IStored)
 				return new StoredMirror((IStored)value);
 			else if(value instanceof IStorable)
 				return new StorableMirror((IStorable)value);
-			else if(value instanceof List) {
-				ScriptObjectMirror array = newArray();
-				AtomicInteger index = new AtomicInteger();
-				((List<Object>)value).forEach(item->array.setSlot(index.getAndIncrement(), toJS(item)));
-				return array;
-			} else if(value instanceof Map) {
-				ScriptObjectMirror object = newObject();
-				((Map<String,Object>)value).forEach((k,v)->object.setMember(k, toJS(v)));
-				return object;
-			} else
+			else if(value instanceof List) 
+				return isStorable ? toJSList((List<Object>)value, isStorable) : toJSArray((List<Object>)value, isStorable);
+			else if(value instanceof Map) 
+				return toJSObject((Map<String,Object>)value, isStorable); 
+			else
 				throw new UnsupportedOperationException(value.getClass().getName());
 		}
 		
+		private ScriptObjectMirror toJSObject(Map<String, Object> value, boolean isStorable) {
+			ScriptObjectMirror object = safeEval("({})");
+			value.forEach((k,v)->object.setMember(k, toJS(v, isStorable)));
+			return object;
+		}
 
-		public ScriptObjectMirror newObject() {
-			return safeEval("({})");
+		private ScriptObjectMirror toJSArray(List<Object> value, boolean isStorable) {
+			ScriptObjectMirror array = safeEval("[]");
+			AtomicInteger index = new AtomicInteger();
+			value.forEach(item->array.setSlot(index.getAndIncrement(), toJS(item, isStorable)));
+			return array;
 		}
-		
-		private ScriptObjectMirror newArray() {
-			return safeEval("[]");
+
+		private ScriptObjectMirror toJSList(List<Object> value, boolean isStorable) {
+			ScriptObjectMirror array = toJSArray(value, isStorable);
+			ScriptObjectMirror listFn = (ScriptObjectMirror)nashorn.get("List");
+			// List is injected on demand, if missing probably safe to use array
+			return listFn==null ? array : (ScriptObjectMirror)listFn.newObject(false, array);
 		}
+	
 		
 		private ScriptObjectMirror safeEval(String script) {
 			try {
@@ -309,7 +316,7 @@ public class MemStoreMirror {
 		
 		public Object getData(String name) {
 			Object data = stored.getData(name);
-			return converter.toJS(data);
+			return converter.toJS(data, !"category".equals(name));
 		}
 		
 	}
@@ -359,7 +366,7 @@ public class MemStoreMirror {
 		}
 		
 		public Object next() {
-			return converter.toJS(iterator.next());
+			return converter.toJS(iterator.next(), false);
 		}
 		
 	}
@@ -380,7 +387,19 @@ public class MemStoreMirror {
 		}
 		
 		public Object iterator() {
-			return iterable.iterator();
+			Iterator<IStored> iterator = iterable.iterator();
+			return new Iterator<Object>() {
+
+				@Override
+				public boolean hasNext() {
+					return iterator.hasNext();
+				}
+
+				@Override
+				public Object next() {
+					return converter.toJS(iterator.next(), false);
+				}};
+			
 		}
 
 		public Object iterate(ScriptObjectMirror function, ScriptObjectMirror binding) {
