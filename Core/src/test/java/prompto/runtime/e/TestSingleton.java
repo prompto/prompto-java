@@ -35,6 +35,21 @@ public class TestSingleton extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedInternal() throws Exception {
+		checkInterpretedOutput("singleton/internal.pec");
+	}
+
+	@Test
+	public void testCompiledInternal() throws Exception {
+		checkCompiledOutput("singleton/internal.pec");
+	}
+
+	@Test
+	public void testTranspiledInternal() throws Exception {
+		checkTranspiledOutput("singleton/internal.pec");
+	}
+
+	@Test
 	public void testInterpretedMember() throws Exception {
 		checkInterpretedOutput("singleton/member.pec");
 	}
