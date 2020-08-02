@@ -21,6 +21,10 @@ public class TypeType extends BaseType {
 		super(Family.TYPE);
 		this.type = type;
 	}
+	
+	public IType getType() {
+		return type;
+	}
 
 	@Override
 	public Type getJavaType(Context context) {
