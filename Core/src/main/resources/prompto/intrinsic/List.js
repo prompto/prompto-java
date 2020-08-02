@@ -51,7 +51,7 @@ List.prototype.item = function(idx) {
     if(idx==null)
         throw new ReferenceError();
     else if(idx<1 || idx>this.length)
-        throw new RangeError();
+        throw new RangeError("idx:" + idx + ",length:" + this.length);
     else
         return this[idx-1];
 };
@@ -60,7 +60,7 @@ List.prototype.getItem = function (idx, create) {
     if(idx==null)
         throw new ReferenceError();
     else if(idx<1 || idx>this.length)
-        throw new RangeError();
+        throw new RangeError("idx:" + idx + ",length:" + this.length);
     else {
         if(!this[idx - 1] && create)
             this[idx - 1] = new Document();
@@ -74,7 +74,7 @@ List.prototype.setItem = function (idx, value) {
     else if(idx==null)
         throw new ReferenceError();
     else if(idx<1 || idx>this.length)
-        throw new RangeError();
+        throw new RangeError("idx:" + idx + ",length:" + this.length);
     else
         this[idx-1] = value;
 };
