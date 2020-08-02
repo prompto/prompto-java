@@ -41,4 +41,8 @@ public enum EqOp {
 			s = this.name().toLowerCase().replace("_", " ");
 		return s;
 	}
+	
+	public boolean isNot() {
+		return (ordinal() & 1) == 1;
+	}
 }

@@ -366,12 +366,14 @@ public class EqualsExpression extends Section implements IPredicateExpression, I
 		AttributeInfo info = StoreUtils.getAttributeInfo(context, decl.getName(), store);
 		MatchOp match = getMatchOp();
 		query.<Object>verify(info, match, data);
-		if(operator==EqOp.NOT_EQUALS || operator==EqOp.NOT_CONTAINS)
+		if(operator.isNot())
 			query.not();
 	}
 	
 	private MatchOp getMatchOp() {
 		switch(operator) {
+		case IS:
+		case IS_NOT:
 		case EQUALS:
 		case NOT_EQUALS:
 			return MatchOp.EQUALS;
@@ -394,7 +396,7 @@ public class EqualsExpression extends Section implements IPredicateExpression, I
 		InterfaceConstant m = new InterfaceConstant(IQueryBuilder.class,
 				"verify", AttributeInfo.class, MatchOp.class, Object.class, IQueryBuilder.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
-		if(operator==EqOp.NOT_EQUALS) {
+		if(operator.isNot()) {
 			m = new InterfaceConstant(IQueryBuilder.class, "not", IQueryBuilder.class);
 			method.addInstruction(Opcode.INVOKEINTERFACE, m);
 		}
@@ -734,7 +736,7 @@ public class EqualsExpression extends Section implements IPredicateExpression, I
 	    transpiler.append(builderName).append(".verify(").append(info.toTranspiled()).append(", MatchOp.").append(matchOp.name()).append(", ");
 	    right.transpile(transpiler);
 	    transpiler.append(");").newLine();
-	    if (this.operator == EqOp.NOT_EQUALS)
+	    if (operator.isNot()) 
 	        transpiler.append(builderName).append(".not();").newLine();
 	}
 	
