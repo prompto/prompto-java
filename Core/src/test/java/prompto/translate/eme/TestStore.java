@@ -37,8 +37,58 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testFetchContains() throws Exception {
+		compareResourceEME("store/fetchContains.pec");
+	}
+
+	@Test
+	public void testFetchGreater() throws Exception {
+		compareResourceEME("store/fetchGreater.pec");
+	}
+
+	@Test
+	public void testFetchGreaterEqual() throws Exception {
+		compareResourceEME("store/fetchGreaterEqual.pec");
+	}
+
+	@Test
+	public void testFetchHas() throws Exception {
+		compareResourceEME("store/fetchHas.pec");
+	}
+
+	@Test
+	public void testFetchIn() throws Exception {
+		compareResourceEME("store/fetchIn.pec");
+	}
+
+	@Test
+	public void testFetchLesser() throws Exception {
+		compareResourceEME("store/fetchLesser.pec");
+	}
+
+	@Test
+	public void testFetchLesserEqual() throws Exception {
+		compareResourceEME("store/fetchLesserEqual.pec");
+	}
+
+	@Test
 	public void testFetchNotBoolean() throws Exception {
 		compareResourceEME("store/fetchNotBoolean.pec");
+	}
+
+	@Test
+	public void testFetchNotContains() throws Exception {
+		compareResourceEME("store/fetchNotContains.pec");
+	}
+
+	@Test
+	public void testFetchNotHas() throws Exception {
+		compareResourceEME("store/fetchNotHas.pec");
+	}
+
+	@Test
+	public void testFetchNotIn() throws Exception {
+		compareResourceEME("store/fetchNotIn.pec");
 	}
 
 	@Test

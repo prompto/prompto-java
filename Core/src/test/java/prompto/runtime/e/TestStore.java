@@ -110,6 +110,111 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedFetchContains() throws Exception {
+		checkInterpretedOutput("store/fetchContains.pec");
+	}
+
+	@Test
+	public void testCompiledFetchContains() throws Exception {
+		checkCompiledOutput("store/fetchContains.pec");
+	}
+
+	@Test
+	public void testTranspiledFetchContains() throws Exception {
+		checkTranspiledOutput("store/fetchContains.pec");
+	}
+
+	@Test
+	public void testInterpretedFetchGreater() throws Exception {
+		checkInterpretedOutput("store/fetchGreater.pec");
+	}
+
+	@Test
+	public void testCompiledFetchGreater() throws Exception {
+		checkCompiledOutput("store/fetchGreater.pec");
+	}
+
+	@Test
+	public void testTranspiledFetchGreater() throws Exception {
+		checkTranspiledOutput("store/fetchGreater.pec");
+	}
+
+	@Test
+	public void testInterpretedFetchGreaterEqual() throws Exception {
+		checkInterpretedOutput("store/fetchGreaterEqual.pec");
+	}
+
+	@Test
+	public void testCompiledFetchGreaterEqual() throws Exception {
+		checkCompiledOutput("store/fetchGreaterEqual.pec");
+	}
+
+	@Test
+	public void testTranspiledFetchGreaterEqual() throws Exception {
+		checkTranspiledOutput("store/fetchGreaterEqual.pec");
+	}
+
+	@Test
+	public void testInterpretedFetchHas() throws Exception {
+		checkInterpretedOutput("store/fetchHas.pec");
+	}
+
+	@Test
+	public void testCompiledFetchHas() throws Exception {
+		checkCompiledOutput("store/fetchHas.pec");
+	}
+
+	@Test
+	public void testTranspiledFetchHas() throws Exception {
+		checkTranspiledOutput("store/fetchHas.pec");
+	}
+
+	@Test
+	public void testInterpretedFetchIn() throws Exception {
+		checkInterpretedOutput("store/fetchIn.pec");
+	}
+
+	@Test
+	public void testCompiledFetchIn() throws Exception {
+		checkCompiledOutput("store/fetchIn.pec");
+	}
+
+	@Test
+	public void testTranspiledFetchIn() throws Exception {
+		checkTranspiledOutput("store/fetchIn.pec");
+	}
+
+	@Test
+	public void testInterpretedFetchLesser() throws Exception {
+		checkInterpretedOutput("store/fetchLesser.pec");
+	}
+
+	@Test
+	public void testCompiledFetchLesser() throws Exception {
+		checkCompiledOutput("store/fetchLesser.pec");
+	}
+
+	@Test
+	public void testTranspiledFetchLesser() throws Exception {
+		checkTranspiledOutput("store/fetchLesser.pec");
+	}
+
+	@Test
+	public void testInterpretedFetchLesserEqual() throws Exception {
+		checkInterpretedOutput("store/fetchLesserEqual.pec");
+	}
+
+	@Test
+	public void testCompiledFetchLesserEqual() throws Exception {
+		checkCompiledOutput("store/fetchLesserEqual.pec");
+	}
+
+	@Test
+	public void testTranspiledFetchLesserEqual() throws Exception {
+		checkTranspiledOutput("store/fetchLesserEqual.pec");
+	}
+
+	@Test
 	public void testInterpretedFetchNotBoolean() throws Exception {
 		checkInterpretedOutput("store/fetchNotBoolean.pec");
 	}
@@ -122,6 +227,51 @@ public class TestStore extends BaseEParserTest {
 	@Test
 	public void testTranspiledFetchNotBoolean() throws Exception {
 		checkTranspiledOutput("store/fetchNotBoolean.pec");
+	}
+
+	@Test
+	public void testInterpretedFetchNotContains() throws Exception {
+		checkInterpretedOutput("store/fetchNotContains.pec");
+	}
+
+	@Test
+	public void testCompiledFetchNotContains() throws Exception {
+		checkCompiledOutput("store/fetchNotContains.pec");
+	}
+
+	@Test
+	public void testTranspiledFetchNotContains() throws Exception {
+		checkTranspiledOutput("store/fetchNotContains.pec");
+	}
+
+	@Test
+	public void testInterpretedFetchNotHas() throws Exception {
+		checkInterpretedOutput("store/fetchNotHas.pec");
+	}
+
+	@Test
+	public void testCompiledFetchNotHas() throws Exception {
+		checkCompiledOutput("store/fetchNotHas.pec");
+	}
+
+	@Test
+	public void testTranspiledFetchNotHas() throws Exception {
+		checkTranspiledOutput("store/fetchNotHas.pec");
+	}
+
+	@Test
+	public void testInterpretedFetchNotIn() throws Exception {
+		checkInterpretedOutput("store/fetchNotIn.pec");
+	}
+
+	@Test
+	public void testCompiledFetchNotIn() throws Exception {
+		checkCompiledOutput("store/fetchNotIn.pec");
+	}
+
+	@Test
+	public void testTranspiledFetchNotIn() throws Exception {
+		checkTranspiledOutput("store/fetchNotIn.pec");
 	}
 
 	@Test
