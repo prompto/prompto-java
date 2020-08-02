@@ -5,6 +5,7 @@ import prompto.compiler.Flags;
 import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.declaration.AttributeDeclaration;
 import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.store.AttributeInfo;
@@ -64,7 +65,12 @@ public class OrderByClause extends Section {
 
 	public void transpileQuery(Transpiler transpiler, String builderName) {
 	    String name = qualifiedName.get(0).toString();
-	    AttributeInfo info = transpiler.getContext().findAttribute(name).getAttributeInfo(transpiler.getContext());
-	    transpiler.append(builderName).append(".addOrderByClause(").append(info.toTranspiled()).append(", ").append(this.descending).append(");").newLine();
+	    AttributeDeclaration decl = transpiler.getContext().findAttribute(name);
+	    if(decl==null)
+	    	transpiler.getContext().getProblemListener().reportUnknownAttribute(this, name);
+	    else {
+	    	AttributeInfo info = decl.getAttributeInfo(transpiler.getContext());
+		    transpiler.append(builderName).append(".addOrderByClause(").append(info.toTranspiled()).append(", ").append(this.descending).append(");").newLine();
+	    }
 	}
 }
