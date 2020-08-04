@@ -24,8 +24,11 @@ public interface IStoreConfiguration {
 		mapping.setEntry("host", getHost());
 		mapping.setEntry("port", getPort());
 		mapping.setEntry("dbName", getDbName());
-		mapping.setEntry("user", getUser());
-		mapping.setEntry("secretKey", getSecretKeyConfiguration().toYaml());
+		ISecretKeyConfiguration secret = getSecretKeyConfiguration();
+		if(secret!=null) {
+			mapping.setEntry("user", getUser());
+			mapping.setEntry("secretKey", secret.toYaml());
+		}
 		return mapping;
 	}
 
