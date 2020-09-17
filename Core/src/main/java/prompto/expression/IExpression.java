@@ -8,6 +8,8 @@ import prompto.error.PromptoError;
 import prompto.parser.Dialect;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
+import prompto.store.AttributeInfo;
+import prompto.store.IStore;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
@@ -67,6 +69,10 @@ public interface IExpression {
 		throw new UnsupportedOperationException("transpileFound " + this.getClass().getName());
 	}
 	default AttributeDeclaration checkAttribute(Context context, ISection section) {
+		context.getProblemListener().reportMissingAttribute(section, this.toString());
+		return null;
+	}
+	default AttributeInfo checkAttributeInfo(Context context, ISection section, IStore store) {
 		context.getProblemListener().reportMissingAttribute(section, this.toString());
 		return null;
 	}

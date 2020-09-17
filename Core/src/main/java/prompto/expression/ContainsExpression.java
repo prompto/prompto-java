@@ -360,11 +360,11 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	
 	@Override
 	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
-		AttributeDeclaration decl = left.checkAttribute(context, this);
-		if(decl==null || !decl.isStorable(context))
-			throw new SyntaxError("Unable to interpret predicate");
+		AttributeInfo info = left.checkAttributeInfo(context, this, store);
+		if(info==null)
+			throw new SyntaxError("Unable to interpret predicate: " + this.toString());
 		IValue value = right.interpret(context);
-		AttributeInfo fieldInfo = StoreUtils.getAttributeInfo(context, decl.getName(), store);
+		AttributeInfo fieldInfo = StoreUtils.getAttributeInfo(context, info.getName(), store);
 		FamilyInfo valueInfo = value.getType().getFamilyInfo(context);
 		MatchOp matchOp = getMatchOp(context, fieldInfo, valueInfo, this.operator, false);
 		if(value instanceof IInstance)

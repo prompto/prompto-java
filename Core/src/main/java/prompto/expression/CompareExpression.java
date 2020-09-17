@@ -48,7 +48,6 @@ import prompto.type.TextType;
 import prompto.type.TimeType;
 import prompto.type.VersionType;
 import prompto.utils.CodeWriter;
-import prompto.utils.StoreUtils;
 import prompto.value.BooleanValue;
 import prompto.value.IInstance;
 import prompto.value.IValue;
@@ -154,10 +153,9 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 	
 	@Override
 	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
-		AttributeDeclaration decl = left.checkAttribute(context, this);
-		if(decl==null || !decl.isStorable(context))
+		AttributeInfo info = left.checkAttributeInfo(context, this, store);
+		if(info==null)
 			throw new SyntaxError("Unable to interpret predicate: " + this.toString());
-		AttributeInfo info = StoreUtils.getAttributeInfo(context, decl.getName(), store);
 		IValue value = right.interpret(context);
 		if(value instanceof IInstance)
 			value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);

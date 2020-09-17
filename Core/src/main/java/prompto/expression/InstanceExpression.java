@@ -29,6 +29,7 @@ import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.runtime.LinkedVariable;
 import prompto.runtime.Variable;
+import prompto.store.AttributeInfo;
 import prompto.store.IQueryBuilder;
 import prompto.store.IStore;
 import prompto.transpiler.Transpiler;
@@ -37,6 +38,7 @@ import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
+import prompto.utils.StoreUtils;
 import prompto.value.ClosureValue;
 import prompto.value.IValue;
 
@@ -87,6 +89,11 @@ public class InstanceExpression extends Section implements IPredicateExpression 
 		if(decl==null)
 			context.getProblemListener().reportMissingAttribute(this, this.toString());
 		return decl;
+	}
+	
+	@Override
+	public AttributeInfo checkAttributeInfo(Context context, ISection section, IStore store) {
+		return StoreUtils.getAttributeInfo(context, id.toString(), store);
 	}
 	
 	

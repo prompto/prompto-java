@@ -71,7 +71,6 @@ import prompto.type.TimeType;
 import prompto.type.UuidType;
 import prompto.type.VersionType;
 import prompto.utils.CodeWriter;
-import prompto.utils.StoreUtils;
 import prompto.value.BooleanValue;
 import prompto.value.IInstance;
 import prompto.value.IValue;
@@ -350,20 +349,18 @@ public class EqualsExpression extends Section implements IPredicateExpression, I
 	
 	@Override
 	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
-		AttributeDeclaration decl = left.checkAttribute(context, this);
-		if(decl==null || !decl.isStorable(context))
-			throw new SyntaxError("Unable to interpret predicate");
+		AttributeInfo info = left.checkAttributeInfo(context, this, store);
+		if(info==null)
+			throw new SyntaxError("Unable to interpret predicate: " + this.toString());
 		IValue value = right.interpret(context);
 		if(value instanceof IInstance)
 			value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
 		Object data = null;
 		if(value!=null)
-		if(IStore.dbIdName.equals(decl.getName()))
+		if(IStore.dbIdName.equals(info.getName()))
 			data = DataStore.getInstance().convertToDbId(value);
 		else
 			data = value.getStorableData();
-		
-		AttributeInfo info = StoreUtils.getAttributeInfo(context, decl.getName(), store);
 		MatchOp match = getMatchOp();
 		query.<Object>verify(info, match, data);
 		if(operator.isNot())

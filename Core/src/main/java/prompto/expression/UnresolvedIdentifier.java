@@ -18,6 +18,7 @@ import prompto.problem.IProblemListener;
 import prompto.problem.ProblemListener;
 import prompto.runtime.Context;
 import prompto.statement.MethodCall;
+import prompto.store.AttributeInfo;
 import prompto.store.IQueryBuilder;
 import prompto.store.IStore;
 import prompto.transpiler.Transpiler;
@@ -25,6 +26,7 @@ import prompto.type.AnyType;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
+import prompto.utils.StoreUtils;
 import prompto.value.IValue;
 
 public class UnresolvedIdentifier extends Section implements IPredicateExpression {
@@ -71,6 +73,11 @@ public class UnresolvedIdentifier extends Section implements IPredicateExpressio
 		if(decl==null)
 			context.getProblemListener().reportMissingAttribute(this, this.toString());
 		return decl;
+	}
+	
+	@Override
+	public AttributeInfo checkAttributeInfo(Context context, ISection section, IStore store) {
+		return StoreUtils.getAttributeInfo(context, id.toString(), store);
 	}
 
 	@Override
