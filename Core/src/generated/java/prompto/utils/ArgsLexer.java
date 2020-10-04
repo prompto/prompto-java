@@ -1,4 +1,4 @@
-// Generated from ArgsLexer.g4 by ANTLR 4.7.1
+// Generated from ArgsLexer.g4 by ANTLR 4.8
 package prompto.utils;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
@@ -11,7 +11,7 @@ import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class ArgsLexer extends Lexer {
-	static { RuntimeMetaData.checkVersion("4.7.1", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.8", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -26,16 +26,25 @@ public class ArgsLexer extends Lexer {
 		"DEFAULT_MODE"
 	};
 
-	public static final String[] ruleNames = {
-		"STRING", "EscapeSequence", "EQUALS", "DASH", "WS", "ELEMENT"
-	};
+	private static String[] makeRuleNames() {
+		return new String[] {
+			"STRING", "EscapeSequence", "EQUALS", "DASH", "WS", "ELEMENT"
+		};
+	}
+	public static final String[] ruleNames = makeRuleNames();
 
-	private static final String[] _LITERAL_NAMES = {
-		null, null, "'='", "'-'", "' '"
-	};
-	private static final String[] _SYMBOLIC_NAMES = {
-		null, "STRING", "EQUALS", "DASH", "WS", "ELEMENT"
-	};
+	private static String[] makeLiteralNames() {
+		return new String[] {
+			null, null, "'='", "'-'", "' '"
+		};
+	}
+	private static final String[] _LITERAL_NAMES = makeLiteralNames();
+	private static String[] makeSymbolicNames() {
+		return new String[] {
+			null, "STRING", "EQUALS", "DASH", "WS", "ELEMENT"
+		};
+	}
+	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
 	/**

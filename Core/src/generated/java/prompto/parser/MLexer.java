@@ -1,4 +1,4 @@
-// Generated from MLexer.g4 by ANTLR 4.7.1
+// Generated from MLexer.g4 by ANTLR 4.8
 package prompto.parser;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
@@ -11,7 +11,7 @@ import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class MLexer extends Lexer {
-	static { RuntimeMetaData.checkVersion("4.7.1", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.8", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -54,90 +54,101 @@ public class MLexer extends Lexer {
 		"DEFAULT_MODE"
 	};
 
-	public static final String[] ruleNames = {
-		"LF_TAB", "LF_MORE", "LF", "TAB", "WS", "COMMENT", "JAVA", "CSHARP", "PYTHON2", 
-		"PYTHON3", "JAVASCRIPT", "SWIFT", "COLON", "SEMI", "COMMA", "RANGE", "DOT", 
-		"LPAR", "RPAR", "LBRAK", "RBRAK", "LCURL", "RCURL", "QMARK", "XMARK", 
-		"AMP", "AMP2", "PIPE", "PIPE2", "PLUS", "MINUS", "STAR", "SLASH", "BSLASH", 
-		"PERCENT", "SHARP", "GT", "GTE", "LT", "LTE", "LTGT", "LTCOLONGT", "EQ", 
-		"XEQ", "EQ2", "TEQ", "TILDE", "LARROW", "RARROW", "EGT", "BOOLEAN", "CSS", 
-		"CHARACTER", "TEXT", "INTEGER", "DECIMAL", "DATE", "TIME", "DATETIME", 
-		"PERIOD", "VERSION", "METHOD_COLON", "CODE", "DOCUMENT", "BLOB", "IMAGE", 
-		"UUID", "ITERATOR", "CURSOR", "HTML", "TYPE", "ABSTRACT", "ALL", "ALWAYS", 
-		"AND", "ANY", "AS", "ASC", "ATTR", "ATTRIBUTE", "ATTRIBUTES", "BINDINGS", 
-		"BREAK", "BY", "CASE", "CATCH", "CATEGORY", "CLASS", "CONTAINS", "DEF", 
-		"DEFAULT", "DEFINE", "DELETE", "DESC", "DO", "DOING", "EACH", "ELSE", 
-		"ENUM", "ENUMERATED", "EXCEPT", "EXECUTE", "EXPECTING", "EXTENDS", "FETCH", 
-		"FILTERED", "FINALLY", "FLUSH", "FOR", "FROM", "GETTER", "HAS", "IF", 
-		"IN", "INDEX", "INVOKE_COLON", "IS", "MATCHING", "METHOD", "METHODS", 
-		"MODULO", "MUTABLE", "NATIVE", "NONE", "NOT", "NOTHING", "NULL", "ON", 
-		"ONE", "OPERATOR", "OR", "ORDER", "OTHERWISE", "PASS", "RAISE", "READ", 
-		"RECEIVING", "RESOURCE", "RETURN", "RETURNING", "ROWS", "SELF", "SETTER", 
-		"SINGLETON", "SORTED", "STORABLE", "STORE", "SUPER", "SWITCH", "TEST", 
-		"THEN", "THIS", "THROW", "TO", "TRY", "VERIFYING", "WIDGET", "WITH", "WHEN", 
-		"WHERE", "WHILE", "WRITE", "BOOLEAN_LITERAL", "CHAR_LITERAL", "MIN_INTEGER", 
-		"MAX_INTEGER", "SYMBOL_IDENTIFIER", "TYPE_IDENTIFIER", "VARIABLE_IDENTIFIER", 
-		"NATIVE_IDENTIFIER", "DOLLAR_IDENTIFIER", "ARONDBASE_IDENTIFIER", "LetterOrDigit", 
-		"Letter", "Digit", "TEXT_LITERAL", "UUID_LITERAL", "INTEGER_LITERAL", 
-		"HEXA_LITERAL", "DECIMAL_LITERAL", "Integer", "Decimal", "Exponent", "Hexadecimal", 
-		"HexNibble", "EscapeSequence", "DATETIME_LITERAL", "TIME_LITERAL", "Time", 
-		"DATE_LITERAL", "Date", "TimeZone", "PERIOD_LITERAL", "Years", "Months", 
-		"Days", "Hours", "Minutes", "Seconds", "HexByte", "VERSION_LITERAL", "JSX_TEXT"
-	};
+	private static String[] makeRuleNames() {
+		return new String[] {
+			"LF_TAB", "LF_MORE", "LF", "TAB", "WS", "COMMENT", "JAVA", "CSHARP", 
+			"PYTHON2", "PYTHON3", "JAVASCRIPT", "SWIFT", "COLON", "SEMI", "COMMA", 
+			"RANGE", "DOT", "LPAR", "RPAR", "LBRAK", "RBRAK", "LCURL", "RCURL", "QMARK", 
+			"XMARK", "AMP", "AMP2", "PIPE", "PIPE2", "PLUS", "MINUS", "STAR", "SLASH", 
+			"BSLASH", "PERCENT", "SHARP", "GT", "GTE", "LT", "LTE", "LTGT", "LTCOLONGT", 
+			"EQ", "XEQ", "EQ2", "TEQ", "TILDE", "LARROW", "RARROW", "EGT", "BOOLEAN", 
+			"CSS", "CHARACTER", "TEXT", "INTEGER", "DECIMAL", "DATE", "TIME", "DATETIME", 
+			"PERIOD", "VERSION", "METHOD_COLON", "CODE", "DOCUMENT", "BLOB", "IMAGE", 
+			"UUID", "ITERATOR", "CURSOR", "HTML", "TYPE", "ABSTRACT", "ALL", "ALWAYS", 
+			"AND", "ANY", "AS", "ASC", "ATTR", "ATTRIBUTE", "ATTRIBUTES", "BINDINGS", 
+			"BREAK", "BY", "CASE", "CATCH", "CATEGORY", "CLASS", "CONTAINS", "DEF", 
+			"DEFAULT", "DEFINE", "DELETE", "DESC", "DO", "DOING", "EACH", "ELSE", 
+			"ENUM", "ENUMERATED", "EXCEPT", "EXECUTE", "EXPECTING", "EXTENDS", "FETCH", 
+			"FILTERED", "FINALLY", "FLUSH", "FOR", "FROM", "GETTER", "HAS", "IF", 
+			"IN", "INDEX", "INVOKE_COLON", "IS", "MATCHING", "METHOD", "METHODS", 
+			"MODULO", "MUTABLE", "NATIVE", "NONE", "NOT", "NOTHING", "NULL", "ON", 
+			"ONE", "OPERATOR", "OR", "ORDER", "OTHERWISE", "PASS", "RAISE", "READ", 
+			"RECEIVING", "RESOURCE", "RETURN", "RETURNING", "ROWS", "SELF", "SETTER", 
+			"SINGLETON", "SORTED", "STORABLE", "STORE", "SUPER", "SWITCH", "TEST", 
+			"THEN", "THIS", "THROW", "TO", "TRY", "VERIFYING", "WIDGET", "WITH", 
+			"WHEN", "WHERE", "WHILE", "WRITE", "BOOLEAN_LITERAL", "CHAR_LITERAL", 
+			"MIN_INTEGER", "MAX_INTEGER", "SYMBOL_IDENTIFIER", "TYPE_IDENTIFIER", 
+			"VARIABLE_IDENTIFIER", "NATIVE_IDENTIFIER", "DOLLAR_IDENTIFIER", "ARONDBASE_IDENTIFIER", 
+			"LetterOrDigit", "Letter", "Digit", "TEXT_LITERAL", "UUID_LITERAL", "INTEGER_LITERAL", 
+			"HEXA_LITERAL", "DECIMAL_LITERAL", "Integer", "Decimal", "Exponent", 
+			"Hexadecimal", "HexNibble", "EscapeSequence", "DATETIME_LITERAL", "TIME_LITERAL", 
+			"Time", "DATE_LITERAL", "Date", "TimeZone", "PERIOD_LITERAL", "Years", 
+			"Months", "Days", "Hours", "Minutes", "Seconds", "HexByte", "VERSION_LITERAL", 
+			"JSX_TEXT"
+		};
+	}
+	public static final String[] ruleNames = makeRuleNames();
 
-	private static final String[] _LITERAL_NAMES = {
-		null, null, null, null, null, null, "'\t'", "' '", null, "'Java:'", "'C#:'", 
-		"'Python2:'", "'Python3:'", "'JavaScript:'", "'Swift:'", "':'", "';'", 
-		null, "'..'", null, null, null, null, null, null, null, null, "'!'", "'&'", 
-		"'&&'", "'|'", "'||'", null, "'-'", "'*'", "'/'", "'\\'", "'%'", "'#'", 
-		"'>'", "'>='", "'<'", "'<='", "'<>'", "'<:>'", "'='", "'!='", "'=='", 
-		"'~='", "'~'", "'<-'", "'->'", "'=>'", "'Boolean'", "'Css'", "'Character'", 
-		"'Text'", "'Integer'", "'Decimal'", "'Date'", "'Time'", "'DateTime'", 
-		"'Period'", "'Version'", "'Method:'", "'Code'", "'Document'", "'Blob'", 
-		"'Image'", "'Uuid'", "'Iterator'", "'Cursor'", "'Html'", "'Type'", "'abstract'", 
-		"'all'", "'always'", "'and'", "'any'", "'as'", null, "'attr'", "'attribute'", 
-		"'attributes'", "'bindings'", "'break'", "'by'", "'case'", "'catch'", 
-		"'category'", "'class'", "'contains'", "'def'", "'default'", "'define'", 
-		"'delete'", null, "'do'", "'doing'", "'each'", "'else'", "'enum'", "'enumerated'", 
-		"'except'", "'execute'", "'expecting'", "'extends'", "'fetch'", "'filtered'", 
-		"'finally'", "'flush'", "'for'", "'from'", "'getter'", "'has'", "'if'", 
-		"'in'", "'index'", "'invoke:'", "'is'", "'matching'", "'method'", "'methods'", 
-		"'modulo'", "'mutable'", "'native'", "'None'", "'not'", null, "'null'", 
-		"'on'", "'one'", "'operator'", "'or'", "'order'", "'otherwise'", "'pass'", 
-		"'raise'", "'read'", "'receiving'", "'resource'", "'return'", "'returning'", 
-		"'rows'", "'self'", "'setter'", "'singleton'", "'sorted'", "'storable'", 
-		"'store'", "'super'", "'switch'", "'test'", "'then'", "'this'", "'throw'", 
-		"'to'", "'try'", "'verifying'", "'widget'", "'with'", "'when'", "'where'", 
-		"'while'", "'write'", null, null, "'MIN_INTEGER'", "'MAX_INTEGER'"
-	};
-	private static final String[] _SYMBOLIC_NAMES = {
-		null, "INDENT", "DEDENT", "LF_TAB", "LF_MORE", "LF", "TAB", "WS", "COMMENT", 
-		"JAVA", "CSHARP", "PYTHON2", "PYTHON3", "JAVASCRIPT", "SWIFT", "COLON", 
-		"SEMI", "COMMA", "RANGE", "DOT", "LPAR", "RPAR", "LBRAK", "RBRAK", "LCURL", 
-		"RCURL", "QMARK", "XMARK", "AMP", "AMP2", "PIPE", "PIPE2", "PLUS", "MINUS", 
-		"STAR", "SLASH", "BSLASH", "PERCENT", "SHARP", "GT", "GTE", "LT", "LTE", 
-		"LTGT", "LTCOLONGT", "EQ", "XEQ", "EQ2", "TEQ", "TILDE", "LARROW", "RARROW", 
-		"EGT", "BOOLEAN", "CSS", "CHARACTER", "TEXT", "INTEGER", "DECIMAL", "DATE", 
-		"TIME", "DATETIME", "PERIOD", "VERSION", "METHOD_COLON", "CODE", "DOCUMENT", 
-		"BLOB", "IMAGE", "UUID", "ITERATOR", "CURSOR", "HTML", "TYPE", "ABSTRACT", 
-		"ALL", "ALWAYS", "AND", "ANY", "AS", "ASC", "ATTR", "ATTRIBUTE", "ATTRIBUTES", 
-		"BINDINGS", "BREAK", "BY", "CASE", "CATCH", "CATEGORY", "CLASS", "CONTAINS", 
-		"DEF", "DEFAULT", "DEFINE", "DELETE", "DESC", "DO", "DOING", "EACH", "ELSE", 
-		"ENUM", "ENUMERATED", "EXCEPT", "EXECUTE", "EXPECTING", "EXTENDS", "FETCH", 
-		"FILTERED", "FINALLY", "FLUSH", "FOR", "FROM", "GETTER", "HAS", "IF", 
-		"IN", "INDEX", "INVOKE_COLON", "IS", "MATCHING", "METHOD", "METHODS", 
-		"MODULO", "MUTABLE", "NATIVE", "NONE", "NOT", "NOTHING", "NULL", "ON", 
-		"ONE", "OPERATOR", "OR", "ORDER", "OTHERWISE", "PASS", "RAISE", "READ", 
-		"RECEIVING", "RESOURCE", "RETURN", "RETURNING", "ROWS", "SELF", "SETTER", 
-		"SINGLETON", "SORTED", "STORABLE", "STORE", "SUPER", "SWITCH", "TEST", 
-		"THEN", "THIS", "THROW", "TO", "TRY", "VERIFYING", "WIDGET", "WITH", "WHEN", 
-		"WHERE", "WHILE", "WRITE", "BOOLEAN_LITERAL", "CHAR_LITERAL", "MIN_INTEGER", 
-		"MAX_INTEGER", "SYMBOL_IDENTIFIER", "TYPE_IDENTIFIER", "VARIABLE_IDENTIFIER", 
-		"NATIVE_IDENTIFIER", "DOLLAR_IDENTIFIER", "ARONDBASE_IDENTIFIER", "TEXT_LITERAL", 
-		"UUID_LITERAL", "INTEGER_LITERAL", "HEXA_LITERAL", "DECIMAL_LITERAL", 
-		"DATETIME_LITERAL", "TIME_LITERAL", "DATE_LITERAL", "PERIOD_LITERAL", 
-		"VERSION_LITERAL", "JSX_TEXT"
-	};
+	private static String[] makeLiteralNames() {
+		return new String[] {
+			null, null, null, null, null, null, "'\t'", "' '", null, "'Java:'", "'C#:'", 
+			"'Python2:'", "'Python3:'", "'JavaScript:'", "'Swift:'", "':'", "';'", 
+			null, "'..'", null, null, null, null, null, null, null, null, "'!'", 
+			"'&'", "'&&'", "'|'", "'||'", null, "'-'", "'*'", "'/'", "'\\'", "'%'", 
+			"'#'", "'>'", "'>='", "'<'", "'<='", "'<>'", "'<:>'", "'='", "'!='", 
+			"'=='", "'~='", "'~'", "'<-'", "'->'", "'=>'", "'Boolean'", "'Css'", 
+			"'Character'", "'Text'", "'Integer'", "'Decimal'", "'Date'", "'Time'", 
+			"'DateTime'", "'Period'", "'Version'", "'Method:'", "'Code'", "'Document'", 
+			"'Blob'", "'Image'", "'Uuid'", "'Iterator'", "'Cursor'", "'Html'", "'Type'", 
+			"'abstract'", "'all'", "'always'", "'and'", "'any'", "'as'", null, "'attr'", 
+			"'attribute'", "'attributes'", "'bindings'", "'break'", "'by'", "'case'", 
+			"'catch'", "'category'", "'class'", "'contains'", "'def'", "'default'", 
+			"'define'", "'delete'", null, "'do'", "'doing'", "'each'", "'else'", 
+			"'enum'", "'enumerated'", "'except'", "'execute'", "'expecting'", "'extends'", 
+			"'fetch'", "'filtered'", "'finally'", "'flush'", "'for'", "'from'", "'getter'", 
+			"'has'", "'if'", "'in'", "'index'", "'invoke:'", "'is'", "'matching'", 
+			"'method'", "'methods'", "'modulo'", "'mutable'", "'native'", "'None'", 
+			"'not'", null, "'null'", "'on'", "'one'", "'operator'", "'or'", "'order'", 
+			"'otherwise'", "'pass'", "'raise'", "'read'", "'receiving'", "'resource'", 
+			"'return'", "'returning'", "'rows'", "'self'", "'setter'", "'singleton'", 
+			"'sorted'", "'storable'", "'store'", "'super'", "'switch'", "'test'", 
+			"'then'", "'this'", "'throw'", "'to'", "'try'", "'verifying'", "'widget'", 
+			"'with'", "'when'", "'where'", "'while'", "'write'", null, null, "'MIN_INTEGER'", 
+			"'MAX_INTEGER'"
+		};
+	}
+	private static final String[] _LITERAL_NAMES = makeLiteralNames();
+	private static String[] makeSymbolicNames() {
+		return new String[] {
+			null, "INDENT", "DEDENT", "LF_TAB", "LF_MORE", "LF", "TAB", "WS", "COMMENT", 
+			"JAVA", "CSHARP", "PYTHON2", "PYTHON3", "JAVASCRIPT", "SWIFT", "COLON", 
+			"SEMI", "COMMA", "RANGE", "DOT", "LPAR", "RPAR", "LBRAK", "RBRAK", "LCURL", 
+			"RCURL", "QMARK", "XMARK", "AMP", "AMP2", "PIPE", "PIPE2", "PLUS", "MINUS", 
+			"STAR", "SLASH", "BSLASH", "PERCENT", "SHARP", "GT", "GTE", "LT", "LTE", 
+			"LTGT", "LTCOLONGT", "EQ", "XEQ", "EQ2", "TEQ", "TILDE", "LARROW", "RARROW", 
+			"EGT", "BOOLEAN", "CSS", "CHARACTER", "TEXT", "INTEGER", "DECIMAL", "DATE", 
+			"TIME", "DATETIME", "PERIOD", "VERSION", "METHOD_COLON", "CODE", "DOCUMENT", 
+			"BLOB", "IMAGE", "UUID", "ITERATOR", "CURSOR", "HTML", "TYPE", "ABSTRACT", 
+			"ALL", "ALWAYS", "AND", "ANY", "AS", "ASC", "ATTR", "ATTRIBUTE", "ATTRIBUTES", 
+			"BINDINGS", "BREAK", "BY", "CASE", "CATCH", "CATEGORY", "CLASS", "CONTAINS", 
+			"DEF", "DEFAULT", "DEFINE", "DELETE", "DESC", "DO", "DOING", "EACH", 
+			"ELSE", "ENUM", "ENUMERATED", "EXCEPT", "EXECUTE", "EXPECTING", "EXTENDS", 
+			"FETCH", "FILTERED", "FINALLY", "FLUSH", "FOR", "FROM", "GETTER", "HAS", 
+			"IF", "IN", "INDEX", "INVOKE_COLON", "IS", "MATCHING", "METHOD", "METHODS", 
+			"MODULO", "MUTABLE", "NATIVE", "NONE", "NOT", "NOTHING", "NULL", "ON", 
+			"ONE", "OPERATOR", "OR", "ORDER", "OTHERWISE", "PASS", "RAISE", "READ", 
+			"RECEIVING", "RESOURCE", "RETURN", "RETURNING", "ROWS", "SELF", "SETTER", 
+			"SINGLETON", "SORTED", "STORABLE", "STORE", "SUPER", "SWITCH", "TEST", 
+			"THEN", "THIS", "THROW", "TO", "TRY", "VERIFYING", "WIDGET", "WITH", 
+			"WHEN", "WHERE", "WHILE", "WRITE", "BOOLEAN_LITERAL", "CHAR_LITERAL", 
+			"MIN_INTEGER", "MAX_INTEGER", "SYMBOL_IDENTIFIER", "TYPE_IDENTIFIER", 
+			"VARIABLE_IDENTIFIER", "NATIVE_IDENTIFIER", "DOLLAR_IDENTIFIER", "ARONDBASE_IDENTIFIER", 
+			"TEXT_LITERAL", "UUID_LITERAL", "INTEGER_LITERAL", "HEXA_LITERAL", "DECIMAL_LITERAL", 
+			"DATETIME_LITERAL", "TIME_LITERAL", "DATE_LITERAL", "PERIOD_LITERAL", 
+			"VERSION_LITERAL", "JSX_TEXT"
+		};
+	}
+	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
 	/**

@@ -1,4 +1,4 @@
-// Generated from ArgsParser.g4 by ANTLR 4.7.1
+// Generated from ArgsParser.g4 by ANTLR 4.8
 package prompto.utils;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class ArgsParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.7.1", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.8", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -20,16 +20,25 @@ public class ArgsParser extends Parser {
 		STRING=1, EQUALS=2, DASH=3, WS=4, ELEMENT=5;
 	public static final int
 		RULE_parse = 0, RULE_entry = 1, RULE_key = 2, RULE_value = 3;
-	public static final String[] ruleNames = {
-		"parse", "entry", "key", "value"
-	};
+	private static String[] makeRuleNames() {
+		return new String[] {
+			"parse", "entry", "key", "value"
+		};
+	}
+	public static final String[] ruleNames = makeRuleNames();
 
-	private static final String[] _LITERAL_NAMES = {
-		null, null, "'='", "'-'", "' '"
-	};
-	private static final String[] _SYMBOLIC_NAMES = {
-		null, "STRING", "EQUALS", "DASH", "WS", "ELEMENT"
-	};
+	private static String[] makeLiteralNames() {
+		return new String[] {
+			null, null, "'='", "'-'", "' '"
+		};
+	}
+	private static final String[] _LITERAL_NAMES = makeLiteralNames();
+	private static String[] makeSymbolicNames() {
+		return new String[] {
+			null, "STRING", "EQUALS", "DASH", "WS", "ELEMENT"
+		};
+	}
+	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
 	/**
@@ -79,6 +88,7 @@ public class ArgsParser extends Parser {
 		super(input);
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
+
 	public static class ParseContext extends ParserRuleContext {
 		public EntryContext e;
 		public List<EntryContext> entry() {
