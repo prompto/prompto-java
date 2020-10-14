@@ -112,6 +112,7 @@ public class SetType extends ContainerType {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
+		transpiler.register("List");
 		transpiler.register("StrictSet");
 		itemType.declare(transpiler);
 	}

@@ -21,5 +21,10 @@ public class TestIterate extends BaseOParserTest {
 		compareResourceOMO("iterate/forEachIntegerRange.poc");
 	}
 
+	@Test
+	public void testForEachIntegerSet() throws Exception {
+		compareResourceOMO("iterate/forEachIntegerSet.poc");
+	}
+
 }
 

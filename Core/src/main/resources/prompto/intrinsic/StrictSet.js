@@ -31,6 +31,20 @@ StrictSet.prototype.iterator = function() {
     };
 };
 
+StrictSet.prototype.iterate = function (fn, instance) {
+    return this.toList().iterate(fn, instance);
+};
+
+
+StrictSet.prototype.toArray = function () {
+    return Array.from(this.set.values());
+};
+
+
+StrictSet.prototype.toList = function () {
+    return new List(false, this.toArray());
+};
+
 
 StrictSet.prototype.item = function(idx) {
     var iter = this.set.values();

@@ -64,5 +64,20 @@ public class TestIterate extends BaseEParserTest {
 		checkTranspiledOutput("iterate/forEachIntegerList.pec");
 	}
 
+	@Test
+	public void testInterpretedForEachIntegerSet() throws Exception {
+		checkInterpretedOutput("iterate/forEachIntegerSet.pec");
+	}
+
+	@Test
+	public void testCompiledForEachIntegerSet() throws Exception {
+		checkCompiledOutput("iterate/forEachIntegerSet.pec");
+	}
+
+	@Test
+	public void testTranspiledForEachIntegerSet() throws Exception {
+		checkTranspiledOutput("iterate/forEachIntegerSet.pec");
+	}
+
 }
 

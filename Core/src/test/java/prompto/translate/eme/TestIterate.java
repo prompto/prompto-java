@@ -21,5 +21,10 @@ public class TestIterate extends BaseEParserTest {
 		compareResourceEME("iterate/forEachIntegerList.pec");
 	}
 
+	@Test
+	public void testForEachIntegerSet() throws Exception {
+		compareResourceEME("iterate/forEachIntegerSet.pec");
+	}
+
 }
 
