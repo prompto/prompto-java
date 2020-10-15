@@ -156,11 +156,6 @@ public class EnumeratedNativeType extends BaseType {
 	}
 	
 	@Override
-	public boolean isAssignableFrom(Context context, IType other) {
-		return this.getTypeName().equals(other.getTypeName());
-	}
-
-	@Override
 	public boolean isMoreSpecificThan(Context context, IType other) {
 		throw new UnsupportedOperationException(); // TODO
 	}
