@@ -455,22 +455,25 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	    if(declarations==null || declarations.isEmpty())
 	    	transpiler.getContext().getProblemListener().reportUnknownMethod(this, this.toString());
 	    else if (declarations.size() == 1)
-	        this.transpileSingle(transpiler, declarations.iterator().next(), false);
+	        transpileSingle(transpiler, declarations.iterator().next(), false);
 	    else
-	        this.transpileMultiple(transpiler, declarations);
+	        transpileMultiple(transpiler, declarations);
 	    return false;
 	}
 
 	private void transpileSingle(Transpiler transpiler, IMethodDeclaration declaration, boolean allowDerived) {
 	   if (declaration instanceof BuiltInMethodDeclaration)
-	        this.transpileBuiltin(transpiler, (BuiltInMethodDeclaration)declaration);
-	   else if(declaration.hasAnnotation(transpiler.getContext(), "Inlined"))
-		   throw new UnsupportedOperationException("Yet!");
-	   else if(declaration.containerHasAnnotation(transpiler.getContext(), "Inlined"))
-		   this.transpileInlinedMemberMethod(transpiler, declaration);
+	        transpileBuiltin(transpiler, (BuiltInMethodDeclaration)declaration);
+	   else if(declaration.hasAnnotation(transpiler.getContext(), "Inlined")) {
+		   if(declaration.getMemberOf()!=null)
+			   transpileInlinedMemberMethod(transpiler, declaration);
+		   else
+			   throw new UnsupportedOperationException("@Inlined of global method");
+	   } else if(declaration.containerHasAnnotation(transpiler.getContext(), "Inlined"))
+		   transpileInlinedMemberMethod(transpiler, declaration);
 	   else {
-	        this.transpileSelector(transpiler, declaration);
-	        this.transpileArguments(transpiler, declaration, allowDerived);
+	        transpileSelector(transpiler, declaration);
+	        transpileArguments(transpiler, declaration, allowDerived);
 	    }
 	}
 
