@@ -4,11 +4,13 @@ import java.lang.reflect.Type;
 
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoPeriod;
 import prompto.runtime.Context;
 import prompto.type.PeriodType;
 
 public class PeriodValue extends BaseValue implements IMultiplyable {
+	
 	public static final PeriodValue ZERO = new PeriodValue(0, 0, 0, 0, 0, 0, 0, 0);
 
 	PromptoPeriod value;
@@ -65,6 +67,28 @@ public class PeriodValue extends BaseValue implements IMultiplyable {
 	}
 	
 	
+	@Override
+	public IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
+		String name = id.toString();
+		if ("years".equals(name))
+			return new IntegerValue(this.value.getNativeYears());
+		else if ("months".equals(name))
+			return new IntegerValue(this.value.getNativeMonths());
+		else if ("weeks".equals(name))
+			return new IntegerValue(this.value.getNativeWeeks());
+		else if ("days".equals(name))
+			return new IntegerValue(this.value.getNativeDays());
+		else if ("hours".equals(name))
+			return new IntegerValue(this.value.getNativeHours());
+		else if ("minutes".equals(name))
+			return new IntegerValue(this.value.getNativeMinutes());
+		else if ("seconds".equals(name))
+			return new IntegerValue(this.value.getNativeSeconds());
+		else if ("milliseconds".equals(name))
+			return new IntegerValue(this.value.getNativeMillis());
+		else
+			return super.getMember(context, id, autoCreate);
+	}
 
 	@Override
 	public Object convertTo(Context context, Type type) {

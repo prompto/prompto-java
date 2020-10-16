@@ -1,5 +1,5 @@
 function Period(data) {
-    var names = ["years", "months", "weeks", "days", "hours", "minutes", "seconds", "millis"];
+    var names = ["years", "months", "weeks", "days", "hours", "minutes", "seconds", "milliseconds"];
     for(var i=0;i<names.length; i++) {
         this[names[i]] = data[i] || null;
     }
@@ -45,7 +45,7 @@ Period.parse = function (text) {
                 throw new Exception();
             } else if (value == null) {
                 throw new Exception();
-            } else if (step == 6) { // millis '.'
+            } else if (step == 6) { // milliseconds '.'
                 inMillis = true;
             } else if (step == 7 && !inMillis) {
                 step = 6;
@@ -94,7 +94,7 @@ Period.prototype.equals = function(obj) {
         this.hours == obj.hours &&
         this.minutes == obj.minutes &&
         this.seconds == obj.seconds &&
-        this.millis == obj.millis;
+        this.milliseconds == obj.milliseconds;
 };
 
 
@@ -107,7 +107,7 @@ Period.prototype.minus = function() {
     data[4] = -this.hours;
     data[5] = -this.minutes;
     data[6] = -this.seconds;
-    data[7] = -this.millis;
+    data[7] = -this.milliseconds;
     return new Period(data);
 };
 
@@ -119,10 +119,10 @@ Period.prototype.add = function(period) {
     data[3] = this.days + period.days;
     data[4] = this.hours + period.hours;
     data[5] = this.minutes + period.minutes;
-    var seconds = (this.seconds + period.seconds) + ((this.millis + period.millis)/1000.0);
+    var seconds = (this.seconds + period.seconds) + ((this.milliseconds + period.milliseconds)/1000.0);
     data[6] = Math.floor(seconds);
-    var millis = Math.round(( seconds * 1000 ) % 1000);
-    data[7] = Math.floor(Math.abs(millis));
+    var milliseconds = Math.round(( seconds * 1000 ) % 1000);
+    data[7] = Math.floor(Math.abs(milliseconds));
     return new Period(data);
 };
 
@@ -135,10 +135,10 @@ Period.prototype.subtract = function(period) {
     data[3] = this.days - period.days;
     data[4] = this.hours - period.hours;
     data[5] = this.minutes - period.minutes;
-    var seconds = (this.seconds + this.millis/1000.0) - (period.seconds + period.millis/1000.0);
+    var seconds = (this.seconds + this.milliseconds/1000.0) - (period.seconds + period.milliseconds/1000.0);
     data[6] = Math.floor(seconds);
-    var millis = Math.round(( seconds * 1000 ) % 1000);
-    data[7] = Math.floor(Math.abs(millis));
+    var milliseconds = Math.round(( seconds * 1000 ) % 1000);
+    data[7] = Math.floor(Math.abs(milliseconds));
     return new Period(data);
 };
 
@@ -157,10 +157,10 @@ Period.prototype.multiply = function(value) {
         data[3] = this.days * count;
         data[4] = this.hours * count;
         data[5] = this.minutes * count;
-        var seconds = (this.seconds + this.millis/1000.0) * count;
+        var seconds = (this.seconds + this.milliseconds/1000.0) * count;
         data[6] = Math.floor(seconds);
-        var millis = Math.round(( seconds * 1000 ) % 1000);
-        data[7] = Math.floor(Math.abs(millis));
+        var milliseconds = Math.round(( seconds * 1000 ) % 1000);
+        data[7] = Math.floor(Math.abs(milliseconds));
         return new Period(data);
     }
 };
@@ -183,7 +183,7 @@ Period.prototype.toString = function() {
         s += this.days;
         s += "D";
     }
-    if (this.hours || this.minutes || this.seconds || this.millis) {
+    if (this.hours || this.minutes || this.seconds || this.milliseconds) {
         s += "T";
         if (this.hours) {
             s += this.hours;
@@ -193,11 +193,11 @@ Period.prototype.toString = function() {
             s += this.minutes;
             s += "M";
         }
-        if (this.seconds || this.millis) {
+        if (this.seconds || this.milliseconds) {
             s += this.seconds;
-            if (this.millis) {
+            if (this.milliseconds) {
                 s += ".";
-                s += ("000" + this.millis).slice(-3);
+                s += ("000" + this.milliseconds).slice(-3);
             }
             s += "S";
         }
@@ -207,7 +207,7 @@ Period.prototype.toString = function() {
 
 
 Period.prototype.totalMilliseconds = function() {
-    return this.millis + (this.seconds * 1000) + (this.minutes * 60 * 1000) + (this.hours * 60 * 60 * 1000)
+    return this.milliseconds + (this.seconds * 1000) + (this.minutes * 60 * 1000) + (this.hours * 60 * 60 * 1000)
         + (this.days * 24 * 60 * 60 * 1000) + (this.weeks * 7 * 24 * 60 * 60 * 1000) + (this.months * (365 / 12) * 24 * 60 * 60 * 1000)
         + (this.years * 365 * 24 * 60 * 60 * 1000)
 };

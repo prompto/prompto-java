@@ -207,8 +207,48 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testPeriodDays() throws Exception {
+		compareResourceEME("builtins/periodDays.pec");
+	}
+
+	@Test
+	public void testPeriodHours() throws Exception {
+		compareResourceEME("builtins/periodHours.pec");
+	}
+
+	@Test
+	public void testPeriodMillis() throws Exception {
+		compareResourceEME("builtins/periodMillis.pec");
+	}
+
+	@Test
+	public void testPeriodMinutes() throws Exception {
+		compareResourceEME("builtins/periodMinutes.pec");
+	}
+
+	@Test
+	public void testPeriodMonths() throws Exception {
+		compareResourceEME("builtins/periodMonths.pec");
+	}
+
+	@Test
+	public void testPeriodSeconds() throws Exception {
+		compareResourceEME("builtins/periodSeconds.pec");
+	}
+
+	@Test
 	public void testPeriodText() throws Exception {
 		compareResourceEME("builtins/periodText.pec");
+	}
+
+	@Test
+	public void testPeriodWeeks() throws Exception {
+		compareResourceEME("builtins/periodWeeks.pec");
+	}
+
+	@Test
+	public void testPeriodYears() throws Exception {
+		compareResourceEME("builtins/periodYears.pec");
 	}
 
 	@Test

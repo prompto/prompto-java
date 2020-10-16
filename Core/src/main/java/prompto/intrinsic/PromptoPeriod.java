@@ -80,7 +80,39 @@ public class PromptoPeriod implements IMultiplyable, IDocumentable {
 		return wrapped.getMillis();
 	}
 
-    public PromptoPeriod multiply(int count) {
+	public Long getYears() {
+		return (long)wrapped.getYears();
+	}
+
+	public Long getMonths() {
+		return (long)wrapped.getMonths();
+	}
+
+	public Long getWeeks() {
+		return (long)wrapped.getWeeks();
+	}
+
+	public Long getDays() {
+		return (long)wrapped.getDays();
+	}
+
+	public Long getHours() {
+		return (long)wrapped.getHours();
+	}
+
+	public Long getMinutes() {
+		return (long)wrapped.getMinutes();
+	}
+
+	public Long getSeconds() {
+		return (long)wrapped.getSeconds();
+	}
+
+	public Long getMilliseconds() {
+		return (long)wrapped.getMillis();
+	}
+
+	public PromptoPeriod multiply(int count) {
         return new PromptoPeriod(
               getNativeYears() * count,
               getNativeMonths() * count,

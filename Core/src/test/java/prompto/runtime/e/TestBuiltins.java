@@ -590,6 +590,96 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedPeriodDays() throws Exception {
+		checkInterpretedOutput("builtins/periodDays.pec");
+	}
+
+	@Test
+	public void testCompiledPeriodDays() throws Exception {
+		checkCompiledOutput("builtins/periodDays.pec");
+	}
+
+	@Test
+	public void testTranspiledPeriodDays() throws Exception {
+		checkTranspiledOutput("builtins/periodDays.pec");
+	}
+
+	@Test
+	public void testInterpretedPeriodHours() throws Exception {
+		checkInterpretedOutput("builtins/periodHours.pec");
+	}
+
+	@Test
+	public void testCompiledPeriodHours() throws Exception {
+		checkCompiledOutput("builtins/periodHours.pec");
+	}
+
+	@Test
+	public void testTranspiledPeriodHours() throws Exception {
+		checkTranspiledOutput("builtins/periodHours.pec");
+	}
+
+	@Test
+	public void testInterpretedPeriodMillis() throws Exception {
+		checkInterpretedOutput("builtins/periodMillis.pec");
+	}
+
+	@Test
+	public void testCompiledPeriodMillis() throws Exception {
+		checkCompiledOutput("builtins/periodMillis.pec");
+	}
+
+	@Test
+	public void testTranspiledPeriodMillis() throws Exception {
+		checkTranspiledOutput("builtins/periodMillis.pec");
+	}
+
+	@Test
+	public void testInterpretedPeriodMinutes() throws Exception {
+		checkInterpretedOutput("builtins/periodMinutes.pec");
+	}
+
+	@Test
+	public void testCompiledPeriodMinutes() throws Exception {
+		checkCompiledOutput("builtins/periodMinutes.pec");
+	}
+
+	@Test
+	public void testTranspiledPeriodMinutes() throws Exception {
+		checkTranspiledOutput("builtins/periodMinutes.pec");
+	}
+
+	@Test
+	public void testInterpretedPeriodMonths() throws Exception {
+		checkInterpretedOutput("builtins/periodMonths.pec");
+	}
+
+	@Test
+	public void testCompiledPeriodMonths() throws Exception {
+		checkCompiledOutput("builtins/periodMonths.pec");
+	}
+
+	@Test
+	public void testTranspiledPeriodMonths() throws Exception {
+		checkTranspiledOutput("builtins/periodMonths.pec");
+	}
+
+	@Test
+	public void testInterpretedPeriodSeconds() throws Exception {
+		checkInterpretedOutput("builtins/periodSeconds.pec");
+	}
+
+	@Test
+	public void testCompiledPeriodSeconds() throws Exception {
+		checkCompiledOutput("builtins/periodSeconds.pec");
+	}
+
+	@Test
+	public void testTranspiledPeriodSeconds() throws Exception {
+		checkTranspiledOutput("builtins/periodSeconds.pec");
+	}
+
+	@Test
 	public void testInterpretedPeriodText() throws Exception {
 		checkInterpretedOutput("builtins/periodText.pec");
 	}
@@ -602,6 +692,36 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testTranspiledPeriodText() throws Exception {
 		checkTranspiledOutput("builtins/periodText.pec");
+	}
+
+	@Test
+	public void testInterpretedPeriodWeeks() throws Exception {
+		checkInterpretedOutput("builtins/periodWeeks.pec");
+	}
+
+	@Test
+	public void testCompiledPeriodWeeks() throws Exception {
+		checkCompiledOutput("builtins/periodWeeks.pec");
+	}
+
+	@Test
+	public void testTranspiledPeriodWeeks() throws Exception {
+		checkTranspiledOutput("builtins/periodWeeks.pec");
+	}
+
+	@Test
+	public void testInterpretedPeriodYears() throws Exception {
+		checkInterpretedOutput("builtins/periodYears.pec");
+	}
+
+	@Test
+	public void testCompiledPeriodYears() throws Exception {
+		checkCompiledOutput("builtins/periodYears.pec");
+	}
+
+	@Test
+	public void testTranspiledPeriodYears() throws Exception {
+		checkTranspiledOutput("builtins/periodYears.pec");
 	}
 
 	@Test

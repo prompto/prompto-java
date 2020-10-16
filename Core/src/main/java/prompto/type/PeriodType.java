@@ -11,6 +11,7 @@ import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
+import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoPeriod;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
@@ -76,6 +77,29 @@ public class PeriodType extends NativeType {
 			super.checkCompare(context, other, section);
 	}
 	
+	@Override
+	public IType checkMember(Context context, Identifier id) {
+		String name = id.toString();
+		if ("years".equals(name))
+			return IntegerType.instance();
+		else if ("months".equals(name))
+			return IntegerType.instance();
+		else if ("weeks".equals(name))
+			return IntegerType.instance();
+		else if ("days".equals(name))
+			return IntegerType.instance();
+		else if ("hours".equals(name))
+			return IntegerType.instance();
+		else if ("minutes".equals(name))
+			return IntegerType.instance();
+		else if ("seconds".equals(name))
+			return IntegerType.instance();
+		else if ("milliseconds".equals(name))
+			return IntegerType.instance();
+		else
+			return super.checkMember(context, id);
+	}
+
 	@Override
 	public void declare(Transpiler transpiler) {
 		transpiler.require("Period");
@@ -152,6 +176,43 @@ public class PeriodType extends NativeType {
 	        transpiler.append(")");
 	    } else
 	        super.transpileSubtract(transpiler, other, left, right);
+	}
+	
+	
+	@Override
+	public void declareMember(Transpiler transpiler, Identifier name) {
+		switch(name.toString()) {
+		case "years":
+		case "months":
+		case "weeks":
+		case "days":
+		case "hours":
+		case "minutes":
+		case "seconds":
+		case "milliseconds":
+			break;
+		default:
+			super.declareMember(transpiler, name);
+	    }
+	}
+	
+	@Override
+	public void transpileMember(Transpiler transpiler, Identifier id) {
+		String name = id.toString();
+		switch(name) {
+		case "years":
+		case "months":
+		case "weeks":
+		case "days":
+		case "hours":
+		case "minutes":
+		case "seconds":
+		case "milliseconds":
+			transpiler.append(name);
+			break;
+		default:
+			super.transpileMember(transpiler, id);
+	    }
 	}
 	
 	@Override

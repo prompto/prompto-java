@@ -117,6 +117,46 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
+	public void testPeriodDays() throws Exception {
+		compareResourceOEO("builtins/periodDays.poc");
+	}
+
+	@Test
+	public void testPeriodHours() throws Exception {
+		compareResourceOEO("builtins/periodHours.poc");
+	}
+
+	@Test
+	public void testPeriodMillis() throws Exception {
+		compareResourceOEO("builtins/periodMillis.poc");
+	}
+
+	@Test
+	public void testPeriodMinutes() throws Exception {
+		compareResourceOEO("builtins/periodMinutes.poc");
+	}
+
+	@Test
+	public void testPeriodMonths() throws Exception {
+		compareResourceOEO("builtins/periodMonths.poc");
+	}
+
+	@Test
+	public void testPeriodSeconds() throws Exception {
+		compareResourceOEO("builtins/periodSeconds.poc");
+	}
+
+	@Test
+	public void testPeriodWeeks() throws Exception {
+		compareResourceOEO("builtins/periodWeeks.poc");
+	}
+
+	@Test
+	public void testPeriodYears() throws Exception {
+		compareResourceOEO("builtins/periodYears.poc");
+	}
+
+	@Test
 	public void testSetCount() throws Exception {
 		compareResourceOEO("builtins/setCount.poc");
 	}

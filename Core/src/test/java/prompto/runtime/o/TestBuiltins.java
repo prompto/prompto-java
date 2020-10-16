@@ -320,6 +320,126 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedPeriodDays() throws Exception {
+		checkInterpretedOutput("builtins/periodDays.poc");
+	}
+
+	@Test
+	public void testCompiledPeriodDays() throws Exception {
+		checkCompiledOutput("builtins/periodDays.poc");
+	}
+
+	@Test
+	public void testTranspiledPeriodDays() throws Exception {
+		checkTranspiledOutput("builtins/periodDays.poc");
+	}
+
+	@Test
+	public void testInterpretedPeriodHours() throws Exception {
+		checkInterpretedOutput("builtins/periodHours.poc");
+	}
+
+	@Test
+	public void testCompiledPeriodHours() throws Exception {
+		checkCompiledOutput("builtins/periodHours.poc");
+	}
+
+	@Test
+	public void testTranspiledPeriodHours() throws Exception {
+		checkTranspiledOutput("builtins/periodHours.poc");
+	}
+
+	@Test
+	public void testInterpretedPeriodMillis() throws Exception {
+		checkInterpretedOutput("builtins/periodMillis.poc");
+	}
+
+	@Test
+	public void testCompiledPeriodMillis() throws Exception {
+		checkCompiledOutput("builtins/periodMillis.poc");
+	}
+
+	@Test
+	public void testTranspiledPeriodMillis() throws Exception {
+		checkTranspiledOutput("builtins/periodMillis.poc");
+	}
+
+	@Test
+	public void testInterpretedPeriodMinutes() throws Exception {
+		checkInterpretedOutput("builtins/periodMinutes.poc");
+	}
+
+	@Test
+	public void testCompiledPeriodMinutes() throws Exception {
+		checkCompiledOutput("builtins/periodMinutes.poc");
+	}
+
+	@Test
+	public void testTranspiledPeriodMinutes() throws Exception {
+		checkTranspiledOutput("builtins/periodMinutes.poc");
+	}
+
+	@Test
+	public void testInterpretedPeriodMonths() throws Exception {
+		checkInterpretedOutput("builtins/periodMonths.poc");
+	}
+
+	@Test
+	public void testCompiledPeriodMonths() throws Exception {
+		checkCompiledOutput("builtins/periodMonths.poc");
+	}
+
+	@Test
+	public void testTranspiledPeriodMonths() throws Exception {
+		checkTranspiledOutput("builtins/periodMonths.poc");
+	}
+
+	@Test
+	public void testInterpretedPeriodSeconds() throws Exception {
+		checkInterpretedOutput("builtins/periodSeconds.poc");
+	}
+
+	@Test
+	public void testCompiledPeriodSeconds() throws Exception {
+		checkCompiledOutput("builtins/periodSeconds.poc");
+	}
+
+	@Test
+	public void testTranspiledPeriodSeconds() throws Exception {
+		checkTranspiledOutput("builtins/periodSeconds.poc");
+	}
+
+	@Test
+	public void testInterpretedPeriodWeeks() throws Exception {
+		checkInterpretedOutput("builtins/periodWeeks.poc");
+	}
+
+	@Test
+	public void testCompiledPeriodWeeks() throws Exception {
+		checkCompiledOutput("builtins/periodWeeks.poc");
+	}
+
+	@Test
+	public void testTranspiledPeriodWeeks() throws Exception {
+		checkTranspiledOutput("builtins/periodWeeks.poc");
+	}
+
+	@Test
+	public void testInterpretedPeriodYears() throws Exception {
+		checkInterpretedOutput("builtins/periodYears.poc");
+	}
+
+	@Test
+	public void testCompiledPeriodYears() throws Exception {
+		checkCompiledOutput("builtins/periodYears.poc");
+	}
+
+	@Test
+	public void testTranspiledPeriodYears() throws Exception {
+		checkTranspiledOutput("builtins/periodYears.poc");
+	}
+
+	@Test
 	public void testInterpretedSetCount() throws Exception {
 		checkInterpretedOutput("builtins/setCount.poc");
 	}
