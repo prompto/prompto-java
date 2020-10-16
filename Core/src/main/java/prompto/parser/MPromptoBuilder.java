@@ -2326,8 +2326,15 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitNative_member_method_declaration(Native_member_method_declarationContext ctx) {
-		IDeclaration decl = getNodeValue(ctx.getChild(0));
-		setNodeValue(ctx, decl);
+		List<CommentStatement> comments = readComments(ctx.comment_statement());
+		List<Annotation> annotations = readAnnotations(ctx.annotation_constructor());
+		ParseTree ctx_ = ctx.getChild(ctx.getChildCount()-1);
+		IDeclaration decl = getNodeValue(ctx_);
+		if(decl!=null) {
+			decl.setComments(comments);
+			decl.setAnnotations(annotations);
+			setNodeValue(ctx, decl);
+		}
 	}
 	
 	@Override

@@ -101,5 +101,10 @@ public class TestAnnotations extends BaseOParserTest {
 		compareResourceOMO("annotations/category.poc");
 	}
 
+	@Test
+	public void testInlined() throws Exception {
+		compareResourceOMO("annotations/inlined.poc");
+	}
+
 }
 

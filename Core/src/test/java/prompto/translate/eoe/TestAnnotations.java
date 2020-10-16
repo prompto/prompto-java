@@ -16,5 +16,10 @@ public class TestAnnotations extends BaseEParserTest {
 		compareResourceEOE("annotations/category.pec");
 	}
 
+	@Test
+	public void testInlined() throws Exception {
+		compareResourceEOE("annotations/inlined.pec");
+	}
+
 }
 
