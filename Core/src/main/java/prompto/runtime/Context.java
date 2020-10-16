@@ -1236,7 +1236,9 @@ public class Context implements IContext {
 			if(context!=null) 
 				return context;
 			CategoryDeclaration decl = getDeclaration();
-			if(decl.hasAttribute(this, id) || decl.hasMethod(this, id))
+			if(decl==null)
+				return null; // happens during registration of native add-ons
+			else if(decl.hasAttribute(this, id) || decl.hasMethod(this, id))
 				return this;
 			else
 				return null;
