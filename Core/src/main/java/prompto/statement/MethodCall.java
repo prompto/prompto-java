@@ -464,26 +464,21 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	private void transpileSingle(Transpiler transpiler, IMethodDeclaration declaration, boolean allowDerived) {
 	   if (declaration instanceof BuiltInMethodDeclaration)
 	        transpileBuiltin(transpiler, (BuiltInMethodDeclaration)declaration);
-	   else if(declaration.hasAnnotation(transpiler.getContext(), "Inlined")) {
-		   if(declaration.getMemberOf()!=null)
-			   transpileInlinedMemberMethod(transpiler, declaration);
-		   else
-			   throw new UnsupportedOperationException("@Inlined of global method");
-	   } else if(declaration.containerHasAnnotation(transpiler.getContext(), "Inlined"))
-		   transpileInlinedMemberMethod(transpiler, declaration);
+	   else if(mustInlineMethodCall(transpiler.getContext(), declaration))
+		   transpileInlinedMethodCall(transpiler, (NativeMethodDeclaration)declaration);
 	   else {
 	        transpileSelector(transpiler, declaration);
 	        transpileArguments(transpiler, declaration, allowDerived);
 	    }
 	}
 
-	private void transpileInlinedMemberMethod(Transpiler transpiler, IMethodDeclaration declaration) {
-		if(!(declaration instanceof NativeMethodDeclaration))
-			throw new UnsupportedOperationException("Can only inline native methods!");
-		transpileInlinedMemberMethod(transpiler, (NativeMethodDeclaration)declaration);
+	private boolean mustInlineMethodCall(Context context, IMethodDeclaration declaration) {
+		return declaration instanceof NativeMethodDeclaration
+				&& (declaration.hasAnnotation(context, "Inlined")
+					|| declaration.containerHasAnnotation(context, "Inlined"));
 	}
 
-	private void transpileInlinedMemberMethod(Transpiler transpiler, NativeMethodDeclaration declaration) {
+	private void transpileInlinedMethodCall(Transpiler transpiler, NativeMethodDeclaration declaration) {
 		JavaScriptNativeCall call = declaration.findCall(JavaScriptNativeCall.class);
 		if(call==null)
 			throw new UnsupportedOperationException("Missing native JavaScript call!");
