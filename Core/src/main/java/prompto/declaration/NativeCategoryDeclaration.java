@@ -184,14 +184,14 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 	    transpiler.append("function ").append("new_").append(this.getName()).append("(values) {").indent();
 	    transpiler.append("values = values || {};").newLine();
 	    transpiler.append("var value = new ").append(name).append("();").newLine();
-	    if(this.attributes!=null) {
-	        this.attributes.forEach(attr -> transpiler.append("value.").append(attr.toString()).append(" = values.hasOwnProperty('").append(attr.toString()).append("') ? values.").append(attr.toString()).append(" : null;").newLine());
+	    if(attributes!=null) {
+	        attributes.forEach(attr -> transpiler.append("value.").append(attr.toString()).append(" = values.hasOwnProperty('").append(attr.toString()).append("') ? values.").append(attr.toString()).append(" : null;").newLine());
 	    }
 	    transpiler.append("return value;").newLine();
 	    transpiler.dedent().append("}").newLine();
 	    Transpiler instance = transpiler.newInstanceTranspiler(new CategoryType(this.getId()));
-	    this.transpileMethods(instance);
-	    this.transpileGetterSetters(instance);
+	    transpileMethods(instance);
+	    transpileGetterSetters(instance);
 	    instance.flush();
 	    return true;
 	}
