@@ -33,7 +33,7 @@ public class BlobType extends BinaryType {
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-		transpiler.require("Blob");
+		transpiler.register("BlobRef");
 	}
 	
 }

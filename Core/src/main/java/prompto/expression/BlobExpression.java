@@ -109,7 +109,7 @@ public class BlobExpression implements IExpression {
 	@Override
 	public void declare(Transpiler transpiler) {
 	    this.source.declare(transpiler);
-	    transpiler.require("Blob");
+	    transpiler.require("BlobRef");
 	    transpiler.require("Document");
 	    transpiler.require("getUtf8CharLength");
 	    transpiler.require("stringToUtf8Buffer");
@@ -118,7 +118,7 @@ public class BlobExpression implements IExpression {
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    transpiler.append("Blob.fromValue(");
+	    transpiler.append("BlobRef.fromValue(");
 	    this.source.transpile(transpiler);
 	    transpiler.append(")");
 		return false;

@@ -83,7 +83,7 @@ public class ReadBlobExpression implements IExpression {
 	@Override
 	public void declare(Transpiler transpiler) {
 		this.resource.declare(transpiler);
-		transpiler.require("Blob");
+		transpiler.require("BlobRef");
 	}
 	
 	@Override

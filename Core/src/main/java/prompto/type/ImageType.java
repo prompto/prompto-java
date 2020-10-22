@@ -33,13 +33,13 @@ public class ImageType extends BinaryType {
 
 	@Override
 	public void declare(Transpiler transpiler) {
-		transpiler.register("Image");
+		transpiler.register("ImageRef");
 	}
 	
 	
 	@Override
 	public void transpile(Transpiler transpiler) {
-		transpiler.append("Image");
+		transpiler.append("ImageRef");
 	}
 	
 }
