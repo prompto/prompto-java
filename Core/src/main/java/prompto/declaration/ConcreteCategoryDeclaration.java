@@ -335,8 +335,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	
 	@Override
 	public GetterMethodDeclaration findGetter(Context context, Identifier attrName) {
-		if(methodsMap==null)
-			return null;
+		registerMethods(context);
 		IDeclaration method = methodsMap.get(GetterMethodDeclaration.getNameAsKey(attrName)); 
 		if(method instanceof GetterMethodDeclaration)
 			return (GetterMethodDeclaration)method;
@@ -366,8 +365,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 
 	@Override
 	public SetterMethodDeclaration findSetter(Context context, Identifier attrName) {
-		if(methodsMap==null)
-			return null;
+		registerMethods(context);
 		IDeclaration method = methodsMap.get(SetterMethodDeclaration.getNameAsKey(attrName)); 
 		if(method instanceof SetterMethodDeclaration)
 			return (SetterMethodDeclaration)method;
