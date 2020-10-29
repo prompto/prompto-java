@@ -88,8 +88,8 @@ define setReactWidgetState as native method receiving ReactWidget w, Document st
 	JavaScript: w.setState(state, callback);
 
 
-define forceReactWidgetRender as native method receiving ReactWidget w doing:
-	JavaScript: w.forceUpdate();
+define forceReactWidgetRender as native method receiving ReactWidget w and Callback callback = nothing doing:
+	JavaScript: w.forceUpdate(callback);
 
 
 define showReactModal as native method receiving Html dialog doing:
@@ -155,8 +155,8 @@ define ReactWidget as widget with methods:
 	define setState as method receiving Document state and Callback callback = nothing doing:
 		setReactWidgetState self with state and callback
 
-	define forceRender as method doing:
-		forceReactWidgetRender self
+	define forceRender as method receiving Callback callback = nothing doing:
+		forceReactWidgetRender self with callback
 
 define WidgetCallback as abstract method receiving any ref
 
