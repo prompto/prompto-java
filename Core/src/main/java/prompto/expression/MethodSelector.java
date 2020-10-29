@@ -31,7 +31,6 @@ import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.compiler.StackState;
 import prompto.declaration.BuiltInMethodDeclaration;
-import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
@@ -440,8 +439,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 				type = decl.getType(context);
 		}
 		if(type instanceof CategoryType) {
-			CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
-			context = context.newInstanceContext((CategoryType)type, decl instanceof SingletonCategoryDeclaration);
+			context = context.newInstanceContext((CategoryType)type, false); 
 			return context.newChildContext();
 		} else if(type instanceof NativeType) {
 			context = context.newBuiltInContext((NativeType)type);
