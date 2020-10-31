@@ -70,7 +70,7 @@ function readCursor(value) {
 		    };
 		}
 	};
-	return new Cursor(false, iterable);
+	return new Cursor(value.mutable, iterable);
 }
 
 

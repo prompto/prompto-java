@@ -149,6 +149,8 @@ public class CursorValue extends BaseValue implements IIterable<IValue>, Iterabl
 				generator.writeFieldName("value");
 			}
 			generator.writeStartObject();
+			generator.writeFieldName("mutable");
+			generator.writeBoolean(mutable);
 			generator.writeFieldName("count");
 			generator.writeNumber(iterable.count());
 			generator.writeFieldName("totalCount");
