@@ -1,3 +1,5 @@
+const imageRefURLRegistry = new FinalizationRegistry(url=>URL.revokeObjectURL(url));
+
 function ImageRef() {
 	this.mimeType = null;
 	this.url = null;
@@ -16,5 +18,7 @@ ImageRef.fromFile = function(file) {
 	var image = new ImageRef();
 	image.mimeType = file.type;
 	image.file = file;
+	image.url = URL.createObjectURL(file);
+	imageRefURLRegistry.register(image, image.url);
 	return image;
 }

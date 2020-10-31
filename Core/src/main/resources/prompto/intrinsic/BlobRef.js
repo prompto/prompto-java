@@ -1,3 +1,5 @@
+const blobRefURLRegistry = new FinalizationRegistry(url=>URL.revokeObjectURL(url));
+
 function BlobRef() {
     this.zipped = null;
     this.file = null;
@@ -16,6 +18,8 @@ BlobRef.fromFile = function(file) {
     var blob = new BlobRef();
 	blob.mimeType = file.type ? file.type : "application/octet-stream";
     blob.file = file;
+    blob.url = URL.createObjectURL(file);
+    blobRefURLRegistry.register(blob, blob.url);
     return blob;
 };
 
