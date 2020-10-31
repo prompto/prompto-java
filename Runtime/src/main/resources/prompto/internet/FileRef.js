@@ -6,11 +6,11 @@ function FileRef(file) {
 }
 
 FileRef.prototype.readImage = function() {
-    return Image.fromFile(this.file);
+    return ImageRef.fromFile(this.file);
 };
 
 FileRef.prototype.readBlob = function() {
-    return Blob.fromFile(this.file);
+    return BlobRef.fromFile(this.file);
 };
 
 FileRef.prototype.readText = function(callback) {
