@@ -334,9 +334,9 @@ public class ListType extends ContainerType {
 	@Override
 	public void transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
 	    if(itemType==IntegerType.instance()) {
-	        transpiler.append(".item(");
+	        transpiler.append(".item((");
 	        item.transpile(transpiler);
-	        transpiler.append(")");
+	        transpiler.append(")-1)");
 	    } else {
 	        super.transpileItem(transpiler, itemType, item);
 	    }
@@ -344,9 +344,9 @@ public class ListType extends ContainerType {
 	
 	@Override
 	public void transpileAssignItemValue(Transpiler transpiler, IExpression item, IExpression expression) {
-	    transpiler.append(".setItem(");
+	    transpiler.append(".setItem((");
 	    item.transpile(transpiler);
-	    transpiler.append(", ");
+	    transpiler.append(")-1, ");
 	    expression.transpile(transpiler);
 	    transpiler.append(")");
 	}
