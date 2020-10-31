@@ -211,7 +211,7 @@ public class DocumentType extends NativeType {
 	
 	@Override
 	public void transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
-	    transpiler.append(".item(");
+	    transpiler.append(".getItem(");
 	    item.transpile(transpiler);
 	    transpiler.append(")");
 	}

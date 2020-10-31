@@ -110,13 +110,20 @@ Dictionary.prototype.hasAny = function(item) {
     return this.keys.hasAny(item, true);
 };
 
-Dictionary.prototype.item = function(item) {
-    if(!item)
-        throw new ReferenceError();
-    if(!this.hasOwnProperty(item))
-        throw new RangeError();
-    return this[item];
-};
+//override property set on Object.prototype
+Object.defineProperty(Dictionary.prototype, "getItem", {
+    get: function() {
+        return function(item) {
+            if(!item)
+                throw new ReferenceError();
+            if(!this.hasOwnProperty(item))
+                throw new RangeError();
+            return this[item];
+        }
+    },
+    set: function() {
+    }
+});
 
 
 Dictionary.prototype.setItem = function (item, value) {

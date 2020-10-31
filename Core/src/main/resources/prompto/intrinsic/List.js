@@ -47,14 +47,25 @@ List.prototype.filtered = function(filterFunction) {
 };
 
 
-List.prototype.item = function(idx) {
-    if(idx==null)
-        throw new ReferenceError();
-    else if(idx<1 || idx>this.length)
-        throw new RangeError("idx:" + idx + ",length:" + this.length);
-    else
-        return this[idx-1];
-};
+//override property set on Object.prototype
+Object.defineProperty(List.prototype, "getItem", {
+    get: function() {
+        return function (idx, create) {
+            if (idx == null)
+                throw new ReferenceError();
+            else if (idx < 1 || idx > this.length)
+                throw new RangeError();
+            else {
+                if (!this[idx - 1] && create)
+                    this[idx - 1] = new Document();
+                return this[idx - 1] || null;
+            }
+        };
+    },
+    set: function () {
+    }
+});
+
 
 List.prototype.getItem = function (idx, create) {
     if(idx==null)
