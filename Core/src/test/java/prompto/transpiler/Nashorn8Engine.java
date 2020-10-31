@@ -64,6 +64,7 @@ public class Nashorn8Engine implements IJSEngine {
 				"var React = { createElement: function() { return {}; }, Component: function() { this.getInitialState = function() { return {}; }; return this; } };",
 				"var ReactBootstrap = { Button: function() { this.render = function() { return {}; }; return this; } };",
 				"var process = { stdout: { write: print } };",
+				"var FinalizationRegistry = Java.type('" + JSFinalizationRegistry.class.getName() + "');",
 				js,
 				"var $context = Java.type('" + JSContext.class.getName() + "');"
 				);

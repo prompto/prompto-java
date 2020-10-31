@@ -1,4 +1,7 @@
-const blobRefURLRegistry = new FinalizationRegistry(url=>URL.revokeObjectURL(url));
+var blobRefURLRegistry = new FinalizationRegistry(function(url) {
+	URL.revokeObjectURL(url);
+});
+
 
 function BlobRef() {
     this.zipped = null;

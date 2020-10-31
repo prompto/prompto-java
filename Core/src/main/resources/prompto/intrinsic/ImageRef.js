@@ -1,4 +1,6 @@
-const imageRefURLRegistry = new FinalizationRegistry(url=>URL.revokeObjectURL(url));
+var imageRefURLRegistry = new FinalizationRegistry(function(url) {
+	URL.revokeObjectURL(url);
+});
 
 function ImageRef() {
 	this.mimeType = null;
