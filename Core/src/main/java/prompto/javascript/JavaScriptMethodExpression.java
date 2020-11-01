@@ -1,6 +1,7 @@
 package prompto.javascript;
 
 import prompto.declaration.IMethodDeclaration;
+import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Argument;
 import prompto.grammar.Identifier;
@@ -95,17 +96,18 @@ public class JavaScriptMethodExpression extends JavaScriptSelectorExpression {
 			Argument argument = methodCall.getArguments().find(id);
 			if(argument==null && declaration.getParameters().size()==1)
 				argument = methodCall.getArguments().get(0);
-			if(argument==null)
-				exp.transpile(transpiler); // fallback
-			else {
+			if(argument!=null) try {
 				IParameter parameter = argument.getParameter();
 				if(parameter==null && declaration.getParameters().size()==1)
 					parameter = declaration.getParameters().get(0);
 	            IExpression expression = argument.getExpression();
 	            parameter.transpileCall(transpiler, expression);
+			} catch(SyntaxError error) {
+				// nothing to do
 			}
-		} else
-			exp.transpile(transpiler);
+		}
+		// default behaviour
+		exp.transpile(transpiler);
 	}
 	
 }
