@@ -1,7 +1,14 @@
 define Callback as abstract method
 define BooleanCallback as abstract method receiving Boolean value
 define IntegerCallback as abstract method receiving Integer value
+define DecimalCallback as abstract method receiving Decimal value
 define TextCallback as abstract method receiving Text value
+define DateCallback as abstract method receiving Decimal value
+define TimeCallback as abstract method receiving Time value
+define DateTimeCallback as abstract method receiving DateTime value
+define PeriodCallback as abstract method receiving Period value
+define UuidCallback as abstract method receiving Uuid value
+define DocumentCallback as abstract method receiving Document value
 define Any as native category with attributes id and text, and bindings:
 
 	define category bindings as:
