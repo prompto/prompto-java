@@ -102,6 +102,7 @@ public class JavaScriptMethodExpression extends JavaScriptSelectorExpression {
 					parameter = declaration.getParameters().get(0);
 	            IExpression expression = argument.getExpression();
 	            parameter.transpileCall(transpiler, expression);
+	            return;
 			} catch(SyntaxError error) {
 				// nothing to do
 			}
