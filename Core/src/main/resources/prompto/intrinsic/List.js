@@ -10,8 +10,10 @@ List.prototype = Object.create(Array.prototype);
 List.prototype.constructor = List;
 
 List.prototype.addItems = function(items) {
-    if(typeof(StrictSet) !== 'undefined' && items instanceof StrictSet)
-    	items = Array.from(items.set.values());
+	if(items.toArray)
+    	items = items.toArray();
+	else if(items.toList)
+    	items = items.toList();
 	this.push.apply(this, items);
 	return this; // enable fluid API
 };
