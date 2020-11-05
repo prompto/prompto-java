@@ -170,6 +170,21 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedHomonym2() throws Exception {
+		checkInterpretedOutput("methods/homonym2.poc");
+	}
+
+	@Test
+	public void testCompiledHomonym2() throws Exception {
+		checkCompiledOutput("methods/homonym2.poc");
+	}
+
+	@Test
+	public void testTranspiledHomonym2() throws Exception {
+		checkTranspiledOutput("methods/homonym2.poc");
+	}
+
+	@Test
 	public void testInterpretedImplicitMember() throws Exception {
 		checkInterpretedOutput("methods/implicitMember.poc");
 	}

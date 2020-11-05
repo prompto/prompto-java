@@ -67,6 +67,11 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testHomonym2() throws Exception {
+		compareResourceOMO("methods/homonym2.poc");
+	}
+
+	@Test
 	public void testImplicitMember() throws Exception {
 		compareResourceOMO("methods/implicitMember.poc");
 	}

@@ -72,6 +72,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testHomonym2() throws Exception {
+		compareResourceEME("methods/homonym2.pec");
+	}
+
+	@Test
 	public void testImplicitAnd() throws Exception {
 		compareResourceEME("methods/implicitAnd.pec");
 	}

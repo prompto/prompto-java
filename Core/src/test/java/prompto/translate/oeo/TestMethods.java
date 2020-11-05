@@ -67,6 +67,11 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testHomonym2() throws Exception {
+		compareResourceOEO("methods/homonym2.poc");
+	}
+
+	@Test
 	public void testImplicitMember() throws Exception {
 		compareResourceOEO("methods/implicitMember.poc");
 	}
