@@ -198,15 +198,15 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 
 	private IExpression resolveUnresolvedMethodReference(Context context, Identifier id) {
 		INamed named = context.getRegisteredValue(INamed.class, id);
-		if(named!=null) {
-			IType type = named.getType(context).resolve(context, null);
-			if(type instanceof MethodType) {
-				MethodCall call = new MethodCall(new MethodSelector(id), arguments);
-				((MethodCall)call).setVariableName(id.toString());
-				return call;
-			}
-		}
-		return null;
+		if(named==null)
+			return null;
+		IType type = named.getType(context).resolve(context, null);
+		if(type instanceof MethodType) {
+			MethodCall call = new MethodCall(new MethodSelector(id), arguments);
+			call.setVariableName(id.toString());
+			return call;
+		} else
+			return null;
 	}
 
 	private IExpression resolveUnresolvedMemberMethod(Context context, Identifier id) {
