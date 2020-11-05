@@ -177,27 +177,36 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 		IExpression call = null;
 		// if this happens in the context of an instance, then we need to check for category members first
 		call = resolveUnresolvedMemberMethod(context, id);
-		if(call==null) {
-			INamed named = context.getRegisteredValue(INamed.class, id);
-			if(named!=null) {
-				IType type = named.getType(context).resolve(context, null);
-				if(type instanceof MethodType) {
-					call = new MethodCall(new MethodSelector(id), arguments);
-					((MethodCall)call).setVariableName(id.toString());
-				}
+		if(call==null)
+			call = resolveUnresolvedMethodReference(context, id);
+		if(call==null) 
+			call = resolveUnresolvedDeclaration(context, id);
+		if(call==null)
+			context.getProblemListener().reportUnknownMethod(id, id.toString());
+		return call;
+	}
+
+	private IExpression resolveUnresolvedDeclaration(Context context, Identifier id) {
+		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, id);
+		if(decl==null)
+			return null;
+		else if(decl instanceof CategoryDeclaration)
+			return new ConstructorExpression(new CategoryType(id), null, arguments);
+		else
+			return new MethodCall(new MethodSelector(id), arguments);
+	}
+
+	private IExpression resolveUnresolvedMethodReference(Context context, Identifier id) {
+		INamed named = context.getRegisteredValue(INamed.class, id);
+		if(named!=null) {
+			IType type = named.getType(context).resolve(context, null);
+			if(type instanceof MethodType) {
+				MethodCall call = new MethodCall(new MethodSelector(id), arguments);
+				((MethodCall)call).setVariableName(id.toString());
+				return call;
 			}
 		}
-		if(call==null) {
-			IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, id);
-			if(decl==null) {
-				context.getProblemListener().reportUnknownMethod(id, id.toString());
-				return null;
-			} else if(decl instanceof CategoryDeclaration)
-				call = new ConstructorExpression(new CategoryType(id), null, arguments, false);
-			else
-				call = new MethodCall(new MethodSelector(id), arguments);
-		}
-		return call;
+		return null;
 	}
 
 	private IExpression resolveUnresolvedMemberMethod(Context context, Identifier id) {
