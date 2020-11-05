@@ -36,7 +36,7 @@ public abstract class ExecutionError extends PromptoError {
 			args.add(new Argument(
 					new UnresolvedParameter(new Identifier("text")), 
 					new TextLiteral(this.getMessage())));
-			exp = new ConstructorExpression( new CategoryType(new Identifier("Error")), null, args, true);
+			exp = new ConstructorExpression( new CategoryType(new Identifier("Error")), null, args);
 		}
 		if(context.getRegisteredValue(INamed.class, errorName)==null)
 			context.registerValue(new ErrorVariable(errorName));

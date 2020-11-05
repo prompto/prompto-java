@@ -850,7 +850,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 		CategoryType type = getNodeValue(ctx.typ);
 		IExpression copyFrom =  getNodeValue(ctx.copyExp);
 		ArgumentList args = getNodeValue(ctx.args);
-		setNodeValue(ctx, new ConstructorExpression(type, copyFrom, args, true));
+		setNodeValue(ctx, new ConstructorExpression(type, copyFrom, args));
 	}
 
 	
@@ -858,7 +858,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitConstructorNoFrom(ConstructorNoFromContext ctx) {
 		CategoryType type = getNodeValue(ctx.typ);
 		ArgumentList args = getNodeValue(ctx.args);
-		setNodeValue(ctx, new ConstructorExpression(type, null, args, true));
+		setNodeValue(ctx, new ConstructorExpression(type, null, args));
 	}
 	
 	@Override

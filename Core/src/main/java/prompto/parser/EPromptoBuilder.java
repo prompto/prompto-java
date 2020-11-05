@@ -905,7 +905,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 			args.add(arg);
 		} else if(args!=null)
 			args.checkLastAnd();
-		setNodeValue(ctx, new ConstructorExpression(type, copyFrom, args, true));
+		setNodeValue(ctx, new ConstructorExpression(type, copyFrom, args));
 	}
 
 	@Override
@@ -921,7 +921,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 		}
 		else if(args!=null)
 			args.checkLastAnd();
-		setNodeValue(ctx, new ConstructorExpression(type, null, args, true));
+		setNodeValue(ctx, new ConstructorExpression(type, null, args));
 	}
 	
 	@Override

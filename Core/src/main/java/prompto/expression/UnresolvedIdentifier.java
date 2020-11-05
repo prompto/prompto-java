@@ -203,7 +203,7 @@ public class UnresolvedIdentifier extends Section implements IPredicateExpressio
 			if(decl instanceof SingletonCategoryDeclaration || decl instanceof IEnumeratedDeclaration)
 				return new TypeExpression(type);
 			else {
-				IExpression method = new ConstructorExpression(type, null, null, true);
+				IExpression method = new ConstructorExpression(type, null, null);
 				method.check(context);
 				return method;
 			}

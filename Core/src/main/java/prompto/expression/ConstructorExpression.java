@@ -47,15 +47,14 @@ import prompto.value.NullValue;
 public class ConstructorExpression extends Section implements IExpression {
 	
 	CategoryType type;
-	boolean checked; // if coming from UnresolvedCall, need to check homonyms
+	boolean checked = false; // need to check homonyms
 	IExpression copyFrom = null;
 	ArgumentList arguments;
 	
-	public ConstructorExpression(CategoryType type, IExpression copyFrom, ArgumentList assignments, boolean checked) {
+	public ConstructorExpression(CategoryType type, IExpression copyFrom, ArgumentList arguments) {
 		this.type = type;
 		this.copyFrom = copyFrom;
-		this.arguments = assignments;
-		this.checked = checked;
+		this.arguments = arguments;
 	}
 	
 	public CategoryType getType() {

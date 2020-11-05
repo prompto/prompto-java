@@ -255,7 +255,7 @@ public class CategorySymbol extends Symbol implements IExpression  {
 	    Argument argument = new Argument(attribute, new TextLiteral('"' + this.getName() + '"'));
 	    ArgumentList arguments = new ArgumentList(this.arguments);
 	    arguments.add(argument);
-	    ConstructorExpression exp = new ConstructorExpression((CategoryType) this.type, null, arguments, false);
+	    ConstructorExpression exp = new ConstructorExpression((CategoryType) this.type, null, arguments);
 	    exp.transpile(transpiler);
 	    transpiler.append(";").newLine();
 	}
