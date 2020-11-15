@@ -28,8 +28,6 @@ import prompto.store.IStorable;
 import prompto.store.IStored;
 import prompto.store.IStoredIterable;
 import prompto.store.IQueryBuilder.MatchOp;
-import prompto.store.memory.MemStore;
-import prompto.store.memory.QueryBuilder;
 import prompto.type.TextType;
 import prompto.utils.IdentifierList;
 

@@ -7,7 +7,6 @@ import java.io.IOException;
 import org.junit.Test;
 
 import prompto.intrinsic.PromptoDocument;
-import prompto.reader.JSONReader;
 import prompto.runtime.Context;
 import prompto.utils.ResourceUtils;
 import prompto.value.DocumentValue;

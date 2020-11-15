@@ -6,8 +6,6 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import prompto.utils.CmdLineParser;
-
 public class TestCmdLineParser {
 
 	Map<String,String> options;

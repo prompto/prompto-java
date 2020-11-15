@@ -4,7 +4,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import prompto.debug.IDebugEvent;
 import prompto.utils.Logger;
 
 /* an implementation which uses plain sockets to communicate with the client */
