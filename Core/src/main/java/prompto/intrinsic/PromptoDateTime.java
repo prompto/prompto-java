@@ -19,6 +19,18 @@ public class PromptoDateTime implements Comparable<PromptoDateTime>, IDocumentab
 		this.wrapped = wrapped;
 	}
 	
+	public PromptoDateTime(PromptoDate date, PromptoTime time) {
+		if(time==null)
+			time = new PromptoTime(0, 0, 0, 0);
+		this.wrapped = new DateTime(date.getYear().intValue(), 
+				date.getMonth().intValue(), 
+				date.getDayOfMonth().intValue(), 
+				time.getHour().intValue(), 
+				time.getMinute().intValue(), 
+				time.getSecond().intValue(), 
+				time.getMillisecond().intValue());
+	}
+	
 	public PromptoDateTime(int year, int month, int day, int hour, int minute, int second, int millis) {
 		this.wrapped = new DateTime(year, month, day, hour, minute, second, millis);
 	}

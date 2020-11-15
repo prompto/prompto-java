@@ -33,6 +33,7 @@ import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.store.AttributeInfo;
+import prompto.store.Family;
 import prompto.store.IQueryBuilder;
 import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStore;
@@ -159,8 +160,13 @@ public class CompareExpression extends Section implements IPredicateExpression, 
 		IValue value = right.interpret(context);
 		if(value instanceof IInstance)
 			value = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
-		MatchOp matchOp = getMatchOp();
-		query.verify(info, matchOp, value==null ? null : value.getStorableData());
+		Object valueData = value==null ? null : value.getStorableData();
+		// ensure behaviour when comparing date and date time
+		if(info.getFamily()==Family.DATETIME && valueData instanceof PromptoDate)
+			valueData = new PromptoDateTime((PromptoDate)valueData, null);
+		else if(info.getFamily()==Family.DATE && valueData instanceof PromptoDateTime)
+			valueData = ((PromptoDateTime)valueData).getDate();
+		query.verify(info, getMatchOp(), valueData);
 		switch(operator) {
 		case GTE:
 		case LTE:
