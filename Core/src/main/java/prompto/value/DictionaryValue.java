@@ -80,8 +80,7 @@ public class DictionaryValue extends BaseValue implements IContainer<IValue> {
 		if (value instanceof DictionaryValue)
 			return merge(this, (DictionaryValue) value);
 		else
-			throw new SyntaxError("Illegal: Dict + "
-					+ value.getClass().getSimpleName());
+			throw new SyntaxError("Illegal: Dict + " + value.getClass().getSimpleName());
 	}
 	
 	@Override

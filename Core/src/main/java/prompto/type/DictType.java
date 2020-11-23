@@ -2,6 +2,7 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -10,22 +11,27 @@ import prompto.compiler.CompilerUtils;
 import prompto.compiler.Descriptor;
 import prompto.compiler.Flags;
 import prompto.compiler.IOperand;
+import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.declaration.BuiltInMethodDeclaration;
 import prompto.declaration.IMethodDeclaration;
+import prompto.error.NotMutableError;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDict;
+import prompto.param.CategoryParameter;
+import prompto.param.IParameter;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
 import prompto.value.DictionaryValue;
 import prompto.value.IValue;
+import prompto.value.TextValue;
 
 public class DictType extends ContainerType {
 	
@@ -116,6 +122,8 @@ public class DictType extends ContainerType {
 	public Set<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
 		if("swap".equals(id.toString()))
 			return new HashSet<>(Collections.singletonList(SWAP_METHOD));
+		else if("remove".equals(id.toString()))
+			return new HashSet<>(Collections.singletonList(REMOVE_METHOD));
 		else
 			return super.getMemberMethods(context, id);
 	}
@@ -301,7 +309,7 @@ public class DictType extends ContainerType {
 		public IValue interpret(Context context) throws PromptoError {
 			DictionaryValue dict = (DictionaryValue)getValue(context);
 			return dict.swap(context);
-		};
+		}
 		
 		@Override
 		public IType check(Context context) {
@@ -311,7 +319,7 @@ public class DictType extends ContainerType {
 		@Override
 		public boolean hasCompileExactInstanceMember() {
 			return true;
-		};
+		}
 		
 		@Override
 		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
@@ -323,11 +331,55 @@ public class DictType extends ContainerType {
 			method.addInstruction(Opcode.INVOKEVIRTUAL, constant);
 			// done
 			return new ResultInfo(PromptoDict.class);
-		};
+		}
 		
 		@Override
 		public void transpileCall(Transpiler transpiler, ArgumentList arguments) {
 	        transpiler.append("swap()");
+		}
+	};
+	
+	static IParameter TEXT_VALUE_ARGUMENT = new CategoryParameter(TextType.instance(), new Identifier("value"));
+
+	static final IMethodDeclaration REMOVE_METHOD = new BuiltInMethodDeclaration("remove", TEXT_VALUE_ARGUMENT) {
+		
+		@Override
+		public IValue interpret(Context context) throws PromptoError {
+			DictionaryValue dict = (DictionaryValue)getValue(context);
+			if(!dict.isMutable())
+				throw new NotMutableError();
+			TextValue key = (TextValue)context.getValue(new Identifier("value"));
+			dict.getStorableData().remove(key);
+			return null;
+		}
+		
+		@Override
+		public IType check(Context context) {
+			return VoidType.instance();
+		}
+
+		@Override
+		public boolean hasCompileExactInstanceMember() {
+			return true;
+		}
+		
+		@Override
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
+			// push arguments on the stack
+			this.compileParameters(context, method, flags, arguments);
+			// call remove method
+			Descriptor.Method descriptor = new Descriptor.Method(Object.class, Object.class);
+			InterfaceConstant constant = new InterfaceConstant(Map.class, "remove", descriptor);
+			method.addInstruction(Opcode.INVOKEINTERFACE, constant);
+			// done
+			return new ResultInfo(Void.class);
+		};
+		
+		@Override
+		public void transpileCall(Transpiler transpiler, ArgumentList arguments) {
+	        transpiler.append("remove(");
+	        arguments.get(0).transpile(transpiler, null);
+	        transpiler.append(")");
 		}
 	};
 }

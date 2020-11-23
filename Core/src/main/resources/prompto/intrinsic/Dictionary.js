@@ -57,7 +57,12 @@ Dictionary.prototype.add = function(dict) {
     var result = Object.assign({}, this, dict);
     result.__proto__ = Dictionary.prototype;
     return result;
-}
+};
+
+
+Dictionary.prototype.remove = function(key) {
+    delete this[key];
+};
 
 
 Dictionary.prototype.toString = function() {
