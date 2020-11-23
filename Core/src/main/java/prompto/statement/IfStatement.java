@@ -320,7 +320,7 @@ public class IfStatement extends BaseStatement {
 				if (context != writer.getContext())
 					writer = writer.newChildWriter(context);
 			}
-			boolean curly = statements != null && statements.size() > 1;
+			boolean curly = needsCurlyBraces();
 			if (curly)
 				writer.append("{\n");
 			else
@@ -330,6 +330,16 @@ public class IfStatement extends BaseStatement {
 			writer.dedent();
 			if (curly)
 				writer.append("}");
+		}
+		
+		
+		private boolean needsCurlyBraces() {
+			if(statements == null)
+				return false;
+			if(statements.size() > 1)
+				return true;
+			else 
+				return !statements.get(0).isSimple();
 		}
 
 		public IExpression getCondition() {
