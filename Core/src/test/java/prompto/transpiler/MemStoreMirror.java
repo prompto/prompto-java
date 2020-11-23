@@ -282,7 +282,7 @@ public class MemStoreMirror {
 			String name = readName(fieldInfo);
 			Family family = readFamily(fieldInfo);
 			Boolean collection = readCollection(fieldInfo);
-			return new AttributeInfo(name, family, collection, false, false, false);
+			return new AttributeInfo(name, family, collection, false, false, false, false);
 		}
 
 		private static String readName(ScriptObjectMirror fieldInfo) {

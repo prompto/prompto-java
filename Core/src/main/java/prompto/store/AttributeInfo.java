@@ -12,11 +12,13 @@ public class AttributeInfo extends FamilyInfo {
 	public static final AttributeInfo ANNOTATIONS = new AttributeInfo("annotations", Family.TEXT, true, null);
 	public static final AttributeInfo MODULE = new AttributeInfo("module", Family.CATEGORY, false, null);
 	
+	public static final String GENERAL = "general";
 	public static final String KEY = "key";
 	public static final String VALUE = "value";
 	public static final String WORDS = "words";
 
 	protected String name;
+	protected boolean general = false;
 	protected boolean key = false;
 	protected boolean value = false;
 	protected boolean words = false;
@@ -25,15 +27,17 @@ public class AttributeInfo extends FamilyInfo {
 		super(family, collection);
 		this.name = name;
 		if(indexTypes!=null) {
+			general = indexTypes.contains(GENERAL);
 			key = indexTypes.contains(KEY);
 			value = indexTypes.contains(VALUE);
 			words = indexTypes.contains(WORDS);
 		} 
 	}
 	
-	public AttributeInfo(String name, Family family, boolean collection, boolean key, boolean value, boolean words) {
+	public AttributeInfo(String name, Family family, boolean collection, boolean general, boolean key, boolean value, boolean words) {
 		super(family, collection);
 		this.name = name;
+		this.general = general;
 		this.key = key;
 		this.value = value;
 		this.words = words;
@@ -42,6 +46,7 @@ public class AttributeInfo extends FamilyInfo {
 	public AttributeInfo(AttributeInfo info) {
 		super(info.getFamily(), info.isCollection());
 		this.name = info.getName();
+		this.general = info.isGeneral();
 		this.key = info.isKey();
 		this.value = info.isValue();
 		this.words = info.isWords();
@@ -54,6 +59,10 @@ public class AttributeInfo extends FamilyInfo {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public boolean isGeneral() {
+		return general;
 	}
 	
 	public boolean isKey() {

@@ -1,6 +1,7 @@
 package prompto.declaration;
 
 import java.lang.reflect.Modifier;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -81,10 +82,13 @@ public class AttributeDeclaration extends BaseDeclaration {
 	
 	
 	public AttributeInfo getAttributeInfo(Context context, Function<Identifier, IDeclaration> locator) {
-		List<String> list = indexTypes==null ?  null : 
-					indexTypes.stream()
-						.map((id)->id.toString())
-						.collect(Collectors.toList());
+		List<String> list = indexTypes==null ?  
+				null : 
+				( indexTypes.isEmpty() ?
+						Collections.singletonList("generic") :
+						indexTypes.stream()
+							.map((id)->id.toString())
+							.collect(Collectors.toList()));
 		FamilyInfo family = getFamilyInfo(context, locator);
 		return new AttributeInfo(getName(), family.getFamily(), family.isCollection(), list);
 	}
