@@ -369,6 +369,21 @@ public class BaseParserTest extends BaseTest {
 	}
 
 
+	public void compareResourceOO(String resourceName) throws Exception {
+		String expected = getResourceAsString(resourceName);
+		// System.out.println(expected);
+		// parse o source code
+		DeclarationList dlo = parseOString(expected);
+		context = Context.newGlobalsContext();
+		dlo.register(context);
+		// rewrite as O
+		CodeWriter writer = new CodeWriter(Dialect.O, context);
+		dlo.toDialect(writer);
+		String actual = writer.toString();
+		// System.out.println(actual);
+		// ensure equivalent
+		assertEquivalent(expected, actual);
+	}
 
 	public void compareResourceEOE(String resourceName) throws Exception {
 		String expected = getResourceAsString(resourceName);
