@@ -338,9 +338,9 @@ public class DictType extends ContainerType {
 		}
 	};
 	
-	static IParameter TEXT_VALUE_ARGUMENT = new CategoryParameter(TextType.instance(), new Identifier("value"));
+	static IParameter KEY_VALUE_ARGUMENT = new CategoryParameter(TextType.instance(), new Identifier("key"));
 
-	static final IMethodDeclaration REMOVE_METHOD = new BuiltInMethodDeclaration("remove", TEXT_VALUE_ARGUMENT) {
+	static final IMethodDeclaration REMOVE_METHOD = new BuiltInMethodDeclaration("remove", KEY_VALUE_ARGUMENT) {
 		
 		@Override
 		public IValue interpret(Context context) throws PromptoError {
