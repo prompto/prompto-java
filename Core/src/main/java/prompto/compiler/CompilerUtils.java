@@ -740,12 +740,12 @@ public abstract class CompilerUtils {
 		method.addInstruction(Opcode.LDC, new StringConstant(info.getName()));
 		compileJavaEnum(context, method, flags, info.getFamily());
 		method.addInstruction(info.isCollection() ? Opcode.ICONST_1 : Opcode.ICONST_0);
+		method.addInstruction(info.isGeneral() ? Opcode.ICONST_1 : Opcode.ICONST_0);
 		method.addInstruction(info.isKey() ? Opcode.ICONST_1 : Opcode.ICONST_0);
 		method.addInstruction(info.isValue() ? Opcode.ICONST_1 : Opcode.ICONST_0);
 		method.addInstruction(info.isWords() ? Opcode.ICONST_1 : Opcode.ICONST_0);
-		compileCallConstructor(method, AttributeInfo.class,
-				String.class, Family.class, boolean.class, 
-				boolean.class, boolean.class, boolean.class);
+		compileCallConstructor(method, AttributeInfo.class, String.class, Family.class, 
+				boolean.class, boolean.class, boolean.class, boolean.class, boolean.class);
 	}
 
 	public static ResultInfo compileALOAD(MethodInfo method, String localName) {
