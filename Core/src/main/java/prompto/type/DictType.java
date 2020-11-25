@@ -347,7 +347,7 @@ public class DictType extends ContainerType {
 			DictionaryValue dict = (DictionaryValue)getValue(context);
 			if(!dict.isMutable())
 				throw new NotMutableError();
-			TextValue key = (TextValue)context.getValue(new Identifier("value"));
+			TextValue key = (TextValue)context.getValue(new Identifier("key"));
 			dict.getStorableData().remove(key);
 			return null;
 		}
