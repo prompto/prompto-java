@@ -38,6 +38,18 @@ List.prototype.remove = function(items) {
 };
 
 
+List.prototype.removeItem = function(item) {
+	this.splice(item - 1, 1);
+};
+
+
+List.prototype.removeValue = function(value) {
+	var idx = this.indexOf(value);
+	if(idx > -1)
+		this.splice(idx, 1);
+};
+
+
 List.prototype.sorted = function(sortFunction) {
     var sorted = Array.from(this).sort(sortFunction);
     return new List(false, sorted);

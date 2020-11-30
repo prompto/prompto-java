@@ -3,6 +3,8 @@ package prompto.intrinsic;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("serial")
 public class PromptoDict<K,V> extends HashMap<K,V> implements Iterable<PromptoDict.Entry<K,V>> {
@@ -131,5 +133,13 @@ public class PromptoDict<K,V> extends HashMap<K,V> implements Iterable<PromptoDi
 			@Override public Entry<K, V> next() { return new PromptoDict.Entry<>(iter.next()); }
 			
 		};
+	}
+
+	public void removeValue(V value) {
+		Set<K> keys = entrySet().stream()
+			.filter(e -> e.getValue().equals(value))
+			.map(e -> e.getKey())
+			.collect(Collectors.toSet());
+		keys.forEach(this::remove);
 	}
 }

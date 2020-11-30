@@ -14,12 +14,16 @@ import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
+import prompto.declaration.BuiltInMethodDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.expression.IExpression;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoList;
+import prompto.param.CategoryParameter;
+import prompto.param.IParameter;
 import prompto.parser.ECleverParser;
 import prompto.runtime.Context;
 import prompto.store.Family;
@@ -132,6 +136,10 @@ public class ListType extends ContainerType {
 		switch(id.toString()) {
 		case "join":
 			return new HashSet<>(Collections.singletonList(JOIN_METHOD));
+		case "removeItem":
+			return new HashSet<>(Collections.singletonList(REMOVE_ITEM_METHOD));
+		case "removeValue":
+			return new HashSet<>(Collections.singletonList(REMOVE_VALUE_METHOD));
 		default:
 			return super.getMemberMethods(context, id);
 		}
@@ -472,4 +480,56 @@ public class ListType extends ContainerType {
 
 	};
 
+	static IParameter ITEM_ARGUMENT = new CategoryParameter(IntegerType.instance(), new Identifier("item"));
+
+	static final IMethodDeclaration REMOVE_ITEM_METHOD = new BuiltInMethodDeclaration("removeItem", ITEM_ARGUMENT) {
+		
+		@Override
+		public IValue interpret(Context context) throws PromptoError {
+			ListValue list = (ListValue)getValue(context);
+			Long item = (Long)context.getValue(new Identifier("item")).getStorableData();
+			list.removeItem(item);
+			return null;
+		};
+		
+		@Override
+		public IType check(Context context) {
+			return VoidType.instance();
+		}
+		
+		@Override
+		public void transpileCall(Transpiler transpiler, ArgumentList arguments) {
+			transpiler.append("removeItem(");
+			arguments.getFirst().transpile(transpiler, this);
+			transpiler.append(")");
+		}
+					
+	};
+
+	static IParameter VALUE_ARGUMENT = new CategoryParameter(AnyType.instance(), new Identifier("value"));
+
+	static final IMethodDeclaration REMOVE_VALUE_METHOD = new BuiltInMethodDeclaration("removeValue", VALUE_ARGUMENT) {
+
+		@Override
+		public IValue interpret(Context context) throws PromptoError {
+			ListValue list = (ListValue)getValue(context);
+			IValue value = context.getValue(new Identifier("value"));
+			list.removeValue(value);
+			return null;
+		};
+		
+		@Override
+		public IType check(Context context) {
+			return VoidType.instance();
+		}
+		
+		@Override
+		public void transpileCall(Transpiler transpiler, ArgumentList arguments) {
+			transpiler.append("removeValue(");
+			arguments.getFirst().transpile(transpiler, this);
+			transpiler.append(")");
+		}
+
+	};
+	
 }

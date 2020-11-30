@@ -106,6 +106,10 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 		items.add(item);
 	}
 	
+	public void removeItem(Long item) {
+		items.remove(item.intValue() - 1);
+	}
+
 	public IValue getItem(int index) {
 		return items.get(index);
 	}
@@ -114,6 +118,10 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 		items.set(index, element);
 	}
 	
+	public void removeValue(IValue value) {
+		items.remove(value);
+	}
+
 	@Override
 	public void setItem(Context context, IValue item, IValue value) {
 		if(!(item instanceof IntegerValue))

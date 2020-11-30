@@ -121,8 +121,10 @@ public class DictType extends ContainerType {
 	public Set<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
 		if("swap".equals(id.toString()))
 			return new HashSet<>(Collections.singletonList(SWAP_METHOD));
-		else if("remove".equals(id.toString()))
-			return new HashSet<>(Collections.singletonList(REMOVE_METHOD));
+		else if("removeKey".equals(id.toString()))
+			return new HashSet<>(Collections.singletonList(REMOVE_KEY_METHOD));
+		else if("removeValue".equals(id.toString()))
+			return new HashSet<>(Collections.singletonList(REMOVE_VALUE_METHOD));
 		else
 			return super.getMemberMethods(context, id);
 	}
@@ -338,9 +340,9 @@ public class DictType extends ContainerType {
 		}
 	};
 	
-	static IParameter KEY_VALUE_ARGUMENT = new CategoryParameter(TextType.instance(), new Identifier("key"));
+	static IParameter KEY_ARGUMENT = new CategoryParameter(TextType.instance(), new Identifier("key"));
 
-	static final IMethodDeclaration REMOVE_METHOD = new BuiltInMethodDeclaration("remove", KEY_VALUE_ARGUMENT) {
+	static final IMethodDeclaration REMOVE_KEY_METHOD = new BuiltInMethodDeclaration("removeKey", KEY_ARGUMENT) {
 		
 		@Override
 		public IValue interpret(Context context) throws PromptoError {
@@ -370,13 +372,41 @@ public class DictType extends ContainerType {
 			Descriptor.Method descriptor = new Descriptor.Method(Object.class, Object.class);
 			InterfaceConstant constant = new InterfaceConstant(Map.class, "remove", descriptor);
 			method.addInstruction(Opcode.INVOKEINTERFACE, constant);
+			method.addInstruction(Opcode.POP);
 			// done
-			return new ResultInfo(Void.class);
+			return new ResultInfo(void.class);
 		};
 		
 		@Override
 		public void transpileCall(Transpiler transpiler, ArgumentList arguments) {
-	        transpiler.append("remove(");
+	        transpiler.append("removeKey(");
+	        arguments.get(0).transpile(transpiler, null);
+	        transpiler.append(")");
+		}
+	};
+	
+	static IParameter VALUE_ARGUMENT = new CategoryParameter(AnyType.instance(), new Identifier("value"));
+
+	static final IMethodDeclaration REMOVE_VALUE_METHOD = new BuiltInMethodDeclaration("removeValue", VALUE_ARGUMENT) {
+		
+		@Override
+		public IValue interpret(Context context) throws PromptoError {
+			DictionaryValue dict = (DictionaryValue)getValue(context);
+			if(!dict.isMutable())
+				throw new NotMutableError();
+			IValue value = (IValue)context.getValue(new Identifier("value"));
+			dict.getStorableData().removeValue(value);
+			return null;
+		}
+		
+		@Override
+		public IType check(Context context) {
+			return VoidType.instance();
+		}
+
+		@Override
+		public void transpileCall(Transpiler transpiler, ArgumentList arguments) {
+	        transpiler.append("removeValue(");
 	        arguments.get(0).transpile(transpiler, null);
 	        transpiler.append(")");
 		}
