@@ -133,7 +133,7 @@ String.prototype.indexOf1Based = function(value, fromIndex) {
 };
 
 String.prototype.equals = function(value) {
-	return this == value;
+	return this === value;
 };
 intrinsic = {};
 
