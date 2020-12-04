@@ -211,6 +211,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		IProblemListener listener = context.getProblemListener();
 		listener.pushDeclaration(this);
 		try {
+			checkConstructor(context);
 			if(parameters!=null)
 				parameters.check(context);
 			Context child = context.newChildContext();
@@ -219,6 +220,26 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		} finally {
 			listener.popDeclaration();
 		}
+	}
+
+	private void checkConstructor(Context context) {
+		if("constructor".equals(getName())) {
+			checkSingletonContext(context);
+			checkSingletonParameters(context);
+		}
+	}
+
+	private void checkSingletonParameters(Context context) {
+		if(parameters!=null && !parameters.isEmpty())
+			context.getProblemListener().reportIllegalConstructorParameters(this);
+	}
+
+	private void checkSingletonContext(Context context) {
+		if(context instanceof Context.InstanceContext) {
+			if(((Context.InstanceContext)context).getDeclaration() instanceof SingletonCategoryDeclaration)
+				return;
+		} 
+		context.getProblemListener().reportIllegalConstructor(this.getId());
 	}
 
 	@Override

@@ -25,6 +25,7 @@ import prompto.debug.WorkerDebugger;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
+import prompto.declaration.ConcreteMethodDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
@@ -918,6 +919,12 @@ public class Context implements IContext {
 					throw new InternalError("No such singleton:" + type.getTypeName());
 				value = new ConcreteInstance(this, (ConcreteCategoryDeclaration)decl);
 				((IInstance)value).setMutable(true); // a singleton is protected by "with x do", so always mutable in that context
+				ConcreteMethodDeclaration method = ((SingletonCategoryDeclaration)decl).getConstructorMethod(this);
+				if(method!=null) {
+					Context instance = newInstanceContext((IInstance)value, false);
+					Context child = instance.newChildContext();
+					method.interpret(child);
+				}
 				values.put(type.getTypeNameId(), value);
 			}
 			if(value instanceof ConcreteInstance)
@@ -1248,7 +1255,7 @@ public class Context implements IContext {
 			return super.contextForValue(name);
 		}
 		
-		private CategoryDeclaration getDeclaration() {
+		public CategoryDeclaration getDeclaration() {
 			if(declaration==null) {
 				if(instance!=null)
 					declaration = instance.getDeclaration();

@@ -20,6 +20,7 @@ import prompto.grammar.Identifier;
 import prompto.grammar.MethodDeclarationList;
 import prompto.intrinsic.PromptoRoot;
 import prompto.runtime.Context;
+import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.utils.CodeWriter;
@@ -31,6 +32,17 @@ public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 		super(name, attributes, null, methods);
 	}
 	
+	public ConcreteMethodDeclaration getConstructorMethod(Context context) {
+		registerMethods(context);
+		IDeclaration decl = methodsMap.get("constructor");
+		if(decl instanceof MethodDeclarationMap) {
+			IMethodDeclaration method = ((MethodDeclarationMap)decl).getFirst();
+			if(method instanceof ConcreteMethodDeclaration)
+				return (ConcreteMethodDeclaration)method;
+		}
+		return null;
+	}
+
 	@Override
 	protected void categoryTypeToEDialect(CodeWriter writer) {
 		writer.append("singleton");
@@ -56,12 +68,23 @@ public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 			compileFields(context, classFile, new Flags());
 			compileEmptyConstructor(context, classFile, new Flags());
 			compileMethods(context, classFile, new Flags());
+			if(getConstructorMethod(context)!=null)
+				compileCallStaticConstructor(context, classFile);
 			return classFile;
 		} catch(SyntaxError e) {
 			throw new CompilerException(e);
 		}
 	}
 	
+	private void compileCallStaticConstructor(Context context, ClassFile classFile) {
+		Descriptor.Method proto = new Descriptor.Method(void.class);
+		MethodInfo method = classFile.newMethod("<clinit>", proto);
+		method.addModifier(Modifier.STATIC);
+		MethodConstant mk = new MethodConstant(classFile.getThisClass(), "constructor", void.class);
+		method.addInstruction(Opcode.INVOKESTATIC, mk);
+		method.addInstruction(Opcode.RETURN);
+	}
+
 	@Override
 	protected void compileField(Context context, ClassFile classFile, Flags flags, Identifier id) {
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
@@ -161,6 +184,8 @@ public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 	        method.transpile(m);
 	        m.flush();
 	    });
+	    if(getConstructorMethod(transpiler.getContext())!=null)
+	    	transpiler.append(this.getName()).append(".instance.$constructor();").newLine();
 		
 	}
 

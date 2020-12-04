@@ -117,6 +117,17 @@ public abstract class ProblemListenerBase implements ANTLRErrorListener, IProble
 	}
 	
 	@Override
+	public void reportIllegalConstructor(ISection section) {
+		addProblem(new IllegalConstructorProblem(section));
+	}
+	
+	
+	@Override
+	public void reportIllegalConstructorParameters(ISection section) {
+		addProblem(new IllegalConstructorParametersProblem(section));
+	}
+
+	@Override
 	public void reportUnknownIdentifier(ISection section, String name) {
 		addProblem(new UnknownIdentifierProblem(name, section));
 	}
