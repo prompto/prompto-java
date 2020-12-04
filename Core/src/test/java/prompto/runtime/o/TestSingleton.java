@@ -35,6 +35,21 @@ public class TestSingleton extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedConstructor() throws Exception {
+		checkInterpretedOutput("singleton/constructor.poc");
+	}
+
+	@Test
+	public void testCompiledConstructor() throws Exception {
+		checkCompiledOutput("singleton/constructor.poc");
+	}
+
+	@Test
+	public void testTranspiledConstructor() throws Exception {
+		checkTranspiledOutput("singleton/constructor.poc");
+	}
+
+	@Test
 	public void testInterpretedInternal() throws Exception {
 		checkInterpretedOutput("singleton/internal.poc");
 	}

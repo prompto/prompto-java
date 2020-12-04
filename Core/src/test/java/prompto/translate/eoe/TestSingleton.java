@@ -12,6 +12,11 @@ public class TestSingleton extends BaseEParserTest {
 	}
 
 	@Test
+	public void testConstructor() throws Exception {
+		compareResourceEOE("singleton/constructor.pec");
+	}
+
+	@Test
 	public void testInternal() throws Exception {
 		compareResourceEOE("singleton/internal.pec");
 	}

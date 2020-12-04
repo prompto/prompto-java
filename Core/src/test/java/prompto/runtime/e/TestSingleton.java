@@ -35,6 +35,21 @@ public class TestSingleton extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedConstructor() throws Exception {
+		checkInterpretedOutput("singleton/constructor.pec");
+	}
+
+	@Test
+	public void testCompiledConstructor() throws Exception {
+		checkCompiledOutput("singleton/constructor.pec");
+	}
+
+	@Test
+	public void testTranspiledConstructor() throws Exception {
+		checkTranspiledOutput("singleton/constructor.pec");
+	}
+
+	@Test
 	public void testInterpretedInternal() throws Exception {
 		checkInterpretedOutput("singleton/internal.pec");
 	}
