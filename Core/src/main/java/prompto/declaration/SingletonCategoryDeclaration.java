@@ -32,9 +32,9 @@ public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 		super(name, attributes, null, methods);
 	}
 	
-	public ConcreteMethodDeclaration getConstructorMethod(Context context) {
+	public ConcreteMethodDeclaration getInitializeMethod(Context context) {
 		registerMethods(context);
-		IDeclaration decl = methodsMap.get("constructor");
+		IDeclaration decl = methodsMap.get("initialize");
 		if(decl instanceof MethodDeclarationMap) {
 			IMethodDeclaration method = ((MethodDeclarationMap)decl).getFirst();
 			if(method instanceof ConcreteMethodDeclaration)
@@ -68,19 +68,19 @@ public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 			compileFields(context, classFile, new Flags());
 			compileEmptyConstructor(context, classFile, new Flags());
 			compileMethods(context, classFile, new Flags());
-			if(getConstructorMethod(context)!=null)
-				compileCallStaticConstructor(context, classFile);
+			if(getInitializeMethod(context)!=null)
+				compileCallStaticInitialize(context, classFile);
 			return classFile;
 		} catch(SyntaxError e) {
 			throw new CompilerException(e);
 		}
 	}
 	
-	private void compileCallStaticConstructor(Context context, ClassFile classFile) {
+	private void compileCallStaticInitialize(Context context, ClassFile classFile) {
 		Descriptor.Method proto = new Descriptor.Method(void.class);
 		MethodInfo method = classFile.newMethod("<clinit>", proto);
 		method.addModifier(Modifier.STATIC);
-		MethodConstant mk = new MethodConstant(classFile.getThisClass(), "constructor", void.class);
+		MethodConstant mk = new MethodConstant(classFile.getThisClass(), "initialize", void.class);
 		method.addInstruction(Opcode.INVOKESTATIC, mk);
 		method.addInstruction(Opcode.RETURN);
 	}
@@ -184,8 +184,8 @@ public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 	        method.transpile(m);
 	        m.flush();
 	    });
-	    if(getConstructorMethod(transpiler.getContext())!=null)
-	    	transpiler.append(this.getName()).append(".instance.$constructor();").newLine();
+	    if(getInitializeMethod(transpiler.getContext())!=null)
+	    	transpiler.append(this.getName()).append(".instance.initialize();").newLine();
 		
 	}
 

@@ -32,8 +32,8 @@ public interface IProblemListener {
 	void reportIllegalRemoteCall(ISection section, String message);
 	void reportIllegalAnnotation(ISection section, String message);
 	void reportIllegalValue(ISection section, String message);
-	void reportIllegalConstructor(ISection section);
-	void reportIllegalConstructorParameters(ISection section);
+	void reportInitializeConstructor(ISection section);
+	void reportIllegalInitializeParameters(ISection section);
 	void reportNoSuperType(ISection section, IType actual);
 	void reportNotMutable(ISection section, String name);
 	void reportNotStorable(ISection section, String name);

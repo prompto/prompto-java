@@ -12,8 +12,8 @@ public class TestSingleton extends BaseOParserTest {
 	}
 
 	@Test
-	public void testConstructor() throws Exception {
-		compareResourceOMO("singleton/constructor.poc");
+	public void testInitialize() throws Exception {
+		compareResourceOMO("singleton/initialize.poc");
 	}
 
 	@Test

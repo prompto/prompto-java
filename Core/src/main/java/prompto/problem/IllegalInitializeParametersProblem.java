@@ -2,9 +2,9 @@ package prompto.problem;
 
 import prompto.parser.ISection;
 
-public class IllegalConstructorProblem extends SyntaxProblemBase {
+public class IllegalInitializeParametersProblem extends SyntaxProblemBase {
 
-	public IllegalConstructorProblem(ISection section) {
+	public IllegalInitializeParametersProblem(ISection section) {
 		super(section);
 		this.section = section;
 	}
@@ -16,7 +16,7 @@ public class IllegalConstructorProblem extends SyntaxProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return "Constructor method is only allowed in singletons!";
+		return "Initialize method cannot have parameters!";
 	}
 
 }
