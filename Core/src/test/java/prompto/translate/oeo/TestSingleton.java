@@ -12,6 +12,11 @@ public class TestSingleton extends BaseOParserTest {
 	}
 
 	@Test
+	public void testDictionary() throws Exception {
+		compareResourceOEO("singleton/dictionary.poc");
+	}
+
+	@Test
 	public void testInitialize() throws Exception {
 		compareResourceOEO("singleton/initialize.poc");
 	}

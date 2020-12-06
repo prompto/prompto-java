@@ -35,6 +35,21 @@ public class TestSingleton extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedDictionary() throws Exception {
+		checkInterpretedOutput("singleton/dictionary.poc");
+	}
+
+	@Test
+	public void testCompiledDictionary() throws Exception {
+		checkCompiledOutput("singleton/dictionary.poc");
+	}
+
+	@Test
+	public void testTranspiledDictionary() throws Exception {
+		checkTranspiledOutput("singleton/dictionary.poc");
+	}
+
+	@Test
 	public void testInterpretedInitialize() throws Exception {
 		checkInterpretedOutput("singleton/initialize.poc");
 	}

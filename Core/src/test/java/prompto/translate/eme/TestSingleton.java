@@ -12,6 +12,11 @@ public class TestSingleton extends BaseEParserTest {
 	}
 
 	@Test
+	public void testDictionary() throws Exception {
+		compareResourceEME("singleton/dictionary.pec");
+	}
+
+	@Test
 	public void testInitialize() throws Exception {
 		compareResourceEME("singleton/initialize.pec");
 	}
