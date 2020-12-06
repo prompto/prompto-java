@@ -37,6 +37,11 @@ public class ItemInstance implements IAssignableSelector {
 	}
 	
 	@Override
+	public String toString() {
+		return parent.toString() + "[" + item.toString() + "]";
+	}
+	
+	@Override
 	public void setParent(IAssignableInstance parent) {
 		this.parent = parent;
 	}
