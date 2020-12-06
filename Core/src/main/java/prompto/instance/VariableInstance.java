@@ -61,10 +61,12 @@ public class VariableInstance implements IAssignableInstance {
 	
 	public ResultInfo compileInstanceParent(Context context, MethodInfo method, Flags flags, InstanceContext actual) {
 		IType type = actual.getInstanceType();
-		if(type instanceof CategoryType) // could be a closure
-			return ((CategoryType)type).compileGetStaticMember(context, method, flags, id);
-		else
-			return null;
+		if(type instanceof CategoryType) { // could be a closure
+			ResultInfo result = ((CategoryType)type).compileGetStaticMember(context, method, flags.withGraceful(true), id);
+			if(result!=null)
+				return result;
+		}
+		return null;
 	}
 
 	public ResultInfo compileLocalParent(Context context, MethodInfo method, Flags flags) {

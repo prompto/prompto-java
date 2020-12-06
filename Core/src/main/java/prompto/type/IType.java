@@ -316,7 +316,10 @@ public interface IType extends ISection {
 	}
 
 	default ResultInfo compileGetStaticMember(Context context, MethodInfo method, Flags flags, Identifier id) {
-		throw new UnsupportedOperationException("compileGetStaticMember " + this.getClass().getName());
+		if(flags.isGraceful())
+			return null;
+		else
+			throw new UnsupportedOperationException("compileGetStaticMember " + this.getClass().getName());
 	}
 
 

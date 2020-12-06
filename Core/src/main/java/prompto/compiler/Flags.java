@@ -19,6 +19,7 @@ public class Flags {
 		this.values.put("decimal", false);
 		this.values.put("member", false);
 		this.values.put("inline", false);
+		this.values.put("graceful", false);
 		this.values.put("opcode", null);
 		this.values.put("getter", null);
 		this.values.put("setter", null);
@@ -83,6 +84,14 @@ public class Flags {
 
 	public Flags withRoughly(boolean set) {
 		return clone("roughly", set);
+	}
+
+	public boolean isGraceful() {
+		return (boolean)values.get("graceful");
+	}
+
+	public Flags withGraceful(boolean set) {
+		return clone("graceful", set);
 	}
 
 	public CmpOp cmpOp() {
