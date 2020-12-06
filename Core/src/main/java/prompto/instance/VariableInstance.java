@@ -49,6 +49,25 @@ public class VariableInstance implements IAssignableInstance {
 	
 	@Override
 	public ResultInfo compileParent(Context context, MethodInfo method, Flags flags) {
+		Context actual = context.contextForValue(id);
+		if(actual instanceof InstanceContext) {
+			ResultInfo result = compileInstanceParent(context, method, flags, (InstanceContext)actual);
+			if(result!=null)
+				return result;
+		}
+		return compileLocalParent(context, method, flags);
+	}
+	
+	
+	public ResultInfo compileInstanceParent(Context context, MethodInfo method, Flags flags, InstanceContext actual) {
+		IType type = actual.getInstanceType();
+		if(type instanceof CategoryType) // could be a closure
+			return ((CategoryType)type).compileGetStaticMember(context, method, flags, id);
+		else
+			return null;
+	}
+
+	public ResultInfo compileLocalParent(Context context, MethodInfo method, Flags flags) {
 		StackLocal local = method.getRegisteredLocal(id.toString());
 		if(local instanceof StackLocal.ObjectLocal)
 			return CompilerUtils.compileALOAD(method, local);
@@ -60,13 +79,21 @@ public class VariableInstance implements IAssignableInstance {
 	public ResultInfo compileAssign(Context context, MethodInfo method, Flags flags, IExpression expression) {
 		Context actual = context.contextForValue(id);
 		if(actual instanceof InstanceContext) {
-			IType type = ((InstanceContext)actual).getInstanceType();
-			if(type instanceof CategoryType) // could be a closure
-				return ((CategoryType)type).compileSetMember(context, method, flags, null, expression, id);
+			ResultInfo result = compileAssignInstanceMember(context, method, flags, expression, (InstanceContext)actual);
+			if(result!=null)
+				return result;
 		}
 		return compileAssignVariable(context, method, flags, expression);
 	}
 	
+	public ResultInfo compileAssignInstanceMember(Context context, MethodInfo method, Flags flags, IExpression expression, InstanceContext actual) {
+		IType type = actual.getInstanceType();
+		if(type instanceof CategoryType) // could be a closure
+			return ((CategoryType)type).compileSetMember(context, method, flags, null, expression, id);
+		else
+			return null;
+	}
+
 	public ResultInfo compileAssignVariable(Context context, MethodInfo method, Flags flags, IExpression expression) {
 		IType valueType = expression.check(context);
 		// Code expressions need to be interpreted as part of compile
@@ -190,7 +217,7 @@ public class VariableInstance implements IAssignableInstance {
 	@Override
 	public void transpileAssign(Transpiler transpiler, IExpression expression) {
 		Context context = transpiler.getContext();
-	   if(context.getRegisteredValue(INamed.class, this.id)==null) {
+	    if(context.getRegisteredValue(INamed.class, this.id)==null) {
 	        IType type = expression.check(context);
 	        context.registerValue(new Variable(this.id, type));
 	        transpiler.append("var ");
@@ -220,7 +247,18 @@ public class VariableInstance implements IAssignableInstance {
 
 	@Override
 	public void transpileAssignParent(Transpiler transpiler) {
-		transpiler.append(this.getName());
+		Context context = transpiler.getContext();
+	    context = context.contextForValue(this.id);
+	    if(context instanceof InstanceContext)
+	    	transpileAssignParentInstance(transpiler, (InstanceContext)context);
+	    else
+	    	transpiler.append(this.getName());
+	}
+
+	private void transpileAssignParentInstance(Transpiler transpiler, InstanceContext context) {
+		IType type = context.getInstanceType();
+		type.transpileInstance(transpiler);
+		transpiler.append(".").append(this.getName());
 	}
 	
 }
