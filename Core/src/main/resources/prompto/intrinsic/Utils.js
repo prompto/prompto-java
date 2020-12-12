@@ -63,6 +63,14 @@ Object.defineProperty(Object.prototype, "getText", {
     }
 });
 */
+
+Object.prototype.toString = function() {
+  var parts = Object.getOwnPropertyNames(this).map(function(name) {
+    return name + ": " + this[name].toString();
+  }, this);
+  return "{ " + parts.join(", ") + " }";
+};
+
 Boolean.prototype.getText = Boolean.prototype.toString;
 Boolean.prototype.equals = function(value) {
 	return this == value;
