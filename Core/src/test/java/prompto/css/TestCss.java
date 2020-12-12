@@ -28,13 +28,13 @@ public class TestCss extends BaseEParserTest {
 	@Test
 	public void parsesHexColorCss() {
 		CssExpression css = parseCssExpression("{color: #223344;}");
-		assertEquals("{ color: #223344;  }", css.toString());
+		assertEquals("{ color: #223344 }", css.toString());
 	}
 
 	@Test
 	public void parsesComplexCss() {
 		CssExpression css = parseCssExpression("{color: #223344 654px white;}");
-		assertEquals("{ color: #223344 654px white;  }", css.toString());
+		assertEquals("{ color: #223344 654px white }", css.toString());
 	}
 
 	private CssExpression parseCssExpression(String value) {
