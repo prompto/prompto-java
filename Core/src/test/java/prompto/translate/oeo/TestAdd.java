@@ -12,6 +12,11 @@ public class TestAdd extends BaseOParserTest {
 	}
 
 	@Test
+	public void testAddCss() throws Exception {
+		compareResourceOEO("add/addCss.poc");
+	}
+
+	@Test
 	public void testAddDate() throws Exception {
 		compareResourceOEO("add/addDate.poc");
 	}

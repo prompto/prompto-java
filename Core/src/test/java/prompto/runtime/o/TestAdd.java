@@ -35,6 +35,16 @@ public class TestAdd extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedAddCss() throws Exception {
+		checkInterpretedOutput("add/addCss.poc");
+	}
+
+	@Test
+	public void testTranspiledAddCss() throws Exception {
+		checkTranspiledOutput("add/addCss.poc");
+	}
+
+	@Test
 	public void testInterpretedAddDate() throws Exception {
 		checkInterpretedOutput("add/addDate.poc");
 	}

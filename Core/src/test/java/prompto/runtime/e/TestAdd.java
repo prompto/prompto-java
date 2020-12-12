@@ -35,6 +35,16 @@ public class TestAdd extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedAddCss() throws Exception {
+		checkInterpretedOutput("add/addCss.pec");
+	}
+
+	@Test
+	public void testTranspiledAddCss() throws Exception {
+		checkTranspiledOutput("add/addCss.pec");
+	}
+
+	@Test
 	public void testInterpretedAddDate() throws Exception {
 		checkInterpretedOutput("add/addDate.pec");
 	}
