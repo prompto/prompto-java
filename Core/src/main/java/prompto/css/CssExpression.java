@@ -2,6 +2,9 @@ package prompto.css;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -24,8 +27,16 @@ import prompto.value.IValue;
 
 public class CssExpression extends Section implements IExpression {
 
-	List<CssField> fields = new ArrayList<>();
+	List<CssField> fields;
 	
+	public CssExpression() {
+		this(new ArrayList<>());
+	}
+	
+	public CssExpression(List<CssField> fields) {
+		this.fields = fields;
+	}
+
 	@Override
 	public IType check(Context context) {
 		return CssType.instance();
@@ -45,11 +56,7 @@ public class CssExpression extends Section implements IExpression {
 	
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("{ ");
-		fields.forEach(field->field.toString(sb));
-		sb.append(" }");
-		return sb.toString();
+		return "{ " +  fields.stream().map(CssField::toString).collect(Collectors.joining(", ")) + " }";
 	}
 
 	public JsonNode toJson(boolean withType) {
@@ -58,6 +65,13 @@ public class CssExpression extends Section implements IExpression {
 		return result;
 	}
 	
+	public CssExpression plus(CssExpression expression) {
+		Set<String> replacing = expression.fields.stream().map(CssField::getName).collect(Collectors.toSet());
+		List<CssField> result = Stream.concat(fields.stream().filter(field -> !replacing.contains(field.getName())), expression.fields.stream())
+				.collect(Collectors.toList());
+		return new CssExpression(result);
+	}
+
 	public void addField(CssField field) {
 		fields.add(field);
 	}
@@ -83,7 +97,6 @@ public class CssExpression extends Section implements IExpression {
 		transpiler.append("}");
 		return false;
 	}
-
 
 
 }

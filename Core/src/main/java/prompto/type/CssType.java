@@ -2,6 +2,8 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 
+import prompto.css.CssExpression;
+import prompto.expression.IExpression;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
@@ -24,6 +26,14 @@ public class CssType extends NativeType {
 	}
 	
 	@Override
+	public IType checkAdd(Context context, IType other, boolean tryReverse) {
+		if(other instanceof CssType)
+			return this;
+		else
+			return super.checkAdd(context, other, tryReverse);
+	}
+
+	@Override
 	public void declare(Transpiler transpiler) {
 		// nothing to do
 	}
@@ -33,7 +43,25 @@ public class CssType extends NativeType {
 	public void transpile(Transpiler transpiler) {
 		transpiler.append("Object");
 	}
+	
+	@Override
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) { 
+		// nothing to do
+	}
 
+	@Override
+	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) { 
+		if(other == this) {
+			transpiler.append("Object.assign({},");
+			left.transpile(transpiler);
+			transpiler.append(",");
+			right.transpile(transpiler);
+			transpiler.append(")");
+		} else if(tryReverse)
+			other.transpileAdd(transpiler, this, false, right, left);
+		else
+			throw new UnsupportedOperationException("transpileAdd " + this.getClass().getName());
+	}
 
 
 }

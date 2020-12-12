@@ -16,6 +16,10 @@ public class CssField {
 		this.name = name;
 		this.value = value;
 	}
+	
+	public String getName() {
+		return name;
+	}
 
 	public void toDialect(CodeWriter writer) {
 		writer.append(name).append(":");
@@ -23,10 +27,9 @@ public class CssField {
 		writer.append(";");
 	}
 	
-	public void toString(StringBuilder sb) {
-		sb.append(name).append(": ");
-		value.toString(sb);
-		sb.append("; ");
+	@Override
+	public String toString() {
+		return name + ": "  + value.toString();
 	}
 	
 	public void toJson(ObjectNode result, boolean withType) {
