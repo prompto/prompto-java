@@ -2,7 +2,6 @@ package prompto.type;
 
 import java.lang.reflect.Type;
 
-import prompto.css.CssExpression;
 import prompto.expression.IExpression;
 import prompto.runtime.Context;
 import prompto.store.Family;
