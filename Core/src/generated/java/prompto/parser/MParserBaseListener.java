@@ -1852,6 +1852,18 @@ public class MParserBaseListener implements MParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterComment_statement(MParser.Comment_statementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitComment_statement(MParser.Comment_statementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterRepl(MParser.ReplContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2999,18 +3011,6 @@ public class MParserBaseListener implements MParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMethod_declaration(MParser.Method_declarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterComment_statement(MParser.Comment_statementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitComment_statement(MParser.Comment_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
