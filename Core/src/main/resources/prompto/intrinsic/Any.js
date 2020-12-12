@@ -11,3 +11,6 @@ Any.prototype.toString = function() {
 };
 
 Any.prototype.getText = Any.prototype.toString;
+
+if(typeof(exports) !== "undefined")
+	exports.Any = Any;
