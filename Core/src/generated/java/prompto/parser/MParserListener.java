@@ -1726,6 +1726,16 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitNull_literal(MParser.Null_literalContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MParser#comment_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterComment_statement(MParser.Comment_statementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MParser#comment_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitComment_statement(MParser.Comment_statementContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MParser#repl}.
 	 * @param ctx the parse tree
 	 */
@@ -2787,16 +2797,6 @@ public interface MParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMethod_declaration(MParser.Method_declarationContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MParser#comment_statement}.
-	 * @param ctx the parse tree
-	 */
-	void enterComment_statement(MParser.Comment_statementContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MParser#comment_statement}.
-	 * @param ctx the parse tree
-	 */
-	void exitComment_statement(MParser.Comment_statementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MParser#native_statement_list}.
 	 * @param ctx the parse tree
