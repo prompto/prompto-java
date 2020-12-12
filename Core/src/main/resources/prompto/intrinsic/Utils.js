@@ -53,23 +53,6 @@ if(!Object.values) {
 	    return values;
 	}; 
 }
-/*
-Object.defineProperty(Object.prototype, "getText", {
-    get: function() {
-        return function() { return this.text || ""; };
-    },
-    set: function() {
-    	// pass
-    }
-});
-*/
-
-Object.prototype.toString = function() {
-  var parts = Object.getOwnPropertyNames(this).map(function(name) {
-    return name + ": " + this[name].toString();
-  }, this);
-  return "{ " + parts.join(", ") + " }";
-};
 
 Boolean.prototype.getText = Boolean.prototype.toString;
 Boolean.prototype.equals = function(value) {

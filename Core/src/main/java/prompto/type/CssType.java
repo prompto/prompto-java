@@ -45,13 +45,13 @@ public class CssType extends NativeType {
 	
 	@Override
 	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) { 
-		// nothing to do
+		transpiler.require("Any");
 	}
 
 	@Override
 	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) { 
 		if(other == this) {
-			transpiler.append("Object.assign({},");
+			transpiler.append("Object.assign(new Any(),");
 			left.transpile(transpiler);
 			transpiler.append(",");
 			right.transpile(transpiler);
