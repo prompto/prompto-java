@@ -1,4 +1,5 @@
 define Callback as abstract method
+define AnyCallback as abstract method receiving Any value
 define BooleanCallback as abstract method receiving Boolean value
 define IntegerCallback as abstract method receiving Integer value
 define DecimalCallback as abstract method receiving Decimal value
