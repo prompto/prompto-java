@@ -18,6 +18,30 @@ Object.defineProperty($Root.prototype, "category", {
 	}
 });
 
+$Root.prototype.equals = function(other) {
+    if (this === other)
+        return true;
+    if (!(other instanceof $Root))
+        return false;
+    if (this.$categories[this.$categories.length - 1] !== other.$categories[other.$categories.length - 1])
+        return false;
+    var thisNames = this.getAttributeNames();
+    for (var i = 0; i < thisNames.length; i++) {
+        var name = thisNames[i];
+        if (this[name] === null) {
+            if(other[name] == null)
+                continue;
+            else
+                return false;
+        }
+        if (!this[name].equals(other[name]))
+            return false;
+    }
+
+    return true;
+};
+
+
 $Root.prototype.toMutable = function() {
 	var result = Object.create(this);
 	result.$mutable = true;

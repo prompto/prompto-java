@@ -77,6 +77,10 @@ Number.prototype.toDecimalString = function() {
         return s + ".0";
 };
 Number.prototype.getText = Number.prototype.toString;
+Number.prototype.equals = function(value) {
+	return this == value;
+};
+
 String.prototype.hasAll = function(items) {
     if(StrictSet && items instanceof StrictSet)
         items = Array.from(items.set.values());
