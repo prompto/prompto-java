@@ -545,7 +545,8 @@ public class EqualsExpression extends Section implements IPredicateExpression, I
 
 	public ResultInfo compileEquals(Context context, MethodInfo method, Flags flags) {
 		ResultInfo lval = left.compile(context, method, flags.withPrimitive(true));
-		IOperatorFunction compiler = getEqualsCompiler(lval.getType());
+		Type ltype = lval.isPromptoCategory() ? Object.class : lval.getType();
+		IOperatorFunction compiler = getEqualsCompiler(ltype);
 		if(compiler==null) {
 			System.err.println("Missing IOperatorFunction for = " + lval.getType().getTypeName());
 			throw new SyntaxError("Cannot check equality of " + lval.getType().getTypeName() + " with " + right.check(context).getFamilyInfo(context));

@@ -261,6 +261,8 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	public boolean equals(Object obj) {
 		if(!(obj instanceof ConcreteInstance))
 			return false;
+		if(declaration != ((ConcreteInstance)obj).declaration)
+			return false;
 		return this.values.equals(((ConcreteInstance)obj).values);
 	}
 	

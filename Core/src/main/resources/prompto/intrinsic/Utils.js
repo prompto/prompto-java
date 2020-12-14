@@ -128,7 +128,8 @@ String.prototype.indexOf1Based = function(value, fromIndex) {
 };
 
 String.prototype.equals = function(value) {
-	return this === value;
+    // use == because === fails in Nashorn
+	return this == value;
 };
 var intrinsic = {};
 

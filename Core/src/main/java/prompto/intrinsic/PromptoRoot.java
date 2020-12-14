@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -210,7 +211,7 @@ public abstract class PromptoRoot extends PromptoStorableBase implements IMutabl
 		fields.forEach(field-> {
 			sb.append(field.getName());
 			sb.append(':');
-			sb.append(String.valueOf(getFieldValue(field)));
+			sb.append(String.valueOf(getFieldValue(this, field)));
 			sb.append(", ");
 		});
 		if(sb.length()>1)
@@ -219,24 +220,24 @@ public abstract class PromptoRoot extends PromptoStorableBase implements IMutabl
 		return sb.toString();
 	}
 
-	protected Object getFieldValue(Field field) {
+	protected static Object getFieldValue(Object instance, Field field) {
 		boolean accessible = field.isAccessible();
-		return accessible ? getAccessibleFieldValue(field) : getInaccessibleFieldValue(field);
+		return accessible ? getAccessibleFieldValue(instance, field) : getInaccessibleFieldValue(instance, field);
 	}
 	
-	private Object getInaccessibleFieldValue(Field field) {
+	private static Object getInaccessibleFieldValue(Object instance, Field field) {
 		try {
 			field.setAccessible(true);
-			return getAccessibleFieldValue(field);
+			return getAccessibleFieldValue(instance, field);
 		} finally {
 			field.setAccessible(false);
 		}
 	}
 
 
-	private Object getAccessibleFieldValue(Field field) {
+	private static Object getAccessibleFieldValue(Object instance, Field field) {
 		try {
-			return field.get(this);
+			return field.get(instance);
 		} catch (Exception e) {
 			return "<unreadable>";
 		} 
@@ -274,12 +275,25 @@ public abstract class PromptoRoot extends PromptoStorableBase implements IMutabl
 		PromptoDocument<String, Object> doc = new PromptoDocument<>(); 
 		List<Field> fields = collectFields();
 		fields.forEach(field-> {
-			Object value = getFieldValue(field);
+			Object value = getFieldValue(this, field);
 			if(value instanceof IDocumentable)
 				value = ((IDocumentable)value).toDocument();
 			doc.put(field.getName(), value);
 		});
 		return doc;
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if(other==null || other.getClass()!=this.getClass())
+			return false;
+		for(Field field : collectFields()) {
+			Object thisValue = getFieldValue(this, field);
+			Object otherValue = getFieldValue(other, field);
+			if(!Objects.equals(thisValue, otherValue))
+				return false;
+		}
+		return true;
 	}
 	
 }
