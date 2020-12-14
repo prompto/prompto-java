@@ -110,6 +110,21 @@ public class TestCategories extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedEquals() throws Exception {
+		checkInterpretedOutput("categories/equals.poc");
+	}
+
+	@Test
+	public void testCompiledEquals() throws Exception {
+		checkCompiledOutput("categories/equals.poc");
+	}
+
+	@Test
+	public void testTranspiledEquals() throws Exception {
+		checkTranspiledOutput("categories/equals.poc");
+	}
+
+	@Test
 	public void testInterpretedPopulateFalse() throws Exception {
 		checkInterpretedOutput("categories/populateFalse.poc");
 	}

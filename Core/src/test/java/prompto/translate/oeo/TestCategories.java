@@ -37,6 +37,11 @@ public class TestCategories extends BaseOParserTest {
 	}
 
 	@Test
+	public void testEquals() throws Exception {
+		compareResourceOEO("categories/equals.poc");
+	}
+
+	@Test
 	public void testPopulateFalse() throws Exception {
 		compareResourceOEO("categories/populateFalse.poc");
 	}
