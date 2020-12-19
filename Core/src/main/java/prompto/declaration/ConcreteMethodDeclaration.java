@@ -444,23 +444,26 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		listener.pushDeclaration(this);
 		declaring = true;
 		try {
-			// TODO IType type = check(transpiler.getContext(), isStart);
-			if(returnType!=null)
-				returnType.declare(transpiler);
-		    if(this.memberOf!=null)
-		    	this.memberOf.declare(transpiler);
-		    else {
-		        transpiler = transpiler.newLocalTranspiler();
-		        transpiler.declare(this);
-		        this.declareParameters(transpiler);
-		    }
-	    	this.registerParameters(transpiler.getContext());
-		    this.statements.declare(transpiler);
+			doDeclare(transpiler);
 		} finally {
 			declaring = false;
 			listener.popDeclaration();
 		}
-			
+	}
+	
+	void doDeclare(Transpiler transpiler) {
+		// TODO IType type = check(transpiler.getContext(), isStart);
+		if(returnType!=null)
+			returnType.declare(transpiler);
+	    if(this.memberOf!=null)
+	    	this.memberOf.declare(transpiler);
+	    else {
+	        transpiler = transpiler.newLocalTranspiler();
+	        transpiler.declare(this);
+	        this.declareParameters(transpiler);
+	    }
+    	this.registerParameters(transpiler.getContext());
+	    this.statements.declare(transpiler);
 	}
 	
 	@Override
@@ -489,7 +492,17 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    this.registerParameters(transpiler.getContext());
+		IProblemListener listener = transpiler.getContext().getProblemListener();
+		listener.pushDeclaration(this);
+		try {
+			return doTranspile(transpiler);
+		} finally {
+			listener.popDeclaration();
+		}
+	}
+	
+	boolean doTranspile(Transpiler transpiler) {
+		this.registerParameters(transpiler.getContext());
 	    this.registerCodeArguments(transpiler.getContext());
 	    this.transpileProlog(transpiler);
 	    this.statements.transpile(transpiler);

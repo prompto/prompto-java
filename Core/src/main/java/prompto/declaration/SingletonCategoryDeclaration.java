@@ -162,12 +162,12 @@ public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 	public boolean transpile(Transpiler transpiler) {
 	    CategoryType type = new CategoryType(this.getId());
 	    transpiler = transpiler.newInstanceTranspiler(type);
-	    doTranspile(transpiler);
+	    super.transpile(transpiler);
 	    transpiler.flush();
 		return true;
 	}
 
-	private void doTranspile(Transpiler transpiler) {
+	protected void doTranspile(Transpiler transpiler) {
 		transpiler.append("function ").append(this.getName()).append("() {").indent();
 	    transpiler.append("$Root.call(this);").newLine();
 	    transpiler.append("this.$mutable = true;").newLine();

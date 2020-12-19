@@ -38,7 +38,7 @@ public class JsxText implements IJsxExpression {
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-		String text = HtmlUtils.htmlEntitiesToUtf8(StringUtils.escape(this.text));
+		String text = HtmlUtils.decodeHtmlEntities(StringUtils.escape(this.text));
 		transpiler.append('"').append(text).append('"');
 		return false;
 	}

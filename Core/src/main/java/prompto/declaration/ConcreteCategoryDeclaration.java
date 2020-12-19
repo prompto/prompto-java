@@ -1100,13 +1100,23 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 
 	@Override
 	public boolean transpile(Transpiler transpiler) {
+		IProblemListener listener = transpiler.getContext().getProblemListener();
+		listener.pushDeclaration(this);
+		try {
+			doTranspile(transpiler);
+		    return true;
+		} finally {
+			listener.popDeclaration();
+		}
+	}
+		
+	protected void doTranspile(Transpiler transpiler) {
 		transpileConstructor(transpiler);
 	    transpiler = transpiler.newInstanceTranspiler(new CategoryType(getId()));
 	    transpileLoaders(transpiler);
 	    transpileMethods(transpiler);
 	    transpileGetterSetters(transpiler);
 	    transpiler.flush();
-	    return true;
 	}
 
 	private void transpileConstructor(Transpiler transpiler) {
