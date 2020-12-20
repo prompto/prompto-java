@@ -42,7 +42,6 @@ var ReactUtils = {
 		removeChildren("modal");
 	},
 	showContextMenu: function(event, menu) {
-		console.log("showContextMenu");
 		event.preventDefault();
 	    document.addEventListener("click", handleDocumentClick );
 	    document.addEventListener("contextmenu", handleDocumentClick );
