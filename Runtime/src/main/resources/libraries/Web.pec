@@ -9,6 +9,9 @@ and methods:
 	define stopPropagation as method doing:
 		JavaScript: this.stopPropagation();
 
+	define preventDefault as method doing:
+		JavaScript: this.preventDefault();
+		
 
 @Inlined
 define MouseEvent as native category with bindings:
@@ -21,6 +24,9 @@ and methods:
 	define stopPropagation as method doing:
 		JavaScript: this.stopPropagation();
 
+	define preventDefault as method doing:
+		JavaScript: this.preventDefault();
+		
 
 @Inlined
 define KeyboardEvent as native category with bindings:
@@ -33,6 +39,9 @@ and methods:
 	define stopPropagation as method doing:
 		JavaScript: this.stopPropagation();
 
+	define preventDefault as method doing:
+		JavaScript: this.preventDefault();
+		
 
 @Inlined
 define RadioChangedEvent as native category with bindings:
@@ -48,6 +57,9 @@ and methods:
 	define stopPropagation as method doing:
 		JavaScript: this.stopPropagation();
 
+	define preventDefault as method doing:
+		JavaScript: this.preventDefault();
+		
 
 @Inlined
 define InputChangedEvent as native category with bindings:
@@ -66,6 +78,9 @@ and methods:
 	define stopPropagation as method doing:
 		JavaScript: this.stopPropagation();
 
+	define preventDefault as method doing:
+		JavaScript: this.preventDefault();
+		
 
 define ClickEventCallback as abstract method receiving ClickEvent event
 define MouseEventCallback as abstract method receiving MouseEvent event
