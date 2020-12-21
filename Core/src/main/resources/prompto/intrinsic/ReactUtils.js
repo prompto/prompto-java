@@ -29,7 +29,9 @@ function closeContextMenu() {
     removeChildren("context");
 }
 
-document && document.addEventListener("contextmenu", function(event) { event.preventDefault(); });
+if(typeof(document) === "object") {
+	document.addEventListener("contextmenu", function(event) { event.preventDefault(); });
+}
 
 var ReactUtils = {
 	showModal: function(modal) {
