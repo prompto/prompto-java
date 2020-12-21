@@ -115,7 +115,6 @@ public abstract class JsxElementBase extends Section implements IJsxExpression {
 					context.getProblemListener().reportDuplicateProperty(prop, prop.getName());
 				else
 					actualNames.add(prop.getName());
-				prop.check(context);
 				Property declared = propertyMap.get(prop.getName());
 				if(declared==null)
 					declared = propertyMap.get(prop.getName().toLowerCase()); // TODO generate camel case html property types
