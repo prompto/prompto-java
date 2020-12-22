@@ -15,7 +15,6 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
-import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.statement.IStatement;
@@ -30,7 +29,7 @@ import prompto.value.BooleanValue;
 import prompto.value.IValue;
 import prompto.value.IntegerValue;
 
-public class ArrowExpression extends Section implements IExpression {
+public class ArrowExpression extends PredicateExpression implements IExpression {
 
 	IdentifierList args;
 	String argsSuite;
@@ -42,6 +41,13 @@ public class ArrowExpression extends Section implements IExpression {
 		this.argsSuite = argsSuite;
 		this.arrowSuite = arrowSuite;
 	}
+	
+	
+	@Override
+	public ArrowExpression toArrowExpression() {
+		return this;
+	}	
+	
 	
 	public IdentifierList getArgs() {
 		return args;
@@ -93,6 +99,44 @@ public class ArrowExpression extends Section implements IExpression {
 			writer.append(arrowSuite);
 		bodyToDialect(writer);
 	}
+	
+
+	@Override
+	public void filteredToDialect(CodeWriter writer, IExpression source) {
+		if(args==null || args.size()!=1)
+			throw new SyntaxError("Expecting 1 parameter only!");
+		IType sourceType = source.check(writer.getContext());
+		IType itemType = ((IterableType)sourceType).getItemType();
+		writer = writer.newChildWriter();
+		writer.getContext().registerValue(new Variable(args.get(0), itemType));
+		switch(writer.getDialect()) {
+		case E:
+		case M:
+			source.toDialect(writer);
+			writer.append(" filtered where ");
+			this.toDialect(writer);
+			break;
+		case O:
+			writer.append("filtered (");
+			source.toDialect(writer);
+			writer.append(") where (");
+			this.toDialect(writer);
+			writer.append(")");
+			break;
+		}
+	}
+
+	
+	@Override
+	public void containsToDialect(CodeWriter writer) {
+		writer.append("where ");
+		if(writer.getDialect()==Dialect.O)
+			writer.append("( ");
+		this.toDialect(writer);
+		if(writer.getDialect()==Dialect.O)
+			writer.append(" ) ");
+	}
+	
 	
 	@Override
 	public String toString() {
@@ -161,6 +205,14 @@ public class ArrowExpression extends Section implements IExpression {
 		};
 	}
 
+	public IType checkFilter(Context context, IType itemType) {
+		if(args==null || args.size()!=1)
+			throw new SyntaxError("Expecting 1 parameter only!");
+		context = context.newChildContext();
+		context.registerValue(new Variable(args.get(0), itemType));
+	    return this.statements.check(context, null);
+	}
+
 	
 	public void declareFilter(Transpiler transpiler, IType itemType) {
 		if(args==null || args.size()!=1)
@@ -192,30 +244,6 @@ public class ArrowExpression extends Section implements IExpression {
 		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
 		method.registerLocal(args.get(0).toString(), VerifierType.ITEM_Object, new ClassConstant(paramType));
 		statements.compile(context, method, new Flags().withPrimitive(true));
-	}
-
-	public void filterToDialect(CodeWriter writer, IExpression source) {
-		if(args==null || args.size()!=1)
-			throw new SyntaxError("Expecting 1 parameter only!");
-		IType sourceType = source.check(writer.getContext());
-		IType itemType = ((IterableType)sourceType).getItemType();
-		writer = writer.newChildWriter();
-		writer.getContext().registerValue(new Variable(args.get(0), itemType));
-		switch(writer.getDialect()) {
-		case E:
-		case M:
-			source.toDialect(writer);
-			writer.append(" filtered where ");
-			this.toDialect(writer);
-			break;
-		case O:
-			writer.append("filtered (");
-			source.toDialect(writer);
-			writer.append(") where (");
-			this.toDialect(writer);
-			writer.append(")");
-			break;
-		}
 	}
 
 	public Comparator<? extends IValue> getComparator(Context context, IType itemType, boolean descending) {
@@ -340,7 +368,6 @@ public class ArrowExpression extends Section implements IExpression {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		return statements.compile(context, method, new Flags());
 	}
-
 
 
 

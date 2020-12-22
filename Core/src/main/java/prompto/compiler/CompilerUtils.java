@@ -6,10 +6,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import prompto.compiler.IVerifierEntry.VerifierType;
+import prompto.expression.ArrowExpression;
+import prompto.expression.IExpression;
+import prompto.expression.PredicateExpression;
 import prompto.grammar.ParameterList;
 import prompto.param.CodeParameter;
 import prompto.grammar.Identifier;
@@ -823,6 +827,44 @@ public abstract class CompilerUtils {
 
 	public static boolean isEnumNativeType(Type type) {
 		return type.getTypeName().startsWith(NATIVE_ENUM_PACKAGE_PREFIX);
+	}
+
+	public static String compileInnerFilterClass(Context context, ClassFile parentClass, IExpression source, PredicateExpression predicate) {
+		int innerClassIndex = 1 + parentClass.getInnerClasses().size();
+		String innerClassName = parentClass.getThisClass().getType().getTypeName() + '$' + innerClassIndex;
+		ClassFile classFile = new ClassFile(new NamedType(innerClassName));
+		classFile.setSuperClass(new ClassConstant(Object.class));
+		classFile.addInterface(new ClassConstant(Predicate.class));
+		CompilerUtils.compileEmptyConstructor(classFile);
+		compileInnerClassExpression(context, classFile, source, predicate);
+		parentClass.addInnerClass(classFile);;
+		return innerClassName;
+	}
+
+	public static void compileInnerClassExpression(Context context, ClassFile classFile, IExpression source, PredicateExpression predicate) {
+		IType paramIType = source.check(context).checkIterator(context);
+		Type paramType = paramIType.getJavaType(context);
+		compileInnerClassBridgeMethod(classFile, paramType, predicate);
+		ArrowExpression arrow = predicate.toArrowExpression();
+		arrow.compileFilter(context, classFile, paramIType, paramType);
+	}
+
+	public static void compileInnerClassBridgeMethod(ClassFile classFile, Type paramType, PredicateExpression predicate) {
+		// create a bridge "apply" method to convert Object -> paramType
+		Descriptor.Method proto = new Descriptor.Method(Object.class, boolean.class);
+		MethodInfo method = classFile.newMethod("test", proto);
+		method.addModifier(Tags.ACC_BRIDGE | Tags.ACC_SYNTHETIC);
+		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
+		ArrowExpression arrow = predicate.toArrowExpression();
+		Identifier arg = arrow.getArgs().getFirst();
+		method.registerLocal(arg.toString(), VerifierType.ITEM_Object, new ClassConstant(Object.class));
+		method.addInstruction(Opcode.ALOAD_0, classFile.getThisClass());
+		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(Object.class));
+		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(paramType));
+		proto = new Descriptor.Method(paramType, boolean.class);
+		MethodConstant c = new MethodConstant(classFile.getThisClass(), "test", proto);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, c);
+		method.addInstruction(Opcode.IRETURN);
 	}
 
 

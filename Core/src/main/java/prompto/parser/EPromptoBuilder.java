@@ -72,6 +72,7 @@ import prompto.expression.DivideExpression;
 import prompto.expression.DocumentExpression;
 import prompto.expression.EqualsExpression;
 import prompto.expression.ExecuteExpression;
+import prompto.expression.ExplicitPredicateExpression;
 import prompto.expression.FetchManyExpression;
 import prompto.expression.FetchOneExpression;
 import prompto.expression.FilteredExpression;
@@ -92,6 +93,7 @@ import prompto.expression.NotExpression;
 import prompto.expression.OrExpression;
 import prompto.expression.ParenthesisExpression;
 import prompto.expression.PlusExpression;
+import prompto.expression.PredicateExpression;
 import prompto.expression.ReadAllExpression;
 import prompto.expression.ReadBlobExpression;
 import prompto.expression.ReadOneExpression;
@@ -930,39 +932,53 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitFilter_expression(Filter_expressionContext ctx) {
-		IExpression exp = getNodeValue(ctx.arrow_expression());
-		if(exp==null)
-			exp = getNodeValue(ctx.expression());
-		setNodeValue(ctx, exp);
+	public void exitArrowFilterExpression(ArrowFilterExpressionContext ctx) {
+		setNodeValue(ctx, getNodeValue(ctx.arrow_expression()));
+	}
+	
+	
+	@Override
+	public void exitExplicitFilterExpression(ExplicitFilterExpressionContext ctx) {
+		Identifier name = getNodeValue(ctx.variable_identifier());
+		IExpression predicate = getNodeValue(ctx.expression());
+		setNodeValue(ctx, new ExplicitPredicateExpression(name, predicate));
+	}
+
+	@Override
+	public void exitOtherFilterExpression(OtherFilterExpressionContext ctx) {
+		setNodeValue(ctx, getNodeValue(ctx.expression()));
 	}
 
 	@Override
 	public void exitHasExpression(HasExpressionContext ctx) {
 		IExpression left = getNodeValue(ctx.left);
 		IExpression right = getNodeValue(ctx.right);
-		setNodeValue(ctx, new ContainsExpression(left, ContOp.HAS, right));
+		ContOp contOp = ctx.NOT() == null ? ContOp.HAS : ContOp.NOT_HAS;
+		setNodeValue(ctx, new ContainsExpression(left, contOp, right));
 	}
 
 	@Override
 	public void exitHasAllExpression(HasAllExpressionContext ctx) {
 		IExpression left = getNodeValue(ctx.left);
 		IExpression right = getNodeValue(ctx.right);
-		setNodeValue(ctx, new ContainsExpression(left, ContOp.HAS_ALL, right));
+		ContOp contOp = ctx.NOT() == null ? ContOp.HAS_ALL : ContOp.NOT_HAS_ALL;
+		setNodeValue(ctx, new ContainsExpression(left, contOp, right));
 	}
 	
 	@Override
 	public void exitHasAnyExpression(HasAnyExpressionContext ctx) {
 		IExpression left = getNodeValue(ctx.left);
 		IExpression right = getNodeValue(ctx.right);
-		setNodeValue(ctx, new ContainsExpression(left, ContOp.HAS_ANY, right));
+		ContOp contOp = ctx.NOT() == null ? ContOp.HAS_ANY : ContOp.NOT_HAS_ANY;
+		setNodeValue(ctx, new ContainsExpression(left, contOp, right));
 	}
 	
 	@Override
 	public void exitContainsExpression(ContainsExpressionContext ctx) {
 		IExpression left = getNodeValue(ctx.left);
 		IExpression right = getNodeValue(ctx.right);
-		setNodeValue(ctx, new EqualsExpression(left, EqOp.CONTAINS, right));
+		EqOp eqOp = ctx.NOT() == null ? EqOp.CONTAINS : EqOp.NOT_CONTAINS;
+		setNodeValue(ctx, new EqualsExpression(left, eqOp, right));
 	}
 	
 	@Override
@@ -1368,7 +1384,21 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitEqualsExpression(EqualsExpressionContext ctx) {
 		IExpression left = getNodeValue(ctx.left);
 		IExpression right = getNodeValue(ctx.right);
-		setNodeValue(ctx, new EqualsExpression(left, EqOp.EQUALS, right));
+		EqOp eqOp = null;
+		switch(ctx.op.getType()) {
+			case ELexer.EQ:
+				eqOp = EqOp.EQUALS;
+				break;
+			case ELexer.LTGT :
+				eqOp = EqOp.NOT_EQUALS;
+				break;
+			case ELexer.TILDE:
+				eqOp = EqOp.ROUGHLY;
+				break;
+			default:
+				throw new UnsupportedOperationException("Operator " + ctx.op.getType());
+		}
+		setNodeValue(ctx, new EqualsExpression(left, eqOp, right));
 	}
 
 	
@@ -1439,14 +1469,20 @@ public class EPromptoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, fetch);
 	}
 	
+	
 	@Override
 	public void exitFiltered_list_suffix(Filtered_list_suffixContext ctx) {
 		Identifier itemName = getNodeValue(ctx.variable_identifier());
 		IExpression predicate = getNodeValue(ctx.predicate);
-		setNodeValue(ctx, new FilteredExpression(itemName, null, predicate));
+		PredicateExpression expression = null;
+		if(itemName != null)
+			expression = new ExplicitPredicateExpression(itemName, predicate);
+		else if(predicate instanceof PredicateExpression)
+			expression = (PredicateExpression)predicate;
+		else
+			throw new UnsupportedOperationException();
+		setNodeValue(ctx, new FilteredExpression(null, expression));
 	}
-	
-	
 	
 	
 	@Override
@@ -1501,19 +1537,29 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitGreaterThanExpression(GreaterThanExpressionContext ctx) {
+	public void exitCompareExpression(CompareExpressionContext ctx) {
 		IExpression left = getNodeValue(ctx.left);
 		IExpression right = getNodeValue(ctx.right);
-		setNodeValue(ctx, new CompareExpression(left, CmpOp.GT, right));
+		CmpOp cmpOp = null;
+		switch(ctx.op.getType()) {
+			case ELexer.LT:
+				cmpOp = CmpOp.LT;
+				break;
+			case ELexer.LTE:
+				cmpOp = CmpOp.LTE;
+				break;
+			case ELexer.GT:
+				cmpOp = CmpOp.GT;
+				break;
+			case ELexer.GTE:
+				cmpOp = CmpOp.GTE;
+				break;
+			default:
+				throw new UnsupportedOperationException("Operator " + ctx.op.getType());
+		}
+		setNodeValue(ctx, new CompareExpression(left, cmpOp, right));
 	}
 	
-	@Override
-	public void exitGreaterThanOrEqualExpression(GreaterThanOrEqualExpressionContext ctx) {
-		IExpression left = getNodeValue(ctx.left);
-		IExpression right = getNodeValue(ctx.right);
-		setNodeValue(ctx, new CompareExpression(left, CmpOp.GTE, right));
-	}
-
 	@Override
 	public void exitHexadecimalLiteral(HexadecimalLiteralContext ctx) {
 		setNodeValue(ctx, new HexaLiteral(ctx.getText()));
@@ -1555,7 +1601,8 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitInExpression(InExpressionContext ctx) {
 		IExpression left = getNodeValue(ctx.left);
 		IExpression right = getNodeValue(ctx.right);
-		setNodeValue(ctx, new ContainsExpression(left, ContOp.IN, right));
+		ContOp contOp = ctx.NOT() == null ? ContOp.IN : ContOp.NOT_IN;
+		setNodeValue(ctx, new ContainsExpression(left, contOp, right));
 	}
 	
 	@Override
@@ -1613,14 +1660,8 @@ public class EPromptoBuilder extends EParserBaseListener {
 		IExpression left = getNodeValue(ctx.left);
 		IExpression right = getNodeValue(ctx.right);
 		EqOp op = right instanceof TypeExpression ? EqOp.IS_A : EqOp.IS;
-		setNodeValue(ctx, new EqualsExpression(left, op, right));
-	}
-	
-	@Override
-	public void exitIsNotExpression(IsNotExpressionContext ctx) {
-		IExpression left = getNodeValue(ctx.left);
-		IExpression right = getNodeValue(ctx.right);
-		EqOp op = right instanceof TypeExpression ? EqOp.IS_NOT_A : EqOp.IS_NOT;
+		if(ctx.NOT()!=null)
+			op = EqOp.values()[op.ordinal() + 1];
 		setNodeValue(ctx, new EqualsExpression(left, op, right));
 	}
 	
@@ -2106,20 +2147,6 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitLessThanExpression(LessThanExpressionContext ctx) {
-		IExpression left = getNodeValue(ctx.left);
-		IExpression right = getNodeValue(ctx.right);
-		setNodeValue(ctx, new CompareExpression(left, CmpOp.LT, right));
-	}
-	
-	@Override
-	public void exitLessThanOrEqualExpression(LessThanOrEqualExpressionContext ctx) {
-		IExpression left = getNodeValue(ctx.left);
-		IExpression right = getNodeValue(ctx.right);
-		setNodeValue(ctx, new CompareExpression(left, CmpOp.LTE, right));
-	}
-	
-	@Override
 	public void exitList_literal(List_literalContext ctx) {
 		boolean mutable = ctx.MUTABLE()!=null;
 		ExpressionList items = getNodeValue(ctx.expression_list());
@@ -2483,51 +2510,9 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitNotHasExpression(NotHasExpressionContext ctx) {
-		IExpression left = getNodeValue(ctx.left);
-		IExpression right = getNodeValue(ctx.right);
-		setNodeValue(ctx, new ContainsExpression(left, ContOp.NOT_HAS, right));
-	}
-
-	@Override
-	public void exitNotHasAllExpression(NotHasAllExpressionContext ctx) {
-		IExpression left = getNodeValue(ctx.left);
-		IExpression right = getNodeValue(ctx.right);
-		setNodeValue(ctx, new ContainsExpression(left, ContOp.NOT_HAS_ALL, right));
-	}
-	
-	@Override
-	public void exitNotHasAnyExpression(NotHasAnyExpressionContext ctx) {
-		IExpression left = getNodeValue(ctx.left);
-		IExpression right = getNodeValue(ctx.right);
-		setNodeValue(ctx, new ContainsExpression(left, ContOp.NOT_HAS_ANY, right));
-	}
-	
-	@Override
-	public void exitNotContainsExpression(NotContainsExpressionContext ctx) {
-		IExpression left = getNodeValue(ctx.left);
-		IExpression right = getNodeValue(ctx.right);
-		setNodeValue(ctx, new EqualsExpression(left, EqOp.NOT_CONTAINS, right));
-	}
-	
-	@Override
-	public void exitNotEqualsExpression(NotEqualsExpressionContext ctx) {
-		IExpression left = getNodeValue(ctx.left);
-		IExpression right = getNodeValue(ctx.right);
-		setNodeValue(ctx, new EqualsExpression(left, EqOp.NOT_EQUALS, right));
-	}
-	
-	@Override
 	public void exitNotExpression(NotExpressionContext ctx) {
 		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, new NotExpression(exp));
-	}
-	
-	@Override
-	public void exitNotInExpression(NotInExpressionContext ctx) {
-		IExpression left = getNodeValue(ctx.left);
-		IExpression right = getNodeValue(ctx.right);
-		setNodeValue(ctx, new ContainsExpression(left, ContOp.NOT_IN, right));
 	}
 	
 	@Override
@@ -2959,13 +2944,6 @@ public class EPromptoBuilder extends EParserBaseListener {
 		Identifier name = getNodeValue(ctx.variable_identifier());
 		setNodeValue(ctx, new VariableInstance(name));
 	}
-	
-	@Override
-	public void exitRoughlyEqualsExpression(RoughlyEqualsExpressionContext ctx) {
-		IExpression left = getNodeValue(ctx.left);
-		IExpression right = getNodeValue(ctx.right);
-		setNodeValue(ctx, new EqualsExpression(left, EqOp.ROUGHLY, right));
-	};
 	
 	@Override
 	public void exitSelectableExpression(SelectableExpressionContext ctx) {

@@ -1,16 +1,20 @@
 package prompto.expression;
 
 import java.util.Collection;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Descriptor;
 import prompto.compiler.Flags;
 import prompto.compiler.IInstructionListener;
 import prompto.compiler.IVerifierEntry.VerifierType;
 import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.NamedType;
 import prompto.compiler.OffsetListenerConstant;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
@@ -36,7 +40,10 @@ import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStore;
 import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
+import prompto.type.ContainerType;
 import prompto.type.IType;
+import prompto.type.IterableType;
+import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.utils.StoreUtils;
 import prompto.value.BooleanValue;
@@ -44,6 +51,7 @@ import prompto.value.IContainer;
 import prompto.value.IInstance;
 import prompto.value.IIterable;
 import prompto.value.IValue;
+import prompto.value.NullValue;
 
 public class ContainsExpression extends Section implements IPredicateExpression, IAssertion {
 
@@ -68,19 +76,33 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 		writer.append(" ");
 		writer.append(operator.toString());
 		writer.append(" ");
-		if(right instanceof ArrowExpression) {
-			writer.append("where ");
-			if(writer.getDialect()!=Dialect.E)
-				writer.append("( ");
-			right.toDialect(writer);
-			if(writer.getDialect()!=Dialect.E)
-				writer.append(" ) ");
-		} else
+		if(right instanceof PredicateExpression)
+			((PredicateExpression)right).containsToDialect(writer);
+		else
 			right.toDialect(writer);
 	}
 	
 	@Override
 	public IType check(Context context) {
+		if(right instanceof PredicateExpression)
+			return checkPredicate(context);
+		else
+			return checkValue(context);
+	}
+	
+	private IType checkPredicate(Context context) {
+		IType lt = left.check(context);
+		if(lt instanceof IterableType) {
+			IType itemType = ((IterableType)lt).getItemType();
+			ArrowExpression arrow = ((PredicateExpression)right).toArrowExpression();
+			return arrow.checkFilter(context, itemType);
+		} else {
+			context.getProblemListener().reportExpectingCollection(this, lt);
+			return VoidType.instance();
+		}
+	}
+
+	IType checkValue(Context context) {
 		IType lt = left.check(context);
 		IType rt = right.check(context);
 		checkOperator(context, lt, rt);
@@ -104,12 +126,133 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	
 	@Override
     public IValue interpret(Context context) throws PromptoError {
-    	IValue lval = left.interpret(context);
-    	IValue rval = right.interpret(context);
-    	return interpret(context, lval, rval);
+		if(right instanceof PredicateExpression)
+			return interpretPredicate(context);
+		else
+			return interpretValue(context);
+	}
+	
+	@SuppressWarnings("unchecked")
+	IValue interpretPredicate(Context context) throws PromptoError {
+		IValue lval = left.interpret(context);
+	    if(lval instanceof IContainer) {
+			IType itemType = ((ContainerType)lval.getType()).getItemType();
+			ArrowExpression arrow = ((PredicateExpression)right).toArrowExpression();
+			Predicate<IValue> predicate = arrow.getFilter(context, itemType);
+			return interpretPredicate(context, (IContainer<IValue>)lval, predicate);
+		} else {
+			context.getProblemListener().reportExpectingCollection(this, lval.getType());
+			return NullValue.instance();
+		}
+	}
+	
+	
+	private IValue interpretPredicate(Context context, IContainer<IValue> lval, Predicate<IValue> predicate) {
+        java.lang.Boolean result = null;
+        switch (operator)
+        {
+            case HAS_ALL:
+            case NOT_HAS_ALL:
+                result = allMatch(context, lval, predicate);
+                break;
+            case HAS_ANY:
+            case NOT_HAS_ANY:
+                result = anyMatch(context, lval, predicate);
+                break;
+            default:
+            	// will throw
+        }
+        if (result != null)
+        {
+            if (operator.name().startsWith("NOT_"))
+                result = !result;
+            return BooleanValue.valueOf(result);
+        }
+        String lowerName = operator.name().toLowerCase().replace('_', ' ');
+        throw new SyntaxError("Illegal filter: " + lval.getClass().getSimpleName() + " " + lowerName);	
+ 	}
 
+	public boolean allMatch(Context context, IContainer<?> container, Predicate<IValue> predicate) throws PromptoError
+    {
+		return StreamSupport.stream(container.getIterable(context).spliterator(), false)
+				.allMatch(predicate);
+    }
+
+	public boolean anyMatch(Context context, IContainer<?> container, Predicate<IValue> predicate) throws PromptoError
+    {
+		return StreamSupport.stream(container.getIterable(context).spliterator(), false)
+				.anyMatch(predicate);
+    }
+
+	IValue interpretValue(Context context) throws PromptoError {
+		IValue lval = left.interpret(context);
+    	IValue rval = right.interpret(context);
+    	return interpretValue(context, lval, rval);
     }
     
+	private IValue interpretValue(Context context, IValue lval, IValue rval) throws PromptoError {
+        java.lang.Boolean result = null;
+        switch (operator)
+        {
+            case IN:
+            case NOT_IN:
+                if(rval instanceof IContainer)
+                    result = ((IContainer<?>)rval).hasItem(context, lval);
+                else if(rval instanceof IIterable)
+                	result = containsOne(context, (IIterable<?>)rval, lval);
+                break;
+            case HAS:
+            case NOT_HAS:
+                if(lval instanceof IContainer)
+                    result = ((IContainer<?>)lval).hasItem(context, rval);
+                else if(lval instanceof IIterable)
+                	result = containsOne(context, (IIterable<?>)lval, rval);
+                break;
+            case HAS_ALL:
+            case NOT_HAS_ALL:
+                if (lval instanceof IContainer && rval instanceof IContainer)
+                    result = containsAll(context, (IContainer<?>)lval, (IContainer<?>)rval);
+                break;
+            case HAS_ANY:
+            case NOT_HAS_ANY:
+                if (lval instanceof IContainer && rval instanceof IContainer)
+                    result = containsAny(context, (IContainer<?>)lval, (IContainer<?>)rval);
+                break;
+        }
+        if (result != null)
+        {
+            if (operator.name().startsWith("NOT_"))
+                result = !result;
+            return BooleanValue.valueOf(result);
+        }
+        if (operator.name().endsWith("IN"))
+        {
+            IValue tmp = lval;
+            lval = rval;
+            rval = tmp;
+        }
+        String lowerName = operator.name().toLowerCase().replace('_', ' ');
+        throw new SyntaxError("Illegal comparison: " + lval.getClass().getSimpleName() +
+        		" " + lowerName + " " + rval.getClass().getSimpleName());	
+    }
+
+	private java.lang.Boolean containsOne(Context context, IIterable<?> container, IValue item) {
+		return StreamSupport.stream(container.getIterable(context).spliterator(), false)
+				.anyMatch(o -> o.equals(item));
+	}
+
+	public boolean containsAll(Context context, IContainer<?> container, IContainer<?> items) throws PromptoError
+    {
+		return StreamSupport.stream(items.getIterable(context).spliterator(), false)
+				.allMatch(item -> container.hasItem(context, item));
+    }
+
+	public boolean containsAny(Context context, IContainer<?> container, IContainer<?> items) throws PromptoError
+    {
+		return StreamSupport.stream(items.getIterable(context).spliterator(), false)
+				.anyMatch(item -> container.hasItem(context, item));
+    }
+
     @Override
     public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
     	ResultInfo result = compileOperator(context, method, flags.withPrimitive(true));
@@ -172,117 +315,73 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 
 	private ResultInfo compileContainsAll(Context context, MethodInfo method, Flags flags, IExpression left, IExpression right) {
 		ResultInfo linfo = left.compile(context, method, flags);
-		right.compile(context, method, flags.withPrimitive(false));
-		if(String.class==linfo.getType()) {
-			MethodConstant m = new MethodConstant(PromptoString.class, "containsAll", String.class, Object.class, boolean.class);
-			method.addInstruction(Opcode.INVOKESTATIC, m);
-			if(flags.toPrimitive())
-				return new ResultInfo(boolean.class);
-			else
-				return CompilerUtils.booleanToBoolean(method);
-		} else {
-			MethodConstant m = new MethodConstant(linfo.getType(), "containsAll", Collection.class, boolean.class);
-			method.addInstruction(Opcode.INVOKEVIRTUAL, m);
-			if(flags.toPrimitive())
-				return new ResultInfo(boolean.class);
-			else
-				return CompilerUtils.booleanToBoolean(method);
-		}
+		if(String.class==linfo.getType())
+			return compileStringContainsX(context, method, flags, right, "containsAll");
+		else if(right instanceof PredicateExpression)
+			return compilePredicateMatchX(context, method, flags, linfo, right, "allMatch");
+		else 
+			return compileCollectionContainsX(context, method, flags, linfo, right, "containsAll");
 	}
 
 	private ResultInfo compileContainsAny(Context context, MethodInfo method, Flags flags, IExpression left, IExpression right) {
 		ResultInfo linfo = left.compile(context, method, flags);
+		if(String.class==linfo.getType())
+			return compileStringContainsX(context, method, flags, right, "containsAny");
+		else if(right instanceof PredicateExpression)
+			return compilePredicateMatchX(context, method, flags, linfo, right, "anyMatch");
+		else 
+			return compileCollectionContainsX(context, method, flags, linfo, right, "containsAny");
+	}
+
+	private ResultInfo compileStringContainsX(Context context, MethodInfo method, Flags flags, IExpression right, String methodName) {
 		right.compile(context, method, flags.withPrimitive(false));
-		if(String.class==linfo.getType()) {
-			MethodConstant m = new MethodConstant(PromptoString.class, "containsAny", String.class, Object.class, boolean.class);
-			method.addInstruction(Opcode.INVOKESTATIC, m);
-			if(flags.toPrimitive())
-				return new ResultInfo(boolean.class);
-			else
-				return CompilerUtils.booleanToBoolean(method);
-		} else {
-			MethodConstant m = new MethodConstant(linfo.getType(), "containsAny", Collection.class, boolean.class);
-			method.addInstruction(Opcode.INVOKEVIRTUAL, m);
-			if(flags.toPrimitive())
-				return new ResultInfo(boolean.class);
-			else
-				return CompilerUtils.booleanToBoolean(method);
-		}
+		MethodConstant m = new MethodConstant(PromptoString.class, methodName, String.class, Object.class, boolean.class);
+		method.addInstruction(Opcode.INVOKESTATIC, m);
+		if(flags.toPrimitive())
+			return new ResultInfo(boolean.class);
+		else
+			return CompilerUtils.booleanToBoolean(method);
+	}
+	
+	
+	private ResultInfo compilePredicateMatchX(Context context, MethodInfo method, Flags flags, ResultInfo left, IExpression right, String methodName) {
+		// get stream
+		MethodConstant m = new MethodConstant(left.getType(), "stream", Stream.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		// create inner class for filter
+		String innerClassName = CompilerUtils.compileInnerFilterClass(context, method.getClassFile(), this.left, (PredicateExpression)right);
+		// instantiate filter
+		ClassConstant innerClass = new ClassConstant(new NamedType(innerClassName));
+		method.addInstruction(Opcode.NEW, innerClass);
+		method.addInstruction(Opcode.DUP);
+		// call filter constructor
+		Descriptor.Method proto = new Descriptor.Method(void.class);
+		m = new MethodConstant(innerClass, "<init>", proto);
+		method.addInstruction(Opcode.INVOKESPECIAL, m);
+		// invoke filter on stream
+		Descriptor.Method desc = new Descriptor.Method(Predicate.class, boolean.class);
+		InterfaceConstant intf = new InterfaceConstant(new ClassConstant(Stream.class), methodName,  desc);
+		method.addInstruction(Opcode.INVOKEINTERFACE, intf);
+		return new ResultInfo(boolean.class);
 	}
 
-	private IValue interpret(Context context, IValue lval, IValue rval) throws PromptoError {
-        java.lang.Boolean result = null;
-        switch (operator)
-        {
-            case IN:
-            case NOT_IN:
-                if(rval instanceof IContainer)
-                    result = ((IContainer<?>)rval).hasItem(context, lval);
-                else if(rval instanceof IIterable)
-                	result = containsOne(context, (IIterable<?>)rval, lval);
-                break;
-            case HAS:
-            case NOT_HAS:
-                if(lval instanceof IContainer)
-                    result = ((IContainer<?>)lval).hasItem(context, rval);
-                else if(lval instanceof IIterable)
-                	result = containsOne(context, (IIterable<?>)lval, rval);
-                break;
-            case HAS_ALL:
-            case NOT_HAS_ALL:
-                if (lval instanceof IContainer && rval instanceof IContainer)
-                    result = containsAll(context, (IContainer<?>)lval, (IContainer<?>)rval);
-                break;
-            case HAS_ANY:
-            case NOT_HAS_ANY:
-                if (lval instanceof IContainer && rval instanceof IContainer)
-                    result = containsAny(context, (IContainer<?>)lval, (IContainer<?>)rval);
-                break;
-        }
-        if (result != null)
-        {
-            if (operator.name().startsWith("NOT_"))
-                result = !result;
-            return BooleanValue.valueOf(result);
-        }
-        if (operator.name().endsWith("IN"))
-        {
-            IValue tmp = lval;
-            lval = rval;
-            rval = tmp;
-        }
-        String lowerName = operator.name().toLowerCase().replace('_', ' ');
-        throw new SyntaxError("Illegal comparison: " + lval.getClass().getSimpleName() +
-        		" " + lowerName + " " + rval.getClass().getSimpleName());	
-    }
-
-	private java.lang.Boolean containsOne(Context context, IIterable<?> container, IValue item) {
-		return StreamSupport.stream(container.getIterable(context).spliterator(), false)
-				.anyMatch((o)->o.equals(item));
+	private ResultInfo compileCollectionContainsX(Context context, MethodInfo method, Flags flags, ResultInfo left, IExpression right, String methodName) {
+		right.compile(context, method, flags.withPrimitive(false));
+		MethodConstant m = new MethodConstant(left.getType(), methodName, Collection.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		if(flags.toPrimitive())
+			return new ResultInfo(boolean.class);
+		else
+			return CompilerUtils.booleanToBoolean(method);
 	}
+	
 
-	public boolean containsAll(Context context, IContainer<?> container, IContainer<?> items) throws PromptoError
-    {
-        for (IValue item : items.getIterable(context)) {
-            if (!container.hasItem(context, item))
-                 return false;
-        }
-        return true;
-    }
-    public boolean containsAny(Context context, IContainer<?> container, IContainer<?> items) throws PromptoError
-    {
-        for (IValue item : items.getIterable(context)) {
-           if (container.hasItem(context, item))
-                    return true;
-        }
-        return false;
-    }
     
 	@Override
 	public boolean interpretAssert(Context context, TestMethodDeclaration test) throws PromptoError {
 		IValue lval = left.interpret(context);
 		IValue rval = right.interpret(context);
-		IValue result = interpret(context, lval, rval);
+		IValue result = interpretValue(context, lval, rval);
 		if(result==BooleanValue.TRUE) 
 			return true;
 		String expected = buildExpectedMessage(context, test);
@@ -444,46 +543,86 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 
 	@Override
 	public void declare(Transpiler transpiler) {
-	    IType lt = this.left.check(transpiler.getContext());
-	    IType rt = this.right.check(transpiler.getContext());
+		if(right instanceof PredicateExpression)
+			declarePredicate(transpiler);
+		else
+			declareValue(transpiler);
+	}
+	
+	private void declarePredicate(Transpiler transpiler) {
+	    left.declare(transpiler);
+	    IType manyType = left.check(transpiler.getContext());
+	    IType itemType = ((IterableType)manyType).getItemType() ;
+	    ArrowExpression arrow = ((PredicateExpression)right).toArrowExpression();
+	    arrow.declareFilter(transpiler, itemType);
+	}
+
+	void declareValue(Transpiler transpiler) {
+	    IType lt = left.check(transpiler.getContext());
+	    IType rt = right.check(transpiler.getContext());
 	    switch(this.operator) {
 	        case IN:
 	        case NOT_IN:
-	            rt.declareContains(transpiler, lt, this.right, this.left);
+	            rt.declareHasValue(transpiler, lt, right, left);
 	            break;
 	        case HAS:
 	        case NOT_HAS:
-	            lt.declareContains(transpiler, rt, this.left, this.right);
+	            lt.declareHasValue(transpiler, rt, left, right);
 	            break;
 	        default:
-	            lt.declareContainsAllOrAny(transpiler, rt, this.left, this.right);
+	            lt.declareHasAllOrAny(transpiler, rt, left, right);
 	    }
 	}
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
+		if(right instanceof PredicateExpression)
+			return transpilePredicate(transpiler);
+		else
+			return transpileValue(transpiler);
+	}
+	
+	private boolean transpilePredicate(Transpiler transpiler) {
+		IType lt = this.left.check(transpiler.getContext());
+	    switch(this.operator) {
+	        case NOT_HAS_ALL:
+	            transpiler.append("!");
+	        case HAS_ALL:
+	            lt.transpileHasAllPredicate(transpiler, left, (PredicateExpression)right);
+	            return false;
+	        case NOT_HAS_ANY:
+	            transpiler.append("!");
+	        case HAS_ANY:
+	            lt.transpileHasAnyPredicate(transpiler, left, (PredicateExpression)right);
+	            return false;
+	        default:
+	            throw new UnsupportedOperationException("Unsupported " + this.operator);
+	    }
+	}
+
+	boolean transpileValue(Transpiler transpiler) {
 		IType lt = this.left.check(transpiler.getContext());
 		IType rt = this.right.check(transpiler.getContext());
 	    switch(this.operator) {
 	        case NOT_IN:
 	            transpiler.append("!");
 	        case IN:
-	            rt.transpileContains(transpiler, lt, this.right, this.left);
+	            rt.transpileHasValue(transpiler, lt, right, left);
 	            return false;
 	        case NOT_HAS:
 	        	transpiler.append("!");
 	        case HAS:
-	            lt.transpileContains(transpiler, rt, this.left, this.right);
+	            lt.transpileHasValue(transpiler, rt, left, right);
 	            return false;
 	        case NOT_HAS_ALL:
 	            transpiler.append("!");
 	        case HAS_ALL:
-	            lt.transpileContainsAll(transpiler, rt, this.left, this.right);
+	            lt.transpileHasAllValues(transpiler, rt, left, right);
 	            return false;
 	        case NOT_HAS_ANY:
 	            transpiler.append("!");
 	        case HAS_ANY:
-	            lt.transpileContainsAny(transpiler, rt, this.left, this.right);
+	            lt.transpileHasAnyValue(transpiler, rt, this.left, this.right);
 	            return false;
 	        default:
 	            throw new UnsupportedOperationException("Unsupported " + this.operator);
@@ -510,9 +649,9 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 	@Override
 	public void transpileFound(Transpiler transpiler, Dialect dialect) {
 	    transpiler.append("(");
-	    this.left.transpile(transpiler);
+	    left.transpile(transpiler);
 	    transpiler.append(") + '").append(this.operator.toString()).append("' + (");
-	    this.right.transpile(transpiler);
+	    right.transpile(transpiler);
 	    transpiler.append(")");
 	}
 }
