@@ -8,152 +8,152 @@ public class TestContainer extends BaseEParserTest {
 
 	@Test
 	public void testHasAllDict() throws Exception {
-		compareResourceEME("contains/hasAllDict.pec");
+		compareResourceEME("container/hasAllDict.pec");
 	}
 
 	@Test
 	public void testHasAllList() throws Exception {
-		compareResourceEME("contains/hasAllList.pec");
+		compareResourceEME("container/hasAllList.pec");
 	}
 
 	@Test
 	public void testHasAllRange() throws Exception {
-		compareResourceEME("contains/hasAllRange.pec");
+		compareResourceEME("container/hasAllRange.pec");
 	}
 
 	@Test
 	public void testHasAllSet() throws Exception {
-		compareResourceEME("contains/hasAllSet.pec");
+		compareResourceEME("container/hasAllSet.pec");
 	}
 
 	@Test
 	public void testHasAllText() throws Exception {
-		compareResourceEME("contains/hasAllText.pec");
+		compareResourceEME("container/hasAllText.pec");
 	}
 
 	@Test
 	public void testHasAllTuple() throws Exception {
-		compareResourceEME("contains/hasAllTuple.pec");
+		compareResourceEME("container/hasAllTuple.pec");
 	}
 
 	@Test
 	public void testHasAnyDict() throws Exception {
-		compareResourceEME("contains/hasAnyDict.pec");
+		compareResourceEME("container/hasAnyDict.pec");
 	}
 
 	@Test
 	public void testHasAnyList() throws Exception {
-		compareResourceEME("contains/hasAnyList.pec");
+		compareResourceEME("container/hasAnyList.pec");
 	}
 
 	@Test
 	public void testHasAnyRange() throws Exception {
-		compareResourceEME("contains/hasAnyRange.pec");
+		compareResourceEME("container/hasAnyRange.pec");
 	}
 
 	@Test
 	public void testHasAnySet() throws Exception {
-		compareResourceEME("contains/hasAnySet.pec");
+		compareResourceEME("container/hasAnySet.pec");
 	}
 
 	@Test
 	public void testHasAnyText() throws Exception {
-		compareResourceEME("contains/hasAnyText.pec");
+		compareResourceEME("container/hasAnyText.pec");
 	}
 
 	@Test
 	public void testHasAnyTuple() throws Exception {
-		compareResourceEME("contains/hasAnyTuple.pec");
+		compareResourceEME("container/hasAnyTuple.pec");
 	}
 
 	@Test
 	public void testInCharacterRange() throws Exception {
-		compareResourceEME("contains/inCharacterRange.pec");
+		compareResourceEME("container/inCharacterRange.pec");
 	}
 
 	@Test
 	public void testInDateRange() throws Exception {
-		compareResourceEME("contains/inDateRange.pec");
+		compareResourceEME("container/inDateRange.pec");
 	}
 
 	@Test
 	public void testInDict() throws Exception {
-		compareResourceEME("contains/inDict.pec");
+		compareResourceEME("container/inDict.pec");
 	}
 
 	@Test
 	public void testInIntegerRange() throws Exception {
-		compareResourceEME("contains/inIntegerRange.pec");
+		compareResourceEME("container/inIntegerRange.pec");
 	}
 
 	@Test
 	public void testInList() throws Exception {
-		compareResourceEME("contains/inList.pec");
+		compareResourceEME("container/inList.pec");
 	}
 
 	@Test
 	public void testInSet() throws Exception {
-		compareResourceEME("contains/inSet.pec");
+		compareResourceEME("container/inSet.pec");
 	}
 
 	@Test
 	public void testInText() throws Exception {
-		compareResourceEME("contains/inText.pec");
+		compareResourceEME("container/inText.pec");
 	}
 
 	@Test
 	public void testInTextEnum() throws Exception {
-		compareResourceEME("contains/inTextEnum.pec");
+		compareResourceEME("container/inTextEnum.pec");
 	}
 
 	@Test
 	public void testInTimeRange() throws Exception {
-		compareResourceEME("contains/inTimeRange.pec");
+		compareResourceEME("container/inTimeRange.pec");
 	}
 
 	@Test
 	public void testInTuple() throws Exception {
-		compareResourceEME("contains/inTuple.pec");
+		compareResourceEME("container/inTuple.pec");
 	}
 
 	@Test
 	public void testNinCharacterRange() throws Exception {
-		compareResourceEME("contains/ninCharacterRange.pec");
+		compareResourceEME("container/ninCharacterRange.pec");
 	}
 
 	@Test
 	public void testNinDateRange() throws Exception {
-		compareResourceEME("contains/ninDateRange.pec");
+		compareResourceEME("container/ninDateRange.pec");
 	}
 
 	@Test
 	public void testNinDict() throws Exception {
-		compareResourceEME("contains/ninDict.pec");
+		compareResourceEME("container/ninDict.pec");
 	}
 
 	@Test
 	public void testNinIntegerRange() throws Exception {
-		compareResourceEME("contains/ninIntegerRange.pec");
+		compareResourceEME("container/ninIntegerRange.pec");
 	}
 
 	@Test
 	public void testNinList() throws Exception {
-		compareResourceEME("contains/ninList.pec");
+		compareResourceEME("container/ninList.pec");
 	}
 
 	@Test
 	public void testNinSet() throws Exception {
-		compareResourceEME("contains/ninSet.pec");
+		compareResourceEME("container/ninSet.pec");
 	}
 
 	@Test
 	public void testNinText() throws Exception {
-		compareResourceEME("contains/ninText.pec");
+		compareResourceEME("container/ninText.pec");
 	}
 
 	@Test
 	public void testNinTimeRange() throws Exception {
-		compareResourceEME("contains/ninTimeRange.pec");
+		compareResourceEME("container/ninTimeRange.pec");
 	}
 
 }

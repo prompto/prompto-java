@@ -8,132 +8,132 @@ public class TestContainer extends BaseOParserTest {
 
 	@Test
 	public void testHasAllList() throws Exception {
-		compareResourceOEO("contains/hasAllList.poc");
+		compareResourceOEO("container/hasAllList.poc");
 	}
 
 	@Test
 	public void testHasAllSet() throws Exception {
-		compareResourceOEO("contains/hasAllSet.poc");
+		compareResourceOEO("container/hasAllSet.poc");
 	}
 
 	@Test
 	public void testHasAllText() throws Exception {
-		compareResourceOEO("contains/hasAllText.poc");
+		compareResourceOEO("container/hasAllText.poc");
 	}
 
 	@Test
 	public void testHasAllTuple() throws Exception {
-		compareResourceOEO("contains/hasAllTuple.poc");
+		compareResourceOEO("container/hasAllTuple.poc");
 	}
 
 	@Test
 	public void testHasAnyList() throws Exception {
-		compareResourceOEO("contains/hasAnyList.poc");
+		compareResourceOEO("container/hasAnyList.poc");
 	}
 
 	@Test
 	public void testHasAnySet() throws Exception {
-		compareResourceOEO("contains/hasAnySet.poc");
+		compareResourceOEO("container/hasAnySet.poc");
 	}
 
 	@Test
 	public void testHasAnyText() throws Exception {
-		compareResourceOEO("contains/hasAnyText.poc");
+		compareResourceOEO("container/hasAnyText.poc");
 	}
 
 	@Test
 	public void testHasAnyTuple() throws Exception {
-		compareResourceOEO("contains/hasAnyTuple.poc");
+		compareResourceOEO("container/hasAnyTuple.poc");
 	}
 
 	@Test
 	public void testInCharacterRange() throws Exception {
-		compareResourceOEO("contains/inCharacterRange.poc");
+		compareResourceOEO("container/inCharacterRange.poc");
 	}
 
 	@Test
 	public void testInDateRange() throws Exception {
-		compareResourceOEO("contains/inDateRange.poc");
+		compareResourceOEO("container/inDateRange.poc");
 	}
 
 	@Test
 	public void testInDict() throws Exception {
-		compareResourceOEO("contains/inDict.poc");
+		compareResourceOEO("container/inDict.poc");
 	}
 
 	@Test
 	public void testInIntegerRange() throws Exception {
-		compareResourceOEO("contains/inIntegerRange.poc");
+		compareResourceOEO("container/inIntegerRange.poc");
 	}
 
 	@Test
 	public void testInList() throws Exception {
-		compareResourceOEO("contains/inList.poc");
+		compareResourceOEO("container/inList.poc");
 	}
 
 	@Test
 	public void testInSet() throws Exception {
-		compareResourceOEO("contains/inSet.poc");
+		compareResourceOEO("container/inSet.poc");
 	}
 
 	@Test
 	public void testInText() throws Exception {
-		compareResourceOEO("contains/inText.poc");
+		compareResourceOEO("container/inText.poc");
 	}
 
 	@Test
 	public void testInTextEnum() throws Exception {
-		compareResourceOEO("contains/inTextEnum.poc");
+		compareResourceOEO("container/inTextEnum.poc");
 	}
 
 	@Test
 	public void testInTimeRange() throws Exception {
-		compareResourceOEO("contains/inTimeRange.poc");
+		compareResourceOEO("container/inTimeRange.poc");
 	}
 
 	@Test
 	public void testInTuple() throws Exception {
-		compareResourceOEO("contains/inTuple.poc");
+		compareResourceOEO("container/inTuple.poc");
 	}
 
 	@Test
 	public void testNinCharacterRange() throws Exception {
-		compareResourceOEO("contains/ninCharacterRange.poc");
+		compareResourceOEO("container/ninCharacterRange.poc");
 	}
 
 	@Test
 	public void testNinDateRange() throws Exception {
-		compareResourceOEO("contains/ninDateRange.poc");
+		compareResourceOEO("container/ninDateRange.poc");
 	}
 
 	@Test
 	public void testNinDict() throws Exception {
-		compareResourceOEO("contains/ninDict.poc");
+		compareResourceOEO("container/ninDict.poc");
 	}
 
 	@Test
 	public void testNinIntegerRange() throws Exception {
-		compareResourceOEO("contains/ninIntegerRange.poc");
+		compareResourceOEO("container/ninIntegerRange.poc");
 	}
 
 	@Test
 	public void testNinList() throws Exception {
-		compareResourceOEO("contains/ninList.poc");
+		compareResourceOEO("container/ninList.poc");
 	}
 
 	@Test
 	public void testNinSet() throws Exception {
-		compareResourceOEO("contains/ninSet.poc");
+		compareResourceOEO("container/ninSet.poc");
 	}
 
 	@Test
 	public void testNinText() throws Exception {
-		compareResourceOEO("contains/ninText.poc");
+		compareResourceOEO("container/ninText.poc");
 	}
 
 	@Test
 	public void testNinTimeRange() throws Exception {
-		compareResourceOEO("contains/ninTimeRange.poc");
+		compareResourceOEO("container/ninTimeRange.poc");
 	}
 
 }

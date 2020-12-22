@@ -21,392 +21,392 @@ public class TestContainer extends BaseOParserTest {
 
 	@Test
 	public void testInterpretedHasAllList() throws Exception {
-		checkInterpretedOutput("contains/hasAllList.poc");
+		checkInterpretedOutput("container/hasAllList.poc");
 	}
 
 	@Test
 	public void testCompiledHasAllList() throws Exception {
-		checkCompiledOutput("contains/hasAllList.poc");
+		checkCompiledOutput("container/hasAllList.poc");
 	}
 
 	@Test
 	public void testTranspiledHasAllList() throws Exception {
-		checkTranspiledOutput("contains/hasAllList.poc");
+		checkTranspiledOutput("container/hasAllList.poc");
 	}
 
 	@Test
 	public void testInterpretedHasAllSet() throws Exception {
-		checkInterpretedOutput("contains/hasAllSet.poc");
+		checkInterpretedOutput("container/hasAllSet.poc");
 	}
 
 	@Test
 	public void testCompiledHasAllSet() throws Exception {
-		checkCompiledOutput("contains/hasAllSet.poc");
+		checkCompiledOutput("container/hasAllSet.poc");
 	}
 
 	@Test
 	public void testTranspiledHasAllSet() throws Exception {
-		checkTranspiledOutput("contains/hasAllSet.poc");
+		checkTranspiledOutput("container/hasAllSet.poc");
 	}
 
 	@Test
 	public void testInterpretedHasAllText() throws Exception {
-		checkInterpretedOutput("contains/hasAllText.poc");
+		checkInterpretedOutput("container/hasAllText.poc");
 	}
 
 	@Test
 	public void testCompiledHasAllText() throws Exception {
-		checkCompiledOutput("contains/hasAllText.poc");
+		checkCompiledOutput("container/hasAllText.poc");
 	}
 
 	@Test
 	public void testTranspiledHasAllText() throws Exception {
-		checkTranspiledOutput("contains/hasAllText.poc");
+		checkTranspiledOutput("container/hasAllText.poc");
 	}
 
 	@Test
 	public void testInterpretedHasAllTuple() throws Exception {
-		checkInterpretedOutput("contains/hasAllTuple.poc");
+		checkInterpretedOutput("container/hasAllTuple.poc");
 	}
 
 	@Test
 	public void testCompiledHasAllTuple() throws Exception {
-		checkCompiledOutput("contains/hasAllTuple.poc");
+		checkCompiledOutput("container/hasAllTuple.poc");
 	}
 
 	@Test
 	public void testTranspiledHasAllTuple() throws Exception {
-		checkTranspiledOutput("contains/hasAllTuple.poc");
+		checkTranspiledOutput("container/hasAllTuple.poc");
 	}
 
 	@Test
 	public void testInterpretedHasAnyList() throws Exception {
-		checkInterpretedOutput("contains/hasAnyList.poc");
+		checkInterpretedOutput("container/hasAnyList.poc");
 	}
 
 	@Test
 	public void testCompiledHasAnyList() throws Exception {
-		checkCompiledOutput("contains/hasAnyList.poc");
+		checkCompiledOutput("container/hasAnyList.poc");
 	}
 
 	@Test
 	public void testTranspiledHasAnyList() throws Exception {
-		checkTranspiledOutput("contains/hasAnyList.poc");
+		checkTranspiledOutput("container/hasAnyList.poc");
 	}
 
 	@Test
 	public void testInterpretedHasAnySet() throws Exception {
-		checkInterpretedOutput("contains/hasAnySet.poc");
+		checkInterpretedOutput("container/hasAnySet.poc");
 	}
 
 	@Test
 	public void testCompiledHasAnySet() throws Exception {
-		checkCompiledOutput("contains/hasAnySet.poc");
+		checkCompiledOutput("container/hasAnySet.poc");
 	}
 
 	@Test
 	public void testTranspiledHasAnySet() throws Exception {
-		checkTranspiledOutput("contains/hasAnySet.poc");
+		checkTranspiledOutput("container/hasAnySet.poc");
 	}
 
 	@Test
 	public void testInterpretedHasAnyText() throws Exception {
-		checkInterpretedOutput("contains/hasAnyText.poc");
+		checkInterpretedOutput("container/hasAnyText.poc");
 	}
 
 	@Test
 	public void testCompiledHasAnyText() throws Exception {
-		checkCompiledOutput("contains/hasAnyText.poc");
+		checkCompiledOutput("container/hasAnyText.poc");
 	}
 
 	@Test
 	public void testTranspiledHasAnyText() throws Exception {
-		checkTranspiledOutput("contains/hasAnyText.poc");
+		checkTranspiledOutput("container/hasAnyText.poc");
 	}
 
 	@Test
 	public void testInterpretedHasAnyTuple() throws Exception {
-		checkInterpretedOutput("contains/hasAnyTuple.poc");
+		checkInterpretedOutput("container/hasAnyTuple.poc");
 	}
 
 	@Test
 	public void testCompiledHasAnyTuple() throws Exception {
-		checkCompiledOutput("contains/hasAnyTuple.poc");
+		checkCompiledOutput("container/hasAnyTuple.poc");
 	}
 
 	@Test
 	public void testTranspiledHasAnyTuple() throws Exception {
-		checkTranspiledOutput("contains/hasAnyTuple.poc");
+		checkTranspiledOutput("container/hasAnyTuple.poc");
 	}
 
 	@Test
 	public void testInterpretedInCharacterRange() throws Exception {
-		checkInterpretedOutput("contains/inCharacterRange.poc");
+		checkInterpretedOutput("container/inCharacterRange.poc");
 	}
 
 	@Test
 	public void testCompiledInCharacterRange() throws Exception {
-		checkCompiledOutput("contains/inCharacterRange.poc");
+		checkCompiledOutput("container/inCharacterRange.poc");
 	}
 
 	@Test
 	public void testTranspiledInCharacterRange() throws Exception {
-		checkTranspiledOutput("contains/inCharacterRange.poc");
+		checkTranspiledOutput("container/inCharacterRange.poc");
 	}
 
 	@Test
 	public void testInterpretedInDateRange() throws Exception {
-		checkInterpretedOutput("contains/inDateRange.poc");
+		checkInterpretedOutput("container/inDateRange.poc");
 	}
 
 	@Test
 	public void testCompiledInDateRange() throws Exception {
-		checkCompiledOutput("contains/inDateRange.poc");
+		checkCompiledOutput("container/inDateRange.poc");
 	}
 
 	@Test
 	public void testTranspiledInDateRange() throws Exception {
-		checkTranspiledOutput("contains/inDateRange.poc");
+		checkTranspiledOutput("container/inDateRange.poc");
 	}
 
 	@Test
 	public void testInterpretedInDict() throws Exception {
-		checkInterpretedOutput("contains/inDict.poc");
+		checkInterpretedOutput("container/inDict.poc");
 	}
 
 	@Test
 	public void testCompiledInDict() throws Exception {
-		checkCompiledOutput("contains/inDict.poc");
+		checkCompiledOutput("container/inDict.poc");
 	}
 
 	@Test
 	public void testTranspiledInDict() throws Exception {
-		checkTranspiledOutput("contains/inDict.poc");
+		checkTranspiledOutput("container/inDict.poc");
 	}
 
 	@Test
 	public void testInterpretedInIntegerRange() throws Exception {
-		checkInterpretedOutput("contains/inIntegerRange.poc");
+		checkInterpretedOutput("container/inIntegerRange.poc");
 	}
 
 	@Test
 	public void testCompiledInIntegerRange() throws Exception {
-		checkCompiledOutput("contains/inIntegerRange.poc");
+		checkCompiledOutput("container/inIntegerRange.poc");
 	}
 
 	@Test
 	public void testTranspiledInIntegerRange() throws Exception {
-		checkTranspiledOutput("contains/inIntegerRange.poc");
+		checkTranspiledOutput("container/inIntegerRange.poc");
 	}
 
 	@Test
 	public void testInterpretedInList() throws Exception {
-		checkInterpretedOutput("contains/inList.poc");
+		checkInterpretedOutput("container/inList.poc");
 	}
 
 	@Test
 	public void testCompiledInList() throws Exception {
-		checkCompiledOutput("contains/inList.poc");
+		checkCompiledOutput("container/inList.poc");
 	}
 
 	@Test
 	public void testTranspiledInList() throws Exception {
-		checkTranspiledOutput("contains/inList.poc");
+		checkTranspiledOutput("container/inList.poc");
 	}
 
 	@Test
 	public void testInterpretedInSet() throws Exception {
-		checkInterpretedOutput("contains/inSet.poc");
+		checkInterpretedOutput("container/inSet.poc");
 	}
 
 	@Test
 	public void testCompiledInSet() throws Exception {
-		checkCompiledOutput("contains/inSet.poc");
+		checkCompiledOutput("container/inSet.poc");
 	}
 
 	@Test
 	public void testTranspiledInSet() throws Exception {
-		checkTranspiledOutput("contains/inSet.poc");
+		checkTranspiledOutput("container/inSet.poc");
 	}
 
 	@Test
 	public void testInterpretedInText() throws Exception {
-		checkInterpretedOutput("contains/inText.poc");
+		checkInterpretedOutput("container/inText.poc");
 	}
 
 	@Test
 	public void testCompiledInText() throws Exception {
-		checkCompiledOutput("contains/inText.poc");
+		checkCompiledOutput("container/inText.poc");
 	}
 
 	@Test
 	public void testTranspiledInText() throws Exception {
-		checkTranspiledOutput("contains/inText.poc");
+		checkTranspiledOutput("container/inText.poc");
 	}
 
 	@Test
 	public void testInterpretedInTextEnum() throws Exception {
-		checkInterpretedOutput("contains/inTextEnum.poc");
+		checkInterpretedOutput("container/inTextEnum.poc");
 	}
 
 	@Test
 	public void testCompiledInTextEnum() throws Exception {
-		checkCompiledOutput("contains/inTextEnum.poc");
+		checkCompiledOutput("container/inTextEnum.poc");
 	}
 
 	@Test
 	public void testTranspiledInTextEnum() throws Exception {
-		checkTranspiledOutput("contains/inTextEnum.poc");
+		checkTranspiledOutput("container/inTextEnum.poc");
 	}
 
 	@Test
 	public void testInterpretedInTimeRange() throws Exception {
-		checkInterpretedOutput("contains/inTimeRange.poc");
+		checkInterpretedOutput("container/inTimeRange.poc");
 	}
 
 	@Test
 	public void testCompiledInTimeRange() throws Exception {
-		checkCompiledOutput("contains/inTimeRange.poc");
+		checkCompiledOutput("container/inTimeRange.poc");
 	}
 
 	@Test
 	public void testTranspiledInTimeRange() throws Exception {
-		checkTranspiledOutput("contains/inTimeRange.poc");
+		checkTranspiledOutput("container/inTimeRange.poc");
 	}
 
 	@Test
 	public void testInterpretedInTuple() throws Exception {
-		checkInterpretedOutput("contains/inTuple.poc");
+		checkInterpretedOutput("container/inTuple.poc");
 	}
 
 	@Test
 	public void testCompiledInTuple() throws Exception {
-		checkCompiledOutput("contains/inTuple.poc");
+		checkCompiledOutput("container/inTuple.poc");
 	}
 
 	@Test
 	public void testTranspiledInTuple() throws Exception {
-		checkTranspiledOutput("contains/inTuple.poc");
+		checkTranspiledOutput("container/inTuple.poc");
 	}
 
 	@Test
 	public void testInterpretedNinCharacterRange() throws Exception {
-		checkInterpretedOutput("contains/ninCharacterRange.poc");
+		checkInterpretedOutput("container/ninCharacterRange.poc");
 	}
 
 	@Test
 	public void testCompiledNinCharacterRange() throws Exception {
-		checkCompiledOutput("contains/ninCharacterRange.poc");
+		checkCompiledOutput("container/ninCharacterRange.poc");
 	}
 
 	@Test
 	public void testTranspiledNinCharacterRange() throws Exception {
-		checkTranspiledOutput("contains/ninCharacterRange.poc");
+		checkTranspiledOutput("container/ninCharacterRange.poc");
 	}
 
 	@Test
 	public void testInterpretedNinDateRange() throws Exception {
-		checkInterpretedOutput("contains/ninDateRange.poc");
+		checkInterpretedOutput("container/ninDateRange.poc");
 	}
 
 	@Test
 	public void testCompiledNinDateRange() throws Exception {
-		checkCompiledOutput("contains/ninDateRange.poc");
+		checkCompiledOutput("container/ninDateRange.poc");
 	}
 
 	@Test
 	public void testTranspiledNinDateRange() throws Exception {
-		checkTranspiledOutput("contains/ninDateRange.poc");
+		checkTranspiledOutput("container/ninDateRange.poc");
 	}
 
 	@Test
 	public void testInterpretedNinDict() throws Exception {
-		checkInterpretedOutput("contains/ninDict.poc");
+		checkInterpretedOutput("container/ninDict.poc");
 	}
 
 	@Test
 	public void testCompiledNinDict() throws Exception {
-		checkCompiledOutput("contains/ninDict.poc");
+		checkCompiledOutput("container/ninDict.poc");
 	}
 
 	@Test
 	public void testTranspiledNinDict() throws Exception {
-		checkTranspiledOutput("contains/ninDict.poc");
+		checkTranspiledOutput("container/ninDict.poc");
 	}
 
 	@Test
 	public void testInterpretedNinIntegerRange() throws Exception {
-		checkInterpretedOutput("contains/ninIntegerRange.poc");
+		checkInterpretedOutput("container/ninIntegerRange.poc");
 	}
 
 	@Test
 	public void testCompiledNinIntegerRange() throws Exception {
-		checkCompiledOutput("contains/ninIntegerRange.poc");
+		checkCompiledOutput("container/ninIntegerRange.poc");
 	}
 
 	@Test
 	public void testTranspiledNinIntegerRange() throws Exception {
-		checkTranspiledOutput("contains/ninIntegerRange.poc");
+		checkTranspiledOutput("container/ninIntegerRange.poc");
 	}
 
 	@Test
 	public void testInterpretedNinList() throws Exception {
-		checkInterpretedOutput("contains/ninList.poc");
+		checkInterpretedOutput("container/ninList.poc");
 	}
 
 	@Test
 	public void testCompiledNinList() throws Exception {
-		checkCompiledOutput("contains/ninList.poc");
+		checkCompiledOutput("container/ninList.poc");
 	}
 
 	@Test
 	public void testTranspiledNinList() throws Exception {
-		checkTranspiledOutput("contains/ninList.poc");
+		checkTranspiledOutput("container/ninList.poc");
 	}
 
 	@Test
 	public void testInterpretedNinSet() throws Exception {
-		checkInterpretedOutput("contains/ninSet.poc");
+		checkInterpretedOutput("container/ninSet.poc");
 	}
 
 	@Test
 	public void testCompiledNinSet() throws Exception {
-		checkCompiledOutput("contains/ninSet.poc");
+		checkCompiledOutput("container/ninSet.poc");
 	}
 
 	@Test
 	public void testTranspiledNinSet() throws Exception {
-		checkTranspiledOutput("contains/ninSet.poc");
+		checkTranspiledOutput("container/ninSet.poc");
 	}
 
 	@Test
 	public void testInterpretedNinText() throws Exception {
-		checkInterpretedOutput("contains/ninText.poc");
+		checkInterpretedOutput("container/ninText.poc");
 	}
 
 	@Test
 	public void testCompiledNinText() throws Exception {
-		checkCompiledOutput("contains/ninText.poc");
+		checkCompiledOutput("container/ninText.poc");
 	}
 
 	@Test
 	public void testTranspiledNinText() throws Exception {
-		checkTranspiledOutput("contains/ninText.poc");
+		checkTranspiledOutput("container/ninText.poc");
 	}
 
 	@Test
 	public void testInterpretedNinTimeRange() throws Exception {
-		checkInterpretedOutput("contains/ninTimeRange.poc");
+		checkInterpretedOutput("container/ninTimeRange.poc");
 	}
 
 	@Test
 	public void testCompiledNinTimeRange() throws Exception {
-		checkCompiledOutput("contains/ninTimeRange.poc");
+		checkCompiledOutput("container/ninTimeRange.poc");
 	}
 
 	@Test
 	public void testTranspiledNinTimeRange() throws Exception {
-		checkTranspiledOutput("contains/ninTimeRange.poc");
+		checkTranspiledOutput("container/ninTimeRange.poc");
 	}
 
 }

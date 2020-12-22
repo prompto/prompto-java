@@ -21,452 +21,452 @@ public class TestContainer extends BaseEParserTest {
 
 	@Test
 	public void testInterpretedHasAllDict() throws Exception {
-		checkInterpretedOutput("contains/hasAllDict.pec");
+		checkInterpretedOutput("container/hasAllDict.pec");
 	}
 
 	@Test
 	public void testCompiledHasAllDict() throws Exception {
-		checkCompiledOutput("contains/hasAllDict.pec");
+		checkCompiledOutput("container/hasAllDict.pec");
 	}
 
 	@Test
 	public void testTranspiledHasAllDict() throws Exception {
-		checkTranspiledOutput("contains/hasAllDict.pec");
+		checkTranspiledOutput("container/hasAllDict.pec");
 	}
 
 	@Test
 	public void testInterpretedHasAllList() throws Exception {
-		checkInterpretedOutput("contains/hasAllList.pec");
+		checkInterpretedOutput("container/hasAllList.pec");
 	}
 
 	@Test
 	public void testCompiledHasAllList() throws Exception {
-		checkCompiledOutput("contains/hasAllList.pec");
+		checkCompiledOutput("container/hasAllList.pec");
 	}
 
 	@Test
 	public void testTranspiledHasAllList() throws Exception {
-		checkTranspiledOutput("contains/hasAllList.pec");
+		checkTranspiledOutput("container/hasAllList.pec");
 	}
 
 	@Test
 	public void testInterpretedHasAllRange() throws Exception {
-		checkInterpretedOutput("contains/hasAllRange.pec");
+		checkInterpretedOutput("container/hasAllRange.pec");
 	}
 
 	@Test
 	public void testCompiledHasAllRange() throws Exception {
-		checkCompiledOutput("contains/hasAllRange.pec");
+		checkCompiledOutput("container/hasAllRange.pec");
 	}
 
 	@Test
 	public void testTranspiledHasAllRange() throws Exception {
-		checkTranspiledOutput("contains/hasAllRange.pec");
+		checkTranspiledOutput("container/hasAllRange.pec");
 	}
 
 	@Test
 	public void testInterpretedHasAllSet() throws Exception {
-		checkInterpretedOutput("contains/hasAllSet.pec");
+		checkInterpretedOutput("container/hasAllSet.pec");
 	}
 
 	@Test
 	public void testCompiledHasAllSet() throws Exception {
-		checkCompiledOutput("contains/hasAllSet.pec");
+		checkCompiledOutput("container/hasAllSet.pec");
 	}
 
 	@Test
 	public void testTranspiledHasAllSet() throws Exception {
-		checkTranspiledOutput("contains/hasAllSet.pec");
+		checkTranspiledOutput("container/hasAllSet.pec");
 	}
 
 	@Test
 	public void testInterpretedHasAllText() throws Exception {
-		checkInterpretedOutput("contains/hasAllText.pec");
+		checkInterpretedOutput("container/hasAllText.pec");
 	}
 
 	@Test
 	public void testCompiledHasAllText() throws Exception {
-		checkCompiledOutput("contains/hasAllText.pec");
+		checkCompiledOutput("container/hasAllText.pec");
 	}
 
 	@Test
 	public void testTranspiledHasAllText() throws Exception {
-		checkTranspiledOutput("contains/hasAllText.pec");
+		checkTranspiledOutput("container/hasAllText.pec");
 	}
 
 	@Test
 	public void testInterpretedHasAllTuple() throws Exception {
-		checkInterpretedOutput("contains/hasAllTuple.pec");
+		checkInterpretedOutput("container/hasAllTuple.pec");
 	}
 
 	@Test
 	public void testCompiledHasAllTuple() throws Exception {
-		checkCompiledOutput("contains/hasAllTuple.pec");
+		checkCompiledOutput("container/hasAllTuple.pec");
 	}
 
 	@Test
 	public void testTranspiledHasAllTuple() throws Exception {
-		checkTranspiledOutput("contains/hasAllTuple.pec");
+		checkTranspiledOutput("container/hasAllTuple.pec");
 	}
 
 	@Test
 	public void testInterpretedHasAnyDict() throws Exception {
-		checkInterpretedOutput("contains/hasAnyDict.pec");
+		checkInterpretedOutput("container/hasAnyDict.pec");
 	}
 
 	@Test
 	public void testCompiledHasAnyDict() throws Exception {
-		checkCompiledOutput("contains/hasAnyDict.pec");
+		checkCompiledOutput("container/hasAnyDict.pec");
 	}
 
 	@Test
 	public void testTranspiledHasAnyDict() throws Exception {
-		checkTranspiledOutput("contains/hasAnyDict.pec");
+		checkTranspiledOutput("container/hasAnyDict.pec");
 	}
 
 	@Test
 	public void testInterpretedHasAnyList() throws Exception {
-		checkInterpretedOutput("contains/hasAnyList.pec");
+		checkInterpretedOutput("container/hasAnyList.pec");
 	}
 
 	@Test
 	public void testCompiledHasAnyList() throws Exception {
-		checkCompiledOutput("contains/hasAnyList.pec");
+		checkCompiledOutput("container/hasAnyList.pec");
 	}
 
 	@Test
 	public void testTranspiledHasAnyList() throws Exception {
-		checkTranspiledOutput("contains/hasAnyList.pec");
+		checkTranspiledOutput("container/hasAnyList.pec");
 	}
 
 	@Test
 	public void testInterpretedHasAnyRange() throws Exception {
-		checkInterpretedOutput("contains/hasAnyRange.pec");
+		checkInterpretedOutput("container/hasAnyRange.pec");
 	}
 
 	@Test
 	public void testCompiledHasAnyRange() throws Exception {
-		checkCompiledOutput("contains/hasAnyRange.pec");
+		checkCompiledOutput("container/hasAnyRange.pec");
 	}
 
 	@Test
 	public void testTranspiledHasAnyRange() throws Exception {
-		checkTranspiledOutput("contains/hasAnyRange.pec");
+		checkTranspiledOutput("container/hasAnyRange.pec");
 	}
 
 	@Test
 	public void testInterpretedHasAnySet() throws Exception {
-		checkInterpretedOutput("contains/hasAnySet.pec");
+		checkInterpretedOutput("container/hasAnySet.pec");
 	}
 
 	@Test
 	public void testCompiledHasAnySet() throws Exception {
-		checkCompiledOutput("contains/hasAnySet.pec");
+		checkCompiledOutput("container/hasAnySet.pec");
 	}
 
 	@Test
 	public void testTranspiledHasAnySet() throws Exception {
-		checkTranspiledOutput("contains/hasAnySet.pec");
+		checkTranspiledOutput("container/hasAnySet.pec");
 	}
 
 	@Test
 	public void testInterpretedHasAnyText() throws Exception {
-		checkInterpretedOutput("contains/hasAnyText.pec");
+		checkInterpretedOutput("container/hasAnyText.pec");
 	}
 
 	@Test
 	public void testCompiledHasAnyText() throws Exception {
-		checkCompiledOutput("contains/hasAnyText.pec");
+		checkCompiledOutput("container/hasAnyText.pec");
 	}
 
 	@Test
 	public void testTranspiledHasAnyText() throws Exception {
-		checkTranspiledOutput("contains/hasAnyText.pec");
+		checkTranspiledOutput("container/hasAnyText.pec");
 	}
 
 	@Test
 	public void testInterpretedHasAnyTuple() throws Exception {
-		checkInterpretedOutput("contains/hasAnyTuple.pec");
+		checkInterpretedOutput("container/hasAnyTuple.pec");
 	}
 
 	@Test
 	public void testCompiledHasAnyTuple() throws Exception {
-		checkCompiledOutput("contains/hasAnyTuple.pec");
+		checkCompiledOutput("container/hasAnyTuple.pec");
 	}
 
 	@Test
 	public void testTranspiledHasAnyTuple() throws Exception {
-		checkTranspiledOutput("contains/hasAnyTuple.pec");
+		checkTranspiledOutput("container/hasAnyTuple.pec");
 	}
 
 	@Test
 	public void testInterpretedInCharacterRange() throws Exception {
-		checkInterpretedOutput("contains/inCharacterRange.pec");
+		checkInterpretedOutput("container/inCharacterRange.pec");
 	}
 
 	@Test
 	public void testCompiledInCharacterRange() throws Exception {
-		checkCompiledOutput("contains/inCharacterRange.pec");
+		checkCompiledOutput("container/inCharacterRange.pec");
 	}
 
 	@Test
 	public void testTranspiledInCharacterRange() throws Exception {
-		checkTranspiledOutput("contains/inCharacterRange.pec");
+		checkTranspiledOutput("container/inCharacterRange.pec");
 	}
 
 	@Test
 	public void testInterpretedInDateRange() throws Exception {
-		checkInterpretedOutput("contains/inDateRange.pec");
+		checkInterpretedOutput("container/inDateRange.pec");
 	}
 
 	@Test
 	public void testCompiledInDateRange() throws Exception {
-		checkCompiledOutput("contains/inDateRange.pec");
+		checkCompiledOutput("container/inDateRange.pec");
 	}
 
 	@Test
 	public void testTranspiledInDateRange() throws Exception {
-		checkTranspiledOutput("contains/inDateRange.pec");
+		checkTranspiledOutput("container/inDateRange.pec");
 	}
 
 	@Test
 	public void testInterpretedInDict() throws Exception {
-		checkInterpretedOutput("contains/inDict.pec");
+		checkInterpretedOutput("container/inDict.pec");
 	}
 
 	@Test
 	public void testCompiledInDict() throws Exception {
-		checkCompiledOutput("contains/inDict.pec");
+		checkCompiledOutput("container/inDict.pec");
 	}
 
 	@Test
 	public void testTranspiledInDict() throws Exception {
-		checkTranspiledOutput("contains/inDict.pec");
+		checkTranspiledOutput("container/inDict.pec");
 	}
 
 	@Test
 	public void testInterpretedInIntegerRange() throws Exception {
-		checkInterpretedOutput("contains/inIntegerRange.pec");
+		checkInterpretedOutput("container/inIntegerRange.pec");
 	}
 
 	@Test
 	public void testCompiledInIntegerRange() throws Exception {
-		checkCompiledOutput("contains/inIntegerRange.pec");
+		checkCompiledOutput("container/inIntegerRange.pec");
 	}
 
 	@Test
 	public void testTranspiledInIntegerRange() throws Exception {
-		checkTranspiledOutput("contains/inIntegerRange.pec");
+		checkTranspiledOutput("container/inIntegerRange.pec");
 	}
 
 	@Test
 	public void testInterpretedInList() throws Exception {
-		checkInterpretedOutput("contains/inList.pec");
+		checkInterpretedOutput("container/inList.pec");
 	}
 
 	@Test
 	public void testCompiledInList() throws Exception {
-		checkCompiledOutput("contains/inList.pec");
+		checkCompiledOutput("container/inList.pec");
 	}
 
 	@Test
 	public void testTranspiledInList() throws Exception {
-		checkTranspiledOutput("contains/inList.pec");
+		checkTranspiledOutput("container/inList.pec");
 	}
 
 	@Test
 	public void testInterpretedInSet() throws Exception {
-		checkInterpretedOutput("contains/inSet.pec");
+		checkInterpretedOutput("container/inSet.pec");
 	}
 
 	@Test
 	public void testCompiledInSet() throws Exception {
-		checkCompiledOutput("contains/inSet.pec");
+		checkCompiledOutput("container/inSet.pec");
 	}
 
 	@Test
 	public void testTranspiledInSet() throws Exception {
-		checkTranspiledOutput("contains/inSet.pec");
+		checkTranspiledOutput("container/inSet.pec");
 	}
 
 	@Test
 	public void testInterpretedInText() throws Exception {
-		checkInterpretedOutput("contains/inText.pec");
+		checkInterpretedOutput("container/inText.pec");
 	}
 
 	@Test
 	public void testCompiledInText() throws Exception {
-		checkCompiledOutput("contains/inText.pec");
+		checkCompiledOutput("container/inText.pec");
 	}
 
 	@Test
 	public void testTranspiledInText() throws Exception {
-		checkTranspiledOutput("contains/inText.pec");
+		checkTranspiledOutput("container/inText.pec");
 	}
 
 	@Test
 	public void testInterpretedInTextEnum() throws Exception {
-		checkInterpretedOutput("contains/inTextEnum.pec");
+		checkInterpretedOutput("container/inTextEnum.pec");
 	}
 
 	@Test
 	public void testCompiledInTextEnum() throws Exception {
-		checkCompiledOutput("contains/inTextEnum.pec");
+		checkCompiledOutput("container/inTextEnum.pec");
 	}
 
 	@Test
 	public void testTranspiledInTextEnum() throws Exception {
-		checkTranspiledOutput("contains/inTextEnum.pec");
+		checkTranspiledOutput("container/inTextEnum.pec");
 	}
 
 	@Test
 	public void testInterpretedInTimeRange() throws Exception {
-		checkInterpretedOutput("contains/inTimeRange.pec");
+		checkInterpretedOutput("container/inTimeRange.pec");
 	}
 
 	@Test
 	public void testCompiledInTimeRange() throws Exception {
-		checkCompiledOutput("contains/inTimeRange.pec");
+		checkCompiledOutput("container/inTimeRange.pec");
 	}
 
 	@Test
 	public void testTranspiledInTimeRange() throws Exception {
-		checkTranspiledOutput("contains/inTimeRange.pec");
+		checkTranspiledOutput("container/inTimeRange.pec");
 	}
 
 	@Test
 	public void testInterpretedInTuple() throws Exception {
-		checkInterpretedOutput("contains/inTuple.pec");
+		checkInterpretedOutput("container/inTuple.pec");
 	}
 
 	@Test
 	public void testCompiledInTuple() throws Exception {
-		checkCompiledOutput("contains/inTuple.pec");
+		checkCompiledOutput("container/inTuple.pec");
 	}
 
 	@Test
 	public void testTranspiledInTuple() throws Exception {
-		checkTranspiledOutput("contains/inTuple.pec");
+		checkTranspiledOutput("container/inTuple.pec");
 	}
 
 	@Test
 	public void testInterpretedNinCharacterRange() throws Exception {
-		checkInterpretedOutput("contains/ninCharacterRange.pec");
+		checkInterpretedOutput("container/ninCharacterRange.pec");
 	}
 
 	@Test
 	public void testCompiledNinCharacterRange() throws Exception {
-		checkCompiledOutput("contains/ninCharacterRange.pec");
+		checkCompiledOutput("container/ninCharacterRange.pec");
 	}
 
 	@Test
 	public void testTranspiledNinCharacterRange() throws Exception {
-		checkTranspiledOutput("contains/ninCharacterRange.pec");
+		checkTranspiledOutput("container/ninCharacterRange.pec");
 	}
 
 	@Test
 	public void testInterpretedNinDateRange() throws Exception {
-		checkInterpretedOutput("contains/ninDateRange.pec");
+		checkInterpretedOutput("container/ninDateRange.pec");
 	}
 
 	@Test
 	public void testCompiledNinDateRange() throws Exception {
-		checkCompiledOutput("contains/ninDateRange.pec");
+		checkCompiledOutput("container/ninDateRange.pec");
 	}
 
 	@Test
 	public void testTranspiledNinDateRange() throws Exception {
-		checkTranspiledOutput("contains/ninDateRange.pec");
+		checkTranspiledOutput("container/ninDateRange.pec");
 	}
 
 	@Test
 	public void testInterpretedNinDict() throws Exception {
-		checkInterpretedOutput("contains/ninDict.pec");
+		checkInterpretedOutput("container/ninDict.pec");
 	}
 
 	@Test
 	public void testCompiledNinDict() throws Exception {
-		checkCompiledOutput("contains/ninDict.pec");
+		checkCompiledOutput("container/ninDict.pec");
 	}
 
 	@Test
 	public void testTranspiledNinDict() throws Exception {
-		checkTranspiledOutput("contains/ninDict.pec");
+		checkTranspiledOutput("container/ninDict.pec");
 	}
 
 	@Test
 	public void testInterpretedNinIntegerRange() throws Exception {
-		checkInterpretedOutput("contains/ninIntegerRange.pec");
+		checkInterpretedOutput("container/ninIntegerRange.pec");
 	}
 
 	@Test
 	public void testCompiledNinIntegerRange() throws Exception {
-		checkCompiledOutput("contains/ninIntegerRange.pec");
+		checkCompiledOutput("container/ninIntegerRange.pec");
 	}
 
 	@Test
 	public void testTranspiledNinIntegerRange() throws Exception {
-		checkTranspiledOutput("contains/ninIntegerRange.pec");
+		checkTranspiledOutput("container/ninIntegerRange.pec");
 	}
 
 	@Test
 	public void testInterpretedNinList() throws Exception {
-		checkInterpretedOutput("contains/ninList.pec");
+		checkInterpretedOutput("container/ninList.pec");
 	}
 
 	@Test
 	public void testCompiledNinList() throws Exception {
-		checkCompiledOutput("contains/ninList.pec");
+		checkCompiledOutput("container/ninList.pec");
 	}
 
 	@Test
 	public void testTranspiledNinList() throws Exception {
-		checkTranspiledOutput("contains/ninList.pec");
+		checkTranspiledOutput("container/ninList.pec");
 	}
 
 	@Test
 	public void testInterpretedNinSet() throws Exception {
-		checkInterpretedOutput("contains/ninSet.pec");
+		checkInterpretedOutput("container/ninSet.pec");
 	}
 
 	@Test
 	public void testCompiledNinSet() throws Exception {
-		checkCompiledOutput("contains/ninSet.pec");
+		checkCompiledOutput("container/ninSet.pec");
 	}
 
 	@Test
 	public void testTranspiledNinSet() throws Exception {
-		checkTranspiledOutput("contains/ninSet.pec");
+		checkTranspiledOutput("container/ninSet.pec");
 	}
 
 	@Test
 	public void testInterpretedNinText() throws Exception {
-		checkInterpretedOutput("contains/ninText.pec");
+		checkInterpretedOutput("container/ninText.pec");
 	}
 
 	@Test
 	public void testCompiledNinText() throws Exception {
-		checkCompiledOutput("contains/ninText.pec");
+		checkCompiledOutput("container/ninText.pec");
 	}
 
 	@Test
 	public void testTranspiledNinText() throws Exception {
-		checkTranspiledOutput("contains/ninText.pec");
+		checkTranspiledOutput("container/ninText.pec");
 	}
 
 	@Test
 	public void testInterpretedNinTimeRange() throws Exception {
-		checkInterpretedOutput("contains/ninTimeRange.pec");
+		checkInterpretedOutput("container/ninTimeRange.pec");
 	}
 
 	@Test
 	public void testCompiledNinTimeRange() throws Exception {
-		checkCompiledOutput("contains/ninTimeRange.pec");
+		checkCompiledOutput("container/ninTimeRange.pec");
 	}
 
 	@Test
 	public void testTranspiledNinTimeRange() throws Exception {
-		checkTranspiledOutput("contains/ninTimeRange.pec");
+		checkTranspiledOutput("container/ninTimeRange.pec");
 	}
 
 }
