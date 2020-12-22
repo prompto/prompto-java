@@ -13,6 +13,7 @@ import prompto.declaration.IMethodDeclaration;
 import prompto.error.InternalError;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
+import prompto.expression.PredicateExpression;
 import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
 import prompto.parser.ECleverParser;
@@ -271,24 +272,32 @@ public interface IType extends ISection {
 		throw new UnsupportedOperationException("transpileRange " + this.getClass().getName());
 	}
 
-	default void declareContains(Transpiler transpiler, IType other, IExpression container, IExpression item)  {
-		throw new UnsupportedOperationException("declareContains " + this.getClass().getName());
+	default void declareHasValue(Transpiler transpiler, IType other, IExpression container, IExpression item)  {
+		throw new UnsupportedOperationException("declareHasValue " + this.getClass().getName());
 	}
 
-	default void transpileContains(Transpiler transpiler, IType other, IExpression container, IExpression item) {
-		throw new UnsupportedOperationException("transpileContains " + this.getClass().getName());
+	default void transpileHasValue(Transpiler transpiler, IType other, IExpression container, IExpression item) {
+		throw new UnsupportedOperationException("transpileHasValue " + this.getClass().getName());
 	}
 
-	default void declareContainsAllOrAny(Transpiler transpiler, IType other, IExpression container, IExpression items)  {
-		throw new UnsupportedOperationException("declareContainsAllOrAny " + this.getClass().getName());
+	default void declareHasAllOrAny(Transpiler transpiler, IType other, IExpression container, IExpression items)  {
+		throw new UnsupportedOperationException("declareHasAllOrAny " + this.getClass().getName());
 	}
 
-	default void transpileContainsAll(Transpiler transpiler, IType other, IExpression container, IExpression items) {
-		throw new UnsupportedOperationException("transpileContainsAll " + this.getClass().getName());
+	default void transpileHasAllValues(Transpiler transpiler, IType other, IExpression container, IExpression items) {
+		throw new UnsupportedOperationException("transpileHasAllValues " + this.getClass().getName());
 	}
 
-	default void transpileContainsAny(Transpiler transpiler, IType other, IExpression container, IExpression items) {
-		throw new UnsupportedOperationException("transpileContainsAny " + this.getClass().getName());
+	default void transpileHasAnyValue(Transpiler transpiler, IType other, IExpression container, IExpression items) {
+		throw new UnsupportedOperationException("transpileHasAnyValue " + this.getClass().getName());
+	}
+
+	default void transpileHasAllPredicate(Transpiler transpiler, IExpression source, PredicateExpression predicate) {
+		throw new UnsupportedOperationException("transpileHasAllPredicate " + this.getClass().getName());
+	}
+
+	default void transpileHasAnyPredicate(Transpiler transpiler, IExpression source, PredicateExpression predicate) {
+		throw new UnsupportedOperationException("transpileHasAnyPredicate " + this.getClass().getName());
 	}
 
 	default void declareSorted(Transpiler transpiler, IExpression key) {
@@ -321,7 +330,6 @@ public interface IType extends ISection {
 		else
 			throw new UnsupportedOperationException("compileGetStaticMember " + this.getClass().getName());
 	}
-
 
 }
  

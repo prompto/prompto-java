@@ -18,7 +18,9 @@ import prompto.declaration.BuiltInMethodDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
+import prompto.expression.ArrowExpression;
 import prompto.expression.IExpression;
+import prompto.expression.PredicateExpression;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoList;
@@ -293,13 +295,13 @@ public class ListType extends ContainerType {
 	}
 	
 	@Override
-	public void declareContains(Transpiler transpiler, IType other, IExpression container, IExpression item) {
+	public void declareHasValue(Transpiler transpiler, IType other, IExpression container, IExpression item) {
 	    container.declare(transpiler);
 	    item.declare(transpiler);
 	}
 	
 	@Override
-	public void transpileContains(Transpiler transpiler, IType other, IExpression container, IExpression item) {
+	public void transpileHasValue(Transpiler transpiler, IType other, IExpression container, IExpression item) {
 	    container.transpile(transpiler);
 	    transpiler.append(".includes(");
 	    item.transpile(transpiler);
@@ -307,14 +309,14 @@ public class ListType extends ContainerType {
 	}
 	
 	@Override
-	public void declareContainsAllOrAny(Transpiler transpiler, IType other, IExpression container, IExpression items) {
+	public void declareHasAllOrAny(Transpiler transpiler, IType other, IExpression container, IExpression items) {
 	   transpiler.require("StrictSet");
 	   container.declare(transpiler);
 	   items.declare(transpiler);
 	}
 	
 	@Override
-	public void transpileContainsAll(Transpiler transpiler, IType other, IExpression container, IExpression items) {
+	public void transpileHasAllValues(Transpiler transpiler, IType other, IExpression container, IExpression items) {
 	    container.transpile(transpiler);
 	    transpiler.append(".hasAll(");
 	    items.transpile(transpiler);
@@ -322,13 +324,35 @@ public class ListType extends ContainerType {
 	}
 	
 	@Override
-	public void transpileContainsAny(Transpiler transpiler, IType other, IExpression container, IExpression items) {
+	public void transpileHasAnyValue(Transpiler transpiler, IType other, IExpression container, IExpression items) {
 	    container.transpile(transpiler);
 	    transpiler.append(".hasAny(");
 	    items.transpile(transpiler);
 	    transpiler.append(")");
 	}
 	
+	@Override
+	public void transpileHasAllPredicate(Transpiler transpiler, IExpression container, PredicateExpression predicate) {
+	    container.transpile(transpiler);
+	    transpiler.append(".every(");
+	    ArrowExpression arrow = predicate.toArrowExpression();
+		IType type = container.check(transpiler.getContext());
+		IType itemType = ((ContainerType)type).getItemType();
+	    arrow.transpileFilter(transpiler, itemType);
+	    transpiler.append(")");
+	}
+
+	@Override
+	public void transpileHasAnyPredicate(Transpiler transpiler, IExpression container, PredicateExpression predicate) {
+	    container.transpile(transpiler);
+	    transpiler.append(".some(");
+	    ArrowExpression arrow = predicate.toArrowExpression();
+		IType type = container.check(transpiler.getContext());
+		IType itemType = ((ContainerType)type).getItemType();
+	    arrow.transpileFilter(transpiler, itemType);
+	    transpiler.append(")");
+	}
+
 	@Override
 	public void declareItem(Transpiler transpiler, IType itemType, IExpression item) {
 	    if(itemType==IntegerType.instance()) {
