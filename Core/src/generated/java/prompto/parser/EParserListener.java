@@ -894,18 +894,6 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitReadOneExpression(EParser.ReadOneExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code NotHasAnyExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterNotHasAnyExpression(EParser.NotHasAnyExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code NotHasAnyExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitNotHasAnyExpression(EParser.NotHasAnyExpressionContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code AndExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
@@ -917,6 +905,18 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAndExpression(EParser.AndExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code NotHasAnyExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterNotHasAnyExpression(EParser.NotHasAnyExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code NotHasAnyExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitNotHasAnyExpression(EParser.NotHasAnyExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ArrowExpression}
 	 * labeled alternative in {@link EParser#expression}.
@@ -1421,6 +1421,16 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitEqualsExpression(EParser.EqualsExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link EParser#filter_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterFilter_expression(EParser.Filter_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#filter_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitFilter_expression(EParser.Filter_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code UnresolvedSelector}
 	 * labeled alternative in {@link EParser#unresolved_expression}.

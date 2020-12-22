@@ -205,6 +205,7 @@ import prompto.param.CodeParameter;
 import prompto.param.ExtendedParameter;
 import prompto.param.IParameter;
 import prompto.param.UnresolvedParameter;
+
 import static prompto.parser.MParser.*;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
@@ -872,6 +873,14 @@ public class MPromptoBuilder extends MParserBaseListener {
 		setNodeValue(ctx, CssType.instance());
 	}
 	
+	@Override
+	public void exitFilter_expression(Filter_expressionContext ctx) {
+		IExpression exp = getNodeValue(ctx.arrow_expression());
+		if(exp==null)
+			exp = getNodeValue(ctx.expression());
+		setNodeValue(ctx, exp);
+	}
+
 	@Override
 	public void exitHasExpression(HasExpressionContext ctx) {
 		IExpression left = getNodeValue(ctx.left);

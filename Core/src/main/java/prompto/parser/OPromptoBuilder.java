@@ -206,17 +206,6 @@ import prompto.param.CodeParameter;
 import prompto.param.ExtendedParameter;
 import prompto.param.IParameter;
 import prompto.param.UnresolvedParameter;
-import prompto.parser.OParser.CssTypeContext;
-import prompto.parser.OParser.Doc_entry_listContext;
-import prompto.parser.OParser.Jsx_fragmentContext;
-import prompto.parser.OParser.Member_identifierContext;
-import prompto.parser.OParser.ReadStatementContext;
-import prompto.parser.OParser.Read_blob_expressionContext;
-import prompto.parser.OParser.Read_statementContext;
-import prompto.parser.OParser.SymbolLiteralContext;
-import prompto.parser.OParser.TypeLiteralContext;
-import prompto.parser.OParser.Type_literalContext;
-
 import static prompto.parser.OParser.*;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
@@ -867,6 +856,14 @@ public class OPromptoBuilder extends OParserBaseListener {
 		setNodeValue(ctx, CssType.instance());
 	}
 		
+	@Override
+	public void exitFilter_expression(Filter_expressionContext ctx) {
+		IExpression exp = getNodeValue(ctx.arrow_expression());
+		if(exp==null)
+			exp = getNodeValue(ctx.expression());
+		setNodeValue(ctx, exp);
+	}
+
 	@Override
 	public void exitHasExpression(HasExpressionContext ctx) {
 		IExpression left = getNodeValue(ctx.left);

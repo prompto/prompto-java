@@ -900,18 +900,6 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitLessThanOrEqualExpression(MParser.LessThanOrEqualExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code NotHasAnyExpression}
-	 * labeled alternative in {@link MParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterNotHasAnyExpression(MParser.NotHasAnyExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code NotHasAnyExpression}
-	 * labeled alternative in {@link MParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitNotHasAnyExpression(MParser.NotHasAnyExpressionContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code AndExpression}
 	 * labeled alternative in {@link MParser#expression}.
 	 * @param ctx the parse tree
@@ -923,6 +911,18 @@ public interface MParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAndExpression(MParser.AndExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code NotHasAnyExpression}
+	 * labeled alternative in {@link MParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterNotHasAnyExpression(MParser.NotHasAnyExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code NotHasAnyExpression}
+	 * labeled alternative in {@link MParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitNotHasAnyExpression(MParser.NotHasAnyExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ArrowExpression}
 	 * labeled alternative in {@link MParser#expression}.
@@ -1235,6 +1235,16 @@ public interface MParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitEqualsExpression(MParser.EqualsExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MParser#filter_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterFilter_expression(MParser.Filter_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MParser#filter_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitFilter_expression(MParser.Filter_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MParser#closure_expression}.
 	 * @param ctx the parse tree

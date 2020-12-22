@@ -928,6 +928,14 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitCssType(CssTypeContext ctx) {
 		setNodeValue(ctx, CssType.instance());
 	}
+	
+	@Override
+	public void exitFilter_expression(Filter_expressionContext ctx) {
+		IExpression exp = getNodeValue(ctx.arrow_expression());
+		if(exp==null)
+			exp = getNodeValue(ctx.expression());
+		setNodeValue(ctx, exp);
+	}
 
 	@Override
 	public void exitHasExpression(HasExpressionContext ctx) {

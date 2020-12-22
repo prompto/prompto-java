@@ -68,7 +68,15 @@ public class ContainsExpression extends Section implements IPredicateExpression,
 		writer.append(" ");
 		writer.append(operator.toString());
 		writer.append(" ");
-		right.toDialect(writer);
+		if(right instanceof ArrowExpression) {
+			writer.append("where ");
+			if(writer.getDialect()!=Dialect.E)
+				writer.append("( ");
+			right.toDialect(writer);
+			if(writer.getDialect()!=Dialect.E)
+				writer.append(" ) ");
+		} else
+			right.toDialect(writer);
 	}
 	
 	@Override
