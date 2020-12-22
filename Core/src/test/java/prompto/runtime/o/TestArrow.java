@@ -65,6 +65,66 @@ public class TestArrow extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedHasAllFromList() throws Exception {
+		checkInterpretedOutput("arrow/hasAllFromList.poc");
+	}
+
+	@Test
+	public void testCompiledHasAllFromList() throws Exception {
+		checkCompiledOutput("arrow/hasAllFromList.poc");
+	}
+
+	@Test
+	public void testTranspiledHasAllFromList() throws Exception {
+		checkTranspiledOutput("arrow/hasAllFromList.poc");
+	}
+
+	@Test
+	public void testInterpretedHasAllFromSet() throws Exception {
+		checkInterpretedOutput("arrow/hasAllFromSet.poc");
+	}
+
+	@Test
+	public void testCompiledHasAllFromSet() throws Exception {
+		checkCompiledOutput("arrow/hasAllFromSet.poc");
+	}
+
+	@Test
+	public void testTranspiledHasAllFromSet() throws Exception {
+		checkTranspiledOutput("arrow/hasAllFromSet.poc");
+	}
+
+	@Test
+	public void testInterpretedHasAnyFromList() throws Exception {
+		checkInterpretedOutput("arrow/hasAnyFromList.poc");
+	}
+
+	@Test
+	public void testCompiledHasAnyFromList() throws Exception {
+		checkCompiledOutput("arrow/hasAnyFromList.poc");
+	}
+
+	@Test
+	public void testTranspiledHasAnyFromList() throws Exception {
+		checkTranspiledOutput("arrow/hasAnyFromList.poc");
+	}
+
+	@Test
+	public void testInterpretedHasAnyFromSet() throws Exception {
+		checkInterpretedOutput("arrow/hasAnyFromSet.poc");
+	}
+
+	@Test
+	public void testCompiledHasAnyFromSet() throws Exception {
+		checkCompiledOutput("arrow/hasAnyFromSet.poc");
+	}
+
+	@Test
+	public void testTranspiledHasAnyFromSet() throws Exception {
+		checkTranspiledOutput("arrow/hasAnyFromSet.poc");
+	}
+
+	@Test
 	public void testInterpretedSortCategory1Arg() throws Exception {
 		checkInterpretedOutput("arrow/sortCategory1Arg.poc");
 	}

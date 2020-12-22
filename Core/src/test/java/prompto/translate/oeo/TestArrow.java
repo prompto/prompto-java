@@ -22,6 +22,26 @@ public class TestArrow extends BaseOParserTest {
 	}
 
 	@Test
+	public void testHasAllFromList() throws Exception {
+		compareResourceOEO("arrow/hasAllFromList.poc");
+	}
+
+	@Test
+	public void testHasAllFromSet() throws Exception {
+		compareResourceOEO("arrow/hasAllFromSet.poc");
+	}
+
+	@Test
+	public void testHasAnyFromList() throws Exception {
+		compareResourceOEO("arrow/hasAnyFromList.poc");
+	}
+
+	@Test
+	public void testHasAnyFromSet() throws Exception {
+		compareResourceOEO("arrow/hasAnyFromSet.poc");
+	}
+
+	@Test
 	public void testSortCategory1Arg() throws Exception {
 		compareResourceOEO("arrow/sortCategory1Arg.poc");
 	}
