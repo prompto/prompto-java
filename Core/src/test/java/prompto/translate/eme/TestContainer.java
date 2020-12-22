@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import prompto.parser.e.BaseEParserTest;
 
-public class TestContains extends BaseEParserTest {
+public class TestContainer extends BaseEParserTest {
 
 	@Test
 	public void testHasAllDict() throws Exception {

@@ -7,7 +7,7 @@ import org.junit.Test;
 import prompto.parser.e.BaseEParserTest;
 import prompto.runtime.utils.Out;
 
-public class TestContains extends BaseEParserTest {
+public class TestContainer extends BaseEParserTest {
 
 	@Before
 	public void before() {
