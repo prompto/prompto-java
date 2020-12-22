@@ -6,7 +6,7 @@ public class NoMatchingPrototypeProblem extends SyntaxProblemBase {
 
 	String proto;
 	
-	public NoMatchingPrototypeProblem(String proto, ISection section) {
+	public NoMatchingPrototypeProblem(ISection section, String proto) {
 		super(section);
 		this.proto = proto;
 	}

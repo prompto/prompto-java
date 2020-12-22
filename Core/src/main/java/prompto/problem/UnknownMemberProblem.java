@@ -6,7 +6,7 @@ public class UnknownMemberProblem extends SyntaxProblemBase {
 
 	String name;
 	
-	public UnknownMemberProblem(String name, ISection section) {
+	public UnknownMemberProblem(ISection section, String name) {
 		super(section);
 		this.name = name;
 	}

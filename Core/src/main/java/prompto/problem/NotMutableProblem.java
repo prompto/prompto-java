@@ -6,7 +6,7 @@ public class NotMutableProblem extends SyntaxProblemBase {
 
 	String message;
 	
-	public NotMutableProblem(String name, ISection section) {
+	public NotMutableProblem(ISection section, String name) {
 		super(section);
 		this.message = name + " is not mutable";
 	}

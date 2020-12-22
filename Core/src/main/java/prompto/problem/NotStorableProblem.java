@@ -6,7 +6,7 @@ public class NotStorableProblem extends SyntaxProblemBase {
 
 	String message;
 	
-	public NotStorableProblem(String name, ISection section) {
+	public NotStorableProblem(ISection section, String name) {
 		super(section);
 		this.message = name + " is not storable";
 	}

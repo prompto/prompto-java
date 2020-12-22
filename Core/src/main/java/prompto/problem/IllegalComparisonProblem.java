@@ -7,7 +7,7 @@ public class IllegalComparisonProblem extends SyntaxProblemBase {
 
 	IType t1, t2;
 	
-	public IllegalComparisonProblem(IType t1, IType t2, ISection section) {
+	public IllegalComparisonProblem(ISection section, IType t1, IType t2) {
 		super(section);
 		this.t1 = t1;
 		this.t2 = t2;

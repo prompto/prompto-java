@@ -6,7 +6,7 @@ public class IllegalAnnotation extends SyntaxProblemBase {
 
 	String message;
 	
-	public IllegalAnnotation(String message, ISection section) {
+	public IllegalAnnotation(ISection section, String message) {
 		super(section);
 		this.message = message;
 	}

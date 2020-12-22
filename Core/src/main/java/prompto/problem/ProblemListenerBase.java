@@ -87,18 +87,18 @@ public abstract class ProblemListenerBase implements ANTLRErrorListener, IProble
 	
 	@Override
 	public void reportDuplicate(ISection section, String name, ISection existing) {
-		addProblem(new DuplicateProblem(name, section, existing));
+		addProblem(new DuplicateProblem(section, name, existing));
 	}
 	
 	
 	@Override
 	public void reportNotMutable(ISection section, String name) {
-		addProblem(new NotMutableProblem(name, section));
+		addProblem(new NotMutableProblem(section, name));
 	}
 	
 	@Override
 	public void reportNotStorable(ISection section, String name) {
-		addProblem(new NotStorableProblem(name, section));
+		addProblem(new NotStorableProblem(section, name));
 	}
 
 	@Override
@@ -129,32 +129,32 @@ public abstract class ProblemListenerBase implements ANTLRErrorListener, IProble
 
 	@Override
 	public void reportUnknownIdentifier(ISection section, String name) {
-		addProblem(new UnknownIdentifierProblem(name, section));
+		addProblem(new UnknownIdentifierProblem(section, name));
 	}
 	
 	@Override
 	public void reportAmbiguousIdentifier(ISection section, String name) {
-		addProblem(new AmbiguousIdentifierError(name, section));
+		addProblem(new AmbiguousIdentifierError(section, name));
 	}
 	
 	@Override
 	public void reportUnknownAttribute(ISection section, String name, String hint) {
-		addProblem(new UnknowAttributeProblem(name, hint, section));
+		addProblem(new UnknowAttributeProblem(section, name, hint));
 	}
 	
 	@Override
 	public void reportUnknownProperty(ISection section, String name) {
-		addProblem(new UnknowPropertyProblem(name, section));
+		addProblem(new UnknowPropertyProblem(section, name));
 	}
 	
 	@Override
 	public void reportDuplicateProperty(ISection section, String name) {
-		addProblem(new DuplicatePropertyProblem(name, section));
+		addProblem(new DuplicatePropertyProblem(section, name));
 	}
 
 	@Override
 	public void reportMissingProperty(ISection section, String name) {
-		addProblem(new MissingPropertyProblem(name, section));
+		addProblem(new MissingPropertyProblem(section, name));
 	}
 
 	@Override
@@ -165,57 +165,57 @@ public abstract class ProblemListenerBase implements ANTLRErrorListener, IProble
 	
 	@Override
 	public void reportUnknownAnnotation(ISection section, String name) {
-		addProblem(new UnknowAnnotationProblem(name, section));
+		addProblem(new UnknowAnnotationProblem(section, name));
 	}
 	
 	@Override
 	public void reportUnknownMethod(ISection section, String name) {
-		addProblem(new UnknownMethodProblem(name, section));
+		addProblem(new UnknownMethodProblem(section, name));
 	}
 	
 	@Override
 	public void reportUnknownCategory(ISection section, String name) {
-		addProblem(new UnknownCategoryProblem(name, section));
+		addProblem(new UnknownCategoryProblem(section, name));
 	}
 
 	@Override
 	public void reportNoMatchingPrototype(ISection section, String proto) {
-		addProblem(new NoMatchingPrototypeProblem(proto, section));
+		addProblem(new NoMatchingPrototypeProblem(section, proto));
 	}
 	
 	@Override
 	public void reportIllegalComparison(ISection section, IType type, IType other) {
-		addProblem(new IllegalComparisonProblem(type, other, section));
+		addProblem(new IllegalComparisonProblem(section, type, other));
 	}
 	
 	@Override
 	public void reportUnknownMember(ISection section, String name) {
-		addProblem(new UnknownMemberProblem(name, section));
+		addProblem(new UnknownMemberProblem(section, name));
 	}
 	
 	@Override
 	public void reportIllegalOperation(ISection section, String message) {
-		addProblem(new IllegalOperationProblem(message, section));
+		addProblem(new IllegalOperationProblem(section, message));
 	}
 	
 	@Override
 	public void reportIllegalRemoteCall(ISection section, String message) {
-		addProblem(new IllegalRemoteCallProblem(message, section));
+		addProblem(new IllegalRemoteCallProblem(section, message));
 	}
 	
 	@Override
 	public void reportIllegalAnnotation(ISection section, String message) {
-		addProblem(new IllegalAnnotation(message, section));
+		addProblem(new IllegalAnnotation(section, message));
 	}
 	
 	@Override
 	public void reportIllegalValue(ISection section, String message) {
-		addProblem(new IllegalValueProblem(message, section));
+		addProblem(new IllegalValueProblem(section, message));
 	}
 	
 	@Override
 	public void reportNoSuperType(ISection section, IType actual) {
-		addProblem(new NoSuperCategoryProblem(actual, section));
+		addProblem(new NoSuperCategoryProblem(section, actual));
 	}
 	
 	@Override
@@ -232,4 +232,10 @@ public abstract class ProblemListenerBase implements ANTLRErrorListener, IProble
 	public void reportMissingBinding(ISection section, String name) {
 		addProblem(new MissingBindingProblem(section, name));
 	}
+	
+	@Override
+	public void reportExpectingCollection(ISection section, IType actual) {
+		addProblem(new ExpectingCollectionProblem(section, actual));
+	}
+
 }

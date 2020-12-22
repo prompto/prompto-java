@@ -6,7 +6,7 @@ public class MissingPropertyProblem extends SyntaxProblemBase {
 
 	String name;
 	
-	public MissingPropertyProblem(String name, ISection section) {
+	public MissingPropertyProblem(ISection section, String name) {
 		super(section);
 		this.name = name;
 	}

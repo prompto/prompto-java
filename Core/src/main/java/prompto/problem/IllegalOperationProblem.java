@@ -6,7 +6,7 @@ public class IllegalOperationProblem extends SyntaxProblemBase {
 
 	String message;
 	
-	public IllegalOperationProblem(String message, ISection section) {
+	public IllegalOperationProblem(ISection section, String message) {
 		super(section);
 		this.message = message;
 	}

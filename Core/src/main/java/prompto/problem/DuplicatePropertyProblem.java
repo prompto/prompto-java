@@ -6,7 +6,7 @@ public class DuplicatePropertyProblem extends SyntaxProblemBase {
 
 	String name;
 	
-	public DuplicatePropertyProblem(String name, ISection section) {
+	public DuplicatePropertyProblem(ISection section, String name) {
 		super(section);
 		this.name = name;
 	}

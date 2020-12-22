@@ -6,7 +6,7 @@ public class IllegalRemoteCallProblem extends SyntaxProblemBase {
 
 	String message;
 	
-	public IllegalRemoteCallProblem(String message, ISection section) {
+	public IllegalRemoteCallProblem(ISection section, String message) {
 		super(section);
 		this.message = message;
 	}

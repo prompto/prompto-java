@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
 public class ProblemCollector extends ProblemListenerBase {
 
 	List<IProblem> problems = new ArrayList<IProblem>();
@@ -37,5 +38,6 @@ public class ProblemCollector extends ProblemListenerBase {
 			return problems;
 		}
 	}
+
 
 }

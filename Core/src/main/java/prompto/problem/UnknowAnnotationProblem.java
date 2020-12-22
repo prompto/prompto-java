@@ -6,7 +6,7 @@ public class UnknowAnnotationProblem extends SyntaxProblemBase {
 
 	String name;
 	
-	public UnknowAnnotationProblem(String name, ISection section) {
+	public UnknowAnnotationProblem(ISection section, String name) {
 		super(section);
 		this.name = name;
 	}

@@ -7,7 +7,7 @@ public class UnknowAttributeProblem extends SyntaxProblemBase {
 	String name;
 	String hint;
 	
-	public UnknowAttributeProblem(String name, String hint, ISection section) {
+	public UnknowAttributeProblem(ISection section, String name, String hint) {
 		super(section);
 		this.name = name;
 		this.hint = hint;

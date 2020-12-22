@@ -6,7 +6,7 @@ public class AmbiguousIdentifierError extends SyntaxProblemBase {
 
 	String name;
 	
-	public AmbiguousIdentifierError(String name, ISection section) {
+	public AmbiguousIdentifierError(ISection section, String name) {
 		super(section);
 		this.name = name;
 	}

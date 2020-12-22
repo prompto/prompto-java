@@ -6,7 +6,7 @@ public class UnknowPropertyProblem extends SyntaxProblemBase {
 
 	String name;
 	
-	public UnknowPropertyProblem(String name, ISection section) {
+	public UnknowPropertyProblem(ISection section, String name) {
 		super(section);
 		this.name = name;
 	}

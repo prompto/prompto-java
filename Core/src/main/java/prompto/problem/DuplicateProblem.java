@@ -7,7 +7,7 @@ public class DuplicateProblem extends SyntaxProblemBase {
 	String name;
 	ISection other;
 	
-	public DuplicateProblem(String name, ISection section, ISection other) {
+	public DuplicateProblem(ISection section, String name, ISection other) {
 		super(section);
 		this.name = name;
 		this.other = other;

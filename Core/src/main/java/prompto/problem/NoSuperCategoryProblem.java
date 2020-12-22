@@ -7,7 +7,7 @@ public class NoSuperCategoryProblem extends SyntaxProblemBase {
 
 	String message;
 	
-	public NoSuperCategoryProblem(IType type, ISection section) {
+	public NoSuperCategoryProblem(ISection section, IType type) {
 		super(section);
 		this.message = type.getTypeName() + " has no parent type";
 	}
