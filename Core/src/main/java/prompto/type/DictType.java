@@ -193,14 +193,14 @@ public class DictType extends ContainerType {
 	}
 	
 	@Override
-	public void declareContains(Transpiler transpiler, IType other, IExpression container, IExpression item) {
+	public void declareHasValue(Transpiler transpiler, IType other, IExpression container, IExpression item) {
 		transpiler.require("StrictSet");
 	    container.declare(transpiler);
 	    item.declare(transpiler);
 	}
 	
 	@Override
-	public void transpileContains(Transpiler transpiler, IType other, IExpression container, IExpression item) {
+	public void transpileHasValue(Transpiler transpiler, IType other, IExpression container, IExpression item) {
 	    container.transpile(transpiler);
 	    transpiler.append(".has(");
 	    item.transpile(transpiler);
@@ -208,14 +208,14 @@ public class DictType extends ContainerType {
 	}
 	
 	@Override
-	public void declareContainsAllOrAny(Transpiler transpiler, IType other, IExpression container, IExpression items) {
+	public void declareHasAllOrAny(Transpiler transpiler, IType other, IExpression container, IExpression items) {
 	    transpiler.require("StrictSet");
 	    container.declare(transpiler);
 	    items.declare(transpiler);
 	}
 	
 	@Override
-	public void transpileContainsAll(Transpiler transpiler, IType other, IExpression container, IExpression items) {
+	public void transpileHasAllValues(Transpiler transpiler, IType other, IExpression container, IExpression items) {
 	    container.transpile(transpiler);
 	    transpiler.append(".hasAll(");
 	    items.transpile(transpiler);
@@ -223,7 +223,7 @@ public class DictType extends ContainerType {
 	}
 	
 	@Override
-	public void transpileContainsAny(Transpiler transpiler, IType other, IExpression container, IExpression items) {
+	public void transpileHasAnyValue(Transpiler transpiler, IType other, IExpression container, IExpression items) {
 	    container.transpile(transpiler);
 	    transpiler.append(".hasAny(");
 	    items.transpile(transpiler);
