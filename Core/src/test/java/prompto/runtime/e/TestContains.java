@@ -20,183 +20,183 @@ public class TestContains extends BaseEParserTest {
 	}
 
 	@Test
-	public void testInterpretedContainsAllDict() throws Exception {
-		checkInterpretedOutput("contains/containsAllDict.pec");
+	public void testInterpretedHasAllDict() throws Exception {
+		checkInterpretedOutput("contains/hasAllDict.pec");
 	}
 
 	@Test
-	public void testCompiledContainsAllDict() throws Exception {
-		checkCompiledOutput("contains/containsAllDict.pec");
+	public void testCompiledHasAllDict() throws Exception {
+		checkCompiledOutput("contains/hasAllDict.pec");
 	}
 
 	@Test
-	public void testTranspiledContainsAllDict() throws Exception {
-		checkTranspiledOutput("contains/containsAllDict.pec");
+	public void testTranspiledHasAllDict() throws Exception {
+		checkTranspiledOutput("contains/hasAllDict.pec");
 	}
 
 	@Test
-	public void testInterpretedContainsAllList() throws Exception {
-		checkInterpretedOutput("contains/containsAllList.pec");
+	public void testInterpretedHasAllList() throws Exception {
+		checkInterpretedOutput("contains/hasAllList.pec");
 	}
 
 	@Test
-	public void testCompiledContainsAllList() throws Exception {
-		checkCompiledOutput("contains/containsAllList.pec");
+	public void testCompiledHasAllList() throws Exception {
+		checkCompiledOutput("contains/hasAllList.pec");
 	}
 
 	@Test
-	public void testTranspiledContainsAllList() throws Exception {
-		checkTranspiledOutput("contains/containsAllList.pec");
+	public void testTranspiledHasAllList() throws Exception {
+		checkTranspiledOutput("contains/hasAllList.pec");
 	}
 
 	@Test
-	public void testInterpretedContainsAllRange() throws Exception {
-		checkInterpretedOutput("contains/containsAllRange.pec");
+	public void testInterpretedHasAllRange() throws Exception {
+		checkInterpretedOutput("contains/hasAllRange.pec");
 	}
 
 	@Test
-	public void testCompiledContainsAllRange() throws Exception {
-		checkCompiledOutput("contains/containsAllRange.pec");
+	public void testCompiledHasAllRange() throws Exception {
+		checkCompiledOutput("contains/hasAllRange.pec");
 	}
 
 	@Test
-	public void testTranspiledContainsAllRange() throws Exception {
-		checkTranspiledOutput("contains/containsAllRange.pec");
+	public void testTranspiledHasAllRange() throws Exception {
+		checkTranspiledOutput("contains/hasAllRange.pec");
 	}
 
 	@Test
-	public void testInterpretedContainsAllSet() throws Exception {
-		checkInterpretedOutput("contains/containsAllSet.pec");
+	public void testInterpretedHasAllSet() throws Exception {
+		checkInterpretedOutput("contains/hasAllSet.pec");
 	}
 
 	@Test
-	public void testCompiledContainsAllSet() throws Exception {
-		checkCompiledOutput("contains/containsAllSet.pec");
+	public void testCompiledHasAllSet() throws Exception {
+		checkCompiledOutput("contains/hasAllSet.pec");
 	}
 
 	@Test
-	public void testTranspiledContainsAllSet() throws Exception {
-		checkTranspiledOutput("contains/containsAllSet.pec");
+	public void testTranspiledHasAllSet() throws Exception {
+		checkTranspiledOutput("contains/hasAllSet.pec");
 	}
 
 	@Test
-	public void testInterpretedContainsAllText() throws Exception {
-		checkInterpretedOutput("contains/containsAllText.pec");
+	public void testInterpretedHasAllText() throws Exception {
+		checkInterpretedOutput("contains/hasAllText.pec");
 	}
 
 	@Test
-	public void testCompiledContainsAllText() throws Exception {
-		checkCompiledOutput("contains/containsAllText.pec");
+	public void testCompiledHasAllText() throws Exception {
+		checkCompiledOutput("contains/hasAllText.pec");
 	}
 
 	@Test
-	public void testTranspiledContainsAllText() throws Exception {
-		checkTranspiledOutput("contains/containsAllText.pec");
+	public void testTranspiledHasAllText() throws Exception {
+		checkTranspiledOutput("contains/hasAllText.pec");
 	}
 
 	@Test
-	public void testInterpretedContainsAllTuple() throws Exception {
-		checkInterpretedOutput("contains/containsAllTuple.pec");
+	public void testInterpretedHasAllTuple() throws Exception {
+		checkInterpretedOutput("contains/hasAllTuple.pec");
 	}
 
 	@Test
-	public void testCompiledContainsAllTuple() throws Exception {
-		checkCompiledOutput("contains/containsAllTuple.pec");
+	public void testCompiledHasAllTuple() throws Exception {
+		checkCompiledOutput("contains/hasAllTuple.pec");
 	}
 
 	@Test
-	public void testTranspiledContainsAllTuple() throws Exception {
-		checkTranspiledOutput("contains/containsAllTuple.pec");
+	public void testTranspiledHasAllTuple() throws Exception {
+		checkTranspiledOutput("contains/hasAllTuple.pec");
 	}
 
 	@Test
-	public void testInterpretedContainsAnyDict() throws Exception {
-		checkInterpretedOutput("contains/containsAnyDict.pec");
+	public void testInterpretedHasAnyDict() throws Exception {
+		checkInterpretedOutput("contains/hasAnyDict.pec");
 	}
 
 	@Test
-	public void testCompiledContainsAnyDict() throws Exception {
-		checkCompiledOutput("contains/containsAnyDict.pec");
+	public void testCompiledHasAnyDict() throws Exception {
+		checkCompiledOutput("contains/hasAnyDict.pec");
 	}
 
 	@Test
-	public void testTranspiledContainsAnyDict() throws Exception {
-		checkTranspiledOutput("contains/containsAnyDict.pec");
+	public void testTranspiledHasAnyDict() throws Exception {
+		checkTranspiledOutput("contains/hasAnyDict.pec");
 	}
 
 	@Test
-	public void testInterpretedContainsAnyList() throws Exception {
-		checkInterpretedOutput("contains/containsAnyList.pec");
+	public void testInterpretedHasAnyList() throws Exception {
+		checkInterpretedOutput("contains/hasAnyList.pec");
 	}
 
 	@Test
-	public void testCompiledContainsAnyList() throws Exception {
-		checkCompiledOutput("contains/containsAnyList.pec");
+	public void testCompiledHasAnyList() throws Exception {
+		checkCompiledOutput("contains/hasAnyList.pec");
 	}
 
 	@Test
-	public void testTranspiledContainsAnyList() throws Exception {
-		checkTranspiledOutput("contains/containsAnyList.pec");
+	public void testTranspiledHasAnyList() throws Exception {
+		checkTranspiledOutput("contains/hasAnyList.pec");
 	}
 
 	@Test
-	public void testInterpretedContainsAnyRange() throws Exception {
-		checkInterpretedOutput("contains/containsAnyRange.pec");
+	public void testInterpretedHasAnyRange() throws Exception {
+		checkInterpretedOutput("contains/hasAnyRange.pec");
 	}
 
 	@Test
-	public void testCompiledContainsAnyRange() throws Exception {
-		checkCompiledOutput("contains/containsAnyRange.pec");
+	public void testCompiledHasAnyRange() throws Exception {
+		checkCompiledOutput("contains/hasAnyRange.pec");
 	}
 
 	@Test
-	public void testTranspiledContainsAnyRange() throws Exception {
-		checkTranspiledOutput("contains/containsAnyRange.pec");
+	public void testTranspiledHasAnyRange() throws Exception {
+		checkTranspiledOutput("contains/hasAnyRange.pec");
 	}
 
 	@Test
-	public void testInterpretedContainsAnySet() throws Exception {
-		checkInterpretedOutput("contains/containsAnySet.pec");
+	public void testInterpretedHasAnySet() throws Exception {
+		checkInterpretedOutput("contains/hasAnySet.pec");
 	}
 
 	@Test
-	public void testCompiledContainsAnySet() throws Exception {
-		checkCompiledOutput("contains/containsAnySet.pec");
+	public void testCompiledHasAnySet() throws Exception {
+		checkCompiledOutput("contains/hasAnySet.pec");
 	}
 
 	@Test
-	public void testTranspiledContainsAnySet() throws Exception {
-		checkTranspiledOutput("contains/containsAnySet.pec");
+	public void testTranspiledHasAnySet() throws Exception {
+		checkTranspiledOutput("contains/hasAnySet.pec");
 	}
 
 	@Test
-	public void testInterpretedContainsAnyText() throws Exception {
-		checkInterpretedOutput("contains/containsAnyText.pec");
+	public void testInterpretedHasAnyText() throws Exception {
+		checkInterpretedOutput("contains/hasAnyText.pec");
 	}
 
 	@Test
-	public void testCompiledContainsAnyText() throws Exception {
-		checkCompiledOutput("contains/containsAnyText.pec");
+	public void testCompiledHasAnyText() throws Exception {
+		checkCompiledOutput("contains/hasAnyText.pec");
 	}
 
 	@Test
-	public void testTranspiledContainsAnyText() throws Exception {
-		checkTranspiledOutput("contains/containsAnyText.pec");
+	public void testTranspiledHasAnyText() throws Exception {
+		checkTranspiledOutput("contains/hasAnyText.pec");
 	}
 
 	@Test
-	public void testInterpretedContainsAnyTuple() throws Exception {
-		checkInterpretedOutput("contains/containsAnyTuple.pec");
+	public void testInterpretedHasAnyTuple() throws Exception {
+		checkInterpretedOutput("contains/hasAnyTuple.pec");
 	}
 
 	@Test
-	public void testCompiledContainsAnyTuple() throws Exception {
-		checkCompiledOutput("contains/containsAnyTuple.pec");
+	public void testCompiledHasAnyTuple() throws Exception {
+		checkCompiledOutput("contains/hasAnyTuple.pec");
 	}
 
 	@Test
-	public void testTranspiledContainsAnyTuple() throws Exception {
-		checkTranspiledOutput("contains/containsAnyTuple.pec");
+	public void testTranspiledHasAnyTuple() throws Exception {
+		checkTranspiledOutput("contains/hasAnyTuple.pec");
 	}
 
 	@Test

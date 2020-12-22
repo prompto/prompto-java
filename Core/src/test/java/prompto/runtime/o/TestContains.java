@@ -20,123 +20,123 @@ public class TestContains extends BaseOParserTest {
 	}
 
 	@Test
-	public void testInterpretedContainsAllList() throws Exception {
-		checkInterpretedOutput("contains/containsAllList.poc");
+	public void testInterpretedHasAllList() throws Exception {
+		checkInterpretedOutput("contains/hasAllList.poc");
 	}
 
 	@Test
-	public void testCompiledContainsAllList() throws Exception {
-		checkCompiledOutput("contains/containsAllList.poc");
+	public void testCompiledHasAllList() throws Exception {
+		checkCompiledOutput("contains/hasAllList.poc");
 	}
 
 	@Test
-	public void testTranspiledContainsAllList() throws Exception {
-		checkTranspiledOutput("contains/containsAllList.poc");
+	public void testTranspiledHasAllList() throws Exception {
+		checkTranspiledOutput("contains/hasAllList.poc");
 	}
 
 	@Test
-	public void testInterpretedContainsAllSet() throws Exception {
-		checkInterpretedOutput("contains/containsAllSet.poc");
+	public void testInterpretedHasAllSet() throws Exception {
+		checkInterpretedOutput("contains/hasAllSet.poc");
 	}
 
 	@Test
-	public void testCompiledContainsAllSet() throws Exception {
-		checkCompiledOutput("contains/containsAllSet.poc");
+	public void testCompiledHasAllSet() throws Exception {
+		checkCompiledOutput("contains/hasAllSet.poc");
 	}
 
 	@Test
-	public void testTranspiledContainsAllSet() throws Exception {
-		checkTranspiledOutput("contains/containsAllSet.poc");
+	public void testTranspiledHasAllSet() throws Exception {
+		checkTranspiledOutput("contains/hasAllSet.poc");
 	}
 
 	@Test
-	public void testInterpretedContainsAllText() throws Exception {
-		checkInterpretedOutput("contains/containsAllText.poc");
+	public void testInterpretedHasAllText() throws Exception {
+		checkInterpretedOutput("contains/hasAllText.poc");
 	}
 
 	@Test
-	public void testCompiledContainsAllText() throws Exception {
-		checkCompiledOutput("contains/containsAllText.poc");
+	public void testCompiledHasAllText() throws Exception {
+		checkCompiledOutput("contains/hasAllText.poc");
 	}
 
 	@Test
-	public void testTranspiledContainsAllText() throws Exception {
-		checkTranspiledOutput("contains/containsAllText.poc");
+	public void testTranspiledHasAllText() throws Exception {
+		checkTranspiledOutput("contains/hasAllText.poc");
 	}
 
 	@Test
-	public void testInterpretedContainsAllTuple() throws Exception {
-		checkInterpretedOutput("contains/containsAllTuple.poc");
+	public void testInterpretedHasAllTuple() throws Exception {
+		checkInterpretedOutput("contains/hasAllTuple.poc");
 	}
 
 	@Test
-	public void testCompiledContainsAllTuple() throws Exception {
-		checkCompiledOutput("contains/containsAllTuple.poc");
+	public void testCompiledHasAllTuple() throws Exception {
+		checkCompiledOutput("contains/hasAllTuple.poc");
 	}
 
 	@Test
-	public void testTranspiledContainsAllTuple() throws Exception {
-		checkTranspiledOutput("contains/containsAllTuple.poc");
+	public void testTranspiledHasAllTuple() throws Exception {
+		checkTranspiledOutput("contains/hasAllTuple.poc");
 	}
 
 	@Test
-	public void testInterpretedContainsAnyList() throws Exception {
-		checkInterpretedOutput("contains/containsAnyList.poc");
+	public void testInterpretedHasAnyList() throws Exception {
+		checkInterpretedOutput("contains/hasAnyList.poc");
 	}
 
 	@Test
-	public void testCompiledContainsAnyList() throws Exception {
-		checkCompiledOutput("contains/containsAnyList.poc");
+	public void testCompiledHasAnyList() throws Exception {
+		checkCompiledOutput("contains/hasAnyList.poc");
 	}
 
 	@Test
-	public void testTranspiledContainsAnyList() throws Exception {
-		checkTranspiledOutput("contains/containsAnyList.poc");
+	public void testTranspiledHasAnyList() throws Exception {
+		checkTranspiledOutput("contains/hasAnyList.poc");
 	}
 
 	@Test
-	public void testInterpretedContainsAnySet() throws Exception {
-		checkInterpretedOutput("contains/containsAnySet.poc");
+	public void testInterpretedHasAnySet() throws Exception {
+		checkInterpretedOutput("contains/hasAnySet.poc");
 	}
 
 	@Test
-	public void testCompiledContainsAnySet() throws Exception {
-		checkCompiledOutput("contains/containsAnySet.poc");
+	public void testCompiledHasAnySet() throws Exception {
+		checkCompiledOutput("contains/hasAnySet.poc");
 	}
 
 	@Test
-	public void testTranspiledContainsAnySet() throws Exception {
-		checkTranspiledOutput("contains/containsAnySet.poc");
+	public void testTranspiledHasAnySet() throws Exception {
+		checkTranspiledOutput("contains/hasAnySet.poc");
 	}
 
 	@Test
-	public void testInterpretedContainsAnyText() throws Exception {
-		checkInterpretedOutput("contains/containsAnyText.poc");
+	public void testInterpretedHasAnyText() throws Exception {
+		checkInterpretedOutput("contains/hasAnyText.poc");
 	}
 
 	@Test
-	public void testCompiledContainsAnyText() throws Exception {
-		checkCompiledOutput("contains/containsAnyText.poc");
+	public void testCompiledHasAnyText() throws Exception {
+		checkCompiledOutput("contains/hasAnyText.poc");
 	}
 
 	@Test
-	public void testTranspiledContainsAnyText() throws Exception {
-		checkTranspiledOutput("contains/containsAnyText.poc");
+	public void testTranspiledHasAnyText() throws Exception {
+		checkTranspiledOutput("contains/hasAnyText.poc");
 	}
 
 	@Test
-	public void testInterpretedContainsAnyTuple() throws Exception {
-		checkInterpretedOutput("contains/containsAnyTuple.poc");
+	public void testInterpretedHasAnyTuple() throws Exception {
+		checkInterpretedOutput("contains/hasAnyTuple.poc");
 	}
 
 	@Test
-	public void testCompiledContainsAnyTuple() throws Exception {
-		checkCompiledOutput("contains/containsAnyTuple.poc");
+	public void testCompiledHasAnyTuple() throws Exception {
+		checkCompiledOutput("contains/hasAnyTuple.poc");
 	}
 
 	@Test
-	public void testTranspiledContainsAnyTuple() throws Exception {
-		checkTranspiledOutput("contains/containsAnyTuple.poc");
+	public void testTranspiledHasAnyTuple() throws Exception {
+		checkTranspiledOutput("contains/hasAnyTuple.poc");
 	}
 
 	@Test

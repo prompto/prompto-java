@@ -7,63 +7,63 @@ import prompto.parser.e.BaseEParserTest;
 public class TestContains extends BaseEParserTest {
 
 	@Test
-	public void testContainsAllDict() throws Exception {
-		compareResourceEME("contains/containsAllDict.pec");
+	public void testHasAllDict() throws Exception {
+		compareResourceEME("contains/hasAllDict.pec");
 	}
 
 	@Test
-	public void testContainsAllList() throws Exception {
-		compareResourceEME("contains/containsAllList.pec");
+	public void testHasAllList() throws Exception {
+		compareResourceEME("contains/hasAllList.pec");
 	}
 
 	@Test
-	public void testContainsAllRange() throws Exception {
-		compareResourceEME("contains/containsAllRange.pec");
+	public void testHasAllRange() throws Exception {
+		compareResourceEME("contains/hasAllRange.pec");
 	}
 
 	@Test
-	public void testContainsAllSet() throws Exception {
-		compareResourceEME("contains/containsAllSet.pec");
+	public void testHasAllSet() throws Exception {
+		compareResourceEME("contains/hasAllSet.pec");
 	}
 
 	@Test
-	public void testContainsAllText() throws Exception {
-		compareResourceEME("contains/containsAllText.pec");
+	public void testHasAllText() throws Exception {
+		compareResourceEME("contains/hasAllText.pec");
 	}
 
 	@Test
-	public void testContainsAllTuple() throws Exception {
-		compareResourceEME("contains/containsAllTuple.pec");
+	public void testHasAllTuple() throws Exception {
+		compareResourceEME("contains/hasAllTuple.pec");
 	}
 
 	@Test
-	public void testContainsAnyDict() throws Exception {
-		compareResourceEME("contains/containsAnyDict.pec");
+	public void testHasAnyDict() throws Exception {
+		compareResourceEME("contains/hasAnyDict.pec");
 	}
 
 	@Test
-	public void testContainsAnyList() throws Exception {
-		compareResourceEME("contains/containsAnyList.pec");
+	public void testHasAnyList() throws Exception {
+		compareResourceEME("contains/hasAnyList.pec");
 	}
 
 	@Test
-	public void testContainsAnyRange() throws Exception {
-		compareResourceEME("contains/containsAnyRange.pec");
+	public void testHasAnyRange() throws Exception {
+		compareResourceEME("contains/hasAnyRange.pec");
 	}
 
 	@Test
-	public void testContainsAnySet() throws Exception {
-		compareResourceEME("contains/containsAnySet.pec");
+	public void testHasAnySet() throws Exception {
+		compareResourceEME("contains/hasAnySet.pec");
 	}
 
 	@Test
-	public void testContainsAnyText() throws Exception {
-		compareResourceEME("contains/containsAnyText.pec");
+	public void testHasAnyText() throws Exception {
+		compareResourceEME("contains/hasAnyText.pec");
 	}
 
 	@Test
-	public void testContainsAnyTuple() throws Exception {
-		compareResourceEME("contains/containsAnyTuple.pec");
+	public void testHasAnyTuple() throws Exception {
+		compareResourceEME("contains/hasAnyTuple.pec");
 	}
 
 	@Test

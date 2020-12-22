@@ -7,43 +7,43 @@ import prompto.parser.o.BaseOParserTest;
 public class TestContains extends BaseOParserTest {
 
 	@Test
-	public void testContainsAllList() throws Exception {
-		compareResourceOMO("contains/containsAllList.poc");
+	public void testHasAllList() throws Exception {
+		compareResourceOMO("contains/hasAllList.poc");
 	}
 
 	@Test
-	public void testContainsAllSet() throws Exception {
-		compareResourceOMO("contains/containsAllSet.poc");
+	public void testHasAllSet() throws Exception {
+		compareResourceOMO("contains/hasAllSet.poc");
 	}
 
 	@Test
-	public void testContainsAllText() throws Exception {
-		compareResourceOMO("contains/containsAllText.poc");
+	public void testHasAllText() throws Exception {
+		compareResourceOMO("contains/hasAllText.poc");
 	}
 
 	@Test
-	public void testContainsAllTuple() throws Exception {
-		compareResourceOMO("contains/containsAllTuple.poc");
+	public void testHasAllTuple() throws Exception {
+		compareResourceOMO("contains/hasAllTuple.poc");
 	}
 
 	@Test
-	public void testContainsAnyList() throws Exception {
-		compareResourceOMO("contains/containsAnyList.poc");
+	public void testHasAnyList() throws Exception {
+		compareResourceOMO("contains/hasAnyList.poc");
 	}
 
 	@Test
-	public void testContainsAnySet() throws Exception {
-		compareResourceOMO("contains/containsAnySet.poc");
+	public void testHasAnySet() throws Exception {
+		compareResourceOMO("contains/hasAnySet.poc");
 	}
 
 	@Test
-	public void testContainsAnyText() throws Exception {
-		compareResourceOMO("contains/containsAnyText.poc");
+	public void testHasAnyText() throws Exception {
+		compareResourceOMO("contains/hasAnyText.poc");
 	}
 
 	@Test
-	public void testContainsAnyTuple() throws Exception {
-		compareResourceOMO("contains/containsAnyTuple.poc");
+	public void testHasAnyTuple() throws Exception {
+		compareResourceOMO("contains/hasAnyTuple.poc");
 	}
 
 	@Test
