@@ -12,6 +12,16 @@ public class TestContainer extends BaseEParserTest {
 	}
 
 	@Test
+	public void testHasAllFromList() throws Exception {
+		compareResourceEME("container/hasAllFromList.pec");
+	}
+
+	@Test
+	public void testHasAllFromSet() throws Exception {
+		compareResourceEME("container/hasAllFromSet.pec");
+	}
+
+	@Test
 	public void testHasAllList() throws Exception {
 		compareResourceEME("container/hasAllList.pec");
 	}
@@ -39,6 +49,16 @@ public class TestContainer extends BaseEParserTest {
 	@Test
 	public void testHasAnyDict() throws Exception {
 		compareResourceEME("container/hasAnyDict.pec");
+	}
+
+	@Test
+	public void testHasAnyFromList() throws Exception {
+		compareResourceEME("container/hasAnyFromList.pec");
+	}
+
+	@Test
+	public void testHasAnyFromSet() throws Exception {
+		compareResourceEME("container/hasAnyFromSet.pec");
 	}
 
 	@Test

@@ -7,6 +7,16 @@ import prompto.parser.o.BaseOParserTest;
 public class TestContainer extends BaseOParserTest {
 
 	@Test
+	public void testHasAllFromList() throws Exception {
+		compareResourceOMO("container/hasAllFromList.poc");
+	}
+
+	@Test
+	public void testHasAllFromSet() throws Exception {
+		compareResourceOMO("container/hasAllFromSet.poc");
+	}
+
+	@Test
 	public void testHasAllList() throws Exception {
 		compareResourceOMO("container/hasAllList.poc");
 	}
@@ -24,6 +34,16 @@ public class TestContainer extends BaseOParserTest {
 	@Test
 	public void testHasAllTuple() throws Exception {
 		compareResourceOMO("container/hasAllTuple.poc");
+	}
+
+	@Test
+	public void testHasAnyFromList() throws Exception {
+		compareResourceOMO("container/hasAnyFromList.poc");
+	}
+
+	@Test
+	public void testHasAnyFromSet() throws Exception {
+		compareResourceOMO("container/hasAnyFromSet.poc");
 	}
 
 	@Test

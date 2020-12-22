@@ -20,6 +20,36 @@ public class TestContainer extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedHasAllFromList() throws Exception {
+		checkInterpretedOutput("container/hasAllFromList.poc");
+	}
+
+	@Test
+	public void testCompiledHasAllFromList() throws Exception {
+		checkCompiledOutput("container/hasAllFromList.poc");
+	}
+
+	@Test
+	public void testTranspiledHasAllFromList() throws Exception {
+		checkTranspiledOutput("container/hasAllFromList.poc");
+	}
+
+	@Test
+	public void testInterpretedHasAllFromSet() throws Exception {
+		checkInterpretedOutput("container/hasAllFromSet.poc");
+	}
+
+	@Test
+	public void testCompiledHasAllFromSet() throws Exception {
+		checkCompiledOutput("container/hasAllFromSet.poc");
+	}
+
+	@Test
+	public void testTranspiledHasAllFromSet() throws Exception {
+		checkTranspiledOutput("container/hasAllFromSet.poc");
+	}
+
+	@Test
 	public void testInterpretedHasAllList() throws Exception {
 		checkInterpretedOutput("container/hasAllList.poc");
 	}
@@ -77,6 +107,36 @@ public class TestContainer extends BaseOParserTest {
 	@Test
 	public void testTranspiledHasAllTuple() throws Exception {
 		checkTranspiledOutput("container/hasAllTuple.poc");
+	}
+
+	@Test
+	public void testInterpretedHasAnyFromList() throws Exception {
+		checkInterpretedOutput("container/hasAnyFromList.poc");
+	}
+
+	@Test
+	public void testCompiledHasAnyFromList() throws Exception {
+		checkCompiledOutput("container/hasAnyFromList.poc");
+	}
+
+	@Test
+	public void testTranspiledHasAnyFromList() throws Exception {
+		checkTranspiledOutput("container/hasAnyFromList.poc");
+	}
+
+	@Test
+	public void testInterpretedHasAnyFromSet() throws Exception {
+		checkInterpretedOutput("container/hasAnyFromSet.poc");
+	}
+
+	@Test
+	public void testCompiledHasAnyFromSet() throws Exception {
+		checkCompiledOutput("container/hasAnyFromSet.poc");
+	}
+
+	@Test
+	public void testTranspiledHasAnyFromSet() throws Exception {
+		checkTranspiledOutput("container/hasAnyFromSet.poc");
 	}
 
 	@Test

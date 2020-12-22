@@ -35,6 +35,36 @@ public class TestContainer extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedHasAllFromList() throws Exception {
+		checkInterpretedOutput("container/hasAllFromList.pec");
+	}
+
+	@Test
+	public void testCompiledHasAllFromList() throws Exception {
+		checkCompiledOutput("container/hasAllFromList.pec");
+	}
+
+	@Test
+	public void testTranspiledHasAllFromList() throws Exception {
+		checkTranspiledOutput("container/hasAllFromList.pec");
+	}
+
+	@Test
+	public void testInterpretedHasAllFromSet() throws Exception {
+		checkInterpretedOutput("container/hasAllFromSet.pec");
+	}
+
+	@Test
+	public void testCompiledHasAllFromSet() throws Exception {
+		checkCompiledOutput("container/hasAllFromSet.pec");
+	}
+
+	@Test
+	public void testTranspiledHasAllFromSet() throws Exception {
+		checkTranspiledOutput("container/hasAllFromSet.pec");
+	}
+
+	@Test
 	public void testInterpretedHasAllList() throws Exception {
 		checkInterpretedOutput("container/hasAllList.pec");
 	}
@@ -122,6 +152,36 @@ public class TestContainer extends BaseEParserTest {
 	@Test
 	public void testTranspiledHasAnyDict() throws Exception {
 		checkTranspiledOutput("container/hasAnyDict.pec");
+	}
+
+	@Test
+	public void testInterpretedHasAnyFromList() throws Exception {
+		checkInterpretedOutput("container/hasAnyFromList.pec");
+	}
+
+	@Test
+	public void testCompiledHasAnyFromList() throws Exception {
+		checkCompiledOutput("container/hasAnyFromList.pec");
+	}
+
+	@Test
+	public void testTranspiledHasAnyFromList() throws Exception {
+		checkTranspiledOutput("container/hasAnyFromList.pec");
+	}
+
+	@Test
+	public void testInterpretedHasAnyFromSet() throws Exception {
+		checkInterpretedOutput("container/hasAnyFromSet.pec");
+	}
+
+	@Test
+	public void testCompiledHasAnyFromSet() throws Exception {
+		checkCompiledOutput("container/hasAnyFromSet.pec");
+	}
+
+	@Test
+	public void testTranspiledHasAnyFromSet() throws Exception {
+		checkTranspiledOutput("container/hasAnyFromSet.pec");
 	}
 
 	@Test

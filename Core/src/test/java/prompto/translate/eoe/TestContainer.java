@@ -12,6 +12,16 @@ public class TestContainer extends BaseEParserTest {
 	}
 
 	@Test
+	public void testHasAllFromList() throws Exception {
+		compareResourceEOE("container/hasAllFromList.pec");
+	}
+
+	@Test
+	public void testHasAllFromSet() throws Exception {
+		compareResourceEOE("container/hasAllFromSet.pec");
+	}
+
+	@Test
 	public void testHasAllList() throws Exception {
 		compareResourceEOE("container/hasAllList.pec");
 	}
@@ -39,6 +49,16 @@ public class TestContainer extends BaseEParserTest {
 	@Test
 	public void testHasAnyDict() throws Exception {
 		compareResourceEOE("container/hasAnyDict.pec");
+	}
+
+	@Test
+	public void testHasAnyFromList() throws Exception {
+		compareResourceEOE("container/hasAnyFromList.pec");
+	}
+
+	@Test
+	public void testHasAnyFromSet() throws Exception {
+		compareResourceEOE("container/hasAnyFromSet.pec");
 	}
 
 	@Test
