@@ -834,6 +834,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitHasExpression(EParser.HasExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code TernaryExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterTernaryExpression(EParser.TernaryExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code TernaryExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitTernaryExpression(EParser.TernaryExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code InExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
@@ -845,6 +857,18 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitInExpression(EParser.InExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code DocumentExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterDocumentExpression(EParser.DocumentExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code DocumentExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitDocumentExpression(EParser.DocumentExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code JsxExpression}
 	 * labeled alternative in {@link EParser#expression}.
@@ -858,17 +882,41 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitJsxExpression(EParser.JsxExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code GreaterThanExpression}
+	 * Enter a parse tree produced by the {@code NotExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterGreaterThanExpression(EParser.GreaterThanExpressionContext ctx);
+	void enterNotExpression(EParser.NotExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code GreaterThanExpression}
+	 * Exit a parse tree produced by the {@code NotExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitGreaterThanExpression(EParser.GreaterThanExpressionContext ctx);
+	void exitNotExpression(EParser.NotExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code InvocationExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterInvocationExpression(EParser.InvocationExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code InvocationExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitInvocationExpression(EParser.InvocationExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code CompareExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterCompareExpression(EParser.CompareExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code CompareExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitCompareExpression(EParser.CompareExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code OrExpression}
 	 * labeled alternative in {@link EParser#expression}.
@@ -881,6 +929,30 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitOrExpression(EParser.OrExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code CodeExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterCodeExpression(EParser.CodeExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code CodeExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitCodeExpression(EParser.CodeExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code AmbiguousExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAmbiguousExpression(EParser.AmbiguousExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code AmbiguousExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAmbiguousExpression(EParser.AmbiguousExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ReadOneExpression}
 	 * labeled alternative in {@link EParser#expression}.
@@ -905,18 +977,6 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAndExpression(EParser.AndExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code NotHasAnyExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterNotHasAnyExpression(EParser.NotHasAnyExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code NotHasAnyExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitNotHasAnyExpression(EParser.NotHasAnyExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ArrowExpression}
 	 * labeled alternative in {@link EParser#expression}.
@@ -954,17 +1014,17 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitFetchExpression(EParser.FetchExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code NotHasExpression}
+	 * Enter a parse tree produced by the {@code ClosureExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterNotHasExpression(EParser.NotHasExpressionContext ctx);
+	void enterClosureExpression(EParser.ClosureExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code NotHasExpression}
+	 * Exit a parse tree produced by the {@code ClosureExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitNotHasExpression(EParser.NotHasExpressionContext ctx);
+	void exitClosureExpression(EParser.ClosureExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code SortedExpression}
 	 * labeled alternative in {@link EParser#expression}.
@@ -978,17 +1038,17 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitSortedExpression(EParser.SortedExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code NotHasAllExpression}
+	 * Enter a parse tree produced by the {@code BlobExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterNotHasAllExpression(EParser.NotHasAllExpressionContext ctx);
+	void enterBlobExpression(EParser.BlobExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code NotHasAllExpression}
+	 * Exit a parse tree produced by the {@code BlobExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitNotHasAllExpression(EParser.NotHasAllExpressionContext ctx);
+	void exitBlobExpression(EParser.BlobExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ContainsExpression}
 	 * labeled alternative in {@link EParser#expression}.
@@ -1001,294 +1061,6 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitContainsExpression(EParser.ContainsExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code NotContainsExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterNotContainsExpression(EParser.NotContainsExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code NotContainsExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitNotContainsExpression(EParser.NotContainsExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code RoughlyEqualsExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterRoughlyEqualsExpression(EParser.RoughlyEqualsExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code RoughlyEqualsExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitRoughlyEqualsExpression(EParser.RoughlyEqualsExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ExecuteExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterExecuteExpression(EParser.ExecuteExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ExecuteExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitExecuteExpression(EParser.ExecuteExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code GreaterThanOrEqualExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterGreaterThanOrEqualExpression(EParser.GreaterThanOrEqualExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code GreaterThanOrEqualExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitGreaterThanOrEqualExpression(EParser.GreaterThanOrEqualExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code IteratorExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterIteratorExpression(EParser.IteratorExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code IteratorExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitIteratorExpression(EParser.IteratorExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code IsNotExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterIsNotExpression(EParser.IsNotExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code IsNotExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitIsNotExpression(EParser.IsNotExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code DivideExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterDivideExpression(EParser.DivideExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code DivideExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitDivideExpression(EParser.DivideExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code IsExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterIsExpression(EParser.IsExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code IsExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitIsExpression(EParser.IsExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code AddExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterAddExpression(EParser.AddExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code AddExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitAddExpression(EParser.AddExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code InstanceExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterInstanceExpression(EParser.InstanceExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code InstanceExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitInstanceExpression(EParser.InstanceExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code MutableInstanceExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterMutableInstanceExpression(EParser.MutableInstanceExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code MutableInstanceExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitMutableInstanceExpression(EParser.MutableInstanceExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ReadAllExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterReadAllExpression(EParser.ReadAllExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ReadAllExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitReadAllExpression(EParser.ReadAllExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code CastExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterCastExpression(EParser.CastExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code CastExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitCastExpression(EParser.CastExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ModuloExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterModuloExpression(EParser.ModuloExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ModuloExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitModuloExpression(EParser.ModuloExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code TernaryExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterTernaryExpression(EParser.TernaryExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code TernaryExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitTernaryExpression(EParser.TernaryExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code NotEqualsExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterNotEqualsExpression(EParser.NotEqualsExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code NotEqualsExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitNotEqualsExpression(EParser.NotEqualsExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code DocumentExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterDocumentExpression(EParser.DocumentExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code DocumentExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitDocumentExpression(EParser.DocumentExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code NotExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterNotExpression(EParser.NotExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code NotExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitNotExpression(EParser.NotExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code InvocationExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterInvocationExpression(EParser.InvocationExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code InvocationExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitInvocationExpression(EParser.InvocationExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code CodeExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterCodeExpression(EParser.CodeExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code CodeExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitCodeExpression(EParser.CodeExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code AmbiguousExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterAmbiguousExpression(EParser.AmbiguousExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code AmbiguousExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitAmbiguousExpression(EParser.AmbiguousExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code LessThanOrEqualExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterLessThanOrEqualExpression(EParser.LessThanOrEqualExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code LessThanOrEqualExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitLessThanOrEqualExpression(EParser.LessThanOrEqualExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code ClosureExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterClosureExpression(EParser.ClosureExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ClosureExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitClosureExpression(EParser.ClosureExpressionContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code BlobExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterBlobExpression(EParser.BlobExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code BlobExpression}
-	 * labeled alternative in {@link EParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitBlobExpression(EParser.BlobExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code FilteredListExpression}
 	 * labeled alternative in {@link EParser#expression}.
@@ -1338,17 +1110,29 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitMultiplyExpression(EParser.MultiplyExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code NotInExpression}
+	 * Enter a parse tree produced by the {@code ExecuteExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterNotInExpression(EParser.NotInExpressionContext ctx);
+	void enterExecuteExpression(EParser.ExecuteExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code NotInExpression}
+	 * Exit a parse tree produced by the {@code ExecuteExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitNotInExpression(EParser.NotInExpressionContext ctx);
+	void exitExecuteExpression(EParser.ExecuteExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code IteratorExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterIteratorExpression(EParser.IteratorExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code IteratorExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitIteratorExpression(EParser.IteratorExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code UnresolvedExpression}
 	 * labeled alternative in {@link EParser#expression}.
@@ -1362,6 +1146,30 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitUnresolvedExpression(EParser.UnresolvedExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code DivideExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterDivideExpression(EParser.DivideExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code DivideExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitDivideExpression(EParser.DivideExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code IsExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterIsExpression(EParser.IsExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code IsExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitIsExpression(EParser.IsExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code MinusExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
@@ -1373,6 +1181,18 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMinusExpression(EParser.MinusExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code AddExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAddExpression(EParser.AddExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code AddExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAddExpression(EParser.AddExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code HasAllExpression}
 	 * labeled alternative in {@link EParser#expression}.
@@ -1386,6 +1206,42 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitHasAllExpression(EParser.HasAllExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code InstanceExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterInstanceExpression(EParser.InstanceExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code InstanceExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitInstanceExpression(EParser.InstanceExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code MutableInstanceExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterMutableInstanceExpression(EParser.MutableInstanceExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code MutableInstanceExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitMutableInstanceExpression(EParser.MutableInstanceExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ReadAllExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterReadAllExpression(EParser.ReadAllExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ReadAllExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitReadAllExpression(EParser.ReadAllExpressionContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code CssExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
@@ -1398,17 +1254,29 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitCssExpression(EParser.CssExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code LessThanExpression}
+	 * Enter a parse tree produced by the {@code CastExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterLessThanExpression(EParser.LessThanExpressionContext ctx);
+	void enterCastExpression(EParser.CastExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code LessThanExpression}
+	 * Exit a parse tree produced by the {@code CastExpression}
 	 * labeled alternative in {@link EParser#expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitLessThanExpression(EParser.LessThanExpressionContext ctx);
+	void exitCastExpression(EParser.CastExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ModuloExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterModuloExpression(EParser.ModuloExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ModuloExpression}
+	 * labeled alternative in {@link EParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitModuloExpression(EParser.ModuloExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code EqualsExpression}
 	 * labeled alternative in {@link EParser#expression}.
@@ -1422,15 +1290,41 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitEqualsExpression(EParser.EqualsExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link EParser#filter_expression}.
+	 * Enter a parse tree produced by the {@code ArrowFilterExpression}
+	 * labeled alternative in {@link EParser#filter_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterFilter_expression(EParser.Filter_expressionContext ctx);
+	void enterArrowFilterExpression(EParser.ArrowFilterExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link EParser#filter_expression}.
+	 * Exit a parse tree produced by the {@code ArrowFilterExpression}
+	 * labeled alternative in {@link EParser#filter_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitFilter_expression(EParser.Filter_expressionContext ctx);
+	void exitArrowFilterExpression(EParser.ArrowFilterExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ExplicitFilterExpression}
+	 * labeled alternative in {@link EParser#filter_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExplicitFilterExpression(EParser.ExplicitFilterExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ExplicitFilterExpression}
+	 * labeled alternative in {@link EParser#filter_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExplicitFilterExpression(EParser.ExplicitFilterExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code OtherFilterExpression}
+	 * labeled alternative in {@link EParser#filter_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterOtherFilterExpression(EParser.OtherFilterExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code OtherFilterExpression}
+	 * labeled alternative in {@link EParser#filter_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitOtherFilterExpression(EParser.OtherFilterExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code UnresolvedSelector}
 	 * labeled alternative in {@link EParser#unresolved_expression}.
