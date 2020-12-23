@@ -84,7 +84,7 @@ public class ExplicitPredicateExpression extends PredicateExpression implements 
 	}
 
 	@Override
-	IType checkWithItemType(Context context, IType itemType) {
+	IType checkFilter(Context context, IType itemType) {
 		Context child = context.newChildContext();
 		child.registerValue(new Variable(itemId, itemType));
 		return predicate.check(child);
