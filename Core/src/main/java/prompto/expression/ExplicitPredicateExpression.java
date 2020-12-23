@@ -84,7 +84,7 @@ public class ExplicitPredicateExpression extends PredicateExpression implements 
 	}
 
 	@Override
-	IType check(Context context, IType itemType) {
+	IType checkWithItemType(Context context, IType itemType) {
 		Context child = context.newChildContext();
 		child.registerValue(new Variable(itemId, itemType));
 		return predicate.check(child);
@@ -93,7 +93,7 @@ public class ExplicitPredicateExpression extends PredicateExpression implements 
 
 	@Override
 	public IType check(Context context) {
-		return toArrowExpression().check(context);
+		throw new UnsupportedOperationException();
 	}
 
 

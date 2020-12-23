@@ -55,11 +55,11 @@ public class ArrowExpression extends PredicateExpression implements IExpression 
 
 	@Override
 	public IType check(Context context) {
-		return check(context, null);
+		return checkWithItemType(context, null);
 	}
 	
 	
-	public IType check(Context context, IType returnType) {
+	public IType checkWithItemType(Context context, IType returnType) {
 		return statements.check(context, returnType);
 	}
 	

@@ -122,7 +122,7 @@ public class MethodType extends BaseType {
 	public IType checkArrowExpression(Context context, ArrowExpression expression) {
 		context = context.newChildContext();
 		this.method.registerParameters(context);
-		expression.check(context, this.method.getReturnType());
+		expression.checkWithItemType(context, this.method.getReturnType());
 		return this;
 	}
 
