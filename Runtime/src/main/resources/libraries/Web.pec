@@ -229,3 +229,10 @@ define browserHistoryCount as native method returning Integer doing:
 
 define browserGoto as native method receiving Text location doing:
 	JavaScript: browserGoto(location); from module: prompto/internet/Browser.js
+
+define KeyboardShortcutCallback as abstract method returning Boolean
+
+define browserBindKeyboardShortcuts as native method receiving Text[] shortcuts and KeyboardShortcutCallback callback doing:
+	JavaScript: window.Mousetrap.bind(shortcuts, callback);
+
+
