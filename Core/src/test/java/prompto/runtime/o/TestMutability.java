@@ -20,6 +20,21 @@ public class TestMutability extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedDowncastLocal() throws Exception {
+		checkInterpretedOutput("mutability/downcastLocal.poc");
+	}
+
+	@Test
+	public void testCompiledDowncastLocal() throws Exception {
+		checkCompiledOutput("mutability/downcastLocal.poc");
+	}
+
+	@Test
+	public void testTranspiledDowncastLocal() throws Exception {
+		checkTranspiledOutput("mutability/downcastLocal.poc");
+	}
+
+	@Test
 	public void testInterpretedImmutable() throws Exception {
 		checkInterpretedOutput("mutability/immutable.poc");
 	}

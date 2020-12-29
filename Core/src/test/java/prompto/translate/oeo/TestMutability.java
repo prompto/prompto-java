@@ -7,6 +7,11 @@ import prompto.parser.o.BaseOParserTest;
 public class TestMutability extends BaseOParserTest {
 
 	@Test
+	public void testDowncastLocal() throws Exception {
+		compareResourceOEO("mutability/downcastLocal.poc");
+	}
+
+	@Test
 	public void testImmutable() throws Exception {
 		compareResourceOEO("mutability/immutable.poc");
 	}
