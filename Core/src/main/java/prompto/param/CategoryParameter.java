@@ -154,8 +154,11 @@ public class CategoryParameter extends BaseParameter implements ITypedParameter 
 		resolve(context);
 		if(resolved==type)
 			context.registerValue(this);
-		else
-			context.registerValue(new CategoryParameter(resolved, id));
+		else {
+			CategoryParameter param = new CategoryParameter(resolved, id);
+			param.setMutable(mutable);
+			context.registerValue(param);
+		}
 		if(defaultExpression!=null) try {
 			context.setValue(id, defaultExpression.interpret(context));
 		} catch(PromptoError error) {
@@ -171,7 +174,7 @@ public class CategoryParameter extends BaseParameter implements ITypedParameter 
 	
 	private void resolve(Context context) {
 		if(resolved==null)
-			resolved = type.resolve(context, null);
+			resolved = type.resolve(context, null).asMutable(context, mutable);
 	}
 
 	@Override

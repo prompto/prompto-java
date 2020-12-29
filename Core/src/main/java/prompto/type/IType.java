@@ -61,6 +61,17 @@ public interface IType extends ISection {
 		return false;
 	}
 	
+	default boolean isMutable(Context context) {
+		return false;
+	}
+
+	default IType asMutable(Context context, boolean mutable) {
+		if(mutable)
+			throw new UnsupportedOperationException("Mutable not supported for " + this.getClass());
+		else
+			return this;
+	}
+	
 	Type getJavaType(Context context);
 
 	IType checkAdd(Context context, IType other, boolean tryReverse);
@@ -79,13 +90,6 @@ public interface IType extends ISection {
 	IType checkMember(Context context, Identifier name);
 	IType checkStaticMember(Context context, Identifier name);
 
-	default IType asMutable(Context context, boolean mutable) {
-		if(mutable)
-			throw new UnsupportedOperationException("Mutable not supported for " + this.getClass());
-		else
-			return this;
-	}
-	
 	void checkUnique(Context context);
 	void checkExists(Context context);
 

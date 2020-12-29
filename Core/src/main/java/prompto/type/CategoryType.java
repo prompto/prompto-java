@@ -123,6 +123,13 @@ public class CategoryType extends BaseType {
 			return this;
 	}
 	
+	
+	
+	@Override
+	public boolean isMutable(Context context) {
+		return mutable;
+	}
+	
 	@Override
 	public IType asMutable(Context context, boolean mutable) {
 		if(mutable==this.mutable)

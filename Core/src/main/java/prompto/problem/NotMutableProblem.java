@@ -13,7 +13,7 @@ public class NotMutableProblem extends SyntaxProblemBase {
 
 	@Override
 	public Type getType() {
-		return Type.WARNING;
+		return Type.ERROR;
 	}
 	
 	@Override

@@ -201,26 +201,29 @@ public class EqualsExpression extends Section implements IPredicateExpression, I
 
 	public Context downcastForCheck(Context context) {
 		try {
-			return downCast(context, false);
+			return downcast(context, false);
 		} catch(PromptoError e) {
 			throw new RuntimeException("Should never get there!");
 		}
 	}
 	public Context downcastForInterpret(Context context) throws PromptoError {
-		return downCast(context, true);
+		return downcast(context, true);
 	}
 
-	private Context downCast(Context context, boolean setValue) throws PromptoError {
+	private Context downcast(Context context, boolean setValue) throws PromptoError {
 		if(operator==EqOp.IS_A) {
 			Identifier name = readLeftName();
 			if(name!=null) {
 				INamed value = context.getRegisteredValue(INamed.class, name);
-				IType type = ((TypeExpression)right).getType();
+				IType targetType = ((TypeExpression)right).getType();
+				IType sourceType = value.getType(context);
+				if(sourceType.isMutable(context))
+					targetType = targetType.asMutable(context, true);
+				value = new LinkedVariable(targetType, value);
 				Context local = context.newChildContext();
-				value = new LinkedVariable(type, value);
 				local.registerValue(value, false);
 				if(setValue)
-					local.setValue(name, new LinkedValue(context, type));
+					local.setValue(name, new LinkedValue(context, targetType));
 				context = local;
 			}
 		}

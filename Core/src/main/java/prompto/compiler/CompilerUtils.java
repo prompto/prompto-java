@@ -758,9 +758,12 @@ public abstract class CompilerUtils {
 	}
 	
 	public static ResultInfo compileALOAD(MethodInfo method, StackLocal value) {
-		ClassConstant klass = value instanceof StackLocal.ObjectLocal ?
-				((StackLocal.ObjectLocal)value).getClassName() :
-				new ClassConstant(Object.class);
+		ClassConstant klass = null;
+		if(value instanceof StackLocal.ObjectLocal) {
+			StackLocal.ObjectLocal local = (StackLocal.ObjectLocal)value;
+			klass = local.getDowncastTo() == null ? local.getClassName() : local.getDowncastTo();
+		} else
+			klass = new ClassConstant(Object.class);
 		if(value.getIndex()<4) {
 			Opcode opcode = Opcode.values()[value.getIndex()+Opcode.ALOAD_0.ordinal()];
 			method.addInstruction(opcode, klass);
