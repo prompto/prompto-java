@@ -32,7 +32,7 @@ public class Assertion extends Section {
 			context.getProblemListener().reportIllegalAssignment(this, BooleanType.instance(), type);
 		// need to optionally auto-downcast
 		if(expression instanceof EqualsExpression) 
-			context = ((EqualsExpression)expression).downCastForCheck(context);
+			context = ((EqualsExpression)expression).downcastForCheck(context);
 		return context;
 	}
 

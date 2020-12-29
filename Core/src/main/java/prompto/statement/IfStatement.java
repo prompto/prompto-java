@@ -300,7 +300,7 @@ public class IfStatement extends BaseStatement {
 			if (condition != null) {
 				writer.append("if ");
 				condition.toDialect(writer);
-				context = downCastContextForCheck(context);
+				context = downcastContextForCheck(context);
 				if (context != writer.getContext())
 					writer = writer.newChildWriter(context);
 			}
@@ -316,7 +316,7 @@ public class IfStatement extends BaseStatement {
 				writer.append("if (");
 				condition.toDialect(writer);
 				writer.append(") ");
-				context = downCastContextForCheck(context);
+				context = downcastContextForCheck(context);
 				if (context != writer.getContext())
 					writer = writer.newChildWriter(context);
 			}
@@ -355,28 +355,28 @@ public class IfStatement extends BaseStatement {
 			IType cond = condition.check(context);
 			if (cond != BooleanType.instance())
 				throw new SyntaxError("Expected a boolean condition!");
-			context = downCastContextForCheck(context);
+			context = downcastContextForCheck(context);
 			return statements.check(context, null);
 		}
 
 		@Override
 		public IValue interpret(Context context) throws PromptoError {
-			context = downCastContextForInterpret(context);
+			context = downcastForInterpret(context);
 			return statements.interpret(context);
 		}
 
-		private Context downCastContextForCheck(Context context) {
+		private Context downcastContextForCheck(Context context) {
 			Context parent = context;
 			if (condition instanceof EqualsExpression)
-				context = ((EqualsExpression) condition).downCastForCheck(context);
+				context = ((EqualsExpression) condition).downcastForCheck(context);
 			context = parent != context ? context : context.newChildContext();
 			return context;
 		}
 
-		private Context downCastContextForInterpret(Context context) throws PromptoError {
+		private Context downcastForInterpret(Context context) throws PromptoError {
 			Context parent = context;
 			if (condition instanceof EqualsExpression)
-				context = ((EqualsExpression) condition).downCastForInterpret(context);
+				context = ((EqualsExpression) condition).downcastForInterpret(context);
 			context = parent != context ? context : context.newChildContext();
 			return context;
 		}
@@ -387,7 +387,7 @@ public class IfStatement extends BaseStatement {
 				this.condition.declare(transpiler);
 			Context context = transpiler.getContext();
 			if (this.condition instanceof EqualsExpression)
-				context = ((EqualsExpression) condition).downCastForCheck(context);
+				context = ((EqualsExpression) condition).downcastForCheck(context);
 			if (context != transpiler.getContext())
 				transpiler = transpiler.newChildTranspiler(context);
 			else
@@ -399,7 +399,7 @@ public class IfStatement extends BaseStatement {
 		public boolean transpile(Transpiler transpiler) {
 			Context context = transpiler.getContext();
 			if (this.condition instanceof EqualsExpression)
-				context = ((EqualsExpression) condition).downCastForCheck(context);
+				context = ((EqualsExpression) condition).downcastForCheck(context);
 			if (context != transpiler.getContext())
 				transpiler = transpiler.newChildTranspiler(context);
 			else

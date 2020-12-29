@@ -199,14 +199,14 @@ public class EqualsExpression extends Section implements IPredicateExpression, I
 			return lval.contains(context, rval);
 	}
 
-	public Context downCastForCheck(Context context) {
+	public Context downcastForCheck(Context context) {
 		try {
 			return downCast(context, false);
 		} catch(PromptoError e) {
 			throw new RuntimeException("Should never get there!");
 		}
 	}
-	public Context downCastForInterpret(Context context) throws PromptoError {
+	public Context downcastForInterpret(Context context) throws PromptoError {
 		return downCast(context, true);
 	}
 
@@ -235,7 +235,7 @@ public class EqualsExpression extends Section implements IPredicateExpression, I
 				ClassConstant c = new ClassConstant(type.getJavaType(context));
 				StackLocal local = method.getRegisteredLocal(name.toString());
 				((StackLocal.ObjectLocal)local).markForAutodowncast(c);
-				return downCastForCheck(context);
+				return downcastForCheck(context);
 			}
 		}
 		return context;
