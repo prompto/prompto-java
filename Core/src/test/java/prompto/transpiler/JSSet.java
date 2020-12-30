@@ -36,9 +36,15 @@ public class JSSet {
 		Set<String> reserved = new HashSet<>(Arrays.asList("length", "mutable"));
 		return values.entrySet().stream()
 				.filter(entry -> !reserved.contains(entry.getKey()))
-				.filter(entry -> !(entry.getValue() instanceof ScriptObjectMirror))
+				.filter(entry -> !isFunction(entry.getValue()))
 				.map(Map.Entry::getValue)
 				.collect(Collectors.toList());
+	}
+
+	private boolean isFunction(Object value) {
+		if(value instanceof ScriptObjectMirror)
+			return ((ScriptObjectMirror)value).isFunction();
+		return false;
 	}
 
 	public int getSize() {
