@@ -197,6 +197,16 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testIteratorToList() throws Exception {
+		compareResourceEOE("builtins/iteratorToList.pec");
+	}
+
+	@Test
+	public void testIteratorToSet() throws Exception {
+		compareResourceEOE("builtins/iteratorToSet.pec");
+	}
+
+	@Test
 	public void testListCount() throws Exception {
 		compareResourceEOE("builtins/listCount.pec");
 	}
@@ -204,6 +214,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testListText() throws Exception {
 		compareResourceEOE("builtins/listText.pec");
+	}
+
+	@Test
+	public void testListToSet() throws Exception {
+		compareResourceEOE("builtins/listToSet.pec");
 	}
 
 	@Test
@@ -259,6 +274,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testSetText() throws Exception {
 		compareResourceEOE("builtins/setText.pec");
+	}
+
+	@Test
+	public void testSetToList() throws Exception {
+		compareResourceEOE("builtins/setToList.pec");
 	}
 
 	@Test

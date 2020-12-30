@@ -560,6 +560,36 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedIteratorToList() throws Exception {
+		checkInterpretedOutput("builtins/iteratorToList.pec");
+	}
+
+	@Test
+	public void testCompiledIteratorToList() throws Exception {
+		checkCompiledOutput("builtins/iteratorToList.pec");
+	}
+
+	@Test
+	public void testTranspiledIteratorToList() throws Exception {
+		checkTranspiledOutput("builtins/iteratorToList.pec");
+	}
+
+	@Test
+	public void testInterpretedIteratorToSet() throws Exception {
+		checkInterpretedOutput("builtins/iteratorToSet.pec");
+	}
+
+	@Test
+	public void testCompiledIteratorToSet() throws Exception {
+		checkCompiledOutput("builtins/iteratorToSet.pec");
+	}
+
+	@Test
+	public void testTranspiledIteratorToSet() throws Exception {
+		checkTranspiledOutput("builtins/iteratorToSet.pec");
+	}
+
+	@Test
 	public void testInterpretedListCount() throws Exception {
 		checkInterpretedOutput("builtins/listCount.pec");
 	}
@@ -587,6 +617,21 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testTranspiledListText() throws Exception {
 		checkTranspiledOutput("builtins/listText.pec");
+	}
+
+	@Test
+	public void testInterpretedListToSet() throws Exception {
+		checkInterpretedOutput("builtins/listToSet.pec");
+	}
+
+	@Test
+	public void testCompiledListToSet() throws Exception {
+		checkCompiledOutput("builtins/listToSet.pec");
+	}
+
+	@Test
+	public void testTranspiledListToSet() throws Exception {
+		checkTranspiledOutput("builtins/listToSet.pec");
 	}
 
 	@Test
@@ -752,6 +797,21 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testTranspiledSetText() throws Exception {
 		checkTranspiledOutput("builtins/setText.pec");
+	}
+
+	@Test
+	public void testInterpretedSetToList() throws Exception {
+		checkInterpretedOutput("builtins/setToList.pec");
+	}
+
+	@Test
+	public void testCompiledSetToList() throws Exception {
+		checkCompiledOutput("builtins/setToList.pec");
+	}
+
+	@Test
+	public void testTranspiledSetToList() throws Exception {
+		checkTranspiledOutput("builtins/setToList.pec");
 	}
 
 	@Test
