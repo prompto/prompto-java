@@ -1,5 +1,6 @@
 package prompto.transpiler;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -32,7 +33,10 @@ public class JSSet {
 	}
 	
 	private List<Object> convert(ScriptObjectMirror values) {
+		Set<String> reserved = new HashSet<>(Arrays.asList("length", "mutable"));
 		return values.entrySet().stream()
+				.filter(entry -> !reserved.contains(entry.getKey()))
+				.filter(entry -> !(entry.getValue() instanceof ScriptObjectMirror))
 				.map(Map.Entry::getValue)
 				.collect(Collectors.toList());
 	}

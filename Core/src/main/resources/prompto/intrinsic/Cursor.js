@@ -36,6 +36,9 @@ Cursor.prototype.iterate = function (fn, instance) {
         toList: function() {
             return new List(false, this.toArray());
         },
+        toSet: function() {
+            return new StrictSet(this.toArray());
+        },
         getText: function() {
             return this.toArray().join(", ");
         }

@@ -90,5 +90,9 @@ public class PromptoSet<V> extends HashSet<V> implements Filterable<PromptoSet<V
 			.map(Object::toString)
 			.collect(Collectors.joining(delimiter));
 	}
+	
+	public PromptoList<V> toList() {
+		return new PromptoList<V>(this, false);
+	}
 
 }

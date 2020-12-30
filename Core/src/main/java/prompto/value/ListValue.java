@@ -26,6 +26,7 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.Filterable;
 import prompto.intrinsic.IterableWithCounts;
 import prompto.intrinsic.PromptoList;
+import prompto.intrinsic.PromptoSet;
 import prompto.java.JavaClassType;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
@@ -311,6 +312,11 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 
 	private Type getItemType(Type type) {
 		return type instanceof ParameterizedType ? ((ParameterizedType)type).getActualTypeArguments()[0] : Object.class;
+	}
+
+	public IValue toSetValue() {
+		PromptoSet<IValue> items = new PromptoSet<>(this.items);
+		return new SetValue(((ListType)this.getType()).getItemType(), items);
 	}
 
 }

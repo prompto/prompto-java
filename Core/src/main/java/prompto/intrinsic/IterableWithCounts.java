@@ -47,8 +47,16 @@ public interface IterableWithCounts<T> extends Iterable<T> {
 			
 		};
 	}
+
 	default PromptoList<T> toList() {
 		PromptoList<T> result = new PromptoList<T>(false);
+		for(T item : this)
+			result.add(item);
+		return result;
+	}
+
+	default PromptoSet<T> toSet() {
+		PromptoSet<T> result = new PromptoSet<T>();
 		for(T item : this)
 			result.add(item);
 		return result;

@@ -137,5 +137,9 @@ public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoLi
 				.collect(Collectors.toList());
 		return new PromptoList<V>(items, false); 
 	}
+	
+	public PromptoSet<V> toSet() {
+		return new PromptoSet<>(this);
+	}
 
 }

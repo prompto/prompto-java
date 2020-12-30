@@ -171,6 +171,9 @@ List.prototype.iterate = function (fn, instance) {
         toList: function() {
             return new List(false, this.toArray());
         },
+        toSet: function() {
+            return new StrictSet(this.toArray());
+        },
         getText: function() {
         	return this.toArray().join(", ");
         },
@@ -227,4 +230,8 @@ List.prototype.toDocument = function() {
             return item;
     });
     return new List(false, items);
+};
+
+List.prototype.toSet = function() {
+    return new StrictSet(this);
 };

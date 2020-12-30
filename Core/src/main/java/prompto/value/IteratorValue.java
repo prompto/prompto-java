@@ -2,6 +2,7 @@ package prompto.value;
 
 import java.util.Iterator;
 
+import prompto.intrinsic.PromptoSet;
 import prompto.type.IType;
 import prompto.type.IteratorType;
 
@@ -30,6 +31,13 @@ public class IteratorValue extends BaseValue implements Iterator<IValue> {
 		while(source.hasNext())
 			values.addItem(source.next());
 		return values;
+	}
+
+	public IValue toSetValue() {
+		PromptoSet<IValue> items = new PromptoSet<>();
+		while(source.hasNext())
+			items.add(source.next());
+		return new SetValue(((IteratorType)this.getType()).getItemType(), items);
 	}
 
 }

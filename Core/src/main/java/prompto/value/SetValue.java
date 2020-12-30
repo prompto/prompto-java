@@ -19,6 +19,7 @@ import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.Filterable;
 import prompto.intrinsic.IterableWithCounts;
+import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoSet;
 import prompto.runtime.Context;
 import prompto.type.ContainerType;
@@ -196,5 +197,10 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IFilterab
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}
+	}
+
+	public IValue toListValue() {
+		PromptoList<IValue> list = new PromptoList<>(items, false);
+		return new ListValue(getItemType(), list);
 	}
 }

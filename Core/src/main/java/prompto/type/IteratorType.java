@@ -18,6 +18,7 @@ import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.IterableWithCounts;
 import prompto.intrinsic.PromptoList;
+import prompto.intrinsic.PromptoSet;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
@@ -76,6 +77,8 @@ public class IteratorType extends IterableType {
 		switch(id.toString()) {
 		case "toList":
 			return new HashSet<>(Collections.singletonList(TO_LIST_METHOD));
+		case "toSet":
+			return new HashSet<>(Collections.singletonList(TO_SET_METHOD));
 		default:
 			return super.getMemberMethods(context, id);
 		}
@@ -148,6 +151,54 @@ public class IteratorType extends IterableType {
 		@Override
 		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentList assignments) {
 			transpiler.append("toList()");
+		}
+	};
+	
+	final IMethodDeclaration TO_SET_METHOD = new BuiltInMethodDeclaration("toSet") {
+		
+		@Override
+		public IValue interpret(Context context) throws PromptoError {
+			IValue value = getValue(context);
+			IType type = value.getType();
+			if(type instanceof IterableType) 
+				value = new IteratorValue(((IterableType)type).getItemType(), ((IterableValue)value).iterator());
+			if(value instanceof IteratorValue)
+				return ((IteratorValue)value).toSetValue();
+			else
+				return NullValue.instance();
+		};
+		
+		
+		
+		@Override
+		public IType check(Context context) {
+			return new SetType(itemType);
+		}
+
+		@Override
+		public boolean hasCompileExactInstanceMember() {
+			return true;
+		}
+		
+		@Override
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentList assignments) {
+			// call replace method
+			Descriptor.Method descriptor = new Descriptor.Method(PromptoSet.class);
+			InterfaceConstant constant = new InterfaceConstant(IterableWithCounts.class, "toSet", descriptor);
+			method.addInstruction(Opcode.INVOKEINTERFACE, constant);
+			// done
+			return new ResultInfo(PromptoSet.class);
+
+		}
+		
+		@Override
+		public void declareCall(Transpiler transpiler) {
+			transpiler.require("StrictSet");
+		};
+		
+		@Override
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentList assignments) {
+			transpiler.append("toSet()");
 		}
 	};
 }

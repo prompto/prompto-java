@@ -7,18 +7,21 @@ import java.util.HashSet;
 import java.util.Set;
 
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Descriptor;
 import prompto.compiler.Flags;
 import prompto.compiler.IOperand;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
+import prompto.declaration.BuiltInMethodDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.expression.ArrowExpression;
 import prompto.expression.IExpression;
 import prompto.expression.PredicateExpression;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoSet;
 import prompto.runtime.Context;
 import prompto.store.Family;
@@ -99,6 +102,8 @@ public class SetType extends ContainerType {
 	@Override
 	public Set<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
 		switch(id.toString()) {
+		case "toList":
+			return new HashSet<>(Collections.singletonList(TO_LIST_METHOD));
 		case "join":
 			return new HashSet<>(Collections.singletonList(JOIN_METHOD));
 		default:
@@ -328,4 +333,45 @@ public class SetType extends ContainerType {
 
 	};
 
+	final IMethodDeclaration TO_LIST_METHOD = new BuiltInMethodDeclaration("toList") {
+		
+		@Override
+		public IValue interpret(Context context) throws PromptoError {
+			SetValue value = (SetValue)getValue(context);
+			return value.toListValue();
+		};
+		
+		
+		
+		@Override
+		public IType check(Context context) {
+			return new ListType(itemType);
+		}
+
+		@Override
+		public boolean hasCompileExactInstanceMember() {
+			return true;
+		}
+		
+		@Override
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentList assignments) {
+			// call replace method
+			Descriptor.Method descriptor = new Descriptor.Method(PromptoList.class);
+			MethodConstant constant = new MethodConstant(PromptoSet.class, "toList", descriptor);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, constant);
+			// done
+			return new ResultInfo(PromptoList.class);
+
+		}
+		
+		@Override
+		public void declareCall(Transpiler transpiler) {
+			transpiler.require("List");
+		};
+		
+		@Override
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentList assignments) {
+			transpiler.append("toList()");
+		}
+	};
 }

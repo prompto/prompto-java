@@ -7,7 +7,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import prompto.compiler.CompilerUtils;
+import prompto.compiler.Descriptor;
 import prompto.compiler.Flags;
 import prompto.compiler.IOperand;
 import prompto.compiler.MethodConstant;
@@ -24,6 +27,7 @@ import prompto.expression.PredicateExpression;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoList;
+import prompto.intrinsic.PromptoSet;
 import prompto.param.CategoryParameter;
 import prompto.param.IParameter;
 import prompto.parser.ECleverParser;
@@ -38,8 +42,6 @@ import prompto.value.IntegerValue;
 import prompto.value.ListValue;
 import prompto.value.NullValue;
 import prompto.value.TextValue;
-
-import com.fasterxml.jackson.databind.JsonNode;
 
 public class ListType extends ContainerType {
 	
@@ -136,6 +138,8 @@ public class ListType extends ContainerType {
 	@Override
 	public Set<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
 		switch(id.toString()) {
+		case "toSet":
+			return new HashSet<>(Collections.singletonList(TO_SET_METHOD));
 		case "join":
 			return new HashSet<>(Collections.singletonList(JOIN_METHOD));
 		case "removeItem":
@@ -556,4 +560,45 @@ public class ListType extends ContainerType {
 
 	};
 	
+	final IMethodDeclaration TO_SET_METHOD = new BuiltInMethodDeclaration("toSet") {
+		
+		@Override
+		public IValue interpret(Context context) throws PromptoError {
+			ListValue list = (ListValue)getValue(context);
+			return list.toSetValue();
+		};
+		
+		
+		
+		@Override
+		public IType check(Context context) {
+			return new SetType(itemType);
+		}
+
+		@Override
+		public boolean hasCompileExactInstanceMember() {
+			return true;
+		}
+		
+		@Override
+		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentList assignments) {
+			// call replace method
+			Descriptor.Method descriptor = new Descriptor.Method(PromptoSet.class);
+			MethodConstant constant = new MethodConstant(PromptoList.class, "toSet", descriptor);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, constant);
+			// done
+			return new ResultInfo(PromptoSet.class);
+
+		}
+		
+		@Override
+		public void declareCall(Transpiler transpiler) {
+			transpiler.require("StrictSet");
+		};
+		
+		@Override
+		public void transpileCall(Transpiler transpiler, prompto.grammar.ArgumentList assignments) {
+			transpiler.append("toSet()");
+		}
+	};
 }
