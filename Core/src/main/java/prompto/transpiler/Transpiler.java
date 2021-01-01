@@ -29,6 +29,7 @@ public class Transpiler {
 	int escapeMode;
 	Stack<String> lines;
 	StringBuilder line;
+	List<String> initializers;
 	String indents;
 	String getterName;
 	String setterName;
@@ -42,6 +43,7 @@ public class Transpiler {
 	    this.escapeMode = 0;
 	    this.lines = new Stack<>();
 	    this.line = new StringBuilder();
+	    this.initializers = new ArrayList<>();
 	    this.indents = "";
 	    this.getterName = null;
 	    this.setterName = null;
@@ -60,6 +62,7 @@ public class Transpiler {
 	    this.escapeMode = copyFrom.escapeMode;
 	    this.lines = copyFrom.lines;
 	    this.line = copyFrom.line;
+	    this.initializers = copyFrom.initializers;
 	    this.indents = copyFrom.indents;
 	    this.parent = copyFrom;
 	    this.getterName = copyFrom.getterName;
@@ -251,18 +254,20 @@ public class Transpiler {
 	
 	@Override
 	public String toString() {
-	    this.appendAllRequired();
-	    this.appendAllRegistered();
-	    this.appendAllDeclared();
-	    this.flush();
+		populateLines();
 	    return this.lines.stream().collect(Collectors.joining("\n"));
 	}
 	
-	public void print(PrintWriter printer) {
+	private void populateLines() {
 	    this.appendAllRequired();
 	    this.appendAllRegistered();
 	    this.appendAllDeclared();
+	    this.appendAllInitializers();
 	    this.flush();
+	}
+
+	public void print(PrintWriter printer) {
+		populateLines();
 	    this.lines.forEach(printer::println);
 	}
 
@@ -325,6 +330,13 @@ public class Transpiler {
 		}
 	}
 
+	public void addInitializer(String line) {
+		this.initializers.add(line);
+	}
+
+	private void appendAllInitializers() {
+		this.initializers.forEach(this.lines::push);
+	}
 
 
 }

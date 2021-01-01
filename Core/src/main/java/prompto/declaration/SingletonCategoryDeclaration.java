@@ -185,7 +185,7 @@ public class SingletonCategoryDeclaration extends ConcreteCategoryDeclaration {
 	        m.flush();
 	    });
 	    if(getInitializeMethod(transpiler.getContext())!=null)
-	    	transpiler.append(this.getName()).append(".instance.initialize();").newLine();
+	    	transpiler.addInitializer(this.getName() + ".instance.initialize();");
 		
 	}
 
