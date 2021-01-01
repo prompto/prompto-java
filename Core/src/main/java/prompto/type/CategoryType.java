@@ -861,8 +861,9 @@ public class CategoryType extends BaseType {
 	    AttributeDeclaration decl = transpiler.getContext().getRegisteredDeclaration(AttributeDeclaration.class, new Identifier(name));
 	    transpiler.append(", ")
 	        .append(decl.isStorable(transpiler.getContext()))
-	        .append(", false"); // not mutable
+	        .append(", ");
 	    IType type = expression.check(transpiler.getContext());
+	    transpiler.append(String.valueOf(type.isMutable(transpiler.getContext())));
 	    if(type instanceof EnumeratedCategoryType || type instanceof EnumeratedNativeType)
 	    	transpiler.append(", true"); // set isEnum flag
 	    else
