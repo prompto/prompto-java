@@ -72,13 +72,13 @@ public class ConcreteWidgetDeclaration extends ConcreteCategoryDeclaration imple
 	    Identifier parent = this.derivedFrom!=null && this.derivedFrom.size()>0 ? this.derivedFrom.get(0) : null;
 	    transpiler.append("function ").append(this.getName()).append("(props) {")
 	    	.indent();
-	    this.transpileGetterSetterAttributes(transpiler);
-	    this.transpileSuperConstructor(transpiler, parent);
-	    this.transpileLocalAttributes(transpiler);
-	    if(this.hasMethod(transpiler.getContext(), new Identifier("getInitialState")))
-	    	transpiler.append("this.state = this.getInitialState();").newLine();
+	    transpileGetterSetterAttributes(transpiler);
+	    transpileSuperConstructor(transpiler, parent);
+	    transpileLocalAttributes(transpiler);
+	    if(hasMethod(transpiler.getContext(), new Identifier("getInitialState")))
+	    	transpiler.append("this.state = this.state || this.getInitialState();").newLine();
 	    else
-	    	transpiler.append("this.state = {};").newLine();
+	    	transpiler.append("this.state = this.state || {};").newLine();
 	    transpiler.append("return this;")
 	    	.dedent()
 	    	.append("}")
