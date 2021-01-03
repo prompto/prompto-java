@@ -342,7 +342,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void buildSection(ParserRuleContext node, Section section) {
 		Token first = findFirstValidToken(node.start.getTokenIndex());
 		Token last = findLastValidToken(node.stop.getTokenIndex());
-		section.setFrom(path, first, last, Dialect.M);
+		section.setSectionFrom(path, first, last, Dialect.M);
 	}
 	
 	private List<Annotation> readAnnotations(List<? extends ParseTree> contexts) {
@@ -2200,7 +2200,8 @@ public class MPromptoBuilder extends MParserBaseListener {
 	@Override
 	public void exitMethod_call_expression(Method_call_expressionContext ctx) {
 		Identifier name = getNodeValue(ctx.name);
-		IExpression caller = new UnresolvedIdentifier(name);
+		UnresolvedIdentifier caller = new UnresolvedIdentifier(name);
+		caller.copySectionFrom(name);
 		ArgumentList args = getNodeValue(ctx.args);
 		setNodeValue(ctx, new UnresolvedCall(caller, args));
 	}
