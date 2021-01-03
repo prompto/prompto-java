@@ -161,7 +161,7 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 			else if(caller instanceof MemberSelector)
 				resolved = resolveMemberSelector(context, (MemberSelector)caller);
 			if(resolved instanceof Section)
-				((Section)resolved).setFrom(this);
+				((Section)resolved).copySectionFrom(this);
 		}
 		if(resolved==null)
 	    	context.getProblemListener().reportUnknownMethod(this, this.toString());

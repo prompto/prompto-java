@@ -32,7 +32,7 @@ public class DocTextKey extends DocKey {
 	@Override
 	public Identifier asIdentifier() {
 		Identifier id = new Identifier(stringValue());
-		id.setFrom(this);
+		id.copySectionFrom(this);
 		return id;
 	}
 	

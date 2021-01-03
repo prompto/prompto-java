@@ -168,7 +168,7 @@ public class UnresolvedIdentifier extends Section implements IPredicateExpressio
 			if(resolved==null)
 				context.getProblemListener().reportUnknownIdentifier(this, id.toString());
 			else if(resolved instanceof Section)
-				((Section)resolved).setFrom(this);
+				((Section)resolved).copySectionFrom(this);
 		}
 		return resolved;
 	}
@@ -229,7 +229,7 @@ public class UnresolvedIdentifier extends Section implements IPredicateExpressio
 			return null;
 		try {
 			MethodCall method = new MethodCall(new MethodSelector(id));
-			method.setFrom(this);
+			method.copySectionFrom(this);
 			method.check(context, updateSelectorParent);
 			return method;
 		} catch(SyntaxError e) {

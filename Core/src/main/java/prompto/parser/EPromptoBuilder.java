@@ -348,7 +348,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void buildSection(ParserRuleContext node, Section section) {
 		Token first = findFirstValidToken(node.start.getTokenIndex());
 		Token last = findLastValidToken(node.stop.getTokenIndex());
-		section.setFrom(path, first, last, Dialect.E);
+		section.setSectionFrom(path, first, last, Dialect.E);
 	}
 	
 	private List<Annotation> readAnnotations(List<? extends ParseTree> contexts) {
