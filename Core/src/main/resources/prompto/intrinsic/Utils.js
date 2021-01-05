@@ -133,7 +133,7 @@ String.prototype.equals = function(value) {
 };
 var intrinsic = {};
 
-if(window && window.document) {
+if(typeof(window)==="object" && window.document) {
 	window.document.setMember = function(name, value) {
 		window.document[name] = value;
 	};
