@@ -1,4 +1,4 @@
-// Generated from OParser.g4 by ANTLR 4.9
+// Generated from OParser.g4 by ANTLR 4.8
 package prompto.parser;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class OParser extends AbstractParser {
-	static { RuntimeMetaData.checkVersion("4.9", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.8", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -5372,7 +5372,7 @@ public class OParser extends AbstractParser {
 				setState(1110);
 				match(RPAR);
 				setState(1111);
-				((CastExpressionContext)_localctx).left = expression(17);
+				((CastExpressionContext)_localctx).left = expression(22);
 				}
 				break;
 			case 9:
@@ -5433,11 +5433,11 @@ public class OParser extends AbstractParser {
 						((MultiplyExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1126);
-						if (!(precpred(_ctx, 22))) throw new FailedPredicateException(this, "precpred(_ctx, 22)");
+						if (!(precpred(_ctx, 21))) throw new FailedPredicateException(this, "precpred(_ctx, 21)");
 						setState(1127);
 						multiply();
 						setState(1128);
-						((MultiplyExpressionContext)_localctx).right = expression(23);
+						((MultiplyExpressionContext)_localctx).right = expression(22);
 						}
 						break;
 					case 2:
@@ -5446,11 +5446,11 @@ public class OParser extends AbstractParser {
 						((DivideExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1130);
-						if (!(precpred(_ctx, 21))) throw new FailedPredicateException(this, "precpred(_ctx, 21)");
+						if (!(precpred(_ctx, 20))) throw new FailedPredicateException(this, "precpred(_ctx, 20)");
 						setState(1131);
 						divide();
 						setState(1132);
-						((DivideExpressionContext)_localctx).right = expression(22);
+						((DivideExpressionContext)_localctx).right = expression(21);
 						}
 						break;
 					case 3:
@@ -5459,11 +5459,11 @@ public class OParser extends AbstractParser {
 						((ModuloExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1134);
-						if (!(precpred(_ctx, 20))) throw new FailedPredicateException(this, "precpred(_ctx, 20)");
+						if (!(precpred(_ctx, 19))) throw new FailedPredicateException(this, "precpred(_ctx, 19)");
 						setState(1135);
 						modulo();
 						setState(1136);
-						((ModuloExpressionContext)_localctx).right = expression(21);
+						((ModuloExpressionContext)_localctx).right = expression(20);
 						}
 						break;
 					case 4:
@@ -5472,11 +5472,11 @@ public class OParser extends AbstractParser {
 						((IntDivideExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1138);
-						if (!(precpred(_ctx, 19))) throw new FailedPredicateException(this, "precpred(_ctx, 19)");
+						if (!(precpred(_ctx, 18))) throw new FailedPredicateException(this, "precpred(_ctx, 18)");
 						setState(1139);
 						idivide();
 						setState(1140);
-						((IntDivideExpressionContext)_localctx).right = expression(20);
+						((IntDivideExpressionContext)_localctx).right = expression(19);
 						}
 						break;
 					case 5:
@@ -5485,7 +5485,7 @@ public class OParser extends AbstractParser {
 						((AddExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1142);
-						if (!(precpred(_ctx, 18))) throw new FailedPredicateException(this, "precpred(_ctx, 18)");
+						if (!(precpred(_ctx, 17))) throw new FailedPredicateException(this, "precpred(_ctx, 17)");
 						setState(1143);
 						((AddExpressionContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
@@ -5498,7 +5498,7 @@ public class OParser extends AbstractParser {
 							consume();
 						}
 						setState(1144);
-						((AddExpressionContext)_localctx).right = expression(19);
+						((AddExpressionContext)_localctx).right = expression(18);
 						}
 						break;
 					case 6:
@@ -24017,15 +24017,15 @@ public class OParser extends AbstractParser {
 	private boolean expression_sempred(ExpressionContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 3:
-			return precpred(_ctx, 22);
-		case 4:
 			return precpred(_ctx, 21);
-		case 5:
+		case 4:
 			return precpred(_ctx, 20);
-		case 6:
+		case 5:
 			return precpred(_ctx, 19);
-		case 7:
+		case 6:
 			return precpred(_ctx, 18);
+		case 7:
+			return precpred(_ctx, 17);
 		case 8:
 			return precpred(_ctx, 16);
 		case 9:
@@ -24824,20 +24824,20 @@ public class OParser extends AbstractParser {
 		"\2\u044f\u0450\7\37\2\2\u0450\u0467\5`\61\32\u0451\u0452\7\31\2\2\u0452"+
 		"\u0467\5`\61\31\u0453\u0455\7\22\2\2\u0454\u0456\7z\2\2\u0455\u0454\3"+
 		"\2\2\2\u0455\u0456\3\2\2\2\u0456\u0457\3\2\2\2\u0457\u0458\5\u00ecw\2"+
-		"\u0458\u0459\7\23\2\2\u0459\u045a\5`\61\23\u045a\u0467\3\2\2\2\u045b\u045c"+
+		"\u0458\u0459\7\23\2\2\u0459\u045a\5`\61\30\u045a\u0467\3\2\2\2\u045b\u045c"+
 		"\7?\2\2\u045c\u045d\7\22\2\2\u045d\u045e\5`\61\2\u045e\u045f\7\23\2\2"+
 		"\u045f\u0467\3\2\2\2\u0460\u0461\7f\2\2\u0461\u0462\7\22\2\2\u0462\u0463"+
 		"\5\u00dan\2\u0463\u0464\7\23\2\2\u0464\u0467\3\2\2\2\u0465\u0467\5f\64"+
 		"\2\u0466\u0449\3\2\2\2\u0466\u044b\3\2\2\2\u0466\u044c\3\2\2\2\u0466\u044d"+
 		"\3\2\2\2\u0466\u044e\3\2\2\2\u0466\u044f\3\2\2\2\u0466\u0451\3\2\2\2\u0466"+
 		"\u0453\3\2\2\2\u0466\u045b\3\2\2\2\u0466\u0460\3\2\2\2\u0466\u0465\3\2"+
-		"\2\2\u0467\u04c4\3\2\2\2\u0468\u0469\f\30\2\2\u0469\u046a\5\u0168\u00b5"+
-		"\2\u046a\u046b\5`\61\31\u046b\u04c3\3\2\2\2\u046c\u046d\f\27\2\2\u046d"+
-		"\u046e\5\u016a\u00b6\2\u046e\u046f\5`\61\30\u046f\u04c3\3\2\2\2\u0470"+
-		"\u0471\f\26\2\2\u0471\u0472\5\u016e\u00b8\2\u0472\u0473\5`\61\27\u0473"+
-		"\u04c3\3\2\2\2\u0474\u0475\f\25\2\2\u0475\u0476\5\u016c\u00b7\2\u0476"+
-		"\u0477\5`\61\26\u0477\u04c3\3\2\2\2\u0478\u0479\f\24\2\2\u0479\u047a\t"+
-		"\2\2\2\u047a\u04c3\5`\61\25\u047b\u047c\f\22\2\2\u047c\u047d\t\3\2\2\u047d"+
+		"\2\2\u0467\u04c4\3\2\2\2\u0468\u0469\f\27\2\2\u0469\u046a\5\u0168\u00b5"+
+		"\2\u046a\u046b\5`\61\30\u046b\u04c3\3\2\2\2\u046c\u046d\f\26\2\2\u046d"+
+		"\u046e\5\u016a\u00b6\2\u046e\u046f\5`\61\27\u046f\u04c3\3\2\2\2\u0470"+
+		"\u0471\f\25\2\2\u0471\u0472\5\u016e\u00b8\2\u0472\u0473\5`\61\26\u0473"+
+		"\u04c3\3\2\2\2\u0474\u0475\f\24\2\2\u0475\u0476\5\u016c\u00b7\2\u0476"+
+		"\u0477\5`\61\25\u0477\u04c3\3\2\2\2\u0478\u0479\f\23\2\2\u0479\u047a\t"+
+		"\2\2\2\u047a\u04c3\5`\61\24\u047b\u047c\f\22\2\2\u047c\u047d\t\3\2\2\u047d"+
 		"\u04c3\5`\61\23\u047e\u047f\f\20\2\2\u047f\u0481\7u\2\2\u0480\u0482\7"+
 		"}\2\2\u0481\u0480\3\2\2\2\u0481\u0482\3\2\2\2\u0482\u0483\3\2\2\2\u0483"+
 		"\u04c3\5`\61\21\u0484\u0485\f\17\2\2\u0485\u0486\t\4\2\2\u0486\u04c3\5"+

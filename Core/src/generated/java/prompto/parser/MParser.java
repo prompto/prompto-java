@@ -1,4 +1,4 @@
-// Generated from MParser.g4 by ANTLR 4.9
+// Generated from MParser.g4 by ANTLR 4.8
 package prompto.parser;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class MParser extends AbstractParser {
-	static { RuntimeMetaData.checkVersion("4.9", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.8", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -5639,11 +5639,11 @@ public class MParser extends AbstractParser {
 						((MultiplyExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1155);
-						if (!(precpred(_ctx, 21))) throw new FailedPredicateException(this, "precpred(_ctx, 21)");
+						if (!(precpred(_ctx, 20))) throw new FailedPredicateException(this, "precpred(_ctx, 20)");
 						setState(1156);
 						multiply();
 						setState(1157);
-						((MultiplyExpressionContext)_localctx).right = expression(22);
+						((MultiplyExpressionContext)_localctx).right = expression(21);
 						}
 						break;
 					case 2:
@@ -5652,11 +5652,11 @@ public class MParser extends AbstractParser {
 						((DivideExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1159);
-						if (!(precpred(_ctx, 20))) throw new FailedPredicateException(this, "precpred(_ctx, 20)");
+						if (!(precpred(_ctx, 19))) throw new FailedPredicateException(this, "precpred(_ctx, 19)");
 						setState(1160);
 						divide();
 						setState(1161);
-						((DivideExpressionContext)_localctx).right = expression(21);
+						((DivideExpressionContext)_localctx).right = expression(20);
 						}
 						break;
 					case 3:
@@ -5665,11 +5665,11 @@ public class MParser extends AbstractParser {
 						((ModuloExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1163);
-						if (!(precpred(_ctx, 19))) throw new FailedPredicateException(this, "precpred(_ctx, 19)");
+						if (!(precpred(_ctx, 18))) throw new FailedPredicateException(this, "precpred(_ctx, 18)");
 						setState(1164);
 						modulo();
 						setState(1165);
-						((ModuloExpressionContext)_localctx).right = expression(20);
+						((ModuloExpressionContext)_localctx).right = expression(19);
 						}
 						break;
 					case 4:
@@ -5678,11 +5678,11 @@ public class MParser extends AbstractParser {
 						((IntDivideExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1167);
-						if (!(precpred(_ctx, 18))) throw new FailedPredicateException(this, "precpred(_ctx, 18)");
+						if (!(precpred(_ctx, 17))) throw new FailedPredicateException(this, "precpred(_ctx, 17)");
 						setState(1168);
 						idivide();
 						setState(1169);
-						((IntDivideExpressionContext)_localctx).right = expression(19);
+						((IntDivideExpressionContext)_localctx).right = expression(18);
 						}
 						break;
 					case 5:
@@ -5691,7 +5691,7 @@ public class MParser extends AbstractParser {
 						((AddExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1171);
-						if (!(precpred(_ctx, 17))) throw new FailedPredicateException(this, "precpred(_ctx, 17)");
+						if (!(precpred(_ctx, 16))) throw new FailedPredicateException(this, "precpred(_ctx, 16)");
 						setState(1172);
 						((AddExpressionContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
@@ -5704,7 +5704,7 @@ public class MParser extends AbstractParser {
 							consume();
 						}
 						setState(1173);
-						((AddExpressionContext)_localctx).right = expression(18);
+						((AddExpressionContext)_localctx).right = expression(17);
 						}
 						break;
 					case 6:
@@ -5899,7 +5899,7 @@ public class MParser extends AbstractParser {
 						((CastExpressionContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(1219);
-						if (!(precpred(_ctx, 16))) throw new FailedPredicateException(this, "precpred(_ctx, 16)");
+						if (!(precpred(_ctx, 21))) throw new FailedPredicateException(this, "precpred(_ctx, 21)");
 						setState(1220);
 						match(AS);
 						setState(1222);
@@ -24237,15 +24237,15 @@ public class MParser extends AbstractParser {
 	private boolean expression_sempred(ExpressionContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 2:
-			return precpred(_ctx, 21);
-		case 3:
 			return precpred(_ctx, 20);
-		case 4:
+		case 3:
 			return precpred(_ctx, 19);
-		case 5:
+		case 4:
 			return precpred(_ctx, 18);
-		case 6:
+		case 5:
 			return precpred(_ctx, 17);
+		case 6:
+			return precpred(_ctx, 16);
 		case 7:
 			return precpred(_ctx, 15);
 		case 8:
@@ -24267,7 +24267,7 @@ public class MParser extends AbstractParser {
 		case 16:
 			return precpred(_ctx, 24);
 		case 17:
-			return precpred(_ctx, 16);
+			return precpred(_ctx, 21);
 		case 18:
 			return precpred(_ctx, 14);
 		case 19:
@@ -25063,13 +25063,13 @@ public class MParser extends AbstractParser {
 		"\u0484\5`\61\2\u0483\u046e\3\2\2\2\u0483\u0470\3\2\2\2\u0483\u0471\3\2"+
 		"\2\2\u0483\u0472\3\2\2\2\u0483\u0473\3\2\2\2\u0483\u0474\3\2\2\2\u0483"+
 		"\u0476\3\2\2\2\u0483\u0478\3\2\2\2\u0483\u047d\3\2\2\2\u0483\u0482\3\2"+
-		"\2\2\u0484\u04e1\3\2\2\2\u0485\u0486\f\27\2\2\u0486\u0487\5\u016a\u00b6"+
-		"\2\u0487\u0488\5\\/\30\u0488\u04e0\3\2\2\2\u0489\u048a\f\26\2\2\u048a"+
-		"\u048b\5\u016c\u00b7\2\u048b\u048c\5\\/\27\u048c\u04e0\3\2\2\2\u048d\u048e"+
-		"\f\25\2\2\u048e\u048f\5\u0170\u00b9\2\u048f\u0490\5\\/\26\u0490\u04e0"+
-		"\3\2\2\2\u0491\u0492\f\24\2\2\u0492\u0493\5\u016e\u00b8\2\u0493\u0494"+
-		"\5\\/\25\u0494\u04e0\3\2\2\2\u0495\u0496\f\23\2\2\u0496\u0497\t\3\2\2"+
-		"\u0497\u04e0\5\\/\24\u0498\u0499\f\21\2\2\u0499\u049a\t\4\2\2\u049a\u04e0"+
+		"\2\2\u0484\u04e1\3\2\2\2\u0485\u0486\f\26\2\2\u0486\u0487\5\u016a\u00b6"+
+		"\2\u0487\u0488\5\\/\27\u0488\u04e0\3\2\2\2\u0489\u048a\f\25\2\2\u048a"+
+		"\u048b\5\u016c\u00b7\2\u048b\u048c\5\\/\26\u048c\u04e0\3\2\2\2\u048d\u048e"+
+		"\f\24\2\2\u048e\u048f\5\u0170\u00b9\2\u048f\u0490\5\\/\25\u0490\u04e0"+
+		"\3\2\2\2\u0491\u0492\f\23\2\2\u0492\u0493\5\u016e\u00b8\2\u0493\u0494"+
+		"\5\\/\24\u0494\u04e0\3\2\2\2\u0495\u0496\f\22\2\2\u0496\u0497\t\3\2\2"+
+		"\u0497\u04e0\5\\/\23\u0498\u0499\f\21\2\2\u0499\u049a\t\4\2\2\u049a\u04e0"+
 		"\5\\/\22\u049b\u049c\f\17\2\2\u049c\u049d\t\5\2\2\u049d\u04e0\5\\/\20"+
 		"\u049e\u04a0\f\16\2\2\u049f\u04a1\7\u0082\2\2\u04a0\u049f\3\2\2\2\u04a0"+
 		"\u04a1\3\2\2\2\u04a1\u04a2\3\2\2\2\u04a2\u04a3\7^\2\2\u04a3\u04e0\5\\"+
@@ -25083,7 +25083,7 @@ public class MParser extends AbstractParser {
 		"\5\\/\b\u04bb\u04e0\3\2\2\2\u04bc\u04bd\f\3\2\2\u04bd\u04be\7r\2\2\u04be"+
 		"\u04bf\7f\2\2\u04bf\u04c0\5\u00dep\2\u04c0\u04c1\7w\2\2\u04c1\u04c2\5"+
 		"\\/\4\u04c2\u04e0\3\2\2\2\u04c3\u04c4\f\32\2\2\u04c4\u04e0\5z>\2\u04c5"+
-		"\u04c6\f\22\2\2\u04c6\u04c8\7R\2\2\u04c7\u04c9\7\177\2\2\u04c8\u04c7\3"+
+		"\u04c6\f\27\2\2\u04c6\u04c8\7R\2\2\u04c7\u04c9\7\177\2\2\u04c8\u04c7\3"+
 		"\2\2\2\u04c8\u04c9\3\2\2\2\u04c9\u04ca\3\2\2\2\u04ca\u04e0\5\u00f0y\2"+
 		"\u04cb\u04cc\f\20\2\2\u04cc\u04ce\7z\2\2\u04cd\u04cf\7\u0082\2\2\u04ce"+
 		"\u04cd\3\2\2\2\u04ce\u04cf\3\2\2\2\u04cf\u04d0\3\2\2\2\u04d0\u04e0\5\u0146"+
