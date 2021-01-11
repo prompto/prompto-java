@@ -1,8 +1,9 @@
 package prompto.store;
 
+import java.util.function.Supplier;
+
 import prompto.store.memory.MemStore;
 import prompto.utils.ISingleton;
-import prompto.utils.ThreadUtils;
 
 public abstract class DataStore {
 
@@ -12,30 +13,22 @@ public abstract class DataStore {
 		@Override public IStore get() { return instance; }
 	};
 	
-	static ThreadLocal<IStore> threadInstance = ThreadLocal.withInitial(()->globalInstance.get());
+	static ThreadLocal<Supplier<IStore>> threadInstance = ThreadLocal.withInitial(()->()->globalInstance.get());
 	
 	public static void setGlobal(IStore store) throws Exception {
 		globalInstance.set(store);
-		cleanupDataStoreInAllThreads();
 	}
-
-	public static void cleanupDataStoreInAllThreads() throws Exception {
-		Thread[] threads = ThreadUtils.getAllThreads();
-		for(Thread thread : threads)
-			ThreadUtils.removeThreadLocalForThread(thread, threadInstance);
-	}
-
 
 	public static void useGlobal() {
-		threadInstance.set(globalInstance.get());
+		threadInstance.set(()->globalInstance.get());
 	}
 	
 	public static void setInstance(IStore store) {
-		threadInstance.set(store);
+		threadInstance.set(()->store);
 	}
 
 	public static IStore getInstance() {
-		return threadInstance.get();
+		return threadInstance.get().get();
 	}
 
 }
