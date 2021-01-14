@@ -16,7 +16,7 @@ import prompto.error.SyntaxError;
 import prompto.runtime.Context;
 import prompto.type.DecimalType;
 
-public class DecimalValue extends BaseValue implements INumber, Comparable<INumber>, IMultiplyable {
+public class DecimalValue extends BaseValue implements INumberValue, Comparable<INumberValue>, IMultiplyable {
 	
 	public static DecimalValue Parse(String text) {
 		return new DecimalValue(Double.parseDouble(text));
@@ -76,11 +76,11 @@ public class DecimalValue extends BaseValue implements INumber, Comparable<INumb
 
 	@Override
 	public IValue divide(Context context, IValue value) throws PromptoError {
-		if (value instanceof INumber) {
-			if (((INumber) value).doubleValue() == 0.0)
+		if (value instanceof INumberValue) {
+			if (((INumberValue) value).doubleValue() == 0.0)
 				throw new DivideByZeroError();
 			else
-				return new DecimalValue(this.doubleValue() / ((INumber) value).doubleValue());
+				return new DecimalValue(this.doubleValue() / ((INumberValue) value).doubleValue());
 		} else
 			throw new SyntaxError("Illegal: Decimal / " + value.getClass().getSimpleName());
 	}
@@ -98,24 +98,24 @@ public class DecimalValue extends BaseValue implements INumber, Comparable<INumb
 
 	@Override
 	public IValue modulo(Context context, IValue value) throws PromptoError {
-		if (value instanceof INumber) {
-			if (((INumber) value).doubleValue() == 0.0)
+		if (value instanceof INumberValue) {
+			if (((INumberValue) value).doubleValue() == 0.0)
 				throw new DivideByZeroError();
 			else
-				return new DecimalValue(this.doubleValue() % ((INumber) value).doubleValue());
+				return new DecimalValue(this.doubleValue() % ((INumberValue) value).doubleValue());
 		} else
 			throw new SyntaxError("Illegal: Decimal % " + value.getClass().getSimpleName());
 	}
 	
 	@Override
-	public int compareTo(INumber obj) {
+	public int compareTo(INumberValue obj) {
 		return Double.compare(value, obj.doubleValue());
 	}
 
 	@Override
 	public int compareTo(Context context, IValue value) throws PromptoError {
-		if (value instanceof INumber)
-			return Double.compare(this.value, ((INumber) value).doubleValue());
+		if (value instanceof INumberValue)
+			return Double.compare(this.value, ((INumberValue) value).doubleValue());
 		else
 			throw new SyntaxError("Illegal comparison: Decimal and " + value.getClass().getSimpleName());
 

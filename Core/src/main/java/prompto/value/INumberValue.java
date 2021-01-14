@@ -1,6 +1,6 @@
 package prompto.value;
 
-public interface INumber extends IValue, Comparable<INumber>
+public interface INumberValue extends IValue, Comparable<INumberValue>
 {
     long longValue();
     double doubleValue();

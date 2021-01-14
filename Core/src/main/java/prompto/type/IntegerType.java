@@ -43,6 +43,7 @@ import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 import prompto.value.DecimalValue;
 import prompto.value.IMultiplyable;
+import prompto.value.INumberValue;
 import prompto.value.IValue;
 import prompto.value.IntegerRange;
 import prompto.value.IntegerValue;
@@ -240,7 +241,7 @@ public class IntegerType extends NativeType implements INumberType {
 	}
 
 	@Override
-	public Comparator<IntegerValue> getNativeComparator(boolean descending) {
+	public Comparator<INumberValue> getNativeComparator(boolean descending) {
 		return descending ? 
 				(o1, o2) -> java.lang.Long.compare(o2.longValue(), o1.longValue()) :
 				(o1, o2) -> java.lang.Long.compare(o1.longValue(), o2.longValue());

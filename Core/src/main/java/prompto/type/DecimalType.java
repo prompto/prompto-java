@@ -18,6 +18,7 @@ import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
 import prompto.value.DecimalValue;
+import prompto.value.INumberValue;
 import prompto.value.IValue;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -105,15 +106,15 @@ public class DecimalType extends NativeType implements INumberType {
 	}
 
 	@Override
-	public Comparator<DecimalValue> getNativeComparator(boolean descending) {
-		return descending ? new Comparator<DecimalValue>() {
+	public Comparator<INumberValue> getNativeComparator(boolean descending) {
+		return descending ? new Comparator<INumberValue>() {
 			@Override
-			public int compare(DecimalValue o1, DecimalValue o2) {
+			public int compare(INumberValue o1, INumberValue o2) {
 				return java.lang.Double.compare(o2.doubleValue(), o1.doubleValue());
 			}
-		} : new Comparator<DecimalValue>() {
+		} : new Comparator<INumberValue>() {
 			@Override
-			public int compare(DecimalValue o1, DecimalValue o2) {
+			public int compare(INumberValue o1, INumberValue o2) {
 				return java.lang.Double.compare(o1.doubleValue(), o2.doubleValue());
 			}
 		};
