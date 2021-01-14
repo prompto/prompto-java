@@ -159,14 +159,14 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 	protected void collectReturnTypes(Context context, TypeMap types) {
 		IType type = statements.check(context, null);
 		if(type!=VoidType.instance())
-			types.put(type.getTypeNameId(), type);
+			types.add(type);
 		Context local = context.newLocalContext();
 		local.registerValue(new ErrorVariable(errorId));
 		super.collectReturnTypes(local, types);
 		if(finallyStatements!=null) {
 			type = finallyStatements.check(context, null);
 			if(type!=VoidType.instance())
-				types.put(type.getTypeNameId(), type);
+				types.add(type);
 		}
 	}
 

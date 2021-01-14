@@ -162,7 +162,11 @@ public abstract class ProblemListenerBase implements ANTLRErrorListener, IProble
 		addProblem(new MissingAttributeProblem(section, message));
 	}
 	
-	
+	@Override
+	public void reportIncompatibleTypes(ISection section, IType first, IType second) {
+		addProblem(new IncompatibleTypesProblem(section, first, second));
+	}
+
 	@Override
 	public void reportUnknownAnnotation(ISection section, String name) {
 		addProblem(new UnknowAnnotationProblem(section, name));

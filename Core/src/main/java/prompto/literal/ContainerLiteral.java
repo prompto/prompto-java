@@ -45,9 +45,9 @@ public abstract class ContainerLiteral<T extends IContainer<IValue>> extends Lit
 	public IType check(Context context) {
 		if(itemType==null) {
 			if(expressions!=null)
-				itemType = TypeUtils.inferElementType(context, expressions);
+				itemType = TypeUtils.inferExpressionsType(context, expressions, this);
 			else
-				itemType = TypeUtils.inferValuesType(context, getItems());
+				itemType = TypeUtils.inferValuesType(context, getItems(), this);
 		}
 		return newType(itemType); 
 	}

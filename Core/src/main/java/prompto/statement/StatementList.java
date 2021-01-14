@@ -60,15 +60,18 @@ public class StatementList extends LinkedList<IStatement> {
 		} else {
 			TypeMap types = new TypeMap();
 			if(returnType!=null)
-				types.put(returnType.getTypeNameId(), returnType);
+				types.add(returnType);
+			ISection section = null;
 			for(IStatement statement : this) {
 				IType type = statement.check(context);
 				if(!statement.canReturn())
 					type = VoidType.instance();
-				if(type!=null && type!=VoidType.instance()) // null indicates error
-					types.put(type.getTypeNameId(), type);
+				if(type!=null && type!=VoidType.instance()) { // null indicates error
+					types.add(type);
+					section = statement;
+				}
 			}
-			IType type = types.inferType(context);
+			IType type = types.inferType(context, section);
 			if(returnType!=null)
 				return returnType;
 			else
@@ -93,7 +96,8 @@ public class StatementList extends LinkedList<IStatement> {
 		} else {
 			TypeMap types = new TypeMap();
 			if(returnType!=null)
-				types.put(returnType.getTypeNameId(), returnType);
+				types.add(returnType);
+			ISection section = null;
 			for(IStatement statement : this) {
 				if(!(statement instanceof JavaNativeCall))
 					continue;
@@ -102,10 +106,12 @@ public class StatementList extends LinkedList<IStatement> {
 				// TODO: remove the below workaround for unregistered native categories
 				if(type==null)
 					type = returnType;
-				if(type!=VoidType.instance())
-					types.put(type.getTypeNameId(), type);
+				if(type!=VoidType.instance()) {
+					types.add(type);
+					section = statement;
+				}
 			}
-			IType type = types.inferType(context);
+			IType type = types.inferType(context, section);
 			if(returnType!=null)
 				return returnType;
 			else

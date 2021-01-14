@@ -26,7 +26,8 @@ public class VoidType extends NativeType {
 
 	@Override
 	public boolean isAssignableFrom(Context context, IType other) {
-		throw new RuntimeException("Should never get there !");
+        // illegal, but happens during syntax checking, if error is collected rather than thrown
+        return false;
 	}
 	
 	@Override

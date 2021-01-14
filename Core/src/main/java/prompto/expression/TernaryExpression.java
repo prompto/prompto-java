@@ -14,6 +14,7 @@ import prompto.compiler.StackState;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.parser.Dialect;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
@@ -23,7 +24,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.BooleanValue;
 import prompto.value.IValue;
 
-public class TernaryExpression implements IExpression {
+public class TernaryExpression extends Section implements IExpression {
 
 	IExpression condition;
 	IExpression ifTrue;
@@ -60,9 +61,9 @@ public class TernaryExpression implements IExpression {
 		IType trueType = ifTrue.check(context);
 		IType falseType = ifFalse.check(context);
 		TypeMap types = new TypeMap();
-		types.put(trueType.getTypeNameId(), trueType);
-		types.put(falseType.getTypeNameId(), falseType);
-		return types.inferType(context);
+		types.add(trueType);
+		types.add(falseType);
+		return types.inferType(context, this);
 	}
 	
 	@Override

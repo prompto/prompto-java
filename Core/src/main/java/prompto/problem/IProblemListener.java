@@ -34,6 +34,7 @@ public interface IProblemListener {
 	void reportIllegalValue(ISection section, String message);
 	void reportInitializeConstructor(ISection section);
 	void reportIllegalInitializeParameters(ISection section);
+	void reportIncompatibleTypes(ISection section, IType first, IType second);
 	void reportNoSuperType(ISection section, IType actual);
 	void reportNotMutable(ISection section, String name);
 	void reportNotStorable(ISection section, String name);

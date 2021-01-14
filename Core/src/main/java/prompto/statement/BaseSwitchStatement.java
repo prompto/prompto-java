@@ -109,19 +109,19 @@ public abstract class BaseSwitchStatement extends BaseStatement {
 	private IType checkReturnType(Context context) {
 		TypeMap types = new TypeMap();
 		collectReturnTypes(context, types);
-		return types.inferType(context);
+		return types.inferType(context, this);
 	}
 	
 	protected void collectReturnTypes(Context context, TypeMap types) {
 		for(SwitchCase sc : switchCases) {
 			IType type = sc.checkReturnType(context);
 			if(type!=VoidType.instance())
-				types.put(type.getTypeNameId(), type);
+				types.add(type);
 		}
 		if(defaultCase!=null) {
 			IType type = defaultCase.check(context, null);
 			if(type!=VoidType.instance())
-				types.put(type.getTypeNameId(), type);
+				types.add(type);
 		}
 	}
 

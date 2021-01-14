@@ -2,41 +2,80 @@ package prompto.type;
 
 import java.util.HashMap;
 
-import prompto.error.SyntaxError;
+import prompto.declaration.CategoryDeclaration;
 import prompto.grammar.Identifier;
+import prompto.parser.ISection;
 import prompto.runtime.Context;
-
 
 
 public class TypeMap extends HashMap<Identifier, IType> {
 
 	private static final long serialVersionUID = 1L;
 
-	public IType inferType(Context context) {
-		if(size()==0)
-			return VoidType.instance();
+	public void add(IType type) {
+		put(type.getTypeNameId(), type);
+	}
+	
+	public IType inferType(Context context, ISection section) {
 		IType inferred = null;
 		// first pass: get less specific type
-		for(IType t : values()) {
-			if(t==NullType.instance())
+		for(IType current : values()) {
+			if(current == NullType.instance())
 				continue;
-			if(inferred==null)
-				inferred = t;
-			else if(inferred.isAssignableFrom(context, t))
+			if(inferred == null)
+				inferred = current;
+			else if(inferred.isAssignableFrom(context, current))
 				continue;
-			else if(t.isAssignableFrom(context, inferred))
-				inferred = t;
-			else
-				throw new SyntaxError("Incompatible types: " + inferred.getTypeName() + " and " + t.getTypeName());
+			else if(current.isAssignableFrom(context, inferred))
+				inferred = current;
+			else {
+				IType common = inferCommonBaseType(context, inferred, current);
+				if(common!=null)
+					inferred = common;
+				else
+					context.getProblemListener().reportIncompatibleTypes(section, current, inferred);
+			}
 		}
 		if(inferred==null)
 			return NullType.instance();
 		// second pass: check compatible
-		for(IType t : values()) {
-			if(t!=inferred && !inferred.isAssignableFrom(context, t))
-				throw new SyntaxError("Incompatible types: " + inferred.getTypeName() + " and " + t.getTypeName());
+		for(IType current : values()) {
+			if(current!=inferred && !inferred.isAssignableFrom(context, current))
+				context.getProblemListener().reportIncompatibleTypes(section, inferred, current);
 		}
 		return inferred;
 	}
+
+	public IType inferCommonBaseType(Context context, IType type1, IType type2) {
+		if(type1 instanceof CategoryType && type2 instanceof CategoryType)
+			return inferCommonCategoryType(context, (CategoryType)type1, (CategoryType)type2, true);
+		else if(type1 instanceof NativeType || type2 instanceof NativeType)
+			return AnyType.instance();
+		else
+			return null;
+	}
 	
+	
+	public IType inferCommonCategoryType(Context context, CategoryType type1, CategoryType type2, boolean trySwap) {
+		CategoryDeclaration decl1 = context.getRegisteredDeclaration(CategoryDeclaration.class, type1.getTypeNameId());
+		if(decl1.getDerivedFrom()!=null) {
+			for(Identifier id : decl1.getDerivedFrom()) {
+				CategoryType parentType = new CategoryType(id);
+				if(parentType.isAssignableFrom(context, type2))
+					return parentType;
+			}
+			// climb up the tree
+			for(Identifier id : decl1.getDerivedFrom()) {
+				CategoryType parentType = new CategoryType(id);
+				IType commonType = inferCommonBaseType(context, parentType, type2);
+				if(commonType!=null)
+					return commonType;
+			}
+		}
+		if(trySwap)
+			return inferCommonCategoryType(context, type2, type1, false);
+		else
+			return null;
+	}
+
 }

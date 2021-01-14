@@ -16,10 +16,13 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.EqualsExpression;
 import prompto.expression.IExpression;
+import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
 import prompto.type.IType;
+import prompto.type.TypeMap;
+import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.BooleanValue;
 import prompto.value.IValue;
@@ -122,8 +125,16 @@ public class IfStatement extends BaseStatement {
 
 	@Override
 	public IType check(Context context) {
-		return elements.get(0).check(context);
-		// TODO check consistency with additional elements
+		TypeMap types = new TypeMap();
+		ISection section = null;
+		for(IfElement element : elements) {
+			IType type = element.check(context);
+			if(type!=VoidType.instance()) {
+				section = element;
+				types.add(type);
+			}
+		}
+		return types.inferType(context, section);
 	}
 
 	@Override
@@ -131,7 +142,7 @@ public class IfStatement extends BaseStatement {
 		for (IfElement element : elements) {
 			IExpression condition = element.getCondition();
 			Object test = condition == null ? BooleanValue.TRUE : condition.interpret(context);
-			if (test instanceof BooleanValue && BooleanValue.TRUE.equals((BooleanValue) test))
+			if (BooleanValue.TRUE == test)
 				return element.interpret(context);
 		}
 		return null;
@@ -352,10 +363,12 @@ public class IfStatement extends BaseStatement {
 
 		@Override
 		public IType check(Context context) {
-			IType cond = condition.check(context);
-			if (cond != BooleanType.instance())
-				throw new SyntaxError("Expected a boolean condition!");
-			context = downcastContextForCheck(context);
+			if(condition!=null) {
+				IType cond = condition.check(context);
+				if (cond != BooleanType.instance())
+					throw new SyntaxError("Expected a boolean condition!");
+				context = downcastContextForCheck(context);
+			}
 			return statements.check(context, null);
 		}
 

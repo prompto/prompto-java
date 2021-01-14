@@ -1,8 +1,5 @@
 package prompto.literal;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
@@ -16,8 +13,8 @@ import prompto.transpiler.Transpiler;
 import prompto.type.DictType;
 import prompto.type.IType;
 import prompto.type.MissingType;
+import prompto.type.TypeMap;
 import prompto.utils.CodeWriter;
-import prompto.utils.TypeUtils;
 import prompto.value.DictionaryValue;
 import prompto.value.IValue;
 import prompto.value.TextValue;
@@ -62,12 +59,12 @@ public class DictLiteral extends Literal<DictionaryValue> {
 		return new DictType(itemType); 
 	}
 	
-	// can't use Utils.inferElementType with list of DictEntry
 	private IType inferElementType(Context context) {
 		if(entries.isEmpty())
 			return MissingType.instance();
-		List<IType> types = entries.stream().map(e->e.getValue().check(context)).collect(Collectors.toList());
-		return TypeUtils.inferCollectionType(context, types);
+		TypeMap types = new TypeMap();
+		entries.forEach(e -> types.add(e.getValue().check(context)));
+		return types.inferType(context, this);
 	}	
 	
 	@Override
