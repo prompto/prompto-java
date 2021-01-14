@@ -35,9 +35,11 @@ import prompto.value.IValue;
 
 public abstract class TypeUtils {
 	
-	public static IType inferValuesType(Context context, Collection<? extends IValue> items, ISection section) {
+	public static IType inferValuesType(Context context, Collection<? extends IValue> values, ISection section) {
+		if(values.isEmpty())
+			return MissingType.instance();
 		TypeMap types = new TypeMap();
-		items.forEach(item -> types.add(item.getType()));
+		values.forEach(value -> types.add(value.getType()));
 		return types.inferType(context, section);
 	}
 	

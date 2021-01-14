@@ -27,13 +27,13 @@ import prompto.value.IValue;
 public class TernaryExpression extends Section implements IExpression {
 
 	IExpression condition;
-	IExpression ifTrue;
-	IExpression ifFalse;
+	IExpression whenTrue;
+	IExpression whenFalse;
 	
-	public TernaryExpression(IExpression condition, IExpression ifTrue, IExpression ifFalse) {
+	public TernaryExpression(IExpression condition, IExpression whenTrue, IExpression whenFalse) {
 		this.condition = condition;
-		this.ifTrue = ifTrue;
-		this.ifFalse = ifFalse;
+		this.whenTrue = whenTrue;
+		this.whenFalse = whenFalse;
 	}
 	
 	@Override
@@ -41,15 +41,15 @@ public class TernaryExpression extends Section implements IExpression {
 		if(writer.getDialect()==Dialect.O) {
 			condition.toDialect(writer);
 			writer.append(" ? ");
-			ifTrue.toDialect(writer);
+			whenTrue.toDialect(writer);
 			writer.append(" : ");
-			ifFalse.toDialect(writer);
+			whenFalse.toDialect(writer);
 		} else {
-			ifTrue.toDialect(writer);
+			whenTrue.toDialect(writer);
 			writer.append(" if ");
 			condition.toDialect(writer);
 			writer.append(" else ");
-			ifFalse.toDialect(writer);
+			whenFalse.toDialect(writer);
 		}
 	}
 	
@@ -58,8 +58,8 @@ public class TernaryExpression extends Section implements IExpression {
 		IType type = condition.check(context);
 		if(!(type instanceof BooleanType))
 			throw new SyntaxError("Cannot test condition on " +  type.getTypeName() );
-		IType trueType = ifTrue.check(context);
-		IType falseType = ifFalse.check(context);
+		IType trueType = whenTrue.check(context);
+		IType falseType = whenFalse.check(context);
 		TypeMap types = new TypeMap();
 		types.add(trueType);
 		types.add(falseType);
@@ -70,9 +70,9 @@ public class TernaryExpression extends Section implements IExpression {
 	public IValue interpret(Context context) throws PromptoError {
 		Object test = condition.interpret(context);
 		if(test == BooleanValue.TRUE)
-			return ifTrue.interpret(context);
+			return whenTrue.interpret(context);
 		else
-			return ifFalse.interpret(context);
+			return whenFalse.interpret(context);
 	}
 	
 	@Override
@@ -85,7 +85,7 @@ public class TernaryExpression extends Section implements IExpression {
 		IInstructionListener branchListener = method.addOffsetListener(new OffsetListenerConstant());
 		method.activateOffsetListener(branchListener);
 		method.addInstruction(Opcode.IFEQ, branchListener);
-		ResultInfo trueResult = ifTrue.compile(context, method, flags.withPrimitive(false));
+		ResultInfo trueResult = whenTrue.compile(context, method, flags.withPrimitive(false));
 		trueResult = compileDowncastIfRequired(context, method, trueResult, resultType);
 		IInstructionListener finalListener = method.addOffsetListener(new OffsetListenerConstant());
 		method.activateOffsetListener(finalListener);
@@ -93,7 +93,7 @@ public class TernaryExpression extends Section implements IExpression {
 		method.restoreFullStackState(initialState);
 		method.placeLabel(initialState);
 		method.inhibitOffsetListener(branchListener);
-		ResultInfo falseResult = ifFalse.compile(context, method, flags.withPrimitive(false));
+		ResultInfo falseResult = whenFalse.compile(context, method, flags.withPrimitive(false));
 		falseResult = compileDowncastIfRequired(context, method, falseResult, resultType);
 		method.inhibitOffsetListener(finalListener);
 		StackState finalState = method.captureStackState();
@@ -117,8 +117,8 @@ public class TernaryExpression extends Section implements IExpression {
 	@Override
 	public void declare(Transpiler transpiler) {
 	    this.condition.declare(transpiler);
-	    this.ifTrue.declare(transpiler);
-	    this.ifFalse.declare(transpiler);
+	    this.whenTrue.declare(transpiler);
+	    this.whenFalse.declare(transpiler);
 	}
 	
 	@Override
@@ -126,9 +126,9 @@ public class TernaryExpression extends Section implements IExpression {
 	    transpiler.append("(");
 	    this.condition.transpile(transpiler);
 	    transpiler.append(" ? ");
-	    this.ifTrue.transpile(transpiler);
+	    this.whenTrue.transpile(transpiler);
 	    transpiler.append(" : ");
-	    this.ifFalse.transpile(transpiler);
+	    this.whenFalse.transpile(transpiler);
 	    transpiler.append(")");
 		return false;
 	}

@@ -20,12 +20,12 @@ public class TypeMap extends HashMap<Identifier, IType> {
 		IType inferred = null;
 		// first pass: get less specific type
 		for(IType current : values()) {
-			if(current == NullType.instance())
-				continue;
-			if(inferred == null)
+			if(inferred == null || inferred == NullType.instance())
 				inferred = current;
-			else if(inferred.isAssignableFrom(context, current))
+			else if(inferred.equals(current))
 				continue;
+			else if(inferred.isAssignableFrom(context, current))
+				inferred = current == DecimalType.instance() ? current : inferred;
 			else if(current.isAssignableFrom(context, inferred))
 				inferred = current;
 			else {
