@@ -37,7 +37,7 @@ public class TypeMap extends HashMap<Identifier, IType> {
 			}
 		}
 		if(inferred==null)
-			return NullType.instance();
+			return VoidType.instance();
 		// second pass: check compatible
 		for(IType current : values()) {
 			if(current!=inferred && !inferred.isAssignableFrom(context, current))
