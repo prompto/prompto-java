@@ -130,9 +130,6 @@ public class JavaClassType extends BaseType {
     	val = convertNative(context, value, type);
     	if(val!=null)
     		return val;
-    	val = convertCategory(context, value, type, returnType);
-    	if(val!=null)
-    		return val;
     	val = convertDocument(context, value, type, returnType);
     	if(val!=null)
     		return val;
@@ -149,6 +146,9 @@ public class JavaClassType extends BaseType {
     	if(val!=null)
     		return val;
     	val = convertBinary(context, value, type, returnType);
+    	if(val!=null)
+    		return val;
+    	val = convertCategory(context, value, type, returnType);
     	if(val!=null)
     		return val;
     	if(returnType==AnyType.instance())

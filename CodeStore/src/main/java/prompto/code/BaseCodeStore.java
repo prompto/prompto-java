@@ -7,6 +7,7 @@ import java.util.Map;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.IDeclaration;
+import prompto.declaration.NativeCategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoVersion;
@@ -53,10 +54,15 @@ public abstract class BaseCodeStore implements ICodeStore {
 	}
 	
 	@Override
-	public Iterable<IDeclaration> fetchSpecificDeclarations(String name, PromptoVersion version) throws PromptoError {
-		return next==null ? null : next.fetchSpecificDeclarations(name, version);
+	public Iterable<IDeclaration> fetchVersionedDeclarations(String name, PromptoVersion version) throws PromptoError {
+		return next==null ? null : next.fetchVersionedDeclarations(name, version);
 	}
 	
+	@Override
+	public NativeCategoryDeclaration fetchLatestNativeCategoryDeclarationWithJavaBinding(String typeName) {
+		return next==null ? null : next.fetchLatestNativeCategoryDeclarationWithJavaBinding(typeName);
+	}
+
 	@Override
 	public Resource fetchLatestResource(String path) throws PromptoError {
 		Resource res = ICodeStore.super.fetchLatestResource(path);
@@ -64,8 +70,8 @@ public abstract class BaseCodeStore implements ICodeStore {
 	}
 	
 	@Override
-	public Resource fetchSpecificResource(String path, PromptoVersion version) {
-		return next==null ? null : next.fetchSpecificResource(path, version);
+	public Resource fetchVersionedResource(String path, PromptoVersion version) {
+		return next==null ? null : next.fetchVersionedResource(path, version);
 	}
 	
 	@Override
@@ -75,8 +81,8 @@ public abstract class BaseCodeStore implements ICodeStore {
 	}
 	
 	@Override
-	public IDeclaration fetchSpecificSymbol(String name, PromptoVersion version) throws PromptoError {
-		return next==null ? null : next.fetchSpecificSymbol(name, version);
+	public IDeclaration fetchVersionedSymbol(String name, PromptoVersion version) throws PromptoError {
+		return next==null ? null : next.fetchVersionedSymbol(name, version);
 	}
 
 	@Override

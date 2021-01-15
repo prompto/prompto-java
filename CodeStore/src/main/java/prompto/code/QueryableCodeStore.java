@@ -26,6 +26,7 @@ import prompto.declaration.IDeclaration;
 import prompto.declaration.IDeclaration.DeclarationType;
 import prompto.declaration.IEnumeratedDeclaration;
 import prompto.declaration.IMethodDeclaration;
+import prompto.declaration.NativeCategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.expression.AndExpression;
 import prompto.expression.EqualsExpression;
@@ -198,7 +199,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends Module> T fetchModule(ModuleType type, String name, PromptoVersion version) throws PromptoError {
+	public <T extends Module> T fetchVersionedModule(ModuleType type, String name, PromptoVersion version) throws PromptoError {
 		try {
 			IStored stored = fetchOneNamedInStore(type.getCategory(), version, name, false);
 			if(stored==null)
@@ -233,7 +234,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 	}
 
 	@Override
-	public Object fetchModuleDbId(String name, PromptoVersion version) throws PromptoError {
+	public Object fetchVersionedModuleDbId(String name, PromptoVersion version) throws PromptoError {
 		try {
 			// could be optimized by only fetching dbId but not worth it...
 			IStored stored = fetchOneNamedInStore(new CategoryType(new Identifier("Module")), version, name, false);
@@ -245,7 +246,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 	
 	
 	@Override
-	public Resource fetchSpecificResource(String name, PromptoVersion version) {
+	public Resource fetchVersionedResource(String name, PromptoVersion version) {
 		try {
 			IStored stored = fetchOneInStore(new CategoryType(new Identifier("Resource")), version, "name", name, true);
 			if(stored==null)
@@ -295,14 +296,14 @@ public class QueryableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public Iterable<IDeclaration> fetchSpecificDeclarations(String name, PromptoVersion version) throws PromptoError {
+	public Iterable<IDeclaration> fetchVersionedDeclarations(String name, PromptoVersion version) throws PromptoError {
 		Iterable<IDeclaration> decls = fetchDeclarationsInStore(name, version);
 		if(decls!=null)
 			return decls;
 		if(storeExternals)
 			return fetchAndStoreExternalSpecificDeclarations(name, version);
 		else
-			return super.fetchSpecificDeclarations(name, version);
+			return super.fetchVersionedDeclarations(name, version);
 	}
 	
 	@Override
@@ -330,7 +331,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 			decls = getRegisteringDeclarations(name);
 			if(decls!=null)
 				return decls;
-			decls = super.fetchSpecificDeclarations(name, version);
+			decls = super.fetchVersionedDeclarations(name, version);
 			if(store!=null && decls!=null && decls.iterator().hasNext()) {
 				// avoid infinite reentrance loop
 				setRegisteringDeclarations(name, decls);
@@ -343,14 +344,14 @@ public class QueryableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public IDeclaration fetchSpecificSymbol(String name, PromptoVersion version) throws PromptoError {
+	public IDeclaration fetchVersionedSymbol(String name, PromptoVersion version) throws PromptoError {
 		Iterable<IDeclaration> decls = fetchSymbolsInStore(name, version, true);
 		if(decls!=null && decls.iterator().hasNext())
 			return decls.iterator().next();
 		if(storeExternals)
 			return fetchAndStoreExternalSpecificSymbol(name, version);
 		else
-			return super.fetchSpecificSymbol(name, version);
+			return super.fetchVersionedSymbol(name, version);
 	}
 	
 	
@@ -363,7 +364,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 				return decls.iterator().next();
 			IDeclaration decl = getRegisteringSymbol(name);
 			if(decl==null) {
-				decl = super.fetchSpecificSymbol(name, version);
+				decl = super.fetchVersionedSymbol(name, version);
 				if(store!=null && decl!=null) {
 					setRegisteringDeclarations(decl.getName(), Collections.singletonList(decl));
 					decls = storeDeclarations(Collections.singletonList(decl));
@@ -545,6 +546,39 @@ public class QueryableCodeStore extends BaseCodeStore {
 			Arrays.asList(DeclarationType.ATTRIBUTE.name(), DeclarationType.CATEGORY.name(), DeclarationType.TEST.name()));
 	
 
+	@Override
+	public NativeCategoryDeclaration fetchLatestNativeCategoryDeclarationWithJavaBinding(String typeName) {
+		if(store==null)
+			return null;
+		else try {
+			IQueryBuilder builder = store.newQueryBuilder();
+			builder.verify(AttributeInfo.CATEGORY, MatchOp.HAS, "NativeCategoryDeclaration");
+			builder = filterOnModules(builder, true);
+			IdentifierList names = new IdentifierList("version");
+			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
+			orderBy.interpretQuery(context, builder);
+			IStoredIterable stored = store.fetchMany(builder.build());
+			NativeCategoryDeclaration decl = filterNativeCategoryDeclarationWithJavaBinding(stored, typeName);
+			if(decl!=null)
+				return decl;
+			else
+				return super.fetchLatestNativeCategoryDeclarationWithJavaBinding(typeName);
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	
+	private NativeCategoryDeclaration filterNativeCategoryDeclarationWithJavaBinding(IStoredIterable iterable, String typeName) {
+		Iterator<IStored> iterator = iterable.iterator();
+		while(iterator.hasNext()) {
+			NativeCategoryDeclaration decl = parseDeclaration(iterator.next());
+			if(typeName.equals(decl.getBoundClassName()))
+				return decl;
+		}
+		return null;
+	}
+
 	private IStoredIterable fetchManyInStore(CategoryType type, PromptoVersion version, String attribute, String value, boolean filterOnModules) throws PromptoError {
 		IQueryBuilder builder = store.newQueryBuilder();
 		if(uniqueDecls.contains(type.toString().toUpperCase())) {
@@ -646,6 +680,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 		if(stored==null)
 			return null;
 		try {
+			logger.debug(()->"Found " + stored.getData("name") + " with dbId " + stored.getDbId());
 			Dialect dialect = Dialect.valueOf((String)stored.getData("dialect"));
 			String body = (String)stored.getData("body");
 			InputStream input = new ByteArrayInputStream(body.getBytes());

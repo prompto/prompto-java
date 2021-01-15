@@ -22,6 +22,7 @@ import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IEnumeratedDeclaration;
+import prompto.declaration.NativeCategoryDeclaration;
 import prompto.error.InvalidResourceError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
@@ -118,7 +119,7 @@ public class ImmutableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public <T extends Module> T fetchModule(ModuleType type, String name, PromptoVersion version) throws PromptoError {
+	public <T extends Module> T fetchVersionedModule(ModuleType type, String name, PromptoVersion version) throws PromptoError {
 		return null;
 	}
 	
@@ -133,12 +134,12 @@ public class ImmutableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public Object fetchModuleDbId(String name, PromptoVersion version) throws PromptoError {
+	public Object fetchVersionedModuleDbId(String name, PromptoVersion version) throws PromptoError {
 		return null;
 	}
 	
 	@Override
-	public Resource fetchSpecificResource(String path, PromptoVersion version) {
+	public Resource fetchVersionedResource(String path, PromptoVersion version) {
 		if(this.resource.toString().endsWith(path))
 			return new URLResource(this.resource);
 		else
@@ -166,12 +167,33 @@ public class ImmutableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public Iterable<IDeclaration> fetchSpecificDeclarations(String name, PromptoVersion version) throws PromptoError {
+	public NativeCategoryDeclaration fetchLatestNativeCategoryDeclarationWithJavaBinding(String typeName) {
+		Iterable<IDeclaration> fetched = fetchInResource(decls->filterNativeCategoryDeclarationWithJavaBinding(decls, typeName));
+		Iterator<IDeclaration> iterator = fetched.iterator();
+		if(iterator.hasNext()) 
+			return (NativeCategoryDeclaration)iterator.next();
+		else
+			return super.fetchLatestNativeCategoryDeclarationWithJavaBinding(typeName);
+	}
+
+	
+	private Iterable<IDeclaration> filterNativeCategoryDeclarationWithJavaBinding(Map<String, List<IDeclaration>> decls, String typeName) {
+		return () -> decls.values().stream()
+				.flatMap(Collection::stream)
+				.filter(decl->decl instanceof NativeCategoryDeclaration)
+				.map(decl -> (NativeCategoryDeclaration)decl)
+				.filter(decl -> typeName.equals(decl.getBoundClassName()))
+				.map(decl -> (IDeclaration)decl)
+				.iterator();
+	}
+
+	@Override
+	public Iterable<IDeclaration> fetchVersionedDeclarations(String name, PromptoVersion version) throws PromptoError {
 		Iterable<IDeclaration> fetched = fetchInResource(decls->decls.get(name));
 		if(fetched!=null)
 			return fetched;
 		else
-			return super.fetchSpecificDeclarations(name, version);
+			return super.fetchVersionedDeclarations(name, version);
 	}
 	
 	@Override
@@ -208,12 +230,12 @@ public class ImmutableCodeStore extends BaseCodeStore {
 	}
 
 	@Override
-	public IDeclaration fetchSpecificSymbol(String name, PromptoVersion version) throws PromptoError {
+	public IDeclaration fetchVersionedSymbol(String name, PromptoVersion version) throws PromptoError {
 		IDeclaration decl = fetchOneSymbol(name);
 		if(decl!=null)
 			return decl;
 		else
-			return super.fetchSpecificSymbol(name, version);
+			return super.fetchVersionedSymbol(name, version);
 	}
 	
 	@Override
@@ -347,5 +369,6 @@ public class ImmutableCodeStore extends BaseCodeStore {
 			return names;
 		}
 	}
+
 	
 }

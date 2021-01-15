@@ -13,6 +13,7 @@ import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
+import prompto.declaration.NativeCategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoVersion;
@@ -97,50 +98,50 @@ public interface ICodeStore {
 	void storeDeclarations(Iterable<IDeclaration> declarations, Dialect dialect, PromptoVersion version, Object moduleId) throws PromptoError;
 
 	default Iterable<IDeclaration> fetchLatestDeclarations(String name) throws PromptoError {
-		return fetchSpecificDeclarations(name, PromptoVersion.LATEST);
+		return fetchVersionedDeclarations(name, PromptoVersion.LATEST);
 	}
 	
-	Iterable<IDeclaration> fetchSpecificDeclarations(String name, PromptoVersion version) throws PromptoError;
+	Iterable<IDeclaration> fetchVersionedDeclarations(String name, PromptoVersion version) throws PromptoError;
 
 	Iterable<IDeclaration> fetchDeclarationsWithAnnotations(Set<String> annotations);
 
 	default IDeclaration fetchLatestSymbol(String name) throws PromptoError {
-		return fetchSpecificSymbol(name, PromptoVersion.LATEST);
+		return fetchVersionedSymbol(name, PromptoVersion.LATEST);
 	}
 
-	IDeclaration fetchSpecificSymbol(String name, PromptoVersion version) throws PromptoError;
+	IDeclaration fetchVersionedSymbol(String name, PromptoVersion version) throws PromptoError;
 
 
 	Collection<CategoryDeclaration> fetchDerivedCategoryDeclarations(Identifier id);
 
 	
-	default public Batch fetchBatch(String name, PromptoVersion version) throws PromptoError {
-		return fetchModule(ModuleType.BATCH, name, version);
+	default public Batch fetchVersionedBatch(String name, PromptoVersion version) throws PromptoError {
+		return fetchVersionedModule(ModuleType.BATCH, name, version);
 	}
 	
-	default public WebSite fetchApplication(String name, PromptoVersion version) throws PromptoError {
-		return fetchModule(ModuleType.WEBSITE, name, version);
+	default public WebSite fetchVersionedApplication(String name, PromptoVersion version) throws PromptoError {
+		return fetchVersionedModule(ModuleType.WEBSITE, name, version);
 	}
 	
-	default public Script fetchScript(String name, PromptoVersion version) throws PromptoError {
-		return fetchModule(ModuleType.SCRIPT, name, version);
+	default public Script fetchVersionedScript(String name, PromptoVersion version) throws PromptoError {
+		return fetchVersionedModule(ModuleType.SCRIPT, name, version);
 	}
 	
-	default public Service fetchService(String name, PromptoVersion version) throws PromptoError {
-		return fetchModule(ModuleType.SERVICE, name, version);
+	default public Service fetchVersionedService(String name, PromptoVersion version) throws PromptoError {
+		return fetchVersionedModule(ModuleType.SERVICE, name, version);
 	}
 
-	default public Library fetchLibrary(String name, PromptoVersion version) throws PromptoError {
-		return fetchModule(ModuleType.LIBRARY, name, version);
+	default public Library fetchVersionedLibrary(String name, PromptoVersion version) throws PromptoError {
+		return fetchVersionedModule(ModuleType.LIBRARY, name, version);
 	}
 	
 	default public Script fetchThesaurus(PromptoVersion version) throws PromptoError {
-		return fetchModule(ModuleType.THESAURUS, ModuleType.THESAURUS.name(), version);
+		return fetchVersionedModule(ModuleType.THESAURUS, ModuleType.THESAURUS.name(), version);
 	}
 	
 	public Iterable<Module> fetchAllModules() throws PromptoError;
-	<T extends Module> T fetchModule(ModuleType type, String name, PromptoVersion version) throws PromptoError;
-	Object fetchModuleDbId(String name, PromptoVersion version) throws PromptoError;
+	<T extends Module> T fetchVersionedModule(ModuleType type, String name, PromptoVersion version) throws PromptoError;
+	Object fetchVersionedModuleDbId(String name, PromptoVersion version) throws PromptoError;
 	void storeModule(Module module) throws PromptoError;
 	void dropModule(Module module);
 	void storeDependency(Dependency dependency);
@@ -157,12 +158,12 @@ public interface ICodeStore {
 	void storeResource(Resource resource, Object moduleId);
 
 	default public Resource fetchLatestResource(String path) throws PromptoError {
-		return fetchSpecificResource(path, PromptoVersion.LATEST);
+		return fetchVersionedResource(path, PromptoVersion.LATEST);
 	}
 
-	Resource fetchSpecificResource(String path, PromptoVersion version);
+	Resource fetchVersionedResource(String path, PromptoVersion version);
 	
-	default public AttributeInfo fetchAttributeInfo(Context context, String name) {
+	default public AttributeInfo fetchLatestAttributeInfo(Context context, String name) {
 		if("category".equals(name))
 			return AttributeInfo.CATEGORY;
 		else {
@@ -179,5 +180,7 @@ public interface ICodeStore {
 	}
 
 	void upgradeIfRequired();
+
+	NativeCategoryDeclaration fetchLatestNativeCategoryDeclarationWithJavaBinding(String typeName);
 
 }

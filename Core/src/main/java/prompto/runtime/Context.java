@@ -54,6 +54,7 @@ import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.type.NativeType;
 import prompto.utils.CodeWriter;
+import prompto.utils.CollectionUtils;
 import prompto.utils.ObjectUtils;
 import prompto.utils.SectionLocator;
 import prompto.value.ClosureValue;
@@ -352,12 +353,12 @@ public class Context implements IContext {
 	public PromptoList<AttributeDeclaration> getAllAttributes() {
 		if(globals!=this)
 			return globals.getAllAttributes();
-		PromptoList<AttributeDeclaration> list = new PromptoList<>(false);
-		for(IDeclaration decl : declarations.values()) {
-			if(decl instanceof AttributeDeclaration)
-				list.add((AttributeDeclaration)decl);
-		}
-		return list;
+		// TODO fetch them from store 
+		// ICodeStore.getInstance().fetchAllAttributes()
+		return declarations.values().stream()
+				.filter(decl -> decl instanceof AttributeDeclaration)
+				.map(decl -> (AttributeDeclaration)decl)
+				.collect(CollectionUtils.toPromptoList());
 	}
 
 	public INamed getRegistered(Identifier name) {
@@ -1057,12 +1058,20 @@ public class Context implements IContext {
 	}
 	
 	public NativeCategoryDeclaration getNativeBinding(Type type) {
-		if(this==globals)
+		if(this==globals) {
+			if(!nativeBindings.containsKey(type))
+				loadNativeBindingFromStore(type);
 			return nativeBindings.get(type);
-		else
+		} else
 			return globals.getNativeBinding(type);
 	}
 	
+	private void loadNativeBindingFromStore(Type type) {
+		NativeCategoryDeclaration decl = ICodeStore.getInstance().fetchLatestNativeCategoryDeclarationWithJavaBinding(type.getTypeName());
+		if(decl!=null)
+			decl.register(this);
+	}
+
 	public String fetchTextResource(String path) {
 		Resource resource = ICodeStore.getInstance().fetchLatestResource(path);
 		if(resource==null)

@@ -50,38 +50,38 @@ public class Interpreter {
 		test.interpret(local);
 	}
 	
-	public static void interpretMain(Context context, Map<String, String> cmdLineArgs) throws PromptoError {
+	public static IValue interpretMain(Context context, Map<String, String> cmdLineArgs) throws PromptoError {
 		try {
 			IExpression args = convertCmdLineArgs(cmdLineArgs);
-			interpretMethod(context, new Identifier("main"), args);
+			return interpretMethod(context, new Identifier("main"), args);
 		} finally {
 			context.notifyCompleted();
 		}
 	}
 	
-	public static void interpretMainNoArgs(Context context, Identifier name) throws PromptoError {
-		interpretMethod(context, name, "");
+	public static IValue interpretMainNoArgs(Context context, Identifier name) throws PromptoError {
+		return interpretMethod(context, name, "");
 	}
 	
-	public static void interpretMainNoArgs(Context context) throws PromptoError {
-		interpretMethod(context, new Identifier("main"), "");
+	public static IValue interpretMainNoArgs(Context context) throws PromptoError {
+		return interpretMethod(context, new Identifier("main"), "");
 	}
 
 
-	public static void interpretMethod(Context context, Identifier methodName, String cmdLineArgs) throws PromptoError {
+	public static IValue interpretMethod(Context context, Identifier methodName, String cmdLineArgs) throws PromptoError {
 		try {
 			IExpression args = parseCmdLineArgs(cmdLineArgs);
-			interpretMethod(context, methodName, args);
+			return interpretMethod(context, methodName, args);
 		} finally {
 			context.notifyCompleted();
 		}
 	}
 	
-	public static void interpretMethod(Context context, Identifier methodName, IExpression args) {
+	public static IValue interpretMethod(Context context, Identifier methodName, IExpression args) {
 		IMethodDeclaration method = MethodLocator.locateMethod(context, methodName, args);
 		ArgumentList assignments = buildArguments(method, args);
 		MethodCall call = new MethodCall(new MethodSelector(methodName), assignments);
-		call.interpret(context);	
+		return call.interpret(context);	
 	}
 
 	public static void interpretScript(Context context, String cmdLineArgs) throws PromptoError {
