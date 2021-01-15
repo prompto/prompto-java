@@ -23,6 +23,7 @@ import prompto.type.DecimalType;
 import prompto.type.DocumentType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
+import prompto.type.JsxType;
 import prompto.type.MissingType;
 import prompto.type.PeriodType;
 import prompto.type.TextType;
@@ -32,6 +33,7 @@ import prompto.type.UuidType;
 import prompto.type.VersionType;
 import prompto.type.VoidType;
 import prompto.value.IValue;
+import prompto.value.JsxValue;
 
 public abstract class TypeUtils {
 	
@@ -74,6 +76,7 @@ public abstract class TypeUtils {
 		map.put(PromptoPeriod.class, PeriodType.instance());
 		map.put(PromptoVersion.class, VersionType.instance());
 		map.put(PromptoDocument.class, DocumentType.instance());
+		map.put(JsxValue.class, JsxType.instance());
 		map.put(Object.class, AnyType.instance());
 		return map;
 	}
