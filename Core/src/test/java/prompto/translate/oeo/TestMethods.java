@@ -82,6 +82,11 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testMemberRef() throws Exception {
+		compareResourceOEO("methods/memberRef.poc");
+	}
+
+	@Test
 	public void testOverride() throws Exception {
 		compareResourceOEO("methods/override.poc");
 	}

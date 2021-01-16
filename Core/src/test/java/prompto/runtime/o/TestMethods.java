@@ -215,6 +215,21 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedMemberRef() throws Exception {
+		checkInterpretedOutput("methods/memberRef.poc");
+	}
+
+	@Test
+	public void testCompiledMemberRef() throws Exception {
+		checkCompiledOutput("methods/memberRef.poc");
+	}
+
+	@Test
+	public void testTranspiledMemberRef() throws Exception {
+		checkTranspiledOutput("methods/memberRef.poc");
+	}
+
+	@Test
 	public void testInterpretedOverride() throws Exception {
 		checkInterpretedOutput("methods/override.poc");
 	}
