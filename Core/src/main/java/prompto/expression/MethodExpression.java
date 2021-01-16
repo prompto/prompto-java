@@ -142,7 +142,7 @@ public class MethodExpression implements IExpression {
 			IType parentType = parent.check(context);
 			if(parentType instanceof CategoryType) {
 		       	CategoryDeclaration category = (CategoryDeclaration)((CategoryType)parentType).getDeclaration(context);
-				MethodDeclarationMap methods = category.getAllMethods(context, expression.getId());
+				MethodDeclarationMap methods = category.getMemberMethods(context, expression.getId(), false);
 				ConcreteMethodDeclaration proto = (ConcreteMethodDeclaration)methods.getFirst(); // TODO check prototype
 				return proto.compileMethodInstance(context, method, flags, parent::compileParent);
 			} else

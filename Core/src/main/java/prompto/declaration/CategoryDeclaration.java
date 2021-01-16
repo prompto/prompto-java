@@ -445,17 +445,6 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		});
 	}
 	
-	public void collectAllMethods(Context context, MethodDeclarationMap map) {
-		getMemberMethods(context, map.getId(), false).values().forEach(m -> map.computeIfAbsent(m.getProto(), proto -> m));
-	}
-
-	public MethodDeclarationMap getAllMethods(Context context, Identifier name) {
-		MethodDeclarationMap map = new MethodDeclarationMap(name);
-		collectAllMethods(context, map);
-		return map;
-	}
-
-
 	protected boolean isPromptoRoot(Context context) {
 		return false;
 	}

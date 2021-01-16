@@ -158,7 +158,7 @@ public class MemberSelector extends SelectorExpression {
             throw new NullReferenceError();
         else if(instance instanceof IInstance) {
         	CategoryDeclaration category = ((IInstance)instance).getDeclaration();
-    		MethodDeclarationMap methods = category.getAllMethods(context, id);
+    		MethodDeclarationMap methods = category.getMemberMethods(context, id, false);
     		IMethodDeclaration method = methods.getFirst(); // TODO check prototype
     		return new ClosureValue(context.newInstanceContext((IInstance)instance, true), new MethodType(method));
         } else
@@ -182,7 +182,7 @@ public class MemberSelector extends SelectorExpression {
 	    IType parentType = parent.check(context);
 	    if(parentType instanceof CategoryType) {
 	       	CategoryDeclaration category = (CategoryDeclaration)((CategoryType)parentType).getDeclaration(context);
-			MethodDeclarationMap methods = category.getAllMethods(context, id);
+			MethodDeclarationMap methods = category.getMemberMethods(context, id, false);
 			ConcreteMethodDeclaration proto = (ConcreteMethodDeclaration)methods.getFirst(); // TODO check prototype
 			return proto.compileMethodInstance(context, method, flags, parent::compileParent);
 	    } else
