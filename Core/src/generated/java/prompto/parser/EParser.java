@@ -5565,10 +5565,10 @@ public class EParser extends AbstractParser {
 		}
 	}
 	public static class ClosureExpressionContext extends ExpressionContext {
-		public Method_identifierContext name;
+		public Instance_expressionContext exp;
 		public TerminalNode METHOD_COLON() { return getToken(EParser.METHOD_COLON, 0); }
-		public Method_identifierContext method_identifier() {
-			return getRuleContext(Method_identifierContext.class,0);
+		public Instance_expressionContext instance_expression() {
+			return getRuleContext(Instance_expressionContext.class,0);
 		}
 		public ClosureExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
@@ -6144,7 +6144,7 @@ public class EParser extends AbstractParser {
 				setState(1221);
 				match(METHOD_COLON);
 				setState(1222);
-				((ClosureExpressionContext)_localctx).name = method_identifier();
+				((ClosureExpressionContext)_localctx).exp = instance_expression(0);
 				}
 				break;
 			case 13:
@@ -25932,8 +25932,8 @@ public class EParser extends AbstractParser {
 		"\5t;\2\u04bd\u04be\7#\2\2\u04be\u04d4\5\\/$\u04bf\u04c0\7\u0081\2\2\u04c0"+
 		"\u04d4\5\\/#\u04c1\u04c2\7C\2\2\u04c2\u04c3\7\21\2\2\u04c3\u04d4\5\\/"+
 		"\21\u04c4\u04c5\7j\2\2\u04c5\u04c6\7\21\2\2\u04c6\u04d4\5\u00e2r\2\u04c7"+
-		"\u04c8\7B\2\2\u04c8\u04d4\5\u00d6l\2\u04c9\u04d4\5r:\2\u04ca\u04d4\5p"+
-		"9\2\u04cb\u04d4\5n8\2\u04cc\u04d4\5|?\2\u04cd\u04d4\5\u0156\u00ac\2\u04ce"+
+		"\u04c8\7B\2\2\u04c8\u04d4\5j\66\2\u04c9\u04d4\5r:\2\u04ca\u04d4\5p9\2"+
+		"\u04cb\u04d4\5n8\2\u04cc\u04d4\5|?\2\u04cd\u04d4\5\u0156\u00ac\2\u04ce"+
 		"\u04d4\5\u0158\u00ad\2\u04cf\u04d4\5\u015a\u00ae\2\u04d0\u04d4\5\u0082"+
 		"B\2\u04d1\u04d4\5x=\2\u04d2\u04d4\5d\63\2\u04d3\u04b0\3\2\2\2\u04d3\u04b2"+
 		"\3\2\2\2\u04d3\u04b3\3\2\2\2\u04d3\u04b4\3\2\2\2\u04d3\u04b5\3\2\2\2\u04d3"+

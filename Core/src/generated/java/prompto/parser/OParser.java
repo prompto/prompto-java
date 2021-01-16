@@ -66,7 +66,7 @@ public class OParser extends AbstractParser {
 		RULE_catch_statement = 41, RULE_break_statement = 42, RULE_return_statement = 43, 
 		RULE_method_call_expression = 44, RULE_method_call_statement = 45, RULE_x_expression = 46, 
 		RULE_expression = 47, RULE_filter_expression = 48, RULE_an_expression = 49, 
-		RULE_closure_expression = 50, RULE_selectable_expression = 51, RULE_instance_expression = 52, 
+		RULE_type_expression = 50, RULE_selectable_expression = 51, RULE_instance_expression = 52, 
 		RULE_mutable_instance_expression = 53, RULE_method_expression = 54, RULE_blob_expression = 55, 
 		RULE_document_expression = 56, RULE_write_statement = 57, RULE_filtered_list_expression = 58, 
 		RULE_fetch_expression = 59, RULE_fetch_statement = 60, RULE_read_statement = 61, 
@@ -155,7 +155,7 @@ public class OParser extends AbstractParser {
 			"while_statement", "if_statement", "else_if_statement_list", "raise_statement", 
 			"try_statement", "catch_statement", "break_statement", "return_statement", 
 			"method_call_expression", "method_call_statement", "x_expression", "expression", 
-			"filter_expression", "an_expression", "closure_expression", "selectable_expression", 
+			"filter_expression", "an_expression", "type_expression", "selectable_expression", 
 			"instance_expression", "mutable_instance_expression", "method_expression", 
 			"blob_expression", "document_expression", "write_statement", "filtered_list_expression", 
 			"fetch_expression", "fetch_statement", "read_statement", "sorted_expression", 
@@ -4943,21 +4943,6 @@ public class OParser extends AbstractParser {
 			if ( listener instanceof OParserListener ) ((OParserListener)listener).exitArrowExpression(this);
 		}
 	}
-	public static class ClosureExpressionContext extends ExpressionContext {
-		public Closure_expressionContext exp;
-		public Closure_expressionContext closure_expression() {
-			return getRuleContext(Closure_expressionContext.class,0);
-		}
-		public ClosureExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OParserListener ) ((OParserListener)listener).enterClosureExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OParserListener ) ((OParserListener)listener).exitClosureExpression(this);
-		}
-	}
 	public static class ContainsExpressionContext extends ExpressionContext {
 		public ExpressionContext left;
 		public ExpressionContext right;
@@ -4977,6 +4962,21 @@ public class OParser extends AbstractParser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof OParserListener ) ((OParserListener)listener).exitContainsExpression(this);
+		}
+	}
+	public static class TypeExpressionContext extends ExpressionContext {
+		public Type_expressionContext exp;
+		public Type_expressionContext type_expression() {
+			return getRuleContext(Type_expressionContext.class,0);
+		}
+		public TypeExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof OParserListener ) ((OParserListener)listener).enterTypeExpression(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof OParserListener ) ((OParserListener)listener).exitTypeExpression(this);
 		}
 	}
 	public static class MultiplyExpressionContext extends ExpressionContext {
@@ -5407,11 +5407,11 @@ public class OParser extends AbstractParser {
 				break;
 			case 11:
 				{
-				_localctx = new ClosureExpressionContext(_localctx);
+				_localctx = new TypeExpressionContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 				setState(1123);
-				((ClosureExpressionContext)_localctx).exp = closure_expression();
+				((TypeExpressionContext)_localctx).exp = type_expression();
 				}
 				break;
 			}
@@ -5972,33 +5972,33 @@ public class OParser extends AbstractParser {
 		return _localctx;
 	}
 
-	public static class Closure_expressionContext extends ParserRuleContext {
+	public static class Type_expressionContext extends ParserRuleContext {
 		public Type_identifierContext name;
 		public Type_identifierContext type_identifier() {
 			return getRuleContext(Type_identifierContext.class,0);
 		}
-		public Closure_expressionContext(ParserRuleContext parent, int invokingState) {
+		public Type_expressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_closure_expression; }
+		@Override public int getRuleIndex() { return RULE_type_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OParserListener ) ((OParserListener)listener).enterClosure_expression(this);
+			if ( listener instanceof OParserListener ) ((OParserListener)listener).enterType_expression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OParserListener ) ((OParserListener)listener).exitClosure_expression(this);
+			if ( listener instanceof OParserListener ) ((OParserListener)listener).exitType_expression(this);
 		}
 	}
 
-	public final Closure_expressionContext closure_expression() throws RecognitionException {
-		Closure_expressionContext _localctx = new Closure_expressionContext(_ctx, getState());
-		enterRule(_localctx, 100, RULE_closure_expression);
+	public final Type_expressionContext type_expression() throws RecognitionException {
+		Type_expressionContext _localctx = new Type_expressionContext(_ctx, getState());
+		enterRule(_localctx, 100, RULE_type_expression);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(1241);
-			((Closure_expressionContext)_localctx).name = type_identifier();
+			((Type_expressionContext)_localctx).name = type_identifier();
 			}
 		}
 		catch (RecognitionException re) {

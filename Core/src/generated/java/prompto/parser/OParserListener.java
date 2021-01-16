@@ -974,18 +974,6 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitArrowExpression(OParser.ArrowExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code ClosureExpression}
-	 * labeled alternative in {@link OParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterClosureExpression(OParser.ClosureExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ClosureExpression}
-	 * labeled alternative in {@link OParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitClosureExpression(OParser.ClosureExpressionContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code ContainsExpression}
 	 * labeled alternative in {@link OParser#expression}.
 	 * @param ctx the parse tree
@@ -997,6 +985,18 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitContainsExpression(OParser.ContainsExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code TypeExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypeExpression(OParser.TypeExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code TypeExpression}
+	 * labeled alternative in {@link OParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypeExpression(OParser.TypeExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code MultiplyExpression}
 	 * labeled alternative in {@link OParser#expression}.
@@ -1212,15 +1212,15 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitAn_expression(OParser.An_expressionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link OParser#closure_expression}.
+	 * Enter a parse tree produced by {@link OParser#type_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterClosure_expression(OParser.Closure_expressionContext ctx);
+	void enterType_expression(OParser.Type_expressionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link OParser#closure_expression}.
+	 * Exit a parse tree produced by {@link OParser#type_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitClosure_expression(OParser.Closure_expressionContext ctx);
+	void exitType_expression(OParser.Type_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code MethodExpression}
 	 * labeled alternative in {@link OParser#selectable_expression}.

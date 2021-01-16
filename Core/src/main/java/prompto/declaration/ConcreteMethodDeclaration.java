@@ -47,6 +47,7 @@ import prompto.type.MethodType;
 import prompto.type.TextType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
+import prompto.utils.TriFunction;
 import prompto.value.CodeValue;
 import prompto.value.IValue;
 
@@ -398,21 +399,30 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 
 	public ResultInfo compileMethodInstance(Context context, MethodInfo method, Flags flags) {
+		return compileMethodInstance(context, method, flags, this::compileMethodInstanceParent);
+	}
+	
+	public ResultInfo compileMethodInstance(Context context, MethodInfo method, Flags flags, TriFunction<Context, MethodInfo, Flags, ResultInfo> parentCompiler) {
 		if(closureOf!=null)
 			return compileClosureInstance(context, method, flags);
 		else
-			return compileMethodReference(context, method, flags);
+			return compileMethodReference(context, method, flags, parentCompiler);
 	}
 	
-	private ResultInfo compileMethodReference(Context context, MethodInfo method, Flags flags) {
-		// TODO use LambdaMetaFactory 
-		Type methodsClassType = this.memberOf==null ? CompilerUtils.getGlobalMethodType(this.id) : CompilerUtils.getCategoryConcreteType(this.memberOf.getId());
-		method.addInstruction(Opcode.LDC, new ClassConstant(methodsClassType));
-		method.addInstruction(Opcode.LDC, new StringConstant(id.toString()));
+	private ResultInfo compileMethodInstanceParent(Context context, MethodInfo method, Flags flags) {
 		if(this.memberOf==null)
 			method.addInstruction(Opcode.ACONST_NULL, new ClassConstant(Object.class));
 		else
 			method.addInstruction(Opcode.ALOAD_0, new ClassConstant(Object.class)); // this
+		return new ResultInfo(Object.class);
+	}
+	
+	private ResultInfo compileMethodReference(Context context, MethodInfo method, Flags flags, TriFunction<Context, MethodInfo, Flags, ResultInfo> parentCompiler) {
+		// TODO use LambdaMetaFactory 
+		Type methodsClassType = this.memberOf==null ? CompilerUtils.getGlobalMethodType(this.id) : CompilerUtils.getCategoryConcreteType(this.memberOf.getId());
+		method.addInstruction(Opcode.LDC, new ClassConstant(methodsClassType));
+		method.addInstruction(Opcode.LDC, new StringConstant(id.toString()));
+		parentCompiler.apply(context, method, flags);
 		NameAndTypeConstant nameAndType = new NameAndTypeConstant("newMethodReference", new Descriptor.Method(Class.class, String.class, Object.class, Object.class));
 		MethodConstant mc = new MethodConstant(new ClassConstant(PromptoMethod.class), nameAndType);
 		method.addInstruction(Opcode.INVOKESTATIC, mc);

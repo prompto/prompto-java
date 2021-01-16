@@ -17,7 +17,9 @@ import prompto.compiler.StackLocal;
 import prompto.compiler.StackState;
 import prompto.compiler.StringConstant;
 import prompto.declaration.CategoryDeclaration;
+import prompto.declaration.ConcreteMethodDeclaration;
 import prompto.declaration.IDeclaration;
+import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
 import prompto.declaration.NativeGetterMethodDeclaration;
 import prompto.error.NullReferenceError;
@@ -32,12 +34,15 @@ import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.ClosureContext;
 import prompto.runtime.Context.InstanceContext;
+import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.statement.UnresolvedCall;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
+import prompto.value.ClosureValue;
+import prompto.value.IInstance;
 import prompto.value.IValue;
 import prompto.value.NullValue;
 
@@ -143,7 +148,23 @@ public class MemberSelector extends SelectorExpression {
         else
         	return instance.getMember(context, id, true);
 	}
-
+	
+	@Override
+	public IValue interpretReference(Context context) {
+        // resolve parent to keep clarity
+		IExpression parent = resolveParent(context);
+        IValue instance = parent.interpret(context);
+        if (instance == null || instance == NullValue.instance())
+            throw new NullReferenceError();
+        else if(instance instanceof IInstance) {
+        	CategoryDeclaration category = ((IInstance)instance).getDeclaration();
+    		MethodDeclarationMap methods = category.getAllMethods(context, id);
+    		IMethodDeclaration method = methods.getFirst(); // TODO check prototype
+    		return new ClosureValue(context.newInstanceContext((IInstance)instance, true), new MethodType(method));
+        } else
+        	throw new SyntaxError("Should never get here!");
+	}
+	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
         // resolve parent to keep clarity
@@ -155,7 +176,19 @@ public class MemberSelector extends SelectorExpression {
 			return compileInstanceMember(context, method, flags, info);
 	}
 	
-	
+	@Override
+	public ResultInfo compileReference(Context context, MethodInfo method, Flags flags) {
+	    IExpression parent = this.resolveParent(context);
+	    IType parentType = parent.check(context);
+	    if(parentType instanceof CategoryType) {
+	       	CategoryDeclaration category = (CategoryDeclaration)((CategoryType)parentType).getDeclaration(context);
+			MethodDeclarationMap methods = category.getAllMethods(context, id);
+			ConcreteMethodDeclaration proto = (ConcreteMethodDeclaration)methods.getFirst(); // TODO check prototype
+			return proto.compileMethodInstance(context, method, flags, parent::compileParent);
+	    } else
+        	throw new SyntaxError("Should never get here!");
+ 	}
+
 	private ResultInfo compileStaticMember(Context context, MethodInfo method, Flags flags, IExpression parent) {
 		IType type = parent.check(context);
 		return type.compileGetStaticMember(context, method, flags, id);
@@ -345,6 +378,15 @@ public class MemberSelector extends SelectorExpression {
 	    transpiler.append(".");
 		IType parentType = this.checkParent(transpiler.getContext());
 		parentType.transpileMember(transpiler, this.getId());
+		return false;
+	}
+	
+	@Override
+	public boolean transpileReference(Transpiler transpiler, MethodType method) {
+	    IExpression parent = this.resolveParent(transpiler.getContext());
+	    parent.transpileParent(transpiler);
+	    transpiler.append(".");
+	    transpiler.append(method.getMethod().getTranspiledName(transpiler.getContext(), this.getName()));
 		return false;
 	}
 

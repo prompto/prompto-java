@@ -12,6 +12,7 @@ import prompto.store.AttributeInfo;
 import prompto.store.IStore;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
+import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
@@ -57,6 +58,9 @@ public interface IExpression {
 		throw new UnsupportedOperationException("transpile " + this.getClass().getName());
 	}
 	default boolean transpileParent(Transpiler transpiler) {
+		return transpile(transpiler);
+	}
+	default boolean transpileReference(Transpiler transpiler, MethodType methodType) {
 		return transpile(transpiler);
 	}
 	default void declareQuery(Transpiler transpiler) {

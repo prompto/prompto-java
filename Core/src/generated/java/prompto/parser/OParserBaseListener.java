@@ -1060,18 +1060,6 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterClosureExpression(OParser.ClosureExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitClosureExpression(OParser.ClosureExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterContainsExpression(OParser.ContainsExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1079,6 +1067,18 @@ public class OParserBaseListener implements OParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitContainsExpression(OParser.ContainsExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTypeExpression(OParser.TypeExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTypeExpression(OParser.TypeExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1300,13 +1300,13 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterClosure_expression(OParser.Closure_expressionContext ctx) { }
+	@Override public void enterType_expression(OParser.Type_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitClosure_expression(OParser.Closure_expressionContext ctx) { }
+	@Override public void exitType_expression(OParser.Type_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

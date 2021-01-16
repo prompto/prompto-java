@@ -97,6 +97,11 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testMemberRef() throws Exception {
+		compareResourceEME("methods/memberRef.pec");
+	}
+
+	@Test
 	public void testOverride() throws Exception {
 		compareResourceEME("methods/override.pec");
 	}

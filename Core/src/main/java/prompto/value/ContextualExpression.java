@@ -8,6 +8,7 @@ import prompto.expression.IExpression;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
+import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
 
 /* a value which can only be determined when expression is interpreted in a specific context */
@@ -73,5 +74,12 @@ public class ContextualExpression extends BaseValue implements IExpression {
 	    return false;
 	}
 	
+	@Override
+	public boolean transpileReference(Transpiler transpiler, MethodType method) {
+		transpiler = transpiler.newChildTranspiler(this.calling);
+	    this.expression.transpileReference(transpiler, method);
+	    transpiler.flush();
+	    return false;
+	}
 
 }

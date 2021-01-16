@@ -260,6 +260,21 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedMemberRef() throws Exception {
+		checkInterpretedOutput("methods/memberRef.pec");
+	}
+
+	@Test
+	public void testCompiledMemberRef() throws Exception {
+		checkCompiledOutput("methods/memberRef.pec");
+	}
+
+	@Test
+	public void testTranspiledMemberRef() throws Exception {
+		checkTranspiledOutput("methods/memberRef.pec");
+	}
+
+	@Test
 	public void testInterpretedOverride() throws Exception {
 		checkInterpretedOutput("methods/override.pec");
 	}

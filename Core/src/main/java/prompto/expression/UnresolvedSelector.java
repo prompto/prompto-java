@@ -46,7 +46,7 @@ public class UnresolvedSelector extends SelectorExpression {
 	@Override
 	public void toDialect(CodeWriter writer) {
 		try {
-			resolve(writer.getContext(), false);
+			resolve(writer.getContext());
 		} catch (SyntaxError e) {
 		}
 		if (resolved != null)
@@ -62,31 +62,27 @@ public class UnresolvedSelector extends SelectorExpression {
 
 	@Override
 	public IType check(Context context) {
-		return resolveAndCheck(context, false);
-	}
-
-	public IType checkMember(Context context) {
-		return resolveAndCheck(context, true);
+		return resolveAndCheck(context);
 	}
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		resolveAndCheck(context, false);
+		resolveAndCheck(context);
 		return resolved.interpret(context);
 	}
 
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		resolveAndCheck(context, false);
+		resolveAndCheck(context);
 		return resolved.compile(context, method, flags);
 	}
 
-	private IType resolveAndCheck(Context context, boolean forMember) {
-		resolve(context, forMember);
+	private IType resolveAndCheck(Context context) {
+		resolve(context);
 		return resolved != null ? resolved.check(context) : AnyType.instance();
 	}
 
-	public IExpression resolve(Context context, boolean forMember) {
+	public IExpression resolve(Context context) {
 		if (resolved == null) {
 			IProblemListener saved = context.getProblemListener();
 			try {
@@ -145,14 +141,14 @@ public class UnresolvedSelector extends SelectorExpression {
 	@Override
 	public void declare(Transpiler transpiler) {
 		if (this.resolved == null)
-			this.resolve(transpiler.getContext(), false);
+			this.resolve(transpiler.getContext());
 		this.resolved.declare(transpiler);
 	}
 
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 		if (this.resolved == null)
-			this.resolve(transpiler.getContext(), false);
+			this.resolve(transpiler.getContext());
 		return this.resolved.transpile(transpiler);
 	}
 

@@ -988,18 +988,6 @@ public class MParserBaseListener implements MParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterClosureExpression(MParser.ClosureExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitClosureExpression(MParser.ClosureExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterContainsExpression(MParser.ContainsExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1019,6 +1007,18 @@ public class MParserBaseListener implements MParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFilteredListExpression(MParser.FilteredListExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTypeExpression(MParser.TypeExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTypeExpression(MParser.TypeExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -1228,13 +1228,13 @@ public class MParserBaseListener implements MParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterClosure_expression(MParser.Closure_expressionContext ctx) { }
+	@Override public void enterType_expression(MParser.Type_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitClosure_expression(MParser.Closure_expressionContext ctx) { }
+	@Override public void exitType_expression(MParser.Type_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -439,16 +439,22 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	}
 
 	public void collectAllMethods(Context context, Map<String, MethodDeclarationMap> map) {
-		getLocalMethods().forEach((m)->{
-			MethodDeclarationMap current = map.get(m.getNameAsKey());
-			if(current==null) {
-				current = new MethodDeclarationMap(m.getId());
-				map.put(m.getNameAsKey(), current);
-			}
-			if(current.get(m.getProto())==null)
-				current.put(m.getProto(), m);
+		getLocalMethods().forEach(m -> {
+			MethodDeclarationMap current = map.computeIfAbsent(m.getNameAsKey(), key -> new MethodDeclarationMap(m.getId()));
+			current.computeIfAbsent(m.getProto(), proto -> m);
 		});
 	}
+	
+	public void collectAllMethods(Context context, MethodDeclarationMap map) {
+		getMemberMethods(context, map.getId(), false).values().forEach(m -> map.computeIfAbsent(m.getProto(), proto -> m));
+	}
+
+	public MethodDeclarationMap getAllMethods(Context context, Identifier name) {
+		MethodDeclarationMap map = new MethodDeclarationMap(name);
+		collectAllMethods(context, map);
+		return map;
+	}
+
 
 	protected boolean isPromptoRoot(Context context) {
 		return false;
@@ -477,5 +483,6 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	public SetterMethodDeclaration findSetter(Context context, Identifier attrName) {
 		throw new IllegalStateException("Should never get there");
 	}
+
 	
 }

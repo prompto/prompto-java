@@ -80,7 +80,6 @@ import prompto.expression.IntDivideExpression;
 import prompto.expression.ItemSelector;
 import prompto.expression.IteratorExpression;
 import prompto.expression.MemberSelector;
-import prompto.expression.MethodExpression;
 import prompto.expression.MinusExpression;
 import prompto.expression.ModuloExpression;
 import prompto.expression.MultiplyExpression;
@@ -108,7 +107,6 @@ import prompto.expression.UnresolvedSelector;
 import prompto.grammar.Annotation;
 import prompto.grammar.Argument;
 import prompto.grammar.ArgumentList;
-import prompto.grammar.ParameterList;
 import prompto.grammar.CategorySymbolList;
 import prompto.grammar.CmpOp;
 import prompto.grammar.ContOp;
@@ -121,6 +119,7 @@ import prompto.grammar.NativeSymbolList;
 import prompto.grammar.Operator;
 import prompto.grammar.OrderByClause;
 import prompto.grammar.OrderByClauseList;
+import prompto.grammar.ParameterList;
 import prompto.instance.IAssignableInstance;
 import prompto.instance.IAssignableSelector;
 import prompto.instance.ItemInstance;
@@ -161,13 +160,13 @@ import prompto.javascript.JavaScriptTextLiteral;
 import prompto.javascript.JavaScriptThisExpression;
 import prompto.jsx.IJsxExpression;
 import prompto.jsx.IJsxValue;
-import prompto.jsx.JsxProperty;
 import prompto.jsx.JsxClosing;
 import prompto.jsx.JsxCode;
 import prompto.jsx.JsxElement;
 import prompto.jsx.JsxExpression;
 import prompto.jsx.JsxFragment;
 import prompto.jsx.JsxLiteral;
+import prompto.jsx.JsxProperty;
 import prompto.jsx.JsxSelfClosing;
 import prompto.jsx.JsxText;
 import prompto.literal.BooleanLiteral;
@@ -208,7 +207,7 @@ import prompto.param.CodeParameter;
 import prompto.param.ExtendedParameter;
 import prompto.param.IParameter;
 import prompto.param.UnresolvedParameter;
-import static prompto.parser.OParser.*;
+import prompto.parser.OParser.*;
 import prompto.python.Python2NativeCall;
 import prompto.python.Python2NativeCategoryBinding;
 import prompto.python.Python3NativeCall;
@@ -721,19 +720,18 @@ public class OPromptoBuilder extends OParserBaseListener {
 	}
 	
 	@Override
-	public void exitClosure_expression(Closure_expressionContext ctx) {
+	public void exitType_expression(Type_expressionContext ctx) {
 		Identifier name = getNodeValue(ctx.name);
-		setNodeValue(ctx, new MethodExpression(name));
+		setNodeValue(ctx, new TypeExpression(new CategoryType(name)));
 	}
 
 	@Override
-	public void exitClosureExpression(ClosureExpressionContext ctx) {
+	public void exitTypeExpression(TypeExpressionContext ctx) {
 		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
-	
 
-	@Override
+		@Override
 	public void exitClosureStatement(ClosureStatementContext ctx) {
 		ConcreteMethodDeclaration decl = getNodeValue(ctx.decl);
 		setNodeValue(ctx, new DeclarationStatement<ConcreteMethodDeclaration>(decl));

@@ -214,7 +214,9 @@ public class CategoryParameter extends BaseParameter implements ITypedParameter 
 	        transpiler.append("Math.round(");
 	        expression.transpile(transpiler);
 	        transpiler.append(")");
-	    } else
+	    } else if(resolved instanceof MethodType)
+	    	expression.transpileReference(transpiler, (MethodType)resolved);
+	    else
 	    	expression.transpile(transpiler);
     }	
 }

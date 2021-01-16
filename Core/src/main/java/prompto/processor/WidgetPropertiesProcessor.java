@@ -7,6 +7,7 @@ import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.IWidgetDeclaration;
 import prompto.error.InternalError;
 import prompto.expression.MethodExpression;
+import prompto.expression.TypeExpression;
 import prompto.grammar.Annotation;
 import prompto.grammar.Identifier;
 import prompto.literal.BooleanLiteral;
@@ -24,7 +25,6 @@ import prompto.property.ValueSetValidator;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
 import prompto.type.AnyType;
-import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.type.PropertiesType;
 import prompto.type.TextType;
@@ -105,7 +105,10 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 		prop.setName(entry.getKey().toString());
 		Object value = entry.getValue();
 		if(value instanceof MethodExpression) {
-			IType type = new CategoryType(((MethodExpression)value).getId());
+			value = ((MethodExpression)value).asTypeLiteral(context);
+		}
+		if(value instanceof TypeExpression) {
+			IType type = ((TypeExpression)value).getType();
 			value = new TypeLiteral(type);
 		}
 		if(value instanceof TypeLiteral)

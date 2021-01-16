@@ -307,12 +307,16 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	    	return this.getName();
 	    else if(this.hasLocalAnnotation("@Callback") || this.hasInheritedAnnotation(context, "@Callback"))
 	    	return this.getName();
-	    else {
-	    	Stream<String> name = Stream.of(this.getName());
-	    	Stream<String> args = this.parameters.stream().map(arg->arg.getTranspiledName(context));
-	    	return Stream.concat(name, args).collect(Collectors.joining("$"));
-	    }
-	};
+	    else 
+	    	return getTranspiledName(context, this.getName());
+	}
+	
+	@Override
+	public String getTranspiledName(Context context, String methodName) {
+    	Stream<String> name = Stream.of(methodName);
+    	Stream<String> args = this.parameters.stream().map(arg->arg.getTranspiledName(context));
+    	return Stream.concat(name, args).collect(Collectors.joining("$"));
+	}
 	
 	
 	@Override

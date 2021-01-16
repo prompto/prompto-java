@@ -784,8 +784,8 @@ public class EPromptoBuilder extends EParserBaseListener {
 
 	@Override
 	public void exitClosureExpression(ClosureExpressionContext ctx) {
-		Identifier name = getNodeValue(ctx.name);
-		setNodeValue(ctx, new MethodExpression(name));
+		IExpression expression = getNodeValue(ctx.exp);
+		setNodeValue(ctx, new MethodExpression(expression));
 	}
 
 	@Override

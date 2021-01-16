@@ -655,6 +655,16 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	@Override
 	public Map<String, MethodDeclarationMap> getAllMethods(Context context) {
 		Map<String, MethodDeclarationMap> map = super.getAllMethods(context);
+		if(derivedFrom!=null) derivedFrom.forEach(id->{
+				CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, id);
+				decl.collectAllMethods(context, map);
+			});
+		return map;		
+	}
+
+	@Override
+	public MethodDeclarationMap getAllMethods(Context context, Identifier name) {
+		MethodDeclarationMap map = super.getAllMethods(context, name);
 		if(derivedFrom!=null) derivedFrom.forEach((id)->{
 				CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, id);
 				decl.collectAllMethods(context, map);

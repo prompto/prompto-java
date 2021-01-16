@@ -79,7 +79,6 @@ import prompto.expression.IntDivideExpression;
 import prompto.expression.ItemSelector;
 import prompto.expression.IteratorExpression;
 import prompto.expression.MemberSelector;
-import prompto.expression.MethodExpression;
 import prompto.expression.MinusExpression;
 import prompto.expression.ModuloExpression;
 import prompto.expression.MultiplyExpression;
@@ -735,13 +734,13 @@ public class MPromptoBuilder extends MParserBaseListener {
 	}
 
 	@Override
-	public void exitClosure_expression(Closure_expressionContext ctx) {
+	public void exitType_expression(Type_expressionContext ctx) {
 		Identifier name = getNodeValue(ctx.name);
-		setNodeValue(ctx, new MethodExpression(name));
+		setNodeValue(ctx, new TypeExpression(new CategoryType(name)));
 	}
 
 	@Override
-	public void exitClosureExpression(ClosureExpressionContext ctx) {
+	public void exitTypeExpression(TypeExpressionContext ctx) {
 		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
 	}
