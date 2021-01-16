@@ -10,6 +10,7 @@ import prompto.expression.DefaultExpression;
 import prompto.expression.IExpression;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.INamedInstance;
+import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
@@ -19,6 +20,7 @@ import prompto.value.IValue;
 
 public interface IParameter extends INamedInstance {
 	
+	Identifier getId();
 	String getProto();
 	String getSignature(Dialect dialect);
 	void register(Context context);

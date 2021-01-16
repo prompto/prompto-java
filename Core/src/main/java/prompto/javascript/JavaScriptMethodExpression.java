@@ -100,6 +100,7 @@ public class JavaScriptMethodExpression extends JavaScriptSelectorExpression {
 				IParameter parameter = argument.getParameter();
 				if(parameter==null && declaration.getParameters().size()==1)
 					parameter = declaration.getParameters().get(0);
+				parameter = declaration.getParameters().find(parameter.getId());
 	            IExpression expression = argument.getExpression();
 	            parameter.transpileCall(transpiler, expression);
 	            return;
