@@ -227,6 +227,7 @@ public class MethodExpression implements IExpression {
 						((InstanceContext) context).getInstanceType().transpileInstance(transpiler);
 					transpiler.append(")");
 				}
+				transpiler.flush();
 			}
 			return false;
 		} else
