@@ -1067,9 +1067,11 @@ public class Context implements IContext {
 	}
 	
 	private void loadNativeBindingFromStore(Type type) {
-		NativeCategoryDeclaration decl = ICodeStore.getInstance().fetchLatestNativeCategoryDeclarationWithJavaBinding(type.getTypeName());
-		if(decl!=null)
-			decl.register(this);
+		if(ICodeStore.getInstance()!=null) {
+			NativeCategoryDeclaration decl = ICodeStore.getInstance().fetchLatestNativeCategoryDeclarationWithJavaBinding(type.getTypeName());
+			if(decl!=null)
+				decl.register(this);
+		}
 	}
 
 	public String fetchTextResource(String path) {
