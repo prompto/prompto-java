@@ -382,11 +382,14 @@ public class MemberSelector extends SelectorExpression {
 	}
 	
 	@Override
-	public boolean transpileReference(Transpiler transpiler, MethodType method) {
+	public boolean transpileMethodReference(Transpiler transpiler, MethodType method) {
 	    IExpression parent = this.resolveParent(transpiler.getContext());
 	    parent.transpileParent(transpiler);
-	    transpiler.append(".");
-	    transpiler.append(method.getMethod().getTranspiledName(transpiler.getContext(), this.getName()));
+	    transpiler.append(".")
+	    	.append(method.getMethod().getTranspiledName(transpiler.getContext(), this.getName()))
+	    	.append(".bind(");
+	    parent.transpileParent(transpiler);
+	    transpiler.append(")");
 		return false;
 	}
 
