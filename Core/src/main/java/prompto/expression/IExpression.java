@@ -60,7 +60,7 @@ public interface IExpression {
 	default boolean transpileParent(Transpiler transpiler) {
 		return transpile(transpiler);
 	}
-	default boolean transpileReference(Transpiler transpiler, MethodType methodType) {
+	default boolean transpileMethodReference(Transpiler transpiler, MethodType methodType) {
 		return transpile(transpiler);
 	}
 	default void declareQuery(Transpiler transpiler) {

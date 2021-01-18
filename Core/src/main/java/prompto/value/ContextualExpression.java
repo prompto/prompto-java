@@ -75,9 +75,9 @@ public class ContextualExpression extends BaseValue implements IExpression {
 	}
 	
 	@Override
-	public boolean transpileReference(Transpiler transpiler, MethodType method) {
+	public boolean transpileMethodReference(Transpiler transpiler, MethodType method) {
 		transpiler = transpiler.newChildTranspiler(this.calling);
-	    this.expression.transpileReference(transpiler, method);
+	    this.expression.transpileMethodReference(transpiler, method);
 	    transpiler.flush();
 	    return false;
 	}
