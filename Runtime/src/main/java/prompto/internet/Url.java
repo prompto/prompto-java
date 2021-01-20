@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.function.Consumer;
 
 import prompto.intrinsic.PromptoBinary;
 import prompto.value.IResource;
@@ -106,6 +107,11 @@ public class Url implements IResource {
 	}
 	
 	@Override
+	public void writeFully(String text, Consumer<String> thenWith) throws IOException {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public String readLine() throws IOException {
 		if(reader==null)
 			reader = new BufferedReader(new InputStreamReader(url.openStream()));
@@ -116,5 +122,6 @@ public class Url implements IResource {
 	public void writeLine(String data) throws IOException {
 		throw new UnsupportedOperationException();
 	}
+
 	
 }

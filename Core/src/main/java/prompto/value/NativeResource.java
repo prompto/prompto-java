@@ -1,6 +1,7 @@
 package prompto.value;
 
 import java.io.IOException;
+import java.util.function.Consumer;
 
 import prompto.declaration.NativeResourceDeclaration;
 import prompto.intrinsic.PromptoBinary;
@@ -40,6 +41,11 @@ public class NativeResource extends NativeInstance implements IResource {
 	}
 	
 	@Override
+	public void writeFully(String data, Consumer<String> thenWith) throws IOException {
+		((IResource)instance).writeFully(data, thenWith);
+	}
+
+	@Override
 	public String readLine() throws IOException {
 		return ((IResource)instance).readLine();
 	}
@@ -53,5 +59,6 @@ public class NativeResource extends NativeInstance implements IResource {
 	public void close() {
 		((IResource)instance).close();
 	}
+
 
 }

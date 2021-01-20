@@ -1393,9 +1393,8 @@ public class OPromptoBuilder extends OParserBaseListener {
 	public void exitFetchOneAsync(FetchOneAsyncContext ctx) {
 		CategoryType category = getNodeValue(ctx.typ);
 		IExpression filter = getNodeValue(ctx.predicate);
-		Identifier name = getNodeValue(ctx.name);
-		StatementList stmts = 	getNodeValue(ctx.stmts);
-		setNodeValue(ctx, new FetchOneStatement(category, filter, name, stmts));
+		ThenWith thenWith = ThenWith.orEmpty(getNodeValue(ctx.then()));
+		setNodeValue(ctx, new FetchOneStatement(category, filter, thenWith));
 	}
 
 
@@ -1417,12 +1416,18 @@ public class OPromptoBuilder extends OParserBaseListener {
 		IExpression stop = getNodeValue(ctx.xstop);
 		IExpression predicate = getNodeValue(ctx.predicate);
 		OrderByClauseList orderBy = getNodeValue(ctx.orderby);
-		Identifier name = getNodeValue(ctx.name);
-		StatementList stmts = getNodeValue(ctx.stmts);
-		setNodeValue(ctx, new FetchManyStatement(category, start, stop, predicate, orderBy, name, stmts));
+		ThenWith thenWith = ThenWith.orEmpty(getNodeValue(ctx.then()));
+		setNodeValue(ctx, new FetchManyStatement(category, start, stop, predicate, orderBy, thenWith));
 	}
 
 	
+	@Override
+	public void exitThen(ThenContext ctx) {
+		Identifier name = getNodeValue(ctx.name);
+		StatementList stmts = getNodeValue(ctx.stmts);
+		setNodeValue(ctx, new ThenWith(name, stmts));
+	}
+
 	@Override
 	public void exitFiltered_list_expression(Filtered_list_expressionContext ctx) {
 		IExpression source = getNodeValue(ctx.source);
@@ -2871,9 +2876,8 @@ public class OPromptoBuilder extends OParserBaseListener {
 	@Override
 	public void exitRead_statement(Read_statementContext ctx) {
 		IExpression source = getNodeValue(ctx.source);
-		Identifier name = getNodeValue(ctx.name);
-		StatementList stmts = 	getNodeValue(ctx.stmts);
-		setNodeValue(ctx, new ReadStatement(source, name, stmts));
+		ThenWith thenWith = ThenWith.orEmpty(getNodeValue(ctx.then()));
+		setNodeValue(ctx, new ReadStatement(source, thenWith));
 	}
 	
 	@Override
@@ -3288,7 +3292,8 @@ public class OPromptoBuilder extends OParserBaseListener {
 	public void exitWrite_statement(Write_statementContext ctx) {
 		IExpression what = getNodeValue(ctx.what);
 		IExpression target = getNodeValue(ctx.target);
-		setNodeValue(ctx, new WriteStatement(what, target));
+		ThenWith thenWith = getNodeValue(ctx.then());
+		setNodeValue(ctx, new WriteStatement(what, target, thenWith));
 	}
 	
 	@Override

@@ -3,11 +3,12 @@ package prompto.io;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.function.Consumer;
 
 import prompto.intrinsic.PromptoBinary;
 import prompto.value.IResource;
 
-public class Buffer  implements IResource {
+public class Buffer implements IResource {
 	
 	StringBuffer buffer = new StringBuffer();
 	BufferedReader reader;
@@ -62,9 +63,15 @@ public class Buffer  implements IResource {
 		buffer = new StringBuffer(data);
 	}
 	
+	@Override
+	public void writeFully(String data, Consumer<String> thenWith) {
+		buffer = new StringBuffer(data);
+		thenWith.accept("");
+	}
+
 	public String getText() {
 		return buffer.toString();
 	}
-	
+
 	
 }

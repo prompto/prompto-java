@@ -26,8 +26,10 @@ MyResource.prototype.readFullyAsync = function(callback) {
 };
 
 
-MyResource.prototype.writeFully = function(data) {
+MyResource.prototype.writeFully = function(data, callback) {
     contents[this.path] = data;
+    if(callback)
+    	callback("accepted: " + contents[this.path]);
 };
 
 MyResource.prototype.readLine = function() {

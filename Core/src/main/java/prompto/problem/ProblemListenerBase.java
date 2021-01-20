@@ -242,4 +242,9 @@ public abstract class ProblemListenerBase implements ANTLRErrorListener, IProble
 		addProblem(new ExpectingCollectionProblem(section, actual));
 	}
 
+	@Override
+	public void reportExpectingResource(ISection section, IType actual) {
+		addProblem(new ExpectingResourceProblem(section, actual));
+	}
+
 }

@@ -27,6 +27,11 @@ public class TestResource extends BaseOParserTest {
 	}
 
 	@Test
+	public void testWriteResourceThen() throws Exception {
+		compareResourceOEO("resource/writeResourceThen.poc");
+	}
+
+	@Test
 	public void testWriteWithResource() throws Exception {
 		compareResourceOEO("resource/writeWithResource.poc");
 	}

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 import prompto.intrinsic.PromptoBinary;
 import prompto.value.IResource;
@@ -70,6 +71,12 @@ public class MyResource implements IResource {
 	}
 	
 	@Override
+	public void writeFully(String data, Consumer<String> thenWith) {
+		setContent(data);
+		thenWith.accept("accepted: " + getContent());
+	}
+
+	@Override
 	public String readLine() throws IOException {
 		if(reader==null) {
 			if(getContent()==null)
@@ -86,4 +93,5 @@ public class MyResource implements IResource {
 			content += "\n";
 		setContent(content + data);
 	}
+
 }

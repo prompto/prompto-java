@@ -1,6 +1,7 @@
 package prompto.value;
 
 import java.io.IOException;
+import java.util.function.Consumer;
 
 import prompto.intrinsic.PromptoBinary;
 
@@ -13,6 +14,7 @@ public interface IResource {
 	PromptoBinary readBlob() throws IOException;
 	String readFully() throws IOException;
 	void writeFully(String data) throws IOException;
+	void writeFully(String text, Consumer<String> thenWith) throws IOException;
 	void close();
 
 }

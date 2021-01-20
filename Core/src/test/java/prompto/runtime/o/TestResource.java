@@ -80,6 +80,21 @@ public class TestResource extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedWriteResourceThen() throws Exception {
+		checkInterpretedOutput("resource/writeResourceThen.poc");
+	}
+
+	@Test
+	public void testCompiledWriteResourceThen() throws Exception {
+		checkCompiledOutput("resource/writeResourceThen.poc");
+	}
+
+	@Test
+	public void testTranspiledWriteResourceThen() throws Exception {
+		checkTranspiledOutput("resource/writeResourceThen.poc");
+	}
+
+	@Test
 	public void testInterpretedWriteWithResource() throws Exception {
 		checkInterpretedOutput("resource/writeWithResource.poc");
 	}

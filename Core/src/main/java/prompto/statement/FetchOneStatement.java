@@ -6,82 +6,52 @@ import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.expression.FetchOneExpression;
 import prompto.expression.IExpression;
-import prompto.grammar.Identifier;
-import prompto.instance.VariableInstance;
-import prompto.parser.Dialect;
+import prompto.parser.ThenWith;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
-import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
 public class FetchOneStatement extends FetchOneExpression implements IStatement {
 
-	Identifier name;
-	StatementList stmts;
-
-	public FetchOneStatement(CategoryType category, IExpression filter, Identifier name, StatementList stmts) {
+	ThenWith thenWith;
+	
+	public FetchOneStatement(CategoryType category, IExpression filter, ThenWith thenWith) {
 		super(category, filter);
-		this.name = name;
-		this.stmts = stmts;
+		this.thenWith = thenWith;
 	}
 	
 	@Override
 	public IType check(Context context) {
 		super.check(context);
-		context = context.newChildContext();
-		context.registerValue(new Variable(name, type));
-		stmts.check(context, VoidType.instance());
-		return VoidType.instance();
+		return thenWith.check(context, type);
 	}
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		IValue record = super.interpret(context);
-		context = context.newChildContext();
-		context.registerValue(new Variable(name, type));
-		context.setValue(name, record);
-		stmts.interpret(context);
-		return null;
+		return thenWith.interpret(context, record);
 	}
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		AssignInstanceStatement assign = new AssignInstanceStatement(new VariableInstance(name), new FetchOneExpression(type, predicate));
-		assign.compile(context, method, flags);
-		stmts.compile(context, method, flags);
-		return new ResultInfo(void.class);
+		return thenWith.compile(context, method, flags, new FetchOneExpression(type, predicate));
 	}
 
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
 		super.toDialect(writer);
-		writer.append(" then with ").append(name);
-		if(writer.getDialect()==Dialect.O)
-			writer.append(" {");
-		else
-			writer.append(":");
-		writer = writer.newChildWriter();
-		writer.getContext().registerValue(new Variable(name, type));
-		writer.newLine().indent();
-		stmts.toDialect(writer);
-		writer.dedent();
-		if(writer.getDialect()==Dialect.O)
-			writer.append("}");
+		thenWith.toDialect(writer, type);
 	}
 	
 	@Override
 	public void declare(Transpiler transpiler) {
-		if(!transpiler.getEngine().isTestEngine())
-			transpiler.require("Remote");
 		super.declare(transpiler);
-		transpiler = transpiler.newChildTranspiler(transpiler.getContext());
-		transpiler.getContext().registerValue(new Variable(name, type));
-		stmts.declare(transpiler);
+		thenWith.declare(transpiler, type);
 	}
 	
 	@Override
@@ -89,10 +59,10 @@ public class FetchOneStatement extends FetchOneExpression implements IStatement 
 	    transpiler.append("(function() {").indent();
 	    transpileQuery(transpiler);
 	    transpiler.append("$DataStore.instance.fetchOneAsync(builder.build(), function($stored) {").indent();
-	    transpileConvert(transpiler, name.toString());
+	    transpileConvert(transpiler, thenWith.getName().toString());
 		transpiler = transpiler.newChildTranspiler(transpiler.getContext());
-		transpiler.getContext().registerValue(new Variable(name, type));
-		stmts.transpile(transpiler);
+		transpiler.getContext().registerValue(new Variable(thenWith.getName(), type));
+		thenWith.getStatements().transpile(transpiler);
 		transpiler.dedent().append("}.bind(this));").dedent().append("}).bind(this)()");
 		transpiler.flush();
 	    return false;

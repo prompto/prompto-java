@@ -10,4 +10,5 @@ public class ProblemListener extends ProblemListenerBase {
 		if(problem.getType()==Type.ERROR)
 			throw new SyntaxError(problem.getMessage() + getEnclosingDeclaration());
 	}
+
 }

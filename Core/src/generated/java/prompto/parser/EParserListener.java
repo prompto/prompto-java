@@ -1646,6 +1646,16 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitFetchManyAsync(EParser.FetchManyAsyncContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link EParser#then}.
+	 * @param ctx the parse tree
+	 */
+	void enterThen(EParser.ThenContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#then}.
+	 * @param ctx the parse tree
+	 */
+	void exitThen(EParser.ThenContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link EParser#read_statement}.
 	 * @param ctx the parse tree
 	 */

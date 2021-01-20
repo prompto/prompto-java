@@ -43,6 +43,7 @@ public interface IProblemListener {
 	void reportMissingBinding(ISection section, String name);
 	void reportMissingAttribute(ISection section, String message);
 	void reportExpectingCollection(ISection section, IType actual);
+	void reportExpectingResource(ISection section, IType actual);
 
 	void pushDeclaration(IDeclaration declaration);
 	IDeclaration popDeclaration();

@@ -27,6 +27,11 @@ public class TestResource extends BaseEParserTest {
 	}
 
 	@Test
+	public void testWriteResourceThen() throws Exception {
+		compareResourceEOE("resource/writeResourceThen.pec");
+	}
+
+	@Test
 	public void testWriteWithResource() throws Exception {
 		compareResourceEOE("resource/writeWithResource.pec");
 	}
