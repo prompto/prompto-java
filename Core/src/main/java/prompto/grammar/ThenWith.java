@@ -1,11 +1,11 @@
-package prompto.parser;
+package prompto.grammar;
 
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
 import prompto.expression.IExpression;
-import prompto.grammar.Identifier;
 import prompto.instance.VariableInstance;
+import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.statement.AssignInstanceStatement;

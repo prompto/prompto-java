@@ -120,6 +120,7 @@ import prompto.grammar.Operator;
 import prompto.grammar.OrderByClause;
 import prompto.grammar.OrderByClauseList;
 import prompto.grammar.ParameterList;
+import prompto.grammar.ThenWith;
 import prompto.instance.IAssignableInstance;
 import prompto.instance.IAssignableSelector;
 import prompto.instance.ItemInstance;

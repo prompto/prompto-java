@@ -7,7 +7,7 @@ import prompto.error.PromptoError;
 import prompto.expression.FetchManyExpression;
 import prompto.expression.IExpression;
 import prompto.grammar.OrderByClauseList;
-import prompto.parser.ThenWith;
+import prompto.grammar.ThenWith;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.transpiler.Transpiler;

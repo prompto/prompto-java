@@ -22,7 +22,7 @@ import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.expression.IExpression;
-import prompto.parser.ThenWith;
+import prompto.grammar.ThenWith;
 import prompto.runtime.Context;
 import prompto.runtime.Context.ResourceContext;
 import prompto.runtime.Variable;

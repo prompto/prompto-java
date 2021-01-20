@@ -6,7 +6,7 @@ import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.expression.ReadAllExpression;
-import prompto.parser.ThenWith;
+import prompto.grammar.ThenWith;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
