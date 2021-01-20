@@ -91,6 +91,37 @@ define DateChangedCallback as abstract method receiving Date value
 define ToggleChangedCallback as abstract method receiving Boolean value
 define ItemSelectedCallback as abstract method receiving Any value
 define PageSelectedCallback as abstract method receiving Integer value
+@Inlined
+define FileRef as native category with bindings:
+
+	define category bindings as:
+		JavaScript: FileRef from module: prompto/web/FileRef.js
+
+and methods: 
+
+	define getName as method returning Text doing:
+		JavaScript: return this.file.name;
+	
+	define getMimeType as method returning Text doing:
+		JavaScript: return this.file.type;
+
+	define getSize as method returning Integer doing:
+		JavaScript: return this.file.size;
+
+	define readText as method receiving TextCallback callback doing:
+		JavaScript: this.readText(callback);
+
+	define readImage as method returning Image doing:
+		JavaScript: return this.readImage();
+
+	define readBlob as method returning Blob doing:
+		JavaScript: return this.readBlob();
+
+define FileRefCallback as abstract method receiving FileRef file
+ 
+define selectFile as native method receiving FileRefCallback callback and Text<> mimeTypes = nothing doing:
+	JavaScript: selectFileRef(callback, mimeTypes); from module: prompto/web/FileRef.js
+
 define getReactWidgetProps as native method receiving ReactWidget w returning Document doing:
 	JavaScript: return w.props;
 
@@ -178,42 +209,11 @@ define WidgetCallback as abstract method receiving any ref
 define alert as native method receiving Text text doing:
 	JavaScript: alert(text);
 
-define openBrowser as native method receiving Text url, Text name = Nothing and Text methodName = "open" returning Document doing:
-	JavaScript: return openBrowser(methodName, url, name); from module: prompto/internet/Browser.js
-
 define downloadFile as native method receiving Text url and Text name = Nothing doing:
-	JavaScript: downloadFile(url, name); from module: prompto/internet/Browser.js
+	JavaScript: downloadFile(url, name); from module: prompto/web/Browser.js
 
-@Inlined
-define FileRef as native category with bindings:
-
-	define category bindings as:
-		JavaScript: FileRef from module: prompto/internet/FileRef.js
-
-and methods: 
-
-	define getName as method returning Text doing:
-		JavaScript: return this.file.name;
-	
-	define getMimeType as method returning Text doing:
-		JavaScript: return this.file.type;
-
-	define getSize as method returning Integer doing:
-		JavaScript: return this.file.size;
-
-	define readText as method receiving TextCallback callback doing:
-		JavaScript: this.readText(callback);
-
-	define readImage as method returning Image doing:
-		JavaScript: return this.readImage();
-
-	define readBlob as method returning Blob doing:
-		JavaScript: return this.readBlob();
-
-define FileRefCallback as abstract method receiving FileRef file
- 
-define selectFile as native method receiving FileRefCallback callback and Text<> mimeTypes = nothing doing:
-	JavaScript: selectFileRef(callback, mimeTypes); from module: prompto/internet/FileRef.js
+define openBrowser as native method receiving Text url, Text name = Nothing and Text methodName = "open" returning Document doing:
+	JavaScript: return openBrowser(methodName, url, name); from module: prompto/web/Browser.js
 
 define browserHistoryBack as native method doing:
 	JavaScript: window.history.back();
@@ -238,3 +238,19 @@ define browserBindKeyboardShortcuts as native method receiving Text[] shortcuts 
 define browserGetWindow as native method returning Document doing:
 	JavaScript: return window;
 
+define WebSocketCallback as abstract method receiving WebSocket value
+
+define openWebSocket as native method receiving Text url, AnyCallback onMessage, Callback onClose = nothing and WebSocketCallback callback = nothing doing:
+		JavaScript: openWebSocket(url, onMessage, onClose); from module: prompto/internet/WebSocket.js
+
+@Inlined
+define WebSocket as native category with bindings:
+
+    define category bindings as:
+		JavaScript: window.WebSocket
+
+and methods: 
+
+	define close as method doing:
+        JavaScript: this.close();
+	
