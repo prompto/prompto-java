@@ -70,6 +70,8 @@ public class WriteStatement extends BaseStatement {
 		}
 		writer.append(" to ");
 		resource.toDialect(writer);
+		if(thenWith != null)
+			thenWith.toDialect(writer, TextType.instance());
 	}
 	
 	@Override
