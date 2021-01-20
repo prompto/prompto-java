@@ -36,7 +36,7 @@ import prompto.value.IResource;
 import prompto.value.IValue;
 import prompto.value.TextValue;
 
-public class WriteStatement extends SimpleStatement {
+public class WriteStatement extends BaseStatement {
 
 	IExpression content;
 	IExpression resource;
@@ -48,6 +48,11 @@ public class WriteStatement extends SimpleStatement {
 		this.thenWith = thenWith;
 	}
 	
+	
+	@Override
+	public boolean isSimple() {
+		return thenWith == null;
+	}
 
 	@Override
 	public void toDialect(CodeWriter writer) {
