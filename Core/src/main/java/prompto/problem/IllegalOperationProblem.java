@@ -1,14 +1,18 @@
 package prompto.problem;
 
 import prompto.parser.ISection;
+import prompto.type.IType;
 
 public class IllegalOperationProblem extends SyntaxProblemBase {
 
-	String message;
+	String verb;
+	IType t1, t2;
 	
-	public IllegalOperationProblem(ISection section, String message) {
+	public IllegalOperationProblem(ISection section, String verb, IType t1, IType t2) {
 		super(section);
-		this.message = message;
+		this.verb = verb;
+		this.t1 = t1;
+		this.t2 = t2;
 	}
 
 	@Override
@@ -18,7 +22,7 @@ public class IllegalOperationProblem extends SyntaxProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return message;
+		return "Cannot " + verb + " " + t1.getTypeName() + " to " + t2.getTypeName();
 	}
 
 }

@@ -110,7 +110,7 @@ public class FetchOneExpression extends Section implements IFetchExpression {
 		if(predicate instanceof IPredicateExpression)
 			((IPredicateExpression)predicate).checkQuery(context);
 		else
-			context.getProblemListener().reportIllegalOperation(this, "Filtering expression must be a predicate !");
+			context.getProblemListener().reportIllegalPredicate(this, predicate);
 		return type!=null ? type : AnyType.instance();
 	}
 	

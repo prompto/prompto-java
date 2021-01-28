@@ -38,6 +38,7 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDocument;
 import prompto.intrinsic.PromptoList;
 import prompto.literal.TextLiteral;
+import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.runtime.Variable;
@@ -104,15 +105,15 @@ public class DocumentType extends NativeType {
 	}
 	
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) {
+	public IType checkAdd(Context context, IType other, boolean tryReverse, ISection section) {
 		if(other==this)
 			return this;
 		else
-			return super.checkAdd(context, other, tryReverse);
+			return super.checkAdd(context, other, tryReverse, section);
 	}
 	
 	@Override
-	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ISection section) {
 		left.declare(transpiler);
 		right.declare(transpiler);
 	}

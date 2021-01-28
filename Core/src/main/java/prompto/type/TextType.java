@@ -69,19 +69,19 @@ public class TextType extends NativeType {
 	}
 
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) {
+	public IType checkAdd(Context context, IType other, boolean tryReverse, ISection section) {
 		if(tryReverse)
 			return this; // we're lhs, ok
 		else
-			return super.checkAdd(context, other, tryReverse);
+			return super.checkAdd(context, other, tryReverse, section);
 	}
 	
 	@Override
-	public IType checkMultiply(Context context, IType other, boolean tryReverse) {
+	public IType checkMultiply(Context context, IType other, boolean tryReverse, ISection section) {
 		if(other instanceof IntegerType)
 			return this;
 		else
-			return super.checkMultiply(context, other, tryReverse);
+			return super.checkMultiply(context, other, tryReverse, section);
 	}
 	
 	@Override
@@ -610,7 +610,7 @@ public class TextType extends NativeType {
 
 	
 	@Override
-	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ISection section) {
 		left.declare(transpiler);
 		right.declare(transpiler);
 	}
@@ -630,12 +630,12 @@ public class TextType extends NativeType {
 	}
 	
 	@Override
-	public void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	public void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ISection section) {
 	    if (other == IntegerType.instance()) {
 	        left.declare(transpiler);
 	        right.declare(transpiler);
 	    } else
-	        super.declareMultiply(transpiler, other, tryReverse, left, right);
+	        super.declareMultiply(transpiler, other, tryReverse, left, right, section);
 	}
 	
 	@Override

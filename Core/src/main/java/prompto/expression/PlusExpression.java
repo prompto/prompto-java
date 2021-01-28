@@ -19,6 +19,7 @@ import prompto.intrinsic.PromptoPeriod;
 import prompto.intrinsic.PromptoSet;
 import prompto.intrinsic.PromptoTime;
 import prompto.intrinsic.PromptoTuple;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.CharacterType;
@@ -38,7 +39,7 @@ import prompto.type.TupleType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
-public class PlusExpression implements IExpression {
+public class PlusExpression extends Section implements IExpression {
 
 	IExpression left;
 	IExpression right;
@@ -64,7 +65,7 @@ public class PlusExpression implements IExpression {
 	public IType check(Context context) {
 		IType lt = left.check(context);
 		IType rt = right.check(context);
-		return lt.checkAdd(context, rt, true);
+		return lt.checkAdd(context, rt, true, this);
 	}
 	
 	@Override
@@ -114,7 +115,7 @@ public class PlusExpression implements IExpression {
 		Context context = transpiler.getContext();
 		IType lt = left.check(context);
 		IType rt = right.check(context);
-		lt.declareAdd(transpiler, rt, true, this.left, this.right);
+		lt.declareAdd(transpiler, rt, true, this.left, this.right, this);
 	}
 	
 	@Override

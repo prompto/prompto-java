@@ -97,7 +97,7 @@ public class UnresolvedIdentifier extends Section implements IPredicateExpressio
 		if(resolved instanceof IPredicateExpression)
 			((IPredicateExpression)resolved).checkQuery(context);
 		else
-			context.getProblemListener().reportIllegalOperation(this, "Expectced a predicate, got: " + this.toString());
+			context.getProblemListener().reportIllegalPredicate(this, this);
 	}
 	
 	public IType checkMember(Context context) {

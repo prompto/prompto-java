@@ -16,6 +16,7 @@ import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoPeriod;
 import prompto.intrinsic.PromptoSet;
 import prompto.intrinsic.PromptoTime;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.DateTimeType;
@@ -30,7 +31,7 @@ import prompto.type.TimeType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
-public class SubtractExpression implements IExpression {
+public class SubtractExpression extends Section implements IExpression {
 
 	IExpression left;
 	IExpression right;
@@ -51,7 +52,7 @@ public class SubtractExpression implements IExpression {
 	public IType check(Context context) {
 		IType lt = left.check(context);
 		IType rt = right.check(context);
-		return lt.checkSubstract(context,rt);
+		return lt.checkSubstract(context, rt, this);
 	}
 	
 	@Override
@@ -95,7 +96,7 @@ public class SubtractExpression implements IExpression {
 	public void declare(Transpiler transpiler) {
 	    IType lt = this.left.check(transpiler.getContext());
 	    IType rt = this.right.check(transpiler.getContext());
-	    lt.declareSubtract(transpiler, rt, this.left, this.right);
+	    lt.declareSubtract(transpiler, rt, this.left, this.right, this);
 	}
 	
 	@Override

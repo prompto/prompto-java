@@ -242,60 +242,60 @@ public class CategoryType extends BaseType {
 	}
 
 	@Override
-	public IType checkMultiply(Context context, IType other, boolean tryReverse) {
-		IType type = checkOperator(context, other, tryReverse, Operator.MULTIPLY);
+	public IType checkMultiply(Context context, IType other, boolean tryReverse, ISection section) {
+		IType type = checkOperator(context, other, tryReverse, Operator.MULTIPLY, section);
 		if(type!=null)
 			return type;
 		else
-			return super.checkMultiply(context, other, tryReverse);
+			return super.checkMultiply(context, other, tryReverse, section);
 	}
 	
 	@Override
-	public IType checkDivide(Context context, IType other) {
-		IType type = checkOperator(context, other, false, Operator.DIVIDE);
+	public IType checkDivide(Context context, IType other, ISection section) {
+		IType type = checkOperator(context, other, false, Operator.DIVIDE, section);
 		if(type!=null)
 			return type;
 		else
-			return super.checkDivide(context, other);
+			return super.checkDivide(context, other, section);
 	}
 	
 	@Override
-	public IType checkIntDivide(Context context, IType other) {
-		IType type = checkOperator(context, other, false, Operator.IDIVIDE);
+	public IType checkIntDivide(Context context, IType other, ISection section) {
+		IType type = checkOperator(context, other, false, Operator.IDIVIDE, section);
 		if(type!=null)
 			return type;
 		else
-			return super.checkIntDivide(context, other);
+			return super.checkIntDivide(context, other, section);
 	}
 	
 	@Override
-	public IType checkModulo(Context context, IType other) {
-		IType type = checkOperator(context, other, false, Operator.MODULO);
+	public IType checkModulo(Context context, IType other, ISection section) {
+		IType type = checkOperator(context, other, false, Operator.MODULO, section);
 		if(type!=null)
 			return type;
 		else
-			return super.checkModulo(context, other);
+			return super.checkModulo(context, other, section);
 	}
 	
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) {
-		IType type = checkOperator(context, other, tryReverse, Operator.PLUS);
+	public IType checkAdd(Context context, IType other, boolean tryReverse, ISection section) {
+		IType type = checkOperator(context, other, tryReverse, Operator.PLUS, section);
 		if(type!=null)
 			return type;
 		else
-			return super.checkAdd(context, other, tryReverse);
+			return super.checkAdd(context, other, tryReverse, section);
 	}
 
 	@Override
-	public IType checkSubstract(Context context, IType other) {
-		IType type = checkOperator(context, other, false, Operator.MINUS);
+	public IType checkSubstract(Context context, IType other, ISection section) {
+		IType type = checkOperator(context, other, false, Operator.MINUS, section);
 		if(type!=null)
 			return type;
 		else
-			return super.checkSubstract(context, other);
+			return super.checkSubstract(context, other, section);
 	}
 	
-	private IType checkOperator(Context context, IType other, boolean tryReverse, Operator operator) {
+	private IType checkOperator(Context context, IType other, boolean tryReverse, Operator operator, ISection section) {
 		IDeclaration actual = getDeclaration(context);
 		if(actual instanceof ConcreteCategoryDeclaration) try {
 			IMethodDeclaration method = ((ConcreteCategoryDeclaration)actual).findOperator(context, operator, other);
@@ -310,8 +310,10 @@ public class CategoryType extends BaseType {
 		}
 		if(tryReverse)
 			return null;
-		else
-			throw new SyntaxError("Unsupported operation: " + this.typeNameId + " " + operator.getToken() + " " + other.getTypeName());
+		else {
+			context.getProblemListener().reportIllegalOperation(section, this.typeNameId.toString() + " " + operator.getToken(), this, other);
+			return VoidType.instance();
+		}
 	}
 
 	@Override
@@ -881,14 +883,14 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
-	    IType type = this.checkOperator(transpiler.getContext(), other, tryReverse, Operator.PLUS);
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ISection section) {
+	    IType type = this.checkOperator(transpiler.getContext(), other, tryReverse, Operator.PLUS, section);
 	    if(type!=null) {
 	        left.declare(transpiler);
 	        right.declare(transpiler);
 	        type.declare(transpiler);
 	    } else
-	        super.declareAdd(transpiler, other, tryReverse, left, right);
+	        super.declareAdd(transpiler, other, tryReverse, left, right, section);
 	}
 	
 	@Override
@@ -900,14 +902,14 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
-	    IType type = this.checkOperator(transpiler.getContext(), other, false, Operator.MINUS);
+	public void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right, ISection section) {
+	    IType type = this.checkOperator(transpiler.getContext(), other, false, Operator.MINUS, section);
 	    if(type!=null) {
 	        left.declare(transpiler);
 	        right.declare(transpiler);
 	        type.declare(transpiler);
 	    } else
-	        super.declareSubtract(transpiler, other, left, right);
+	        super.declareSubtract(transpiler, other, left, right, section);
 	}
 	
 	
@@ -920,14 +922,14 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
-		IType type = this.checkOperator(transpiler.getContext(), other, tryReverse, Operator.MULTIPLY);
+	public void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ISection section) {
+		IType type = this.checkOperator(transpiler.getContext(), other, tryReverse, Operator.MULTIPLY, section);
 	    if(type!=null) {
 	        left.declare(transpiler);
 	        right.declare(transpiler);
 	        type.declare(transpiler);
 	    } else
-	        super.declareMultiply(transpiler, other, tryReverse, left, right);
+	        super.declareMultiply(transpiler, other, tryReverse, left, right, section);
 	}
 	
 	@Override
@@ -939,15 +941,15 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public void declareDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
-		IType type = this.checkOperator(transpiler.getContext(), other, false, Operator.DIVIDE);
+	public void declareDivide(Transpiler transpiler, IType other, IExpression left, IExpression right, ISection section) {
+		IType type = this.checkOperator(transpiler.getContext(), other, false, Operator.DIVIDE, section);
 	    if(type!=null) {
 	    	transpiler.require("divide");
 	        left.declare(transpiler);
 	        right.declare(transpiler);
 	        type.declare(transpiler);
 	    } else
-	        super.declareDivide(transpiler, other, left, right);
+	        super.declareDivide(transpiler, other, left, right, section);
 	}
 	
 	@Override
@@ -959,15 +961,15 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public void declareIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
-		IType type = this.checkOperator(transpiler.getContext(), other, false, Operator.IDIVIDE);
+	public void declareIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right, ISection section) {
+		IType type = this.checkOperator(transpiler.getContext(), other, false, Operator.IDIVIDE, section);
 	    if(type!=null) {
 	    	transpiler.require("divide");
 	        left.declare(transpiler);
 	        right.declare(transpiler);
 	        type.declare(transpiler);
 	    } else
-	        super.declareIntDivide(transpiler, other, left, right);
+	        super.declareIntDivide(transpiler, other, left, right, section);
 	}
 	
 	@Override
@@ -979,15 +981,15 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public void declareModulo(Transpiler transpiler, IType other, IExpression left, IExpression right) {
-		IType type = this.checkOperator(transpiler.getContext(), other, false, Operator.MODULO);
+	public void declareModulo(Transpiler transpiler, IType other, IExpression left, IExpression right, ISection section) {
+		IType type = this.checkOperator(transpiler.getContext(), other, false, Operator.MODULO, section);
 	    if(type!=null) {
 	    	transpiler.require("divide");
 	        left.declare(transpiler);
 	        right.declare(transpiler);
 	        type.declare(transpiler);
 	    } else
-	        super.declareModulo(transpiler, other, left, right);
+	        super.declareModulo(transpiler, other, left, right, section);
 	}
 	
 	@Override

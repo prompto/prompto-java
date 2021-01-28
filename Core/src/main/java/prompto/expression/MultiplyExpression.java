@@ -14,6 +14,7 @@ import prompto.compiler.ResultInfo;
 import prompto.declaration.CategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.CharacterType;
@@ -25,7 +26,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.IMultiplyable;
 import prompto.value.IValue;
 
-public class MultiplyExpression implements IExpression {
+public class MultiplyExpression extends Section implements IExpression {
 
 	IExpression left;
 	IExpression right;
@@ -46,7 +47,7 @@ public class MultiplyExpression implements IExpression {
 	public IType check(Context context) {
 		IType lt = left.check(context);
 		IType rt = right.check(context);
-		return lt.checkMultiply(context, rt, true);
+		return lt.checkMultiply(context, rt, true, this);
 	}
 	
 	@Override
@@ -108,7 +109,7 @@ public class MultiplyExpression implements IExpression {
 	public void declare(Transpiler transpiler) {
 	    IType lt = this.left.check(transpiler.getContext());
 	    IType rt = this.right.check(transpiler.getContext());
-	    lt.declareMultiply(transpiler, rt, true, this.left, this.right);
+	    lt.declareMultiply(transpiler, rt, true, this.left, this.right, this);
 	}
 	
 	@Override

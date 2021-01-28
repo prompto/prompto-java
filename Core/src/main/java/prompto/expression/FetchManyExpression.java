@@ -200,7 +200,7 @@ public class FetchManyExpression extends FetchOneExpression {
 		if(predicate instanceof IPredicateExpression)
 			((IPredicateExpression)predicate).checkQuery(context);
 		else
-			context.getProblemListener().reportIllegalOperation(this, "Filtering expression must be a predicate !");
+			context.getProblemListener().reportIllegalPredicate(this, predicate);
 	}
 
 	@Override
@@ -224,9 +224,10 @@ public class FetchManyExpression extends FetchOneExpression {
 			builder.verify(info, MatchOp.HAS, type.getTypeName());
 		}
 		if(predicate!=null) {
-			if(!(predicate instanceof IPredicateExpression))
-				throw new SyntaxError("Filtering expression must be a predicate !");
-			((IPredicateExpression)predicate).interpretQuery(context, builder, store);
+			if(predicate instanceof IPredicateExpression)
+				((IPredicateExpression)predicate).interpretQuery(context, builder, store);
+			else
+				context.getProblemListener().reportIllegalPredicate(this, predicate);
 		}
 		if(type!=null && predicate!=null)
 			builder.and();

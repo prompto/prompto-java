@@ -84,10 +84,10 @@ public class AndExpression extends Section implements IPredicateExpression, IAss
 	@Override
 	public void checkQuery(Context context) throws PromptoError {
 		if(!(left instanceof IPredicateExpression))
-			context.getProblemListener().reportIllegalOperation(this, "Expected a predicate, got: " + left.toString());
+			context.getProblemListener().reportIllegalPredicate(this,left);
 		((IPredicateExpression)left).checkQuery(context);
 		if(!(right instanceof IPredicateExpression))
-			context.getProblemListener().reportIllegalOperation(this, "Expected a predicate, got: " + right.toString());
+			context.getProblemListener().reportIllegalPredicate(this, right);
 		((IPredicateExpression)right).checkQuery(context);
 	}
 	

@@ -17,6 +17,7 @@ import org.antlr.v4.runtime.dfa.DFA;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
+import prompto.expression.IExpression;
 import prompto.parser.ISection;
 import prompto.parser.MissingTokenException;
 import prompto.parser.UnwantedTokenException;
@@ -188,18 +189,24 @@ public abstract class ProblemListenerBase implements ANTLRErrorListener, IProble
 	}
 	
 	@Override
-	public void reportIllegalComparison(ISection section, IType type, IType other) {
-		addProblem(new IllegalComparisonProblem(section, type, other));
+	public void reportIllegalOperation(ISection section, String verb, IType type, IType other) {
+		addProblem(new IllegalOperationProblem(section, verb, type, other));
 	}
 	
+	@Override
+	public void reportIllegalOperator(ISection section, String message) {
+		addProblem(new IllegalOperatorProblem(section, message));
+	}
+
+
 	@Override
 	public void reportUnknownMember(ISection section, String name) {
 		addProblem(new UnknownMemberProblem(section, name));
 	}
 	
 	@Override
-	public void reportIllegalOperation(ISection section, String message) {
-		addProblem(new IllegalOperationProblem(section, message));
+	public void reportIllegalPredicate(ISection section, IExpression actual) {
+		addProblem(new IllegalPredicateProblem(section, actual));
 	}
 	
 	@Override

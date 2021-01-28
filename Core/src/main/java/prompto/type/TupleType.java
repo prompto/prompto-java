@@ -18,6 +18,7 @@ import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoTuple;
+import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
@@ -72,10 +73,10 @@ public class TupleType extends ContainerType {
 }
 	
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) {
+	public IType checkAdd(Context context, IType other, boolean tryReverse, ISection section) {
 		if(other instanceof TupleType || other instanceof ListType || other instanceof SetType)
 			return this; 
-		return super.checkAdd(context, other, tryReverse);
+		return super.checkAdd(context, other, tryReverse, section);
 	}
 	
 	@Override
@@ -99,12 +100,12 @@ public class TupleType extends ContainerType {
 	}
 
 	@Override
-	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ISection section) {
 	    if(other == TupleType.instance() || other instanceof ListType || other instanceof SetType) {
 	        left.declare(transpiler);
 	        right.declare(transpiler);
 	    } else {
-	        super.declareAdd(transpiler, other, tryReverse, left, right);
+	        super.declareAdd(transpiler, other, tryReverse, left, right, section);
 	    }
 	}
 	

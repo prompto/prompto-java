@@ -74,25 +74,25 @@ public class IntegerType extends NativeType implements INumberType {
 	}
 	
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) {
+	public IType checkAdd(Context context, IType other, boolean tryReverse, ISection section) {
 		if(other instanceof IntegerType)
 			return this;
 		if(other instanceof DecimalType)
 			return other;
-		return super.checkAdd(context, other, tryReverse);
+		return super.checkAdd(context, other, tryReverse, section);
 	}
 	
 	@Override
-	public IType checkSubstract(Context context, IType other) {
+	public IType checkSubstract(Context context, IType other, ISection section) {
 		if(other instanceof IntegerType)
 			return this;
 		if(other instanceof DecimalType)
 			return other;
-		return super.checkSubstract(context, other);
+		return super.checkSubstract(context, other, section);
 	}
 	
 	@Override
-	public IType checkMultiply(Context context, IType other, boolean tryReverse) {
+	public IType checkMultiply(Context context, IType other, boolean tryReverse, ISection section) {
 		if(other instanceof IntegerType)
 			return this;
 		if(other instanceof DecimalType)
@@ -105,30 +105,30 @@ public class IntegerType extends NativeType implements INumberType {
 			return other;
 		if(other instanceof ListType)
 			return other;
-		return super.checkMultiply(context, other, tryReverse);
+		return super.checkMultiply(context, other, tryReverse, section);
 	}
 
 	@Override
-	public IType checkDivide(Context context, IType other) {
+	public IType checkDivide(Context context, IType other, ISection section) {
 		if(other instanceof IntegerType)
 			return DecimalType.instance();
 		if(other instanceof DecimalType)
 			return other;
-		return super.checkDivide(context, other);
+		return super.checkDivide(context, other, section);
 	}
 	
 	@Override
-	public IType checkIntDivide(Context context, IType other) {
+	public IType checkIntDivide(Context context, IType other, ISection section) {
 		if(other instanceof IntegerType)
 			return this;
-		return super.checkIntDivide(context, other);
+		return super.checkIntDivide(context, other, section);
 	}
 
 	@Override
-	public IType checkModulo(Context context, IType other) {
+	public IType checkModulo(Context context, IType other, ISection section) {
 		if(other instanceof IntegerType)
 			return this;
-		return super.checkModulo(context, other);
+		return super.checkModulo(context, other, section);
 	}
 
 	@Override
@@ -293,12 +293,12 @@ public class IntegerType extends NativeType implements INumberType {
 
 	
 	@Override
-	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ISection section) {
 	    if (other == IntegerType.instance() || other == DecimalType.instance()) {
 	        left.declare(transpiler);
 	        right.declare(transpiler);
 	    } else
-	        super.declareAdd(transpiler, other, tryReverse, left, right);
+	        super.declareAdd(transpiler, other, tryReverse, left, right, section);
 	}
 	
 	@Override
@@ -312,12 +312,12 @@ public class IntegerType extends NativeType implements INumberType {
 	}
 	
 	@Override
-	public void declareModulo(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	public void declareModulo(Transpiler transpiler, IType other, IExpression left, IExpression right, ISection section) {
 		   if (other == IntegerType.instance() ) {
 		        left.declare(transpiler);
 		        right.declare(transpiler);
 		    } else
-		        super.declareModulo(transpiler, other, left, right);
+		        super.declareModulo(transpiler, other, left, right, section);
 	}
 	
 	@Override
@@ -332,13 +332,13 @@ public class IntegerType extends NativeType implements INumberType {
 	}
 	
 	@Override
-	public void declareDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	public void declareDivide(Transpiler transpiler, IType other, IExpression left, IExpression right, ISection section) {
 		transpiler.require("divide");
 	    if (other == IntegerType.instance() || other == DecimalType.instance()) {
 	        left.declare(transpiler);
 	        right.declare(transpiler);
 	    } else
-	        super.declareDivide(transpiler, other, left, right);
+	        super.declareDivide(transpiler, other, left, right, section);
 	}
 	
 	@Override
@@ -354,13 +354,13 @@ public class IntegerType extends NativeType implements INumberType {
 	}
 	
 	@Override
-	public void declareIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	public void declareIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right, ISection section) {
 	   if (other == IntegerType.instance() ) {
 		    transpiler.require("divide");
 	        left.declare(transpiler);
 	        right.declare(transpiler);
 	    } else
-	        super.declareIntDivide(transpiler, other, left, right);
+	        super.declareIntDivide(transpiler, other, left, right, section);
 	}
 	
 	@Override
@@ -388,12 +388,12 @@ public class IntegerType extends NativeType implements INumberType {
 	}
 	
 	@Override
-	public void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	public void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ISection section) {
 	   if (other == IntegerType.instance() || other == DecimalType.instance()) {
 	        left.declare(transpiler);
 	        right.declare(transpiler);
 	    } else
-	        super.declareMultiply(transpiler, other, tryReverse, left, right);
+	        super.declareMultiply(transpiler, other, tryReverse, left, right, section);
 	}
 	
 	@Override
@@ -407,12 +407,12 @@ public class IntegerType extends NativeType implements INumberType {
 	}
 	
 	@Override
-	public void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right) {
+	public void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right, ISection section) {
 	   if (other == IntegerType.instance() || other == DecimalType.instance()) {
 	        left.declare(transpiler);
 	        right.declare(transpiler);
 	    } else
-	        super.declareSubtract(transpiler, other, left, right);
+	        super.declareSubtract(transpiler, other, left, right, section);
 	}
 	
 	@Override

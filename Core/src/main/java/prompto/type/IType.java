@@ -74,12 +74,12 @@ public interface IType extends ISection {
 	
 	Type getJavaType(Context context);
 
-	IType checkAdd(Context context, IType other, boolean tryReverse);
-	IType checkSubstract(Context context, IType other);
-	IType checkDivide(Context context, IType other);
-	IType checkIntDivide(Context context, IType other);
-	IType checkMultiply(Context context, IType other, boolean tryReverse);
-	IType checkModulo(Context context, IType rt);
+	IType checkAdd(Context context, IType other, boolean tryReverse, ISection section);
+	IType checkSubstract(Context context, IType other, ISection section);
+	IType checkDivide(Context context, IType other, ISection section);
+	IType checkIntDivide(Context context, IType other, ISection section);
+	IType checkMultiply(Context context, IType other, boolean tryReverse, ISection section);
+	IType checkModulo(Context context, IType other, ISection section);
 	void checkCompare(Context context, IType other, ISection section);
 	IType checkItem(Context context, IType itemType) ;
 	IType checkRange(Context context, IType other);
@@ -133,9 +133,9 @@ public interface IType extends ISection {
 	}
 
 
-	default void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) { 
+	default void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ISection section) { 
 		if(tryReverse)
-			other.declareAdd(transpiler, this, false, right, left);
+			other.declareAdd(transpiler, this, false, right, left, section);
 		else
 			throw new UnsupportedOperationException("declareAdd " + this.getClass().getName());
 	}
@@ -176,7 +176,7 @@ public interface IType extends ISection {
 	    throw new UnsupportedOperationException("transpileStaticMember " + name + " for " + this.getClass().getName());
 	}
 	
-	default void declareModulo(Transpiler transpiler, IType other, IExpression left, IExpression right)  { 
+	default void declareModulo(Transpiler transpiler, IType other, IExpression left, IExpression right, ISection section)  { 
 		throw new UnsupportedOperationException("declareModulo " + this.getClass().getName());
 	}
 
@@ -184,7 +184,7 @@ public interface IType extends ISection {
         throw new UnsupportedOperationException("transpileModulo " + this.getClass().getName());
 	}
 
-	default void declareDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) { 
+	default void declareDivide(Transpiler transpiler, IType other, IExpression left, IExpression right, ISection section) { 
 		throw new UnsupportedOperationException("declareDivide " + this.getClass().getName());
 	}
 
@@ -192,7 +192,7 @@ public interface IType extends ISection {
         throw new UnsupportedOperationException("transpileDivide " + this.getClass().getName());
 	}
 
-	default void declareIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right) { 
+	default void declareIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right, ISection section) { 
 		throw new UnsupportedOperationException("declareIntDivide " + this.getClass().getName());
 	}
 
@@ -208,9 +208,9 @@ public interface IType extends ISection {
         throw new UnsupportedOperationException("transpileMinus " + this.getClass().getName());
 	}
 
-	default void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) { 
+	default void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ISection section) { 
 		if(tryReverse)
-			other.declareMultiply(transpiler, this, false, right, left);
+			other.declareMultiply(transpiler, this, false, right, left, section);
 		else
 			throw new UnsupportedOperationException("declareMultiply " + this.getClass().getName());
 	}
@@ -222,7 +222,7 @@ public interface IType extends ISection {
 			throw new UnsupportedOperationException("transpileMultiply " + this.getClass().getName());
 	}
 
-	default void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right)  { 
+	default void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right, ISection section)  { 
 		throw new UnsupportedOperationException("declareSubtract " + this.getClass().getName());
 	}
 

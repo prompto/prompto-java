@@ -76,55 +76,67 @@ public abstract class BaseType extends Section implements IType {
 	}
 	
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse) {
+	public IType checkAdd(Context context, IType other, boolean tryReverse, ISection section) {
 		if(other instanceof EnumeratedNativeType)
-			return checkAdd(context, ((EnumeratedNativeType)other).getDerivedFrom(), tryReverse);
+			return checkAdd(context, ((EnumeratedNativeType)other).getDerivedFrom(), tryReverse, section);
 		else if(tryReverse)
-			return other.checkAdd(context, this, false);
-		else
-			throw new SyntaxError("Cannot add " + this.getTypeName() + " to " + other.getTypeName());
+			return other.checkAdd(context, this, false, section);
+		else {
+			context.getProblemListener().reportIllegalOperation(section, "add", tryReverse ? this : other, tryReverse ? other : this );
+			return VoidType.instance();
+		}
 	}
 
 	@Override
-	public IType checkSubstract(Context context, IType other) {
+	public IType checkSubstract(Context context, IType other, ISection section) {
 		if(other instanceof EnumeratedNativeType)
-			return checkSubstract(context, ((EnumeratedNativeType)other).getDerivedFrom());
-		else 		
-			throw new SyntaxError("Cannot substract " + this.getTypeName() + " from " + other.getTypeName());
+			return checkSubstract(context, ((EnumeratedNativeType)other).getDerivedFrom(), section);
+		else {
+			context.getProblemListener().reportIllegalOperation(section, "subtract", this, other );
+			return VoidType.instance();
+		}		
 	}
 
 	@Override
-	public IType checkDivide(Context context, IType other) {
+	public IType checkDivide(Context context, IType other, ISection section) {
 		if(other instanceof EnumeratedNativeType)
-			return checkDivide(context, ((EnumeratedNativeType)other).getDerivedFrom());
-		else 		
-			throw new SyntaxError("Cannot divide " + this.getTypeName() + " with " + other.getTypeName());
+			return checkDivide(context, ((EnumeratedNativeType)other).getDerivedFrom(), section);
+		else {
+			context.getProblemListener().reportIllegalOperation(section, "divide", this, other );
+			return VoidType.instance();
+		}	
 	}
 
 	@Override
-	public IType checkIntDivide(Context context, IType other) {
+	public IType checkIntDivide(Context context, IType other, ISection section) {
 		if(other instanceof EnumeratedNativeType)
-			return checkIntDivide(context, ((EnumeratedNativeType)other).getDerivedFrom());
-		else 		
-			throw new SyntaxError("Cannot divide " + this.getTypeName() + " with " + other.getTypeName());
+			return checkIntDivide(context, ((EnumeratedNativeType)other).getDerivedFrom(), section);
+		else {
+			context.getProblemListener().reportIllegalOperation(section, "divide", this, other );
+			return VoidType.instance();
+		}	
 	}
 
 	@Override
-	public IType checkMultiply(Context context, IType other, boolean tryReverse) {
+	public IType checkMultiply(Context context, IType other, boolean tryReverse, ISection section) {
 		if(other instanceof EnumeratedNativeType)
-			return checkMultiply(context, ((EnumeratedNativeType)other).getDerivedFrom(), tryReverse);
+			return checkMultiply(context, ((EnumeratedNativeType)other).getDerivedFrom(), tryReverse, section);
 		else if(tryReverse)
-			return other.checkMultiply(context, this, false);
-		else
-			throw new SyntaxError("Cannot multiply " + this.getTypeName() + " with " + other.getTypeName());
+			return other.checkMultiply(context, this, false, section);
+		else {
+			context.getProblemListener().reportIllegalOperation(section, "multiply", tryReverse ? this : other, tryReverse ? other : this );
+			return VoidType.instance();
+		}
 	}
 
 	@Override
-	public IType checkModulo(Context context, IType other) {
+	public IType checkModulo(Context context, IType other, ISection section) {
 		if(other instanceof EnumeratedNativeType)
-			return checkModulo(context, ((EnumeratedNativeType)other).getDerivedFrom());
-		else 		
-			throw new SyntaxError("Cannot modulo " + this.getTypeName() + " with " + other.getTypeName());
+			return checkModulo(context, ((EnumeratedNativeType)other).getDerivedFrom(), section);
+		else {
+			context.getProblemListener().reportIllegalOperation(section, "modulo", this, other );
+			return VoidType.instance();
+		}			
 	}
 	
 	@Override
@@ -132,7 +144,7 @@ public abstract class BaseType extends Section implements IType {
 		if(other instanceof EnumeratedNativeType)
 			checkCompare(context, ((EnumeratedNativeType)other).getDerivedFrom(), section);
 		else 		
-			context.getProblemListener().reportIllegalComparison(section, this, other);
+			context.getProblemListener().reportIllegalOperation(section, "compare", this, other);
 	}
 
 	@Override

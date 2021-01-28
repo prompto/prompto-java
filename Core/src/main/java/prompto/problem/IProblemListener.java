@@ -3,6 +3,7 @@ package prompto.problem;
 import java.util.Set;
 
 import prompto.declaration.IDeclaration;
+import prompto.expression.IExpression;
 import prompto.parser.ISection;
 import prompto.type.IType;
 
@@ -27,8 +28,8 @@ public interface IProblemListener {
 	void reportIllegalReturn(ISection section);
 	void reportIllegalAssignment(ISection section, IType expected, IType actual);
 	void reportIllegalAssignment(ISection section, Set<IType> expected, IType actual);
-	void reportIllegalComparison(ISection section, IType type, IType other);
-	void reportIllegalOperation(ISection section, String message);
+	void reportIllegalOperation(ISection section, String operation, IType left, IType right);
+	void reportIllegalPredicate(ISection section, IExpression expression);
 	void reportIllegalRemoteCall(ISection section, String message);
 	void reportIllegalAnnotation(ISection section, String message);
 	void reportIllegalValue(ISection section, String message);
@@ -44,9 +45,11 @@ public interface IProblemListener {
 	void reportMissingAttribute(ISection section, String message);
 	void reportExpectingCollection(ISection section, IType actual);
 	void reportExpectingResource(ISection section, IType actual);
-
+	void reportIllegalOperator(ISection section, String message);
+	
 	void pushDeclaration(IDeclaration declaration);
 	IDeclaration popDeclaration();
 	String getEnclosingDeclaration();
+	
 
 }

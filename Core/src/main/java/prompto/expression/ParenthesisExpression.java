@@ -48,7 +48,7 @@ public class ParenthesisExpression extends Section implements IPredicateExpressi
 		if(expression instanceof IPredicateExpression)
 			((IPredicateExpression)expression).checkQuery(context);
 		else
-			context.getProblemListener().reportIllegalOperation(this, "Expected a predicate, got: " + expression.toString());
+			context.getProblemListener().reportIllegalPredicate(this, expression);
 	}
 
 	@Override
