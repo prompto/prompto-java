@@ -1,7 +1,8 @@
-function Url(path, encoding, method) {
+function Url(path, encoding, httpMethod, httpHeaders) {
 	this.path = path;
 	this.encoding = encoding || "utf-8";
-	this.httpRequestMethod = method || "GET";
+	this.httpMethod = httpMethod || "GET";
+	this.httpHeaders = httpHeaders || [ new HttpHeader("Content-Type", "application/x-www-form-urlencoded")];
 	return this;
 }
 
@@ -10,13 +11,20 @@ Url.prototype.isReadable = function() {
 };
 
 Url.prototype.isWritable = function() {
-	return false;
+	return true;
 };
 
 Url.prototype.close = function() {
 };
 
 Url.prototype.readFully = function() {
+	if(this.path.startsWith("http"))
+		return this.readFullyHttp();
+	else
+		this.throwError("Url only supports HTTP protocol in browser.");
+};
+	
+Url.prototype.readFullyHttp = function() {
 	var xhr = this.createHttpRequest(false);
 	xhr.send();
 	this.checkStatus(xhr);
@@ -24,33 +32,43 @@ Url.prototype.readFully = function() {
 };
 
 Url.prototype.readFullyAsync = function(callback) {
+	if(this.path.startsWith("http"))
+		return this.readFullyAsyncHttp();
+	else
+		this.throwError("Url only supports HTTP protocol in browser.");
+}
+
+Url.prototype.readFullyAsyncHttp = function(callback) {
 	var self = this;
 	var xhr = this.createHttpRequest(true);
 	xhr.onload = function() {
-		self.checkStatus(xhr);
+		self.checkHttpStatus(xhr);
 		callback(xhr.responseText);
 	};
 	xhr.send();
 };
 
-Url.prototype.checkStatus = function(xhr) {
-	if (xhr.status != 200) {
-		try {
-			var rwe = eval("prompto.error.ReadWriteError"); // assume it's already defined
-			throw new rwe("Request failed, status: " + xhr.status + ", " + xhr.statusText);
-		} catch (error) {
-			throw new Error("Request failed, status: " + xhr.status + ", " + xhr.statusText);
-		}
+Url.prototype.checkHttpStatus = function(xhr) {
+	if (xhr.status != 200)
+		this.throwError("Request failed, status: " + xhr.status + ", " + xhr.statusText);
+};
+
+Url.prototype.throwError = function(message) {
+	try {
+		var rwe = eval("prompto.error.ReadWriteError"); // assume it's already defined
+		throw new rwe(message);
+	} catch (error) {
+		throw new Error(message);
 	}
 };
 
 Url.prototype.createHttpRequest = function(async) {
-	var method = this.httpRequestMethod || "GET";
 	var xhr = new XMLHttpRequest();
 	xhr.overrideMimeType('text/plain');
-	xhr.open(method, this.path, async);
-	xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	xhr.open(this.httpMethod, this.path, async);
+	this.httpHeaders.forEach(function(header) {
+		xhr.setRequestHeader(header.name, header.text);
+	});
 	return xhr;
 };
 
@@ -65,12 +83,21 @@ Url.prototype.readLine = function() {
 		return null;
 }
 
-Url.prototype.writeFully = function(data) {
-
+Url.prototype.writeFully = function(data, callback) {
+	var self = this;
+	var async = callback !== null;
+	var xhr = this.createHttpRequest(async);
+	xhr.setRequestHeader("Content-Size", data.length);
+	xhr.onload = function() {
+		self.checkHttpStatus(xhr);
+		if(callback !== null)
+			callback(xhr.responseText);
+	};
+	xhr.send(data);
 };
 
 Url.prototype.writeLine = function(data) {
-
+	this.throwError("Url only supports full HTTP writes in browser.");
 };
 
-exports.Url = Url;
+module.exports.Url = Url;

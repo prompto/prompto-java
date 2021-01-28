@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
 import java.util.function.Consumer;
 
 import prompto.intrinsic.PromptoBinary;
@@ -19,6 +20,8 @@ public class Url implements IResource {
 	URL url;
 	BufferedReader reader;
 	String encoding = "utf-8";
+	String httpMethod;
+	List<HttpHeader>  httpHeaders;
 	
 	public void setDbId(Object dbId) {
 		this.dbId = dbId;
@@ -45,6 +48,22 @@ public class Url implements IResource {
 		return encoding;
 	}
 	
+	public String getHttpMethod() {
+		return httpMethod;
+	}
+
+	public void setHttpMethod(String httpMethod) {
+		this.httpMethod = httpMethod;
+	}
+
+	public List<HttpHeader> getHttpHeaders() {
+		return httpHeaders;
+	}
+
+	public void setHttpHeaders(List<HttpHeader> httpHeaders) {
+		this.httpHeaders = httpHeaders;
+	}
+
 	@Override
 	public boolean isReadable() {
 		return url!=null;
