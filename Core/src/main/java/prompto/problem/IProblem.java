@@ -4,9 +4,11 @@ public interface IProblem {
 	
 	String getPath();
 	int getStartIndex();
-	int getEndIndex();
 	int getStartLine();
 	int getStartColumn();
+	int getEndIndex();
+	int getEndLine();
+	int getEndColumn();
 	String getMessage();
 	Type getType();
 	

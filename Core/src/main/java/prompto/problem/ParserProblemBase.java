@@ -29,6 +29,20 @@ public abstract class ParserProblemBase implements IProblem {
 	public int getStartColumn() {
 		return column;
 	}
+	
+	
+	@Override
+	public int getEndLine() {
+		// TODO inaccurate but good enough for now
+		return line;
+	}
+	
+	@Override
+	public int getEndColumn() {
+		// TODO inaccurate but good enough for now
+		return column + getEndIndex() + getStartIndex();
+	}
+	
 
 	@Override
 	public int hashCode() {

@@ -18,6 +18,11 @@ public abstract class SyntaxProblemBase implements IProblem {
 	}
 	
 	@Override
+	public int getStartIndex() {
+		return section.getStart().getTokenIndex();
+	}
+	
+	@Override
 	public int getStartLine() {
 		return section.getStart().getLine();
 	}
@@ -28,13 +33,18 @@ public abstract class SyntaxProblemBase implements IProblem {
 	}
 
 	@Override
-	public int getStartIndex() {
-		return section.getStart().getTokenIndex();
+	public int getEndIndex() {
+		return section.getEnd().getTokenIndex();
+	}
+
+	@Override
+	public int getEndLine() {
+		return section.getEnd().getLine();
 	}
 	
 	@Override
-	public int getEndIndex() {
-		return section.getEnd().getTokenIndex();
+	public int getEndColumn() {
+		return section.getEnd().getColumn();
 	}
 
 

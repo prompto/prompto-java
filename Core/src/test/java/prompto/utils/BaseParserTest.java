@@ -8,10 +8,18 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.junit.Before;
+
+import com.esotericsoftware.yamlbeans.YamlReader;
 
 import prompto.config.TempDirectories;
 import prompto.declaration.DeclarationList;
@@ -24,6 +32,9 @@ import prompto.parser.Dialect;
 import prompto.parser.ECleverParser;
 import prompto.parser.MCleverParser;
 import prompto.parser.OCleverParser;
+import prompto.problem.IProblem;
+import prompto.problem.ProblemCollector;
+import prompto.problem.IProblem.Type;
 import prompto.runtime.ApplicationContext;
 import prompto.runtime.Context;
 import prompto.runtime.Executor;
@@ -220,7 +231,7 @@ public class BaseParserTest extends BaseTest {
 		String read = Out.read();
 		if(trimNewLines)
 			read = read.replaceAll("\n", "");
-		List<String> expected = readExpected(resource);
+		List<String> expected = readExpectedOutput(resource);
 		if(expected.size()==1)
 			assertEquals(expected.get(0), read);
 		else {
@@ -291,7 +302,7 @@ public class BaseParserTest extends BaseTest {
 		}
 	}
 
-	protected List<String> readExpected(String resourceName) {
+	protected List<String> readExpectedOutput(String resourceName) {
 		try {
 			int idx = resourceName.lastIndexOf('.');
 			resourceName = resourceName.substring(0, idx) + ".txt";
@@ -494,6 +505,85 @@ public class BaseParserTest extends BaseTest {
 	private static String removeWhitespace(String s) {
 		return s.replaceAll(" ", "").replaceAll("\t", "").replaceAll("\n", "");
 	}
+	
+	public void checkProblems(String resourceName) throws Exception {
+		DeclarationList dl = parseResource(resourceName);
+		context = Context.newGlobalsContext();
+		dl.register(context);
+		ProblemCollector collector = new ProblemCollector();
+		context.setProblemListener(collector);
+		dl.check(context);
+		Set<ProblemDescriptor> expected = readExpectedProblems(resourceName);
+		Set<ProblemDescriptor> actual = readActualProblems(collector);
+		assertEquals(expected, actual);
+	}
+	
+	static public class ProblemDescriptor {
+		
+        public String type;
+        public String message;
+        public int startLine;
+        public int startColumn;
+        public int endLine;
+        public int endColumn;
 
+        public ProblemDescriptor() {
+		}
+		
+		public ProblemDescriptor(IProblem problem) {
+			startLine = problem.getStartLine();
+			startColumn = problem.getStartColumn();
+			endLine = problem.getEndLine();
+			endColumn = problem.getEndColumn();
+			type = problem.getType().name().toLowerCase();
+			message = problem.getMessage();
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(endColumn, endLine, message, startColumn, startLine, type);
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			return this == obj || (obj instanceof ProblemDescriptor && this.equals((ProblemDescriptor)obj));
+		}
+		
+		public boolean equals(ProblemDescriptor other) {
+			return endColumn == other.endColumn && endLine == other.endLine && Objects.equals(message, other.message) && startColumn == other.startColumn && startLine == other.startLine && Objects.equals(type, other.type);
+		}
+
+		@Override
+		public String toString() {
+			return "ProblemDescriptor [type=" + type + ", message=" + message + ", startLine=" + startLine + ", startColumn=" + startColumn + ", endLine=" + endLine + ", endColumn=" + endColumn + "]";
+		}
+		
+	}
+	
+	private Set<ProblemDescriptor> readActualProblems(ProblemCollector collector) {
+		return collector.getProblems().stream()
+				.map(ProblemDescriptor::new)
+				.collect(Collectors.toSet());
+	}
+
+
+	@SuppressWarnings("unchecked")
+	protected Set<ProblemDescriptor> readExpectedProblems(String resourceName) {
+		try {
+			int idx = resourceName.lastIndexOf('.');
+			resourceName = resourceName.substring(0, idx) + ".problems.yml";
+			try(InputStream input = getResourceAsStream(resourceName)) {
+				assertNotNull("resource not found:" + resourceName, input);
+				BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+				YamlReader yaml = new YamlReader(reader);
+				List<ProblemDescriptor> read = yaml.read(List.class, ProblemDescriptor.class);
+				return new HashSet<>(read);
+			} 
+		} catch(Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+			return null;
+		}
+	}
 
 }
