@@ -63,5 +63,24 @@ public class Logger {
 			logger.error(message.get(), t);
 	}
 	
+	public boolean isInfoEnabled() {
+		return logger.isInfoEnabled();
+	}
+	
+	public boolean isWarnEnabled() {
+		return logger.isWarnEnabled();
+	}
+	
+	public boolean isErrorEnabled() {
+		return logger.isErrorEnabled();
+	}
+	
+	public boolean isDebugEnabled() {
+		return logger.isDebugEnabled();
+	}
+	
+	public boolean isTraceEnabled() {
+		return logger.isTraceEnabled();
+	}
 
 }
