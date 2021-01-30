@@ -49,7 +49,7 @@ public class CategoryParameter extends BaseParameter implements ITypedParameter 
 	
 	@Override
 	public String getSignature(Dialect dialect) {
-		return getProto();
+		return type.getTypeNameId().toString() + " " + id.toString();
 	}
 	
 	@Override

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -486,13 +487,9 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	}
 
 	public Iterable<IMethodDeclaration> getAbstractMethods(Context context) {
-		Map<String, MethodDeclarationMap> all = getAllMethods(context);
-		return all.keySet().stream()
-				.map(name -> {
-					MethodDeclarationMap protos = all.get(name);
-					return protos.values().stream().filter(IMethodDeclaration::isAbstract);
-				})
-				.flatMap(i -> i)
+		return getAllMethods(context).values().stream()
+				.map(protos -> protos.values().stream().filter(IMethodDeclaration::isAbstract))
+				.flatMap(Function.identity())
 				.collect(Collectors.toList());
 	}
 
