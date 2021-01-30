@@ -631,8 +631,9 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	
 	protected Map<String, MethodDeclarationMap> collectInterfaceMethods(Context context) {
 		// the methods to declare in the interface are those not already declared
-		Map<String, MethodDeclarationMap> local = super.getAllMethods(context);
 		Map<String, MethodDeclarationMap> all = getAllMethods(context);
+		Map<String, MethodDeclarationMap> local = new HashMap<>();
+		collectLocalMethods(context, local);
 		removeInheritedMethods(local, all);
 		return local;
 	}
@@ -650,16 +651,6 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 					local.remove(key);
 			}
 		});
-	}
-
-	@Override
-	public Map<String, MethodDeclarationMap> getAllMethods(Context context) {
-		Map<String, MethodDeclarationMap> map = super.getAllMethods(context);
-		if(derivedFrom!=null) derivedFrom.forEach(id->{
-				CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, id);
-				decl.collectAllMethods(context, map);
-			});
-		return map;		
 	}
 
 	private void compileMethodPrototype(Context context, ClassFile classFile, IMethodDeclaration method) {

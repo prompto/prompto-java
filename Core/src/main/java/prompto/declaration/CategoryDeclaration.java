@@ -433,18 +433,30 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	}
 
 	public Map<String, MethodDeclarationMap> getAllMethods(Context context) {
-		Map<String, MethodDeclarationMap> map = new HashMap<>();
-		collectAllMethods(context, map);
-		return map;
+		Map<String, MethodDeclarationMap> maps = new HashMap<>();
+		collectAllMethods(context, maps);
+		return maps;
 	}
 
-	public void collectAllMethods(Context context, Map<String, MethodDeclarationMap> map) {
-		getLocalMethods().forEach(m -> {
-			MethodDeclarationMap current = map.computeIfAbsent(m.getNameAsKey(), key -> new MethodDeclarationMap(m.getId()));
-			current.computeIfAbsent(m.getProto(), proto -> m);
-		});
+	public void collectAllMethods(Context context, Map<String, MethodDeclarationMap> maps) {
+		collectInheritedMethods(context, maps);
+		collectLocalMethods(context, maps);
 	}
 	
+	public void collectLocalMethods(Context context, Map<String, MethodDeclarationMap> maps) {
+		getLocalMethods().forEach(m -> {
+			MethodDeclarationMap current = maps.computeIfAbsent(m.getNameAsKey(), key -> new MethodDeclarationMap(m.getId()));
+			current.put(m.getProto(), m);
+		});
+	}
+
+	public void collectInheritedMethods(Context context, Map<String, MethodDeclarationMap> maps) {
+		if(derivedFrom!=null) derivedFrom.forEach(id->{
+			CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, id);
+			decl.collectAllMethods(context, maps);
+		});
+	}
+
 	protected boolean isPromptoRoot(Context context) {
 		return false;
 	}
