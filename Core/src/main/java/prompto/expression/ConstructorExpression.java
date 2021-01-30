@@ -160,23 +160,42 @@ public class ConstructorExpression extends Section implements IExpression {
 			context.getProblemListener().reportUnknownCategory(this, type.getTypeName());
 		checkFirstHomonym(context, cd);
 		cd.checkConstructorContext(context);
+		checkConstructable(context, cd);
+		checkCopyFrom(context);
+		checkArguments(context, cd);
+		return getActualType(context, cd); // 
+	}
+	
+	private void checkConstructable(Context context, CategoryDeclaration decl) {
+		if(decl.isAWidget(context))
+			context.getProblemListener().reportIllegalWidgetConstructor(this, decl.getName());
+		decl.getAbstractMethods(context).forEach(method->context.getProblemListener().reportIllegalAbstractConstructor(this, decl.getName(), method.getSignature(Dialect.O)));
+		
+	}
+
+	private IType getActualType(Context context, CategoryDeclaration decl) {
+		return decl.getType(context).asMutable(context, type.isMutable()); // could be a resource rather than a category;;
+	}
+
+	private void checkCopyFrom(Context context) {
 		if(copyFrom!=null) {
 			IType cft = copyFrom.check(context);
-			if(!(cft instanceof CategoryType) && (cft!=DocumentType.instance()))
+			if(!(cft instanceof CategoryType) && cft!=DocumentType.instance())
 				throw new SyntaxError("Cannot copy from " + cft.getTypeName());
 		}
+	}
+
+	private void checkArguments(Context context, CategoryDeclaration decl) {
 		if(arguments!=null) {
 			context = context.newChildContext();
 			for(Argument argument : arguments) {
-				if(!cd.hasAttribute(context, argument.getParameterId()))
-					throw new SyntaxError("\"" + argument.getParameterId() + 
-						"\" is not an attribute of " + type.getTypeName());	
+				if(!decl.hasAttribute(context, argument.getParameterId()))
+					throw new SyntaxError("\"" + argument.getParameterId() +  "\" is not an attribute of " + type.getTypeName());	
 				argument.check(context);
 			}
 		}
-		return cd.getType(context).asMutable(context, type.isMutable()); // could be a resource rather than a category;
 	}
-	
+
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		CategoryDeclaration cd = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());

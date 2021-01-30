@@ -26,6 +26,7 @@ public interface IProblemListener {
 	void reportUnknownCategory(ISection section, String name);
 	void reportNoMatchingPrototype(ISection section, String proto);
 	void reportIllegalReturn(ISection section);
+	void reportIllegalOperator(ISection section, String message);
 	void reportIllegalAssignment(ISection section, IType expected, IType actual);
 	void reportIllegalAssignment(ISection section, Set<IType> expected, IType actual);
 	void reportIllegalOperation(ISection section, String operation, IType left, IType right);
@@ -33,8 +34,11 @@ public interface IProblemListener {
 	void reportIllegalRemoteCall(ISection section, String message);
 	void reportIllegalAnnotation(ISection section, String message);
 	void reportIllegalValue(ISection section, String message);
-	void reportInitializeConstructor(ISection section);
+	void reportIllegalInitialize(ISection section);
 	void reportIllegalInitializeParameters(ISection section);
+	void reportIllegalWidgetConstructor(ISection section, String name);
+	void reportIllegalAbstractConstructor(ISection section, String name, String missingPrototype);
+	
 	void reportIncompatibleTypes(ISection section, IType first, IType second);
 	void reportNoSuperType(ISection section, IType actual);
 	void reportNotMutable(ISection section, String name);
@@ -45,7 +49,6 @@ public interface IProblemListener {
 	void reportMissingAttribute(ISection section, String message);
 	void reportExpectingCollection(ISection section, IType actual);
 	void reportExpectingResource(ISection section, IType actual);
-	void reportIllegalOperator(ISection section, String message);
 	
 	void pushDeclaration(IDeclaration declaration);
 	IDeclaration popDeclaration();

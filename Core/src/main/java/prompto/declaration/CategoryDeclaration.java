@@ -473,5 +473,16 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		throw new IllegalStateException("Should never get there");
 	}
 
+	public Iterable<IMethodDeclaration> getAbstractMethods(Context context) {
+		Map<String, MethodDeclarationMap> all = getAllMethods(context);
+		return all.keySet().stream()
+				.map(name -> {
+					MethodDeclarationMap protos = all.get(name);
+					return protos.values().stream().filter(IMethodDeclaration::isAbstract);
+				})
+				.flatMap(i -> i)
+				.collect(Collectors.toList());
+	}
+
 	
 }

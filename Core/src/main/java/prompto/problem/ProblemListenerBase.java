@@ -118,7 +118,7 @@ public abstract class ProblemListenerBase implements ANTLRErrorListener, IProble
 	}
 	
 	@Override
-	public void reportInitializeConstructor(ISection section) {
+	public void reportIllegalInitialize(ISection section) {
 		addProblem(new IllegalInitializeProblem(section));
 	}
 	
@@ -127,6 +127,18 @@ public abstract class ProblemListenerBase implements ANTLRErrorListener, IProble
 	public void reportIllegalInitializeParameters(ISection section) {
 		addProblem(new IllegalInitializeParametersProblem(section));
 	}
+
+	
+	@Override
+	public void reportIllegalWidgetConstructor(ISection section, String name) {
+		addProblem(new IllegalWidgetConstructorProblem(section, name));
+	}
+
+	@Override
+	public void reportIllegalAbstractConstructor(ISection section, String name, String missingPrototype) {
+		addProblem(new IllegalAbstractConstructorProblem(section, name, missingPrototype));
+	}
+
 
 	@Override
 	public void reportUnknownIdentifier(ISection section, String name) {

@@ -240,7 +240,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 			if(((Context.InstanceContext)context).getDeclaration() instanceof SingletonCategoryDeclaration)
 				return;
 		} 
-		context.getProblemListener().reportInitializeConstructor(this.getId());
+		context.getProblemListener().reportIllegalInitialize(this.getId());
 	}
 
 	@Override
