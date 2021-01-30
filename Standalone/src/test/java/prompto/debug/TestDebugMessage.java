@@ -1,6 +1,7 @@
 package prompto.debug;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -14,16 +15,13 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import prompto.debug.IAcknowledgement.Acknowledgement;
-import prompto.debug.Serializer.AcknowledgementMessage;
-import prompto.debug.Serializer.DebugResponseMessage;
 import prompto.debug.Serializer.DebugRequestMessage;
-import prompto.debug.IDebugResponse.GetStatusResponse;
-import prompto.debug.IDebugRequest.GetProcessStatusRequest;
-import prompto.debug.IDebugRequest.GetWorkerStatusRequest;
-import prompto.debug.IDebugRequest.InstallBreakpointRequest;
+import prompto.debug.ack.Acknowledged;
+import prompto.debug.request.GetProcessStatusDebugRequest;
+import prompto.debug.request.GetWorkerStatusDebugRequest;
+import prompto.debug.request.InstallBreakpointDebugRequest;
+import prompto.debug.response.GetStatusDebugResponse;
 import prompto.parser.Dialect;
 import prompto.parser.Location;
 import prompto.parser.Section;
@@ -70,101 +68,62 @@ public class TestDebugMessage {
 	public void testJsonProcessStatusRequest() throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-		GetProcessStatusRequest o = new GetProcessStatusRequest();
+		GetProcessStatusDebugRequest o = new GetProcessStatusDebugRequest();
 		JsonNode json = mapper.valueToTree(o);
-		o = mapper.treeToValue(json, GetProcessStatusRequest.class);
+		o = mapper.treeToValue(json, GetProcessStatusDebugRequest.class);
 	}
 	
 	@Test
 	public void testProcessStatusRequestMessage() throws Exception {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-		DebugRequestMessage message = new DebugRequestMessage();
-		message.object = new GetProcessStatusRequest();
-		message.type = message.object.getType();
-		JsonNode json = mapper.valueToTree(message);
-		assertEquals(IDebugRequest.Type.GET_PROCESS_STATUS.name(), json.get("type").asText());
-		assertNull(json.get("object").get("type"));
-		String s = json.toString();
-		JsonNode content = mapper.readTree(s);
-		String typeName = content.get("type").asText();
-		IDebugRequest.Type type = IDebugRequest.Type.valueOf(typeName);
-		JsonNode object = content.get("object");
-		assertTrue(object instanceof ObjectNode);
-		IDebugRequest request = mapper.treeToValue(object, type.getKlass());
-		assertTrue(request instanceof GetProcessStatusRequest);
+		Object value = new GetProcessStatusDebugRequest();
+		String message = Serializer.writeMessage(value);
+		Object request = Serializer.readDebugRequest(message);
+		assertTrue(request instanceof GetProcessStatusDebugRequest);
 	}
 	
 	@Test
 	public void testJsonThreadStatusRequest() throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-		GetWorkerStatusRequest o = new GetWorkerStatusRequest();
+		GetWorkerStatusDebugRequest o = new GetWorkerStatusDebugRequest();
 		JsonNode json = mapper.valueToTree(o);
-		o = mapper.treeToValue(json, GetWorkerStatusRequest.class);
+		o = mapper.treeToValue(json, GetWorkerStatusDebugRequest.class);
 	}
 	
 	@Test
 	public void testThreadStatusRequestMessage() throws Exception {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-		DebugRequestMessage message = new DebugRequestMessage();
-		message.object = new GetWorkerStatusRequest();
-		message.type = message.object.getType();
-		JsonNode json = mapper.valueToTree(message);
-		assertEquals(IDebugRequest.Type.GET_WORKER_STATUS.name(), json.get("type").asText());
-		assertNull(json.get("object").get("type"));
-		String s = json.toString();
-		JsonNode content = mapper.readTree(s);
-		String typeName = content.get("type").asText();
-		IDebugRequest.Type type = IDebugRequest.Type.valueOf(typeName);
-		JsonNode object = content.get("object");
-		assertTrue(object instanceof ObjectNode);
-		IDebugRequest request = mapper.treeToValue(object, type.getKlass());
-		assertTrue(request instanceof GetWorkerStatusRequest);
+		Object value = new GetWorkerStatusDebugRequest();
+		String message = Serializer.writeMessage(value);
+		Object request = Serializer.readDebugRequest(message);
+		assertTrue(request instanceof GetWorkerStatusDebugRequest);
 	}
+
 	@Test
 	public void testBreakpointRequestMessage() throws Exception {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-		DebugRequestMessage message = new DebugRequestMessage();
-		message.object = new InstallBreakpointRequest(new Section("n/a", new Location(12, 18, 22), new Location(12, 22, 14), Dialect.E, true));
-		message.type = message.object.getType();
-		JsonNode json = mapper.valueToTree(message);
-		assertEquals(IDebugRequest.Type.INSTALL_BREAKPOINT.name(), json.get("type").asText());
-		assertNull(json.get("object").get("type"));
-		String s = json.toString();
-		JsonNode content = mapper.readTree(s);
-		String typeName = content.get("type").asText();
-		IDebugRequest.Type type = IDebugRequest.Type.valueOf(typeName);
-		JsonNode object = content.get("object");
-		assertTrue(object instanceof ObjectNode);
-		IDebugRequest request = mapper.treeToValue(object, type.getKlass());
-		assertTrue(request instanceof InstallBreakpointRequest);
+		Object value = new InstallBreakpointDebugRequest(new Section("n/a", new Location(12, 18, 22), new Location(12, 22, 14), Dialect.E, true));
+		String message = Serializer.writeMessage(value);
+		Object request = Serializer.readDebugRequest(message);
+		assertTrue(request instanceof InstallBreakpointDebugRequest);
 	}
 
 	@Test
 	public void testStatusResponseMessage() throws Exception {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-		DebugResponseMessage message = new DebugResponseMessage();
-		message.object = new GetStatusResponse(Status.SUSPENDED);
-		message.type = message.object.getType();
-		JsonNode json = mapper.valueToTree(message);
-		assertEquals(IDebugResponse.Type.GET_STATUS.name(), json.get("type").asText());
-		assertNull(json.get("object").get("type"));
-		String s = json.toString();
-		JsonNode content = mapper.readTree(s);
-		String typeName = content.get("type").asText();
-		IDebugResponse.Type type = IDebugResponse.Type.valueOf(typeName);
-		JsonNode object = content.get("object");
-		assertTrue(object instanceof ObjectNode);
-		IDebugResponse response = mapper.treeToValue(object, type.getKlass());
-		assertTrue(response instanceof GetStatusResponse);
-		assertEquals(Status.SUSPENDED, ((GetStatusResponse)response).getStatus());
+		Object value = new GetStatusDebugResponse(Status.SUSPENDED);
+		String message = Serializer.writeMessage(value);
+		Object response = Serializer.readDebugResponse(message);
+		assertTrue(response instanceof GetStatusDebugResponse);
+		assertEquals(Status.SUSPENDED, ((GetStatusDebugResponse)response).getStatus());
 	}
 	
 	
+	@Test
+	public void testAcknowledgementMessage() throws Exception {
+		Object value = new Acknowledged();
+		String message = Serializer.writeMessage(value);
+		Object response = Serializer.readAcknowledgement(message);
+		assertTrue(response instanceof Acknowledged);
+	}
+
 	@Test
 	public void testOpenStream() throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
@@ -172,8 +131,8 @@ public class TestDebugMessage {
 		mapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, false);
 		mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
 		DebugRequestMessage message = new DebugRequestMessage();
-		message.object = new GetProcessStatusRequest();
-		message.type = message.object.getType();
+		message.value = new GetProcessStatusDebugRequest();
+		message.type = message.value.getClass().getSimpleName();
 		JsonNode json = mapper.valueToTree(message);
 		String s = json.toString();
 		try(InputStream input = new ByteArrayInputStream(s.getBytes())) {
@@ -188,20 +147,5 @@ public class TestDebugMessage {
 		}
 	}
 	
-	@Test
-	public void testAcknowledgementMessage() throws Exception {
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-		AcknowledgementMessage message = new AcknowledgementMessage();
-		message.type = IAcknowledgement.Type.RECEIVED;
-		JsonNode json = mapper.valueToTree(message);
-		assertEquals(IAcknowledgement.Type.RECEIVED.name(), json.get("type").asText());
-		String s = json.toString();
-		JsonNode content = mapper.readTree(s);
-		String typeName = content.get("type").asText();
-		IAcknowledgement.Type type = IAcknowledgement.Type.valueOf(typeName);
-		IAcknowledgement ack = type.getKlass().newInstance();
-		assertTrue(ack instanceof Acknowledgement);
-	}
 
 }

@@ -6,6 +6,8 @@ import java.net.Socket;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import prompto.debug.request.IDebugRequest;
+import prompto.debug.response.IDebugResponse;
 import prompto.utils.Logger;
 
 /* a client which is able to send debug requests (such as step, get stack frames...) to a debug request server using Java serialization */
@@ -50,13 +52,13 @@ public class JavaDebugRequestClient extends DebugRequestClient {
 
 	@Override
 	protected IDebugResponse sendRequest(IDebugRequest request, Consumer<Exception> errorHandler) {
-		logger.debug(()->"DebugRequestClient sends " + request.getType());
+		logger.debug(()->"DebugRequestClient sends " + request.getClass().getName());
 		try(Socket client = new Socket(remoteHost, remotePort)) {
 			try(OutputStream output = client.getOutputStream()) {
-				Serializer.writeDebugRequest(output, request);
+				Serializer.writeMessage(output, request);
 				try(InputStream input = client.getInputStream()) {
 					IDebugResponse response = Serializer.readDebugResponse(input);
-					logger.debug(()->"DebugRequestClient receives " + response.getType());
+					logger.debug(()->"DebugRequestClient receives " + response.getClass().getName());
 					return response;
 				}
 			}

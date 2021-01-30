@@ -6,6 +6,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
+import prompto.debug.event.ConnectedDebugEvent;
+import prompto.debug.request.IDebugRequest;
+import prompto.debug.response.IDebugResponse;
 import prompto.utils.Logger;
 
 /* a class which listens to IDebugRequest messages (such as step, get stack frames...) and forwards them to the debugger */
@@ -33,7 +36,7 @@ public class JavaDebugRequestListener implements IDebugRequestListener {
 	
 
 	@Override
-	public IDebugEvent.Connected startListening() throws Exception {
+	public ConnectedDebugEvent startListening() throws Exception {
 		Object lock = new Object();
 		this.thread = new Thread(() -> {
 			try(ServerSocket server = new ServerSocket(0)) {
@@ -67,7 +70,7 @@ public class JavaDebugRequestListener implements IDebugRequestListener {
 			}
 		}
 		// TODO use host name
-		return new IDebugEvent.Connected("localhost", port);
+		return new ConnectedDebugEvent("localhost", port);
 	}
 
 	@Override
@@ -85,9 +88,9 @@ public class JavaDebugRequestListener implements IDebugRequestListener {
 			InputStream input = client.getInputStream();
 			OutputStream output = client.getOutputStream();
 			IDebugRequest request = readRequest(input);
-			logger.debug(()->"DebugRequestServer receives " + request.getType());
+			logger.debug(()->"DebugRequestServer receives " + request.getClass().getName());
 			IDebugResponse response = request.execute(debugger);
-			logger.debug(()->"DebugRequestServer responds " + response.getType());
+			logger.debug(()->"DebugRequestServer responds " + response.getClass().getName());
 			sendResponse(output, response);
 			output.flush();
 		}
@@ -99,7 +102,7 @@ public class JavaDebugRequestListener implements IDebugRequestListener {
 
 
 	private void sendResponse(OutputStream output, IDebugResponse response) throws Exception {
-		Serializer.writeDebugResponse(output, response);
+		Serializer.writeMessage(output, response);
 	}
 
 

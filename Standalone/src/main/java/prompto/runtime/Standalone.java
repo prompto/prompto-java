@@ -29,7 +29,6 @@ import prompto.config.IStoreConfiguration;
 import prompto.config.StandaloneConfiguration;
 import prompto.config.TempDirectories;
 import prompto.config.YamlConfigurationReader;
-import prompto.debug.IDebugEvent;
 import prompto.debug.IDebugEventAdapter;
 import prompto.debug.IDebugEventAdapterFactory;
 import prompto.debug.IDebugRequestListener;
@@ -39,6 +38,7 @@ import prompto.debug.ProcessDebugger;
 import prompto.debug.ProcessDebugger.DebuggedWorker;
 import prompto.debug.Status;
 import prompto.debug.WorkerDebugger;
+import prompto.debug.event.ConnectedDebugEvent;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.error.PromptoError;
@@ -260,7 +260,7 @@ public abstract class Standalone {
 		processDebugger.setListener(debugEventAdapter);
 		// wire listener which will receive requests from client
 		debugRequestListener = createDebugRequestListener(config, processDebugger);
-		IDebugEvent.Connected connected = debugRequestListener.startListening();
+		ConnectedDebugEvent connected = debugRequestListener.startListening();
 		debugEventAdapter.handleConnectedEvent(connected);
 		// wire local context to debugger
 		Context local = ApplicationContext.get().newLocalContext();

@@ -19,9 +19,9 @@ import prompto.code.BinaryResource;
 import prompto.code.ICodeStore;
 import prompto.code.Resource;
 import prompto.code.TextResource;
-import prompto.debug.IDebugEvent;
 import prompto.debug.ProcessDebugger.DebuggedWorker;
 import prompto.debug.WorkerDebugger;
+import prompto.debug.event.CompletedDebugEvent;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
@@ -902,7 +902,7 @@ public class Context implements IContext {
 	
 	public void notifyCompleted() {
 		if(debugger!=null) {
-			IDebugEvent.Completed completed = new IDebugEvent.Completed(DebuggedWorker.wrap(Thread.currentThread()));
+			CompletedDebugEvent completed = new CompletedDebugEvent(DebuggedWorker.wrap(Thread.currentThread()));
 			debugger.notifyCompleted(completed);
 		}
 	}

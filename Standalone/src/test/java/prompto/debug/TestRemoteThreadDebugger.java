@@ -10,6 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import prompto.debug.event.ConnectedDebugEvent;
 import prompto.runtime.Standalone;
 import prompto.runtime.utils.Out;
 import prompto.store.NullStoreFactory;
@@ -135,7 +136,7 @@ public class TestRemoteThreadDebugger extends TestDebuggerVariablesBase implemen
 
 	
 	@Override
-	public void handleConnectedEvent(IDebugEvent.Connected event) {
+	public void handleConnectedEvent(ConnectedDebugEvent event) {
 		((JavaDebugRequestClient)debugger).setRemote(event.getHost(), event.getPort());
 		((DebugRequestClient)debugger).setConnected(true);
 		synchronized (lock) {

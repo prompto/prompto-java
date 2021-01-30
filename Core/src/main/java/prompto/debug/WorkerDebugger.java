@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Collections;
 
 import prompto.debug.ProcessDebugger.DebuggedWorker;
+import prompto.debug.event.CompletedDebugEvent;
+import prompto.debug.event.StartedDebugEvent;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
@@ -265,7 +267,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 		return frame==null ? -1 : 1 + frame.getMethodLine() - frame.getStatementLine();
 	}
 	
-	public void notifyStarted(IDebugEvent.Started event) {
+	public void notifyStarted(StartedDebugEvent event) {
 		setStatus(Status.RUNNING);
 		if(listener!=null) {
 			IWorker worker = DebuggedWorker.parse(event.getWorkerId());
@@ -273,7 +275,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 		}
 	}
 	
-	public void notifyCompleted(IDebugEvent.Completed event) {
+	public void notifyCompleted(CompletedDebugEvent event) {
 		ProcessDebugger.getInstance().unregister(Thread.currentThread());
 		if(listener!=null) {
 			IWorker worker = DebuggedWorker.parse(event.getWorkerId());

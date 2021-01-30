@@ -6,7 +6,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
-import prompto.debug.IAcknowledgement.Acknowledgement;
+import prompto.debug.ack.Acknowledged;
+import prompto.debug.event.IDebugEvent;
 import prompto.utils.Logger;
 
 /* a server which listens to IDebugEvents sent by the remote debugged process */ 
@@ -76,10 +77,10 @@ public class JavaDebugEventListener {
 		InputStream input = client.getInputStream();
 		OutputStream output = client.getOutputStream();
 		IDebugEvent event = readDebugEvent(input);
-		logger.debug(()->"DebugEventServer receives " + event.getType());
+		logger.debug(()->"DebugEventServer receives " + event.getClass().getName());
 		event.execute(listener);
-		logger.debug(()->"DebugEventServer sends " + IAcknowledgement.Type.RECEIVED);
-		sendAcknowledgement(output);
+		logger.debug(()->"DebugEventServer sends " + event.getClass().getName());
+		sendAcknowledged(output);
 		output.flush();
 	}
 
@@ -89,8 +90,8 @@ public class JavaDebugEventListener {
 	}
 
 
-	private void sendAcknowledgement(OutputStream output) throws Exception {
-		Serializer.writeAcknowledgement(output, new Acknowledgement());
+	private void sendAcknowledged(OutputStream output) throws Exception {
+		Serializer.writeMessage(output, new Acknowledged());
 	}
 
 	public boolean isListening() {

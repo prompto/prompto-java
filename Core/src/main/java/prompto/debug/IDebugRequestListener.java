@@ -1,8 +1,10 @@
 package prompto.debug;
 
+import prompto.debug.event.ConnectedDebugEvent;
+
 public interface IDebugRequestListener {
 
-	IDebugEvent.Connected startListening() throws Exception;
+	ConnectedDebugEvent startListening() throws Exception;
 	void stopListening();
 	
 }

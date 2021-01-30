@@ -10,6 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.experimental.categories.Category;
 
+import prompto.debug.event.ConnectedDebugEvent;
 import prompto.store.NullStoreFactory;
 import prompto.utils.IOUtils;
 import prompto.utils.ManualTests;
@@ -116,7 +117,7 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 
 	
 	@Override
-	public void handleConnectedEvent(IDebugEvent.Connected event) {
+	public void handleConnectedEvent(ConnectedDebugEvent event) {
 		((JavaDebugRequestClient)debugger).setRemote(event.getHost(), event.getPort());
 		((DebugRequestClient)debugger).setConnected(true);
 		synchronized (lock) {

@@ -4,8 +4,27 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.function.Consumer;
 
-import static prompto.debug.IDebugRequest.*;
-import static prompto.debug.IDebugResponse.*;
+import prompto.debug.request.GetLineDebugRequest;
+import prompto.debug.request.GetStackDebugRequest;
+import prompto.debug.request.GetVariableDebugRequest;
+import prompto.debug.request.GetVariablesDebugRequest;
+import prompto.debug.request.GetWorkerStatusDebugRequest;
+import prompto.debug.request.IDebugRequest;
+import prompto.debug.request.InstallBreakpointDebugRequest;
+import prompto.debug.request.IsSteppingDebugRequest;
+import prompto.debug.request.ResumeDebugRequest;
+import prompto.debug.request.StepIntoDebugRequest;
+import prompto.debug.request.StepOutDebugRequest;
+import prompto.debug.request.StepOverDebugRequest;
+import prompto.debug.request.SuspendDebugRequest;
+import prompto.debug.request.TerminateDebugRequest;
+import prompto.debug.response.GetLineDebugResponse;
+import prompto.debug.response.GetStackDebugResponse;
+import prompto.debug.response.GetStatusDebugResponse;
+import prompto.debug.response.GetVariableDebugResponse;
+import prompto.debug.response.GetVariablesDebugResponse;
+import prompto.debug.response.IDebugResponse;
+import prompto.debug.response.IsSteppingDebugResponse;
 import prompto.parser.ISection;
 
 /* a client which is able to send debug requests (such as step, get stack frames...) to a debug request server */
@@ -49,20 +68,20 @@ public abstract class DebugRequestClient implements IDebugger {
 	private Status fetchWorkerStatus(IWorker worker) {
 		if(!connected)
 			return Status.UNREACHABLE;
-		IDebugRequest request = new GetWorkerStatusRequest(worker);
+		IDebugRequest request = new GetWorkerStatusDebugRequest(worker);
 		IDebugResponse response = send(request) ;
-		if(response instanceof GetStatusResponse)
-			return ((GetStatusResponse)response).getStatus();
+		if(response instanceof GetStatusDebugResponse)
+			return ((GetStatusDebugResponse)response).getStatus();
 		else 
 			return Status.UNREACHABLE;
 	}
 
 	@Override
 	public IStack<?> getStack(IWorker worker) {
-		IDebugRequest request = new GetStackRequest(worker);
+		IDebugRequest request = new GetStackDebugRequest(worker);
 		IDebugResponse response = send(request) ;
-		if(response instanceof GetStackResponse) {
-			LeanStack stack = ((GetStackResponse)response).getStack();
+		if(response instanceof GetStackDebugResponse) {
+			LeanStack stack = ((GetStackDebugResponse)response).getStack();
 			return new ClientStack(this, worker, stack);
 		} else 
 			throw new UnreachableException();
@@ -70,40 +89,40 @@ public abstract class DebugRequestClient implements IDebugger {
 	
 	@Override
 	public Collection<? extends IVariable> getVariables(IWorker worker, IStackFrame frame) {
-		IDebugRequest request = new GetVariablesRequest(worker, frame);
+		IDebugRequest request = new GetVariablesDebugRequest(worker, frame);
 		IDebugResponse response = send(request) ;
-		if(response instanceof GetVariablesResponse)
-			return ((GetVariablesResponse)response).getVariables();
+		if(response instanceof GetVariablesDebugResponse)
+			return ((GetVariablesDebugResponse)response).getVariables();
 		else 
 			throw new UnreachableException();
 	}
 	
 	@Override
 	public IVariable getVariable(IWorker worker, IStackFrame frame, String name) {
-		IDebugRequest request = new GetVariableRequest(worker, frame, name);
+		IDebugRequest request = new GetVariableDebugRequest(worker, frame, name);
 		IDebugResponse response = send(request) ;
-		if(response instanceof GetVariableResponse)
-			return ((GetVariableResponse)response).getVariable();
+		if(response instanceof GetVariableDebugResponse)
+			return ((GetVariableDebugResponse)response).getVariable();
 		else 
 			throw new UnreachableException();
 	}
 
 	@Override
 	public int getLineInFile(IWorker worker) {
-		IDebugRequest request = new GetLineRequest(worker);
+		IDebugRequest request = new GetLineDebugRequest(worker);
 		IDebugResponse response = send(request) ;
-		if(response instanceof GetLineResponse)
-			return ((GetLineResponse)response).getLineInFile();
+		if(response instanceof GetLineDebugResponse)
+			return ((GetLineDebugResponse)response).getLineInFile();
 		else 
 			throw new UnreachableException();
 	}
 	
 	@Override
 	public int getLineInMethod(IWorker worker) {
-		IDebugRequest request = new GetLineRequest(worker);
+		IDebugRequest request = new GetLineDebugRequest(worker);
 		IDebugResponse response = send(request) ;
-		if(response instanceof GetLineResponse)
-			return ((GetLineResponse)response).getLineInMethod();
+		if(response instanceof GetLineDebugResponse)
+			return ((GetLineDebugResponse)response).getLineInMethod();
 		else 
 			throw new UnreachableException();
 	}
@@ -112,10 +131,10 @@ public abstract class DebugRequestClient implements IDebugger {
 	public boolean isStepping(IWorker worker) {
 		if(!connected)
 			return false;
-		IDebugRequest request = new IsSteppingRequest(worker);
+		IDebugRequest request = new IsSteppingDebugRequest(worker);
 		IDebugResponse response = send(request) ;
-		if(response instanceof IsSteppingResponse)
-			return ((IsSteppingResponse)response).isStepping();
+		if(response instanceof IsSteppingDebugResponse)
+			return ((IsSteppingDebugResponse)response).isStepping();
 		else 
 			throw new UnreachableException();
 	}
@@ -159,43 +178,43 @@ public abstract class DebugRequestClient implements IDebugger {
 
 	@Override
 	public void suspend(IWorker worker) {
-		IDebugRequest request = new SuspendRequest(worker);
+		IDebugRequest request = new SuspendDebugRequest(worker);
 		send(request);
 	}
 
 	@Override
 	public void resume(IWorker worker) {
-		IDebugRequest request = new ResumeRequest(worker);
+		IDebugRequest request = new ResumeDebugRequest(worker);
 		send(request);
 	}
 	
 	@Override
 	public void terminate(IWorker worker) {
-		IDebugRequest request = new TerminateRequest(worker);
+		IDebugRequest request = new TerminateDebugRequest(worker);
 		send(request);
 	}
 
 	@Override
 	public void stepInto(IWorker worker) {
-		IDebugRequest request = new StepIntoRequest(worker);
+		IDebugRequest request = new StepIntoDebugRequest(worker);
 		send(request);
 	}
 
 	@Override
 	public void stepOut(IWorker worker) {
-		IDebugRequest request = new StepOutRequest(worker);
+		IDebugRequest request = new StepOutDebugRequest(worker);
 		send(request);
 	}
 
 	@Override
 	public void stepOver(IWorker worker) {
-		IDebugRequest request = new StepOverRequest(worker);
+		IDebugRequest request = new StepOverDebugRequest(worker);
 		send(request);
 	}
 	
 	@Override
 	public void installBreakpoint(ISection worker) {
-		IDebugRequest request = new InstallBreakpointRequest(worker);
+		IDebugRequest request = new InstallBreakpointDebugRequest(worker);
 		send(request);
 	}
 

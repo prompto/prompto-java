@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -11,8 +13,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+import prompto.debug.ack.Acknowledged;
+import prompto.debug.ack.IAcknowledgement;
+import prompto.debug.event.IDebugEvent;
+import prompto.debug.request.IDebugRequest;
+import prompto.debug.response.IDebugResponse;
+import prompto.utils.Logger;
+
 public class Serializer {
 
+	static Logger logger = new Logger();
 	static ObjectMapper mapper = initMapper();
 	
 	private static ObjectMapper initMapper() {
@@ -23,124 +33,119 @@ public class Serializer {
 		return mapper;
 	}
 
-	static class DebugRequestMessage {
-		IDebugRequest.Type type;
-		IDebugRequest object;
-		
-		public IDebugRequest.Type getType() {
+	
+	static class DebugMessage<T extends Object> {
+
+		String type;
+		T value;
+
+		public String getType() {
 			return type;
 		}
 		
-		public IDebugRequest getObject() {
-			return object;
+		
+		public T getValue() {
+			return value;
 		}
 	}
 	
-	public static void writeDebugRequest(OutputStream output, IDebugRequest request) throws Exception {
-		DebugRequestMessage message = new DebugRequestMessage();
-		message.type = request.getType();
-		message.object = request;
+	static class DebugRequestMessage extends DebugMessage<IDebugRequest> {
+		
+	}
+	
+	static class DebugResponseMessage extends DebugMessage<IDebugResponse> {
+		
+	}
+
+	static class DebugEventMessage extends DebugMessage<IDebugEvent> {
+
+	}
+	
+	static class AcknowledgementMessage extends DebugMessage<Object> {
+	}
+	
+	
+	
+	public static <T extends Object> void writeMessage(OutputStream output, T value) throws Exception {
+		Map<String, Object> message = new HashMap<>();
+		message.put("type", value.getClass().getSimpleName());
+		message.put("value", value);
 		mapper.writeValue(output, message);
 		output.flush();
 	}
 	
-	public static IDebugRequest readDebugRequest(InputStream input) throws Exception {
-		JsonNode content = mapper.readTree(input);
-		String typeName = content.get("type").asText();
-		IDebugRequest.Type type = IDebugRequest.Type.valueOf(typeName);
-		return mapper.convertValue(content.get("object"), type.getKlass());
-	}
-
-	static class DebugResponseMessage {
-		IDebugResponse.Type type;
-		IDebugResponse object;
-		
-		public IDebugResponse.Type getType() {
-			return type;
-		}
-		
-		public IDebugResponse getObject() {
-			return object;
-		}
-	}
-	
-
-	public static void writeDebugResponse(OutputStream output, IDebugResponse response) throws Exception {
-		DebugResponseMessage message = new DebugResponseMessage();
-		message.type = response.getType();
-		message.object = response;
-		mapper.writeValue(output, message);
-	}
-
-	public static IDebugResponse readDebugResponse(InputStream input) throws Exception {
-		JsonNode content = mapper.readTree(input);
-		String typeName = content.get("type").asText();
-		IDebugResponse.Type type = IDebugResponse.Type.valueOf(typeName);
-		return mapper.convertValue(content.get("object"), type.getKlass());
-	}
-
-
-	static class DebugEventMessage {
-		IDebugEvent.Type type;
-		IDebugEvent object;
-		
-		public IDebugEvent.Type getType() {
-			return type;
-		}
-		
-		public IDebugEvent getObject() {
-			return object;
-		}
-	}
-	
-	
-	public static String writeDebugEvent(IDebugEvent event) throws Exception {
+	public static <T extends Object> String writeMessage(T value) throws Exception {
 		try(ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-			writeDebugEvent(output, event);
+			writeMessage(output, value);
 			return output.toString();
 		}
 	}
 	
-	public static void writeDebugEvent(OutputStream output, IDebugEvent event) throws Exception {
-		DebugEventMessage message = new DebugEventMessage();
-		message.type = event.getType();
-		message.object = event;
-		mapper.writeValue(output, message);
+	public static <T extends Object> T readMessage(String message) throws Exception {
+		try(InputStream input = new ByteArrayInputStream(message.getBytes())) {
+			return Serializer.<T>readMessage(input);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T extends Object> T readMessage(InputStream input) throws Exception {
+		JsonNode content = mapper.readTree(input);
+		String type = content.get("type").asText();
+		Class<?> klass = getClassForName(type);
+		return (T)mapper.convertValue(content.get("value"), klass);
+	}
+
+	private static Class<?> getClassForName(String typeName) throws Exception {
+		if(typeName.equals(Acknowledged.class.getSimpleName()))
+			return Acknowledged.class;
+		else {
+			// by convention all implementations sit in the same package as their interface
+			Class<?> intf = null;
+			if(typeName.endsWith("DebugRequest"))
+				intf = IDebugRequest.class;
+			else if(typeName.endsWith("DebugResponse"))
+				intf = IDebugResponse.class;
+			else if(typeName.endsWith("DebugEvent"))
+				intf = IDebugEvent.class;
+			else {
+				logger.error(()->{return "Cannot resolve typeName: " + typeName;});
+				return null;
+			}
+			return Class.forName(intf.getPackage().getName() + "." + typeName);
+		}
+	}
+
+	public static IAcknowledgement readAcknowledgement(String message) throws Exception {
+		return Serializer.<IAcknowledgement>readMessage(message);
+	}
+	
+	public static IDebugRequest readDebugRequest(String message) throws Exception {
+		return Serializer.<IDebugRequest>readMessage(message);
+	}
+
+	public static IDebugResponse readDebugResponse(String message) throws Exception {
+		return Serializer.<IDebugResponse>readMessage(message);
 	}
 
 	public static IDebugEvent readDebugEvent(String message) throws Exception {
-		try(InputStream input = new ByteArrayInputStream(message.getBytes())) {
-			return readDebugEvent(input);
-		}
-	}
-	
-	public static IDebugEvent readDebugEvent(InputStream input) throws Exception {
-		JsonNode content = mapper.readTree(input);
-		String typeName = content.get("type").asText();
-		IDebugEvent.Type type = IDebugEvent.Type.valueOf(typeName);
-		return mapper.convertValue(content.get("object"), type.getKlass());
-	}
-	
-	static class AcknowledgementMessage {
-		IAcknowledgement.Type type;
-		
-		public IAcknowledgement.Type getType() {
-			return type;
-		}
-	}
-	
-	
-	public static void writeAcknowledgement(OutputStream output, IAcknowledgement ack) throws Exception {
-		AcknowledgementMessage message = new AcknowledgementMessage();
-		message.type = ack.getType();
-		mapper.writeValue(output, message);
+		return Serializer.<IDebugEvent>readMessage(message);
 	}
 
 	public static IAcknowledgement readAcknowledgement(InputStream input) throws Exception {
-		JsonNode content = mapper.readTree(input);
-		String typeName = content.get("type").asText();
-		IAcknowledgement.Type type = IAcknowledgement.Type.valueOf(typeName);
-		return type.getKlass().newInstance();
+		return Serializer.<IAcknowledgement>readMessage(input);
 	}
+
+	public static IDebugRequest readDebugRequest(InputStream input) throws Exception {
+		return Serializer.<IDebugRequest>readMessage(input);
+	}
+
+	public static IDebugResponse readDebugResponse(InputStream input) throws Exception {
+		return Serializer.<IDebugResponse>readMessage(input);
+	}
+
+	public static IDebugEvent readDebugEvent(InputStream input) throws Exception {
+		return Serializer.<IDebugEvent>readMessage(input);
+	}
+	
 
 }

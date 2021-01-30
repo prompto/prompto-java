@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import prompto.debug.ack.IAcknowledgement;
+import prompto.debug.event.IDebugEvent;
 import prompto.utils.Logger;
 
 /* an implementation which uses plain sockets to communicate with the client */
@@ -24,11 +26,11 @@ public class JavaDebugEventAdapter extends DebugEventAdapterBase {
 	protected IAcknowledgement send(IDebugEvent event) {
 		try(Socket client = new Socket(host, port)) {
 			try(OutputStream output = client.getOutputStream()) {
-				logger.debug(()->"DebugEventClient sends " + event.getType());
+				logger.debug(()->"DebugEventClient sends " + event.getClass().getName());
 				sendDebugEvent(output, event);
 				try(InputStream input = client.getInputStream()) {
 					IAcknowledgement ack = readAcknowledgement(input);
-					logger.debug(()->"DebugEventClient receives " + ack.getType());
+					logger.debug(()->"DebugEventClient receives " + ack.getClass().getName());
 					return ack;
 				}
 			}
