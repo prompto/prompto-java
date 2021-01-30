@@ -18,7 +18,8 @@ Url.prototype.close = function() {
 };
 
 Url.prototype.readFully = function() {
-	if(this.path.startsWith("http"))
+	var protocol = this.getProtocol();
+	if(protocol.startsWith("http"))
 		return this.readFullyHttp();
 	else
 		this.throwError("Url only supports HTTP protocol in browser.");
@@ -27,7 +28,7 @@ Url.prototype.readFully = function() {
 Url.prototype.readFullyHttp = function() {
 	var xhr = this.createHttpRequest(false);
 	xhr.send();
-	this.checkStatus(xhr);
+	this.checkHttpStatus(xhr);
 	return xhr.responseText;
 };
 
@@ -49,7 +50,7 @@ Url.prototype.readFullyAsyncHttp = function(callback) {
 };
 
 Url.prototype.checkHttpStatus = function(xhr) {
-	if (xhr.status != 200)
+	if (xhr.status !== 200)
 		this.throwError("Request failed, status: " + xhr.status + ", " + xhr.statusText);
 };
 
@@ -57,7 +58,9 @@ Url.prototype.throwError = function(message) {
     var rwe = null;
     try {
         rwe = eval("prompto.error.ReadWriteError"); // assume it's already defined
-    } catch (error) { }
+    } catch (error) {
+        rwe = null;
+    }
     if(rwe)
         throw new rwe(message);
     else
@@ -67,20 +70,27 @@ Url.prototype.throwError = function(message) {
 Url.prototype.createHttpRequest = function(async) {
 	var xhr = new XMLHttpRequest();
 	xhr.overrideMimeType('text/plain');
-	var httpMethod = this._getHttpMethod();
+	var httpMethod = this.getHttpMethod();
 	xhr.open(httpMethod, this.path, async);
 	// Accept-Charset is not allowed in browsers, so ignore this.encoding 
 	var httpHeaders = { Accept: "application/json, text/plain", "Content-Type": "application/x-www-form-urlencoded" };
-	this.httpHeaders.forEach(function(header) {
-		httpHeaders[header.name] = header.text;
-	});
+	if(this.httpHeaders) {
+		this.httpHeaders.forEach(function(header) {
+			httpHeaders[header.name] = header.text;
+		});
+	}
 	for(var name in httpHeaders) {
 		xhr.setRequestHeader(name, httpHeaders[name]);
 	}
 	return xhr;
 };
 
-Url.prototype._getHttpMethod = function() {
+Url.prototype.getProtocol = function() {
+	var idx = this.path.indexOf(":");
+	return idx < 0 ? "http" : this.path.substring(0, idx);
+};
+
+Url.prototype.getHttpMethod = function() {
 	if(this.httpMethod) {
 		// fetch value from enum
 		if(this.httpMethod.value)
@@ -116,6 +126,7 @@ Url.prototype.writeFully = function(data, callback) {
 };
 
 Url.prototype.serialize = function(data) {
+    var writeJSONValue = eval("writeJSONValue");
 	return JSON.stringify(writeJSONValue(data));
 };	
 
