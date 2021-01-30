@@ -13,7 +13,7 @@ public class IllegalWidgetConstructorProblem extends SyntaxProblemBase {
 
 	@Override
 	public Type getType() {
-		return Type.ERROR;
+		return Type.WARNING;
 	}
 	
 	@Override
