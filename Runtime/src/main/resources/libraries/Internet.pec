@@ -115,9 +115,9 @@ define HttpHeader as native category with attributes name and text, and bindings
 	define category bindings as:
 		Java: prompto.internet.HttpHeader
 		C#: prompto.internet.HttpHeader
-		Python2: Url from module: prompto.internet.HttpHeader
-		Python3: Url from module: prompto.internet.HttpHeader
-		JavaScript: Url from module: prompto/internet/HttpHeader.js
+		Python2: HttpHeader from module: prompto.internet.HttpHeader
+		Python3: HttpHeader from module: prompto.internet.HttpHeader
+		JavaScript: HttpHeader from module: prompto/internet/HttpHeader.js
 
 define httpHeaders as HttpHeader[] attribute
 	

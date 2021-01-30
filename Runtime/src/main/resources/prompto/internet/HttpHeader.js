@@ -3,3 +3,5 @@ function HttpHeader(name, text) {
 	this.text = text;
 	return this;
 }
+
+module.exports.HttpHeader = HttpHeader;

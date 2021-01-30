@@ -1,8 +1,8 @@
 function Url(path, encoding, httpMethod, httpHeaders) {
 	this.path = path;
-	this.encoding = encoding || "utf-8";
-	this.httpMethod = httpMethod || "GET";
-	this.httpHeaders = httpHeaders || [ new HttpHeader("Content-Type", "application/x-www-form-urlencoded")];
+	this.encoding = encoding;
+	this.httpMethod = httpMethod;
+	this.httpHeaders = httpHeaders;
 	return this;
 }
 
@@ -33,7 +33,7 @@ Url.prototype.readFullyHttp = function() {
 
 Url.prototype.readFullyAsync = function(callback) {
 	if(this.path.startsWith("http"))
-		return this.readFullyAsyncHttp();
+		return this.readFullyAsyncHttp(callback);
 	else
 		this.throwError("Url only supports HTTP protocol in browser.");
 }
@@ -65,11 +65,28 @@ Url.prototype.throwError = function(message) {
 Url.prototype.createHttpRequest = function(async) {
 	var xhr = new XMLHttpRequest();
 	xhr.overrideMimeType('text/plain');
-	xhr.open(this.httpMethod, this.path, async);
+	var httpMethod = this._getHttpMethod();
+	xhr.open(httpMethod, this.path, async);
+	// Accept-Charset is not allowed in browsers, so ignore this.encoding 
+	var httpHeaders = { Accept: "application/json, text/plain", "Content-Type": "application/x-www-form-urlencoded" };
 	this.httpHeaders.forEach(function(header) {
-		xhr.setRequestHeader(header.name, header.text);
+		httpHeaders[header.name] = header.text;
 	});
+	for(var name in httpHeaders) {
+		xhr.setRequestHeader(name, httpHeaders[name]);
+	}
 	return xhr;
+};
+
+Url.prototype._getHttpMethod = function() {
+	if(this.httpMethod) {
+		// fetch value from enum
+		if(this.httpMethod.value)
+			return this.httpMethod.value;
+		else
+			return this.httpMethod;
+	} else
+		return "GET";
 };
 
 Url.prototype.readLine = function() {
@@ -81,20 +98,25 @@ Url.prototype.readLine = function() {
 		return this.lines.shift();
 	else
 		return null;
-}
+};
 
 Url.prototype.writeFully = function(data, callback) {
 	var self = this;
 	var async = callback !== null;
 	var xhr = this.createHttpRequest(async);
-	xhr.setRequestHeader("Content-Size", data.length);
 	xhr.onload = function() {
 		self.checkHttpStatus(xhr);
 		if(callback !== null)
 			callback(xhr.responseText);
 	};
+	data = this.serialize(data);
 	xhr.send(data);
 };
+
+Url.prototype.serialize = function(data) {
+	return JSON.stringify(writeJSONValue(data));
+};	
+
 
 Url.prototype.writeLine = function(data) {
 	this.throwError("Url only supports full HTTP writes in browser.");
