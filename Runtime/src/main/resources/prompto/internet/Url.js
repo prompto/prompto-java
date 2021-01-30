@@ -23,7 +23,7 @@ Url.prototype.readFully = function() {
 	else
 		this.throwError("Url only supports HTTP protocol in browser.");
 };
-	
+
 Url.prototype.readFullyHttp = function() {
 	var xhr = this.createHttpRequest(false);
 	xhr.send();
@@ -54,12 +54,14 @@ Url.prototype.checkHttpStatus = function(xhr) {
 };
 
 Url.prototype.throwError = function(message) {
-	try {
-		var rwe = eval("prompto.error.ReadWriteError"); // assume it's already defined
-		throw new rwe(message);
-	} catch (error) {
-		throw new Error(message);
-	}
+    var rwe = null;
+    try {
+        rwe = eval("prompto.error.ReadWriteError"); // assume it's already defined
+    } catch (error) { }
+    if(rwe)
+        throw new rwe(message);
+    else
+        throw new Error(message);
 };
 
 Url.prototype.createHttpRequest = function(async) {
@@ -116,7 +118,6 @@ Url.prototype.writeFully = function(data, callback) {
 Url.prototype.serialize = function(data) {
 	return JSON.stringify(writeJSONValue(data));
 };	
-
 
 Url.prototype.writeLine = function(data) {
 	this.throwError("Url only supports full HTTP writes in browser.");
