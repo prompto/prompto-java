@@ -149,7 +149,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 				}
 				if(argument==null) // missing argument
 					return false;
-				if(!isAssignableTo(local, parameter, argument, checkInstance, allowDerived, filter))
+				if(!isArgumentAssignableTo(local, parameter, argument, checkInstance, allowDerived, filter))
 					return false;
 				argsList.remove(argument);
 			}
@@ -184,7 +184,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 		}
 	}
 	
-	boolean isAssignableTo(Context context, IParameter parameter, Argument argument, boolean useInstance, boolean allowDerived, Predicate<Specificity> filter) {
+	boolean isArgumentAssignableTo(Context context, IParameter parameter, Argument argument, boolean useInstance, boolean allowDerived, Predicate<Specificity> filter) {
 		Specificity spec = computeSpecificity(context, parameter, argument, useInstance, allowDerived);
 		return filter.test(spec);
 	}
