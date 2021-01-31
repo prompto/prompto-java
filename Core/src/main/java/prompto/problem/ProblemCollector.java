@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 
-public class ProblemCollector extends ProblemListenerBase {
+public class ProblemCollector extends ProblemListener {
 
 	List<IProblem> problems = new ArrayList<IProblem>();
 	Set<String> unique = new HashSet<>();

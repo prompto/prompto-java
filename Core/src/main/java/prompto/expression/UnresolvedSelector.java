@@ -8,7 +8,7 @@ import prompto.error.SyntaxError;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.problem.IProblemListener;
-import prompto.problem.ProblemListener;
+import prompto.problem.ProblemRaiser;
 import prompto.runtime.Context;
 import prompto.statement.UnresolvedCall;
 import prompto.transpiler.Transpiler;
@@ -84,19 +84,14 @@ public class UnresolvedSelector extends SelectorExpression {
 
 	public IExpression resolve(Context context) {
 		if (resolved == null) {
-			IProblemListener saved = context.getProblemListener();
+			final IProblemListener saved = context.getProblemListener(); 
+			context.pushProblemListener(new ProblemRaiser() { @Override public boolean isCheckNative() { return saved.isCheckNative(); } });
 			try {
-				context.setProblemListener(new ProblemListener() {
-					@Override
-					public boolean isCheckNative() {
-						return saved.isCheckNative();
-					}
-				});
 				resolved = tryResolveMethod(context, null);
 				if (resolved == null)
 					resolved = tryResolveMember(context);
 			} finally {
-				context.setProblemListener(saved);
+				context.popProblemListener();
 			}
 			if (resolved == null)
 				context.getProblemListener().reportUnknownIdentifier(this, id.toString());

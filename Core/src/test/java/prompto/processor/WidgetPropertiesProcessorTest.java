@@ -14,7 +14,7 @@ import prompto.grammar.Identifier;
 import prompto.jsx.JsxElementBase;
 import prompto.parser.ISection;
 import prompto.parser.o.BaseOParserTest;
-import prompto.problem.ProblemListener;
+import prompto.problem.ProblemRaiser;
 import prompto.transpiler.Nashorn8Engine;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
@@ -39,7 +39,7 @@ public class WidgetPropertiesProcessorTest extends BaseOParserTest {
 	@Test
 	public void transpilesWithWarnings() throws Exception {
 		Instance<String> warning = new Instance<>();
-		context.setProblemListener(new ProblemListener() {
+		context.pushProblemListener(new ProblemRaiser() {
 			@Override
 			public void reportIllegalAssignment(ISection section, IType expected, IType actual) {
 				warning.set("invalid");
@@ -79,7 +79,7 @@ public class WidgetPropertiesProcessorTest extends BaseOParserTest {
 	@Test
 	public void transpilesStructWithWarnings() throws Exception {
 		Instance<String> warning = new Instance<>();
-		context.setProblemListener(new ProblemListener() {
+		context.pushProblemListener(new ProblemRaiser() {
 			@Override
 			public void reportIllegalAssignment(ISection section, IType expected, IType actual) {
 				warning.set("invalid");
@@ -134,7 +134,7 @@ public class WidgetPropertiesProcessorTest extends BaseOParserTest {
 	public void transpilesReactPropsWithWarnings() throws Exception {
 		JsxElementBase.setTestMode(false);
 		Instance<String> warning = new Instance<>();
-		context.setProblemListener(new ProblemListener() {
+		context.pushProblemListener(new ProblemRaiser() {
 			@Override
 			public void reportUnknownMember(ISection section, String name) {
 				warning.set("invalid");
@@ -174,7 +174,7 @@ public class WidgetPropertiesProcessorTest extends BaseOParserTest {
 	@Test
 	public void transpilesRequiredWithWarnings() throws Exception {
 		Instance<String> warning = new Instance<>();
-		context.setProblemListener(new ProblemListener() {
+		context.pushProblemListener(new ProblemRaiser() {
 			@Override
 			public void reportMissingProperty(ISection section, String missingl) {
 				warning.set("invalid");
@@ -214,7 +214,7 @@ public class WidgetPropertiesProcessorTest extends BaseOParserTest {
 	@Test
 	public void transpilesTypeSetWithWarnings() throws Exception {
 		Instance<String> warning = new Instance<>();
-		context.setProblemListener(new ProblemListener() {
+		context.pushProblemListener(new ProblemRaiser() {
 			@Override
 			public void reportIllegalAssignment(ISection section, Set<IType> expected, IType actual) {
 				warning.set("invalid");
@@ -254,7 +254,7 @@ public class WidgetPropertiesProcessorTest extends BaseOParserTest {
 	@Test
 	public void transpilesValueSetWithWarnings() throws Exception {
 		Instance<String> warning = new Instance<>();
-		context.setProblemListener(new ProblemListener() {
+		context.pushProblemListener(new ProblemRaiser() {
 			@Override
 			public void reportIllegalValue(ISection section, String message) {
 				warning.set("invalid");

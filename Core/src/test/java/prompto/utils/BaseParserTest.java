@@ -508,7 +508,7 @@ public class BaseParserTest extends BaseTest {
 		context = Context.newGlobalsContext();
 		dl.register(context);
 		ProblemCollector collector = new ProblemCollector();
-		context.setProblemListener(collector);
+		context.pushProblemListener(collector);
 		dl.check(context);
 		Set<ProblemDescriptor> expected = readExpectedProblems(resourceName);
 		Set<ProblemDescriptor> actual = readActualProblems(collector);

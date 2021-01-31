@@ -41,6 +41,8 @@ import prompto.javascript.JavaScriptNativeCall;
 import prompto.param.CodeParameter;
 import prompto.param.IParameter;
 import prompto.parser.Dialect;
+import prompto.problem.IProblemListener;
+import prompto.problem.ProblemCollector;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.runtime.MethodFinder;
@@ -154,7 +156,16 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			return declaration.getReturnType()!=null ? declaration.getReturnType() : VoidType.instance();
 		else {
 			Context local = isLocalClosure(context) ? context : selector.newLocalCheckContext(context, declaration);
-			return check(declaration, context, local);
+			// don't bubble up problems
+			IProblemListener listener = local.getProblemListener();
+			if(listener instanceof ProblemCollector)
+				listener = new ProblemCollector();
+			local.pushProblemListener(listener);
+			try {
+				return check(declaration, context, local);
+			} finally {
+				local.popProblemListener();
+			}
 		}
 	}
 

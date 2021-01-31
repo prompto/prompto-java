@@ -96,7 +96,7 @@ public class TestErrorListener {
 		parser.setProblemListener(listener);
 		DeclarationList decls = parser.parse(null, new ByteArrayInputStream(prompto.getBytes()));
 		Context context = Context.newGlobalsContext();
-		context.setProblemListener(listener);
+		context.pushProblemListener(listener);
 		decls.register(context);
 		decls.check(context);
 		assertEquals(count, listener.getCount());

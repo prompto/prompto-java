@@ -15,7 +15,7 @@ import prompto.parser.Dialect;
 import prompto.parser.ISection;
 import prompto.parser.Section;
 import prompto.problem.IProblemListener;
-import prompto.problem.ProblemListener;
+import prompto.problem.ProblemRaiser;
 import prompto.runtime.Context;
 import prompto.statement.MethodCall;
 import prompto.store.AttributeInfo;
@@ -158,12 +158,12 @@ public class UnresolvedIdentifier extends Section implements IPredicateExpressio
 
 	public IExpression resolve(Context context, boolean forMember, boolean updateSelectorParent) {
 		if(resolved==null) {
-			IProblemListener saved = context.getProblemListener();
+			final IProblemListener saved = context.getProblemListener(); 
+			context.pushProblemListener(new ProblemRaiser() { @Override public boolean isCheckNative() { return saved.isCheckNative(); } });
 			try {
-				context.setProblemListener(new ProblemListener() { @Override public boolean isCheckNative() { return saved.isCheckNative(); } });
 				resolved = doResolve(context, forMember, updateSelectorParent);
 			} finally {
-				context.setProblemListener(saved);
+				context.popProblemListener();
 			}
 			if(resolved==null)
 				context.getProblemListener().reportUnknownIdentifier(this, id.toString());

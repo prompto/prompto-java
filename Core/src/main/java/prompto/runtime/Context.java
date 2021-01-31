@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.Stack;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -45,7 +46,7 @@ import prompto.parser.ILocation;
 import prompto.parser.ISection;
 import prompto.parser.Section;
 import prompto.problem.IProblemListener;
-import prompto.problem.ProblemListener;
+import prompto.problem.ProblemRaiser;
 import prompto.statement.CommentStatement;
 import prompto.statement.IStatement;
 import prompto.type.CategoryType;
@@ -73,7 +74,7 @@ public class Context implements IContext {
 		context.calling = null;
 		context.parent = null;
 		context.debugger = null;
-		context.problemListener = new ProblemListener();
+		context.problemListener = new ProblemRaiser();
 		return context;
 	}
 
@@ -82,6 +83,7 @@ public class Context implements IContext {
 	Context parent; // for inner methods
 	WorkerDebugger debugger; 
 	IProblemListener problemListener;
+	Stack<IProblemListener> problemListeners;
 	
 	Map<Identifier,IDeclaration> declarations = new HashMap<>();
 	Map<Identifier,TestMethodDeclaration> tests = new HashMap<>();
@@ -148,20 +150,33 @@ public class Context implements IContext {
 		return debugger;
 	}
 	
-	public void setProblemListener(IProblemListener problemListener) {
-		this.problemListener = problemListener;
-	}
-	
 	public IProblemListener getProblemListener() {
 		return problemListener;
+	}
+
+	public void pushProblemListener(IProblemListener problemListener) {
+		if(problemListeners == null)
+			problemListeners = new Stack<>();
+		problemListeners.push(this.problemListener);
+		this.problemListener = problemListener;
+	}
+
+	public void popProblemListener() {
+		this.problemListener = problemListeners.pop();
+		if(problemListeners.isEmpty())
+			problemListeners = null;
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
+		sb.append("instances:");
+		sb.append(instances);
+		sb.append(",values:");
+		sb.append(values);
 		if(this!=globals) {
-			sb.append("globals:");
+			sb.append(",globals:");
 			sb.append(globals);
 		}
 		sb.append(",calling:");
@@ -170,10 +185,6 @@ public class Context implements IContext {
 		sb.append(parent);
 		sb.append(",declarations:");
 		sb.append(declarations);
-		sb.append(",instances:");
-		sb.append(instances);
-		sb.append(",values:");
-		sb.append(values);
 		sb.append("}");
 		return sb.toString();
 	}
@@ -1355,7 +1366,5 @@ public class Context implements IContext {
 		}
 		
 	}
-
-
 
 }
