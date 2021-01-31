@@ -15,6 +15,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
+import prompto.problem.ProblemCollector;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.statement.IStatement;
@@ -55,11 +56,21 @@ public class ArrowExpression extends PredicateExpression implements IExpression 
 
 	@Override
 	public IType check(Context context) {
-		return checkReturnType(context, null);
+		return doCheckReturnType(context, null);
 	}
 	
 	
 	public IType checkReturnType(Context context, IType returnType) {
+		// don't bubble up errors
+		context.pushProblemListener(new ProblemCollector());
+		try {
+			return doCheckReturnType(context, null);
+		} finally {
+			context.popProblemListener();
+		}
+	}
+	
+	private IType doCheckReturnType(Context context, IType returnType) {
 		return statements.check(context, returnType);
 	}
 	

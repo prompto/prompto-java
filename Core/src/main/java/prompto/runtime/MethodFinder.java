@@ -2,6 +2,7 @@ package prompto.runtime;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -41,7 +42,7 @@ public class MethodFinder {
 		Set<IMethodDeclaration> methods = findCandidateMethods(checkInstance);
 		if(methods.size()==0) {
 			context.getProblemListener().reportUnknownMethod(methodCall.getSelector().getId(), methodCall.toString());
-			return null;
+			return Collections.emptySet();
 		}
 		return filterCompatible(methods, checkInstance, allowDerived, filter);
 	}

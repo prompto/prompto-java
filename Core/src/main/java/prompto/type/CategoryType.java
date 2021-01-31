@@ -730,14 +730,14 @@ public class CategoryType extends BaseType {
 	
 	@Override
 	public void declareSorted(Transpiler transpiler, IExpression key) {
-	    String keyname = key!=null ? key.toString() : "key";
+	    Identifier keyId = getKeyIdentifier(key);
 	    IDeclaration decl = this.getDeclaration(transpiler.getContext());
 	    if(decl instanceof CategoryDeclaration) {
 	    	CategoryDeclaration cd = (CategoryDeclaration)decl;
-	    	if ( cd.hasAttribute(transpiler.getContext(), new Identifier(keyname)) ||  cd.hasMethod(transpiler.getContext(), new Identifier(keyname)))
+	    	if ( cd.hasAttribute(transpiler.getContext(), keyId) ||  cd.hasMethod(transpiler.getContext(), keyId))
 	    		return;
 	    } 
-        decl = this.findGlobalMethod(transpiler.getContext(), keyname);
+        decl = this.findGlobalMethod(transpiler.getContext(), keyId);
         if (decl != null) {
             decl.declare(transpiler);
         } else {
@@ -748,22 +748,35 @@ public class CategoryType extends BaseType {
         }
 	}
 	
+	private Identifier getKeyIdentifier(IExpression key) {
+		if(key instanceof InstanceExpression)
+			return ((InstanceExpression)key).getId();
+		else if(key instanceof ISection) {
+			Identifier keyId = new Identifier(key.toString());
+			keyId.copySectionFrom((ISection)key);
+			return keyId;
+		} else if(key != null) 
+			return new Identifier(key.toString());
+ 		else 
+			return new Identifier("key");
+	}
+
 	@Override
 	public void transpileSortedComparator(Transpiler transpiler, IExpression key, boolean descending) {
-	    String keyname = key!=null ? key.toString() : "key";
+		Identifier keyId = getKeyIdentifier(key);
 	    IDeclaration decl = this.getDeclaration(transpiler.getContext());
 	    if(decl instanceof CategoryDeclaration) {
 	    	CategoryDeclaration cd = (CategoryDeclaration)decl;
-    	    if (cd.hasAttribute(transpiler.getContext(), new Identifier(keyname))) {
+    	    if (cd.hasAttribute(transpiler.getContext(), keyId)) {
     	    	this.transpileSortedByAttribute(transpiler, descending, key);
     	    	return;
-    	    } else if (cd.hasMethod(transpiler.getContext(), new Identifier(keyname))) {
+    	    } else if (cd.hasMethod(transpiler.getContext(), keyId)) {
     	    	throw new UnsupportedOperationException();
     	    	/*this.transpileSortedByClassMethod(transpiler, descending, key);
     	    	return;*/
     	    } 
 	    }
-	    decl = this.findGlobalMethod(transpiler.getContext(), keyname);
+	    decl = this.findGlobalMethod(transpiler.getContext(), keyId);
         if (decl != null) {
             this.transpileSortedByGlobalMethod(transpiler, descending, decl.getTranspiledName(transpiler.getContext()));
 	    	return;
@@ -815,12 +828,12 @@ public class CategoryType extends BaseType {
 	    key.transpile(transpiler);
 	}
 
-	private IDeclaration findGlobalMethod(Context context, String name) {
+	private IDeclaration findGlobalMethod(Context context, Identifier id) {
 		try {
 			IExpression exp = new ValueExpression(this, this.newInstance(context));
 			Argument arg = new Argument(null, exp);
 			ArgumentList args = new ArgumentList(Collections.singletonList(arg));
-			MethodCall proto = new MethodCall(new MethodSelector(null, new Identifier(name)), args);
+			MethodCall proto = new MethodCall(new MethodSelector(null, id), args);
 			MethodFinder finder = new MethodFinder(context, proto);
 			return finder.findBestMethod(true);
 		} catch (PromptoError error) {

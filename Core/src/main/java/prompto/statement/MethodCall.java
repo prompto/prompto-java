@@ -156,7 +156,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			return declaration.getReturnType()!=null ? declaration.getReturnType() : VoidType.instance();
 		else {
 			Context local = isLocalClosure(context) ? context : selector.newLocalCheckContext(context, declaration);
-			// don't bubble up problems
+			// don't bubble up problems if collecting
 			IProblemListener listener = local.getProblemListener();
 			if(listener instanceof ProblemCollector)
 				listener = new ProblemCollector();
@@ -407,6 +407,17 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	@Override
 	public void declare(Transpiler transpiler) {
 		Context context = transpiler.getContext();
+		// don't bubble up problems, they will emerge when transpiling
+		context.pushProblemListener(new ProblemCollector());
+		try {
+			doDeclare(transpiler);
+		} finally {
+			context.popProblemListener();
+		}
+	}
+	
+	private void doDeclare(Transpiler transpiler) {
+		Context context = transpiler.getContext();
 		MethodFinder finder = new MethodFinder(context, this);
 	    Set<IMethodDeclaration> declarations = finder.findCompatibleMethods(false, true, spec -> spec!= Specificity.INCOMPATIBLE);
 	    if(declarations.size()==1 && declarations.iterator().next() instanceof BuiltInMethodDeclaration) {
@@ -461,6 +472,17 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
+		Context context = transpiler.getContext();
+		// don't bubble up problems, they will emerge when transpiling
+		context.pushProblemListener(new ProblemCollector());
+		try {
+			return doTranspile(transpiler);
+		} finally {
+			context.popProblemListener();
+		}
+	}
+
+	private boolean doTranspile(Transpiler transpiler) {
 		MethodFinder finder = new MethodFinder(transpiler.getContext(), this);
 	    Set<IMethodDeclaration> declarations = finder.findCompatibleMethods(false, true, spec -> spec!=Specificity.INCOMPATIBLE);
 	    if(declarations==null || declarations.isEmpty())
