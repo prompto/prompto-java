@@ -164,6 +164,12 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 		}
 	}
 	
+	private boolean isArgumentAssignableTo(Context context, IParameter parameter, Argument argument, boolean useInstance, boolean allowDerived, Predicate<Specificity> filter) {
+		Specificity spec = computeSpecificity(context, parameter, argument, useInstance, allowDerived);
+		return filter.test(spec);
+	}
+	
+
 	@Override
 	public boolean isAssignableFrom(Context context, ArgumentList arguments) {
 		try {
@@ -179,7 +185,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 				}
 				if(argument==null) // missing argument
 					return false;
-				if(!isAssignableFrom(local, parameter, argument))
+				if(!isArgumentAssignableFrom(local, parameter, argument))
 					return false;
 				argsList.remove(argument);
 			}
@@ -189,16 +195,10 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 		}
 	}
 	
-	boolean isArgumentAssignableTo(Context context, IParameter parameter, Argument argument, boolean useInstance, boolean allowDerived, Predicate<Specificity> filter) {
-		Specificity spec = computeSpecificity(context, parameter, argument, useInstance, allowDerived);
-		return filter.test(spec);
-	}
-	
-	boolean isAssignableFrom(Context context, IParameter parameter, Argument argument) {
+	private boolean isArgumentAssignableFrom(Context context, IParameter parameter, Argument argument) {
 		try {
 			IType requiredType = parameter.getType(context);
-			IExpression expression = argument.getExpression();
-			IType actualType = argument.checkActualType(context, requiredType, expression, false);
+			IType actualType = argument.checkActualType(context, requiredType, false);
 			if(actualType.equals(requiredType)
 					|| actualType.isAssignableFrom(context, requiredType)
 					|| requiredType.isAssignableFrom(context, actualType))
@@ -216,7 +216,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	public Specificity computeSpecificity(Context context, IParameter parameter, Argument argument, boolean useInstance, boolean allowDerived) {
 		try {
 			IType requiredType = parameter.getType(context).resolve(context, null);
-			IType actualType = argument.checkActualType(context, requiredType, argument.getExpression(), useInstance).resolve(context, null);
+			IType actualType = argument.checkActualType(context, requiredType, useInstance).resolve(context, null);
 			if(actualType.equals(requiredType))
 				return Specificity.EXACT;
 			else if(requiredType.isAssignableFrom(context, actualType)) 

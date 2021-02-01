@@ -145,9 +145,8 @@ public class Argument extends Section {
 	
 	public IExpression resolve(Context context, IParameter parameter, boolean checkInstance, boolean allowDerived) throws PromptoError {
 		// since we support implicit members, it's time to resolve them
-		IExpression expression = getExpression();
 		IType requiredType = parameter.getType(context);
-		IType actualType = checkActualType(context, requiredType, expression, checkInstance);
+		IType actualType = checkActualType(context, requiredType, checkInstance);
 		boolean assignable = requiredType.isAssignableFrom(context, actualType);
 		// when in dispatch, allow derived
 		if(!assignable && allowDerived)
@@ -158,8 +157,9 @@ public class Argument extends Section {
 		return expression; 
 	}
 
-	public IType checkActualType(Context context, IType requiredType, IExpression expression, boolean checkInstance) {
+	public IType checkActualType(Context context, IType requiredType, boolean checkInstance) {
 		IType actualType = null;
+		IExpression expression = getExpression();
 		boolean isArrow = isArrowExpression(requiredType, expression);
 		if(isArrow)
 			actualType = checkArrowExpression(context, (MethodType)requiredType, expression);
@@ -176,14 +176,14 @@ public class Argument extends Section {
 	}
 
 
-	private IType checkArrowExpression(Context context, MethodType requiredType, IExpression expression) {
+	private static IType checkArrowExpression(Context context, MethodType requiredType, IExpression expression) {
 		context = expression instanceof ContextualExpression ? ((ContextualExpression)expression).getCalling() : context.getCallingContext();
 		ArrowExpression arrow = (ArrowExpression)(expression instanceof ArrowExpression ? expression : ((ContextualExpression)expression).getExpression());
 		return requiredType.checkArrowExpression(context, arrow);
 	}
 
 
-	private boolean isArrowExpression(IType requiredType, IExpression expression) {
+	private static boolean isArrowExpression(IType requiredType, IExpression expression) {
 		if(!(requiredType instanceof MethodType))
 			return false;
 		if(expression instanceof ContextualExpression)

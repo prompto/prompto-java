@@ -39,6 +39,11 @@ public class MethodFinder {
 		return methodCall.toString();
 	}
 	
+	public Set<IMethodDeclaration> findCandidates(boolean checkInstance) {
+		MethodSelector selector = methodCall.getSelector();
+		return selector.getCandidates(context, checkInstance);
+	}
+	
 	public IMethodDeclaration findBest(boolean checkInstance) {
 		Set<IMethodDeclaration> candidates = findCandidates(checkInstance);
 		if(candidates.size()==0) {
@@ -57,14 +62,8 @@ public class MethodFinder {
 		}
 	}
 	
-	public Set<IMethodDeclaration> findCandidates(boolean checkInstance) {
-		MethodSelector selector = methodCall.getSelector();
-		return selector.getCandidates(context, checkInstance);
-	}
-	
 	public Set<IMethodDeclaration> findPotential() {
-		MethodSelector selector = methodCall.getSelector();
-		Collection<IMethodDeclaration> candidates = selector.getCandidates(context, false);
+		Collection<IMethodDeclaration> candidates = findCandidates(false);
 		if(candidates.size()==0)
 			context.getProblemListener().reportUnknownMethod(methodCall.getSelector().getId(), methodCall.toString());
 		return filterPotential(candidates);
@@ -123,25 +122,25 @@ public class MethodFinder {
 		return candidate;
 	}
 	
-	Score compareSpecifity(IMethodDeclaration d1, IMethodDeclaration d2, boolean useInstance, boolean allowDerived) {
+	Score compareSpecifity(IMethodDeclaration decl1, IMethodDeclaration decl2, boolean checkInstance, boolean allowDerived) {
 		try {
-			Context s1 = context.newLocalContext();
-			d1.registerParameters(s1);
-			Context s2 = context.newLocalContext();
-			d2.registerParameters(s2);
-			Iterator<Argument> it1 = methodCall.makeArguments(context, d1).iterator();
-			Iterator<Argument> it2 = methodCall.makeArguments(context, d2).iterator();
+			Context ctx1 = context.newLocalContext();
+			decl1.registerParameters(ctx1);
+			Context ctx2 = context.newLocalContext();
+			decl2.registerParameters(ctx2);
+			Iterator<Argument> it1 = methodCall.makeArguments(context, decl1).iterator();
+			Iterator<Argument> it2 = methodCall.makeArguments(context, decl2).iterator();
 			while(it1.hasNext() && it2.hasNext()) {
 				Argument as1 = it1.next();
 				Argument as2 = it2.next();
-				IParameter ar1 = d1.getParameters().find(as1.getParameterId());
-				IParameter ar2 = d2.getParameters().find(as2.getParameterId());
+				IParameter ar1 = decl1.getParameters().find(as1.getParameterId());
+				IParameter ar2 = decl2.getParameters().find(as2.getParameterId());
 				if(as1.getParameterId().equals(as2.getParameterId())) {
 					// the general case with named arguments
-					IType t1 = ar1.getType(s1);
-					IType t2 = ar2.getType(s2);
+					IType t1 = ar1.getType(ctx1);
+					IType t2 = ar2.getType(ctx2);
 					// try resolving runtime type
-					if(useInstance && t1 instanceof CategoryType && t2 instanceof CategoryType) {
+					if(checkInstance && t1 instanceof CategoryType && t2 instanceof CategoryType) {
 						Object value = as1.getExpression().interpret(context); // in the named case as1==as2, so only evaluate 1
 						if(value instanceof IInstance) {
 							CategoryType actual = ((IInstance)value).getType();
@@ -150,14 +149,14 @@ public class MethodFinder {
 								return score;
 						}
 					}
-					if(t1.isMoreSpecificThan(s2,t2))
+					if(t1.isMoreSpecificThan(ctx2,t2))
 						return Score.BETTER;
-					if(t2.isMoreSpecificThan(s1,t1))
+					if(t2.isMoreSpecificThan(ctx1,t1))
 						return Score.WORSE;
 				} else {
 					// specific case for single anonymous argument
-					Specificity sp1 = d1.computeSpecificity(s1, ar1, as1, useInstance, allowDerived);
-					Specificity sp2 = d2.computeSpecificity(s2, ar2, as2, useInstance, allowDerived);
+					Specificity sp1 = decl1.computeSpecificity(ctx1, ar1, as1, checkInstance, allowDerived);
+					Specificity sp2 = decl2.computeSpecificity(ctx2, ar2, as2, checkInstance, allowDerived);
 					if(sp1.ordinal()>sp2.ordinal())
 						return Score.BETTER;
 					if(sp2.ordinal()>sp1.ordinal())
