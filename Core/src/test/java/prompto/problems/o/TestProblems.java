@@ -11,5 +11,20 @@ public class TestProblems extends BaseOParserTest {
 		checkProblems("problems/abstract.poc");
 	}
 
+	@Test
+	public void testDeepAbstract() throws Exception {
+		checkProblems("problems/deepAbstract.poc");
+	}
+
+	@Test
+	public void testDeepUnknownMethod() throws Exception {
+		checkProblems("problems/deepUnknownMethod.poc");
+	}
+
+	@Test
+	public void testUnknownMethod() throws Exception {
+		checkProblems("problems/unknownMethod.poc");
+	}
+
 }
 

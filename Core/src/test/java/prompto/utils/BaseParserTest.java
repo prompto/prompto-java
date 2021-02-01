@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -509,7 +510,12 @@ public class BaseParserTest extends BaseTest {
 		dl.register(context);
 		ProblemCollector collector = new ProblemCollector();
 		context.pushProblemListener(collector);
-		dl.check(context);
+		// by convention we only test main() is there is more than one decl
+		IDeclaration decl = dl.size() == 1 ? dl.get(0) : dl.stream()
+				.filter(d -> "main".equals(d.getName()))
+				.findFirst().orElse(null);
+		assertNotNull(decl);
+		decl.check(context);
 		Set<ProblemDescriptor> expected = readExpectedProblems(resourceName);
 		Set<ProblemDescriptor> actual = readActualProblems(collector);
 		assertEquals(expected, actual);
@@ -574,7 +580,7 @@ public class BaseParserTest extends BaseTest {
 				BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 				YamlReader yaml = new YamlReader(reader);
 				List<ProblemDescriptor> read = yaml.read(List.class, ProblemDescriptor.class);
-				return new HashSet<>(read);
+				return read!=null ? new HashSet<>(read) : Collections.emptySet();
 			} 
 		} catch(Exception e) {
 			e.printStackTrace();
