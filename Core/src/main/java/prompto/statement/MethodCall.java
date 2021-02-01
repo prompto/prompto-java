@@ -16,7 +16,6 @@ import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StackState;
 import prompto.compiler.StringConstant;
-import prompto.declaration.AbstractMethodDeclaration;
 import prompto.declaration.ArrowDeclaration;
 import prompto.declaration.BuiltInMethodDeclaration;
 import prompto.declaration.ClosureDeclaration;
@@ -105,7 +104,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			MethodFinder finder = new MethodFinder(writer.getContext(), this);
 			IMethodDeclaration declaration = finder.findBest(false);
 			/* if method is a reference */
-			return declaration instanceof AbstractMethodDeclaration || declaration.getClosureOf()!=null;
+			return declaration.isAbstract() || declaration.getClosureOf()!=null;
 		} catch(SyntaxError e) {
 			// not an error
 			return false;
@@ -438,19 +437,19 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		if(candidates.size()==0) {
 			transpiler.getContext().getProblemListener().reportUnknownMethod(getSelector().getId(), this.toString());
 		} else {
-		    Set<IMethodDeclaration> compatible = finder.filterCompatible(candidates, false, true, spec -> spec!=Specificity.INCOMPATIBLE);
-		    if(compatible.size()==1 && compatible.iterator().next() instanceof BuiltInMethodDeclaration) {
-	            ((BuiltInMethodDeclaration)compatible.iterator().next()).declareCall(transpiler);
+		    Set<IMethodDeclaration> compatibles = finder.filterCompatible(candidates, false, true, spec -> spec!=Specificity.INCOMPATIBLE);
+		    if(compatibles.size()==1 && compatibles.iterator().next() instanceof BuiltInMethodDeclaration) {
+	            ((BuiltInMethodDeclaration)compatibles.iterator().next()).declareCall(transpiler);
 		    } else {
 	        	if(!this.isLocalClosure(transpiler.getContext())) {
-	        		compatible.forEach(declaration -> {
+	        		compatibles.forEach(declaration -> {
 			            Context local = this.selector.newLocalCheckContext(transpiler.getContext(), declaration);
 			            this.declareDeclaration(transpiler, declaration, local);
 			        });
 	        	}
-		        if(compatible.size()>1 && this.dispatcher==null) {
+		        if(compatibles.size()>1 && this.dispatcher==null) {
 		        	IMethodDeclaration declaration = finder.findBest(false);
-		        	List<IMethodDeclaration> sorted = finder.sortMostSpecificFirst(compatible);
+		        	List<IMethodDeclaration> sorted = finder.sortMostSpecificFirst(compatibles);
 		            this.dispatcher = new DispatchMethodDeclaration(transpiler.getContext(), this, declaration, sorted);
 		            transpiler.declare(this.dispatcher);
 		        }

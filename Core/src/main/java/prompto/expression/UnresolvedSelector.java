@@ -22,8 +22,9 @@ public class UnresolvedSelector extends SelectorExpression {
 	Identifier id;
 	IExpression resolved;
 
-	public UnresolvedSelector(Identifier name) {
-		this.id = name;
+	public UnresolvedSelector(Identifier id) {
+		this.id = id;
+		copySectionFrom(id);
 	}
 
 	public IExpression getResolved() {

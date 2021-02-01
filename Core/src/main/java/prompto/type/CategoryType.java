@@ -158,9 +158,10 @@ public class CategoryType extends BaseType {
 						return null;
 					} else
 						throw new SyntaxError("Unknown type:" + type.getTypeNameId());
-				} else if(decl instanceof MethodDeclarationMap)
+				} else if(decl instanceof MethodDeclarationMap) {
 					resolved = new MethodType(((MethodDeclarationMap)decl).getFirst());
-				else {
+					((MethodType)resolved).copySectionFrom(this);
+				} else {
 					IType found = decl.getType(context);
 					resolved = found.getClass()==type.getClass() ? type : found;
 				}
