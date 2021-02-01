@@ -149,12 +149,11 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		MethodFinder finder = new MethodFinder(context, this);
 		IMethodDeclaration declaration = finder.findBest(false);
 		if(declaration==null)
-			return null;
+			return VoidType.instance();
 		if(updateSelectorParent && declaration.getMemberOf()!=null && this.selector.getParent()==null)
 			this.selector.setParent(new ThisExpression());
 		if(declaration.isAbstract()) {
-			if(!declaration.isReference())
-				context.getProblemListener().reportIllegalAbstractMethodCall(this, declaration.getSignature(Dialect.O));
+			checkAbstractOnly(context, declaration);
 			return declaration.getReturnType()!=null ? declaration.getReturnType() : VoidType.instance();
 		} else {
 			Context local = isLocalClosure(context) ? context : selector.newLocalCheckContext(context, declaration);
@@ -168,6 +167,21 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			} finally {
 				local.popProblemListener();
 			}
+		}
+	}
+
+	private void checkAbstractOnly(Context context, IMethodDeclaration declaration) {
+		if(declaration.isReference()) // parameter or variable populated from a method call
+			return;
+		if(declaration.getMemberOf()!=null) // the category could be subclassed (if constructor called on abstract, that would raise an error anyway)
+			return;
+		// if a global method, need to check for runtime dispatch
+		MethodFinder finder = new MethodFinder(context, this);
+		Set<IMethodDeclaration> potential = finder.findPotential();
+		potential = potential.stream().filter(m->!m.isAbstract()).collect(Collectors.toSet());
+		if(potential.isEmpty()) {
+			// raise error if direct call to pure abstract method
+			context.getProblemListener().reportIllegalAbstractMethodCall(this, declaration.getSignature(Dialect.O));
 		}
 	}
 
@@ -226,7 +240,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		MethodFinder finder = new MethodFinder(context, this);
-		Collection<IMethodDeclaration> declarations = finder.findPotentialMethods();
+		Collection<IMethodDeclaration> declarations = finder.findPotential();
 		switch(declarations.size()) {
 		case 0:
 			throw new SyntaxError("No matching prototype for:" + this.toString()); 

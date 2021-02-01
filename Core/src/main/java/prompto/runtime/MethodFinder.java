@@ -42,7 +42,7 @@ public class MethodFinder {
 	public IMethodDeclaration findBest(boolean checkInstance) {
 		Set<IMethodDeclaration> candidates = findCandidates(checkInstance);
 		if(candidates.size()==0) {
-			context.getProblemListener().reportUnknownMethod(methodCall.getSelector(), methodCall.toString());
+			context.getProblemListener().reportUnknownMethod(methodCall, methodCall.toString());
 			return null;
 		}
 		Set<IMethodDeclaration> compatible = filterCompatible(candidates, checkInstance, false, spec -> spec!=Specificity.INCOMPATIBLE && spec!=Specificity.DERIVED);
@@ -62,7 +62,7 @@ public class MethodFinder {
 		return selector.getCandidates(context, checkInstance);
 	}
 	
-	public List<IMethodDeclaration> findPotentialMethods() {
+	public Set<IMethodDeclaration> findPotential() {
 		MethodSelector selector = methodCall.getSelector();
 		Collection<IMethodDeclaration> candidates = selector.getCandidates(context, false);
 		if(candidates.size()==0)
@@ -182,9 +182,8 @@ public class MethodFinder {
 		}
 		return compatibles;
 	}
-	
-	List<IMethodDeclaration> filterPotential(Collection<IMethodDeclaration> candidates) {
-		List<IMethodDeclaration> potential = new ArrayList<IMethodDeclaration>();
+	Set<IMethodDeclaration> filterPotential(Collection<IMethodDeclaration> candidates) {
+		Set<IMethodDeclaration> potential = new HashSet<IMethodDeclaration>();
 		for(IMethodDeclaration declaration : candidates) {
 			try {
 				ArgumentList args = methodCall.makeArguments(context, declaration);

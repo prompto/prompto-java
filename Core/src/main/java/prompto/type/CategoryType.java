@@ -834,6 +834,7 @@ public class CategoryType extends BaseType {
 			Argument arg = new Argument(null, exp);
 			ArgumentList args = new ArgumentList(Collections.singletonList(arg));
 			MethodCall proto = new MethodCall(new MethodSelector(null, id), args);
+			proto.copySectionFrom(id);
 			MethodFinder finder = new MethodFinder(context, proto);
 			return finder.findBest(true);
 		} catch (PromptoError error) {
