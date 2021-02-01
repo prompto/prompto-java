@@ -491,17 +491,6 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-		Context context = transpiler.getContext();
-		// don't bubble up problems, they will emerge when transpiling
-		context.pushProblemListener(new ProblemCollector());
-		try {
-			return doTranspile(transpiler);
-		} finally {
-			context.popProblemListener();
-		}
-	}
-
-	private boolean doTranspile(Transpiler transpiler) {
 		MethodFinder finder = new MethodFinder(transpiler.getContext(), this);
 		Set<IMethodDeclaration> candidates = finder.findCandidates(false);
 		if(candidates.size()==0) {
