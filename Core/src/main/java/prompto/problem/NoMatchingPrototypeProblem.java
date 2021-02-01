@@ -1,14 +1,18 @@
 package prompto.problem;
 
+import java.util.Set;
+
 import prompto.parser.ISection;
 
 public class NoMatchingPrototypeProblem extends SyntaxProblemBase {
 
-	String proto;
+	String actual;
+	Set<String> expected;
 	
-	public NoMatchingPrototypeProblem(ISection section, String proto) {
+	public NoMatchingPrototypeProblem(ISection section, String actual, Set<String> expected) {
 		super(section);
-		this.proto = proto;
+		this.actual = actual;
+		this.expected = expected;
 	}
 
 	@Override
@@ -18,7 +22,7 @@ public class NoMatchingPrototypeProblem extends SyntaxProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return "No matching prototype:" + proto;
+		return "No matching prototype for: " + actual + ", expected: " + String.join("\n", expected);
 	}
 
 }

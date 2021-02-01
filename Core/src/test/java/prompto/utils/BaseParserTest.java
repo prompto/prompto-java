@@ -23,6 +23,7 @@ import com.esotericsoftware.yamlbeans.YamlReader;
 import prompto.config.TempDirectories;
 import prompto.declaration.DeclarationList;
 import prompto.declaration.IDeclaration;
+import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
@@ -515,7 +516,10 @@ public class BaseParserTest extends BaseTest {
 				.filter(d -> "main".equals(d.getName()))
 				.findFirst().orElse(null);
 		assertNotNull(decl);
-		decl.check(context);
+		if(decl instanceof IMethodDeclaration)
+			((IMethodDeclaration)decl).check(context, true);
+		else
+			decl.check(context);
 		Set<ProblemDescriptor> expected = readExpectedProblems(resourceName);
 		Set<ProblemDescriptor> actual = readActualProblems(collector);
 		assertEquals(expected, actual);

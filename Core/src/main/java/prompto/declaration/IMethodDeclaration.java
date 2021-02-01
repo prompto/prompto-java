@@ -33,6 +33,7 @@ public interface IMethodDeclaration extends IDeclaration {
 	String getSignature(Dialect dialect);
 	boolean isAbstract();
 	boolean isTemplate();
+	boolean isReference();
 	boolean isEligibleAsMain();
 	default String getNameAsKey() { return getName(); }
 	void setMemberOf(CategoryDeclaration declaration);
@@ -62,6 +63,9 @@ public interface IMethodDeclaration extends IDeclaration {
 		return category!=null &&  category.hasLocalAnnotation(name);
 	}
 	void declare(Transpiler transpiler);
+	default IMethodDeclaration asReference() {
+		return new MethodDeclarationReference(this);
+	}
 	
 }
 

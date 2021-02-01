@@ -139,6 +139,10 @@ public abstract class ProblemListener implements ANTLRErrorListener, IProblemLis
 		addProblem(new IllegalAbstractConstructorProblem(section, name, missingPrototype));
 	}
 
+	@Override
+	public void reportIllegalAbstractMethodCall(ISection section, String methodSignature) {
+		addProblem(new IllegalAbstractMethodCallProblem(section, methodSignature));
+	}
 
 	@Override
 	public void reportUnknownIdentifier(ISection section, String name) {
@@ -196,10 +200,20 @@ public abstract class ProblemListener implements ANTLRErrorListener, IProblemLis
 	}
 
 	@Override
-	public void reportNoMatchingPrototype(ISection section, String proto) {
-		addProblem(new NoMatchingPrototypeProblem(section, proto));
+	public void reportNoMatchingPrototype(ISection section, String actual, Set<String> expected) {
+		addProblem(new NoMatchingPrototypeProblem(section, actual, expected));
 	}
 	
+	@Override
+	public void reportMissingArrowPrototype(ISection section, String source) {
+		addProblem(new MissingArrowPrototypeProblem(section, source));
+	}
+
+	@Override
+	public void reportTooManyArrowPrototype(ISection section, String source, Set<String> culprits) {
+		addProblem(new TooManyArrowPrototypesProblem(section, source, culprits));
+	}
+
 	@Override
 	public void reportIllegalOperation(ISection section, String verb, IType type, IType other) {
 		addProblem(new IllegalOperationProblem(section, verb, type, other));

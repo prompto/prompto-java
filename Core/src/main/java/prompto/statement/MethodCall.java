@@ -70,8 +70,8 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		this.selector = selector;
 	}
 
-	public MethodCall(MethodSelector method, ArgumentList arguments) {
-		this.selector = method;
+	public MethodCall(MethodSelector selector, ArgumentList arguments) {
+		this.selector = selector;
 		this.arguments = arguments;
 	}
 	
@@ -103,7 +103,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			return false;
 		try {
 			MethodFinder finder = new MethodFinder(writer.getContext(), this);
-			IMethodDeclaration declaration = finder.findBestMethod(false);
+			IMethodDeclaration declaration = finder.findBest(false);
 			/* if method is a reference */
 			return declaration instanceof AbstractMethodDeclaration || declaration.getClosureOf()!=null;
 		} catch(SyntaxError e) {
@@ -137,7 +137,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	@Override
 	public IType checkReference(Context context) {
 		MethodFinder finder = new MethodFinder(context, this);
-		IMethodDeclaration method = finder.findBestMethod(false);
+		IMethodDeclaration method = finder.findBest(false);
 		if(method!=null)
 			return new MethodType(method);
 		else
@@ -147,14 +147,16 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	
 	public IType check(Context context, boolean updateSelectorParent) {
 		MethodFinder finder = new MethodFinder(context, this);
-		IMethodDeclaration declaration = finder.findBestMethod(false);
+		IMethodDeclaration declaration = finder.findBest(false);
 		if(declaration==null)
 			return null;
 		if(updateSelectorParent && declaration.getMemberOf()!=null && this.selector.getParent()==null)
 			this.selector.setParent(new ThisExpression());
-		if(declaration instanceof AbstractMethodDeclaration)
+		if(declaration.isAbstract()) {
+			if(!declaration.isReference())
+				context.getProblemListener().reportIllegalAbstractMethodCall(this, declaration.getSignature(Dialect.O));
 			return declaration.getReturnType()!=null ? declaration.getReturnType() : VoidType.instance();
-		else {
+		} else {
 			Context local = isLocalClosure(context) ? context : selector.newLocalCheckContext(context, declaration);
 			// don't bubble up problems if collecting
 			IProblemListener listener = local.getProblemListener();
@@ -373,7 +375,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			return method;
 		else {
 			MethodFinder finder = new MethodFinder(context, this);
-			return finder.findBestMethod(checkInstance);
+			return finder.findBest(checkInstance);
 		}
 	}
 	
@@ -417,25 +419,29 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	}
 	
 	private void doDeclare(Transpiler transpiler) {
-		Context context = transpiler.getContext();
-		MethodFinder finder = new MethodFinder(context, this);
-	    Set<IMethodDeclaration> declarations = finder.findCompatibleMethods(false, true, spec -> spec!= Specificity.INCOMPATIBLE);
-	    if(declarations.size()==1 && declarations.iterator().next() instanceof BuiltInMethodDeclaration) {
-            ((BuiltInMethodDeclaration)declarations.iterator().next()).declareCall(transpiler);
-	    } else {
-        	if(!this.isLocalClosure(context)) {
-		        declarations.forEach(declaration -> {
-		            Context local = this.selector.newLocalCheckContext(transpiler.getContext(), declaration);
-		            this.declareDeclaration(transpiler, declaration, local);
-		        });
-        	}
-	        if(declarations.size()>1 && this.dispatcher==null) {
-	        	IMethodDeclaration declaration = finder.findBestMethod(false);
-	        	List<IMethodDeclaration> sorted = finder.sortMostSpecificFirst(declarations);
-	            this.dispatcher = new DispatchMethodDeclaration(transpiler.getContext(), this, declaration, sorted);
-	            transpiler.declare(this.dispatcher);
-	        }
-	    }
+		MethodFinder finder = new MethodFinder(transpiler.getContext(), this);
+		Set<IMethodDeclaration> candidates = finder.findCandidates(false);
+		if(candidates.size()==0) {
+			transpiler.getContext().getProblemListener().reportUnknownMethod(getSelector().getId(), this.toString());
+		} else {
+		    Set<IMethodDeclaration> compatible = finder.filterCompatible(candidates, false, true, spec -> spec!=Specificity.INCOMPATIBLE);
+		    if(compatible.size()==1 && compatible.iterator().next() instanceof BuiltInMethodDeclaration) {
+	            ((BuiltInMethodDeclaration)compatible.iterator().next()).declareCall(transpiler);
+		    } else {
+	        	if(!this.isLocalClosure(transpiler.getContext())) {
+	        		compatible.forEach(declaration -> {
+			            Context local = this.selector.newLocalCheckContext(transpiler.getContext(), declaration);
+			            this.declareDeclaration(transpiler, declaration, local);
+			        });
+	        	}
+		        if(compatible.size()>1 && this.dispatcher==null) {
+		        	IMethodDeclaration declaration = finder.findBest(false);
+		        	List<IMethodDeclaration> sorted = finder.sortMostSpecificFirst(compatible);
+		            this.dispatcher = new DispatchMethodDeclaration(transpiler.getContext(), this, declaration, sorted);
+		            transpiler.declare(this.dispatcher);
+		        }
+		    }
+		}
 	}
 
 	private void declareDeclaration(Transpiler transpiler, IMethodDeclaration declaration, Context local) {
@@ -484,13 +490,18 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 
 	private boolean doTranspile(Transpiler transpiler) {
 		MethodFinder finder = new MethodFinder(transpiler.getContext(), this);
-	    Set<IMethodDeclaration> declarations = finder.findCompatibleMethods(false, true, spec -> spec!=Specificity.INCOMPATIBLE);
-	    if(declarations==null || declarations.isEmpty())
+		Set<IMethodDeclaration> candidates = finder.findCandidates(false);
+		if(candidates.size()==0) {
+			transpiler.getContext().getProblemListener().reportUnknownMethod(getSelector().getId(), this.toString());
+			return false;
+		}
+	    Set<IMethodDeclaration> compatible = finder.filterCompatible(candidates, false, true, spec -> spec!=Specificity.INCOMPATIBLE);
+	    if(compatible==null || compatible.isEmpty())
 	    	transpiler.getContext().getProblemListener().reportUnknownMethod(this, this.toString());
-	    else if (declarations.size() == 1)
-	        transpileSingle(transpiler, declarations.iterator().next(), false);
+	    else if (compatible.size() == 1)
+	        transpileSingle(transpiler, compatible.iterator().next(), false);
 	    else
-	        transpileMultiple(transpiler, declarations);
+	        transpileMultiple(transpiler, compatible);
 	    return false;
 	}
 

@@ -7,18 +7,38 @@ import prompto.parser.o.BaseOParserTest;
 public class TestProblems extends BaseOParserTest {
 
 	@Test
-	public void testAbstract() throws Exception {
-		checkProblems("problems/abstract.poc");
+	public void testAbstractCallback() throws Exception {
+		checkProblems("problems/abstractCallback.poc");
 	}
 
 	@Test
-	public void testDeepAbstract() throws Exception {
-		checkProblems("problems/deepAbstract.poc");
+	public void testAbstractCategory() throws Exception {
+		checkProblems("problems/abstractCategory.poc");
+	}
+
+	@Test
+	public void testAbstractMethod() throws Exception {
+		checkProblems("problems/abstractMethod.poc");
+	}
+
+	@Test
+	public void testDeepAbstractCategory() throws Exception {
+		checkProblems("problems/deepAbstractCategory.poc");
+	}
+
+	@Test
+	public void testDeepAbstractMethod() throws Exception {
+		checkProblems("problems/deepAbstractMethod.poc");
 	}
 
 	@Test
 	public void testDeepUnknownMethod() throws Exception {
 		checkProblems("problems/deepUnknownMethod.poc");
+	}
+
+	@Test
+	public void testNoMatchingPrototype() throws Exception {
+		checkProblems("problems/noMatchingPrototype.poc");
 	}
 
 	@Test

@@ -101,7 +101,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			if(type != null) {
 				type = type.resolve(context, null);
 				if(type instanceof prompto.type.MethodType) {
-					return ((prompto.type.MethodType)type).getMethod();
+					return ((prompto.type.MethodType)type).getMethod().asReference();
 				}
 			}
 		}

@@ -835,7 +835,7 @@ public class CategoryType extends BaseType {
 			ArgumentList args = new ArgumentList(Collections.singletonList(arg));
 			MethodCall proto = new MethodCall(new MethodSelector(null, id), args);
 			MethodFinder finder = new MethodFinder(context, proto);
-			return finder.findBestMethod(true);
+			return finder.findBest(true);
 		} catch (PromptoError error) {
 			return null;
 		}
@@ -1052,7 +1052,7 @@ public class CategoryType extends BaseType {
 			ArgumentList args = new ArgumentList(Collections.singletonList(arg));
 			MethodCall call = new MethodCall(new MethodSelector(methodName), args);
 			MethodFinder finder = new MethodFinder(context, call);
-			IMethodDeclaration decl = finder.findBestMethod(true);
+			IMethodDeclaration decl = finder.findBest(true);
 			if(decl==null)
 				return null;
 			else

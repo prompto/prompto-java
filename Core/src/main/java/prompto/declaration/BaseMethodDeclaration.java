@@ -55,6 +55,11 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	}
 
 	@Override
+	public boolean isReference() {
+		return false;
+	}
+	
+	@Override
 	public DeclarationType getDeclarationType() {
 		return DeclarationType.METHOD;
 	}

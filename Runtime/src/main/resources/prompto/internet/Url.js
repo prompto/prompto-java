@@ -126,8 +126,10 @@ Url.prototype.writeFully = function(data, callback) {
 };
 
 Url.prototype.serialize = function(data) {
-    var writeJSONValue = eval("writeJSONValue");
-	return JSON.stringify(writeJSONValue(data));
+	if(typeof(window) === "object") {
+		return JSON.stringify(window.writeJSONValue(data));
+	} else
+		return null;
 };	
 
 Url.prototype.writeLine = function(data) {

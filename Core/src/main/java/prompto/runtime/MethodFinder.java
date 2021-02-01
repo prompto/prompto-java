@@ -2,12 +2,12 @@ package prompto.runtime;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
@@ -17,6 +17,7 @@ import prompto.grammar.Argument;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Specificity;
 import prompto.param.IParameter;
+import prompto.parser.Dialect;
 import prompto.statement.MethodCall;
 import prompto.type.CategoryType;
 import prompto.type.IType;
@@ -38,29 +39,25 @@ public class MethodFinder {
 		return methodCall.toString();
 	}
 	
-	public Set<IMethodDeclaration> findCompatibleMethods(boolean checkInstance, boolean allowDerived, Predicate<Specificity> filter) {
-		Set<IMethodDeclaration> methods = findCandidateMethods(checkInstance);
-		if(methods.size()==0) {
-			context.getProblemListener().reportUnknownMethod(methodCall.getSelector().getId(), methodCall.toString());
-			return Collections.emptySet();
+	public IMethodDeclaration findBest(boolean checkInstance) {
+		Set<IMethodDeclaration> candidates = findCandidates(checkInstance);
+		if(candidates.size()==0) {
+			context.getProblemListener().reportUnknownMethod(methodCall.getSelector(), methodCall.toString());
+			return null;
 		}
-		return filterCompatible(methods, checkInstance, allowDerived, filter);
-	}
-	
-	public IMethodDeclaration findBestMethod(boolean checkInstance) {
-		Collection<IMethodDeclaration> methods = findCompatibleMethods(checkInstance, false, spec -> spec!=Specificity.INCOMPATIBLE && spec!=Specificity.DERIVED);
-		switch(methods.size()) {
+		Set<IMethodDeclaration> compatible = filterCompatible(candidates, checkInstance, false, spec -> spec!=Specificity.INCOMPATIBLE && spec!=Specificity.DERIVED);
+		switch(compatible.size()) {
 		case 0:
-			context.getProblemListener().reportNoMatchingPrototype(methodCall.getSelector().getId(), methodCall.toString());
+			context.getProblemListener().reportNoMatchingPrototype(methodCall, methodCall.toString(), candidates.stream().map(m->m.getSignature(Dialect.O)).collect(Collectors.toSet()));
 			return null;
 		case 1:
-			return methods.iterator().next();
+			return compatible.iterator().next();
 		default:
-			return findMostSpecific(methods, checkInstance);
+			return findMostSpecific(compatible, checkInstance);
 		}
 	}
 	
-	public Set<IMethodDeclaration> findCandidateMethods(boolean checkInstance) {
+	public Set<IMethodDeclaration> findCandidates(boolean checkInstance) {
 		MethodSelector selector = methodCall.getSelector();
 		return selector.getCandidates(context, checkInstance);
 	}
@@ -172,7 +169,7 @@ public class MethodFinder {
 		return Score.SIMILAR;
 	}
 	
-	Set<IMethodDeclaration> filterCompatible(Collection<IMethodDeclaration> candidates, boolean checkInstance, boolean allowDerived, Predicate<Specificity> filter) {
+	public Set<IMethodDeclaration> filterCompatible(Collection<IMethodDeclaration> candidates, boolean checkInstance, boolean allowDerived, Predicate<Specificity> filter) {
 		Set<IMethodDeclaration> compatibles = new HashSet<IMethodDeclaration>();
 		for(IMethodDeclaration declaration : candidates) {
 			try {
