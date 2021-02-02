@@ -241,7 +241,7 @@ define browserGetWindow as native method returning Document doing:
 define WebSocketCallback as abstract method receiving WebSocket value
 
 define openWebSocket as native method receiving Text url, AnyCallback onMessage, Callback onClose = nothing and WebSocketCallback callback = nothing doing:
-		JavaScript: openWebSocket(url, onMessage, onClose); from module: prompto/web/WebSocket.js
+		JavaScript: openWebSocket(url, onMessage, onClose, callback); from module: prompto/web/WebSocket.js
 
 @Inlined
 define WebSocket as native category with bindings:
