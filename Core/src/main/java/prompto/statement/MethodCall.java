@@ -581,7 +581,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	    IExpression parent = this.selector.resolveParent(transpiler.getContext());
 	    parent.transpileParent(transpiler);
 	    transpiler.append(".");
-	    declaration.transpileCall(transpiler, this.arguments);
+	    declaration.transpileCall(transpiler, makeArguments(transpiler.getContext(), declaration));
 	}
 
 	private void transpileMultiple(Transpiler transpiler, Set<IMethodDeclaration> declarations) {
