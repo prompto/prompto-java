@@ -215,8 +215,16 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	@Override
 	public Specificity computeSpecificity(Context context, IParameter parameter, Argument argument, boolean useInstance, boolean allowDerived) {
 		try {
-			IType requiredType = parameter.getType(context).resolve(context, null);
-			IType actualType = argument.checkActualType(context, requiredType, useInstance).resolve(context, null);
+			IType requiredType = parameter.getType(context);
+			if(requiredType==null)
+				return Specificity.INCOMPATIBLE;
+			else
+				requiredType = requiredType.resolve(context, null);
+			IType actualType = argument.checkActualType(context, requiredType, useInstance);
+			if(actualType==null)
+				return Specificity.INCOMPATIBLE;
+			else
+				actualType = actualType.resolve(context, null);
 			if(actualType.equals(requiredType))
 				return Specificity.EXACT;
 			else if(requiredType.isAssignableFrom(context, actualType)) 
@@ -229,6 +237,7 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 			else if(allowDerived && actualType.isAssignableFrom(context, requiredType))
 				return Specificity.IMPLICIT;
 		} catch(PromptoError error) {
+			error = null; // convenient for debugging
 		}
 		return Specificity.INCOMPATIBLE; 
 	}

@@ -173,8 +173,11 @@ public class CategoryParameter extends BaseParameter implements ITypedParameter 
 	}
 	
 	private void resolve(Context context) {
-		if(resolved==null)
-			resolved = type.resolve(context, null).asMutable(context, mutable);
+		if(resolved==null) {
+			IType resolved = type.resolve(context, null);
+			if(resolved!=null)
+				this.resolved = resolved.resolve(context, null).asMutable(context, mutable);
+		}
 	}
 
 	@Override

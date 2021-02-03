@@ -46,7 +46,7 @@ public abstract class IterableType extends NativeType {
 	
 	@Override
 	public void checkExists(Context context) {
-		itemType.checkExists(context);
+		itemType.resolve(context, null);
 	}
 	
 	@Override
