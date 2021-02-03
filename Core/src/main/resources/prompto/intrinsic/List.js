@@ -9,6 +9,10 @@ function List(mutable, items) {
 List.prototype = Object.create(Array.prototype);
 List.prototype.constructor = List;
 
+List.prototype.toArray = function() {
+	return this;
+};
+
 List.prototype.addItems = function(items) {
 	if(items.toArray)
     	items = items.toArray();
