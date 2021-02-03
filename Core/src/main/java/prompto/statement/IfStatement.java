@@ -17,6 +17,7 @@ import prompto.error.SyntaxError;
 import prompto.expression.EqualsExpression;
 import prompto.expression.IExpression;
 import prompto.parser.ISection;
+import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
@@ -105,8 +106,7 @@ public class IfStatement extends BaseStatement {
 					writer.append(" ");
 				writer.append("else ");
 			}
-			curly = elem.statements.size() > 1;
-			elem.toDialect(writer);
+			curly = elem.toDialect(writer);
 			first = false;
 		}
 		writer.newLine();
@@ -277,7 +277,7 @@ public class IfStatement extends BaseStatement {
 		return true;
 	}
 
-	public static class IfElement extends BaseStatement {
+	public static class IfElement extends Section {
 
 		IExpression condition;
 		StatementList statements;
@@ -287,26 +287,24 @@ public class IfStatement extends BaseStatement {
 			this.statements = statements;
 		}
 
-		@Override
-		public void toDialect(CodeWriter writer) {
+		public boolean toDialect(CodeWriter writer) {
 			switch (writer.getDialect()) {
 			case E:
-				toEDialect(writer);
-				break;
+				return toEDialect(writer);
 			case O:
-				toODialect(writer);
-				break;
+				return toODialect(writer);
 			case M:
-				toMDialect(writer);
-				break;
+				return toMDialect(writer);
+			default:
+				return false;
 			}
 		}
 
-		public void toMDialect(CodeWriter writer) {
-			toEDialect(writer);
+		public boolean toMDialect(CodeWriter writer) {
+			return toEDialect(writer);
 		}
 
-		public void toEDialect(CodeWriter writer) {
+		public boolean toEDialect(CodeWriter writer) {
 			Context context = writer.getContext();
 			if (condition != null) {
 				writer.append("if ");
@@ -319,9 +317,10 @@ public class IfStatement extends BaseStatement {
 			writer.indent();
 			statements.toDialect(writer);
 			writer.dedent();
+			return false;
 		}
 
-		public void toODialect(CodeWriter writer) {
+		public boolean toODialect(CodeWriter writer) {
 			Context context = writer.getContext();
 			if (condition != null) {
 				writer.append("if (");
@@ -341,6 +340,7 @@ public class IfStatement extends BaseStatement {
 			writer.dedent();
 			if (curly)
 				writer.append("}");
+			return curly;
 		}
 		
 		
@@ -361,7 +361,6 @@ public class IfStatement extends BaseStatement {
 			return statements;
 		}
 
-		@Override
 		public IType check(Context context) {
 			if(condition!=null) {
 				IType cond = condition.check(context);
@@ -372,7 +371,6 @@ public class IfStatement extends BaseStatement {
 			return statements.check(context, null);
 		}
 
-		@Override
 		public IValue interpret(Context context) throws PromptoError {
 			context = downcastForInterpret(context);
 			return statements.interpret(context);
@@ -394,7 +392,6 @@ public class IfStatement extends BaseStatement {
 			return context;
 		}
 
-		@Override
 		public void declare(Transpiler transpiler) {
 			if (this.condition != null)
 				this.condition.declare(transpiler);
@@ -408,7 +405,6 @@ public class IfStatement extends BaseStatement {
 			this.statements.declare(transpiler);
 		}
 
-		@Override
 		public boolean transpile(Transpiler transpiler) {
 			Context context = transpiler.getContext();
 			if (this.condition instanceof EqualsExpression)
