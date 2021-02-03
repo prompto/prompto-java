@@ -58,7 +58,7 @@ public abstract class IterableType extends NativeType {
 	public abstract IterableType withItemType(IType itemType);
 	
 	@Override
-	public void transpileCode(Transpiler transpiler) {
+	public void transpileJsxCode(Transpiler transpiler) {
 		transpiler.append(".toArray()");
 	}
 	

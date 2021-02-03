@@ -320,7 +320,7 @@ public interface IType extends ISection {
 		throw new UnsupportedOperationException("transpileIterator " + this.getClass().getName());
 	}
 
-	default void transpileCode(Transpiler transpiler) {
+	default void transpileJsxCode(Transpiler transpiler) {
 		// nothing to do
 	}
 

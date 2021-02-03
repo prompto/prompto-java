@@ -274,7 +274,7 @@ public class TimeType extends NativeType {
 	}
 	
 	@Override
-	public void transpileCode(Transpiler transpiler) {
+	public void transpileJsxCode(Transpiler transpiler) {
 		transpiler.append(".toString()");
 	}
 

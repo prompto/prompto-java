@@ -38,7 +38,7 @@ public class JsxCode implements IJsxExpression {
 	public boolean transpile(Transpiler transpiler) {
 		IType type = expression.check(transpiler.getContext());
 		this.expression.transpile(transpiler);
-		type.transpileCode(transpiler);
+		type.transpileJsxCode(transpiler);
 		return false;
 	}
 
