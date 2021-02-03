@@ -22,6 +22,16 @@ public class TestProblems extends BaseOParserTest {
 	}
 
 	@Test
+	public void testCallbackArgument() throws Exception {
+		checkProblems("problems/callbackArgument.poc");
+	}
+
+	@Test
+	public void testCallbackList() throws Exception {
+		checkProblems("problems/callbackList.poc");
+	}
+
+	@Test
 	public void testDeepAbstractCategory() throws Exception {
 		checkProblems("problems/deepAbstractCategory.poc");
 	}
