@@ -14,6 +14,14 @@ function isAText(o) {
     return typeof(o) === 'string' || o instanceof String;
 }
 
+function StringOrNull(o) {
+	return o && o.toString ? o.toString() : null;
+}
+
+function ArrayOrNull(o) {
+	return o && o.toArray ? o.toArray() : null;
+}
+
 function equalObjects(o1, o2) {
     if(Object.is(o1, o2))
         return true;

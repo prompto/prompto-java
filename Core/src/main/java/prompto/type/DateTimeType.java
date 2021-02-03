@@ -284,8 +284,10 @@ public class DateTimeType extends NativeType {
 	}
 	
 	@Override
-	public void transpileJsxCode(Transpiler transpiler) {
-		transpiler.append(".toString()");
+	public void transpileJsxCode(Transpiler transpiler, IExpression expression) {
+		transpiler.append("StringOrNull(");
+		expression.transpile(transpiler);
+		transpiler.append(")");
 	}
 
 	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 

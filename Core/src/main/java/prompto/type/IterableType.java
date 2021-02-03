@@ -1,5 +1,6 @@
 package prompto.type;
 
+import prompto.expression.IExpression;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.store.FamilyInfo;
@@ -58,8 +59,10 @@ public abstract class IterableType extends NativeType {
 	public abstract IterableType withItemType(IType itemType);
 	
 	@Override
-	public void transpileJsxCode(Transpiler transpiler) {
-		transpiler.append(".toArray()");
+	public void transpileJsxCode(Transpiler transpiler, IExpression expression) {
+		transpiler.append("ArrayOrNull(");
+		expression.transpile(transpiler);
+		transpiler.append(")");
 	}
 	
 	

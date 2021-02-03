@@ -309,7 +309,7 @@ public interface IType extends ISection {
 	}
 
 	default void transpileSortedComparator(Transpiler transpiler, IExpression key, boolean descending) {
-		throw new UnsupportedOperationException("transpileSorted " + this.getClass().getName());
+		throw new UnsupportedOperationException("transpileSortedComparator " + this.getClass().getName());
 	}
 
 	default void declareIterator(Transpiler transpiler, Identifier id, IExpression expression) {
@@ -320,8 +320,8 @@ public interface IType extends ISection {
 		throw new UnsupportedOperationException("transpileIterator " + this.getClass().getName());
 	}
 
-	default void transpileJsxCode(Transpiler transpiler) {
-		// nothing to do
+	default void transpileJsxCode(Transpiler transpiler, IExpression expression) {
+		expression.transpile(transpiler);
 	}
 
 	default ResultInfo compileSorted(Context context, MethodInfo method, Flags flags, ResultInfo srcInfo, IExpression key, boolean descending) {
