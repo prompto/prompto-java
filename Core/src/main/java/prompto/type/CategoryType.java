@@ -721,8 +721,10 @@ public class CategoryType extends BaseType {
 		if(type==this) {
 		  	IDeclaration decl = this.getDeclaration(transpiler.getContext());
 			decl.declare(transpiler);
-		} else
+		} else if(type!=null)
 			type.declare(transpiler);
+		else
+			transpiler.getContext().getProblemListener().reportUnknownCategory(this, this.getTypeName());
 	}
 	
 	@Override
