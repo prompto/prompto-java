@@ -36,6 +36,7 @@ public class TypeExpression implements IExpression {
 	
 	@Override
 	public IType check(Context context) {
+		type.checkExists(context);
 		return new TypeType(type);
 	}
 	

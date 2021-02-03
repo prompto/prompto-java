@@ -328,7 +328,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 		return getHiddenTokens(token, input::getHiddenTokensToLeft);
 	}
 
-	public void buildSection(ParserRuleContext node, Section section) {
+	public void populateSection(ParserRuleContext node, Section section) {
 		Token first = findFirstValidToken(node.start.getTokenIndex());
 		Token last = findLastValidToken(node.stop.getTokenIndex());
 		section.setSectionFrom(path, first, last, Dialect.O);
@@ -690,8 +690,9 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	@Override
 	public void exitCategory_type(Category_typeContext ctx) {
-		Identifier name = new Identifier(ctx.getText());
-		setNodeValue(ctx, new CategoryType(name));
+		Identifier typeName = new Identifier(ctx.getText());
+		populateSection(ctx, typeName);
+		setNodeValue(ctx, new CategoryType(typeName));
 	}
 
 
@@ -3341,7 +3342,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	
 	public void setNodeValue(ParserRuleContext node, Section value) {
 		nodeValues.put(node, value);
-		buildSection(node, value);
+		populateSection(node, value);
 	}
 	
 	public void setNodeValue(ParseTree node, Object value) {

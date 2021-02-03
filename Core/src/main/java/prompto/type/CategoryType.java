@@ -153,11 +153,10 @@ public class CategoryType extends BaseType {
 			else {
 				IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, type.getTypeNameId());
 				if(decl==null) {
-					if(onError!=null) {
-						onError.accept(type);
-						return null;
-					} else
-						throw new SyntaxError("Unknown type:" + type.getTypeNameId());
+					if(onError!=null)
+						onError.accept(this);
+					else
+						context.getProblemListener().reportUnknownCategory(this, type.getTypeName());
 				} else if(decl instanceof MethodDeclarationMap) {
 					resolved = new MethodType(((MethodDeclarationMap)decl).getFirst());
 					((MethodType)resolved).copySectionFrom(this);
@@ -416,8 +415,10 @@ public class CategoryType extends BaseType {
 			return super.isAssignableFrom(context, other) 
 					|| ( other instanceof CategoryType 
 						 && isAssignableFrom(context, (CategoryType)other));
-		else
+		else if(actual!=null)
 			return actual.isAssignableFrom(context, other);
+		else
+			return super.isAssignableFrom(context, other);
 	}
 	
 	public boolean isAssignableFrom(Context context, CategoryType other) {

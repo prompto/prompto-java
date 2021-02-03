@@ -346,7 +346,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 		return !(tree instanceof TerminalNode) || ((TerminalNode)tree).getSymbol().getType()!=INDENT;
 	}
 	
-	public void buildSection(ParserRuleContext node, Section section) {
+	public void populateSection(ParserRuleContext node, Section section) {
 		Token first = findFirstValidToken(node.start.getTokenIndex());
 		Token last = findLastValidToken(node.stop.getTokenIndex());
 		section.setSectionFrom(path, first, last, Dialect.E);
@@ -754,8 +754,9 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitCategory_type(Category_typeContext ctx) {
-		Identifier name = new Identifier(ctx.getText());
-		setNodeValue(ctx, new CategoryType(name));
+		Identifier typeName = new Identifier(ctx.getText());
+		populateSection(ctx, typeName);
+		setNodeValue(ctx, new CategoryType(typeName));
 	}
 
 
@@ -3442,13 +3443,13 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	public void setNodeValue(ParserRuleContext node, Section value) {
 		nodeValues.put(node, value);
-		buildSection(node, value);
+		populateSection(node, value);
 	}
 	
 	public void setNodeValue(ParseTree node, Object value) {
 		nodeValues.put(node, value);
 		if(node instanceof ParserRuleContext && value instanceof Section)
-			buildSection((ParserRuleContext)node, (Section)value);
+			populateSection((ParserRuleContext)node, (Section)value);
 	}
 	
 }
