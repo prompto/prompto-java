@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.function.Consumer;
 
 import prompto.debug.request.GetLineDebugRequest;
-import prompto.debug.request.GetStackDebugRequest;
+import prompto.debug.request.GetWorkerStackDebugRequest;
 import prompto.debug.request.GetVariableDebugRequest;
 import prompto.debug.request.GetVariablesDebugRequest;
 import prompto.debug.request.GetWorkerStatusDebugRequest;
@@ -19,7 +19,7 @@ import prompto.debug.request.StepOverDebugRequest;
 import prompto.debug.request.SuspendDebugRequest;
 import prompto.debug.request.TerminateDebugRequest;
 import prompto.debug.response.GetLineDebugResponse;
-import prompto.debug.response.GetStackDebugResponse;
+import prompto.debug.response.GetWorkerStackDebugResponse;
 import prompto.debug.response.GetStatusDebugResponse;
 import prompto.debug.response.GetVariableDebugResponse;
 import prompto.debug.response.GetVariablesDebugResponse;
@@ -77,11 +77,11 @@ public abstract class DebugRequestClient implements IDebugger {
 	}
 
 	@Override
-	public IStack<?> getStack(IWorker worker) {
-		IDebugRequest request = new GetStackDebugRequest(worker);
+	public IStack<?> getWorkerStack(IWorker worker) {
+		IDebugRequest request = new GetWorkerStackDebugRequest(worker);
 		IDebugResponse response = send(request) ;
-		if(response instanceof GetStackDebugResponse) {
-			LeanStack stack = ((GetStackDebugResponse)response).getStack();
+		if(response instanceof GetWorkerStackDebugResponse) {
+			LeanStack stack = ((GetWorkerStackDebugResponse)response).getStack();
 			return new ClientStack(this, worker, stack);
 		} else 
 			throw new UnreachableException();

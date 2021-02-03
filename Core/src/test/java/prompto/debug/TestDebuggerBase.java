@@ -47,7 +47,7 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		assertEquals(Status.SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
 		assertEquals(MAIN_LINE + 1, debugger.getLineInFile(getDebuggedThread()));
 		assertTrue(debugger.isStepping(getDebuggedThread()));
-		IStack<?> stack = debugger.getStack(getDebuggedThread());
+		IStack<?> stack = debugger.getWorkerStack(getDebuggedThread());
 		assertFalse(stack.isEmpty());
 		assertEquals(MAIN_LINE + 1, stack.iterator().next().getStatementLine());
 		debugger.resume(getDebuggedThread());	

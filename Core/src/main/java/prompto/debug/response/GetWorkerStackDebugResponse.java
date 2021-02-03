@@ -3,15 +3,15 @@ package prompto.debug.response;
 import prompto.debug.IStack;
 import prompto.debug.LeanStack;
 
-public class GetStackDebugResponse implements IDebugResponse {
+public class GetWorkerStackDebugResponse implements IDebugResponse {
 
 	LeanStack stack;
 	
-	public GetStackDebugResponse() {
+	public GetWorkerStackDebugResponse() {
 		this.stack = new LeanStack();
 	}
 
-	public GetStackDebugResponse(IStack<?> stack) {
+	public GetWorkerStackDebugResponse(IStack<?> stack) {
 		this.stack = new LeanStack(stack);
 	}
 	

@@ -23,7 +23,7 @@ public abstract class TestDebuggerVariablesBase extends TestDebuggerBase {
 		waitSuspendedOrTerminated();
 		assertEquals(Status.SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
 		// main method,  printLevel1 "test"
-		IStack<?> stack = debugger.getStack(getDebuggedThread());
+		IStack<?> stack = debugger.getWorkerStack(getDebuggedThread());
 		IStackFrame frame = stack.iterator().next();
 		Collection<? extends IVariable> vars = frame.getVariables();
 		assertEquals(0, vars.size());
@@ -31,7 +31,7 @@ public abstract class TestDebuggerVariablesBase extends TestDebuggerBase {
 		debugger.stepInto(getDebuggedThread());
 		waitSuspendedOrTerminated();
 		// printLevel1, value = value + "1"
-		stack = debugger.getStack(getDebuggedThread());
+		stack = debugger.getWorkerStack(getDebuggedThread());
 		frame = stack.iterator().next();
 		vars = frame.getVariables();	
 		assertEquals(1, vars.size());
@@ -42,7 +42,7 @@ public abstract class TestDebuggerVariablesBase extends TestDebuggerBase {
 		// next, other = "other"
 		debugger.stepOver(getDebuggedThread());
 		waitSuspendedOrTerminated();
-		stack = debugger.getStack(getDebuggedThread());
+		stack = debugger.getWorkerStack(getDebuggedThread());
 		frame = stack.iterator().next();
 		vars = frame.getVariables();	
 		assertEquals(1, vars.size());
@@ -53,7 +53,7 @@ public abstract class TestDebuggerVariablesBase extends TestDebuggerBase {
 		// next, value = value + other
 		debugger.stepOver(getDebuggedThread());
 		waitSuspendedOrTerminated();
-		stack = debugger.getStack(getDebuggedThread());
+		stack = debugger.getWorkerStack(getDebuggedThread());
 		frame = stack.iterator().next();
 		vars = frame.getVariables();	
 		assertEquals(2, vars.size());
@@ -69,7 +69,7 @@ public abstract class TestDebuggerVariablesBase extends TestDebuggerBase {
 		// next, printLevel2 value
 		debugger.stepOver(getDebuggedThread());
 		waitSuspendedOrTerminated();
-		stack = debugger.getStack(getDebuggedThread());
+		stack = debugger.getWorkerStack(getDebuggedThread());
 		frame = stack.iterator().next();
 		vars = frame.getVariables();	
 		assertEquals(2, vars.size());
@@ -213,13 +213,13 @@ public abstract class TestDebuggerVariablesBase extends TestDebuggerBase {
 		waitSuspendedOrTerminated();
 		assertEquals(Status.SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
 		// main method, a = ...
-		IStack<?> stack = debugger.getStack(getDebuggedThread());
+		IStack<?> stack = debugger.getWorkerStack(getDebuggedThread());
 		IStackFrame frame = stack.iterator().next();
 		Collection<? extends IVariable> vars = frame.getVariables();
 		assertEquals(0, vars.size());
 		debugger.stepOver(getDebuggedThread());
 		waitSuspendedOrTerminated();
-		stack = debugger.getStack(getDebuggedThread());
+		stack = debugger.getWorkerStack(getDebuggedThread());
 		frame = stack.iterator().next();
 		vars = frame.getVariables();
 		assertEquals(1, vars.size());

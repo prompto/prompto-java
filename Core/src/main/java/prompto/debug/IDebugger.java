@@ -16,7 +16,7 @@ public interface IDebugger {
 	Collection<? extends IWorker> getWorkers();
 	Status getProcessStatus();
 	Status getWorkerStatus(IWorker worker);
-	IStack<?> getStack(IWorker worker);
+	IStack<?> getWorkerStack(IWorker worker);
 	int getLineInFile(IWorker worker); 
 	int getLineInMethod(IWorker worker); 
 	boolean isStepping(IWorker worker);

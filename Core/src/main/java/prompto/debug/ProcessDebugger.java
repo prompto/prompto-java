@@ -118,7 +118,7 @@ public class ProcessDebugger implements IDebugger {
 	}
 
 	@Override
-	public IStack<?> getStack(IWorker worker) {
+	public IStack<?> getWorkerStack(IWorker worker) {
 		IWorkerDebugger debugger = debuggers.get(worker);
 		if(debugger==null) {
 			logger.warn(()->"Invalid worker: " + worker);
