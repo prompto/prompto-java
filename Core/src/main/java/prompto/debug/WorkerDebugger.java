@@ -115,7 +115,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 		terminateIfRequested();
 		if(stack.size()>0 && stack.size()==-stepDepth) {
 			stepDepth = stack.size();
-			suspend(SuspendReason.STEPPING, context, section); // stepping out
+			suspend(SuspendReason.STEPPED, context, section); // stepping out
 		} else
 			suspendIfRequested(context, section);
 		stack.pop();
@@ -128,7 +128,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 		IStackFrame previous = stack.pop();
 		stack.push(new WorkerStackFrame(context, previous.getCategoryName(), previous.getMethodName(), previous.getMethodProto(), previous.getMethodLine(), stack.size(), section));
 		if(stack.size()>0 && stack.size()<=stepDepth)
-			suspend(SuspendReason.STEPPING, context, section);
+			suspend(SuspendReason.STEPPED, context, section);
 		else if(section.isBreakpoint()) {
 			stepDepth = stack.size();
 			suspend(SuspendReason.BREAKPOINT, context, section);
@@ -141,7 +141,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 		terminateIfRequested();
 		if(stack.size()>0 && stack.size()==-stepDepth) {
 			stepDepth = stack.size();
-			suspend(SuspendReason.STEPPING, context, section);
+			suspend(SuspendReason.STEPPED, context, section);
 		} else
 			suspendIfRequested(context, section);
 		terminateIfRequested();

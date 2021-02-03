@@ -4,7 +4,7 @@ public class LeanWorker implements IWorker {
 	
 	String workerId;
 	String name;
-	State state;
+	WorkerState workerState;
 	
 	@Override
 	public String getWorkerId() {
@@ -17,8 +17,8 @@ public class LeanWorker implements IWorker {
 	}
 	
 	@Override
-	public State getState() {
-		return state;
+	public WorkerState getWorkerState() {
+		return workerState;
 	}
 
 }

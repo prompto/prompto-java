@@ -1,7 +1,7 @@
 package prompto.debug;
 
 public enum SuspendReason {
-	STEPPING,
+	STEPPED,
 	BREAKPOINT,
 	SUSPENDED
 }

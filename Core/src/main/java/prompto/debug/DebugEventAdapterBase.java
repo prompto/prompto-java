@@ -10,7 +10,7 @@ import prompto.debug.event.IDebugEvent;
 import prompto.debug.event.ReadyDebugEvent;
 import prompto.debug.event.ResumedDebugEvent;
 import prompto.debug.event.StartedDebugEvent;
-import prompto.debug.event.SuspendedDebugEvent;
+import prompto.debug.event.WorkerSuspendedDebugEvent;
 import prompto.debug.event.TerminatedDebugEvent;
 import prompto.utils.Logger;
 
@@ -35,7 +35,7 @@ public abstract class DebugEventAdapterBase implements IDebugEventAdapter {
 	
 	@Override
 	public void handleSuspendedEvent(IWorker worker, SuspendReason reason) {
-		send(new SuspendedDebugEvent(worker, reason));
+		send(new WorkerSuspendedDebugEvent(worker, reason));
 	}
 
 	@Override

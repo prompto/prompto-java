@@ -325,7 +325,7 @@ public class ProcessDebugger implements IDebugger {
 			this.threadId = thread.getId();
 			this.workerId = String.valueOf(threadId);
 			this.name = thread.getName();
-			this.state = State.valueOf(thread.getState());
+			this.workerState = WorkerState.valueOf(thread.getState());
 		}
 		
 		@Override
