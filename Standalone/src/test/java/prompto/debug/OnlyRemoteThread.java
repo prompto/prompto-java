@@ -13,8 +13,8 @@ public class OnlyRemoteThread implements IWorker {
 	}
 	
 	@Override
-	public State getState() {
-		return State.RUNNING;
+	public WorkerState getWorkerState() {
+		return WorkerState.WORKING;
 	}
 		
 }
