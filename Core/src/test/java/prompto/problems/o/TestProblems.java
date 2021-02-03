@@ -57,6 +57,11 @@ public class TestProblems extends BaseOParserTest {
 	}
 
 	@Test
+	public void testUnknownMemberMethod() throws Exception {
+		checkProblems("problems/unknownMemberMethod.poc");
+	}
+
+	@Test
 	public void testUnknownMethod() throws Exception {
 		checkProblems("problems/unknownMethod.poc");
 	}

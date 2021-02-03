@@ -85,6 +85,10 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	public ArgumentList getArguments() {
 		return arguments;
 	}
+	
+	public String getName() {
+		return selector.getName();
+	}
 
 	@Override
 	public void toDialect(CodeWriter writer) {
@@ -435,7 +439,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		MethodFinder finder = new MethodFinder(transpiler.getContext(), this);
 		Set<IMethodDeclaration> candidates = finder.findCandidates(false);
 		if(candidates.size()==0) {
-			transpiler.getContext().getProblemListener().reportUnknownMethod(getSelector().getId(), this.toString());
+			transpiler.getContext().getProblemListener().reportUnknownMethod(getSelector().getId(), this.getName());
 		} else {
 		    Set<IMethodDeclaration> compatibles = finder.filterCompatible(candidates, false, true, spec -> spec!=Specificity.INCOMPATIBLE);
 		    if(compatibles.size()==1 && compatibles.iterator().next() instanceof BuiltInMethodDeclaration) {
@@ -494,12 +498,12 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		MethodFinder finder = new MethodFinder(transpiler.getContext(), this);
 		Set<IMethodDeclaration> candidates = finder.findCandidates(false);
 		if(candidates.size()==0) {
-			transpiler.getContext().getProblemListener().reportUnknownMethod(getSelector().getId(), this.toString());
+			transpiler.getContext().getProblemListener().reportUnknownMethod(getSelector().getId(), this.getName());
 			return false;
 		}
 	    Set<IMethodDeclaration> compatible = finder.filterCompatible(candidates, false, true, spec -> spec!=Specificity.INCOMPATIBLE);
 	    if(compatible==null || compatible.isEmpty())
-	    	transpiler.getContext().getProblemListener().reportUnknownMethod(this, this.toString());
+	    	transpiler.getContext().getProblemListener().reportUnknownMethod(getSelector().getId(), this.getName());
 	    else if (compatible.size() == 1)
 	        transpileSingle(transpiler, compatible.iterator().next(), false);
 	    else
