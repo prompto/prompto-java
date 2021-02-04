@@ -1,5 +1,7 @@
 package prompto.grammar;
 
+import java.util.Objects;
+
 import prompto.parser.Section;
 
 public class Identifier extends Section {
@@ -21,7 +23,11 @@ public class Identifier extends Section {
 	}
 	
 	@Override
-	public boolean equals(Object obj) {
-		return obj instanceof Identifier && value.equals(((Identifier)obj).value);
+	public boolean equals(Object other) {
+		return other== this || (other instanceof Identifier && ((Identifier)other).equals(this));
+	}
+	
+	public boolean equals(Identifier other) {
+		return other==this || (other!=null && Objects.equals(value, other.value));
 	}
 }

@@ -103,17 +103,12 @@ public class Section implements ISection {
 	}
 
 	@Override
-	public int hashCode() {
-		return Objects.hash(breakpoint, dialect, end, path, start);
-	}
-
-	@Override
 	public boolean equals(Object other) {
-		return this == other || (other instanceof Section && ((Section)other).equals(this));
+		return this == other || (other!=null && other.getClass()==Section.class && ((Section)other).equals(this));
 	}
 	
 	public boolean equals(Section other) {
-		return breakpoint == other.breakpoint && dialect == other.dialect && Objects.equals(end, other.end) && Objects.equals(path, other.path) && Objects.equals(start, other.start);
+		return other!=null && other.getClass()==Section.class && breakpoint == other.breakpoint && dialect == other.dialect && Objects.equals(end, other.end) && Objects.equals(path, other.path) && Objects.equals(start, other.start);
 	}
 	
 	
