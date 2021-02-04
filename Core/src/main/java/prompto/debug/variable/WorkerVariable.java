@@ -1,5 +1,7 @@
-package prompto.debug;
+package prompto.debug.variable;
 
+import prompto.debug.value.IValue;
+import prompto.debug.value.WorkerValue;
 import prompto.grammar.INamed;
 import prompto.runtime.Context;
 

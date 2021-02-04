@@ -35,4 +35,10 @@ public class ConnectedDebugEvent implements IDebugEvent {
 	public void execute(IDebugEventListener listener) {
 		listener.handleConnectedEvent(this);
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		return other==this || other instanceof ConnectedDebugEvent;
+	}
+
 }

@@ -1,9 +1,11 @@
 package prompto.debug.event;
 
+import java.util.Objects;
+
 import prompto.debug.IDebugEventListener;
-import prompto.debug.IWorker;
 import prompto.debug.SuspendReason;
 import prompto.debug.ProcessDebugger.DebuggedWorker;
+import prompto.debug.worker.IWorker;
 
 public class WorkerSuspendedDebugEvent extends WorkerDebugEvent {
 	
@@ -32,4 +34,20 @@ public class WorkerSuspendedDebugEvent extends WorkerDebugEvent {
 		IWorker worker = DebuggedWorker.parse(workerId);
 		listener.handleSuspendedEvent(worker, suspendReason);
 	}
+	
+	public WorkerSuspendedDebugEvent withSuspendReason(SuspendReason reason) {
+		this.suspendReason = reason;
+		return this;
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		return other==this || (other instanceof WorkerSuspendedDebugEvent && ((WorkerSuspendedDebugEvent)other).equals(this));
+	}
+
+	public boolean equals(WorkerSuspendedDebugEvent other) {
+		return Objects.equals(suspendReason, other.suspendReason) && super.equals(other);
+	}
+
+
 }

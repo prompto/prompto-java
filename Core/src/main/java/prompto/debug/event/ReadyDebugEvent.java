@@ -8,4 +8,10 @@ public class ReadyDebugEvent implements IDebugEvent {
 	public void execute(IDebugEventListener listener) {
 		listener.handleReadyEvent();
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		return other==this || other instanceof ReadyDebugEvent;
+	}
+
 }

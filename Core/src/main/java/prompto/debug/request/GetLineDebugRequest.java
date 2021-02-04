@@ -1,9 +1,9 @@
 package prompto.debug.request;
 
 import prompto.debug.IDebugger;
-import prompto.debug.IWorker;
 import prompto.debug.ProcessDebugger.DebuggedWorker;
 import prompto.debug.response.GetLineDebugResponse;
+import prompto.debug.worker.IWorker;
 
 public class GetLineDebugRequest extends WorkerRequest {
 
@@ -24,4 +24,12 @@ public class GetLineDebugRequest extends WorkerRequest {
 		return new GetLineDebugResponse(lineInFile, lineInMethod);
 	}
 	
+	@Override
+	public boolean equals(Object other) {
+		return other==this || (other instanceof GetLineDebugRequest && ((GetLineDebugRequest)other).equals(this));
+	}
+
+	public boolean equals(GetLineDebugRequest other) {
+		return super.equals(other);
+	}
 }

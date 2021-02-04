@@ -11,6 +11,9 @@ import org.junit.Before;
 import org.junit.experimental.categories.Category;
 
 import prompto.debug.event.ConnectedDebugEvent;
+import prompto.debug.java.JavaDebugEventAdapterFactory;
+import prompto.debug.java.JavaDebugRequestListenerFactory;
+import prompto.debug.worker.IWorker;
 import prompto.store.NullStoreFactory;
 import prompto.utils.IOUtils;
 import prompto.utils.ManualTests;

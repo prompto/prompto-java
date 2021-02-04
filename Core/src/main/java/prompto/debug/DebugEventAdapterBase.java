@@ -11,6 +11,7 @@ import prompto.debug.event.ReadyDebugEvent;
 import prompto.debug.event.WorkerResumedDebugEvent;
 import prompto.debug.event.WorkerStartedDebugEvent;
 import prompto.debug.event.WorkerSuspendedDebugEvent;
+import prompto.debug.worker.IWorker;
 import prompto.debug.event.TerminatedDebugEvent;
 import prompto.utils.Logger;
 

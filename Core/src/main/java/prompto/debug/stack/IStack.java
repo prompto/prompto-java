@@ -1,4 +1,4 @@
-package prompto.debug;
+package prompto.debug.stack;
 
 import java.util.Collection;
 

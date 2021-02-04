@@ -1,5 +1,8 @@
-package prompto.debug;
+package prompto.debug.value;
 
+import java.util.Objects;
+
+@SuppressWarnings("unchecked")
 public abstract class ValueBase implements IValue {
 
 	String typeName;
@@ -31,5 +34,19 @@ public abstract class ValueBase implements IValue {
 		return valueString;
 	}
 	
+	public <T extends ValueBase> T withTypeName(String typeName) {
+		this.typeName = typeName;
+		return (T)this;
+	}
+	
+	public <T extends ValueBase> T withValueString(String valueString) {
+		this.valueString = valueString;
+		return (T)this;
+	}
+
+	public boolean equals(ValueBase other) {
+		return Objects.equals(typeName, other.typeName) && Objects.equals(valueString, other.valueString);
+	}
+
 
 }

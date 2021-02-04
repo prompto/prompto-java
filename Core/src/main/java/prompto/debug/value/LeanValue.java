@@ -1,4 +1,4 @@
-package prompto.debug;
+package prompto.debug.value;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -19,5 +19,15 @@ public class LeanValue extends ValueBase {
 	public JsonNode getValueData() {
 		return JsonNodeFactory.instance.nullNode();
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		return this == other || (other instanceof LeanValue && ((LeanValue)other).equals(this));
+	}
+	
+	public boolean equals(LeanValue other) {
+		return super.equals(other);
+	}
+
 
 }

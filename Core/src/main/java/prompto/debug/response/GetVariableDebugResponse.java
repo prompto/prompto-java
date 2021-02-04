@@ -1,7 +1,9 @@
 package prompto.debug.response;
 
-import prompto.debug.FatVariable;
-import prompto.debug.IVariable;
+import java.util.Objects;
+
+import prompto.debug.variable.FatVariable;
+import prompto.debug.variable.IVariable;
 
 public class GetVariableDebugResponse implements IDebugResponse {
 
@@ -21,5 +23,15 @@ public class GetVariableDebugResponse implements IDebugResponse {
 	public void setVariable(FatVariable variable) {
 		this.variable = variable;
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		return this == other || (other instanceof GetVariableDebugResponse && ((GetVariableDebugResponse)other).equals(this));
+	}
+	
+	public boolean equals(GetVariableDebugResponse other) {
+		return Objects.equals(variable, other.variable);
+	}
+
 
 }

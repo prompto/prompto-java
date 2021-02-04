@@ -6,6 +6,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import prompto.debug.stack.IStack;
+import prompto.debug.worker.IWorker;
 import prompto.declaration.ConcreteMethodDeclaration;
 import prompto.grammar.Identifier;
 import prompto.parser.ISection;

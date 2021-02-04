@@ -1,10 +1,10 @@
 package prompto.debug.request;
 
 import prompto.debug.IDebugger;
-import prompto.debug.IStack;
-import prompto.debug.IWorker;
 import prompto.debug.ProcessDebugger.DebuggedWorker;
 import prompto.debug.response.GetWorkerStackDebugResponse;
+import prompto.debug.stack.IStack;
+import prompto.debug.worker.IWorker;
 
 public class GetWorkerStackDebugRequest extends WorkerRequest {
 
@@ -23,4 +23,13 @@ public class GetWorkerStackDebugRequest extends WorkerRequest {
 		return new GetWorkerStackDebugResponse(stack);
 	}
 	
+	@Override
+	public boolean equals(Object other) {
+		return other==this || (other instanceof GetWorkerStackDebugRequest && ((GetWorkerStackDebugRequest)other).equals(this));
+	}
+
+	public boolean equals(GetWorkerStackDebugRequest other) {
+		return super.equals(other);
+	}
+
 }

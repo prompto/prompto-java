@@ -1,7 +1,9 @@
 package prompto.debug.response;
 
-import prompto.debug.IStack;
-import prompto.debug.LeanStack;
+import java.util.Objects;
+
+import prompto.debug.stack.IStack;
+import prompto.debug.stack.LeanStack;
 
 public class GetWorkerStackDebugResponse implements IDebugResponse {
 
@@ -22,5 +24,15 @@ public class GetWorkerStackDebugResponse implements IDebugResponse {
 	public void setStack(LeanStack stack) {
 		this.stack = stack;
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		return this == other || (other instanceof GetWorkerStackDebugResponse && ((GetWorkerStackDebugResponse)other).equals(this));
+	}
+	
+	public boolean equals(GetWorkerStackDebugResponse other) {
+		return Objects.equals(stack, other.stack);
+	}
+
 
 }

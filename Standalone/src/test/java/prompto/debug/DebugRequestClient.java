@@ -25,6 +25,12 @@ import prompto.debug.response.GetVariableDebugResponse;
 import prompto.debug.response.GetVariablesDebugResponse;
 import prompto.debug.response.IDebugResponse;
 import prompto.debug.response.IsSteppingDebugResponse;
+import prompto.debug.stack.ClientStack;
+import prompto.debug.stack.IStack;
+import prompto.debug.stack.IStackFrame;
+import prompto.debug.stack.LeanStack;
+import prompto.debug.variable.IVariable;
+import prompto.debug.worker.IWorker;
 import prompto.parser.ISection;
 
 /* a client which is able to send debug requests (such as step, get stack frames...) to a debug request server */

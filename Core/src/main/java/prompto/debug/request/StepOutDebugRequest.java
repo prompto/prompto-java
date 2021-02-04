@@ -1,9 +1,9 @@
 package prompto.debug.request;
 
 import prompto.debug.IDebugger;
-import prompto.debug.IWorker;
 import prompto.debug.ProcessDebugger.DebuggedWorker;
 import prompto.debug.response.VoidDebugResponse;
+import prompto.debug.worker.IWorker;
 
 public class StepOutDebugRequest extends WorkerRequest {
 
@@ -22,4 +22,13 @@ public class StepOutDebugRequest extends WorkerRequest {
 		return new VoidDebugResponse();
 	}
 	
+	@Override
+	public boolean equals(Object other) {
+		return other==this || (other instanceof StepOutDebugRequest && ((StepOutDebugRequest)other).equals(this));
+	}
+
+	public boolean equals(StepOutDebugRequest other) {
+		return super.equals(other);
+	}
+
 }

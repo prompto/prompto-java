@@ -1,6 +1,8 @@
 package prompto.debug.request;
 
-import prompto.debug.IWorker;
+import java.util.Objects;
+
+import prompto.debug.worker.IWorker;
 
 public abstract class WorkerRequest implements IDebugRequest {
 	
@@ -21,5 +23,14 @@ public abstract class WorkerRequest implements IDebugRequest {
 		this.workerId = workerId;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public <T extends WorkerRequest> T withWorkerId(String workerId) {
+		this.workerId = workerId;
+		return (T)this;
+	}
 	
+	public boolean equals(WorkerRequest other) {
+		return Objects.equals(workerId, other.workerId);
+	}
+
 }

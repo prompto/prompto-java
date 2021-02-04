@@ -1,4 +1,4 @@
-package prompto.debug;
+package prompto.debug.variable;
 
 import java.util.ArrayList;
 

@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.Token;
 
 
 public class Location implements ILocation {
+
 	int tokenIndex;
 	int line;
 	int column;
@@ -75,4 +76,15 @@ public class Location implements ILocation {
 		return this.line>other.getLine()
 				|| (this.line==other.getLine() && this.column>=other.getColumn());
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		return this==other || (other instanceof Location && ((Location)other).equals(this));
+	}
+	
+	public boolean equals(Location other) {
+		return column == other.column && line == other.line && tokenIndex == other.tokenIndex;
+	}
+
+
 }

@@ -1,6 +1,8 @@
 package prompto.debug.event;
 
-import prompto.debug.IWorker;
+import java.util.Objects;
+
+import prompto.debug.worker.IWorker;
 
 public abstract class WorkerDebugEvent implements IDebugEvent {
 
@@ -21,4 +23,14 @@ public abstract class WorkerDebugEvent implements IDebugEvent {
 		return workerId;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public <T extends WorkerDebugEvent> T withWorkerId(String workerId) {
+		this.workerId = workerId;
+		return (T)this;
+	}
+
+	public boolean equals(WorkerDebugEvent other) {
+		return Objects.equals(workerId, other.workerId);
+	}
+
 }

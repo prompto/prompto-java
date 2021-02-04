@@ -1,8 +1,10 @@
-package prompto.debug;
+package prompto.debug.stack;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import prompto.debug.variable.IVariable;
+import prompto.debug.variable.WorkerVariable;
 import prompto.declaration.ConcreteMethodDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.NativeMethodDeclaration;

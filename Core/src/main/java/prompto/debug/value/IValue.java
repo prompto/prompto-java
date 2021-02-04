@@ -1,4 +1,4 @@
-package prompto.debug;
+package prompto.debug.value;
 
 import com.fasterxml.jackson.databind.JsonNode;
 

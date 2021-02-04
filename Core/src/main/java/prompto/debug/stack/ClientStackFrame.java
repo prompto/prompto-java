@@ -1,6 +1,10 @@
-package prompto.debug;
+package prompto.debug.stack;
 
 import java.util.Collection;
+
+import prompto.debug.IDebugger;
+import prompto.debug.variable.IVariable;
+import prompto.debug.worker.IWorker;
 
 public class ClientStackFrame extends LeanStackFrame {
 

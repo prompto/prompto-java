@@ -1,7 +1,10 @@
-package prompto.debug;
+package prompto.debug.stack;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
+
+import prompto.debug.IDebugger;
+import prompto.debug.worker.IWorker;
 
 @SuppressWarnings("serial")
 public class ClientStack extends ArrayList<ClientStackFrame> implements IStack<ClientStackFrame> {

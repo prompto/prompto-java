@@ -1,9 +1,11 @@
 package prompto.debug.event;
 
+import java.util.Objects;
+
 import prompto.debug.IDebugEventListener;
-import prompto.debug.IWorker;
 import prompto.debug.ProcessDebugger.DebuggedWorker;
-import prompto.debug.WorkerState;
+import prompto.debug.worker.IWorker;
+import prompto.debug.worker.WorkerState;
 
 public class WorkerStartedDebugEvent extends WorkerDebugEvent {
 	
@@ -41,4 +43,23 @@ public class WorkerStartedDebugEvent extends WorkerDebugEvent {
 		listener.handleStartedEvent(worker);
 	}
 	
+	public WorkerStartedDebugEvent withName(String name) {
+		this.name = name;
+		return this;
+	}
+
+	public WorkerStartedDebugEvent withWorkerState(WorkerState state) {
+		this.workerState = state;
+		return this;
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		return other==this || (other instanceof WorkerStartedDebugEvent && ((WorkerStartedDebugEvent)other).equals(this));
+	}
+
+	public boolean equals(WorkerStartedDebugEvent other) {
+		return Objects.equals(name, other.name) && Objects.equals(workerState, other.workerState) && super.equals(other);
+	}
+
 }

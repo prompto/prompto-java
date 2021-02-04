@@ -1,4 +1,4 @@
-package prompto.debug;
+package prompto.debug.stack;
 
 import java.util.ArrayList;
 
@@ -9,7 +9,7 @@ public class LeanStack extends ArrayList<LeanStackFrame> implements IStack<LeanS
 	}
 	
 	public LeanStack(IStack<?> stack) {
-		stack.forEach((f)->add(new LeanStackFrame(f)));
+		stack.forEach(f->add(new LeanStackFrame(f)));
 	}
 	
 }

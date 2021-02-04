@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import prompto.debug.ProcessDebugger.DebuggedWorker;
+import prompto.debug.worker.IWorker;
 import prompto.error.PromptoError;
 import prompto.runtime.Context;
 import prompto.runtime.Interpreter;

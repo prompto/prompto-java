@@ -1,6 +1,8 @@
-package prompto.debug;
+package prompto.debug.stack;
 
 import java.util.Collection;
+
+import prompto.debug.variable.IVariable;
 
 
 public interface IStackFrame {

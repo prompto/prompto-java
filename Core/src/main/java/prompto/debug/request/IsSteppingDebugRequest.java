@@ -1,9 +1,9 @@
 package prompto.debug.request;
 
 import prompto.debug.IDebugger;
-import prompto.debug.IWorker;
 import prompto.debug.ProcessDebugger.DebuggedWorker;
 import prompto.debug.response.IsSteppingDebugResponse;
+import prompto.debug.worker.IWorker;
 
 public class IsSteppingDebugRequest extends WorkerRequest {
 
@@ -22,4 +22,13 @@ public class IsSteppingDebugRequest extends WorkerRequest {
 		return new IsSteppingDebugResponse(stepping);
 	}
 	
+	@Override
+	public boolean equals(Object other) {
+		return other==this || (other instanceof IsSteppingDebugRequest && ((IsSteppingDebugRequest)other).equals(this));
+	}
+
+	public boolean equals(IsSteppingDebugRequest other) {
+		return super.equals(other);
+	}
+
 }

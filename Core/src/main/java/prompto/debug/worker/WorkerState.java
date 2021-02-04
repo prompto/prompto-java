@@ -1,4 +1,4 @@
-package prompto.debug;
+package prompto.debug.worker;
 
 import java.lang.Thread.State;
 

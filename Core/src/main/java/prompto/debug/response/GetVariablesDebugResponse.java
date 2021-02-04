@@ -1,11 +1,12 @@
 package prompto.debug.response;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import prompto.debug.IVariable;
-import prompto.debug.LeanVariable;
-import prompto.debug.LeanVariableList;
+import prompto.debug.variable.IVariable;
+import prompto.debug.variable.LeanVariable;
+import prompto.debug.variable.LeanVariableList;
 
 public class GetVariablesDebugResponse implements IDebugResponse {
 
@@ -29,5 +30,15 @@ public class GetVariablesDebugResponse implements IDebugResponse {
 	public void setVariables(LeanVariableList variables) {
 		this.variables = variables;
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		return this == other || (other instanceof GetVariablesDebugResponse && ((GetVariablesDebugResponse)other).equals(this));
+	}
+	
+	public boolean equals(GetVariablesDebugResponse other) {
+		return Objects.equals(variables, other.variables);
+	}
+
 
 }

@@ -1,9 +1,11 @@
-package prompto.debug;
+package prompto.debug.stack;
 
 import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import prompto.debug.variable.IVariable;
 
 /* designed to be serialized in JSON */
 public class LeanStackFrame implements IStackFrame {

@@ -6,6 +6,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import prompto.debug.stack.IStack;
+import prompto.debug.stack.IStackFrame;
+import prompto.debug.stack.LeanStack;
+import prompto.debug.variable.IVariable;
+import prompto.debug.worker.IWorker;
+import prompto.debug.worker.LeanWorker;
+import prompto.debug.worker.WorkerState;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.utils.Logger;

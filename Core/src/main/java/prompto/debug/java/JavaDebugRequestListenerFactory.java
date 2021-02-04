@@ -1,7 +1,10 @@
-package prompto.debug;
+package prompto.debug.java;
 
 import prompto.config.IConfigurationReader;
 import prompto.config.IDebugRequestListenerConfiguration;
+import prompto.debug.IDebugRequestListener;
+import prompto.debug.IDebugRequestListenerFactory;
+import prompto.debug.IDebugger;
 
 public class JavaDebugRequestListenerFactory implements IDebugRequestListenerFactory {
 

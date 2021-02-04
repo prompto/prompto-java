@@ -19,4 +19,12 @@ public class IsSteppingDebugResponse implements IDebugResponse {
 		this.stepping = stepping;
 	}
 
+	@Override
+	public boolean equals(Object other) {
+		return this == other || (other instanceof IsSteppingDebugResponse && ((IsSteppingDebugResponse)other).equals(this));
+	}
+	
+	public boolean equals(IsSteppingDebugResponse other) {
+		return stepping == other.stepping;
+	}
 }

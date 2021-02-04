@@ -1,4 +1,4 @@
-package prompto.debug;
+package prompto.debug.java;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -6,6 +6,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
+import prompto.debug.IDebugRequestListener;
+import prompto.debug.IDebugger;
+import prompto.debug.Serializer;
 import prompto.debug.event.ConnectedDebugEvent;
 import prompto.debug.request.IDebugRequest;
 import prompto.debug.response.IDebugResponse;

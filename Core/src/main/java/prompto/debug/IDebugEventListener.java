@@ -1,6 +1,7 @@
 package prompto.debug;
 
 import prompto.debug.event.ConnectedDebugEvent;
+import prompto.debug.worker.IWorker;
 
 /* listens to debugger events */ 
 public interface IDebugEventListener {

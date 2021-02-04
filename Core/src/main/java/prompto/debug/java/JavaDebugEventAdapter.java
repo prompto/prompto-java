@@ -1,9 +1,10 @@
-package prompto.debug;
+package prompto.debug.java;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import prompto.debug.DebugEventAdapterBase;
 import prompto.debug.ack.IAcknowledgement;
 import prompto.debug.event.IDebugEvent;
 import prompto.utils.Logger;

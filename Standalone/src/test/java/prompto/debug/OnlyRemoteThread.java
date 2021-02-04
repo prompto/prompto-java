@@ -1,5 +1,8 @@
 package prompto.debug;
 
+import prompto.debug.worker.IWorker;
+import prompto.debug.worker.WorkerState;
+
 public class OnlyRemoteThread implements IWorker {
 
 	@Override

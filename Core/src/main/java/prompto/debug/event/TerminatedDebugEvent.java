@@ -8,4 +8,10 @@ public class TerminatedDebugEvent implements IDebugEvent {
 	public void execute(IDebugEventListener listener) {
 		listener.handleTerminatedEvent();
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		return other==this || other instanceof TerminatedDebugEvent;
+	}
+
 }

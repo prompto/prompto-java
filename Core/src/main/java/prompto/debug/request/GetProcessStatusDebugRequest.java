@@ -15,4 +15,9 @@ public class GetProcessStatusDebugRequest implements IDebugRequest {
 		return new GetStatusDebugResponse(status);
 	}
 	
+	@Override
+	public boolean equals(Object other) {
+		return other==this || other instanceof GetProcessStatusDebugRequest;
+	}
+
 }

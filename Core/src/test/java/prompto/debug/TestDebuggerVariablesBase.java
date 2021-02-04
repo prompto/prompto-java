@@ -12,6 +12,11 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import prompto.debug.stack.IStack;
+import prompto.debug.stack.IStackFrame;
+import prompto.debug.value.IValue;
+import prompto.debug.variable.IVariable;
+
 
 public abstract class TestDebuggerVariablesBase extends TestDebuggerBase {
 

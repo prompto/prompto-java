@@ -1,6 +1,8 @@
-package prompto.debug;
+package prompto.debug.variable;
 
+import java.util.Objects;
 
+@SuppressWarnings("unchecked")
 public abstract class VariableBase implements IVariable {
 
 	String name;
@@ -37,4 +39,20 @@ public abstract class VariableBase implements IVariable {
 		return typeName;
 	}
 	
+	public <T extends VariableBase> T withName(String name) {
+		this.name = name;
+		return (T)this;
+	}
+	
+	public <T extends VariableBase> T withTypeName(String typeName) {
+		this.typeName = typeName;
+		return (T)this;
+	}
+	
+	public boolean equals(VariableBase other) {
+		return Objects.equals(name, other.name) && Objects.equals(typeName, other.typeName);
+	}
+
+	
+
 }

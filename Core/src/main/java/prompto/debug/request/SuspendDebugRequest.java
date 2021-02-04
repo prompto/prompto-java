@@ -1,9 +1,9 @@
 package prompto.debug.request;
 
 import prompto.debug.IDebugger;
-import prompto.debug.IWorker;
 import prompto.debug.ProcessDebugger.DebuggedWorker;
 import prompto.debug.response.VoidDebugResponse;
+import prompto.debug.worker.IWorker;
 
 public class SuspendDebugRequest extends WorkerRequest {
 
@@ -22,4 +22,13 @@ public class SuspendDebugRequest extends WorkerRequest {
 		return new VoidDebugResponse();
 	}
 	
+	@Override
+	public boolean equals(Object other) {
+		return other==this || (other instanceof SuspendDebugRequest && ((SuspendDebugRequest)other).equals(this));
+	}
+
+	public boolean equals(SuspendDebugRequest other) {
+		return super.equals(other);
+	}
+
 }

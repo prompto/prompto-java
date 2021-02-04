@@ -29,4 +29,14 @@ public class GetLineDebugResponse implements IDebugResponse {
 		this.lineInMethod = lineInMethod;
 	}
 
+	@Override
+	public boolean equals(Object other) {
+		return this == other || (other instanceof GetLineDebugResponse && ((GetLineDebugResponse)other).equals(this));
+	}
+	
+	public boolean equals(GetLineDebugResponse other) {
+		return lineInFile == other.lineInFile && lineInMethod == other.lineInMethod;
+	}
+	
+
 }

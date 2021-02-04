@@ -1,4 +1,6 @@
-package prompto.debug;
+package prompto.debug.variable;
+
+import prompto.debug.value.IValue;
 
 public interface IVariable {
 

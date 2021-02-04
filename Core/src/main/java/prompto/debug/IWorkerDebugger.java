@@ -2,6 +2,10 @@ package prompto.debug;
 
 import java.util.Collection;
 
+import prompto.debug.stack.IStack;
+import prompto.debug.stack.IStackFrame;
+import prompto.debug.variable.IVariable;
+
 public interface IWorkerDebugger {
 
 	Status getStatus();

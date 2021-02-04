@@ -1,9 +1,11 @@
-package prompto.debug;
+package prompto.debug.java;
 
 import java.util.function.Supplier;
 
 import prompto.config.IConfigurationReader;
 import prompto.config.IDebugEventAdapterConfiguration;
+import prompto.debug.IDebugEventAdapter;
+import prompto.debug.IDebugEventAdapterFactory;
 
 public class JavaDebugEventAdapterFactory implements IDebugEventAdapterFactory {
 

@@ -7,10 +7,10 @@ import org.antlr.v4.runtime.Token;
 public class Section implements ISection {
 	
 	String path;
-	Location start;
-	Location end;
-	Dialect dialect;
-	boolean breakpoint;
+	private Location start;
+	private Location end;
+	private Dialect dialect;
+	private boolean breakpoint;
 	
 	public Section() {
 	}
@@ -21,27 +21,27 @@ public class Section implements ISection {
 
 	public Section(String path, Location start, Location end, Dialect dialect, boolean breakpoint) {
 		this.path = path;
-		this.start = start;
-		this.end = end;
-		this.dialect = dialect;
-		this.breakpoint = breakpoint;
+		this.setStart(start);
+		this.setEnd(end);
+		this.setDialect(dialect);
+		this.setBreakpoint(breakpoint);
 	}
 	
 	
 	public void copySectionFrom(ISection section) {
 		this.path = section.getPath();
-		this.start = section.getStart()==null ? null : new Location(section.getStart());
-		this.end = section.getEnd()==null ? null : new Location(section.getEnd());
-		this.dialect = section.getDialect();
-		this.breakpoint = section.isBreakpoint();
+		this.setStart(section.getStart()==null ? null : new Location(section.getStart()));
+		this.setEnd(section.getEnd()==null ? null : new Location(section.getEnd()));
+		this.setDialect(section.getDialect());
+		this.setBreakpoint(section.isBreakpoint());
 	}
 
 	
 	public void setSectionFrom(String path, Token start, Token end, Dialect dialect) {
 		this.path = path;
-		this.start = new Location(start);
-		this.end = new Location(end, true);
-		this.dialect = dialect;
+		this.setStart(new Location(start));
+		this.setEnd(new Location(end, true));
+		this.setDialect(dialect);
 	}
 	
 	public void setPath(String path) {
@@ -70,7 +70,7 @@ public class Section implements ISection {
 	
 	@Override
 	public void setAsBreakpoint(boolean set) {
-		breakpoint = set;
+		setBreakpoint(set);
 	}
 
 	@Override
@@ -80,10 +80,42 @@ public class Section implements ISection {
 	
 	@Override
 	public boolean isOrContains(ISection section) {
-		return this.dialect==section.getDialect()
+		return this.getDialect()==section.getDialect()
 				&& Objects.equals(this.path, section.getPath())
-				&& this.start.isNotAfter(section.getStart())
-				&& this.end.isNotBefore(section.getEnd());
+				&& this.getStart().isNotAfter(section.getStart())
+				&& this.getEnd().isNotBefore(section.getEnd());
 	}
+
+	public void setStart(Location start) {
+		this.start = start;
+	}
+
+	public void setEnd(Location end) {
+		this.end = end;
+	}
+
+	public void setDialect(Dialect dialect) {
+		this.dialect = dialect;
+	}
+
+	public void setBreakpoint(boolean breakpoint) {
+		this.breakpoint = breakpoint;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(breakpoint, dialect, end, path, start);
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		return this == other || (other instanceof Section && ((Section)other).equals(this));
+	}
+	
+	public boolean equals(Section other) {
+		return breakpoint == other.breakpoint && dialect == other.dialect && Objects.equals(end, other.end) && Objects.equals(path, other.path) && Objects.equals(start, other.start);
+	}
+	
+	
 	
 }
