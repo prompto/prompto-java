@@ -101,16 +101,17 @@ public class Section implements ISection {
 	public void setBreakpoint(boolean breakpoint) {
 		this.breakpoint = breakpoint;
 	}
+	
+	// do NOT provide Section.equals coz it breaks a lot of stuff, due to missing hashCode/equals in descentants
+	// TODO use composition instead of inheritance
 
-	@Override
-	public boolean equals(Object other) {
-		return this == other || (other!=null && other.getClass()==Section.class && ((Section)other).equals(this));
+	public static boolean equalSections(Section s1, Section s2) {
+		if (s1==s2)
+			return true;
+		if(s1==null || s2==null)
+			return false;
+		return s1.breakpoint == s2.breakpoint && s1.dialect == s2.dialect && Objects.equals(s1.end, s2.end) && Objects.equals(s1.path, s2.path) && Objects.equals(s1.start, s2.start);
 	}
-	
-	public boolean equals(Section other) {
-		return other!=null && other.getClass()==Section.class && breakpoint == other.breakpoint && dialect == other.dialect && Objects.equals(end, other.end) && Objects.equals(path, other.path) && Objects.equals(start, other.start);
-	}
-	
 	
 	
 }

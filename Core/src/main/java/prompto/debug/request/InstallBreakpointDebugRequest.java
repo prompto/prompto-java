@@ -1,7 +1,5 @@
 package prompto.debug.request;
 
-import java.util.Objects;
-
 import prompto.debug.IDebugger;
 import prompto.debug.response.IDebugResponse;
 import prompto.debug.response.VoidDebugResponse;
@@ -44,7 +42,7 @@ public class InstallBreakpointDebugRequest implements IDebugRequest {
 	}
 
 	public boolean equals(InstallBreakpointDebugRequest other) {
-		return Objects.equals(section, other.section);
+		return Section.equalSections(section, other.section);
 	}
 
 	

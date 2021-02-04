@@ -83,8 +83,8 @@ public class Location implements ILocation {
 	}
 	
 	public boolean equals(Location other) {
-		return column == other.column && line == other.line && tokenIndex == other.tokenIndex;
+		return other != null && column == other.column && line == other.line && tokenIndex == other.tokenIndex;
 	}
-
+	
 
 }
