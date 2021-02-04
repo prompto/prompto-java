@@ -4,12 +4,12 @@ import prompto.debug.IDebugEventListener;
 import prompto.debug.IWorker;
 import prompto.debug.ProcessDebugger.DebuggedWorker;
 
-public class CompletedDebugEvent extends WorkerDebugEvent {
+public class WorkerCompletedDebugEvent extends WorkerDebugEvent {
 	
-	public CompletedDebugEvent() {
+	public WorkerCompletedDebugEvent() {
 	}
 	
-	public CompletedDebugEvent(IWorker worker) {
+	public WorkerCompletedDebugEvent(IWorker worker) {
 		super(worker);
 	}
 	

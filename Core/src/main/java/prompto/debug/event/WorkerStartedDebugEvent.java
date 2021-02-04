@@ -5,18 +5,18 @@ import prompto.debug.IWorker;
 import prompto.debug.ProcessDebugger.DebuggedWorker;
 import prompto.debug.WorkerState;
 
-public class StartedDebugEvent extends WorkerDebugEvent {
+public class WorkerStartedDebugEvent extends WorkerDebugEvent {
 	
 	String name;
-	WorkerState state;
+	WorkerState workerState;
 	
-	public StartedDebugEvent() {
+	public WorkerStartedDebugEvent() {
 	}
 	
-	public StartedDebugEvent(IWorker worker) {
+	public WorkerStartedDebugEvent(IWorker worker) {
 		super(worker);
 		this.name = worker.getName();
-		this.state = worker.getWorkerState();
+		this.workerState = worker.getWorkerState();
 	}
 	
 	public void setName(String name) {
@@ -27,12 +27,12 @@ public class StartedDebugEvent extends WorkerDebugEvent {
 		return name;
 	}
 	
-	public void setState(WorkerState state) {
-		this.state = state;
+	public void setWorkerState(WorkerState state) {
+		this.workerState = state;
 	}
 	
-	public WorkerState getState() {
-		return state;
+	public WorkerState getWorkerState() {
+		return workerState;
 	}
 	
 	@Override

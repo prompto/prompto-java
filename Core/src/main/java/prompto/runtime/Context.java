@@ -22,7 +22,7 @@ import prompto.code.Resource;
 import prompto.code.TextResource;
 import prompto.debug.ProcessDebugger.DebuggedWorker;
 import prompto.debug.WorkerDebugger;
-import prompto.debug.event.CompletedDebugEvent;
+import prompto.debug.event.WorkerCompletedDebugEvent;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
@@ -913,7 +913,7 @@ public class Context implements IContext {
 	
 	public void notifyCompleted() {
 		if(debugger!=null) {
-			CompletedDebugEvent completed = new CompletedDebugEvent(DebuggedWorker.wrap(Thread.currentThread()));
+			WorkerCompletedDebugEvent completed = new WorkerCompletedDebugEvent(DebuggedWorker.wrap(Thread.currentThread()));
 			debugger.notifyCompleted(completed);
 		}
 	}
