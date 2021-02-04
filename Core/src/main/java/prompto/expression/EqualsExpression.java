@@ -39,8 +39,8 @@ import prompto.intrinsic.PromptoSet;
 import prompto.intrinsic.PromptoTime;
 import prompto.intrinsic.PromptoVersion;
 import prompto.literal.NullLiteral;
+import prompto.parser.CodeSection;
 import prompto.parser.Dialect;
-import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.LinkedValue;
 import prompto.runtime.LinkedVariable;
@@ -77,7 +77,7 @@ import prompto.value.IValue;
 import prompto.value.NullValue;
 import prompto.value.TypeValue;
 
-public class EqualsExpression extends Section implements IPredicateExpression, IAssertion {
+public class EqualsExpression extends CodeSection implements IPredicateExpression, IAssertion {
 
 	IExpression left;
 	EqOp operator;

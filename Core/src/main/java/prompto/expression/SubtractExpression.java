@@ -16,7 +16,7 @@ import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoPeriod;
 import prompto.intrinsic.PromptoSet;
 import prompto.intrinsic.PromptoTime;
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.DateTimeType;
@@ -31,7 +31,7 @@ import prompto.type.TimeType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
-public class SubtractExpression extends Section implements IExpression {
+public class SubtractExpression extends CodeSection implements IExpression {
 
 	IExpression left;
 	IExpression right;

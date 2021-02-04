@@ -11,9 +11,9 @@ import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
+import prompto.parser.CodeSection;
 import prompto.parser.Dialect;
-import prompto.parser.ISection;
-import prompto.parser.Section;
+import prompto.parser.ICodeSection;
 import prompto.problem.IProblemListener;
 import prompto.problem.ProblemRaiser;
 import prompto.runtime.Context;
@@ -29,13 +29,13 @@ import prompto.utils.CodeWriter;
 import prompto.utils.StoreUtils;
 import prompto.value.IValue;
 
-public class UnresolvedIdentifier extends Section implements IPredicateExpression {
+public class UnresolvedIdentifier extends CodeSection implements IPredicateExpression {
 
 	Identifier id;
 	IExpression resolved;
 	
-	public UnresolvedIdentifier(Identifier name) {
-		this.id = name;
+	public UnresolvedIdentifier(Identifier id) {
+		this.id = id;
 	}
 	
 	public IExpression getResolved() {
@@ -68,7 +68,7 @@ public class UnresolvedIdentifier extends Section implements IPredicateExpressio
 	}
 	
 	@Override
-	public AttributeDeclaration checkAttribute(Context context, ISection section) {
+	public AttributeDeclaration checkAttribute(Context context, ICodeSection section) {
 		AttributeDeclaration decl = context.findAttribute(id.toString());
 		if(decl==null)
 			context.getProblemListener().reportMissingAttribute(this, this.toString());
@@ -76,7 +76,7 @@ public class UnresolvedIdentifier extends Section implements IPredicateExpressio
 	}
 	
 	@Override
-	public AttributeInfo checkAttributeInfo(Context context, ISection section, IStore store) {
+	public AttributeInfo checkAttributeInfo(Context context, ICodeSection section, IStore store) {
 		return StoreUtils.getAttributeInfo(context, id.toString(), store);
 	}
 
@@ -167,8 +167,8 @@ public class UnresolvedIdentifier extends Section implements IPredicateExpressio
 			}
 			if(resolved==null)
 				context.getProblemListener().reportUnknownIdentifier(this, id.toString());
-			else if(resolved instanceof Section)
-				((Section)resolved).copySectionFrom(this);
+			else if(resolved instanceof ICodeSection)
+				((ICodeSection)resolved).setSectionFrom(this);
 		}
 		return resolved;
 	}
@@ -229,7 +229,7 @@ public class UnresolvedIdentifier extends Section implements IPredicateExpressio
 			return null;
 		try {
 			MethodCall method = new MethodCall(new MethodSelector(id));
-			method.copySectionFrom(this);
+			method.setSectionFrom(this);
 			method.check(context, updateSelectorParent);
 			return method;
 		} catch(SyntaxError e) {

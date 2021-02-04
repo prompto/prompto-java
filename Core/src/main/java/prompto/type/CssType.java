@@ -3,7 +3,7 @@ package prompto.type;
 import java.lang.reflect.Type;
 
 import prompto.expression.IExpression;
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
@@ -26,7 +26,7 @@ public class CssType extends NativeType {
 	}
 	
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse, ISection section) {
+	public IType checkAdd(Context context, IType other, boolean tryReverse, ICodeSection section) {
 		if(other instanceof CssType)
 			return this;
 		else
@@ -45,7 +45,7 @@ public class CssType extends NativeType {
 	}
 	
 	@Override
-	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ISection section) { 
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ICodeSection section) { 
 		transpiler.require("Any");
 	}
 

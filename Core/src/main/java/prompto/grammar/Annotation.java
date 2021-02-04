@@ -5,13 +5,13 @@ import java.util.Optional;
 import prompto.declaration.CategoryDeclaration;
 import prompto.literal.DocEntry;
 import prompto.literal.DocEntryList;
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 import prompto.processor.AnnotationProcessor;
 import prompto.runtime.Context;
 import prompto.utils.CodeWriter;
 import prompto.utils.Logger;
 
-public class Annotation extends Section {
+public class Annotation extends CodeSection {
 
 	static Logger logger = new Logger();
 	

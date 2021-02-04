@@ -328,12 +328,13 @@ public class OPromptoBuilder extends OParserBaseListener {
 		return getHiddenTokens(token, input::getHiddenTokensToLeft);
 	}
 
-	public void populateSection(ParserRuleContext node, Section section) {
-		Token first = findFirstValidToken(node.start.getTokenIndex());
-		Token last = findLastValidToken(node.stop.getTokenIndex());
-		section.setSectionFrom(path, first, last, Dialect.O);
+	public void populateSection(ParserRuleContext node, ICodeSection codeSection) {
+		if(codeSection.getSection()==null) {
+			Token first = findFirstValidToken(node.start.getTokenIndex());
+			Token last = findLastValidToken(node.stop.getTokenIndex());
+			codeSection.setSection(Section.from(path, first, last, Dialect.O));
+		}
 	}
-	
 	
 	private List<Annotation> readAnnotations(List<? extends ParseTree> contexts) {
 		List<Annotation> annotations = contexts.stream()
@@ -2227,7 +2228,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	public void exitMethod_call_expression(Method_call_expressionContext ctx) {
 		Identifier name = getNodeValue(ctx.name);
 		UnresolvedIdentifier caller = new UnresolvedIdentifier(name);
-		caller.copySectionFrom(name);
+		caller.setSectionFrom(name);
 		ArgumentList args = getNodeValue(ctx.args);
 		setNodeValue(ctx, new UnresolvedCall(caller, args));
 	}
@@ -3340,7 +3341,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 			return null;
 	}
 	
-	public void setNodeValue(ParserRuleContext node, Section value) {
+	public void setNodeValue(ParserRuleContext node, ICodeSection value) {
 		nodeValues.put(node, value);
 		populateSection(node, value);
 	}

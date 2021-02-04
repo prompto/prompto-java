@@ -18,7 +18,7 @@ import prompto.grammar.ParameterList;
 import prompto.grammar.Specificity;
 import prompto.param.IParameter;
 import prompto.parser.Dialect;
-import prompto.parser.ILocation;
+import prompto.parser.ICodeSection;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.statement.CommentStatement;
@@ -35,6 +35,16 @@ public class MethodDeclarationWrapper implements IMethodDeclaration {
 		this.wrapped = wrapped; 
 	}
 
+	@Override
+	public ISection getSection() {
+		return wrapped.getSection();
+	}
+
+	@Override
+	public void setSection(ISection section) {
+		wrapped.setSection(section);
+	}
+	
 	@Override
 	public boolean isReference() {
 		return wrapped.isReference();
@@ -131,37 +141,7 @@ public class MethodDeclarationWrapper implements IMethodDeclaration {
 	}
 
 	@Override
-	public String getPath() {
-		return wrapped.getPath();
-	}
-
-	@Override
-	public ILocation getStart() {
-		return wrapped.getStart();
-	}
-
-	@Override
-	public ILocation getEnd() {
-		return wrapped.getEnd();
-	}
-
-	@Override
-	public Dialect getDialect() {
-		return wrapped.getDialect();
-	}
-
-	@Override
-	public void setAsBreakpoint(boolean set) {
-		wrapped.setAsBreakpoint(set);
-	}
-
-	@Override
-	public boolean isBreakpoint() {
-		return wrapped.isBreakpoint();
-	}
-
-	@Override
-	public boolean isOrContains(ISection section) {
+	public boolean isOrContains(ICodeSection section) {
 		return wrapped.isOrContains(section);
 	}
 
@@ -279,5 +259,6 @@ public class MethodDeclarationWrapper implements IMethodDeclaration {
 	public void declare(Transpiler transpiler) {
 		wrapped.declare(transpiler);
 	}
+
 
 }

@@ -1,12 +1,11 @@
 package prompto.problem;
 
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 
 public class IllegalInitializeParametersProblem extends SyntaxProblemBase {
 
-	public IllegalInitializeParametersProblem(ISection section) {
+	public IllegalInitializeParametersProblem(ICodeSection section) {
 		super(section);
-		this.section = section;
 	}
 
 	@Override

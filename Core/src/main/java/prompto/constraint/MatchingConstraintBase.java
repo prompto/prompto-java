@@ -1,10 +1,10 @@
 package prompto.constraint;
 
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 import prompto.transpiler.ITranspilable;
 import prompto.transpiler.Transpiler;
 
-public abstract class MatchingConstraintBase extends Section implements IAttributeConstraint {
+public abstract class MatchingConstraintBase extends CodeSection implements IAttributeConstraint {
 
 	ITranspilable transpileFunction;
 

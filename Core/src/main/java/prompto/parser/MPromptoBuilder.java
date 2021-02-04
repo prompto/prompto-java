@@ -339,10 +339,12 @@ public class MPromptoBuilder extends MParserBaseListener {
 		return !(tree instanceof TerminalNode) || ((TerminalNode)tree).getSymbol().getType()!=MParser.INDENT;
 	}
 
-	public void populateSection(ParserRuleContext node, Section section) {
-		Token first = findFirstValidToken(node.start.getTokenIndex());
-		Token last = findLastValidToken(node.stop.getTokenIndex());
-		section.setSectionFrom(path, first, last, Dialect.M);
+	public void populateSection(ParserRuleContext node, ICodeSection codeSection) {
+		if(codeSection.getSection()==null) {
+			Token first = findFirstValidToken(node.start.getTokenIndex());
+			Token last = findLastValidToken(node.stop.getTokenIndex());
+			codeSection.setSection(Section.from(path, first, last, Dialect.M));
+		}
 	}
 	
 	private List<Annotation> readAnnotations(List<? extends ParseTree> contexts) {
@@ -2206,7 +2208,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitMethod_call_expression(Method_call_expressionContext ctx) {
 		Identifier name = getNodeValue(ctx.name);
 		UnresolvedIdentifier caller = new UnresolvedIdentifier(name);
-		caller.copySectionFrom(name);
+		caller.setSectionFrom(name);
 		ArgumentList args = getNodeValue(ctx.args);
 		setNodeValue(ctx, new UnresolvedCall(caller, args));
 	}
@@ -3325,7 +3327,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 			return null;
 	}
 	
-	public void setNodeValue(ParserRuleContext node, Section value) {
+	public void setNodeValue(ParserRuleContext node, ICodeSection value) {
 		nodeValues.put(node, value);
 		populateSection(node, value);
 	}

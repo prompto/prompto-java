@@ -15,8 +15,8 @@ import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoRoot;
+import prompto.parser.CodeSection;
 import prompto.parser.Dialect;
-import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.statement.UnresolvedCall;
 import prompto.store.AttributeInfo;
@@ -34,7 +34,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 import prompto.value.NullValue;
 
-public class FetchOneExpression extends Section implements IFetchExpression {
+public class FetchOneExpression extends CodeSection implements IFetchExpression {
 
 	protected CategoryType type;
 	protected IExpression predicate;

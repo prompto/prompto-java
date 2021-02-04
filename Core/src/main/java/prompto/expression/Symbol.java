@@ -7,15 +7,15 @@ import prompto.error.NotStorableError;
 import prompto.error.PromptoError;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
-import prompto.parser.ISection;
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.type.IType;
 import prompto.value.ISliceable;
 import prompto.value.IValue;
 
-public abstract class Symbol extends Section implements IExpression, INamed, IValue, ISection {
+public abstract class Symbol extends CodeSection implements IExpression, INamed, IValue, ICodeSection {
 
 	Identifier symbol;
 	IType type;

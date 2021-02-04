@@ -1,12 +1,12 @@
 package prompto.problem;
 
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 
 public class AmbiguousIdentifierError extends SyntaxProblemBase {
 
 	String name;
 	
-	public AmbiguousIdentifierError(ISection section, String name) {
+	public AmbiguousIdentifierError(ICodeSection section, String name) {
 		super(section);
 		this.name = name;
 	}

@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import prompto.declaration.CategoryDeclaration;
 import prompto.grammar.Identifier;
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 
 
@@ -16,7 +16,7 @@ public class TypeMap extends HashMap<Identifier, IType> {
 		put(type.getTypeNameId(), type);
 	}
 	
-	public IType inferType(Context context, ISection section) {
+	public IType inferType(Context context, ICodeSection section) {
 		IType inferred = null;
 		// first pass: get less specific type
 		for(IType current : values()) {

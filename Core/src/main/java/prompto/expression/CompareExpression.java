@@ -28,8 +28,8 @@ import prompto.intrinsic.PromptoDate;
 import prompto.intrinsic.PromptoDateTime;
 import prompto.intrinsic.PromptoTime;
 import prompto.intrinsic.PromptoVersion;
+import prompto.parser.CodeSection;
 import prompto.parser.Dialect;
-import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.store.AttributeInfo;
@@ -53,7 +53,7 @@ import prompto.value.BooleanValue;
 import prompto.value.IInstance;
 import prompto.value.IValue;
 
-public class CompareExpression extends Section implements IPredicateExpression, IAssertion {
+public class CompareExpression extends CodeSection implements IPredicateExpression, IAssertion {
 
 	IExpression left;
 	CmpOp operator;

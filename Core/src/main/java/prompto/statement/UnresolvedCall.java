@@ -21,7 +21,7 @@ import prompto.grammar.ArgumentList;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
-import prompto.parser.Section;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Context.MethodDeclarationMap;
@@ -160,8 +160,8 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 				resolved = resolveUnresolvedSelector(context, (UnresolvedSelector)caller);
 			else if(caller instanceof MemberSelector)
 				resolved = resolveMemberSelector(context, (MemberSelector)caller);
-			if(resolved instanceof Section)
-				((Section)resolved).copySectionFrom(this);
+			if(resolved instanceof ICodeSection)
+				((ICodeSection)resolved).setSectionFrom(this);
 		}
 		if(resolved==null)
 	    	context.getProblemListener().reportUnknownMethod(this, this.toString());
@@ -235,7 +235,9 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 	private IExpression resolveMemberSelector(Context context, MemberSelector caller) {
 		IExpression parent = caller.getParent();
 		Identifier id = caller.getId();
-		return new MethodCall(new MethodSelector(parent, id), arguments);
+		MethodSelector selector = new MethodSelector(parent, id);
+		selector.setSectionFrom(caller);
+		return new MethodCall(selector, arguments);
 	}
 	
 	@Override

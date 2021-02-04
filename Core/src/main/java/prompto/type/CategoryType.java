@@ -56,7 +56,7 @@ import prompto.instance.MemberInstance;
 import prompto.instance.VariableInstance;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoRoot;
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.runtime.MethodFinder;
@@ -103,7 +103,7 @@ public class CategoryType extends BaseType {
 		this.typeNameId = typeNameId;
 	}
 	
-	public CategoryType getSuperType(ISection section, Context context) {
+	public CategoryType getSuperType(ICodeSection section, Context context) {
 		IDeclaration decl = getDeclaration(context);
 		if(decl instanceof CategoryDeclaration) {
 			IdentifierList derived = ((CategoryDeclaration)decl).getDerivedFrom();
@@ -159,7 +159,7 @@ public class CategoryType extends BaseType {
 						context.getProblemListener().reportUnknownCategory(this, type.getTypeName());
 				} else if(decl instanceof MethodDeclarationMap) {
 					resolved = new MethodType(((MethodDeclarationMap)decl).getFirst());
-					((MethodType)resolved).copySectionFrom(this);
+					((MethodType)resolved).setSectionFrom(this);
 				} else {
 					IType found = decl.getType(context);
 					resolved = found.getClass()==type.getClass() ? type : found;
@@ -242,7 +242,7 @@ public class CategoryType extends BaseType {
 	}
 
 	@Override
-	public IType checkMultiply(Context context, IType other, boolean tryReverse, ISection section) {
+	public IType checkMultiply(Context context, IType other, boolean tryReverse, ICodeSection section) {
 		IType type = checkOperator(context, other, tryReverse, Operator.MULTIPLY, section);
 		if(type!=null)
 			return type;
@@ -251,7 +251,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public IType checkDivide(Context context, IType other, ISection section) {
+	public IType checkDivide(Context context, IType other, ICodeSection section) {
 		IType type = checkOperator(context, other, false, Operator.DIVIDE, section);
 		if(type!=null)
 			return type;
@@ -260,7 +260,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public IType checkIntDivide(Context context, IType other, ISection section) {
+	public IType checkIntDivide(Context context, IType other, ICodeSection section) {
 		IType type = checkOperator(context, other, false, Operator.IDIVIDE, section);
 		if(type!=null)
 			return type;
@@ -269,7 +269,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public IType checkModulo(Context context, IType other, ISection section) {
+	public IType checkModulo(Context context, IType other, ICodeSection section) {
 		IType type = checkOperator(context, other, false, Operator.MODULO, section);
 		if(type!=null)
 			return type;
@@ -278,7 +278,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse, ISection section) {
+	public IType checkAdd(Context context, IType other, boolean tryReverse, ICodeSection section) {
 		IType type = checkOperator(context, other, tryReverse, Operator.PLUS, section);
 		if(type!=null)
 			return type;
@@ -287,7 +287,7 @@ public class CategoryType extends BaseType {
 	}
 
 	@Override
-	public IType checkSubstract(Context context, IType other, ISection section) {
+	public IType checkSubstract(Context context, IType other, ICodeSection section) {
 		IType type = checkOperator(context, other, false, Operator.MINUS, section);
 		if(type!=null)
 			return type;
@@ -295,7 +295,7 @@ public class CategoryType extends BaseType {
 			return super.checkSubstract(context, other, section);
 	}
 	
-	private IType checkOperator(Context context, IType other, boolean tryReverse, Operator operator, ISection section) {
+	private IType checkOperator(Context context, IType other, boolean tryReverse, Operator operator, ICodeSection section) {
 		IDeclaration actual = getDeclaration(context);
 		if(actual instanceof ConcreteCategoryDeclaration) try {
 			IMethodDeclaration method = ((ConcreteCategoryDeclaration)actual).findOperator(context, operator, other);
@@ -755,9 +755,9 @@ public class CategoryType extends BaseType {
 	private Identifier getKeyIdentifier(IExpression key) {
 		if(key instanceof InstanceExpression)
 			return ((InstanceExpression)key).getId();
-		else if(key instanceof ISection) {
+		else if(key instanceof ICodeSection) {
 			Identifier keyId = new Identifier(key.toString());
-			keyId.copySectionFrom((ISection)key);
+			keyId.setSectionFrom((ICodeSection)key);
 			return keyId;
 		} else if(key != null) 
 			return new Identifier(key.toString());
@@ -838,7 +838,7 @@ public class CategoryType extends BaseType {
 			Argument arg = new Argument(null, exp);
 			ArgumentList args = new ArgumentList(Collections.singletonList(arg));
 			MethodCall proto = new MethodCall(new MethodSelector(null, id), args);
-			proto.copySectionFrom(id);
+			proto.setSectionFrom(id);
 			MethodFinder finder = new MethodFinder(context, proto);
 			return finder.findBest(true);
 		} catch (PromptoError error) {
@@ -901,7 +901,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ISection section) {
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ICodeSection section) {
 	    IType type = this.checkOperator(transpiler.getContext(), other, tryReverse, Operator.PLUS, section);
 	    if(type!=null) {
 	        left.declare(transpiler);
@@ -920,7 +920,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right, ISection section) {
+	public void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right, ICodeSection section) {
 	    IType type = this.checkOperator(transpiler.getContext(), other, false, Operator.MINUS, section);
 	    if(type!=null) {
 	        left.declare(transpiler);
@@ -940,7 +940,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ISection section) {
+	public void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ICodeSection section) {
 		IType type = this.checkOperator(transpiler.getContext(), other, tryReverse, Operator.MULTIPLY, section);
 	    if(type!=null) {
 	        left.declare(transpiler);
@@ -959,7 +959,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public void declareDivide(Transpiler transpiler, IType other, IExpression left, IExpression right, ISection section) {
+	public void declareDivide(Transpiler transpiler, IType other, IExpression left, IExpression right, ICodeSection section) {
 		IType type = this.checkOperator(transpiler.getContext(), other, false, Operator.DIVIDE, section);
 	    if(type!=null) {
 	    	transpiler.require("divide");
@@ -979,7 +979,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public void declareIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right, ISection section) {
+	public void declareIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right, ICodeSection section) {
 		IType type = this.checkOperator(transpiler.getContext(), other, false, Operator.IDIVIDE, section);
 	    if(type!=null) {
 	    	transpiler.require("divide");
@@ -999,7 +999,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public void declareModulo(Transpiler transpiler, IType other, IExpression left, IExpression right, ISection section) {
+	public void declareModulo(Transpiler transpiler, IType other, IExpression left, IExpression right, ICodeSection section) {
 		IType type = this.checkOperator(transpiler.getContext(), other, false, Operator.MODULO, section);
 	    if(type!=null) {
 	    	transpiler.require("divide");
@@ -1054,6 +1054,7 @@ public class CategoryType extends BaseType {
 		try {
 			IExpression exp = new ValueExpression(this, newInstance(context));
 			Argument arg = new Argument(null, exp); // MethodCall supports first anonymous argument
+			arg.setSectionFrom(methodName);
 			ArgumentList args = new ArgumentList(Collections.singletonList(arg));
 			MethodCall call = new MethodCall(new MethodSelector(methodName), args);
 			MethodFinder finder = new MethodFinder(context, call);
@@ -1241,7 +1242,11 @@ public class CategoryType extends BaseType {
 		private ResultInfo compileValue(Context context, MethodInfo method, Type paramType, String paramName) {
 			context.registerValue(new Variable(new Identifier(paramName), CategoryType.this));
 			Argument argument = call.getArguments().getFirst();
-			argument.setExpression(new UnresolvedIdentifier(new Identifier(paramName)));
+			Identifier paramId = new Identifier(paramName);
+			paramId.setSectionFrom(argument);
+			UnresolvedIdentifier expression = new UnresolvedIdentifier(paramId);
+			expression.setSectionFrom(argument);
+			argument.setExpression(expression);
 			return call.compile(context, method, new Flags());
 		}
 	}

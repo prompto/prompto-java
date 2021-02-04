@@ -1,12 +1,12 @@
 package prompto.problem;
 
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 
 public class UnknownMethodProblem extends SyntaxProblemBase {
 
 	String name;
 	
-	public UnknownMethodProblem(ISection section, String name) {
+	public UnknownMethodProblem(ICodeSection section, String name) {
 		super(section);
 		this.name = name;
 	}

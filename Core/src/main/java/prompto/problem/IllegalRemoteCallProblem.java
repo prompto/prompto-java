@@ -1,12 +1,12 @@
 package prompto.problem;
 
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 
 public class IllegalRemoteCallProblem extends SyntaxProblemBase {
 
 	String message;
 	
-	public IllegalRemoteCallProblem(ISection section, String message) {
+	public IllegalRemoteCallProblem(ICodeSection section, String message) {
 		super(section);
 		this.message = message;
 	}

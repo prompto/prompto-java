@@ -6,12 +6,12 @@ import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
 import prompto.expression.ThisExpression;
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 
-public class JavaThisExpression extends Section implements JavaExpression {
+public class JavaThisExpression extends CodeSection implements JavaExpression {
 	
 	ThisExpression expression = new ThisExpression();
 	

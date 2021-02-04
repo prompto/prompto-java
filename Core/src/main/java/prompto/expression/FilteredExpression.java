@@ -18,7 +18,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.intrinsic.Filterable;
 import prompto.intrinsic.IterableWithCounts;
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
@@ -29,7 +29,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.IFilterable;
 import prompto.value.IValue;
 
-public class FilteredExpression extends Section implements IExpression {
+public class FilteredExpression extends CodeSection implements IExpression {
 
 	IExpression source;
 	PredicateExpression predicate;

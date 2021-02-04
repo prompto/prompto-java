@@ -2,9 +2,9 @@ package prompto.grammar;
 
 import java.util.Objects;
 
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 
-public class Identifier extends Section {
+public class Identifier extends CodeSection {
 
 	String value;
 	

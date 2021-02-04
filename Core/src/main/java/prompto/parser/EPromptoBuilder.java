@@ -346,10 +346,12 @@ public class EPromptoBuilder extends EParserBaseListener {
 		return !(tree instanceof TerminalNode) || ((TerminalNode)tree).getSymbol().getType()!=INDENT;
 	}
 	
-	public void populateSection(ParserRuleContext node, Section section) {
-		Token first = findFirstValidToken(node.start.getTokenIndex());
-		Token last = findLastValidToken(node.stop.getTokenIndex());
-		section.setSectionFrom(path, first, last, Dialect.E);
+	public void populateSection(ParserRuleContext node, ICodeSection codeSection) {
+		if(codeSection.getSection()==null) {
+			Token first = findFirstValidToken(node.start.getTokenIndex());
+			Token last = findLastValidToken(node.stop.getTokenIndex());
+			codeSection.setSection(Section.from(path, first, last, Dialect.E));
+		}
 	}
 	
 	private List<Annotation> readAnnotations(List<? extends ParseTree> contexts) {
@@ -483,8 +485,10 @@ public class EPromptoBuilder extends EParserBaseListener {
 		ArgumentList items = getNodeValue(ctx.items);
 		if(items==null)
 			items = new ArgumentList();
-		items.add(0, new Argument(null, exp));
-		Argument item = getNodeValue(ctx.item);
+		Argument item = new Argument(null, exp);
+		populateSection(ctx, item);
+		items.add(0,item);
+		item = getNodeValue(ctx.item);
 		if(item!=null)
 			items.add(item);
 		else
@@ -3441,15 +3445,15 @@ public class EPromptoBuilder extends EParserBaseListener {
 			return null;
 	}
 	
-	public void setNodeValue(ParserRuleContext node, Section value) {
+	public void setNodeValue(ParserRuleContext node, ICodeSection value) {
 		nodeValues.put(node, value);
 		populateSection(node, value);
 	}
 	
 	public void setNodeValue(ParseTree node, Object value) {
 		nodeValues.put(node, value);
-		if(node instanceof ParserRuleContext && value instanceof Section)
-			populateSection((ParserRuleContext)node, (Section)value);
+		if(node instanceof ParserRuleContext && value instanceof ICodeSection)
+			populateSection((ParserRuleContext)node, (ICodeSection)value);
 	}
 	
 }

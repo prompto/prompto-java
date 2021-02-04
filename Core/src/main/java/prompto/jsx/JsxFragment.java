@@ -2,14 +2,14 @@ package prompto.jsx;
 
 import java.util.List;
 
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.JsxType;
 import prompto.utils.CodeWriter;
 
-public class JsxFragment extends Section implements IJsxExpression {
+public class JsxFragment extends CodeSection implements IJsxExpression {
 
 	String openingSuite;
 	List<IJsxExpression> children;

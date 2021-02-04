@@ -28,8 +28,8 @@ import prompto.error.SyntaxError;
 import prompto.grammar.ContOp;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoString;
+import prompto.parser.CodeSection;
 import prompto.parser.Dialect;
-import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.store.AttributeInfo;
@@ -53,7 +53,7 @@ import prompto.value.IIterable;
 import prompto.value.IValue;
 import prompto.value.NullValue;
 
-public class ContainsExpression extends Section implements IPredicateExpression, IAssertion {
+public class ContainsExpression extends CodeSection implements IPredicateExpression, IAssertion {
 
 	IExpression left;
 	ContOp operator;

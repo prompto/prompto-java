@@ -5,9 +5,9 @@ import java.util.Collections;
 import java.util.function.Consumer;
 
 import prompto.debug.request.GetLineDebugRequest;
-import prompto.debug.request.GetWorkerStackDebugRequest;
 import prompto.debug.request.GetVariableDebugRequest;
 import prompto.debug.request.GetVariablesDebugRequest;
+import prompto.debug.request.GetWorkerStackDebugRequest;
 import prompto.debug.request.GetWorkerStatusDebugRequest;
 import prompto.debug.request.IDebugRequest;
 import prompto.debug.request.InstallBreakpointDebugRequest;
@@ -19,10 +19,10 @@ import prompto.debug.request.StepOverDebugRequest;
 import prompto.debug.request.SuspendDebugRequest;
 import prompto.debug.request.TerminateDebugRequest;
 import prompto.debug.response.GetLineDebugResponse;
-import prompto.debug.response.GetWorkerStackDebugResponse;
 import prompto.debug.response.GetStatusDebugResponse;
 import prompto.debug.response.GetVariableDebugResponse;
 import prompto.debug.response.GetVariablesDebugResponse;
+import prompto.debug.response.GetWorkerStackDebugResponse;
 import prompto.debug.response.IDebugResponse;
 import prompto.debug.response.IsSteppingDebugResponse;
 import prompto.debug.stack.ClientStack;
@@ -219,8 +219,8 @@ public abstract class DebugRequestClient implements IDebugger {
 	}
 	
 	@Override
-	public void installBreakpoint(ISection worker) {
-		IDebugRequest request = new InstallBreakpointDebugRequest(worker);
+	public void installBreakpoint(ISection section) {
+		IDebugRequest request = new InstallBreakpointDebugRequest(section);
 		send(request);
 	}
 

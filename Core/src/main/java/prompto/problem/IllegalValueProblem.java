@@ -1,12 +1,12 @@
 package prompto.problem;
 
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 
 public class IllegalValueProblem extends SyntaxProblemBase {
 
 	String message;
 	
-	public IllegalValueProblem(ISection section, String message) {
+	public IllegalValueProblem(ICodeSection section, String message) {
 		super(section);
 		this.message = message;
 	}

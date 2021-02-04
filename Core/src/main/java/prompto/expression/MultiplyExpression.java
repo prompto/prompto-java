@@ -14,7 +14,7 @@ import prompto.compiler.ResultInfo;
 import prompto.declaration.CategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.CharacterType;
@@ -26,7 +26,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.IMultiplyable;
 import prompto.value.IValue;
 
-public class MultiplyExpression extends Section implements IExpression {
+public class MultiplyExpression extends CodeSection implements IExpression {
 
 	IExpression left;
 	IExpression right;

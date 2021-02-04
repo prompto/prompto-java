@@ -1,13 +1,13 @@
 package prompto.problem;
 
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.type.IType;
 
 public class ExpectingResourceProblem extends SyntaxProblemBase {
 
 	String message;
 	
-	public ExpectingResourceProblem(ISection section, IType type) {
+	public ExpectingResourceProblem(ICodeSection section, IType type) {
 		super(section);
 		this.message = "Expected a resource, got: " + type.getTypeName();
 	}

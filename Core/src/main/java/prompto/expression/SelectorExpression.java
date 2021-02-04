@@ -1,11 +1,11 @@
 package prompto.expression;
 
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.type.IType;
 
 
-public abstract class SelectorExpression extends Section implements IExpression {
+public abstract class SelectorExpression extends CodeSection implements IExpression {
 
 	IExpression parent;
 	

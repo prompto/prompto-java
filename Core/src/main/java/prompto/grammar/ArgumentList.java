@@ -157,7 +157,9 @@ public class ArgumentList extends LinkedList<Argument> {
 	                throw new SyntaxError("Missing argument:" + parameter.getName());
 	        } else {
 	            IExpression expression = new ContextualExpression(context, argument.getExpression());
-	            resolved.add(new Argument(parameter, expression));
+	            Argument copy = new Argument(parameter, expression);
+	            copy.setSectionFrom(argument);
+	            resolved.add(copy);
 	        }
 	    }
 	    if(original.size() > 0) {

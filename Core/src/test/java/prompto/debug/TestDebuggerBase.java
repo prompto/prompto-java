@@ -34,7 +34,7 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 	int installBreakPoint(String methodName, int stmtNumber) {
 		MethodDeclarationMap mdm = context.getRegisteredDeclaration(MethodDeclarationMap.class, new Identifier(methodName));
 		ConcreteMethodDeclaration cmd = (ConcreteMethodDeclaration)mdm.values().iterator().next();
-		ISection section = cmd.getStatements().get(stmtNumber);
+		ISection section = cmd.getStatements().get(stmtNumber).getSection();
 		section.setAsBreakpoint(true);
 		debugger.installBreakpoint(section);
 		return section.getStart().getLine();

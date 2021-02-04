@@ -18,13 +18,13 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 
 
-public class JavaIdentifierExpression extends Section implements JavaExpression {
+public class JavaIdentifierExpression extends CodeSection implements JavaExpression {
 
 	
 	public static JavaIdentifierExpression parse(String ids) {

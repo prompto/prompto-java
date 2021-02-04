@@ -16,8 +16,8 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.EqualsExpression;
 import prompto.expression.IExpression;
-import prompto.parser.ISection;
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
@@ -126,7 +126,7 @@ public class IfStatement extends BaseStatement {
 	@Override
 	public IType check(Context context) {
 		TypeMap types = new TypeMap();
-		ISection section = null;
+		ICodeSection section = null;
 		for(IfElement element : elements) {
 			IType type = element.check(context);
 			if(type!=VoidType.instance()) {
@@ -277,7 +277,7 @@ public class IfStatement extends BaseStatement {
 		return true;
 	}
 
-	public static class IfElement extends Section {
+	public static class IfElement extends CodeSection {
 
 		IExpression condition;
 		StatementList statements;

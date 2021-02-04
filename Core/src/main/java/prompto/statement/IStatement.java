@@ -1,10 +1,11 @@
 package prompto.statement;
 
 import prompto.expression.IExpression;
+import prompto.parser.ICodeSection;
 import prompto.parser.ISection;
 import prompto.transpiler.Transpiler;
 
-public interface IStatement extends IExpression, ISection {
+public interface IStatement extends IExpression, ICodeSection {
 
 	default boolean canReturn() {
 		return false;
@@ -17,7 +18,7 @@ public interface IStatement extends IExpression, ISection {
 	@Override
 	default boolean transpile(Transpiler transpiler)  { throw new UnsupportedOperationException("transpile " + this.getClass().getName()); }
 	default ISection locateSection(ISection section) {
-		return isOrContains(section) ? this : null;
+		return isOrContains(section) ? this.getSection() : null;
 	}
 
 }

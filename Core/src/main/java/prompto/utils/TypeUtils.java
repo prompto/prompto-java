@@ -12,7 +12,7 @@ import prompto.intrinsic.PromptoDocument;
 import prompto.intrinsic.PromptoPeriod;
 import prompto.intrinsic.PromptoTime;
 import prompto.intrinsic.PromptoVersion;
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.type.AnyType;
 import prompto.type.BooleanType;
@@ -37,7 +37,7 @@ import prompto.value.JsxValue;
 
 public abstract class TypeUtils {
 	
-	public static IType inferValuesType(Context context, Collection<? extends IValue> values, ISection section) {
+	public static IType inferValuesType(Context context, Collection<? extends IValue> values, ICodeSection section) {
 		if(values.isEmpty())
 			return MissingType.instance();
 		TypeMap types = new TypeMap();
@@ -45,7 +45,7 @@ public abstract class TypeUtils {
 		return types.inferType(context, section);
 	}
 	
-	public static IType inferExpressionsType(Context context, ExpressionList expressions, ISection section) {
+	public static IType inferExpressionsType(Context context, ExpressionList expressions, ICodeSection section) {
 		if(expressions.isEmpty())
 			return MissingType.instance();
 		TypeMap types = new TypeMap();

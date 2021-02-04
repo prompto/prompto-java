@@ -17,7 +17,7 @@ import prompto.expression.PredicateExpression;
 import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
 import prompto.parser.ECleverParser;
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.store.FamilyInfo;
 import prompto.transpiler.Transpiler;
@@ -28,7 +28,7 @@ import prompto.value.RangeBase;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-public interface IType extends ISection {
+public interface IType extends ICodeSection {
 	
 	static IType fromTypeName(Context context, String typeName) throws PromptoError {
 		if(Character.isUpperCase(typeName.charAt(0))) try {
@@ -74,13 +74,13 @@ public interface IType extends ISection {
 	
 	Type getJavaType(Context context);
 
-	IType checkAdd(Context context, IType other, boolean tryReverse, ISection section);
-	IType checkSubstract(Context context, IType other, ISection section);
-	IType checkDivide(Context context, IType other, ISection section);
-	IType checkIntDivide(Context context, IType other, ISection section);
-	IType checkMultiply(Context context, IType other, boolean tryReverse, ISection section);
-	IType checkModulo(Context context, IType other, ISection section);
-	void checkCompare(Context context, IType other, ISection section);
+	IType checkAdd(Context context, IType other, boolean tryReverse, ICodeSection section);
+	IType checkSubstract(Context context, IType other, ICodeSection section);
+	IType checkDivide(Context context, IType other, ICodeSection section);
+	IType checkIntDivide(Context context, IType other, ICodeSection section);
+	IType checkMultiply(Context context, IType other, boolean tryReverse, ICodeSection section);
+	IType checkModulo(Context context, IType other, ICodeSection section);
+	void checkCompare(Context context, IType other, ICodeSection section);
 	IType checkItem(Context context, IType itemType) ;
 	IType checkRange(Context context, IType other);
 	void checkContains(Context context, IType other);
@@ -93,7 +93,7 @@ public interface IType extends ISection {
 	void checkUnique(Context context);
 	void checkExists(Context context);
 
-	void checkAssignableFrom(Context context, IType other, ISection section);
+	void checkAssignableFrom(Context context, IType other, ICodeSection section);
 	boolean isAssignableFrom(Context context, IType other);
 	boolean isMoreSpecificThan(Context context, IType other);
 	
@@ -133,7 +133,7 @@ public interface IType extends ISection {
 	}
 
 
-	default void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ISection section) { 
+	default void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ICodeSection section) { 
 		if(tryReverse)
 			other.declareAdd(transpiler, this, false, right, left, section);
 		else
@@ -176,7 +176,7 @@ public interface IType extends ISection {
 	    throw new UnsupportedOperationException("transpileStaticMember " + name + " for " + this.getClass().getName());
 	}
 	
-	default void declareModulo(Transpiler transpiler, IType other, IExpression left, IExpression right, ISection section)  { 
+	default void declareModulo(Transpiler transpiler, IType other, IExpression left, IExpression right, ICodeSection section)  { 
 		throw new UnsupportedOperationException("declareModulo " + this.getClass().getName());
 	}
 
@@ -184,7 +184,7 @@ public interface IType extends ISection {
         throw new UnsupportedOperationException("transpileModulo " + this.getClass().getName());
 	}
 
-	default void declareDivide(Transpiler transpiler, IType other, IExpression left, IExpression right, ISection section) { 
+	default void declareDivide(Transpiler transpiler, IType other, IExpression left, IExpression right, ICodeSection section) { 
 		throw new UnsupportedOperationException("declareDivide " + this.getClass().getName());
 	}
 
@@ -192,7 +192,7 @@ public interface IType extends ISection {
         throw new UnsupportedOperationException("transpileDivide " + this.getClass().getName());
 	}
 
-	default void declareIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right, ISection section) { 
+	default void declareIntDivide(Transpiler transpiler, IType other, IExpression left, IExpression right, ICodeSection section) { 
 		throw new UnsupportedOperationException("declareIntDivide " + this.getClass().getName());
 	}
 
@@ -208,7 +208,7 @@ public interface IType extends ISection {
         throw new UnsupportedOperationException("transpileMinus " + this.getClass().getName());
 	}
 
-	default void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ISection section) { 
+	default void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ICodeSection section) { 
 		if(tryReverse)
 			other.declareMultiply(transpiler, this, false, right, left, section);
 		else
@@ -222,7 +222,7 @@ public interface IType extends ISection {
 			throw new UnsupportedOperationException("transpileMultiply " + this.getClass().getName());
 	}
 
-	default void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right, ISection section)  { 
+	default void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right, ICodeSection section)  { 
 		throw new UnsupportedOperationException("declareSubtract " + this.getClass().getName());
 	}
 

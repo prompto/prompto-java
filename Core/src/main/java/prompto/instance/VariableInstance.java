@@ -12,7 +12,7 @@ import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
 import prompto.runtime.Variable;
@@ -125,9 +125,9 @@ public class VariableInstance implements IAssignableInstance {
 	}
 	
 	@Override
-	public IType checkAssignValue(Context context, IType valueType, ISection section) {
+	public IType checkAssignValue(Context context, IType valueType, ICodeSection section) {
 		// called for a=x
-		INamed actual = context.getRegisteredValue(INamed.class,id);
+		INamed actual = context.getRegisteredValue(INamed.class, id);
 		if(actual==null)
 			context.registerValue(new Variable(id, valueType));
 		else {
@@ -140,7 +140,7 @@ public class VariableInstance implements IAssignableInstance {
 	}
 	
 	@Override
-	public IType checkAssignMember(Context context, Identifier memberName, IType valueType, ISection section) {
+	public IType checkAssignMember(Context context, Identifier memberName, IType valueType, ICodeSection section) {
 		// called for a.x = y
 		INamed actual = context.getRegisteredValue(INamed.class, id);
 		if(actual==null) {
@@ -161,7 +161,7 @@ public class VariableInstance implements IAssignableInstance {
 	}
 	
 	@Override
-	public IType checkAssignItem(Context context, IType itemType, IType valueType, ISection section) {
+	public IType checkAssignItem(Context context, IType itemType, IType valueType, ICodeSection section) {
 		// called for a[x] = y
 		INamed actual = context.getRegisteredValue(INamed.class, id);
 		if(actual==null) 

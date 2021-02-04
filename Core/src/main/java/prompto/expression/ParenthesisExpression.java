@@ -5,7 +5,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.store.IQueryBuilder;
 import prompto.store.IStore;
@@ -14,7 +14,7 @@ import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
-public class ParenthesisExpression extends Section implements IPredicateExpression {
+public class ParenthesisExpression extends CodeSection implements IPredicateExpression {
 
 	IExpression expression;
 

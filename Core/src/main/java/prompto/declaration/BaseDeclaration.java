@@ -9,12 +9,12 @@ import java.util.stream.Stream;
 import prompto.code.ICodeStore;
 import prompto.grammar.Annotation;
 import prompto.grammar.Identifier;
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.statement.CommentStatement;
 import prompto.utils.CodeWriter;
 
-public abstract class BaseDeclaration extends Section implements IDeclaration {
+public abstract class BaseDeclaration extends CodeSection implements IDeclaration {
 
 	Collection<CommentStatement> comments = null;
 	Collection<Annotation> annotations = null;
@@ -145,12 +145,16 @@ public abstract class BaseDeclaration extends Section implements IDeclaration {
 		return false;
 	}
 	
+	/* 
+	 * TODO
+	 */
+	
 	@Override
 	public int computeStartLine() {
 		if(comments!=null && !comments.isEmpty())
-			return comments.iterator().next().getStart().getLine();
+			return comments.iterator().next().getSection().getStart().getLine();
 		else if(annotations!=null && !annotations.isEmpty())
-			return annotations.iterator().next().getStart().getLine();
+			return annotations.iterator().next().getSection().getStart().getLine();
 		else 
 			return super.computeStartLine();
 	}

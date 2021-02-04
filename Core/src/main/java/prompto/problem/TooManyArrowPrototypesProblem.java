@@ -2,14 +2,14 @@ package prompto.problem;
 
 import java.util.Set;
 
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 
 public class TooManyArrowPrototypesProblem extends SyntaxProblemBase {
 
 	String actual;
 	Set<String> culprits;
 	
-	public TooManyArrowPrototypesProblem(ISection section, String actual, Set<String> culprits) {
+	public TooManyArrowPrototypesProblem(ICodeSection section, String actual, Set<String> culprits) {
 		super(section);
 		this.actual = actual;
 		this.culprits = culprits;

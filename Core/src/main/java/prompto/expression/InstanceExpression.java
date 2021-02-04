@@ -20,9 +20,9 @@ import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.literal.BooleanLiteral;
 import prompto.param.IParameter;
+import prompto.parser.CodeSection;
 import prompto.parser.Dialect;
-import prompto.parser.ISection;
-import prompto.parser.Section;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.runtime.Context.ClosureContext;
 import prompto.runtime.Context.InstanceContext;
@@ -42,7 +42,7 @@ import prompto.utils.StoreUtils;
 import prompto.value.ClosureValue;
 import prompto.value.IValue;
 
-public class InstanceExpression extends Section implements IPredicateExpression {
+public class InstanceExpression extends CodeSection implements IPredicateExpression {
 
 	Identifier id;
 	
@@ -84,7 +84,7 @@ public class InstanceExpression extends Section implements IPredicateExpression 
 	}
 
 	@Override
-	public AttributeDeclaration checkAttribute(Context context, ISection section) {
+	public AttributeDeclaration checkAttribute(Context context, ICodeSection section) {
 		AttributeDeclaration decl = context.findAttribute(id.toString());
 		if(decl==null)
 			context.getProblemListener().reportMissingAttribute(this, this.toString());
@@ -92,7 +92,7 @@ public class InstanceExpression extends Section implements IPredicateExpression 
 	}
 	
 	@Override
-	public AttributeInfo checkAttributeInfo(Context context, ISection section, IStore store) {
+	public AttributeInfo checkAttributeInfo(Context context, ICodeSection section, IStore store) {
 		return StoreUtils.getAttributeInfo(context, id.toString(), store);
 	}
 	

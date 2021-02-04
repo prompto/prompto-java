@@ -1,7 +1,5 @@
 package prompto.problem;
 
-
-
 public abstract class ParserProblemBase implements IProblem {
 	
 	String path;

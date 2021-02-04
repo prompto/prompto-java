@@ -1,12 +1,11 @@
 package prompto.problem;
 
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 
 public class ReturningVoidTypeProblem extends SyntaxProblemBase {
 
-	public ReturningVoidTypeProblem(ISection section) {
+	public ReturningVoidTypeProblem(ICodeSection section) {
 		super(section);
-		this.section = section;
 	}
 
 	@Override

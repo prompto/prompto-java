@@ -23,7 +23,7 @@ import prompto.expression.PredicateExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoSet;
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
@@ -70,7 +70,7 @@ public class SetType extends ContainerType {
     }
 
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse, ISection section) {
+	public IType checkAdd(Context context, IType other, boolean tryReverse, ICodeSection section) {
 		if(	(other instanceof ListType || other instanceof SetType) && this.getItemType().isAssignableFrom(context, ((ContainerType)other).getItemType()) )
 			return this;
 		return super.checkAdd(context, other, tryReverse, section);
@@ -78,7 +78,7 @@ public class SetType extends ContainerType {
 	
 	
 	@Override
-	public IType checkSubstract(Context context, IType other, ISection section) {
+	public IType checkSubstract(Context context, IType other, ICodeSection section) {
 		if(	(other instanceof ListType || other instanceof SetType) &&
 				this.getItemType().equals(((ContainerType)other).getItemType()) )
 					return this;
@@ -132,7 +132,7 @@ public class SetType extends ContainerType {
 	}
 
 	@Override
-	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ISection section) {
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ICodeSection section) {
 	    if((other instanceof SetType || other instanceof ListType) && this.getItemType().isAssignableFrom(transpiler.getContext(), ((ContainerType)other).getItemType())) {
 	        left.declare(transpiler);
 	        right.declare(transpiler);
@@ -155,7 +155,7 @@ public class SetType extends ContainerType {
 	
 	
 	@Override
-	public void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right, ISection section) {
+	public void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right, ICodeSection section) {
 	    if((other instanceof ListType || other instanceof SetType) && this.getItemType().equals(((ContainerType)other).getItemType())) {
 	        left.declare(transpiler);
 	        right.declare(transpiler);

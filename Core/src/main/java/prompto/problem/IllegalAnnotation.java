@@ -1,12 +1,12 @@
 package prompto.problem;
 
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 
 public class IllegalAnnotation extends SyntaxProblemBase {
 
 	String message;
 	
-	public IllegalAnnotation(ISection section, String message) {
+	public IllegalAnnotation(ICodeSection section, String message) {
 		super(section);
 		this.message = message;
 	}

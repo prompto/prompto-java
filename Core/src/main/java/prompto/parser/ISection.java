@@ -7,7 +7,7 @@ public interface ISection {
 	ILocation getEnd();
 	Dialect getDialect();
 	void setAsBreakpoint(boolean set);
-	boolean isBreakpoint();
+	boolean isBreakpoint(); 
 	boolean isOrContains(ISection section);
 	default int computeStartLine() {
 		return getStart()==null ? 0 : getStart().getLine();
@@ -21,4 +21,5 @@ public interface ISection {
 	default int computeEndTokenIndex() {
 		return getEnd()==null ? 0 : getEnd().getTokenIndex();
 	}
+
 }

@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
@@ -20,8 +22,8 @@ import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
-import prompto.parser.ISection;
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.store.FamilyInfo;
@@ -29,9 +31,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 import prompto.value.RangeBase;
 
-import com.fasterxml.jackson.databind.JsonNode;
-
-public abstract class BaseType extends Section implements IType {
+public abstract class BaseType extends CodeSection implements IType {
 
 	Family family;
 
@@ -76,7 +76,7 @@ public abstract class BaseType extends Section implements IType {
 	}
 	
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse, ISection section) {
+	public IType checkAdd(Context context, IType other, boolean tryReverse, ICodeSection section) {
 		if(other instanceof EnumeratedNativeType)
 			return checkAdd(context, ((EnumeratedNativeType)other).getDerivedFrom(), tryReverse, section);
 		else if(tryReverse)
@@ -88,7 +88,7 @@ public abstract class BaseType extends Section implements IType {
 	}
 
 	@Override
-	public IType checkSubstract(Context context, IType other, ISection section) {
+	public IType checkSubstract(Context context, IType other, ICodeSection section) {
 		if(other instanceof EnumeratedNativeType)
 			return checkSubstract(context, ((EnumeratedNativeType)other).getDerivedFrom(), section);
 		else {
@@ -98,7 +98,7 @@ public abstract class BaseType extends Section implements IType {
 	}
 
 	@Override
-	public IType checkDivide(Context context, IType other, ISection section) {
+	public IType checkDivide(Context context, IType other, ICodeSection section) {
 		if(other instanceof EnumeratedNativeType)
 			return checkDivide(context, ((EnumeratedNativeType)other).getDerivedFrom(), section);
 		else {
@@ -108,7 +108,7 @@ public abstract class BaseType extends Section implements IType {
 	}
 
 	@Override
-	public IType checkIntDivide(Context context, IType other, ISection section) {
+	public IType checkIntDivide(Context context, IType other, ICodeSection section) {
 		if(other instanceof EnumeratedNativeType)
 			return checkIntDivide(context, ((EnumeratedNativeType)other).getDerivedFrom(), section);
 		else {
@@ -118,7 +118,7 @@ public abstract class BaseType extends Section implements IType {
 	}
 
 	@Override
-	public IType checkMultiply(Context context, IType other, boolean tryReverse, ISection section) {
+	public IType checkMultiply(Context context, IType other, boolean tryReverse, ICodeSection section) {
 		if(other instanceof EnumeratedNativeType)
 			return checkMultiply(context, ((EnumeratedNativeType)other).getDerivedFrom(), tryReverse, section);
 		else if(tryReverse)
@@ -130,7 +130,7 @@ public abstract class BaseType extends Section implements IType {
 	}
 
 	@Override
-	public IType checkModulo(Context context, IType other, ISection section) {
+	public IType checkModulo(Context context, IType other, ICodeSection section) {
 		if(other instanceof EnumeratedNativeType)
 			return checkModulo(context, ((EnumeratedNativeType)other).getDerivedFrom(), section);
 		else {
@@ -140,7 +140,7 @@ public abstract class BaseType extends Section implements IType {
 	}
 	
 	@Override
-	public void checkCompare(Context context, IType other, ISection section) {
+	public void checkCompare(Context context, IType other, ICodeSection section) {
 		if(other instanceof EnumeratedNativeType)
 			checkCompare(context, ((EnumeratedNativeType)other).getDerivedFrom(), section);
 		else 		
@@ -207,7 +207,7 @@ public abstract class BaseType extends Section implements IType {
 	public abstract boolean isMoreSpecificThan(Context context, IType other);
 
 	@Override
-	public final void checkAssignableFrom(Context context, IType other, ISection section) {
+	public final void checkAssignableFrom(Context context, IType other, ICodeSection section) {
 		if (!isAssignableFrom(context, other))
 			context.getProblemListener().reportIllegalAssignment(section, this, other);
 	}

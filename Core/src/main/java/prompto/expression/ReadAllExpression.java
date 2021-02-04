@@ -12,7 +12,7 @@ import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
@@ -23,7 +23,7 @@ import prompto.value.IResource;
 import prompto.value.IValue;
 import prompto.value.TextValue;
 
-public class ReadAllExpression extends Section implements IExpression {
+public class ReadAllExpression extends CodeSection implements IExpression {
 
 	protected IExpression resource;
 	

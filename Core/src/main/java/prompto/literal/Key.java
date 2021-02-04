@@ -4,13 +4,13 @@ import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
 import prompto.grammar.Identifier;
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 import prompto.value.TextValue;
 
-public abstract class Key extends Section {
+public abstract class Key extends CodeSection {
 
 	public abstract Identifier asIdentifier();
 	public abstract void toDialect(CodeWriter writer);

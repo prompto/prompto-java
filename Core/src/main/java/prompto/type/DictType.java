@@ -25,7 +25,7 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDict;
 import prompto.param.CategoryParameter;
 import prompto.param.IParameter;
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
@@ -74,7 +74,7 @@ public class DictType extends ContainerType {
 	}
 	
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse, ISection section) {
+	public IType checkAdd(Context context, IType other, boolean tryReverse, ICodeSection section) {
 		if(other instanceof DictType 
 			&& this.getItemType().equals(((DictType)other).getItemType()))
 			return this;
@@ -141,7 +141,7 @@ public class DictType extends ContainerType {
 	}
 	
 	@Override
-	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ISection section) {
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ICodeSection section) {
 	   if(other instanceof DictType && this.getItemType().equals(((DictType)other).getItemType())) {
 	        left.declare(transpiler);
 	        right.declare(transpiler);

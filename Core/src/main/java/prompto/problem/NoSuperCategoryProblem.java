@@ -1,13 +1,13 @@
 package prompto.problem;
 
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.type.IType;
 
 public class NoSuperCategoryProblem extends SyntaxProblemBase {
 
 	String message;
 	
-	public NoSuperCategoryProblem(ISection section, IType type) {
+	public NoSuperCategoryProblem(ICodeSection section, IType type) {
 		super(section);
 		this.message = type.getTypeName() + " has no parent type";
 	}

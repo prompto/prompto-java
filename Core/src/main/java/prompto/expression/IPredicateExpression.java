@@ -3,12 +3,12 @@ package prompto.expression;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.store.IQueryBuilder;
 import prompto.store.IStore;
 
-public interface IPredicateExpression extends IExpression, ISection {
+public interface IPredicateExpression extends IExpression, ICodeSection {
 
 	void checkQuery(Context context) throws PromptoError;
 	void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError;

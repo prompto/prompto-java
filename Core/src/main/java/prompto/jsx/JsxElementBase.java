@@ -12,8 +12,8 @@ import prompto.grammar.Identifier;
 import prompto.literal.DocEntry;
 import prompto.literal.DocEntryList;
 import prompto.literal.TypeLiteral;
+import prompto.parser.CodeSection;
 import prompto.parser.OCleverParser;
-import prompto.parser.Section;
 import prompto.processor.WidgetPropertiesProcessor;
 import prompto.property.Property;
 import prompto.property.PropertyMap;
@@ -24,7 +24,7 @@ import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.type.JsxType;
 
-public abstract class JsxElementBase extends Section implements IJsxExpression {
+public abstract class JsxElementBase extends CodeSection implements IJsxExpression {
 
 	Identifier id;
 	List<JsxProperty> properties;

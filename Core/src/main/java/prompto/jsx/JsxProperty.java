@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import prompto.grammar.Identifier;
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 import prompto.property.Property;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
@@ -14,7 +14,7 @@ import prompto.type.MethodType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 
-public class JsxProperty extends Section {
+public class JsxProperty extends CodeSection {
 
 	Identifier id;
 	IJsxValue value;

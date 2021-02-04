@@ -29,8 +29,8 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.IMutable;
 import prompto.intrinsic.PromptoDocument;
 import prompto.param.AttributeParameter;
+import prompto.parser.CodeSection;
 import prompto.parser.Dialect;
-import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.store.IStore;
 import prompto.transpiler.ITranspilable;
@@ -44,7 +44,7 @@ import prompto.value.IInstance;
 import prompto.value.IValue;
 import prompto.value.NullValue;
 
-public class ConstructorExpression extends Section implements IExpression {
+public class ConstructorExpression extends CodeSection implements IExpression {
 	
 	CategoryType type;
 	boolean checked = false; // need to check homonyms

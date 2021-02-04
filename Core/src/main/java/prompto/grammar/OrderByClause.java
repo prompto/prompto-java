@@ -6,7 +6,7 @@ import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
 import prompto.declaration.AttributeDeclaration;
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.store.AttributeInfo;
 import prompto.store.IQueryBuilder;
@@ -14,7 +14,7 @@ import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 
-public class OrderByClause extends Section {
+public class OrderByClause extends CodeSection {
 	
 	IdentifierList qualifiedName;
 	boolean descending;

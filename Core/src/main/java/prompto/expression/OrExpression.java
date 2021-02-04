@@ -18,8 +18,8 @@ import prompto.compiler.StringConstant;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.parser.CodeSection;
 import prompto.parser.Dialect;
-import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.store.IQueryBuilder;
 import prompto.store.IStore;
@@ -30,7 +30,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.BooleanValue;
 import prompto.value.IValue;
 
-public class OrExpression extends Section implements IPredicateExpression, IAssertion {
+public class OrExpression extends CodeSection implements IPredicateExpression, IAssertion {
 	
 	IExpression left;
 	IExpression right;

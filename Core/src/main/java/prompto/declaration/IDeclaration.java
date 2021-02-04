@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 import prompto.code.ICodeStore;
 import prompto.grammar.Annotation;
 import prompto.grammar.INamed;
+import prompto.parser.ICodeSection;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.statement.CommentStatement;
@@ -15,7 +16,7 @@ import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 
-public interface IDeclaration extends ITranspilable, INamed, ISection {
+public interface IDeclaration extends ITranspilable, INamed, ICodeSection {
 	
 	public static enum DeclarationType {
 		ATTRIBUTE,
@@ -54,6 +55,6 @@ public interface IDeclaration extends ITranspilable, INamed, ISection {
 	@Override
 	default boolean transpile(Transpiler transpiler) { throw new UnsupportedOperationException("transpile " + this.getClass().getName()); }
 	default ISection locateSection(ISection section) {
-		return isOrContains(section) ? this : null;
+		return isOrContains(section) ? this.getSection() : null;
 	}
 }

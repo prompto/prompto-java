@@ -1,5 +1,6 @@
 package prompto.problem;
 
+import prompto.parser.ICodeSection;
 import prompto.parser.ISection;
 
 
@@ -8,6 +9,10 @@ public abstract class SyntaxProblemBase implements IProblem {
 	ISection section;
 	int hashCode = -1;
 	
+	public SyntaxProblemBase(ICodeSection codeSection) {
+		this(codeSection.getSection());
+	}
+
 	public SyntaxProblemBase(ISection section) {
 		this.section = section;
 	}

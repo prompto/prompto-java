@@ -12,7 +12,7 @@ import org.junit.Test;
 import prompto.declaration.IDeclaration;
 import prompto.grammar.Identifier;
 import prompto.jsx.JsxElementBase;
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.parser.o.BaseOParserTest;
 import prompto.problem.ProblemRaiser;
 import prompto.transpiler.Nashorn8Engine;
@@ -41,7 +41,7 @@ public class WidgetPropertiesProcessorTest extends BaseOParserTest {
 		Instance<String> warning = new Instance<>();
 		context.pushProblemListener(new ProblemRaiser() {
 			@Override
-			public void reportIllegalAssignment(ISection section, IType expected, IType actual) {
+			public void reportIllegalAssignment(ICodeSection section, IType expected, IType actual) {
 				warning.set("invalid");
 			}
 		});
@@ -81,7 +81,7 @@ public class WidgetPropertiesProcessorTest extends BaseOParserTest {
 		Instance<String> warning = new Instance<>();
 		context.pushProblemListener(new ProblemRaiser() {
 			@Override
-			public void reportIllegalAssignment(ISection section, IType expected, IType actual) {
+			public void reportIllegalAssignment(ICodeSection section, IType expected, IType actual) {
 				warning.set("invalid");
 			}
 		});
@@ -136,7 +136,7 @@ public class WidgetPropertiesProcessorTest extends BaseOParserTest {
 		Instance<String> warning = new Instance<>();
 		context.pushProblemListener(new ProblemRaiser() {
 			@Override
-			public void reportUnknownMember(ISection section, String name) {
+			public void reportUnknownMember(ICodeSection section, String name) {
 				warning.set("invalid");
 			}
 		});
@@ -176,7 +176,7 @@ public class WidgetPropertiesProcessorTest extends BaseOParserTest {
 		Instance<String> warning = new Instance<>();
 		context.pushProblemListener(new ProblemRaiser() {
 			@Override
-			public void reportMissingProperty(ISection section, String missingl) {
+			public void reportMissingProperty(ICodeSection section, String missingl) {
 				warning.set("invalid");
 			}
 		});
@@ -216,7 +216,7 @@ public class WidgetPropertiesProcessorTest extends BaseOParserTest {
 		Instance<String> warning = new Instance<>();
 		context.pushProblemListener(new ProblemRaiser() {
 			@Override
-			public void reportIllegalAssignment(ISection section, Set<IType> expected, IType actual) {
+			public void reportIllegalAssignment(ICodeSection section, Set<IType> expected, IType actual) {
 				warning.set("invalid");
 			}
 		});
@@ -256,7 +256,7 @@ public class WidgetPropertiesProcessorTest extends BaseOParserTest {
 		Instance<String> warning = new Instance<>();
 		context.pushProblemListener(new ProblemRaiser() {
 			@Override
-			public void reportIllegalValue(ISection section, String message) {
+			public void reportIllegalValue(ICodeSection section, String message) {
 				warning.set("invalid");
 			}
 		});

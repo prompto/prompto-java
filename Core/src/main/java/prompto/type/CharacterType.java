@@ -17,7 +17,7 @@ import prompto.expression.IExpression;
 import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoChar;
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
@@ -46,12 +46,12 @@ public class CharacterType extends NativeType {
 	}
 
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse, ISection section) {
+	public IType checkAdd(Context context, IType other, boolean tryReverse, ICodeSection section) {
 		return TextType.instance();
 	}
 
 	@Override
-	public IType checkMultiply(Context context, IType other, boolean tryReverse, ISection section) {
+	public IType checkMultiply(Context context, IType other, boolean tryReverse, ICodeSection section) {
 		if (other instanceof IntegerType)
 			return TextType.instance();
 		else
@@ -59,7 +59,7 @@ public class CharacterType extends NativeType {
 	}
 
 	@Override
-	public void checkCompare(Context context, IType other, ISection section) {
+	public void checkCompare(Context context, IType other, ICodeSection section) {
 		if (other instanceof CharacterType || other instanceof TextType)
 			return;
 		else
@@ -130,7 +130,7 @@ public class CharacterType extends NativeType {
 	}
 
 	@Override
-	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ISection section) {
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ICodeSection section) {
 		// can add anything to text
 		left.declare(transpiler);
 		right.declare(transpiler);
@@ -145,7 +145,7 @@ public class CharacterType extends NativeType {
 	}
 	
 	@Override
-	public void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ISection section) {
+	public void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ICodeSection section) {
 	    if (other == IntegerType.instance()) {
 	        left.declare(transpiler);
 	        right.declare(transpiler);

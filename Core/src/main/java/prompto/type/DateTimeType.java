@@ -17,7 +17,7 @@ import prompto.grammar.CmpOp;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDateTime;
 import prompto.intrinsic.PromptoPeriod;
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
@@ -58,14 +58,14 @@ public class DateTimeType extends NativeType {
 	}
 
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse, ISection section) {
+	public IType checkAdd(Context context, IType other, boolean tryReverse, ICodeSection section) {
 		if (other instanceof PeriodType)
 			return this;
 		return super.checkAdd(context, other, tryReverse, section);
 	}
 
 	@Override
-	public IType checkSubstract(Context context, IType other, ISection section) {
+	public IType checkSubstract(Context context, IType other, ICodeSection section) {
 		if (other instanceof DateTimeType)
 			return PeriodType.instance();
 		else if (other instanceof PeriodType)
@@ -75,7 +75,7 @@ public class DateTimeType extends NativeType {
 	}
 
 	@Override
-	public void checkCompare(Context context, IType other, ISection section) {
+	public void checkCompare(Context context, IType other, ICodeSection section) {
 		if (other instanceof DateType)
 			return;
 		else if (other instanceof DateTimeType)
@@ -154,7 +154,7 @@ public class DateTimeType extends NativeType {
 	}
 	
 	@Override
-	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ISection section) {
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ICodeSection section) {
 	    if (other == PeriodType.instance()) {
 	        left.declare(transpiler);
 	        right.declare(transpiler);
@@ -174,7 +174,7 @@ public class DateTimeType extends NativeType {
 	}
 	
 	@Override
-	public void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right, ISection section) {
+	public void declareSubtract(Transpiler transpiler, IType other, IExpression left, IExpression right, ICodeSection section) {
 	    if (other == PeriodType.instance() || other == DateTimeType.instance()) {
 	        left.declare(transpiler);
 	        right.declare(transpiler);

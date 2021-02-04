@@ -1,12 +1,12 @@
 package prompto.problem;
 
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 
 public class NotMutableProblem extends SyntaxProblemBase {
 
 	String message;
 	
-	public NotMutableProblem(ISection section, String name) {
+	public NotMutableProblem(ICodeSection section, String name) {
 		super(section);
 		this.message = name + " is not mutable";
 	}

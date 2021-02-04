@@ -6,7 +6,7 @@ import prompto.compiler.ResultInfo;
 import prompto.declaration.AttributeDeclaration;
 import prompto.error.PromptoError;
 import prompto.parser.Dialect;
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.store.AttributeInfo;
 import prompto.store.IStore;
@@ -72,11 +72,11 @@ public interface IExpression {
 	default void transpileFound(Transpiler transpiler, Dialect dialect) {
 		throw new UnsupportedOperationException("transpileFound " + this.getClass().getName());
 	}
-	default AttributeDeclaration checkAttribute(Context context, ISection section) {
+	default AttributeDeclaration checkAttribute(Context context, ICodeSection section) {
 		context.getProblemListener().reportMissingAttribute(section, this.toString());
 		return null;
 	}
-	default AttributeInfo checkAttributeInfo(Context context, ISection section, IStore store) {
+	default AttributeInfo checkAttributeInfo(Context context, ICodeSection section, IStore store) {
 		context.getProblemListener().reportMissingAttribute(section, this.toString());
 		return null;
 	}

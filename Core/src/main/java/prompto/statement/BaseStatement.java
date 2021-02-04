@@ -1,7 +1,7 @@
 package prompto.statement;
 
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 
-public abstract class BaseStatement extends Section implements IStatement {
+public abstract class BaseStatement extends CodeSection implements IStatement {
 
 }

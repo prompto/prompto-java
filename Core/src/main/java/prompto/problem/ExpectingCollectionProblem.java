@@ -1,13 +1,13 @@
 package prompto.problem;
 
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.type.IType;
 
 public class ExpectingCollectionProblem extends SyntaxProblemBase {
 
 	String message;
 	
-	public ExpectingCollectionProblem(ISection section, IType type) {
+	public ExpectingCollectionProblem(ICodeSection section, IType type) {
 		super(section);
 		this.message = "Expected a collection, got: " + type.getTypeName();
 	}

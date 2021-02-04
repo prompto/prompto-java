@@ -3,12 +3,12 @@ package prompto.java;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 
-public interface JavaExpression extends ISection {
+public interface JavaExpression extends ICodeSection {
 	
 	IType check(Context context);
 	Object interpret(Context context) throws PromptoError;

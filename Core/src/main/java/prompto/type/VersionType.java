@@ -14,7 +14,7 @@ import prompto.compiler.ResultInfo;
 import prompto.expression.IExpression;
 import prompto.grammar.CmpOp;
 import prompto.intrinsic.PromptoVersion;
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
@@ -56,7 +56,7 @@ public class VersionType extends NativeType {
 	}
 	
 	@Override
-	public void checkCompare(Context context, IType other, ISection section) {
+	public void checkCompare(Context context, IType other, ICodeSection section) {
 		if (other instanceof VersionType)
 			return;
 		else

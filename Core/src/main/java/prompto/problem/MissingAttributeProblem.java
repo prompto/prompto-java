@@ -1,12 +1,12 @@
 package prompto.problem;
 
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 
 public class MissingAttributeProblem extends SyntaxProblemBase {
 
 	String actual;
 	
-	public MissingAttributeProblem(ISection section, String actual) {
+	public MissingAttributeProblem(ICodeSection section, String actual) {
 		super(section);
 		this.actual = actual;
 	}

@@ -19,16 +19,16 @@ public class WorkerStackFrame extends LeanStackFrame {
 	Context context;
 	
 	public WorkerStackFrame(Context context, String categoryName, String methodName, String methodProto, int index, IDeclaration method) {
-		this(context, categoryName, methodName, methodProto, method.computeStartLine(), index, (ISection)method);
+		this(context, categoryName, methodName, methodProto, method.computeStartLine(), index, method.getSection());
 		if(method instanceof ConcreteMethodDeclaration) {
 			IStatement stmt = ((ConcreteMethodDeclaration)method).getStatements().getFirst();
-			this.endCharIndex = stmt.getStart().getTokenIndex() - 1;
+			this.endCharIndex = stmt.getSection().getStart().getTokenIndex() - 1;
 		} else if(method instanceof NativeMethodDeclaration) {
 			IStatement stmt = ((NativeMethodDeclaration)method).getStatements().getFirst();
-			this.endCharIndex = stmt.getStart().getTokenIndex() - 1;
+			this.endCharIndex = stmt.getSection().getStart().getTokenIndex() - 1;
 		} else if(method instanceof TestMethodDeclaration) {
 			IStatement stmt = ((TestMethodDeclaration)method).getStatements().getFirst();
-			this.endCharIndex = stmt.getStart().getTokenIndex() - 1;
+			this.endCharIndex = stmt.getSection().getStart().getTokenIndex() - 1;
 		} else
 			this.endCharIndex = this.startCharIndex + 1;
 	}

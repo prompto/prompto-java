@@ -11,8 +11,8 @@ import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.expression.TypeExpression;
 import prompto.intrinsic.PromptoType;
+import prompto.parser.CodeSection;
 import prompto.parser.Dialect;
-import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.transpiler.Transpiler;
@@ -22,7 +22,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 import prompto.value.TypeValue;
 
-public class TypeLiteral extends Section implements IExpression {
+public class TypeLiteral extends CodeSection implements IExpression {
 
 	IType type;
 	

@@ -1,6 +1,6 @@
 package prompto.problem;
 
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.type.IType;
 
 public class IncompatibleTypesProblem extends SyntaxProblemBase {
@@ -8,7 +8,7 @@ public class IncompatibleTypesProblem extends SyntaxProblemBase {
 	IType first;
 	IType second;
 	
-	public IncompatibleTypesProblem(ISection section, IType first, IType second) {
+	public IncompatibleTypesProblem(ICodeSection section, IType first, IType second) {
 		super(section);
 		this.first = first;
 		this.second = second;

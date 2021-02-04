@@ -12,7 +12,7 @@ import prompto.expression.IExpression;
 import prompto.expression.InstanceExpression;
 import prompto.expression.MemberSelector;
 import prompto.param.IParameter;
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.statement.UnresolvedCall;
@@ -26,7 +26,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.ContextualExpression;
 import prompto.value.IInstance;
 
-public class Argument extends Section {
+public class Argument extends CodeSection {
 	
 	IParameter parameter;
 	IExpression expression;

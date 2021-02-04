@@ -33,7 +33,7 @@ import prompto.literal.IntegerLiteral;
 import prompto.literal.TextLiteral;
 import prompto.param.CategoryParameter;
 import prompto.param.IParameter;
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
@@ -69,7 +69,7 @@ public class TextType extends NativeType {
 	}
 
 	@Override
-	public IType checkAdd(Context context, IType other, boolean tryReverse, ISection section) {
+	public IType checkAdd(Context context, IType other, boolean tryReverse, ICodeSection section) {
 		if(tryReverse)
 			return this; // we're lhs, ok
 		else
@@ -77,7 +77,7 @@ public class TextType extends NativeType {
 	}
 	
 	@Override
-	public IType checkMultiply(Context context, IType other, boolean tryReverse, ISection section) {
+	public IType checkMultiply(Context context, IType other, boolean tryReverse, ICodeSection section) {
 		if(other instanceof IntegerType)
 			return this;
 		else
@@ -85,7 +85,7 @@ public class TextType extends NativeType {
 	}
 	
 	@Override
-	public void checkCompare(Context context, IType other, ISection section) {
+	public void checkCompare(Context context, IType other, ICodeSection section) {
 		if(other instanceof TextType || other instanceof CharacterType)
 			return;
 		else
@@ -610,7 +610,7 @@ public class TextType extends NativeType {
 
 	
 	@Override
-	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ISection section) {
+	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ICodeSection section) {
 		left.declare(transpiler);
 		right.declare(transpiler);
 	}
@@ -630,7 +630,7 @@ public class TextType extends NativeType {
 	}
 	
 	@Override
-	public void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ISection section) {
+	public void declareMultiply(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ICodeSection section) {
 	    if (other == IntegerType.instance()) {
 	        left.declare(transpiler);
 	        right.declare(transpiler);

@@ -18,7 +18,7 @@ import prompto.declaration.CategoryDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.expression.IExpression;
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.parser.MissingTokenException;
 import prompto.parser.UnwantedTokenException;
 import prompto.type.IType;
@@ -87,196 +87,196 @@ public abstract class ProblemListener implements ANTLRErrorListener, IProblemLis
 	}
 	
 	@Override
-	public void reportDuplicate(ISection section, String name, ISection existing) {
+	public void reportDuplicate(ICodeSection section, String name, ICodeSection existing) {
 		addProblem(new DuplicateProblem(section, name, existing));
 	}
 	
 	
 	@Override
-	public void reportNotMutable(ISection section, String name) {
+	public void reportNotMutable(ICodeSection section, String name) {
 		addProblem(new NotMutableProblem(section, name));
 	}
 	
 	@Override
-	public void reportNotStorable(ISection section, String name) {
+	public void reportNotStorable(ICodeSection section, String name) {
 		addProblem(new NotStorableProblem(section, name));
 	}
 
 	@Override
-	public void reportIllegalAssignment(ISection section, IType expected, IType actual) {
+	public void reportIllegalAssignment(ICodeSection section, IType expected, IType actual) {
 		addProblem(new IllegalAssignmentProblem(section, expected, actual));
 	}
 	
 	@Override
-	public void reportIllegalAssignment(ISection section, Set<IType> expected, IType actual) {
+	public void reportIllegalAssignment(ICodeSection section, Set<IType> expected, IType actual) {
 		addProblem(new IllegalAssignmentProblem(section, expected, actual));
 	}
 
 	@Override
-	public void reportIllegalReturn(ISection section) {
+	public void reportIllegalReturn(ICodeSection section) {
 		addProblem(new IllegalReturnProblem(section));
 	}
 	
 	@Override
-	public void reportIllegalInitialize(ISection section) {
+	public void reportIllegalInitialize(ICodeSection section) {
 		addProblem(new IllegalInitializeProblem(section));
 	}
 	
 	
 	@Override
-	public void reportIllegalInitializeParameters(ISection section) {
+	public void reportIllegalInitializeParameters(ICodeSection section) {
 		addProblem(new IllegalInitializeParametersProblem(section));
 	}
 
 	
 	@Override
-	public void reportIllegalWidgetConstructor(ISection section, String name) {
+	public void reportIllegalWidgetConstructor(ICodeSection section, String name) {
 		addProblem(new IllegalWidgetConstructorProblem(section, name));
 	}
 
 	@Override
-	public void reportIllegalAbstractConstructor(ISection section, String name, String missingPrototype) {
+	public void reportIllegalAbstractConstructor(ICodeSection section, String name, String missingPrototype) {
 		addProblem(new IllegalAbstractConstructorProblem(section, name, missingPrototype));
 	}
 
 	@Override
-	public void reportIllegalAbstractMethodCall(ISection section, String methodSignature) {
+	public void reportIllegalAbstractMethodCall(ICodeSection section, String methodSignature) {
 		addProblem(new IllegalAbstractMethodCallProblem(section, methodSignature));
 	}
 
 	@Override
-	public void reportUnknownIdentifier(ISection section, String name) {
+	public void reportUnknownIdentifier(ICodeSection section, String name) {
 		addProblem(new UnknownIdentifierProblem(section, name));
 	}
 	
 	@Override
-	public void reportAmbiguousIdentifier(ISection section, String name) {
+	public void reportAmbiguousIdentifier(ICodeSection section, String name) {
 		addProblem(new AmbiguousIdentifierError(section, name));
 	}
 	
 	@Override
-	public void reportUnknownAttribute(ISection section, String name, String hint) {
+	public void reportUnknownAttribute(ICodeSection section, String name, String hint) {
 		addProblem(new UnknowAttributeProblem(section, name, hint));
 	}
 	
 	@Override
-	public void reportUnknownProperty(ISection section, String name) {
+	public void reportUnknownProperty(ICodeSection section, String name) {
 		addProblem(new UnknowPropertyProblem(section, name));
 	}
 	
 	@Override
-	public void reportDuplicateProperty(ISection section, String name) {
+	public void reportDuplicateProperty(ICodeSection section, String name) {
 		addProblem(new DuplicatePropertyProblem(section, name));
 	}
 
 	@Override
-	public void reportMissingProperty(ISection section, String name) {
+	public void reportMissingProperty(ICodeSection section, String name) {
 		addProblem(new MissingPropertyProblem(section, name));
 	}
 
 	@Override
-	public void reportMissingAttribute(ISection section, String message) {
+	public void reportMissingAttribute(ICodeSection section, String message) {
 		addProblem(new MissingAttributeProblem(section, message));
 	}
 	
 	@Override
-	public void reportIncompatibleTypes(ISection section, IType first, IType second) {
+	public void reportIncompatibleTypes(ICodeSection section, IType first, IType second) {
 		addProblem(new IncompatibleTypesProblem(section, first, second));
 	}
 
 	@Override
-	public void reportUnknownAnnotation(ISection section, String name) {
+	public void reportUnknownAnnotation(ICodeSection section, String name) {
 		addProblem(new UnknowAnnotationProblem(section, name));
 	}
 	
 	@Override
-	public void reportUnknownMethod(ISection section, String name) {
+	public void reportUnknownMethod(ICodeSection section, String name) {
 		addProblem(new UnknownMethodProblem(section, name));
 	}
 	
 	@Override
-	public void reportUnknownCategory(ISection section, String name) {
+	public void reportUnknownCategory(ICodeSection section, String name) {
 		addProblem(new UnknownCategoryProblem(section, name));
 	}
 
 	@Override
-	public void reportNoMatchingPrototype(ISection section, String actual, Set<String> expected) {
+	public void reportNoMatchingPrototype(ICodeSection section, String actual, Set<String> expected) {
 		addProblem(new NoMatchingPrototypeProblem(section, actual, expected));
 	}
 	
 	@Override
-	public void reportMissingArrowPrototype(ISection section, String source) {
+	public void reportMissingArrowPrototype(ICodeSection section, String source) {
 		addProblem(new MissingArrowPrototypeProblem(section, source));
 	}
 
 	@Override
-	public void reportTooManyArrowPrototype(ISection section, String source, Set<String> culprits) {
+	public void reportTooManyArrowPrototype(ICodeSection section, String source, Set<String> culprits) {
 		addProblem(new TooManyArrowPrototypesProblem(section, source, culprits));
 	}
 
 	@Override
-	public void reportIllegalOperation(ISection section, String verb, IType type, IType other) {
+	public void reportIllegalOperation(ICodeSection section, String verb, IType type, IType other) {
 		addProblem(new IllegalOperationProblem(section, verb, type, other));
 	}
 	
 	@Override
-	public void reportIllegalOperator(ISection section, String message) {
+	public void reportIllegalOperator(ICodeSection section, String message) {
 		addProblem(new IllegalOperatorProblem(section, message));
 	}
 
 
 	@Override
-	public void reportUnknownMember(ISection section, String name) {
+	public void reportUnknownMember(ICodeSection section, String name) {
 		addProblem(new UnknownMemberProblem(section, name));
 	}
 	
 	@Override
-	public void reportIllegalPredicate(ISection section, IExpression actual) {
+	public void reportIllegalPredicate(ICodeSection section, IExpression actual) {
 		addProblem(new IllegalPredicateProblem(section, actual));
 	}
 	
 	@Override
-	public void reportIllegalRemoteCall(ISection section, String message) {
+	public void reportIllegalRemoteCall(ICodeSection section, String message) {
 		addProblem(new IllegalRemoteCallProblem(section, message));
 	}
 	
 	@Override
-	public void reportIllegalAnnotation(ISection section, String message) {
+	public void reportIllegalAnnotation(ICodeSection section, String message) {
 		addProblem(new IllegalAnnotation(section, message));
 	}
 	
 	@Override
-	public void reportIllegalValue(ISection section, String message) {
+	public void reportIllegalValue(ICodeSection section, String message) {
 		addProblem(new IllegalValueProblem(section, message));
 	}
 	
 	@Override
-	public void reportNoSuperType(ISection section, IType actual) {
+	public void reportNoSuperType(ICodeSection section, IType actual) {
 		addProblem(new NoSuperCategoryProblem(section, actual));
 	}
 	
 	@Override
-	public void reportAssigningVoidType(ISection section) {
+	public void reportAssigningVoidType(ICodeSection section) {
 		addProblem(new AssigningVoidTypeProblem(section));
 	}
 	
 	@Override
-	public void reportReturningVoidType(ISection section) {
+	public void reportReturningVoidType(ICodeSection section) {
 		addProblem(new ReturningVoidTypeProblem(section));
 	}
 	
 	@Override
-	public void reportMissingBinding(ISection section, String name) {
+	public void reportMissingBinding(ICodeSection section, String name) {
 		addProblem(new MissingBindingProblem(section, name));
 	}
 	
 	@Override
-	public void reportExpectingCollection(ISection section, IType actual) {
+	public void reportExpectingCollection(ICodeSection section, IType actual) {
 		addProblem(new ExpectingCollectionProblem(section, actual));
 	}
 
 	@Override
-	public void reportExpectingResource(ISection section, IType actual) {
+	public void reportExpectingResource(ICodeSection section, IType actual) {
 		addProblem(new ExpectingResourceProblem(section, actual));
 	}
 

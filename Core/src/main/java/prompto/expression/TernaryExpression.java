@@ -13,8 +13,8 @@ import prompto.compiler.ResultInfo;
 import prompto.compiler.StackState;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.parser.CodeSection;
 import prompto.parser.Dialect;
-import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.BooleanType;
@@ -24,7 +24,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.BooleanValue;
 import prompto.value.IValue;
 
-public class TernaryExpression extends Section implements IExpression {
+public class TernaryExpression extends CodeSection implements IExpression {
 
 	IExpression condition;
 	IExpression whenTrue;

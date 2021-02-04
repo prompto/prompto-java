@@ -1,12 +1,12 @@
 package prompto.problem;
 
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 
 public class MissingBindingProblem extends SyntaxProblemBase {
 
 	String name;
 	
-	public MissingBindingProblem(ISection section, String name) {
+	public MissingBindingProblem(ICodeSection section, String name) {
 		super(section);
 		this.name = name;
 	}

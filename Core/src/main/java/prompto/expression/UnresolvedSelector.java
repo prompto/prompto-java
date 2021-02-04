@@ -24,7 +24,7 @@ public class UnresolvedSelector extends SelectorExpression {
 
 	public UnresolvedSelector(Identifier id) {
 		this.id = id;
-		copySectionFrom(id);
+		setSectionFrom(id);
 	}
 
 	public IExpression getResolved() {
@@ -103,7 +103,7 @@ public class UnresolvedSelector extends SelectorExpression {
 	private IExpression tryResolveMember(Context context) {
 		try {
 			MemberSelector member = new MemberSelector(parent, id);
-			member.copySectionFrom(this);
+			member.setSectionFrom(this);
 			member.check(context);
 			return member;
 		} catch (SyntaxError e) {
@@ -125,7 +125,7 @@ public class UnresolvedSelector extends SelectorExpression {
 				resolvedParent = ((UnresolvedIdentifier) resolvedParent).getResolved();
 			}
 			UnresolvedCall method = new UnresolvedCall(new MethodSelector(resolvedParent, id), assignments);
-			method.copySectionFrom(this);
+			method.setSectionFrom(this);
 			method.check(context);
 			return method;
 		} catch (SyntaxError e) {

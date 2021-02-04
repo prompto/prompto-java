@@ -8,7 +8,7 @@ import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
@@ -17,7 +17,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 import prompto.value.NullValue;
 
-public class SymbolExpression extends Section implements IExpression {
+public class SymbolExpression extends CodeSection implements IExpression {
 
 	Identifier id;
 	Symbol symbol;

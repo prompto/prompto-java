@@ -1,12 +1,12 @@
 package prompto.problem;
 
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 
 public class IllegalAbstractMethodCallProblem extends SyntaxProblemBase {
 
 	String methodSignature;
 	
-	public IllegalAbstractMethodCallProblem(ISection section, String methodSignature) {
+	public IllegalAbstractMethodCallProblem(ICodeSection section, String methodSignature) {
 		super(section);
 		this.methodSignature = methodSignature;
 	}

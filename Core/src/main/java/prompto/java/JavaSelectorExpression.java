@@ -1,8 +1,8 @@
 package prompto.java;
 
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 
-public abstract class JavaSelectorExpression extends Section implements JavaExpression {
+public abstract class JavaSelectorExpression extends CodeSection implements JavaExpression {
 
 	JavaExpression parent;
 	

@@ -14,8 +14,8 @@ import prompto.compiler.StringConstant;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
+import prompto.parser.CodeSection;
 import prompto.parser.Dialect;
-import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.store.IQueryBuilder;
 import prompto.store.IStore;
@@ -26,7 +26,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.BooleanValue;
 import prompto.value.IValue;
 
-public class NotExpression extends Section implements IUnaryExpression, IPredicateExpression, IAssertion {
+public class NotExpression extends CodeSection implements IUnaryExpression, IPredicateExpression, IAssertion {
 
 	IExpression expression;
 	

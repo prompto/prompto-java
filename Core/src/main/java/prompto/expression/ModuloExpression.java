@@ -10,7 +10,7 @@ import prompto.compiler.ResultInfo;
 import prompto.declaration.CategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.DecimalType;
@@ -19,7 +19,7 @@ import prompto.type.IntegerType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
-public class ModuloExpression extends Section implements IExpression {
+public class ModuloExpression extends CodeSection implements IExpression {
 
 	IExpression left;
 	IExpression right;

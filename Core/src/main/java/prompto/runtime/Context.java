@@ -41,8 +41,7 @@ import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoBinary;
 import prompto.intrinsic.PromptoList;
-import prompto.parser.Dialect;
-import prompto.parser.ILocation;
+import prompto.parser.ICodeSection;
 import prompto.parser.ISection;
 import prompto.parser.Section;
 import prompto.problem.IProblemListener;
@@ -320,7 +319,7 @@ public class Context implements IContext {
 	private void unregisterValues(String path) {
 		List<Identifier> toRemove = new ArrayList<Identifier>();
 		for(Identifier id : instances.keySet()) {
-			if(path.equals(id.getPath()))
+			if(path.equals(id.getSection().getPath()))
 				toRemove.add(id);
 		}
 		for(Identifier id : toRemove) {
@@ -332,7 +331,7 @@ public class Context implements IContext {
 	private void unregisterTests(String path) {
 		List<TestMethodDeclaration> toRemove = new ArrayList<TestMethodDeclaration>();
 		for(TestMethodDeclaration decl : tests.values()) {
-			if(path.equals(decl.getPath()))
+			if(path.equals(decl.getSection().getPath()))
 				toRemove.add(decl);
 		}
 		for(TestMethodDeclaration decl : toRemove)
@@ -342,7 +341,7 @@ public class Context implements IContext {
 	private void unregisterDeclarations(String path) {
 		List<IDeclaration> toRemove = new ArrayList<IDeclaration>();
 		for(IDeclaration decl : declarations.values()) {
-			if(path.equals(decl.getPath()))
+			if(path.equals(decl.getSection().getPath()))
 				toRemove.add(decl);
 			else if(decl instanceof MethodDeclarationMap)
 				((MethodDeclarationMap)decl).unregister(path);
@@ -539,7 +538,7 @@ public class Context implements IContext {
 	private MethodDeclarationMap checkDuplicate(IMethodDeclaration declaration) {
 		INamed current = getRegistered(declaration.getId());
 		if(current!=null && !(current instanceof MethodDeclarationMap))
-			problemListener.reportDuplicate(declaration, declaration.getId().toString(), (ISection)current);
+			problemListener.reportDuplicate(declaration, declaration.getId().toString(), (ICodeSection)current);
 		return (MethodDeclarationMap)current;
 	}
 
@@ -551,7 +550,7 @@ public class Context implements IContext {
 	private boolean checkDuplicate(TestMethodDeclaration declaration) {
 		TestMethodDeclaration current = tests.get(declaration.getId());
 		if(current!=null)
-			problemListener.reportDuplicate(declaration, declaration.getId().toString(), (ISection)current);
+			problemListener.reportDuplicate(declaration, declaration.getId().toString(), (ICodeSection)current);
 		return current==null;
 	}
 	
@@ -648,7 +647,7 @@ public class Context implements IContext {
 		public void unregister(String path) {
 			List<IMethodDeclaration> toRemove = new ArrayList<IMethodDeclaration>();
 			for(IMethodDeclaration decl : this.values()) {
-				if(path.equals(decl.getPath()))
+				if(path.equals(decl.getSection().getPath()))
 					toRemove.add(decl);
 			}
 			for(IMethodDeclaration decl : toRemove)
@@ -700,37 +699,6 @@ public class Context implements IContext {
 		}
 
 		@Override
-		public String getPath() {
-			return "__INTERNAL__"; // avoid crash in unregister
-		}
-
-		@Override
-		public ILocation getStart() {
-			throw new RuntimeException("Should never get there!");
-		}
-
-		@Override
-		public ILocation getEnd() {
-			throw new RuntimeException("Should never get there!");
-		}
-		
-		@Override
-		public Dialect getDialect() {
-			throw new RuntimeException("Should never get there!");
-		}
-		
-		@Override
-		public void setAsBreakpoint(boolean set) {
-			throw new RuntimeException("Should never get there!");
-		}
-		
-		@Override
-		public boolean isBreakpoint() {
-			throw new RuntimeException("Should never get there!");
-		}
-		
-		
-		@Override
 		public ISection locateSection(ISection section) {
 			return values().stream()
 					.map(m->m.locateSection(section))
@@ -740,7 +708,7 @@ public class Context implements IContext {
 		}
 		
 		@Override
-		public boolean isOrContains(ISection section) {
+		public boolean isOrContains(ICodeSection section) {
 			throw new RuntimeException("Should never get there!");
 		}
 
@@ -755,6 +723,16 @@ public class Context implements IContext {
 
 		public IMethodDeclaration getFirst() {
 			return values().iterator().next();
+		}
+
+		@Override
+		public ISection getSection() {
+			throw new UnsupportedOperationException("Should never get there!");
+		}
+
+		@Override
+		public void setSection(ISection section) {
+			throw new UnsupportedOperationException("Should never get there!");
 		}
 
 	}
@@ -893,21 +871,21 @@ public class Context implements IContext {
 	}
 
 	
-	public void leaveSection(ISection section) throws PromptoError {
+	public void leaveSection(ICodeSection codeSection) throws PromptoError {
 		if(debugger!=null)
-			debugger.leaveSection(this, section);
+			debugger.leaveSection(this, codeSection.getSection());
 	}
 
 	
 	public void enterStatement(IStatement statement) throws PromptoError {
 		if(debugger!=null)
-			debugger.enterStatement(this, statement);
+			debugger.enterStatement(this, statement.getSection());
 	}
 
 	
 	public void leaveStatement(IStatement statement) throws PromptoError {
 		if(debugger!=null)
-			debugger.leaveStatement(this, statement);
+			debugger.leaveStatement(this, statement.getSection());
 	}
 
 	
@@ -1019,7 +997,7 @@ public class Context implements IContext {
 			return null;
 		else {
 			Section converted = new Section(section);
-			converted.setPath(declaration.getPath());
+			converted.setPath(declaration.getSection().getPath());
 			return locateFileSection(converted, Collections.singletonList(declaration));
 		}
 	}

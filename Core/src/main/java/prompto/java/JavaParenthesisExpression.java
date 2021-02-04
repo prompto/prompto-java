@@ -1,12 +1,12 @@
 package prompto.java;
 
 import prompto.error.PromptoError;
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 
-public class JavaParenthesisExpression extends Section implements JavaExpression {
+public class JavaParenthesisExpression extends CodeSection implements JavaExpression {
 
 	JavaExpression expression;
 	

@@ -1,12 +1,12 @@
 package prompto.problem;
 
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 
 public class MissingArrowPrototypeProblem extends SyntaxProblemBase {
 
 	String source;
 	
-	public MissingArrowPrototypeProblem(ISection section, String source) {
+	public MissingArrowPrototypeProblem(ICodeSection section, String source) {
 		super(section);
 		this.source = source;
 	}

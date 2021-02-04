@@ -4,7 +4,13 @@ import java.util.Objects;
 
 import org.antlr.v4.runtime.Token;
 
-public class Section implements ISection {
+public final class Section implements ISection {
+	
+	public static Section from(String path, Token start, Token end, Dialect dialect) {
+		Section section = new Section();
+		section.setFrom(path, start, end, dialect);
+		return section;
+	}
 	
 	String path;
 	private Location start;
@@ -16,7 +22,7 @@ public class Section implements ISection {
 	}
 	
 	public Section(ISection section) {
-		copySectionFrom(section);
+		copyFrom(section);
 	}
 
 	public Section(String path, Location start, Location end, Dialect dialect, boolean breakpoint) {
@@ -28,7 +34,7 @@ public class Section implements ISection {
 	}
 	
 	
-	public void copySectionFrom(ISection section) {
+	public void copyFrom(ISection section) {
 		this.path = section.getPath();
 		this.setStart(section.getStart()==null ? null : new Location(section.getStart()));
 		this.setEnd(section.getEnd()==null ? null : new Location(section.getEnd()));
@@ -37,7 +43,7 @@ public class Section implements ISection {
 	}
 
 	
-	public void setSectionFrom(String path, Token start, Token end, Dialect dialect) {
+	public void setFrom(String path, Token start, Token end, Dialect dialect) {
 		this.path = path;
 		this.setStart(new Location(start));
 		this.setEnd(new Location(end, true));
@@ -102,16 +108,14 @@ public class Section implements ISection {
 		this.breakpoint = breakpoint;
 	}
 	
-	// do NOT provide Section.equals coz it breaks a lot of stuff, due to missing hashCode/equals in descentants
-	// TODO use composition instead of inheritance
-
-	public static boolean equalSections(Section s1, Section s2) {
-		if (s1==s2)
-			return true;
-		if(s1==null || s2==null)
-			return false;
-		return s1.breakpoint == s2.breakpoint && s1.dialect == s2.dialect && Objects.equals(s1.end, s2.end) && Objects.equals(s1.path, s2.path) && Objects.equals(s1.start, s2.start);
+	
+	@Override
+	public boolean equals(Object other) {
+		return this == other || (other instanceof Section && ((Section)other).equals(this));
 	}
-	
-	
+
+	public boolean equals(Section other) {
+		return other != null && breakpoint == other.breakpoint && dialect == other.dialect && Objects.equals(end, other.end) && Objects.equals(path, other.path) && Objects.equals(start, other.start);
+	}
+
 }

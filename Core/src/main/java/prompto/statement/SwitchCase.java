@@ -2,15 +2,16 @@ package prompto.statement;
 
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
+import prompto.parser.CodeSection;
+import prompto.parser.ICodeSection;
 import prompto.parser.ISection;
-import prompto.parser.Section;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
-public abstract class SwitchCase extends Section implements ISection {
+public abstract class SwitchCase extends CodeSection implements ICodeSection {
 
 	protected IExpression expression;
 	StatementList statements;
@@ -26,7 +27,7 @@ public abstract class SwitchCase extends Section implements ISection {
 
 	public ISection locateSection(ISection section) {
 		ISection result = statements.locateSection(section);
-		return result!=null ? result : this.isOrContains(section) ? this : null;
+		return result!=null ? result : this.isOrContains(section) ? this.getSection() : null;
 	}
 	
 	public abstract void checkSwitchType(Context context, IType type);

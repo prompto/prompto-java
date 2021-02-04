@@ -14,7 +14,7 @@ import prompto.type.IType;
 import prompto.utils.CodeWriter;
 
 /* the purpose of this class is simply to link an expression with a section */
-public class Assertion extends Section {
+public class Assertion extends CodeSection {
 
 	IExpression expression;
 	

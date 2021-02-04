@@ -11,6 +11,7 @@ import prompto.compiler.StackLocals;
 import prompto.error.PromptoError;
 import prompto.java.JavaNativeCall;
 import prompto.parser.Dialect;
+import prompto.parser.ICodeSection;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
@@ -61,7 +62,7 @@ public class StatementList extends LinkedList<IStatement> {
 			TypeMap types = new TypeMap();
 			if(returnType!=null)
 				types.add(returnType);
-			ISection section = null;
+			ICodeSection section = null;
 			for(IStatement statement : this) {
 				IType type = statement.check(context);
 				if(!statement.canReturn())
@@ -97,7 +98,7 @@ public class StatementList extends LinkedList<IStatement> {
 			TypeMap types = new TypeMap();
 			if(returnType!=null)
 				types.add(returnType);
-			ISection section = null;
+			ICodeSection section = null;
 			for(IStatement statement : this) {
 				if(!(statement instanceof JavaNativeCall))
 					continue;

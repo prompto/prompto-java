@@ -1,13 +1,13 @@
 package prompto.problem;
 
 import prompto.expression.IExpression;
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 
 public class IllegalPredicateProblem extends SyntaxProblemBase {
 
 	IExpression expression;
 	
-	public IllegalPredicateProblem(ISection section, IExpression expression) {
+	public IllegalPredicateProblem(ICodeSection section, IExpression expression) {
 		super(section);
 		this.expression = expression;
 	}

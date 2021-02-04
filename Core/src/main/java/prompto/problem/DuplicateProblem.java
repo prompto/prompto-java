@@ -1,13 +1,13 @@
 package prompto.problem;
 
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 
 public class DuplicateProblem extends SyntaxProblemBase {
 
 	String name;
-	ISection other;
+	ICodeSection other;
 	
-	public DuplicateProblem(ISection section, String name, ISection other) {
+	public DuplicateProblem(ICodeSection section, String name, ICodeSection other) {
 		super(section);
 		this.name = name;
 		this.other = other;

@@ -19,7 +19,7 @@ import prompto.intrinsic.PromptoPeriod;
 import prompto.intrinsic.PromptoSet;
 import prompto.intrinsic.PromptoTime;
 import prompto.intrinsic.PromptoTuple;
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.CharacterType;
@@ -39,7 +39,7 @@ import prompto.type.TupleType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
-public class PlusExpression extends Section implements IExpression {
+public class PlusExpression extends CodeSection implements IExpression {
 
 	IExpression left;
 	IExpression right;

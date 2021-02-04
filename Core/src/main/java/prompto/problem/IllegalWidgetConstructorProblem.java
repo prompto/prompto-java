@@ -1,12 +1,12 @@
 package prompto.problem;
 
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 
 public class IllegalWidgetConstructorProblem extends SyntaxProblemBase {
 
 	String name;
 	
-	public IllegalWidgetConstructorProblem(ISection section, String name) {
+	public IllegalWidgetConstructorProblem(ICodeSection section, String name) {
 		super(section);
 		this.name = name;
 	}

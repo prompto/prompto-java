@@ -6,8 +6,8 @@ import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
-import prompto.parser.ISection;
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
@@ -15,7 +15,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.CodeValue;
 import prompto.value.IValue;
 
-public class ExecuteExpression extends Section implements IExpression, ISection {
+public class ExecuteExpression extends CodeSection implements IExpression, ICodeSection {
 
 	Identifier id;
 	

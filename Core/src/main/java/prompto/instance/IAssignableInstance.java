@@ -6,7 +6,7 @@ import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
@@ -16,9 +16,9 @@ import prompto.value.IValue;
 public interface IAssignableInstance {
 
 	IType check(Context context);
-	IType checkAssignValue(Context context, IType valueType, ISection section);
-	IType checkAssignMember(Context context, Identifier name, IType valueType, ISection section);
-	IType checkAssignItem(Context context, IType itemType, IType valueType, ISection section);
+	IType checkAssignValue(Context context, IType valueType, ICodeSection section);
+	IType checkAssignMember(Context context, Identifier name, IType valueType, ICodeSection section);
+	IType checkAssignItem(Context context, IType itemType, IType valueType, ICodeSection section);
 	void assign(Context context, IExpression expression) throws PromptoError;
 	IValue interpret(Context context) throws PromptoError;
 	void toDialect(CodeWriter writer, IExpression expression);

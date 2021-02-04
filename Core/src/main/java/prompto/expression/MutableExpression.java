@@ -11,7 +11,7 @@ import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.intrinsic.IMutable;
-import prompto.parser.Section;
+import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
@@ -21,7 +21,7 @@ import prompto.value.IInstance;
 import prompto.value.IValue;
 import prompto.value.NullValue;
 
-public class MutableExpression extends Section implements IExpression {
+public class MutableExpression extends CodeSection implements IExpression {
 
 	IExpression source;
 	
