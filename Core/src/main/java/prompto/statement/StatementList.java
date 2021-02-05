@@ -34,9 +34,9 @@ public class StatementList extends LinkedList<IStatement> {
 	}
 	
 
-	public ISection locateSection(ISection section) {
+	public ICodeSection locateCodeSection(ISection section) {
 		return this.stream()
-				.map(s->s.locateSection(section))
+				.map(s->s.locateCodeSection(section))
 				.filter(Objects::nonNull)
 				.findFirst()
 				.orElse(null);

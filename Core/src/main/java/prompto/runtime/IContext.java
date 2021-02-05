@@ -1,11 +1,12 @@
 package prompto.runtime;
 
+import prompto.parser.ICodeSection;
 import prompto.parser.ISection;
 
 
 public interface IContext {
 
 	IContext getCallingContext();
-	ISection locateSection(ISection section);
+	ICodeSection locateCodeSection(ISection section);
 
 }

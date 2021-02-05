@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.Objects;
 
 import prompto.declaration.IMethodDeclaration;
+import prompto.parser.ICodeSection;
 import prompto.parser.ISection;
 
 public class MethodDeclarationList extends LinkedList<IMethodDeclaration> {
@@ -17,9 +18,9 @@ public class MethodDeclarationList extends LinkedList<IMethodDeclaration> {
 		this.add(method);
 	}
 
-	public ISection locateSection(ISection section) {
+	public ICodeSection locateCodeSection(ISection section) {
 		return this.stream()
-				.map(m->m.locateSection(section))
+				.map(m->m.locateCodeSection(section))
 				.filter(Objects::nonNull)
 				.findFirst()
 				.orElse(null);

@@ -21,6 +21,7 @@ import prompto.compiler.StackState;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.parser.ICodeSection;
 import prompto.parser.ISection;
 import prompto.runtime.BreakResult;
 import prompto.runtime.Context;
@@ -58,9 +59,9 @@ public class ForEachStatement extends BaseStatement {
 	}
 
 	@Override
-	public ISection locateSection(ISection section) {
-		ISection result = statements.locateSection(section);
-		return result!=null ? result : super.locateSection(section);
+	public ICodeSection locateCodeSection(ISection section) {
+		ICodeSection result = statements.locateCodeSection(section);
+		return result!=null ? result : super.locateCodeSection(section);
 	}
 	
 	@Override

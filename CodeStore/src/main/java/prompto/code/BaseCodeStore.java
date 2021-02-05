@@ -11,6 +11,7 @@ import prompto.declaration.NativeCategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoVersion;
+import prompto.parser.ICodeSection;
 import prompto.parser.ISection;
 
 /* a code store which simply links to another one */
@@ -33,8 +34,8 @@ public abstract class BaseCodeStore implements ICodeStore {
 	}
 	
 	@Override
-	public ISection findSection(ISection section) { 
-		return next==null ? null : next.findSection(section);
+	public ICodeSection findCodeSection(ISection section) { 
+		return next==null ? null : next.findCodeSection(section);
 	}
 	
 	@Override

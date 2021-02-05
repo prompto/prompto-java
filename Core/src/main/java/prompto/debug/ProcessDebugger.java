@@ -13,6 +13,7 @@ import prompto.debug.variable.IVariable;
 import prompto.debug.worker.IWorker;
 import prompto.debug.worker.LeanWorker;
 import prompto.debug.worker.WorkerState;
+import prompto.parser.ICodeSection;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.utils.Logger;
@@ -76,10 +77,10 @@ public class ProcessDebugger implements IDebugger {
 	public void installBreakpoint(ISection section) {
 		if(context==null)
 			throw new RuntimeException("No context to search from!");
-		ISection instance = context.locateSection(section);
+		ICodeSection instance = context.locateCodeSection(section);
 		if(instance!=null) {
 			logger.debug(()->"Found section " + instance.toString());
-			instance.setAsBreakpoint(section.isBreakpoint());
+			instance.getSection().setAsBreakpoint(section.isBreakpoint());
 		} else
 			logger.debug(()->"Could not find section " + section.toString());
 		

@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import prompto.error.ExecutionError;
 import prompto.error.PromptoError;
+import prompto.parser.ICodeSection;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
@@ -28,9 +29,9 @@ public abstract class BaseSwitchStatement extends BaseStatement {
 			this.add(item);
 		}
 
-		public ISection locateSection(ISection section) {
+		public ICodeSection locateCodeSection(ISection section) {
 			return this.stream()
-					.map(s->s.locateSection(section))
+					.map(s->s.locateCodeSection(section))
 					.filter(Objects::nonNull)
 					.findFirst()
 					.orElse(null);
@@ -60,11 +61,11 @@ public abstract class BaseSwitchStatement extends BaseStatement {
 	}
 	
 	@Override
-	public ISection locateSection(ISection section) {
-		ISection result = switchCases.locateSection(section);
+	public ICodeSection locateCodeSection(ISection section) {
+		ICodeSection result = switchCases.locateCodeSection(section);
 		if(result==null && defaultCase!=null)
-			result = defaultCase.locateSection(section);
-		return result!=null ? result : super.locateSection(section);
+			result = defaultCase.locateCodeSection(section);
+		return result!=null ? result : super.locateCodeSection(section);
 	}
 	
 

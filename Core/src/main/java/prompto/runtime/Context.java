@@ -699,9 +699,9 @@ public class Context implements IContext {
 		}
 
 		@Override
-		public ISection locateSection(ISection section) {
+		public ICodeSection locateCodeSection(ISection section) {
 			return values().stream()
-					.map(m->m.locateSection(section))
+					.map(m->m.locateCodeSection(section))
 					.filter(Objects::nonNull)
 					.findFirst()
 					.orElse(null);
@@ -979,26 +979,26 @@ public class Context implements IContext {
 	
 	
 	@Override
-	public ISection locateSection(ISection section) {
+	public ICodeSection locateCodeSection(ISection section) {
 		if(globals!=this)
-			return globals.locateSection(section);
+			return globals.locateCodeSection(section);
 		else {
 			String path = section.getPath();
 			if(path.startsWith("store:/")) 
-				return locateStoreSection(section);
+				return locateStoreCodeSection(section);
 			else
-				return locateFileSection(section, declarations.values());
+				return locateFileCodeSection(section, declarations.values());
 		}
 	}
 	
-	ISection locateStoreSection(ISection section) {
+	ICodeSection locateStoreCodeSection(ISection section) {
 		IDeclaration declaration = locateStoreDeclarationAtPath(section.getPath());
 		if(declaration==null)
 			return null;
 		else {
 			Section converted = new Section(section);
 			converted.setPath(declaration.getSection().getPath());
-			return locateFileSection(converted, Collections.singletonList(declaration));
+			return locateFileCodeSection(converted, Collections.singletonList(declaration));
 		}
 	}
 
@@ -1027,13 +1027,13 @@ public class Context implements IContext {
 		}
 	}
 
-	ISection locateFileSection(ISection section, Collection<IDeclaration> declarations) {
-		ISection result = SectionLocator.locateSection(declarations, section);
+	ICodeSection locateFileCodeSection(ISection section, Collection<IDeclaration> declarations) {
+		ICodeSection result = SectionLocator.locateCodeSection(declarations, section);
 		if(result!=null) 
 			return result;
 		ICodeStore store = ICodeStore.getInstance();
 		if(store!=null)
-			return store.findSection(section);
+			return store.findCodeSection(section);
 		else
 			return null;
 	}

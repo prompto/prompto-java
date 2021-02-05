@@ -192,8 +192,12 @@ public class Serializer {
 		for(Field field : klass.getDeclaredFields()) {
 			field.setAccessible(true);
 			JsonNode fieldNode = node.get(field.getName());
-			Type type = field.getGenericType();
-			field.set(value, postDeserialize(type, fieldNode));
+			if(fieldNode==null)
+				logger.debug(()->"No data for field: " + field.getName());
+			else {
+				Type type = field.getGenericType();
+				field.set(value, postDeserialize(type, fieldNode));
+			}
 		}
 	}
 

@@ -20,6 +20,7 @@ import prompto.intrinsic.PromptoVersion;
 import prompto.parser.AbstractParser;
 import prompto.parser.Dialect;
 import prompto.parser.ECleverParser;
+import prompto.parser.ICodeSection;
 import prompto.parser.ISection;
 import prompto.parser.MCleverParser;
 import prompto.parser.OCleverParser;
@@ -151,7 +152,11 @@ public interface ICodeStore {
 
 	void collectStorableAttributes(Map<String, AttributeDeclaration> columns) throws PromptoError;
 
-	ISection findSection(ISection section);
+	ICodeSection findCodeSection(ISection section);
+	default ISection findSection(ISection section) {
+		ICodeSection codeSection = findCodeSection(section);
+		return codeSection==null ? null : codeSection.getSection();
+	}
 
     Collection<String> fetchDeclarationNames();
 
@@ -182,5 +187,6 @@ public interface ICodeStore {
 	void upgradeIfRequired();
 
 	NativeCategoryDeclaration fetchLatestNativeCategoryDeclarationWithJavaBinding(String typeName);
+
 
 }

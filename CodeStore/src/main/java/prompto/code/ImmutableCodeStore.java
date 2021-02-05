@@ -29,6 +29,7 @@ import prompto.error.ReadWriteError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoVersion;
 import prompto.parser.Dialect;
+import prompto.parser.ICodeSection;
 import prompto.parser.ISection;
 import prompto.utils.Logger;
 import prompto.utils.SectionLocator;
@@ -252,21 +253,21 @@ public class ImmutableCodeStore extends BaseCodeStore {
 	}
 
 	@Override
-	public ISection findSection(ISection section) {
-		ISection result = fetchInResource(section);
+	public ICodeSection findCodeSection(ISection section) {
+		ICodeSection result = fetchInResource(section);
 		if(result!=null)
 			return result;
 		else
-			return super.findSection(section);
+			return super.findCodeSection(section);
 	}
 	
 
 
-	private ISection fetchInResource(ISection section) {
+	private ICodeSection fetchInResource(ISection section) {
 		if(!resource.toExternalForm().equals(section.getPath()))
 			return null;
 		loadResource();
-		return SectionLocator.findSectionInLists(declarations.values(), section);
+		return SectionLocator.findCodeSectionInLists(declarations.values(), section);
 				
 	}
 

@@ -35,6 +35,7 @@ import prompto.param.CategoryParameter;
 import prompto.param.CodeParameter;
 import prompto.param.IParameter;
 import prompto.param.ValuedCodeParameter;
+import prompto.parser.ICodeSection;
 import prompto.parser.ISection;
 import prompto.problem.IProblemListener;
 import prompto.runtime.Context;
@@ -93,8 +94,8 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	}
 	
 	@Override
-	public ISection locateSection(ISection section) {
-		return statements.locateSection(section);
+	public ICodeSection locateCodeSection(ISection section) {
+		return statements.locateCodeSection(section);
 	}
 
 	@Override

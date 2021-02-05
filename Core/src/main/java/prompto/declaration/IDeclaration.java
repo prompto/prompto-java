@@ -54,7 +54,7 @@ public interface IDeclaration extends ITranspilable, INamed, ICodeSection {
 	default void declareChild(Transpiler transpiler) { throw new UnsupportedOperationException("declareChild " + this.getClass().getName()); }
 	@Override
 	default boolean transpile(Transpiler transpiler) { throw new UnsupportedOperationException("transpile " + this.getClass().getName()); }
-	default ISection locateSection(ISection section) {
-		return isOrContains(section) ? this.getSection() : null;
+	default ICodeSection locateCodeSection(ISection section) {
+		return isOrContains(section) ? this : null;
 	}
 }

@@ -39,6 +39,7 @@ import prompto.grammar.Operator;
 import prompto.intrinsic.PromptoEnum;
 import prompto.intrinsic.PromptoRoot;
 import prompto.intrinsic.PromptoStorableBase;
+import prompto.parser.ICodeSection;
 import prompto.parser.ISection;
 import prompto.problem.IProblemListener;
 import prompto.runtime.Context;
@@ -97,8 +98,8 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 	
 	@Override
-	public ISection locateSection(ISection section) {
-		return methods.locateSection(section);
+	public ICodeSection locateCodeSection(ISection section) {
+		return methods.locateCodeSection(section);
 	}
 	
 	@Override

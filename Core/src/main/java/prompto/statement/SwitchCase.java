@@ -25,9 +25,9 @@ public abstract class SwitchCase extends CodeSection implements ICodeSection {
 		return expression;
 	}
 
-	public ISection locateSection(ISection section) {
-		ISection result = statements.locateSection(section);
-		return result!=null ? result : this.isOrContains(section) ? this.getSection() : null;
+	public ICodeSection locateCodeSection(ISection section) {
+		ICodeSection result = statements.locateCodeSection(section);
+		return result!=null ? result : this.isOrContains(section) ? this : null;
 	}
 	
 	public abstract void checkSwitchType(Context context, IType type);

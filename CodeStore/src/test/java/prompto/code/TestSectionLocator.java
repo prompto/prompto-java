@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import prompto.intrinsic.PromptoVersion;
 import prompto.parser.Dialect;
-import prompto.parser.ISection;
+import prompto.parser.ICodeSection;
 import prompto.parser.Location;
 import prompto.parser.Section;
 import prompto.parser.e.BaseEParserTest;
@@ -25,7 +25,7 @@ public class TestSectionLocator extends BaseEParserTest {
 		assertTrue(new File(file.getFile()).exists());
 		ICodeStore store = new ImmutableCodeStore(null, ModuleType.LIBRARY, file.toURI().toURL(), PromptoVersion.parse("1.0.0.0"));
 		Section section = new Section(file.toExternalForm(), new Location(0, 10, 1), new Location(0, 10, 20), Dialect.E, false);
-		ISection found = store.findSection(section);
+		ICodeSection found = store.findCodeSection(section);
 		assertNotNull(found);
 		assertTrue(found instanceof IStatement);
 	}
