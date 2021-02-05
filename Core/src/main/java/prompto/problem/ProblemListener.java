@@ -135,8 +135,8 @@ public abstract class ProblemListener implements ANTLRErrorListener, IProblemLis
 	}
 
 	@Override
-	public void reportIllegalAbstractConstructor(ICodeSection section, String name, String missingPrototype) {
-		addProblem(new IllegalAbstractConstructorProblem(section, name, missingPrototype));
+	public void reportIllegalAbstractCategory(ICodeSection section, String name, String missingPrototype) {
+		addProblem(new IllegalAbstractCategoryProblem(section, name, missingPrototype));
 	}
 
 	@Override

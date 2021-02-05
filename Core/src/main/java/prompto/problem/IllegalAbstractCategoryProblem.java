@@ -2,12 +2,12 @@ package prompto.problem;
 
 import prompto.parser.ICodeSection;
 
-public class IllegalAbstractConstructorProblem extends SyntaxProblemBase {
+public class IllegalAbstractCategoryProblem extends SyntaxProblemBase {
 
 	String name;
 	String missingMethod;
 	
-	public IllegalAbstractConstructorProblem(ICodeSection section, String name, String missingMethod) {
+	public IllegalAbstractCategoryProblem(ICodeSection section, String name, String missingMethod) {
 		super(section);
 		this.name = name;
 		this.missingMethod = missingMethod;

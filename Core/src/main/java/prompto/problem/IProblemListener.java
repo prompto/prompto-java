@@ -40,7 +40,7 @@ public interface IProblemListener {
 	void reportIllegalInitialize(ICodeSection section);
 	void reportIllegalInitializeParameters(ICodeSection section);
 	void reportIllegalWidgetConstructor(ICodeSection section, String name);
-	void reportIllegalAbstractConstructor(ICodeSection section, String name, String missingPrototype);
+	void reportIllegalAbstractCategory(ICodeSection section, String name, String missingPrototype);
 	void reportIllegalAbstractWidget(ICodeSection section, String name, String missingPrototype);
 	void reportIllegalAbstractMethodCall(ICodeSection section, String methodSignature);
 	

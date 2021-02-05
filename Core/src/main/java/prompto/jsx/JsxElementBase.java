@@ -42,15 +42,22 @@ public abstract class JsxElementBase extends CodeSection implements IJsxExpressi
 	
 	@Override
 	public IType check(Context context) {
-		if(Character.isUpperCase(id.toString().charAt(0))) {
-			checkConstructable(context);
-			PropertyMap propertyMap = buildPropertyMap(context);
-			checkWidgetProperties(context, propertyMap);
-			
-		} else
-			checkHtmlProperties(context);
+		if(isHtmlTag())
+			checkHtml(context);
+		else
+			checkWidget(context);
 		checkChildren(context);
 		return JsxType.instance();
+	}
+
+	private void checkHtml(Context context) {
+		checkHtmlProperties(context);
+	}
+
+	private void checkWidget(Context context) {
+		checkConstructable(context);
+		PropertyMap propertyMap = buildPropertyMap(context);
+		checkWidgetProperties(context, propertyMap);
 	}
 
 	private PropertyMap buildPropertyMap(Context context) {
@@ -64,7 +71,8 @@ public abstract class JsxElementBase extends CodeSection implements IJsxExpressi
 		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 		if(decl==null || !decl.isAWidget(context))
 			context.getProblemListener().reportUnknownWidget(this, type.getTypeName());
-		decl.getAbstractMethods(context).forEach(method->context.getProblemListener().reportIllegalAbstractWidget(this, decl.getName(), method.getSignature(Dialect.O)));	
+		if(decl!=null)
+			decl.getAbstractMethods(context).forEach(method->context.getProblemListener().reportIllegalAbstractWidget(this, decl.getName(), method.getSignature(Dialect.O)));	
 	}
 	
 	protected void checkChildren(Context context) {
