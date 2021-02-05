@@ -70,7 +70,7 @@ public class TestSerializer {
 	@Test
 	public void requestsAreSerialized() throws Exception {
 		testRoundRobin(new GetLineDebugRequest().withWorkerId("Hello"));
-		testRoundRobin(new GetVariableDebugRequest().<GetVariableDebugRequest>withWorkerId("Hello").withVariableName("MyVar").withStackFrame(StackFrameTestUtils.someStackFrame()));
+		testRoundRobin(new GetVariableDebugRequest().<GetVariableDebugRequest>withWorkerId("Hello").withName("MyVar").withStackFrame(StackFrameTestUtils.someStackFrame()));
 		testRoundRobin(new GetVariablesDebugRequest().<GetVariablesDebugRequest>withWorkerId("Hello").withStackFrame(StackFrameTestUtils.someStackFrame()));
 		testRoundRobin(new GetWorkerStackDebugRequest().withWorkerId("32"));
 		testRoundRobin(new GetWorkerStatusDebugRequest().withWorkerId("32"));

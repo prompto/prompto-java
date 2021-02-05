@@ -13,7 +13,7 @@ import prompto.debug.worker.IWorker;
 public class GetVariableDebugRequest extends WorkerRequest {
 
 	LeanStackFrame stackFrame;
-	String variableName;
+	String name;
 	
 	public GetVariableDebugRequest() {
 	}
@@ -21,7 +21,7 @@ public class GetVariableDebugRequest extends WorkerRequest {
 	public GetVariableDebugRequest(IWorker worker, IStackFrame stackFrame, String variableName) {
 		super(worker);
 		this.stackFrame = new LeanStackFrame(stackFrame);
-		this.variableName = variableName;
+		this.name = variableName;
 	}
 
 	public void setStackFrame(LeanStackFrame stackFrame) {
@@ -32,24 +32,24 @@ public class GetVariableDebugRequest extends WorkerRequest {
 		return stackFrame;
 	}
 
-	public void setVariableName(String variableName) {
-		this.variableName = variableName;
+	public void setName(String variableName) {
+		this.name = variableName;
 	}
 	
-	public String getVariableName() {
-		return variableName;
+	public String getName() {
+		return name;
 	}
 	
 	@Override
 	public GetVariableDebugResponse execute(IDebugger debugger) {
 		logger.debug(()->"before variable");
-		IVariable variable = debugger.getVariable(DebuggedWorker.parse(workerId), stackFrame, variableName);
+		IVariable variable = debugger.getVariable(DebuggedWorker.parse(workerId), stackFrame, name);
 		logger.debug(()->"after variables");
 		return new GetVariableDebugResponse(variable);
 	}
 	
-	public GetVariableDebugRequest withVariableName(String variableName) {
-		this.variableName = variableName;
+	public GetVariableDebugRequest withName(String variableName) {
+		this.name = variableName;
 		return this;
 	}
 	
@@ -64,7 +64,7 @@ public class GetVariableDebugRequest extends WorkerRequest {
 	}
 	
 	public boolean equals(GetVariableDebugRequest other) {
-		return Objects.equals(stackFrame, other.stackFrame) && Objects.equals(variableName, other.variableName) && super.equals(other);
+		return Objects.equals(stackFrame, other.stackFrame) && Objects.equals(name, other.name) && super.equals(other);
 	}
 	
 }
