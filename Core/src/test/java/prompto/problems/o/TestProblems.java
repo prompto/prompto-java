@@ -22,6 +22,11 @@ public class TestProblems extends BaseOParserTest {
 	}
 
 	@Test
+	public void testAbstractWidget() throws Exception {
+		checkProblems("problems/abstractWidget.poc");
+	}
+
+	@Test
 	public void testCallbackArgument() throws Exception {
 		checkProblems("problems/callbackArgument.poc");
 	}
@@ -42,6 +47,11 @@ public class TestProblems extends BaseOParserTest {
 	}
 
 	@Test
+	public void testDeepAbstractWidget() throws Exception {
+		checkProblems("problems/deepAbstractWidget.poc");
+	}
+
+	@Test
 	public void testDeepUnknownMethod() throws Exception {
 		checkProblems("problems/deepUnknownMethod.poc");
 	}
@@ -49,6 +59,11 @@ public class TestProblems extends BaseOParserTest {
 	@Test
 	public void testNoMatchingPrototype() throws Exception {
 		checkProblems("problems/noMatchingPrototype.poc");
+	}
+
+	@Test
+	public void testUnknownAttributeParameter() throws Exception {
+		checkProblems("problems/unknownAttributeParameter.poc");
 	}
 
 	@Test

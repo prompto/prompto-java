@@ -7,7 +7,6 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.StackLocal;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.IDeclaration;
-import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
@@ -16,8 +15,10 @@ import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
+import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
+import prompto.value.NullValue;
 
 public class UnresolvedParameter extends BaseParameter {
 
@@ -53,7 +54,8 @@ public class UnresolvedParameter extends BaseParameter {
 	@Override
 	public void check(Context context) {
 		resolve(context);
-		resolved.check(context);
+		if(resolved!=null)
+			resolved.check(context);
 	}
 	
 	@Override
@@ -64,19 +66,20 @@ public class UnresolvedParameter extends BaseParameter {
 	@Override
 	public IType getType(Context context) {
 		resolve(context);
-		return resolved.getType(context);
+		return resolved==null ? VoidType.instance() : resolved.getType(context);
 	}
 	
 	@Override
 	public void register(Context context) {
 		resolve(context);
-		resolved.register(context);
+		if(resolved!=null)
+			resolved.register(context);
 	}
 	
 	@Override
 	public IValue checkValue(Context context, IExpression value) {
 		resolve(context);
-		return resolved.checkValue(context, value);
+		return resolved==null ? NullValue.instance() : resolved.checkValue(context, value);
 	}
 	
 	private void resolve(Context context) {
@@ -88,7 +91,7 @@ public class UnresolvedParameter extends BaseParameter {
 		else if(named instanceof MethodDeclarationMap)
 			resolved = new MethodParameter(id);
 		else
-			throw new SyntaxError("Unknown identifier: " + id);
+			context.getProblemListener().reportUnknownAttribute(id, id.toString());
 	}
 	
 	@Override

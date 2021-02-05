@@ -140,6 +140,11 @@ public abstract class ProblemListener implements ANTLRErrorListener, IProblemLis
 	}
 
 	@Override
+	public void reportIllegalAbstractWidget(ICodeSection section, String name, String missingPrototype) {
+		addProblem(new IllegalAbstractWidgetProblem(section, name, missingPrototype));
+	}
+
+	@Override
 	public void reportIllegalAbstractMethodCall(ICodeSection section, String methodSignature) {
 		addProblem(new IllegalAbstractMethodCallProblem(section, methodSignature));
 	}
@@ -197,6 +202,11 @@ public abstract class ProblemListener implements ANTLRErrorListener, IProblemLis
 	@Override
 	public void reportUnknownCategory(ICodeSection section, String name) {
 		addProblem(new UnknownCategoryProblem(section, name));
+	}
+
+	@Override
+	public void reportUnknownWidget(ICodeSection section, String name) {
+		addProblem(new UnknownWidgetProblem(section, name));
 	}
 
 	@Override

@@ -24,6 +24,7 @@ public interface IProblemListener {
 	void reportUnknownAnnotation(ICodeSection section, String name);
 	void reportUnknownMethod(ICodeSection section, String name);
 	void reportUnknownCategory(ICodeSection section, String name);
+	void reportUnknownWidget(ICodeSection section, String name);
 	void reportNoMatchingPrototype(ICodeSection section, String actual, Set<String> expected);
 	void reportMissingArrowPrototype(ICodeSection section, String source);
 	void reportTooManyArrowPrototype(ICodeSection section, String source, Set<String> culprits);
@@ -40,6 +41,7 @@ public interface IProblemListener {
 	void reportIllegalInitializeParameters(ICodeSection section);
 	void reportIllegalWidgetConstructor(ICodeSection section, String name);
 	void reportIllegalAbstractConstructor(ICodeSection section, String name, String missingPrototype);
+	void reportIllegalAbstractWidget(ICodeSection section, String name, String missingPrototype);
 	void reportIllegalAbstractMethodCall(ICodeSection section, String methodSignature);
 	
 	void reportIncompatibleTypes(ICodeSection section, IType first, IType second);

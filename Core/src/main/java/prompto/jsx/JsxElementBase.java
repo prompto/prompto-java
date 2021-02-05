@@ -13,6 +13,7 @@ import prompto.literal.DocEntry;
 import prompto.literal.DocEntryList;
 import prompto.literal.TypeLiteral;
 import prompto.parser.CodeSection;
+import prompto.parser.Dialect;
 import prompto.parser.OCleverParser;
 import prompto.processor.WidgetPropertiesProcessor;
 import prompto.property.Property;
@@ -42,15 +43,28 @@ public abstract class JsxElementBase extends CodeSection implements IJsxExpressi
 	@Override
 	public IType check(Context context) {
 		if(Character.isUpperCase(id.toString().charAt(0))) {
-			CategoryType type = new CategoryType(id);
-			Context instance = context.newInstanceContext(type, true);
-			PropertyMap propertyMap = getPropertyMap(instance);
-			// check props in calling context, not widget context
+			checkConstructable(context);
+			PropertyMap propertyMap = buildPropertyMap(context);
 			checkWidgetProperties(context, propertyMap);
+			
 		} else
 			checkHtmlProperties(context);
 		checkChildren(context);
 		return JsxType.instance();
+	}
+
+	private PropertyMap buildPropertyMap(Context context) {
+		CategoryType type = new CategoryType(id);
+		Context instance = context.newInstanceContext(type, true);
+		return getPropertyMap(instance);
+	}
+
+	private void checkConstructable(Context context) {
+		CategoryType type = new CategoryType(id);
+		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
+		if(decl==null || !decl.isAWidget(context))
+			context.getProblemListener().reportUnknownWidget(this, type.getTypeName());
+		decl.getAbstractMethods(context).forEach(method->context.getProblemListener().reportIllegalAbstractWidget(this, decl.getName(), method.getSignature(Dialect.O)));	
 	}
 	
 	protected void checkChildren(Context context) {
@@ -291,10 +305,9 @@ public abstract class JsxElementBase extends CodeSection implements IJsxExpressi
 	@Override
 	public void declare(Transpiler transpiler) {
 		if(!isHtmlTag()) {
+			checkConstructable(transpiler.getContext());
 			IDeclaration decl = transpiler.getContext().getRegisteredDeclaration(IDeclaration.class, id);
-			if(decl==null)
-				transpiler.getContext().getProblemListener().reportUnknownIdentifier(id, id.toString());
-			else
+			if(decl!=null)
 				decl.declare(transpiler.newLocalTranspiler());
 		}
 		if(this.properties!=null) {
