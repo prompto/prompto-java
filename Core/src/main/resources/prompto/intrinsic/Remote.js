@@ -1,5 +1,5 @@
 function readJSONValue(value) {
-	if(value==null)
+	if(value === null)
 		return null;
 	else if(Array.isArray(value)) {
 		var items = value.map(readJSONValue);
@@ -33,6 +33,8 @@ function readJSONValue(value) {
 		}
 	} else if(value.name) {
 		return eval(value.name);
+	} else if(typeof(value) === typeof({})) {
+		return readDocument(value);
 	} else
 		return value; // a string, boolean or number
 }
