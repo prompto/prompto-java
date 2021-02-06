@@ -48,7 +48,7 @@ function readPromptoValue(value) {
 }
 
 function isPromptoEnum(value) {
-	return typeof(value.name) === typeof("") && value.name.lenth > 0 && value.name === value.name.toUpperCase() && value.value !== undefined;
+	return typeof(value.name) === typeof("") && value.name.length > 0 && value.name === value.name.toUpperCase() && value.value !== undefined;
 }
 
 function readPromptoEnum(value) {
