@@ -216,15 +216,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 
 	@Override
-	public boolean hasAttribute(Context context, Identifier name) {
-		if(super.hasAttribute(context, name))
-			return true;
-		if(hasDerivedAttribute(context,name))
-			return true;
-		return false;
-	}
-	
-	private boolean hasDerivedAttribute(Context context, Identifier name) {
+	public boolean hasDerivedAttribute(Context context, Identifier name) {
 		if(derivedFrom==null)
 			return false;
 		return derivedFrom.stream()
@@ -235,19 +227,17 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	
 	
 	@Override
-	public boolean hasMethod(Context context, Identifier name) {
+	public boolean hasLocalMethod(Context context, Identifier name) {
 		registerMethods(context);
-		if(methodsMap.containsKey(name.toString()))
-			return true;
-		if(hasDerivedMethod(context,name))
-			return true;
-		return false;
+		return methodsMap.containsKey(name.toString());
 	}
 	
 	
-	private boolean hasDerivedMethod(Context context, Identifier name) {
+	@Override
+	public  boolean hasDerivedMethod(Context context, Identifier name) {
 		if(derivedFrom==null)
 			return false;
+		registerMethods(context);
 		return derivedFrom.stream()
 				.map(ancestor->context.getRegisteredDeclaration(CategoryDeclaration.class, ancestor))
 				.filter(Objects::nonNull)

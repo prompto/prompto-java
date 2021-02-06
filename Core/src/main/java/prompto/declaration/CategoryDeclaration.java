@@ -137,13 +137,29 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	}
 
 	public boolean hasAttribute(Context context, Identifier id) {
-		if(IStore.dbIdName.equals(id.toString()))
+		return hasLocalAttribute(context, id) || hasDerivedAttribute(context, id); 
+	}
+	
+	public boolean hasLocalAttribute(Context context, Identifier id) {
+			if(IStore.dbIdName.equals(id.toString()))
 			return isStorable(context);
 		else
 			return attributes!=null && attributes.contains(id);
 	}
 	
-	public boolean hasMethod(Context context, Identifier name) {
+	public boolean hasDerivedAttribute(Context context, Identifier id) {
+		return false;
+	}
+	
+	public boolean hasMethod(Context context, Identifier id) {
+		return hasLocalMethod(context, id) || hasDerivedMethod(context, id); 
+	}
+
+	public boolean hasLocalMethod(Context context, Identifier id) {
+		return false; 
+	}
+
+	public boolean hasDerivedMethod(Context context, Identifier id) {
 		return false; 
 	}
 
