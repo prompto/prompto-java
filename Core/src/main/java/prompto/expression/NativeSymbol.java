@@ -2,9 +2,14 @@ package prompto.expression;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.FieldConstant;
@@ -30,8 +35,8 @@ public class NativeSymbol extends Symbol implements IExpression {
 	
 	IExpression expression;
 	
-	public NativeSymbol(Identifier name, IExpression expression) {
-		super(name);
+	public NativeSymbol(Identifier id, IExpression expression) {
+		super(id);
 		this.expression = expression;
 	}
 
@@ -168,6 +173,16 @@ public class NativeSymbol extends Symbol implements IExpression {
 	@Override
 	public IValue toDocumentValue(Context context) {
 		return new TextValue(expression.toString());
+	}
+	
+	@Override
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		ObjectNode result = JsonNodeFactory.instance.objectNode();
+		for(String member : Arrays.asList("name", "value")) {
+			JsonNode node = producer.apply(getMember(context, new Identifier(member), false));
+			result.set(member, node);
+		}
+		return result;
 	}
 
 }
