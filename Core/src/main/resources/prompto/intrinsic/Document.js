@@ -73,9 +73,9 @@ Document.prototype.$safe_setMember = function(name, value) {
 
 Document.prototype.$safe_getItem = function(item) {
     if(isANumber(item))
-    	return this[item - 1];
+    	return this[item - 1] || null;
     else
-    	return this[item];
+    	return this[item] || null;
 };
 
 
