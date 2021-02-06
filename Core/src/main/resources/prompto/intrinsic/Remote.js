@@ -58,7 +58,7 @@ function readPromptoEnum(value) {
 function readDocument(value) {
 	var document = new Document();
 	Object.getOwnPropertyNames(value).forEach(function(name) {
-		document.setMember(name, this.readJSONValue(value[name]));
+		document.$safe_setMember(name, this.readJSONValue(value[name]));
 	}, this);
 	return document;
 }

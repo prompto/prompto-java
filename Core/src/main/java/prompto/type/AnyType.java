@@ -131,20 +131,12 @@ public class AnyType extends NativeType {
 	
 	@Override
 	public void transpileAssignMemberValue(Transpiler transpiler, String name, IExpression expression) {
-	    // required to support Document members
-	    transpiler.append(".setMember('").append(name).append("', ");
-	    expression.transpile(transpiler);
-	    transpiler.append(")");
+		DocumentType.instance().transpileAssignMemberValue(transpiler, name, expression);
 	}
 	
 	@Override
 	public void transpileAssignItemValue(Transpiler transpiler, IExpression item, IExpression expression) {
-	    // required to support Document members
-	    transpiler.append(".setItem(");
-	    item.transpile(transpiler);
-	    transpiler.append(", ");
-	    expression.transpile(transpiler);
-	    transpiler.append(")");
+		DocumentType.instance().transpileAssignItemValue(transpiler, item, expression);
 	}
 
 }

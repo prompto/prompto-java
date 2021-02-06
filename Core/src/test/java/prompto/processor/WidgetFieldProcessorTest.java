@@ -17,7 +17,7 @@ import prompto.transpiler.Transpiler;
 public class WidgetFieldProcessorTest extends BaseOParserTest {
 
 	@Test
-	public void transpiles() throws Exception {
+	public void transpilesState() throws Exception {
 		JsxElementBase.setTestMode(true);
 		loadResource("annotations/WidgetField.poc");
 		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, new Identifier("Container"));
@@ -28,6 +28,6 @@ public class WidgetFieldProcessorTest extends BaseOParserTest {
 		try(OutputStream output = new FileOutputStream("transpiled.js")) {
 			output.write(js.getBytes());
 		}
-		assertTrue(js.contains("this.state.getMember('stuff', false)"));
+		assertTrue(js.contains("this.state.$safe_getMember('stuff', false)"));
 	}
 }

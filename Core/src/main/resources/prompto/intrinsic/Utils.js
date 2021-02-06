@@ -10,6 +10,10 @@ function isADecimal(o) {
     return typeof(o) === "number" && o !== Math.floor(o);
 }
 
+function isANumber(o) {
+    return typeof(o) === "number";
+}
+
 function isAText(o) {
     return typeof(o) === 'string' || o instanceof String;
 }

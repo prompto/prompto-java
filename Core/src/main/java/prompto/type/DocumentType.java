@@ -122,7 +122,7 @@ public class DocumentType extends NativeType {
 	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
 	    if(other instanceof DocumentType) {
 	        left.transpile(transpiler);
-	        transpiler.append(".add(");
+	        transpiler.append(".$safe_add(");
 	        right.transpile(transpiler);
 	        transpiler.append(")");
 	    } else 
@@ -212,7 +212,7 @@ public class DocumentType extends NativeType {
 	
 	@Override
 	public void transpileItem(Transpiler transpiler, IType itemType, IExpression item) {
-	    transpiler.append(".getItem(");
+	    transpiler.append(".$safe_getItem(");
 	    item.transpile(transpiler);
 	    transpiler.append(")");
 	}
@@ -239,29 +239,29 @@ public class DocumentType extends NativeType {
 		String name = id.toString();
 		switch(name.toString()) {
 		case "count":
-	        transpiler.append("length");
+	        transpiler.append("$safe_length");
 			break;
 		case "keys":
 		case "values":
-			transpiler.append(name);
+			transpiler.append("$safe_" + name);
 			break;
 		case "text":
 			transpiler.append("getText()");
 			break;
 	    default:
-	        transpiler.append("getMember('").append(id).append("', false)");
+	        transpiler.append("$safe_getMember('").append(id).append("', false)");
 	    }
 	}
 	
 	@Override
 	public void transpileAssignMember(Transpiler transpiler, String name) {
-		transpiler.append(".getMember('").append(name).append("', true)");
+		transpiler.append(".$safe_getMember('").append(name).append("', true)");
 	}
 	
 	
 	@Override
 	public void transpileAssignMemberValue(Transpiler transpiler, String name, IExpression expression) {
-	    transpiler.append(".setMember('").append(name).append("', ");
+	    transpiler.append(".$safe_setMember('").append(name).append("', ");
 	    expression.transpile(transpiler);
 	    transpiler.append(")");
 	}
@@ -270,7 +270,7 @@ public class DocumentType extends NativeType {
 	
 	@Override
 	public void transpileAssignItemValue(Transpiler transpiler, IExpression item, IExpression expression) {
-	    transpiler.append(".setItem(");
+	    transpiler.append(".$safe_setItem(");
 	    item.transpile(transpiler);
 	    transpiler.append(", ");
 	    expression.transpile(transpiler);
