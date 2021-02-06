@@ -1,42 +1,58 @@
 function readJSONValue(value) {
-	if(value === null)
+	if(value === null || value === undefined)
 		return null;
 	else if(Array.isArray(value)) {
 		var items = value.map(readJSONValue);
 		return new List(false, items);
-	} else if(value.type) {
-		if(value.type.endsWith("[]"))
-			return readList(value.value);
-		else if(value.type.endsWith("<>"))
-			return readSet(value.value);
-		else if(value.type.startsWith("Cursor<"))
-			return readCursor(value.value);
-		else switch(value.type) {
-			case "Uuid":
-				return UUID.fromString(value.value);
-			case "Date":
-				return LocalDate.parse(value.value);
-			case "Time":
-				return LocalTime.parse(value.value);
-			case "DateTime":
-				return DateTime.parse(value.value);
-			case "Version":
-				return Version.parse(value.value);
-			case "Image":
-				return ImageRef.fromJSON(value.value);
-			case "Blob":
-				return BlobRef.fromJSON(value.value);
-			case "Document":
-				return readDocument(value.value);
-			default:
-				return readInstance(value);
-		}
-	} else if(value.name) {
-		return eval(value.name);
+	} else if(isPromptoValue(value)) {
+		return readPromptoValue(value);
+	} else if(isPromptoEnum(value)) {
+		return readPromptoEnum(value);
 	} else if(typeof(value) === typeof({})) {
 		return readDocument(value);
 	} else
 		return value; // a string, boolean or number
+}
+
+function isPromptoValue(value) {
+	return typeof(value.type) === typeof("") && value.value !== undefined;
+}
+
+function readPromptoValue(value) {
+	if(value.type.endsWith("[]"))
+		return readPromptoList(value.value);
+	else if(value.type.endsWith("<>"))
+		return readPromptoSet(value.value);
+	else if(value.type.startsWith("Cursor<"))
+		return readPromptoCursor(value.value);
+	else switch(value.type) {
+		case "Uuid":
+			return UUID.fromString(value.value);
+		case "Date":
+			return LocalDate.parse(value.value);
+		case "Time":
+			return LocalTime.parse(value.value);
+		case "DateTime":
+			return DateTime.parse(value.value);
+		case "Version":
+			return Version.parse(value.value);
+		case "Image":
+			return ImageRef.fromJSON(value.value);
+		case "Blob":
+			return BlobRef.fromJSON(value.value);
+		case "Document":
+			return readDocument(value.value);
+		default:
+			return readInstance(value);
+	}
+}
+
+function isPromptoEnum(value) {
+	return typeof(value.name) === typeof("") && value.name.lenth > 0 && value.name === value.name.toUpperCase() && value.value !== undefined;
+}
+
+function readPromptoEnum(value) {
+	return eval(value.name);
 }
 
 function readDocument(value) {
@@ -48,19 +64,19 @@ function readDocument(value) {
 }
 
 
-function readList(value) {
+function readPromptoList(value) {
 	var items = value.map(readJSONValue);
 	return new List(false, items);
 }
 
 
-function readSet(value) {
+function readPromptoSet(value) {
 	var items = value.map(readJSONValue);
 	return new StrictSet(items);
 }
 
 
-function readCursor(value) {
+function readPromptoCursor(value) {
 	var iterable = {
 		count: function() { return value.count; },
 		totalCount: function() { return value.totalCount; },
