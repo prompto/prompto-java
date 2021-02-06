@@ -11,10 +11,5 @@ public class TestSelf extends BaseEParserTest {
 		compareResourceEOE("self/selfAsParameter.pec");
 	}
 
-	@Test
-	public void testSelfMember() throws Exception {
-		compareResourceEOE("self/selfMember.pec");
-	}
-
 }
 

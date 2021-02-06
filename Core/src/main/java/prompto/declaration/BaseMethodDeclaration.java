@@ -239,11 +239,6 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 				return Specificity.INHERITED;
 			else if(allowDerived && actualType.isAssignableFrom(context, requiredType)) 
 				return Specificity.DERIVED;
-			actualType = argument.resolve(context, this, useInstance, false).check(context);
-			if(requiredType.isAssignableFrom(context, actualType))
-				return Specificity.IMPLICIT;
-			else if(allowDerived && actualType.isAssignableFrom(context, requiredType))
-				return Specificity.IMPLICIT;
 		} catch(PromptoError error) {
 			error = null; // convenient for debugging
 		}

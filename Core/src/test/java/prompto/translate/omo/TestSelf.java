@@ -11,10 +11,5 @@ public class TestSelf extends BaseOParserTest {
 		compareResourceOMO("self/selfAsParameter.poc");
 	}
 
-	@Test
-	public void testSelfMember() throws Exception {
-		compareResourceOMO("self/selfMember.poc");
-	}
-
 }
 

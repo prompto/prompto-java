@@ -7,7 +7,6 @@ import org.junit.Test;
 import prompto.declaration.DeclarationList;
 
 
-
 public class TestParserFiles extends BaseEParserTest {
 
 	@Test
@@ -38,20 +37,6 @@ public class TestParserFiles extends BaseEParserTest {
 		assertEquals(6,stmts.size());
 	}
 
-	@Test
-	public void testImplicitMember() throws Exception {
-		DeclarationList stmts = parseResource("methods/implicitMember.pec");
-		assertNotNull(stmts);
-		assertEquals(6,stmts.size());
-	}
-	
-	@Test
-	public void testPolymorphicImplicit() throws Exception {
-		DeclarationList stmts = parseResource("methods/polymorphic_implicit.pec");
-		assertNotNull(stmts);
-		assertEquals(12,stmts.size());
-	}
-	
 	@Test
 	public void testEnumeratedCategory() throws Exception {
 		DeclarationList stmts = parseResource("enums/categoryEnum.pec");

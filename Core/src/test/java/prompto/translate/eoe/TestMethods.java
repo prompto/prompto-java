@@ -82,11 +82,6 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
-	public void testImplicitMember() throws Exception {
-		compareResourceEOE("methods/implicitMember.pec");
-	}
-
-	@Test
 	public void testMember() throws Exception {
 		compareResourceEOE("methods/member.pec");
 	}
@@ -114,11 +109,6 @@ public class TestMethods extends BaseEParserTest {
 	@Test
 	public void testPolymorphic_abstract() throws Exception {
 		compareResourceEOE("methods/polymorphic_abstract.pec");
-	}
-
-	@Test
-	public void testPolymorphic_implicit() throws Exception {
-		compareResourceEOE("methods/polymorphic_implicit.pec");
 	}
 
 	@Test

@@ -34,20 +34,5 @@ public class TestSelf extends BaseOParserTest {
 		checkTranspiledOutput("self/selfAsParameter.poc");
 	}
 
-	@Test
-	public void testInterpretedSelfMember() throws Exception {
-		checkInterpretedOutput("self/selfMember.poc");
-	}
-
-	@Test
-	public void testCompiledSelfMember() throws Exception {
-		checkCompiledOutput("self/selfMember.poc");
-	}
-
-	@Test
-	public void testTranspiledSelfMember() throws Exception {
-		checkTranspiledOutput("self/selfMember.poc");
-	}
-
 }
 

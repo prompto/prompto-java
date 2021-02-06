@@ -72,11 +72,6 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
-	public void testImplicitMember() throws Exception {
-		compareResourceOMO("methods/implicitMember.poc");
-	}
-
-	@Test
 	public void testMember() throws Exception {
 		compareResourceOMO("methods/member.poc");
 	}
@@ -99,11 +94,6 @@ public class TestMethods extends BaseOParserTest {
 	@Test
 	public void testPolymorphic_abstract() throws Exception {
 		compareResourceOMO("methods/polymorphic_abstract.poc");
-	}
-
-	@Test
-	public void testPolymorphic_implicit() throws Exception {
-		compareResourceOMO("methods/polymorphic_implicit.poc");
 	}
 
 	@Test

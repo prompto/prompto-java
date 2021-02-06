@@ -185,21 +185,6 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
-	public void testInterpretedImplicitMember() throws Exception {
-		checkInterpretedOutput("methods/implicitMember.poc");
-	}
-
-	@Test
-	public void testCompiledImplicitMember() throws Exception {
-		checkCompiledOutput("methods/implicitMember.poc");
-	}
-
-	@Test
-	public void testTranspiledImplicitMember() throws Exception {
-		checkTranspiledOutput("methods/implicitMember.poc");
-	}
-
-	@Test
 	public void testInterpretedMember() throws Exception {
 		checkInterpretedOutput("methods/member.poc");
 	}
@@ -272,21 +257,6 @@ public class TestMethods extends BaseOParserTest {
 	@Test
 	public void testTranspiledPolymorphic_abstract() throws Exception {
 		checkTranspiledOutput("methods/polymorphic_abstract.poc");
-	}
-
-	@Test
-	public void testInterpretedPolymorphic_implicit() throws Exception {
-		checkInterpretedOutput("methods/polymorphic_implicit.poc");
-	}
-
-	@Test
-	public void testCompiledPolymorphic_implicit() throws Exception {
-		checkCompiledOutput("methods/polymorphic_implicit.poc");
-	}
-
-	@Test
-	public void testTranspiledPolymorphic_implicit() throws Exception {
-		checkTranspiledOutput("methods/polymorphic_implicit.poc");
 	}
 
 	@Test
