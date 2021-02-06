@@ -10,7 +10,6 @@ import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.intrinsic.PromptoVersion;
 import prompto.runtime.Context;
-import prompto.type.DateType;
 import prompto.type.VersionType;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -27,7 +26,7 @@ public class VersionValue extends BaseValue implements Comparable<VersionValue> 
 	PromptoVersion value;
 
 	public VersionValue(PromptoVersion value) {
-		super(DateType.instance());
+		super(VersionType.instance());
 		this.value = value;
 
 	}
