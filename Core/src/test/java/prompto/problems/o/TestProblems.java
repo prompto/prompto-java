@@ -62,6 +62,11 @@ public class TestProblems extends BaseOParserTest {
 	}
 
 	@Test
+	public void testSetReactState() throws Exception {
+		checkProblems("problems/setReactState.poc");
+	}
+
+	@Test
 	public void testUnknownAttributeParameter() throws Exception {
 		checkProblems("problems/unknownAttributeParameter.poc");
 	}
