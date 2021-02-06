@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Set;
 
 import prompto.compiler.ClassFile;
-import prompto.grammar.ParameterList;
 import prompto.param.AttributeParameter;
 import prompto.param.CategoryParameter;
 import prompto.param.IParameter;
+import prompto.param.ParameterList;
 import prompto.param.UnresolvedParameter;
 import prompto.runtime.Context;
 import prompto.statement.MethodCall;

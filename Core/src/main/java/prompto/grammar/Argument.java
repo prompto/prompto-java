@@ -12,6 +12,7 @@ import prompto.expression.IExpression;
 import prompto.expression.InstanceExpression;
 import prompto.expression.MemberSelector;
 import prompto.param.IParameter;
+import prompto.param.ParameterList;
 import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
@@ -160,10 +161,13 @@ public class Argument extends CodeSection {
 	public IType checkActualType(Context context, IType requiredType, boolean checkInstance) {
 		IType actualType = null;
 		IExpression expression = getExpression();
-		boolean isArrow = isArrowExpression(requiredType, expression);
-		if(isArrow)
-			actualType = checkArrowExpression(context, (MethodType)requiredType, expression);
-		else if(requiredType instanceof MethodType)
+		boolean isArrow = isArrowExpression(expression);
+		if(isArrow) {
+			if(requiredType instanceof MethodType)
+				actualType = checkArrowExpression(context, (MethodType)requiredType, expression);
+			else
+				actualType = VoidType.instance();
+		} else if(requiredType instanceof MethodType)
 			actualType = expression.checkReference(context.getCallingContext());
 		else
 			actualType = expression.check(context.getCallingContext());
@@ -183,9 +187,7 @@ public class Argument extends CodeSection {
 	}
 
 
-	private static boolean isArrowExpression(IType requiredType, IExpression expression) {
-		if(!(requiredType instanceof MethodType))
-			return false;
+	private static boolean isArrowExpression(IExpression expression) {
 		if(expression instanceof ContextualExpression)
 			expression = ((ContextualExpression)expression).getExpression();
 		return expression instanceof ArrowExpression;

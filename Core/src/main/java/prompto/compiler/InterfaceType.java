@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import prompto.grammar.ParameterList;
+import prompto.param.ParameterList;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.VoidType;

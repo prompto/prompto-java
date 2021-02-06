@@ -18,9 +18,9 @@ import prompto.expression.IExpression;
 import prompto.grammar.Argument;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
-import prompto.grammar.ParameterList;
 import prompto.grammar.Specificity;
 import prompto.param.IParameter;
+import prompto.param.ParameterList;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
@@ -38,6 +38,14 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 		super(name);
 		this.parameters = parameters!=null ? parameters : new ParameterList();
 		this.returnType = returnType;
+	}
+	
+	
+	@Override
+	public String toString() {
+		return (returnType!=null ? returnType.toString() + " " : "")
+				+ (memberOf!=null ? memberOf.toString() + "." : "") 
+				+ id.toString() + "(" + parameters.toString() + ")";
 	}
 	
 	@Override

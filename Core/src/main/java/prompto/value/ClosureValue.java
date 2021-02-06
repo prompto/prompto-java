@@ -4,8 +4,8 @@ import java.lang.reflect.Type;
 
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
-import prompto.grammar.ParameterList;
 import prompto.grammar.Identifier;
+import prompto.param.ParameterList;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.type.MethodType;

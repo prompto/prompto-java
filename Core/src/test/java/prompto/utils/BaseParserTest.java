@@ -511,10 +511,8 @@ public class BaseParserTest extends BaseTest {
 		ProblemCollector collector = new ProblemCollector();
 		context.pushProblemListener(collector);
 		dl.register(context);
-		// by convention we only test main() is there is more than one decl
-		IDeclaration decl = dl.size() == 1 ? dl.get(0) : dl.stream()
-				.filter(d -> "main".equals(d.getName()))
-				.findFirst().orElse(null);
+		// by convention we only test the last decl
+		IDeclaration decl = dl.getLast();
 		assertNotNull(decl);
 		if(decl instanceof IMethodDeclaration)
 			((IMethodDeclaration)decl).check(context, true);

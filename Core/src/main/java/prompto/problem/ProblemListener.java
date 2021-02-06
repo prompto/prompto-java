@@ -215,12 +215,17 @@ public abstract class ProblemListener implements ANTLRErrorListener, IProblemLis
 	}
 	
 	@Override
+	public void reportTooManyPrototypes(ICodeSection section, String source, Set<String> culprits) {
+		addProblem(new TooManyPrototypesProblem(section, source, culprits));
+	}
+
+	@Override
 	public void reportMissingArrowPrototype(ICodeSection section, String source) {
 		addProblem(new MissingArrowPrototypeProblem(section, source));
 	}
 
 	@Override
-	public void reportTooManyArrowPrototype(ICodeSection section, String source, Set<String> culprits) {
+	public void reportTooManyArrowPrototypes(ICodeSection section, String source, Set<String> culprits) {
 		addProblem(new TooManyArrowPrototypesProblem(section, source, culprits));
 	}
 

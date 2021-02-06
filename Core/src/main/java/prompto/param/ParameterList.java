@@ -1,10 +1,9 @@
-package prompto.grammar;
+package prompto.param;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import prompto.param.CodeParameter;
-import prompto.param.IParameter;
+import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;

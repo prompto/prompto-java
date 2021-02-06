@@ -26,8 +26,9 @@ public interface IProblemListener {
 	void reportUnknownCategory(ICodeSection section, String name);
 	void reportUnknownWidget(ICodeSection section, String name);
 	void reportNoMatchingPrototype(ICodeSection section, String actual, Set<String> expected);
+	void reportTooManyPrototypes(ICodeSection section, String source, Set<String> culprits);
 	void reportMissingArrowPrototype(ICodeSection section, String source);
-	void reportTooManyArrowPrototype(ICodeSection section, String source, Set<String> culprits);
+	void reportTooManyArrowPrototypes(ICodeSection section, String source, Set<String> culprits);
 	void reportIllegalReturn(ICodeSection section);
 	void reportIllegalOperator(ICodeSection section, String message);
 	void reportIllegalAssignment(ICodeSection section, IType expected, IType actual);

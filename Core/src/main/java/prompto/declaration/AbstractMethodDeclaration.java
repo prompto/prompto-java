@@ -7,7 +7,7 @@ import prompto.compiler.ClassFile;
 import prompto.compiler.InterfaceType;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
-import prompto.grammar.ParameterList;
+import prompto.param.ParameterList;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;

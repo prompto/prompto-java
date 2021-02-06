@@ -157,7 +157,7 @@ public class ArrowExpression extends PredicateExpression implements IExpression 
 	
 	public String toString(Context context) {
 		try {
-			CodeWriter writer = new CodeWriter(Dialect.E, context);
+			CodeWriter writer = new CodeWriter(Dialect.O, context);
 			toDialect(writer);
 			return writer.toString();
 		} catch(Throwable t) {

@@ -27,7 +27,6 @@ import prompto.grammar.Argument;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
-import prompto.grammar.ParameterList;
 import prompto.intrinsic.PromptoProxy;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;

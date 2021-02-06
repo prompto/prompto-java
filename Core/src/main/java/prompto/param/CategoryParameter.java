@@ -130,7 +130,7 @@ public class CategoryParameter extends BaseParameter implements ITypedParameter 
 
 	@Override
 	public String toString() {
-		return id.toString() + ':' + getProto();
+		return type.toString() + " " + id.toString();
 	}
 	
 	@Override

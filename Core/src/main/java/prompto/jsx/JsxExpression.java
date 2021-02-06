@@ -112,7 +112,7 @@ public class JsxExpression implements IJsxValue, IJsxExpression {
 			context.getProblemListener().reportMissingArrowPrototype((ArrowExpression)expression, expression.toString());
 			return null;
 		} else if(types.size() > 1) {
-			context.getProblemListener().reportTooManyArrowPrototype((ArrowExpression)expression, expression.toString(), types.stream().map(Object::toString).collect(Collectors.toSet()));
+			context.getProblemListener().reportTooManyArrowPrototypes((ArrowExpression)expression, expression.toString(), types.stream().map(Object::toString).collect(Collectors.toSet()));
 			return null;
 		} else
 			return types.iterator().next();

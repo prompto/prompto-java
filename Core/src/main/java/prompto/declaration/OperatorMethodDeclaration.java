@@ -1,8 +1,8 @@
 package prompto.declaration;
 
 import prompto.expression.IExpression;
-import prompto.grammar.ParameterList;
 import prompto.param.IParameter;
+import prompto.param.ParameterList;
 import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
 import prompto.runtime.Context;

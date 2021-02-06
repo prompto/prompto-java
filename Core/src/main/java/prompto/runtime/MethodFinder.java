@@ -18,6 +18,7 @@ import prompto.grammar.ArgumentList;
 import prompto.grammar.Specificity;
 import prompto.param.IParameter;
 import prompto.parser.Dialect;
+import prompto.problem.ProblemRaiser;
 import prompto.statement.MethodCall;
 import prompto.type.CategoryType;
 import prompto.type.IType;
@@ -92,7 +93,7 @@ public class MethodFinder {
 			}
 		}
 		if(ambiguous.size()>0)
-			throw new SyntaxError("Too many prototypes!"); // TODO refine
+			context.getProblemListener().reportTooManyPrototypes(methodCall, methodCall.toString(), candidates.stream().map(Object::toString).collect(Collectors.toSet()));
 		return candidate;
 	}
 
@@ -118,7 +119,7 @@ public class MethodFinder {
 			}
 		}
 		if(ambiguous.size()>0)
-			throw new SyntaxError("Too many prototypes!"); // TODO refine
+			context.getProblemListener().reportTooManyPrototypes(methodCall, methodCall.toString(), candidates.stream().map(Object::toString).collect(Collectors.toSet()));
 		return candidate;
 	}
 	
@@ -169,6 +170,15 @@ public class MethodFinder {
 	}
 	
 	public Set<IMethodDeclaration> filterCompatible(Collection<IMethodDeclaration> candidates, boolean checkInstance, boolean allowDerived, Predicate<Specificity> filter) {
+		try {
+			context.pushProblemListener(new ProblemRaiser());
+			return doFilterCompatible(candidates, checkInstance, allowDerived, filter);
+		} finally {
+			context.popProblemListener();
+		}
+	}
+	
+	private Set<IMethodDeclaration> doFilterCompatible(Collection<IMethodDeclaration> candidates, boolean checkInstance, boolean allowDerived, Predicate<Specificity> filter) {
 		Set<IMethodDeclaration> compatibles = new HashSet<IMethodDeclaration>();
 		for(IMethodDeclaration declaration : candidates) {
 			try {
