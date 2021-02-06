@@ -6,7 +6,9 @@ function Document(entries) {
 
 Object.defineProperty(Document.prototype, "$user_keys", {
     get : function() {
-        return Object.getOwnPropertyNames(this).filter(function(name) { return name!=="mutable"; });
+        return Object.getOwnPropertyNames(this).filter(function(name) {
+            return name!=="mutable";
+        });
     }
 });
 
@@ -26,7 +28,9 @@ Object.defineProperty(Document.prototype, "$safe_keys", {
 
 Object.defineProperty(Document.prototype, "$safe_values", {
     get : function() {
-        var names = this.$user_keys.map(function(name) { return this[name]; }, this);
+        var names = this.$user_keys.map(function(name) {
+            return this[name];
+        }, this);
         return new List(false, names);
     }
 });
@@ -35,8 +39,9 @@ Document.prototype.toString = function() {
     return JSON.stringify(this);
 };
 
+
 Document.prototype.equals = function(other) {
-    if(this==other)
+    if(this===other)
         return true;
     if(!(other instanceof Document))
         return false;
@@ -48,6 +53,7 @@ Document.prototype.equals = function(other) {
         return this[name]===other[name] || (this[name].equals && this[name].equals(other[name]));
     }, this);
 };
+
 
 Document.prototype.getText = function() {
     if(this.hasOwnProperty("text"))
@@ -101,6 +107,7 @@ Document.prototype.toDocument = function() {
     return result;
 };
 
+
 Document.prototype.toJson = function(json, instanceId, fieldName, withType, binaries) {
     var values = {};
     Object.getOwnPropertyNames(this).forEach(function (key) {
@@ -120,10 +127,11 @@ Document.prototype.toJson = function(json, instanceId, fieldName, withType, bina
 };
 
 Document.prototype.fromJson = function(node, parts) {
-    for (key in node) {
+    for (var key in node) {
         this[key] = this.readJsonField(node[key], parts);
     }
 };
+
 
 Document.prototype.readJsonField = function(node, parts) {
     if(!node || typeof(node)===typeof(true) || typeof(node)===typeof(1) || typeof(node)===typeof(1.0) || typeof(node)===typeof(""))
