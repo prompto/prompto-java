@@ -96,7 +96,7 @@ public class PromptoClassLoader extends URLClassLoader {
 	}
 
 	@Override
-	protected Class<?> findClass(String fullName) throws ClassNotFoundException {
+	public Class<?> findClass(String fullName) throws ClassNotFoundException {
 		try {
 			return super.findClass(fullName);
 		} catch (ClassNotFoundException e) {

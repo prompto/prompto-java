@@ -1,6 +1,7 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
+import java.util.Objects;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.NamedType;
@@ -75,14 +76,24 @@ public class MethodType extends BaseType {
 	}
 	
 	@Override
-	public boolean equals(Object obj) {
-		if(obj==this)
+	public boolean equals(Object other) {
+		return other==this || (other instanceof MethodType && ((MethodType)other).equals(this));
+	}
+	
+	
+	public boolean equals(MethodType other) {
+		if(other==this)
 			return true;
-		else  try {
-			return (obj instanceof MethodType) && 
-					this.method.getProto().equals(((MethodType)obj).method.getProto()); // TODO: refine
-		} catch (SyntaxError e) {
+		else if(other==null)
 			return false;
+		else  {
+			try {
+				String thisProto = this.method.getProto();
+				String otherProto = other.method.getProto();
+				return Objects.equals(thisProto, otherProto);
+			} catch (SyntaxError e) {
+				return false;
+			}
 		}
 	}
 	

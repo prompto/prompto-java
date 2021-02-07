@@ -515,7 +515,7 @@ public class EqualsExpression extends CodeSection implements IPredicateExpressio
 		ClassConstant dest = new ClassConstant(target.getJavaType(context));
 		method.addInstruction(Opcode.LDC, dest);
 		// call helper
-		MethodConstant m = new MethodConstant(PromptoProxy.class, "isProxyableTo", Object.class, Object.class, boolean.class);
+		MethodConstant m = new MethodConstant(PromptoProxy.class, "isProxyableTo", Object.class, Class.class, boolean.class);
 		method.addInstruction(Opcode.INVOKESTATIC, m);
 	}
 
