@@ -2,8 +2,8 @@ var window = this.window;
 
 exports.openBrowser = function(methodName, url, name) {
     var tab = window[methodName](url, name);
-  	// ensure result exhibits the same as Document 
-    if(typeof(Document) !== undefined)
+    // ensure result exhibits the same as Document 
+    if(tab && typeof(Document) !== undefined)
     	return new Document(tab);
     else
     	return tab;
