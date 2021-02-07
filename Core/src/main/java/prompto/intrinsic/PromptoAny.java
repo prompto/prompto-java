@@ -1,7 +1,7 @@
 package prompto.intrinsic;
 
 @SuppressWarnings("unchecked")
-public abstract class PromptoAny {
+public class PromptoAny {
 
 	public static void setMember(Object instance, Object key, Object value) {
 		if(instance instanceof PromptoDocument)
@@ -13,6 +13,8 @@ public abstract class PromptoAny {
 	public static Object getMember(Object instance, Object key) {
 		if(instance instanceof PromptoDocument)
 			return ((PromptoDocument<Object,Object>)instance).getOrCreate(key, PromptoDocument.class);
+		else if("text".equals(key))
+			return instance.toString();
 		else
 			throw new UnsupportedOperationException("Cannot call getMember for " + instance.getClass().getName());
 	}
