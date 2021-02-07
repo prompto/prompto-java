@@ -121,12 +121,12 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 
 	@Override
 	public IType check(Context context) {
-		if(attributes!=null) for(Identifier attribute : attributes) {
-			if(attribute==null)
+		if(attributes!=null) for(Identifier attr : attributes) {
+			if(attr==null)
 				continue; // problem already handled by parser
-			AttributeDeclaration ad = context.getRegisteredDeclaration(AttributeDeclaration.class, attribute);
-			if(ad==null)
-				context.getProblemListener().reportUnknownAttribute(attribute, attribute.toString());
+			AttributeDeclaration ad = context.getRegisteredDeclaration(AttributeDeclaration.class, attr);
+			if(ad==null && !"text".equals(attr.toString()))
+				context.getProblemListener().reportUnknownAttribute(attr, attr.toString());
 		}
 		return new CategoryType(this.getId());
 	}
