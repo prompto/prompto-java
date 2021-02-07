@@ -13,7 +13,7 @@ define DocumentCallback as abstract method receiving Document value
 define Any as native category with attributes id and text, and bindings:
 
 	define category bindings as:
-		Java: prompto.intrinsic.PromptoAny
+		Java: java.lang.Object
 		C#: prompto.value.AnyValue
 		Python2: AnyValue from module: prompto.value.AnyValue
 		Python3: AnyValue from module: prompto.value.AnyValue
