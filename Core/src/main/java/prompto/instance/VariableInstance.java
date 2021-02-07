@@ -140,8 +140,10 @@ public class VariableInstance implements IAssignableInstance {
 		else {
 			// need to check type compatibility
 			IType actualType = actual.getType(context);
-			actualType.checkAssignableFrom(context, valueType, section);
-			valueType = actualType;
+			if(actualType!=null) {
+				actualType.checkAssignableFrom(context, valueType, section);
+				valueType = actualType;
+			}
 		}
 		return valueType;
 	}
