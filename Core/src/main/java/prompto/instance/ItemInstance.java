@@ -108,7 +108,7 @@ public class ItemInstance implements IAssignableSelector {
 	@Override
 	public ResultInfo compileAssign(Context context, MethodInfo method, Flags flags, IExpression value) {
 		ResultInfo parentInfo = this.parent.compileParent(context, method, flags);
-		if(PromptoAny.class==parentInfo.getType() || PromptoDocument.class==parentInfo.getType())
+		if(Object.class==parentInfo.getType() || PromptoDocument.class==parentInfo.getType())
 			return compileAssignAny(context, method, flags, item, value);
 		else if(PromptoList.class==parentInfo.getType())
 			return compileAssignList(context, method, flags, item, value);

@@ -18,6 +18,10 @@ function isAText(o) {
     return typeof(o) === 'string' || o instanceof String;
 }
 
+function isAMethod(o) {
+    return typeof(o) === 'function';
+}
+
 function StringOrNull(o) {
 	return o && o.toString ? o.toString() : null;
 }

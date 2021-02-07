@@ -98,19 +98,26 @@ public class VariableInstance implements IAssignableInstance {
 
 	public ResultInfo compileAssignVariable(Context context, MethodInfo method, Flags flags, IExpression expression) {
 		IType valueType = expression.check(context);
-		// Code expressions need to be interpreted as part of compile
-		if(valueType==CodeType.instance()) {
-			assign(context, expression);
-			return new ResultInfo(void.class);
-		} else {
-			checkAssignValue(context, valueType, this.id); // id: any section will do for now
-			ResultInfo info = expression.compile(context, method, flags);
-			StackLocal local = method.registerLocal(id.toString(), VerifierType.ITEM_Object, new ClassConstant(info.getType()));
-			CompilerUtils.compileASTORE(method, local);
-			return new ResultInfo(void.class);
-		}
+		if(valueType==CodeType.instance())
+			return compileAssignCodeVariable(context, method, flags, expression);
+		else
+			return compileAssignDataVariable(context, method, flags, expression, valueType);
 	}
 	
+	private ResultInfo compileAssignCodeVariable(Context context, MethodInfo method, Flags flags, IExpression expression) {
+		// Code expressions need to be interpreted as part of compile
+		assign(context, expression);
+		return new ResultInfo(void.class);
+	}
+
+	private ResultInfo compileAssignDataVariable(Context context, MethodInfo method, Flags flags, IExpression expression, IType valueType) {
+		checkAssignValue(context, valueType, this.id); // id: any section will do for now
+		ResultInfo info = expression.compile(context, method, flags);
+		StackLocal local = method.registerLocal(id.toString(), VerifierType.ITEM_Object, new ClassConstant(info.getType()));
+		CompilerUtils.compileASTORE(method, local);
+		return new ResultInfo(void.class);
+	}
+
 	@Override
 	public void toDialect(CodeWriter writer, IExpression expression) {
 		if(expression!=null) try {

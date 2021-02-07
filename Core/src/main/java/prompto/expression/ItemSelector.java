@@ -96,8 +96,8 @@ public class ItemSelector extends SelectorExpression {
 		map.put(PromptoTuple.class, TupleType::compileItem);
 		map.put(PromptoSet.class, SetType::compileItem);
 		map.put(PromptoList.class, ListType::compileItem);
-		map.put(PromptoAny.class, ItemSelector::compileAnyItem);
 		map.put(PromptoDocument.class, ItemSelector::compileAnyItem);
+		map.put(Object.class, ItemSelector::compileAnyItem);
 		return map;
 	}
 	
@@ -105,7 +105,7 @@ public class ItemSelector extends SelectorExpression {
 		expression.compile(context, method, flags);
 		IOperand oper = new MethodConstant(PromptoAny.class, "getItem", Object.class, Object.class, Object.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
-		return new ResultInfo(PromptoAny.class);
+		return new ResultInfo(Object.class);
 	}
 
 	@Override

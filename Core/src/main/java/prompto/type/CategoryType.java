@@ -318,7 +318,7 @@ public class CategoryType extends BaseType {
 
 	@Override
 	public void checkExists(Context context) {
-		getDeclaration(context);
+		resolve(context, null);
 	}
 	
 	@Override

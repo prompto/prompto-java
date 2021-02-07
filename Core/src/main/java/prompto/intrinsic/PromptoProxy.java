@@ -50,7 +50,14 @@ public abstract class PromptoProxy {
 		
 	}
 
+	/* for method references, since the FunctionalInterface class is not known in advance by the concrete implementation */
+	/* we need a proxy to bridge the FunctionalInterface method (get, apply, accept...) with the actual method */
+	public static boolean isProxyableTo(Object valueType, Object targetType) {
+		return true;
+	}
 
+
+	
 	private static Class<?>[] adjustParameterTypesForLambda(Class<? extends Object> klass, Class<?>[] parameterTypes) {
 		// if the method reference is a lambda, then parameterTypes are all Object.class 
 		if(klass.getName().startsWith(PromptoMethod.class.getName() + "$$Lambda$")) {

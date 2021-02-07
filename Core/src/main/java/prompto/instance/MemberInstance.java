@@ -105,7 +105,7 @@ public class MemberInstance implements IAssignableSelector {
 			IOperand oper = new MethodConstant(parent.getType(), "getOrCreate", Object.class, Class.class, Object.class);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 			// result type could actually be any Prompto intrinsic object (including String and Character)
-			return new ResultInfo(PromptoAny.class);
+			return new ResultInfo(Object.class);
 		} else
 			throw new UnsupportedOperationException();
 	}
@@ -113,7 +113,7 @@ public class MemberInstance implements IAssignableSelector {
 	@Override
 	public ResultInfo compileAssign(Context context, MethodInfo method, Flags flags, IExpression expression) {
 		ResultInfo parent = this.parent.compileParent(context, method, flags);
-		if(PromptoAny.class==parent.getType())
+		if(Object.class==parent.getType())
 			return compileAssignAny(context, method, flags, expression);
 		else if(PromptoDocument.class==parent.getType())
 			return compileAssignDocument(context, method, flags, expression);

@@ -427,7 +427,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		NameAndTypeConstant nameAndType = new NameAndTypeConstant("newMethodReference", new Descriptor.Method(Class.class, String.class, Object.class, Object.class));
 		MethodConstant mc = new MethodConstant(new ClassConstant(PromptoMethod.class), nameAndType);
 		method.addInstruction(Opcode.INVOKESTATIC, mc);
-		return new ResultInfo(methodsClassType);
+		return new ResultInfo(Object.class);
 	}
 
 	public ResultInfo compileClosureInstance(Context context, MethodInfo method, Flags flags) {

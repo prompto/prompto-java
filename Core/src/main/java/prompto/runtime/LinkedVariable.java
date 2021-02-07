@@ -1,11 +1,12 @@
 package prompto.runtime;
 
 import prompto.grammar.INamed;
+import prompto.grammar.INamedInstance;
 import prompto.grammar.Identifier;
 import prompto.type.IType;
 
 /* used for downcast */
-public class LinkedVariable implements INamed {
+public class LinkedVariable implements INamedInstance {
 
 	IType type;
 	INamed linked;

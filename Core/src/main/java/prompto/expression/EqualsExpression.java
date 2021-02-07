@@ -28,12 +28,12 @@ import prompto.error.SyntaxError;
 import prompto.grammar.EqOp;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
-import prompto.intrinsic.PromptoAny;
 import prompto.intrinsic.PromptoDate;
 import prompto.intrinsic.PromptoDateTime;
 import prompto.intrinsic.PromptoDict;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoPeriod;
+import prompto.intrinsic.PromptoProxy;
 import prompto.intrinsic.PromptoRange;
 import prompto.intrinsic.PromptoSet;
 import prompto.intrinsic.PromptoTime;
@@ -62,6 +62,7 @@ import prompto.type.DictType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
 import prompto.type.ListType;
+import prompto.type.MethodType;
 import prompto.type.NullType;
 import prompto.type.PeriodType;
 import prompto.type.RangeType;
@@ -213,9 +214,9 @@ public class EqualsExpression extends CodeSection implements IPredicateExpressio
 	private Context downcast(Context context, boolean setValue) throws PromptoError {
 		if(operator==EqOp.IS_A) {
 			Identifier name = readLeftName();
-			if(name!=null) {
+			if(name!=null && right instanceof TypeExpression) {
 				INamed value = context.getRegisteredValue(INamed.class, name);
-				IType targetType = ((TypeExpression)right).getType();
+				IType targetType = ((TypeExpression)right).getType().resolve(context, null);
 				IType sourceType = value.getType(context);
 				if(sourceType.isMutable(context))
 					targetType = targetType.asMutable(context, true);
@@ -233,8 +234,8 @@ public class EqualsExpression extends CodeSection implements IPredicateExpressio
 	public Context prepareAutodowncast(Context context, MethodInfo method) {
 		if(operator==EqOp.IS_A) {
 			Identifier name = readLeftName();
-			if(name!=null) {
-				IType type = ((TypeExpression)right).getType();
+			if(name!=null && right instanceof TypeExpression) {
+				IType type = ((TypeExpression)right).getType().resolve(context, null);
 				ClassConstant c = new ClassConstant(type.getJavaType(context));
 				StackLocal local = method.getRegisteredLocal(name.toString());
 				((StackLocal.ObjectLocal)local).markForAutodowncast(c);
@@ -428,7 +429,6 @@ public class EqualsExpression extends CodeSection implements IPredicateExpressio
 		map.put(Double.class, DecimalType::compileEquals); 
 		map.put(long.class, IntegerType::compileEquals);
 		map.put(Long.class, IntegerType::compileEquals); 
-		map.put(PromptoAny.class, AnyType::compileEquals); 
 		map.put(PromptoRange.Long.class, RangeType::compileEquals); 
 		map.put(PromptoRange.Character.class, RangeType::compileEquals); 
 		map.put(PromptoRange.Date.class, RangeType::compileEquals); 
@@ -492,16 +492,38 @@ public class EqualsExpression extends CodeSection implements IPredicateExpressio
 	}
 	
 	private ResultInfo compileIsA(Context context, MethodInfo method, Flags flags) {
-		right.compile(context, method, flags.withPrimitive(false));
-		left.compile(context, method, flags.withPrimitive(false));
-		MethodConstant m = new MethodConstant(Class.class, "isInstance", Object.class, boolean.class);
-		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		if(!(this.right instanceof TypeExpression))
+			throw new Error("Cannot compile:" + this.right.getClass().getName());
+		IType type = ((TypeExpression)this.right).getType().resolve(context, null);
+		if(type instanceof MethodType)
+			compileIsAMethodType(context, method, flags, (MethodType)type);
+		else
+			compileIsAnInstance(context, method, flags);
 		if(flags.isReverse())
 			CompilerUtils.reverseBoolean(method);
 		if(flags.toPrimitive())
 			return new ResultInfo(boolean.class);
 		else
 			return CompilerUtils.booleanToBoolean(method);
+	}
+	
+	
+	private void compileIsAMethodType(Context context, MethodInfo method, Flags flags, MethodType target) {
+		// the reference we are checking
+		left.compile(context, method, flags.withPrimitive(false));
+		// what interface we would be casting to
+		ClassConstant dest = new ClassConstant(target.getJavaType(context));
+		method.addInstruction(Opcode.LDC, dest);
+		// call helper
+		MethodConstant m = new MethodConstant(PromptoProxy.class, "isProxyableTo", Object.class, Object.class, boolean.class);
+		method.addInstruction(Opcode.INVOKESTATIC, m);
+	}
+
+	private void compileIsAnInstance(Context context, MethodInfo method, Flags flags) {
+		right.compile(context, method, flags.withPrimitive(false));
+		left.compile(context, method, flags.withPrimitive(false));
+		MethodConstant m = new MethodConstant(Class.class, "isInstance", Object.class, boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 	}
 
 	public ResultInfo compileIs(Context context, MethodInfo method, Flags flags) {
@@ -628,7 +650,7 @@ public class EqualsExpression extends CodeSection implements IPredicateExpressio
 	private void transpileIsA(Transpiler transpiler) {
 		if(!(this.right instanceof TypeExpression))
 			throw new Error("Cannot transpile:" + this.right.getClass().getName());
-		IType type = ((TypeExpression)this.right).getType();
+		IType type = ((TypeExpression)this.right).getType().resolve(transpiler.getContext(), null);
 		if(type==BooleanType.instance()) {
 	        transpiler.append("isABoolean(");
 	        this.left.transpile(transpiler);
@@ -647,6 +669,10 @@ public class EqualsExpression extends CodeSection implements IPredicateExpressio
 	        transpiler.append(")");
 	    } else if(type==CharacterType.instance()) {
 	        transpiler.append("isACharacter(");
+	        this.left.transpile(transpiler);
+	        transpiler.append(")");
+	    } else if(type instanceof MethodType) {
+	        transpiler.append("isAMethod(");
 	        this.left.transpile(transpiler);
 	        transpiler.append(")");
 	    } else {

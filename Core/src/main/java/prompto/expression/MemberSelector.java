@@ -203,7 +203,7 @@ public class MemberSelector extends SelectorExpression {
 		// special case for String.length() to avoid wrapping String.class for just one member
 		else if(String.class==info.getType() && "count".equals(getName()))
 			return compileStringLength(method, flags);
-		else if(PromptoAny.class==info.getType()) 
+		else if(Object.class==info.getType()) 
 			return compileGetMember(context, method, flags, info, resultType);
 		else if(shouldCompileToGetOrCreate(info.getType()))
 			return compileGetOrCreate(context, method, flags, info, resultType);		
@@ -314,7 +314,7 @@ public class MemberSelector extends SelectorExpression {
 		oper = new MethodConstant(PromptoDocument.class, "getOrCreate", Object.class, 
 				Class.class, Object.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(PromptoAny.class);
+		return new ResultInfo(Object.class);
 	}
 
 	private ResultInfo compileGetMember(Context context, MethodInfo method, Flags flags, ResultInfo info, Type resultType) {
@@ -323,7 +323,7 @@ public class MemberSelector extends SelectorExpression {
 		oper = new MethodConstant(PromptoAny.class, "getMember", Object.class, 
 				Object.class, Object.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
-		return new ResultInfo(PromptoAny.class);
+		return new ResultInfo(Object.class);
 	}
 
 	private void compileGetField(Context context, MethodInfo method, Flags flags, ResultInfo info, Type resultType) {

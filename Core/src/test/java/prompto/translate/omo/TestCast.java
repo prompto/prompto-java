@@ -12,6 +12,11 @@ public class TestCast extends BaseOParserTest {
 	}
 
 	@Test
+	public void testAutoDowncastMethod() throws Exception {
+		compareResourceOMO("cast/autoDowncastMethod.poc");
+	}
+
+	@Test
 	public void testCastChild() throws Exception {
 		compareResourceOMO("cast/castChild.poc");
 	}
