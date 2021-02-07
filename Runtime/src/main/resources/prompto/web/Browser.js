@@ -1,9 +1,12 @@
 var window = this.window;
 
-/* work around limited JS syntax in prompto bindings */
-/* cannot write: window[methodName](url, name) */
 exports.openBrowser = function(methodName, url, name) {
-    return window[methodName](url, name);
+    var tab = window[methodName](url, name);
+  	// ensure result exhibits the same as Document 
+    if(typeof(Document) !== undefined)
+    	return new Document(tab);
+    else
+    	return tab;
 };
 
 /* work around limited JS syntax in prompto bindings */
