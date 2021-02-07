@@ -28,6 +28,7 @@ import prompto.error.SyntaxError;
 import prompto.grammar.EqOp;
 import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoAny;
 import prompto.intrinsic.PromptoDate;
 import prompto.intrinsic.PromptoDateTime;
 import prompto.intrinsic.PromptoDict;
@@ -429,6 +430,7 @@ public class EqualsExpression extends CodeSection implements IPredicateExpressio
 		map.put(Double.class, DecimalType::compileEquals); 
 		map.put(long.class, IntegerType::compileEquals);
 		map.put(Long.class, IntegerType::compileEquals); 
+		map.put(PromptoAny.class, AnyType::compileEquals); 
 		map.put(PromptoRange.Long.class, RangeType::compileEquals); 
 		map.put(PromptoRange.Character.class, RangeType::compileEquals); 
 		map.put(PromptoRange.Date.class, RangeType::compileEquals); 

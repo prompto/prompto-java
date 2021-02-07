@@ -113,7 +113,7 @@ public class MemberInstance implements IAssignableSelector {
 	@Override
 	public ResultInfo compileAssign(Context context, MethodInfo method, Flags flags, IExpression expression) {
 		ResultInfo parent = this.parent.compileParent(context, method, flags);
-		if(Object.class==parent.getType())
+		if(Object.class==parent.getType() || PromptoAny.class==parent.getType())
 			return compileAssignAny(context, method, flags, expression);
 		else if(PromptoDocument.class==parent.getType())
 			return compileAssignDocument(context, method, flags, expression);

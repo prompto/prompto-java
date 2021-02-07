@@ -197,13 +197,11 @@ public class MemberSelector extends SelectorExpression {
 	private ResultInfo compileInstanceMember(Context context, MethodInfo method, Flags flags, ResultInfo info) {
 		IType type = check(context);
 		Type resultType = type.getJavaType(context);
-		// special case for char.codePoint() to avoid wrapping char.class for just one member
-		if(Character.class==info.getType() && "codePoint".equals(getName()))
+		if(shouldCompileCharacterCodePoint(info))
 			return compileCharacterCodePoint(method, flags);
-		// special case for String.length() to avoid wrapping String.class for just one member
-		else if(String.class==info.getType() && "count".equals(getName()))
+		else if (shouldCompileStringLength(info))
 			return compileStringLength(method, flags);
-		else if(Object.class==info.getType()) 
+		else if(shouldCompileGetMember(info))
 			return compileGetMember(context, method, flags, info, resultType);
 		else if(shouldCompileToGetOrCreate(info.getType()))
 			return compileGetOrCreate(context, method, flags, info, resultType);		
@@ -230,6 +228,25 @@ public class MemberSelector extends SelectorExpression {
 		}
 	}
 		
+	private boolean shouldCompileGetMember(ResultInfo info) {
+		if("text".equals(getName()))
+			return PromptoAny.class==info.getType() || Object.class==info.getType();
+		else if(info.isNativeCategory())
+			return false;
+		else
+			return PromptoAny.class==info.getType();
+	}
+
+	private boolean shouldCompileStringLength(ResultInfo info) {
+		// special case for String.length() to avoid wrapping String.class for just one member
+		return String.class==info.getType() && "count".equals(getName());
+	}
+
+	private boolean shouldCompileCharacterCodePoint(ResultInfo info) {
+		// special case for char.codePoint() to avoid wrapping char.class for just one member
+		return Character.class==info.getType() && "codePoint".equals(getName());
+	}
+
 	private boolean shouldCompileToGetOrCreate(Type type) {
 		if(PromptoDocument.class!=type)
 			return false;
@@ -261,7 +278,7 @@ public class MemberSelector extends SelectorExpression {
 		NativeGetterMethodDeclaration getter = getNativeGetter(context);
 		if(getter!=null) {
 			StackState state = method.captureStackState();
-			// can't use 'this' since it could refer to another abject than the native parent
+			// can't use 'this' since it could refer to another object than the native parent
 			StackLocal local = method.registerLocal("$this$", VerifierType.ITEM_Object, new ClassConstant(info.getType())); 
 			CompilerUtils.compileASTORE(method, local);
 			context = context.newInstanceContext(getter.getMemberOf().getType(context), false).newChildContext(); // mimic method call
@@ -314,7 +331,9 @@ public class MemberSelector extends SelectorExpression {
 		oper = new MethodConstant(PromptoDocument.class, "getOrCreate", Object.class, 
 				Class.class, Object.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
-		return new ResultInfo(Object.class);
+		if(resultType!=Object.class)
+			method.addInstruction(Opcode.CHECKCAST, new ClassConstant(resultType));
+		return new ResultInfo(resultType);
 	}
 
 	private ResultInfo compileGetMember(Context context, MethodInfo method, Flags flags, ResultInfo info, Type resultType) {
@@ -323,7 +342,9 @@ public class MemberSelector extends SelectorExpression {
 		oper = new MethodConstant(PromptoAny.class, "getMember", Object.class, 
 				Object.class, Object.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
-		return new ResultInfo(Object.class);
+		if(resultType!=Object.class)
+			method.addInstruction(Opcode.CHECKCAST, new ClassConstant(resultType));
+		return new ResultInfo(resultType);
 	}
 
 	private void compileGetField(Context context, MethodInfo method, Flags flags, ResultInfo info, Type resultType) {
