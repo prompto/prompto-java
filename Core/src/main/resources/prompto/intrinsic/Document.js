@@ -4,31 +4,29 @@ function Document(entries) {
     return this;
 }
 
-Object.defineProperty(Document.prototype, "$user_keys", {
-    get : function() {
-        return Object.getOwnPropertyNames(this).filter(function(name) {
-            return name!=="mutable";
-        });
-    }
-});
+Document.prototype.$user_keys = function() {
+    return Object.getOwnPropertyNames(this).filter(function(name) {
+        return name!=="mutable" && !name.startsWith("$");
+    });
+};
 
 
 Object.defineProperty(Document.prototype, "$safe_length", {
     get : function() {
-        return this.$user_keys.length;
+        return this.$user_keys().length;
     }
 });
 
 Object.defineProperty(Document.prototype, "$safe_keys", {
     get : function() {
-        return new StrictSet(this.$user_keys);
+        return new StrictSet(this.$user_keys());
     }
 });
 
 
 Object.defineProperty(Document.prototype, "$safe_values", {
     get : function() {
-        var names = this.$user_keys.map(function(name) {
+        var names = this.$user_keys().map(function(name) {
             return this[name];
         }, this);
         return new List(false, names);
@@ -145,7 +143,7 @@ Document.prototype.readJsonField = function(node, parts) {
 };
 
 
-// ensure objects created from Documents exhibit the same behaviour
+// ensure objects created from Documents (such as React state) exhibit the same behaviour
 
 Object.getOwnPropertyNames(Document.prototype).forEach( function(name) {
     if(name.startsWith("$safe_")) {
@@ -159,3 +157,5 @@ Object.getOwnPropertyNames(Document.prototype).forEach( function(name) {
         });
     }
 });
+
+
