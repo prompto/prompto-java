@@ -674,6 +674,8 @@ public class EqualsExpression extends CodeSection implements IPredicateExpressio
 	    } else if(type instanceof MethodType) {
 	        transpiler.append("isAMethod(");
 	        this.left.transpile(transpiler);
+	        transpiler.append(", ");
+	        ((MethodType)type).transpileMethodType(transpiler);
 	        transpiler.append(")");
 	    } else {
 	        this.left.transpile(transpiler);

@@ -260,5 +260,9 @@ public class MethodDeclarationWrapper implements IMethodDeclaration {
 		wrapped.declare(transpiler);
 	}
 
+	@Override
+	public void transpileMethodType(Transpiler transpiler) {
+		wrapped.transpileMethodType(transpiler);
+	}
 
 }

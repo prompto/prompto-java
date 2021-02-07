@@ -43,12 +43,12 @@ public class TestCast extends BaseOParserTest {
 	public void testCompiledAutoDowncastMethod() throws Exception {
 		checkCompiledOutput("cast/autoDowncastMethod.poc");
 	}
-/*
+
 	@Test
 	public void testTranspiledAutoDowncastMethod() throws Exception {
 		checkTranspiledOutput("cast/autoDowncastMethod.poc");
 	}
-*/
+
 	@Test
 	public void testInterpretedCastChild() throws Exception {
 		checkInterpretedOutput("cast/castChild.poc");

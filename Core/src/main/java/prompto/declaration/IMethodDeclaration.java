@@ -66,6 +66,7 @@ public interface IMethodDeclaration extends IDeclaration {
 	default IMethodDeclaration asReference() {
 		return new MethodDeclarationReference(this);
 	}
+	void transpileMethodType(Transpiler transpiler);
 	
 }
 

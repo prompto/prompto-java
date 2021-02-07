@@ -18,8 +18,24 @@ function isAText(o) {
     return typeof(o) === 'string' || o instanceof String;
 }
 
-function isAMethod(o) {
-    return typeof(o) === 'function';
+function isAMethod(o, params, result) {
+    if(typeof o !== 'function')
+        return false;
+    function countParams(o) {
+        var str = o.toString();
+        str = str.replace(/\/\*[\s\S]*?\*\//g, '')
+            .replace(/\/\/(.)*/g, '')
+            .replace(/{[\s\S]*}/, '')
+            .replace(/=>/g, '')
+            .trim();
+        var lpar = str.indexOf("(");
+        var rpar = str.indexOf(")", lpar + 1);
+        str = str.substring( lpar + 1, rpar);
+        var args = str.split(",");
+        args = args.filter(function(s) { return s.trim().length > 0; });
+        return args.length;
+    }
+    return params.length === countParams(o);
 }
 
 function StringOrNull(o) {

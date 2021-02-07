@@ -25,6 +25,7 @@ import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
+import prompto.type.VoidType;
 import prompto.value.IValue;
 
 public abstract class BaseMethodDeclaration extends BaseDeclaration implements IMethodDeclaration {
@@ -336,6 +337,25 @@ public abstract class BaseMethodDeclaration extends BaseDeclaration implements I
 	}
 	
 	
+	@Override
+	public void transpileMethodType(Transpiler transpiler) {
+        IType returnType = this.returnType;
+        if(returnType == null)
+            returnType = this.check(transpiler.getContext(), true);
+        if(returnType == null)
+            returnType = VoidType.instance();
+        transpiler.append("[");
+        if(this.parameters.size() > 0) {
+            this.parameters.forEach(param -> transpiler.append("'")
+                .append(param.getType(transpiler.getContext()).getTypeName())
+                .append("', "));
+            transpiler.trimLast(2);
+        }
+        transpiler.append("], '")
+            .append(returnType.getTypeName())
+            .append("'");
+    }
+
 	@Override
 	public boolean hasInheritedAnnotation(Context context, String name) {
 		if(memberOf==null)

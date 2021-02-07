@@ -154,6 +154,10 @@ public class MethodType extends BaseType {
 		transpiler.flush();
 	}
 
+	public void transpileMethodType(Transpiler transpiler) {
+		this.method.transpileMethodType(transpiler);
+	}
+
 
 
 }
