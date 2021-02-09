@@ -365,7 +365,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 		IExpression left = getNodeValue(ctx.left);
 		IExpression right = getNodeValue(ctx.right);
 		IExpression exp = ctx.op.getType()==OParser.PLUS ? new PlusExpression(left, right) : new SubtractExpression(left, right);
-		setNodeValue(ctx, exp);
+		setNodeValue(ctx, (ICodeSection)exp);
 	}
 
 	@Override
@@ -3350,7 +3350,5 @@ public class OPromptoBuilder extends OParserBaseListener {
 		nodeValues.put(node, value);
 	}
 	
-	
-
 		
 }

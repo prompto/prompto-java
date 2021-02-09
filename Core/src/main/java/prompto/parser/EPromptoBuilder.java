@@ -383,7 +383,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 		IExpression left = getNodeValue(ctx.left);
 		IExpression right = getNodeValue(ctx.right);
 		IExpression exp = ctx.op.getType()==EParser.PLUS ? new PlusExpression(left, right) : new SubtractExpression(left, right);
-		setNodeValue(ctx, exp);
+		setNodeValue(ctx, (ICodeSection)exp);
 	}
 
 	@Override

@@ -376,7 +376,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 		IExpression left = getNodeValue(ctx.left);
 		IExpression right = getNodeValue(ctx.right);
 		IExpression exp = ctx.op.getType()==MParser.PLUS ? new PlusExpression(left, right) : new SubtractExpression(left, right);
-		setNodeValue(ctx, exp);
+		setNodeValue(ctx, (ICodeSection)exp);
 	}
 
 	@Override
