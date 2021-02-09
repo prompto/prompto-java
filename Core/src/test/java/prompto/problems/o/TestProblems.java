@@ -57,6 +57,11 @@ public class TestProblems extends BaseOParserTest {
 	}
 
 	@Test
+	public void testIllegalOperation() throws Exception {
+		checkProblems("problems/illegalOperation.poc");
+	}
+
+	@Test
 	public void testNoMatchingPrototype() throws Exception {
 		checkProblems("problems/noMatchingPrototype.poc");
 	}
