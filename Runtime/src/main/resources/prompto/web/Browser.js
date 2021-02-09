@@ -31,3 +31,8 @@ exports.downloadFile = function(url, name) {
 	document.body.removeChild(a);
 };
 
+exports.browserBindKeyboardShortcuts = function(shortcuts, callback) {
+	window.Mousetrap.bind(shortcuts, function() { 
+		return callback() || false; 
+	});
+};

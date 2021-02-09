@@ -238,7 +238,7 @@ define browserGoto as native method receiving Text location doing:
 define KeyboardShortcutCallback as abstract method returning Boolean
 
 define browserBindKeyboardShortcuts as native method receiving Text[] shortcuts and KeyboardShortcutCallback callback doing:
-	JavaScript: window.Mousetrap.bind(shortcuts, callback);
+	JavaScript: browserBindKeyboardShortcuts(shortcuts, callback); from module: prompto/web/Browser.js
 
 define browserGetWindow as native method returning Document doing:
 	JavaScript: return window;
