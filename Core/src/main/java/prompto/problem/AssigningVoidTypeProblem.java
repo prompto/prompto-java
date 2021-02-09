@@ -15,7 +15,7 @@ public class AssigningVoidTypeProblem extends SyntaxProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return "Cannot assign void expression";
+		return "Cannot assign Void expression";
 	}
 
 }

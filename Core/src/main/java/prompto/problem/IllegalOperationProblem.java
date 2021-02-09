@@ -6,13 +6,13 @@ import prompto.type.IType;
 public class IllegalOperationProblem extends SyntaxProblemBase {
 
 	String verb;
-	IType t1, t2;
+	IType left, right;
 	
-	public IllegalOperationProblem(ICodeSection section, String verb, IType t1, IType t2) {
+	public IllegalOperationProblem(ICodeSection section, String verb, IType left, IType right) {
 		super(section);
 		this.verb = verb;
-		this.t1 = t1;
-		this.t2 = t2;
+		this.left = left;
+		this.right = right;
 	}
 
 	@Override
@@ -22,7 +22,7 @@ public class IllegalOperationProblem extends SyntaxProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return "Cannot " + verb + " " + t1.getTypeName() + " to " + t2.getTypeName();
+		return "Cannot " + verb + " " + left.getTypeName() + " and " + right.getTypeName();
 	}
 
 }
