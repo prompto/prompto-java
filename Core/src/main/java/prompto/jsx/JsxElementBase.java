@@ -282,6 +282,7 @@ public abstract class JsxElementBase extends CodeSection implements IJsxExpressi
 		+ "width: { type: Integer, help: \"Horizontal dimension\"},\n"
 		+ "wrap: { values: <null, \"hard\", \"soft\">, help: \"How the value of the form control is to be wrapped for form submission\"},\n"
 		+ "onClick: ClickEventCallback,\n"
+		+ "onSubmit: SubmitEventCallback,\n"
 		+ "onContextMenu: ClickEventCallback,\n"
 		+ "onChange: InputChangedCallback,\n"
 		+ "key: Any\n"

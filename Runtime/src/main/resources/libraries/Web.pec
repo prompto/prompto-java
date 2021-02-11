@@ -82,11 +82,26 @@ and methods:
 		JavaScript: this.preventDefault();
 		
 
+@Inlined
+define SubmitEvent as native category with bindings:
+
+	define category bindings as:
+		JavaScript: Event
+
+and methods:
+		
+	define stopPropagation as method doing:
+		JavaScript: this.stopPropagation();
+
+	define preventDefault as method doing:
+		JavaScript: this.preventDefault();
+
 define ClickEventCallback as abstract method receiving ClickEvent event
 define MouseEventCallback as abstract method receiving MouseEvent event
 define KeyboardEventCallback as abstract method receiving KeyboardEvent event
 define RadioChangedCallback as abstract method receiving RadioChangedEvent event
 define InputChangedCallback as abstract method receiving InputChangedEvent event
+define SubmitEventCallback as abstract method receiving SubmitEvent event
 define DateChangedCallback as abstract method receiving Date value
 define ToggleChangedCallback as abstract method receiving Boolean value
 define ItemSelectedCallback as abstract method receiving Any value
@@ -134,11 +149,11 @@ define setReactWidgetState as native method receiving ReactWidget w, Document st
 	JavaScript: w.setState(state, callback);
 
 
-define ReactStateAndPropsCallback as abstract method receiving Document state and Document props returning Document
+define ReactStateAndPropsUpdater as abstract method receiving Document state and Document props returning Document
 
 
-define setReactWidgetState as native method receiving ReactWidget w and ReactStateAndPropsCallback callback = nothing doing:
-	JavaScript: w.setState(callback);
+define setReactWidgetState as native method receiving ReactWidget w, ReactStateAndPropsUpdater updater and Callback callback = nothing doing:
+	JavaScript: w.setState(updater, callback);
 
 
 define forceReactWidgetRender as native method receiving ReactWidget w and Callback callback = nothing doing:
@@ -203,8 +218,8 @@ define ReactWidget as widget with methods:
 	define setState as method receiving Document state and Callback callback = nothing doing:
 		setReactWidgetState self with state and callback
 
-	define setState as method receiving ReactStateAndPropsCallback callback doing:
-		setReactWidgetState self with callback
+	define setState as method receiving ReactStateAndPropsUpdater updater and Callback callback = nothing doing:
+		setReactWidgetState self with updater and callback
 
 	define forceRender as method receiving Callback callback = nothing doing:
 		forceReactWidgetRender self with callback
