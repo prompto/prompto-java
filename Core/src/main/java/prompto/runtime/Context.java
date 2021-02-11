@@ -55,6 +55,7 @@ import prompto.type.MethodType;
 import prompto.type.NativeType;
 import prompto.utils.CodeWriter;
 import prompto.utils.CollectionUtils;
+import prompto.utils.Logger;
 import prompto.utils.ObjectUtils;
 import prompto.utils.SectionLocator;
 import prompto.value.ClosureValue;
@@ -67,6 +68,8 @@ import prompto.value.IValue;
 /* a Context is the place where the Interpreter locates declarations and values */
 public class Context implements IContext {
 	
+	static final Logger logger = new Logger();
+
 	public static Context newGlobalsContext() {
 		Context context = new Context();
 		context.globals = context;
@@ -490,14 +493,17 @@ public class Context implements IContext {
 				Iterable<IDeclaration> decls = store.fetchLatestDeclarations(id.toString());
 				if(decls==null)
 					return null;
-				decls.forEach((d)-> {
-					if(d instanceof MethodDeclarationMap) {
-						MethodDeclarationMap map = (MethodDeclarationMap)d;
-						for(Map.Entry<String, IMethodDeclaration> entry : map.entrySet())
-							entry.getValue().register(this);
-					} else
-						d.register(this);
+				// register prototypes locally first to avoid partial resolution 
+				// in multi-thread scenarios (such as servlet queries)
+				MethodDeclarationMap map = new MethodDeclarationMap(id);
+				decls.forEach(decl2 -> {
+					if(decl2 instanceof IMethodDeclaration)
+						map.register((IMethodDeclaration)decl2, this, false);
+					else
+						decl2.register(this);
 				});
+				if(map.size()>0)
+					map.register(this);
 				return declarations.get(id);
 			} catch(PromptoError e) {
 				throw new RuntimeException(e); // TODO define a strategy
