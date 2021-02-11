@@ -33,7 +33,7 @@ public class WorkerResumedDebugEvent extends WorkerDebugEvent {
 	@Override
 	public void execute(IDebugEventListener listener) {
 		IWorker worker = DebuggedWorker.parse(workerId);
-		listener.handleResumedEvent(worker, resumeReason);
+		listener.onWorkerResumedEvent(worker, resumeReason);
 	}
 	
 	public WorkerResumedDebugEvent withResumeReason(ResumeReason reason) {

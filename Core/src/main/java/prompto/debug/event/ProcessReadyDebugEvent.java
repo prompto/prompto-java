@@ -2,16 +2,16 @@ package prompto.debug.event;
 
 import prompto.debug.IDebugEventListener;
 
-public class ReadyDebugEvent implements IDebugEvent {
+public class ProcessReadyDebugEvent implements IDebugEvent {
 	
 	@Override
 	public void execute(IDebugEventListener listener) {
-		listener.handleReadyEvent();
+		listener.onProcessReadyEvent();
 	}
 	
 	@Override
 	public boolean equals(Object other) {
-		return other==this || other instanceof ReadyDebugEvent;
+		return other==this || other instanceof ProcessReadyDebugEvent;
 	}
 
 }

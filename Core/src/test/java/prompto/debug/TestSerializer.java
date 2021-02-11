@@ -11,8 +11,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.BooleanNode;
 
 import prompto.debug.event.ConnectedDebugEvent;
-import prompto.debug.event.ReadyDebugEvent;
-import prompto.debug.event.TerminatedDebugEvent;
+import prompto.debug.event.ProcessReadyDebugEvent;
+import prompto.debug.event.ProcessTerminatedDebugEvent;
 import prompto.debug.event.WorkerCompletedDebugEvent;
 import prompto.debug.event.WorkerResumedDebugEvent;
 import prompto.debug.event.WorkerStartedDebugEvent;
@@ -58,8 +58,8 @@ public class TestSerializer {
 	@Test
 	public void eventsAreSerialized() throws Exception {
 		testRoundRobin(new ConnectedDebugEvent("host", 8080));
-		testRoundRobin(new ReadyDebugEvent());
-		testRoundRobin(new TerminatedDebugEvent());
+		testRoundRobin(new ProcessReadyDebugEvent());
+		testRoundRobin(new ProcessTerminatedDebugEvent());
 		testRoundRobin(new WorkerCompletedDebugEvent().withWorkerId("Hello"));
 		testRoundRobin(new WorkerResumedDebugEvent().withResumeReason(ResumeReason.STEP_OUT).withWorkerId("Hello"));
 		testRoundRobin(new WorkerStartedDebugEvent().withName("name").withWorkerId("Hello"));

@@ -32,7 +32,7 @@ public class WorkerSuspendedDebugEvent extends WorkerDebugEvent {
 	@Override
 	public void execute(IDebugEventListener listener) {
 		IWorker worker = DebuggedWorker.parse(workerId);
-		listener.handleSuspendedEvent(worker, suspendReason);
+		listener.onWorkerSuspendedEvent(worker, suspendReason);
 	}
 	
 	public WorkerSuspendedDebugEvent withSuspendReason(SuspendReason reason) {

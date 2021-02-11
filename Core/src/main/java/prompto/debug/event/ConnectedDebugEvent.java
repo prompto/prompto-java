@@ -33,7 +33,7 @@ public class ConnectedDebugEvent implements IDebugEvent {
 	
 	@Override
 	public void execute(IDebugEventListener listener) {
-		listener.handleConnectedEvent(this);
+		listener.onConnectedEvent(this);
 	}
 	
 	@Override

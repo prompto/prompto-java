@@ -5,11 +5,11 @@ import prompto.debug.worker.IWorker;
 
 /* listens to debugger events */ 
 public interface IDebugEventListener {
-	void handleConnectedEvent(ConnectedDebugEvent event);
-	void handleReadyEvent();
-	void handleStartedEvent(IWorker worker);
-	void handleResumedEvent(IWorker worker, ResumeReason reason);
-	void handleSuspendedEvent(IWorker worker, SuspendReason reason);
-	void handleCompletedEvent(IWorker worker);
-	void handleTerminatedEvent();
+	void onConnectedEvent(ConnectedDebugEvent event);
+	void onProcessReadyEvent();
+	void onWorkerStartedEvent(IWorker worker);
+	void onWorkerResumedEvent(IWorker worker, ResumeReason reason);
+	void onWorkerSuspendedEvent(IWorker worker, SuspendReason reason);
+	void onWorkerCompletedEvent(IWorker worker);
+	void onProcessTerminatedEvent();
 }

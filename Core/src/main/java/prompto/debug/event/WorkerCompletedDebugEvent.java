@@ -16,7 +16,7 @@ public class WorkerCompletedDebugEvent extends WorkerDebugEvent {
 	@Override
 	public void execute(IDebugEventListener listener) {
 		IWorker worker = DebuggedWorker.parse(workerId);
-		listener.handleStartedEvent(worker);
+		listener.onWorkerStartedEvent(worker);
 	}
 	
 	@Override

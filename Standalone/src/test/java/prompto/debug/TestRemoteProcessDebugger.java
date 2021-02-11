@@ -120,7 +120,7 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 
 	
 	@Override
-	public void handleConnectedEvent(ConnectedDebugEvent event) {
+	public void onConnectedEvent(ConnectedDebugEvent event) {
 		((JavaDebugRequestClient)debugger).setRemote(event.getHost(), event.getPort());
 		((DebugRequestClient)debugger).setConnected(true);
 		synchronized (lock) {
@@ -129,27 +129,27 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 	}
 
 	@Override
-	public void handleReadyEvent() {
+	public void onProcessReadyEvent() {
 	}
 	
 	@Override
-	public void handleStartedEvent(IWorker thread) {
+	public void onWorkerStartedEvent(IWorker thread) {
 	}
 	
 	@Override
-	public void handleResumedEvent(IWorker thread, ResumeReason reason) {
+	public void onWorkerResumedEvent(IWorker thread, ResumeReason reason) {
 	}
 	
 	@Override
-	public void handleSuspendedEvent(IWorker thread, SuspendReason reason) {
+	public void onWorkerSuspendedEvent(IWorker thread, SuspendReason reason) {
 	}
 	
 	@Override
-	public void handleCompletedEvent(IWorker thread) {
+	public void onWorkerCompletedEvent(IWorker thread) {
 	}
 	
 	@Override
-	public void handleTerminatedEvent() {
+	public void onProcessTerminatedEvent() {
 		this.debugger.notifyTerminated();
 	};
 }

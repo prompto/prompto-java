@@ -40,7 +40,7 @@ public class WorkerStartedDebugEvent extends WorkerDebugEvent {
 	@Override
 	public void execute(IDebugEventListener listener) {
 		IWorker worker = DebuggedWorker.parse(workerId);
-		listener.handleStartedEvent(worker);
+		listener.onWorkerStartedEvent(worker);
 	}
 	
 	public WorkerStartedDebugEvent withName(String name) {

@@ -173,7 +173,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 		synchronized(lock) {
 			setStatus(Status.SUSPENDED);
 			if(listener!=null)
-				listener.handleSuspendedEvent(DebuggedWorker.wrap(Thread.currentThread()), reason);
+				listener.onWorkerSuspendedEvent(DebuggedWorker.wrap(Thread.currentThread()), reason);
 			try {
 				logger.debug(()->"waiting lock");
 				lock.wait();
@@ -184,7 +184,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 			} finally {
 				setStatus( Status.RUNNING);
 				if(listener!=null)
-					listener.handleResumedEvent(DebuggedWorker.wrap(Thread.currentThread()), resumeReason);
+					listener.onWorkerResumedEvent(DebuggedWorker.wrap(Thread.currentThread()), resumeReason);
 			}
 		}
 	}	
@@ -276,7 +276,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 		setStatus(Status.RUNNING);
 		if(listener!=null) {
 			IWorker worker = DebuggedWorker.parse(event.getWorkerId());
-			listener.handleStartedEvent(worker); 
+			listener.onWorkerStartedEvent(worker); 
 		}
 	}
 	
@@ -284,7 +284,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 		ProcessDebugger.getInstance().unregister(Thread.currentThread());
 		if(listener!=null) {
 			IWorker worker = DebuggedWorker.parse(event.getWorkerId());
-			listener.handleCompletedEvent(worker); 
+			listener.onWorkerCompletedEvent(worker); 
 		}
 	}
 

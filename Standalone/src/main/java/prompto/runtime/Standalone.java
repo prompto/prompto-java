@@ -261,7 +261,7 @@ public abstract class Standalone {
 		// wire listener which will receive requests from client
 		debugRequestListener = createDebugRequestListener(config, processDebugger);
 		ConnectedDebugEvent connected = debugRequestListener.startListening();
-		debugEventAdapter.handleConnectedEvent(connected);
+		debugEventAdapter.onConnectedEvent(connected);
 		// wire local context to debugger
 		Context local = ApplicationContext.get().newLocalContext();
 		WorkerDebugger workerDebugger = startWorkerDebugger(Thread.currentThread(), local);
@@ -276,7 +276,7 @@ public abstract class Standalone {
 	public static void stopProcessDebugger() {
 		ProcessDebugger processDebugger = ProcessDebugger.getInstance();
 		processDebugger.setProcessStatus(Status.TERMINATING);
-		debugEventAdapter.handleTerminatedEvent();
+		debugEventAdapter.onProcessTerminatedEvent();
 		processDebugger.setProcessStatus(Status.TERMINATED);
 		debugRequestListener.stopListening();
 	}
@@ -286,7 +286,7 @@ public abstract class Standalone {
 	public static WorkerDebugger startWorkerDebugger(Thread thread, Context context) {
 		WorkerDebugger workerDebugger = new WorkerDebugger();
 		ProcessDebugger.getInstance().register(Thread.currentThread(), workerDebugger);
-		debugEventAdapter.handleStartedEvent(DebuggedWorker.wrap(Thread.currentThread()));
+		debugEventAdapter.onWorkerStartedEvent(DebuggedWorker.wrap(Thread.currentThread()));
 		workerDebugger.setListener(debugEventAdapter);
 		context.setDebugger(workerDebugger);
 		workerDebugger.setStatus(Status.RUNNING);

@@ -106,7 +106,7 @@ public class ProcessDebugger implements IDebugger {
 		if(!isTerminated()) {
 			setProcessStatus(Status.TERMINATED);
 			if(listener!=null)
-				listener.handleTerminatedEvent();
+				listener.onProcessTerminatedEvent();
 		}
 	}
 
