@@ -502,8 +502,9 @@ public class Context implements IContext {
 					else
 						decl2.register(this);
 				});
-				if(map.size()>0)
-					map.register(this);
+				if(map.size()>0) {
+					registerDeclaration(map);
+				}
 				return declarations.get(id);
 			} catch(PromptoError e) {
 				throw new RuntimeException(e); // TODO define a strategy
