@@ -125,9 +125,10 @@ function writeJSONValue(value, useDbRefs, formData) {
 			return { type: "DateTime", value: value.toString() };
 		case "Version":
 			return { type: "Version", value: value.toString() };
-		case "Blob":
-		case "Image":
-			return { type: typeName, value: writeJSONBinary(value, formData) };
+		case "BlobRef":
+			return { type: "Blob", value: writeJSONBinary(value, formData) };
+		case "ImageRef":
+			return { type: "Image", value: writeJSONBinary(value, formData) };
 		case "List":
 			return value.map(function(value) {
 				return writeJSONValue(value, useDbRefs);
