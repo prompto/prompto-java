@@ -53,6 +53,7 @@ import prompto.transpiler.ITranspilable;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
+import prompto.type.NativeType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 import prompto.value.ConcreteInstance;
@@ -1221,7 +1222,10 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 
 	private boolean isEnumeratedAttribute(Context context, Identifier attr) {
 		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, attr);
-		decl =  context.getRegisteredDeclaration(IDeclaration.class, decl.getType(context).getTypeNameId());
+		IType type = decl.getType(context);
+		if(type instanceof NativeType)
+			return false;
+		decl =  context.getRegisteredDeclaration(IDeclaration.class, type.getTypeNameId());
 		return decl instanceof IEnumeratedDeclaration;
 	}
 
