@@ -46,6 +46,7 @@ import prompto.expression.ArrowExpression;
 import prompto.expression.IExpression;
 import prompto.expression.InstanceExpression;
 import prompto.expression.MethodSelector;
+import prompto.expression.SelectorExpression;
 import prompto.expression.UnresolvedIdentifier;
 import prompto.expression.ValueExpression;
 import prompto.grammar.Argument;
@@ -734,25 +735,29 @@ public class CategoryType extends BaseType {
 	
 	@Override
 	public void declareSorted(Transpiler transpiler, IExpression key) {
-	    Identifier keyId = getKeyIdentifier(key);
-	    IDeclaration decl = this.getDeclaration(transpiler.getContext());
-	    if(decl instanceof CategoryDeclaration) {
-	    	CategoryDeclaration cd = (CategoryDeclaration)decl;
-	    	if ( cd.hasAttribute(transpiler.getContext(), keyId) ||  cd.hasMethod(transpiler.getContext(), keyId))
-	    		return;
-	    } 
-        decl = this.findGlobalMethod(transpiler.getContext(), keyId);
-        if (decl != null) {
-            decl.declare(transpiler);
-        } else {
-            if(key instanceof ArrowExpression)
-            	; // TODO
-            else
-            	key.declare(transpiler);
-        }
-	}
+		IDeclaration decl = this.getDeclaration(transpiler.getContext());
+		Identifier keyId = getKeyIdentifier(key);
+	    if(keyId!=null) {
+	 	    if(decl instanceof CategoryDeclaration) {
+		    	CategoryDeclaration cd = (CategoryDeclaration)decl;
+		    	if ( cd.hasAttribute(transpiler.getContext(), keyId) ||  cd.hasMethod(transpiler.getContext(), keyId))
+		    		return;
+		    } 
+	        decl = this.findGlobalMethod(transpiler.getContext(), keyId);
+		    if (decl != null) {
+	            decl.declare(transpiler);
+	            return;
+		    }
+	    }
+        if(key instanceof ArrowExpression)
+        	; // TODO
+        else
+        	key.declare(transpiler);
+ 	}
 	
 	private Identifier getKeyIdentifier(IExpression key) {
+		if(key instanceof SelectorExpression && ((SelectorExpression)key).getParent()!=null)
+			return null;
 		if(key instanceof InstanceExpression)
 			return ((InstanceExpression)key).getId();
 		else if(key instanceof ICodeSection) {
@@ -767,24 +772,26 @@ public class CategoryType extends BaseType {
 
 	@Override
 	public void transpileSortedComparator(Transpiler transpiler, IExpression key, boolean descending) {
-		Identifier keyId = getKeyIdentifier(key);
 	    IDeclaration decl = this.getDeclaration(transpiler.getContext());
-	    if(decl instanceof CategoryDeclaration) {
-	    	CategoryDeclaration cd = (CategoryDeclaration)decl;
-    	    if (cd.hasAttribute(transpiler.getContext(), keyId)) {
-    	    	this.transpileSortedByAttribute(transpiler, descending, key);
-    	    	return;
-    	    } else if (cd.hasMethod(transpiler.getContext(), keyId)) {
-    	    	throw new UnsupportedOperationException();
-    	    	/*this.transpileSortedByClassMethod(transpiler, descending, key);
-    	    	return;*/
-    	    } 
-	    }
-	    decl = this.findGlobalMethod(transpiler.getContext(), keyId);
-        if (decl != null) {
-            this.transpileSortedByGlobalMethod(transpiler, descending, decl.getTranspiledName(transpiler.getContext()));
-	    	return;
-        }
+		Identifier keyId = getKeyIdentifier(key);
+		if(keyId!=null) {
+		    if(decl instanceof CategoryDeclaration) {
+		    	CategoryDeclaration cd = (CategoryDeclaration)decl;
+	    	    if (cd.hasAttribute(transpiler.getContext(), keyId)) {
+	    	    	this.transpileSortedByAttribute(transpiler, descending, key);
+	    	    	return;
+	    	    } else if (cd.hasMethod(transpiler.getContext(), keyId)) {
+	    	    	throw new UnsupportedOperationException();
+	    	    	/*this.transpileSortedByClassMethod(transpiler, descending, key);
+	    	    	return;*/
+	    	    } 
+		    }
+		    decl = this.findGlobalMethod(transpiler.getContext(), keyId);
+			if (decl != null) {
+	            this.transpileSortedByGlobalMethod(transpiler, descending, decl.getTranspiledName(transpiler.getContext()));
+		    	return;
+	        }
+		}
         if(key instanceof ArrowExpression)
         	((ArrowExpression)key).transpileSortedComparator(transpiler, this, descending);
         else
