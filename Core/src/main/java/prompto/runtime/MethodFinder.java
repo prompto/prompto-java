@@ -22,10 +22,13 @@ import prompto.problem.ProblemRaiser;
 import prompto.statement.MethodCall;
 import prompto.type.CategoryType;
 import prompto.type.IType;
+import prompto.utils.Logger;
 import prompto.value.IInstance;
 
 
 public class MethodFinder {
+
+	static final Logger logger = new Logger();
 
 	Context context;
 	MethodCall methodCall;
