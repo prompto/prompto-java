@@ -186,7 +186,8 @@ public class CastExpression implements IExpression {
 	public void declare(Transpiler transpiler) {
 		expression.declare(transpiler);
 		IType target = getTargetType(transpiler.getContext());
-		target.declare(transpiler);
+		if(target!=null)
+			target.declare(transpiler);
 	}
 	
 	

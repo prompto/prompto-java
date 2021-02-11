@@ -130,7 +130,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	
 	private Set<IMethodDeclaration> getMemberCandidates(Context context, boolean checkInstance) {
 		IType parentType = checkParentType(context, checkInstance);
-		return parentType.getMemberMethods(context, id);
+		return parentType != null ? parentType.getMemberMethods(context, id) : Collections.emptySet();
 	}
 	
 	private IType checkParentType(Context context, boolean checkInstance) {
