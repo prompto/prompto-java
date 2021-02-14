@@ -19,6 +19,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.intrinsic.PromptoProxy;
 import prompto.param.ParameterList;
+import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.transpiler.Transpiler;
@@ -29,13 +30,14 @@ import prompto.type.IntegerType;
 import prompto.type.IterableType;
 import prompto.type.MethodType;
 import prompto.type.NativeType;
+import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.DecimalValue;
 import prompto.value.IValue;
 import prompto.value.IntegerValue;
 import prompto.value.NullValue;
 
-public class CastExpression implements IExpression {
+public class CastExpression extends CodeSection implements IExpression {
 	
 	IExpression expression;
 	IType type;
@@ -56,6 +58,8 @@ public class CastExpression implements IExpression {
 	public IType check(Context context) {
 		IType actual = expression.check(context).anyfy();
 		IType target = getTargetType(context);
+		if(target==null)
+			return VoidType.instance();
 		// check Any
 		if(actual==AnyType.instance())
 			return target;

@@ -1,6 +1,8 @@
 package prompto.utils;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,10 +11,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -518,8 +518,8 @@ public class BaseParserTest extends BaseTest {
 			((IMethodDeclaration)decl).check(context, true);
 		else
 			decl.check(context);
-		Set<ProblemDescriptor> expected = readExpectedProblems(resourceName);
-		Set<ProblemDescriptor> actual = readActualProblems(collector);
+		List<ProblemDescriptor> expected = readExpectedProblems(resourceName);
+		List<ProblemDescriptor> actual = readActualProblems(collector);
 		assertEquals(expected, actual);
 	}
 	
@@ -565,15 +565,15 @@ public class BaseParserTest extends BaseTest {
 		
 	}
 	
-	private Set<ProblemDescriptor> readActualProblems(ProblemCollector collector) {
+	private List<ProblemDescriptor> readActualProblems(ProblemCollector collector) {
 		return collector.getProblems().stream()
 				.map(ProblemDescriptor::new)
-				.collect(Collectors.toSet());
+				.collect(Collectors.toList());
 	}
 
 
 	@SuppressWarnings("unchecked")
-	protected Set<ProblemDescriptor> readExpectedProblems(String resourceName) {
+	protected List<ProblemDescriptor> readExpectedProblems(String resourceName) {
 		try {
 			int idx = resourceName.lastIndexOf('.');
 			resourceName = resourceName.substring(0, idx) + ".problems.yml";
@@ -582,7 +582,7 @@ public class BaseParserTest extends BaseTest {
 				BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 				YamlReader yaml = new YamlReader(reader);
 				List<ProblemDescriptor> read = yaml.read(List.class, ProblemDescriptor.class);
-				return read!=null ? new HashSet<>(read) : Collections.emptySet();
+				return read!=null ? read : Collections.emptyList();
 			} 
 		} catch(Exception e) {
 			e.printStackTrace();

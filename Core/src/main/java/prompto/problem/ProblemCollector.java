@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class ProblemCollector extends ProblemListener {
 
-	List<IProblem> problems = new ArrayList<IProblem>();
+	List<IProblem> problems = new ArrayList<>();
 	Set<String> unique = new HashSet<>();
 	
 	public void reset() {
