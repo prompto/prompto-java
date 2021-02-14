@@ -72,7 +72,7 @@ public abstract class JsxElementBase extends CodeSection implements IJsxExpressi
 		if(decl==null || !decl.isAWidget(context))
 			context.getProblemListener().reportUnknownWidget(this, type.getTypeName());
 		if(decl!=null)
-			decl.getAbstractMethods(context).forEach(method->context.getProblemListener().reportIllegalAbstractWidget(this, decl.getName(), method.getSignature(Dialect.O)));	
+			decl.getAbstractMethods(context, this).forEach(method->context.getProblemListener().reportIllegalAbstractWidget(this, decl.getName(), method.getSignature(Dialect.O)));	
 	}
 	
 	protected void checkChildren(Context context) {

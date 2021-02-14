@@ -271,6 +271,12 @@ public abstract class ProblemListener implements ANTLRErrorListener, IProblemLis
 	}
 	
 	@Override
+	public void reportInconsistentHierarchy(ICodeSection section, String category, String culprit) {
+		addProblem(new InconsistentHierarchyProblem(section, category, culprit));
+	}
+
+
+	@Override
 	public void reportAssigningVoidType(ICodeSection section) {
 		addProblem(new AssigningVoidTypeProblem(section));
 	}

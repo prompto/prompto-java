@@ -81,7 +81,10 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		if(derivedFrom==null || derivedFrom.size()!=1)
 			return false;
 		CategoryDeclaration parent = context.getRegisteredDeclaration(CategoryDeclaration.class, derivedFrom.get(0), true);
-		return parent.isAWidget(context);
+		if(parent==null)
+			return false;
+		else
+			return parent.isAWidget(context);
 	}
 	
 	@Override
@@ -615,15 +618,15 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 	
 	private void compileMethodPrototypes(Context context, ClassFile classFile) {
-		Map<String, MethodDeclarationMap> all = collectInterfaceMethods(context);
+		Map<String, MethodDeclarationMap> all = collectInterfaceMethods(context, this);
 		all.values().forEach((map)->
 			map.values().forEach((method)->
 				compileMethodPrototype(context, classFile, method)));
 	}
 	
-	protected Map<String, MethodDeclarationMap> collectInterfaceMethods(Context context) {
+	protected Map<String, MethodDeclarationMap> collectInterfaceMethods(Context context, ICodeSection section) {
 		// the methods to declare in the interface are those not already declared
-		Map<String, MethodDeclarationMap> all = getAllMethods(context);
+		Map<String, MethodDeclarationMap> all = getAllMethods(context, section);
 		Map<String, MethodDeclarationMap> local = new HashMap<>();
 		collectLocalMethods(context, local);
 		removeInheritedMethods(local, all);

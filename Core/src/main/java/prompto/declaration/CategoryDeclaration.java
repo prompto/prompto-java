@@ -24,6 +24,7 @@ import prompto.grammar.Annotation;
 import prompto.grammar.Identifier;
 import prompto.grammar.MethodDeclarationList;
 import prompto.grammar.Operator;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.store.IStore;
@@ -449,14 +450,14 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		throw new UnsupportedOperationException(); // TODO -> abstract
 	}
 
-	public Map<String, MethodDeclarationMap> getAllMethods(Context context) {
+	public Map<String, MethodDeclarationMap> getAllMethods(Context context, ICodeSection section) {
 		Map<String, MethodDeclarationMap> maps = new HashMap<>();
-		collectAllMethods(context, maps);
+		collectAllMethods(context, section, maps);
 		return maps;
 	}
 
-	public void collectAllMethods(Context context, Map<String, MethodDeclarationMap> maps) {
-		collectInheritedMethods(context, maps);
+	public void collectAllMethods(Context context, ICodeSection section, Map<String, MethodDeclarationMap> maps) {
+		collectInheritedMethods(context, section, maps);
 		collectLocalMethods(context, maps);
 	}
 	
@@ -467,10 +468,13 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		});
 	}
 
-	public void collectInheritedMethods(Context context, Map<String, MethodDeclarationMap> maps) {
+	public void collectInheritedMethods(Context context, ICodeSection section, Map<String, MethodDeclarationMap> maps) {
 		if(derivedFrom!=null) derivedFrom.forEach(id->{
 			CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, id);
-			decl.collectAllMethods(context, maps);
+			if(decl==null)
+				context.getProblemListener().reportInconsistentHierarchy(section, this.getName(), id.toString());
+			else
+				decl.collectAllMethods(context, section, maps);
 		});
 	}
 
@@ -502,8 +506,8 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		throw new IllegalStateException("Should never get there");
 	}
 
-	public Iterable<IMethodDeclaration> getAbstractMethods(Context context) {
-		return getAllMethods(context).values().stream()
+	public Iterable<IMethodDeclaration> getAbstractMethods(Context context, ICodeSection section) {
+		return getAllMethods(context, section).values().stream()
 				.map(protos -> protos.values().stream().filter(IMethodDeclaration::isAbstract))
 				.flatMap(Function.identity())
 				.collect(Collectors.toList());

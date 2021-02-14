@@ -97,6 +97,11 @@ public class TestProblems extends BaseOParserTest {
 	}
 
 	@Test
+	public void testUnknownParentType() throws Exception {
+		checkProblems("problems/unknownParentType.poc");
+	}
+
+	@Test
 	public void testUnknownType() throws Exception {
 		checkProblems("problems/unknownType.poc");
 	}

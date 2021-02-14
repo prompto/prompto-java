@@ -169,7 +169,7 @@ public class ConstructorExpression extends CodeSection implements IExpression {
 	private void checkConstructable(Context context, CategoryDeclaration decl) {
 		if(decl.isAWidget(context))
 			context.getProblemListener().reportIllegalWidgetConstructor(this, decl.getName());
-		decl.getAbstractMethods(context).forEach(method->context.getProblemListener().reportIllegalAbstractCategory(this, decl.getName(), method.getSignature(Dialect.O)));	
+		decl.getAbstractMethods(context, this).forEach(method->context.getProblemListener().reportIllegalAbstractCategory(this, decl.getName(), method.getSignature(Dialect.O)));	
 	}
 
 	private IType getActualType(Context context, CategoryDeclaration decl) {
