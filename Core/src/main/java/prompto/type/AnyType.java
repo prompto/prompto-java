@@ -17,6 +17,7 @@ import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDocument;
 import prompto.intrinsic.PromptoList;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
@@ -46,8 +47,8 @@ public class AnyType extends NativeType {
 	}
 	
 	@Override
-	public IType checkItem(Context context, IType itemType) {
-		return DocumentType.instance().checkItem(context,  itemType); // needed to support lists in Documents
+	public IType checkItem(Context context, IType itemType, ICodeSection section) {
+		return DocumentType.instance().checkItem(context,  itemType, section); // needed to support lists in Documents
 	}
 	
 	@Override

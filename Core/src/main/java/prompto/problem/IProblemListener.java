@@ -33,6 +33,7 @@ public interface IProblemListener {
 	void reportIllegalOperator(ICodeSection section, String message);
 	void reportIllegalAssignment(ICodeSection section, IType expected, IType actual);
 	void reportIllegalAssignment(ICodeSection section, Set<IType> expected, IType actual);
+	void reportIllegalItemType(ICodeSection section, Set<IType> expected, IType actual);
 	void reportIllegalOperation(ICodeSection section, String operation, IType left, IType right);
 	void reportIllegalPredicate(ICodeSection section, IExpression expression);
 	void reportIllegalRemoteCall(ICodeSection section, String message);

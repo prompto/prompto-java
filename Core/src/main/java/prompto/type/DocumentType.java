@@ -83,7 +83,7 @@ public class DocumentType extends NativeType {
 	}
 	
 	@Override
-	public IType checkItem(Context context, IType itemType) {
+	public IType checkItem(Context context, IType itemType, ICodeSection section) {
 		return AnyType.instance();
 	}
 

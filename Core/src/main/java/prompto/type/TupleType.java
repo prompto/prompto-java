@@ -55,11 +55,11 @@ public class TupleType extends ContainerType {
 	}
 
 	@Override
-	public IType checkItem(Context context, IType other) {
+	public IType checkItem(Context context, IType other, ICodeSection section) {
 		if(other==IntegerType.instance())
 			return AnyType.instance();
 		else
-			return super.checkItem(context,other);
+			return super.checkItem(context,other, section);
 	}
 	
 

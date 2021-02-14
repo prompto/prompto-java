@@ -13,6 +13,7 @@ import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.expression.IExpression;
 import prompto.intrinsic.PromptoRange;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
@@ -60,11 +61,11 @@ public class RangeType extends ContainerType {
 	}
 	
 	@Override
-	public IType checkItem(Context context, IType other) {
+	public IType checkItem(Context context, IType other, ICodeSection section) {
 		if(other==IntegerType.instance())
 			return itemType;
 		else
-			return super.checkItem(context,other);
+			return super.checkItem(context,other, section);
 	}
 	
 	@Override

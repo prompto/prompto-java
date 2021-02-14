@@ -69,7 +69,7 @@ public class ItemSelector extends SelectorExpression {
 	public IType check(Context context) {
 		IType parentType = parent.check(context);
 		IType itemType = item.check(context);
-		return parentType.checkItem(context, itemType);
+		return parentType.checkItem(context, itemType, this);
 	}
 	
 	@Override

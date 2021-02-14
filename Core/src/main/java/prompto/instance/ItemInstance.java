@@ -18,6 +18,7 @@ import prompto.intrinsic.PromptoDict;
 import prompto.intrinsic.PromptoDocument;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoTuple;
+import prompto.parser.CodeSection;
 import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
@@ -27,7 +28,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.IContainer;
 import prompto.value.IValue;
 
-public class ItemInstance implements IAssignableSelector {
+public class ItemInstance extends CodeSection implements IAssignableSelector {
 
 	IAssignableInstance parent;
 	IExpression item;
@@ -76,7 +77,7 @@ public class ItemInstance implements IAssignableSelector {
 		// called when a[3][x] = value
 		IType thisItemType = item.check(context);
 		IType parentType = parent.checkAssignItem(context, thisItemType, valueType, section);
-		return parentType.checkItem(context, itemType); 
+		return parentType.checkItem(context, itemType, section); 
 	}
 	
 	@Override
@@ -165,7 +166,7 @@ public class ItemInstance implements IAssignableSelector {
 	public IType check(Context context) {
 		IType parentType = this.parent.check(context);
 		IType itemType = this.item.check(context);
-	    return parentType.checkItem(context, itemType);
+	    return parentType.checkItem(context, itemType, this);
 	}
 	
 	@Override

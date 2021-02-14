@@ -176,7 +176,7 @@ public class VariableInstance implements IAssignableInstance {
 		if(actual==null) 
 			throw new SyntaxError("Unknown variable:" + this.id);
 		IType parentType = actual.getType(context);
-		return parentType.checkItem(context, itemType);
+		return parentType.checkItem(context, itemType, section);
 	}
 	
 	@Override

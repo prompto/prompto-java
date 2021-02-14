@@ -81,7 +81,7 @@ public interface IType extends ICodeSection {
 	IType checkMultiply(Context context, IType other, boolean tryReverse, ICodeSection section);
 	IType checkModulo(Context context, IType other, ICodeSection section);
 	void checkCompare(Context context, IType other, ICodeSection section);
-	IType checkItem(Context context, IType itemType) ;
+	IType checkItem(Context context, IType itemType, ICodeSection section) ;
 	IType checkRange(Context context, IType other);
 	void checkContains(Context context, IType other);
 	void checkContainsAllOrAny(Context context, IType other);

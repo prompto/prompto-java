@@ -91,11 +91,13 @@ public class DictType extends ContainerType {
 	}
 	
 	@Override
-	public IType checkItem(Context context, IType other) {
+	public IType checkItem(Context context, IType other, ICodeSection section) {
 		if(other==TextType.instance())
 			return itemType;
-		else
-			return super.checkItem(context,other);
+		else {
+			context.getProblemListener().reportIllegalItemType(section, Collections.singleton(TextType.instance()), other);
+			return VoidType.instance();
+		}
 	}
 	
 	@Override

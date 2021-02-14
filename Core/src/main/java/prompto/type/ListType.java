@@ -96,11 +96,11 @@ public class ListType extends ContainerType {
 	}
 	
 	@Override
-	public IType checkItem(Context context, IType other) {
+	public IType checkItem(Context context, IType other, ICodeSection section) {
 		if(other==IntegerType.instance())
 			return itemType;
 		else
-			return super.checkItem(context,other);
+			return super.checkItem(context,other, section);
 	}
 	
 	@Override
