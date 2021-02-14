@@ -402,6 +402,7 @@ public class MParser extends AbstractParser {
 				}
 				break;
 			case RESOURCE:
+			case STORABLE:
 			case VARIABLE_IDENTIFIER:
 				{
 				setState(526);
@@ -1797,7 +1798,7 @@ public class MParser extends AbstractParser {
 			setState(730);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (_la==RESOURCE || _la==VARIABLE_IDENTIFIER) {
+			if (((((_la - 141)) & ~0x3f) == 0 && ((1L << (_la - 141)) & ((1L << (RESOURCE - 141)) | (1L << (STORABLE - 141)) | (1L << (VARIABLE_IDENTIFIER - 141)))) != 0)) {
 				{
 				setState(729);
 				((Native_category_declarationContext)_localctx).attrs = attribute_identifier_list();
@@ -1913,7 +1914,7 @@ public class MParser extends AbstractParser {
 			setState(751);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if (_la==RESOURCE || _la==VARIABLE_IDENTIFIER) {
+			if (((((_la - 141)) & ~0x3f) == 0 && ((1L << (_la - 141)) & ((1L << (RESOURCE - 141)) | (1L << (STORABLE - 141)) | (1L << (VARIABLE_IDENTIFIER - 141)))) != 0)) {
 				{
 				setState(750);
 				((Native_resource_declarationContext)_localctx).attrs = attribute_identifier_list();
@@ -11566,6 +11567,7 @@ public class MParser extends AbstractParser {
 
 	public static class Attribute_identifierContext extends ParserRuleContext {
 		public TerminalNode VARIABLE_IDENTIFIER() { return getToken(MParser.VARIABLE_IDENTIFIER, 0); }
+		public TerminalNode STORABLE() { return getToken(MParser.STORABLE, 0); }
 		public TerminalNode RESOURCE() { return getToken(MParser.RESOURCE, 0); }
 		public Attribute_identifierContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -11590,7 +11592,7 @@ public class MParser extends AbstractParser {
 			{
 			setState(1796);
 			_la = _input.LA(1);
-			if ( !(_la==RESOURCE || _la==VARIABLE_IDENTIFIER) ) {
+			if ( !(((((_la - 141)) & ~0x3f) == 0 && ((1L << (_la - 141)) & ((1L << (RESOURCE - 141)) | (1L << (STORABLE - 141)) | (1L << (VARIABLE_IDENTIFIER - 141)))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -24684,25 +24686,25 @@ public class MParser extends AbstractParser {
 		"\u01f0\u01f2\u01f4\u01f6\u01f8\u01fa\u01fc\u01fe\u0200\u0202\u0204\u0206"+
 		"\2\22\3\2\\]\3\2#$\3\2*-\3\2\61\63\4\2\3\3\7\t\3\2\n\13\5\2tt\u0094\u0094"+
 		"\u00ae\u00ae\7\2\\\\\177\177\u008f\u008f\u0097\u0097\u00ae\u00ae\5\2\\"+
-		"\\\u008f\u008f\u00ae\u00ae\4\2\u008f\u008f\u00ae\u00ae\4\2\u0093\u0093"+
-		"\u009d\u009d\4\2SScc\t\2\f\2188:BDKMxz\u009b\u009d\u00a7\4\2((~~\5\2\33"+
-		"\34**,,\3\2\23\23\2\u0bd8\2\u0208\3\2\2\2\4\u0219\3\2\2\2\6\u0223\3\2"+
-		"\2\2\b\u0227\3\2\2\2\n\u022f\3\2\2\2\f\u024d\3\2\2\2\16\u0254\3\2\2\2"+
-		"\20\u0263\3\2\2\2\22\u0270\3\2\2\2\24\u0288\3\2\2\2\26\u0295\3\2\2\2\30"+
-		"\u0297\3\2\2\2\32\u02a6\3\2\2\2\34\u02b0\3\2\2\2\36\u02bd\3\2\2\2 \u02c7"+
-		"\3\2\2\2\"\u02d5\3\2\2\2$\u02ea\3\2\2\2&\u02fe\3\2\2\2(\u0306\3\2\2\2"+
-		"*\u0312\3\2\2\2,\u0321\3\2\2\2.\u0337\3\2\2\2\60\u034a\3\2\2\2\62\u035d"+
-		"\3\2\2\2\64\u035f\3\2\2\2\66\u0381\3\2\2\28\u0383\3\2\2\2:\u0398\3\2\2"+
-		"\2<\u03a2\3\2\2\2>\u03ac\3\2\2\2@\u03bb\3\2\2\2B\u03c2\3\2\2\2D\u03c9"+
-		"\3\2\2\2F\u03e9\3\2\2\2H\u03eb\3\2\2\2J\u03f8\3\2\2\2L\u0401\3\2\2\2N"+
-		"\u0408\3\2\2\2P\u041c\3\2\2\2R\u0434\3\2\2\2T\u0437\3\2\2\2V\u0468\3\2"+
-		"\2\2X\u046a\3\2\2\2Z\u046c\3\2\2\2\\\u0485\3\2\2\2^\u04ed\3\2\2\2`\u04ef"+
-		"\3\2\2\2b\u04f7\3\2\2\2d\u04f9\3\2\2\2f\u0503\3\2\2\2h\u0517\3\2\2\2j"+
-		"\u0525\3\2\2\2l\u0527\3\2\2\2n\u052e\3\2\2\2p\u0547\3\2\2\2r\u0549\3\2"+
-		"\2\2t\u0553\3\2\2\2v\u055d\3\2\2\2x\u0563\3\2\2\2z\u056a\3\2\2\2|\u0590"+
-		"\3\2\2\2~\u05b3\3\2\2\2\u0080\u05b5\3\2\2\2\u0082\u05bd\3\2\2\2\u0084"+
-		"\u05c3\3\2\2\2\u0086\u05d2\3\2\2\2\u0088\u05de\3\2\2\2\u008a\u05e0\3\2"+
-		"\2\2\u008c\u05e7\3\2\2\2\u008e\u05eb\3\2\2\2\u0090\u05f2\3\2\2\2\u0092"+
+		"\\\u008f\u008f\u00ae\u00ae\5\2\u008f\u008f\u0097\u0097\u00ae\u00ae\4\2"+
+		"\u0093\u0093\u009d\u009d\4\2SScc\t\2\f\2188:BDKMxz\u009b\u009d\u00a7\4"+
+		"\2((~~\5\2\33\34**,,\3\2\23\23\2\u0bd8\2\u0208\3\2\2\2\4\u0219\3\2\2\2"+
+		"\6\u0223\3\2\2\2\b\u0227\3\2\2\2\n\u022f\3\2\2\2\f\u024d\3\2\2\2\16\u0254"+
+		"\3\2\2\2\20\u0263\3\2\2\2\22\u0270\3\2\2\2\24\u0288\3\2\2\2\26\u0295\3"+
+		"\2\2\2\30\u0297\3\2\2\2\32\u02a6\3\2\2\2\34\u02b0\3\2\2\2\36\u02bd\3\2"+
+		"\2\2 \u02c7\3\2\2\2\"\u02d5\3\2\2\2$\u02ea\3\2\2\2&\u02fe\3\2\2\2(\u0306"+
+		"\3\2\2\2*\u0312\3\2\2\2,\u0321\3\2\2\2.\u0337\3\2\2\2\60\u034a\3\2\2\2"+
+		"\62\u035d\3\2\2\2\64\u035f\3\2\2\2\66\u0381\3\2\2\28\u0383\3\2\2\2:\u0398"+
+		"\3\2\2\2<\u03a2\3\2\2\2>\u03ac\3\2\2\2@\u03bb\3\2\2\2B\u03c2\3\2\2\2D"+
+		"\u03c9\3\2\2\2F\u03e9\3\2\2\2H\u03eb\3\2\2\2J\u03f8\3\2\2\2L\u0401\3\2"+
+		"\2\2N\u0408\3\2\2\2P\u041c\3\2\2\2R\u0434\3\2\2\2T\u0437\3\2\2\2V\u0468"+
+		"\3\2\2\2X\u046a\3\2\2\2Z\u046c\3\2\2\2\\\u0485\3\2\2\2^\u04ed\3\2\2\2"+
+		"`\u04ef\3\2\2\2b\u04f7\3\2\2\2d\u04f9\3\2\2\2f\u0503\3\2\2\2h\u0517\3"+
+		"\2\2\2j\u0525\3\2\2\2l\u0527\3\2\2\2n\u052e\3\2\2\2p\u0547\3\2\2\2r\u0549"+
+		"\3\2\2\2t\u0553\3\2\2\2v\u055d\3\2\2\2x\u0563\3\2\2\2z\u056a\3\2\2\2|"+
+		"\u0590\3\2\2\2~\u05b3\3\2\2\2\u0080\u05b5\3\2\2\2\u0082\u05bd\3\2\2\2"+
+		"\u0084\u05c3\3\2\2\2\u0086\u05d2\3\2\2\2\u0088\u05de\3\2\2\2\u008a\u05e0"+
+		"\3\2\2\2\u008c\u05e7\3\2\2\2\u008e\u05eb\3\2\2\2\u0090\u05f2\3\2\2\2\u0092"+
 		"\u05f6\3\2\2\2\u0094\u05ff\3\2\2\2\u0096\u0604\3\2\2\2\u0098\u0606\3\2"+
 		"\2\2\u009a\u0608\3\2\2\2\u009c\u0611\3\2\2\2\u009e\u0614\3\2\2\2\u00a0"+
 		"\u0619\3\2\2\2\u00a2\u0627\3\2\2\2\u00a4\u063a\3\2\2\2\u00a6\u064b\3\2"+
@@ -25443,10 +25445,10 @@ public class MParser extends AbstractParser {
 		"\7\24\2\2\u099a\u099b\5\u019e\u00d0\2\u099b\u099d\3\2\2\2\u099c\u0996"+
 		"\3\2\2\2\u099c\u0997\3\2\2\2\u099c\u0998\3\2\2\2\u099d\u019b\3\2\2\2\u099e"+
 		"\u099f\b\u00cf\1\2\u099f\u09a0\5\u0190\u00c9\2\u09a0\u09a6\3\2\2\2\u09a1"+
-		"\u09a2\f\3";
+		"\u09a2";
 	private static final String _serializedATNSegment1 =
-		"\2\2\u09a2\u09a3\7\24\2\2\u09a3\u09a5\5\u0190\u00c9\2\u09a4\u09a1\3\2"+
-		"\2\2\u09a5\u09a8\3\2\2\2\u09a6\u09a4\3\2\2\2\u09a6\u09a7\3\2\2\2\u09a7"+
+		"\f\3\2\2\u09a2\u09a3\7\24\2\2\u09a3\u09a5\5\u0190\u00c9\2\u09a4\u09a1"+
+		"\3\2\2\2\u09a5\u09a8\3\2\2\2\u09a6\u09a4\3\2\2\2\u09a6\u09a7\3\2\2\2\u09a7"+
 		"\u019d\3\2\2\2\u09a8\u09a6\3\2\2\2\u09a9\u09aa\b\u00d0\1\2\u09aa\u09ab"+
 		"\5\u01a6\u00d4\2\u09ab\u09ac\7\60\2\2\u09ac\u09ad\5\u0190\u00c9\2\u09ad"+
 		"\u09b6\3\2\2\2\u09ae\u09af\f\3\2\2\u09af\u09b0\7\24\2\2\u09b0\u09b1\5"+
