@@ -5,7 +5,7 @@ import org.antlr.v4.runtime.Token;
 
 public class Location implements ILocation {
 
-	Integer tokenIndex;
+	int tokenIndex;
 	int line;
 	int column;
 	
