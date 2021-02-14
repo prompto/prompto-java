@@ -2,13 +2,13 @@ package prompto.problem;
 
 import prompto.parser.ICodeSection;
 
-public class MissingBindingProblem extends SyntaxProblemBase {
+public class ErrorProblem extends SyntaxProblemBase {
 
-	String message;
+	String name;
 	
-	public MissingBindingProblem(ICodeSection section, String message) {
+	public ErrorProblem(ICodeSection section, String name) {
 		super(section);
-		this.message = message;
+		this.name = name;
 	}
 
 	@Override
@@ -18,7 +18,7 @@ public class MissingBindingProblem extends SyntaxProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return message;
+		return "Missing binding:" + name;
 	}
 
 }

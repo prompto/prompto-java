@@ -156,13 +156,13 @@ public class DecimalType extends NativeType implements INumberType {
 	}
 
 	@Override
-	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ICodeSection section) {
 		if (other == IntegerType.instance() || other == DecimalType.instance()) {
 			left.transpile(transpiler);
 			transpiler.append(" + ");
 			right.transpile(transpiler);
 		} else
-			super.transpileAdd(transpiler, other, tryReverse, left, right);
+			super.transpileAdd(transpiler, other, tryReverse, left, right, section);
 	}
 
 	@Override

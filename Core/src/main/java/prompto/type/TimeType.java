@@ -168,14 +168,14 @@ public class TimeType extends NativeType {
 	}
 	
 	@Override
-	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ICodeSection section) {
 	    if (other == PeriodType.instance()) {
 	        left.transpile(transpiler);
 	        transpiler.append(".addPeriod(");
 	        right.transpile(transpiler);
 	        transpiler.append(")");
 	    } else {
-	        super.transpileAdd(transpiler, other, tryReverse, left, right);
+	        super.transpileAdd(transpiler, other, tryReverse, left, right, section);
 	    }
 	}
 	

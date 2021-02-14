@@ -67,16 +67,6 @@ public class Location implements ILocation {
 		return column;
 	}
 
-	public boolean isNotAfter(ILocation other) {
-		return this.line<other.getLine()
-				|| (this.line==other.getLine() && this.column<=other.getColumn());
-	}
-	
-	public boolean isNotBefore(ILocation other) {
-		return this.line>other.getLine()
-				|| (this.line==other.getLine() && this.column>=other.getColumn());
-	}
-	
 	@Override
 	public boolean equals(Object other) {
 		return this==other || (other instanceof Location && ((Location)other).equals(this));
@@ -85,6 +75,7 @@ public class Location implements ILocation {
 	public boolean equals(Location other) {
 		return other != null && column == other.column && line == other.line && tokenIndex == other.tokenIndex;
 	}
+
 	
 
 }

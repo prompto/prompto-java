@@ -15,6 +15,7 @@ import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.literal.TextLiteral;
 import prompto.param.CategoryParameter;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.store.Family;
@@ -62,11 +63,11 @@ public abstract class ContainerType extends IterableType {
 	}
 	
 	@Override
-	public void checkContains(Context context, IType other) {
+	public void checkContains(Context context, IType other, ICodeSection section) {
 		if(itemType.isAssignableFrom(context, other))
 			return;
 		else
-			super.checkContains(context, other);
+			super.checkContains(context, other, section);
 	}
 	
 	@Override

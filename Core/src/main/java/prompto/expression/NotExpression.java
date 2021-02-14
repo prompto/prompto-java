@@ -62,7 +62,7 @@ public class NotExpression extends CodeSection implements IUnaryExpression, IPre
 	public IType check(Context context) {
 		IType type = expression.check(context);
 		if(!(type instanceof BooleanType))
-			throw new SyntaxError("Cannot negate " + type.getTypeName());
+			context.getProblemListener().reportIllegalOperator(this, "Cannot negate " + type.getTypeName());
 		return BooleanType.instance();
 	}
 	

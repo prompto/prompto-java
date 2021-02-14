@@ -152,7 +152,9 @@ public class CategoryParameter extends BaseParameter implements ITypedParameter 
 		if(actual==context)
 			throw new SyntaxError("Duplicate argument: \"" + id + "\"");
 		resolve(context);
-		if(resolved==type)
+		if(resolved==null)
+			context.getProblemListener().reportUnknownCategory(this, id.toString());
+		else if(resolved==type)
 			context.registerValue(this);
 		else {
 			CategoryParameter param = new CategoryParameter(resolved, id);
@@ -189,7 +191,10 @@ public class CategoryParameter extends BaseParameter implements ITypedParameter 
 	@Override
 	public void declare(Transpiler transpiler) {
 		resolve(transpiler.getContext());
-		resolved.declare(transpiler);
+		if(resolved==null)
+			transpiler.getContext().getProblemListener().reportUnknownCategory(this, id.toString());
+		else
+			resolved.declare(transpiler);
 	}
 	
 	@Override

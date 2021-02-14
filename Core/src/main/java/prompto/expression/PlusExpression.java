@@ -123,7 +123,7 @@ public class PlusExpression extends CodeSection implements IExpression {
 		Context context = transpiler.getContext();
 		IType lt = left.check(context);
 		IType rt = right.check(context);
-		lt.transpileAdd(transpiler, rt, true, this.left, this.right);
+		lt.transpileAdd(transpiler, rt, true, this.left, this.right, this);
 		return false;
 	}
 	

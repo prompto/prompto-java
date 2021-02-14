@@ -1,6 +1,7 @@
 package prompto.type;
 
 import prompto.expression.IExpression;
+import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.store.FamilyInfo;
@@ -38,11 +39,11 @@ public abstract class IterableType extends NativeType {
 	}
 	
 	@Override
-	public void checkContains(Context context, IType other) {
+	public void checkContains(Context context, IType other, ICodeSection section) {
 		if(itemType.isAssignableFrom(context, other))
 			return;
 		else
-			super.checkContains(context, other);
+			super.checkContains(context, other, section);
 	}
 	
 	@Override

@@ -217,16 +217,18 @@ public class EqualsExpression extends CodeSection implements IPredicateExpressio
 			Identifier name = readLeftName();
 			if(name!=null && right instanceof TypeExpression) {
 				INamed value = context.getRegisteredValue(INamed.class, name);
-				IType targetType = ((TypeExpression)right).getType().resolve(context, null);
-				IType sourceType = value.getType(context);
-				if(sourceType.isMutable(context))
-					targetType = targetType.asMutable(context, true);
-				value = new LinkedVariable(targetType, value);
-				Context local = context.newChildContext();
-				local.registerValue(value, false);
-				if(setValue)
-					local.setValue(name, new LinkedValue(context, targetType));
-				context = local;
+				if(value!=null) {
+					IType targetType = ((TypeExpression)right).getType().resolve(context, null);
+					IType sourceType = value.getType(context);
+					if(sourceType.isMutable(context))
+						targetType = targetType.asMutable(context, true);
+					value = new LinkedVariable(targetType, value);
+					Context local = context.newChildContext();
+					local.registerValue(value, false);
+					if(setValue)
+						local.setValue(name, new LinkedValue(context, targetType));
+					context = local;
+				}
 			}
 		}
 		return context;

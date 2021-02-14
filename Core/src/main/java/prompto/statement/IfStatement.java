@@ -13,7 +13,6 @@ import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StackState;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.expression.EqualsExpression;
 import prompto.expression.IExpression;
 import prompto.parser.CodeSection;
@@ -285,7 +284,18 @@ public class IfStatement extends BaseStatement {
 		public IfElement(IExpression condition, StatementList statements) {
 			this.condition = condition;
 			this.statements = statements;
+			this.populateSection();
 		}
+		
+		
+
+		private void populateSection() {
+			if(condition instanceof ICodeSection)
+				mergeCodeSection(((ICodeSection)condition).getSection());
+			if(statements!=null)
+				statements.forEach(stmt -> mergeCodeSection(stmt.getSection()));
+		}
+
 
 		public boolean toDialect(CodeWriter writer) {
 			switch (writer.getDialect()) {
@@ -365,8 +375,9 @@ public class IfStatement extends BaseStatement {
 			if(condition!=null) {
 				IType cond = condition.check(context);
 				if (cond != BooleanType.instance())
-					throw new SyntaxError("Expected a boolean condition!");
-				context = downcastContextForCheck(context);
+					context.getProblemListener().reportIllegalPredicate(this, condition);
+				else
+					context = downcastContextForCheck(context);
 			}
 			return statements.check(context, null);
 		}

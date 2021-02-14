@@ -75,10 +75,15 @@ public class OrExpression extends CodeSection implements IPredicateExpression, I
 	@Override
 	public IType check(Context context) {
 		IType lt = left.check(context);
-		IType rt = right.check(context);
-		if(!(lt instanceof BooleanType) || !(rt instanceof BooleanType))
-			throw new SyntaxError("Cannot combine " + lt.getTypeName() + " and " + rt.getTypeName());
-		return BooleanType.instance();
+		if(lt instanceof BooleanType) {
+			IType rt = right.check(context);
+			if(rt instanceof BooleanType)
+				return BooleanType.instance();	
+			else
+				context.getProblemListener().reportIllegalPredicate(this, right);
+		} else
+			context.getProblemListener().reportIllegalPredicate(this, left);
+		return BooleanType.instance(); // don't propagate 
 	}
 	
 	@Override

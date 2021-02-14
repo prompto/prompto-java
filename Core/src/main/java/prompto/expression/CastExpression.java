@@ -16,7 +16,6 @@ import prompto.compiler.StringConstant;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.intrinsic.PromptoProxy;
 import prompto.param.ParameterList;
 import prompto.parser.CodeSection;
@@ -69,7 +68,8 @@ public class CastExpression extends CodeSection implements IExpression {
 		// check downcast
 		if(actual.isAssignableFrom(context, target))
 			return target;
-		throw new SyntaxError("Cannot cast " + actual.toString() + " to " + target.toString());
+		context.getProblemListener().reportIncompatibleTypes(this, actual, target);
+		return VoidType.instance();
 	}
 
 	private IType getTargetType(Context context) {

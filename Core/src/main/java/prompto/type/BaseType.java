@@ -148,11 +148,11 @@ public abstract class BaseType extends CodeSection implements IType {
 	}
 
 	@Override
-	public void checkContains(Context context, IType other) {
+	public void checkContains(Context context, IType other, ICodeSection section) {
 		if(other instanceof EnumeratedNativeType)
-			checkContains(context, ((EnumeratedNativeType)other).getDerivedFrom());
-		else 		
-			throw new SyntaxError(this.getTypeName() + " cannot contain " + other.getTypeName());
+			checkContains(context, ((EnumeratedNativeType)other).getDerivedFrom(), section);
+		else 	
+			context.getProblemListener().reportIllegalOperation(section, "contain", this, other);
 	}
 
 	@Override

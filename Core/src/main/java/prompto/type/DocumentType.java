@@ -119,14 +119,14 @@ public class DocumentType extends NativeType {
 	}
 	
 	@Override
-	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ICodeSection section) {
 	    if(other instanceof DocumentType) {
 	        left.transpile(transpiler);
 	        transpiler.append(".$safe_add(");
 	        right.transpile(transpiler);
 	        transpiler.append(")");
 	    } else 
-	        super.transpileAdd(transpiler, other, tryReverse, left, right);
+	        super.transpileAdd(transpiler, other, tryReverse, left, right, section);
     }
 	
 	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 

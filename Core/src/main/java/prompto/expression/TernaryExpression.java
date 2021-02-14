@@ -57,7 +57,7 @@ public class TernaryExpression extends CodeSection implements IExpression {
 	public IType check(Context context) {
 		IType type = condition.check(context);
 		if(!(type instanceof BooleanType))
-			throw new SyntaxError("Cannot test condition on " +  type.getTypeName() );
+			context.getProblemListener().reportIllegalPredicate(this, condition );
 		IType trueType = whenTrue.check(context);
 		IType falseType = whenFalse.check(context);
 		TypeMap types = new TypeMap();

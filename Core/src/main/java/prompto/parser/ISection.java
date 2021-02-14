@@ -6,9 +6,11 @@ public interface ISection {
 	ILocation getStart();
 	ILocation getEnd();
 	Dialect getDialect();
+	ISection merge(ISection other);
+	boolean isOrContains(ISection section);
+
 	void setAsBreakpoint(boolean set);
 	boolean isBreakpoint(); 
-	boolean isOrContains(ISection section);
 	default int computeStartLine() {
 		return getStart()==null ? 0 : getStart().getLine();
 	}

@@ -84,7 +84,7 @@ public class RangeType extends ContainerType {
 	}
 
 	@Override
-	public void declareHasValue(Transpiler transpiler, IType other, IExpression container, IExpression item) {
+	public void declareHasValue(Transpiler transpiler, IType other, IExpression container, IExpression item, ICodeSection section) {
 	    transpiler.require("StrictSet");
 	    container.declare(transpiler);
 	    item.declare(transpiler);

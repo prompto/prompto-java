@@ -13,5 +13,15 @@ public class CodeSection implements ICodeSection {
 	public void setSection(ISection section) {
 		this.section = section;
 	}
+	
+	public void mergeCodeSection(ISection section) {
+		if(section==null)
+			return;
+		else if(this.section==null)
+			this.section = section;
+		else
+			this.section = this.section.merge(section);
+	}
+
 
 }

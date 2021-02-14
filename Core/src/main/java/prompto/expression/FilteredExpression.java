@@ -25,6 +25,7 @@ import prompto.type.BooleanType;
 import prompto.type.IType;
 import prompto.type.IterableType;
 import prompto.type.ListType;
+import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.IFilterable;
 import prompto.value.IValue;
@@ -58,14 +59,17 @@ public class FilteredExpression extends CodeSection implements IExpression {
 	@Override
 	public IType check(Context context) {
 		IType sourceType = source.check(context);
-		if(!(sourceType instanceof IterableType))
-			throw new SyntaxError("Expecting a cursor, list, set or tuple as data source!");
-		IType itemType = ((IterableType)sourceType).getItemType();
-		ArrowExpression arrow = predicate.toArrowExpression();
-		IType filterType = arrow.checkFilter(context, itemType);
-		if(filterType!=BooleanType.instance())
-			throw new SyntaxError("Filtering expression must return a boolean!");
-		return new ListType(itemType);
+		if(!(sourceType instanceof IterableType)) {
+			context.getProblemListener().reportExpectingCollection(this, sourceType);
+			return VoidType.instance();
+		} else {
+			IType itemType = ((IterableType)sourceType).getItemType();
+			ArrowExpression arrow = predicate.toArrowExpression();
+			IType filterType = arrow.checkFilter(context, itemType);
+			if(filterType!=BooleanType.instance())
+				throw new SyntaxError("Filtering expression must return a boolean!");
+			return new ListType(itemType);
+		}
 	}
 	
 	@Override
@@ -128,25 +132,31 @@ public class FilteredExpression extends CodeSection implements IExpression {
 	@Override
 	public void declare(Transpiler transpiler) {
 	    this.source.declare(transpiler);
-	    IType manyType = this.source.check(transpiler.getContext());
-	    IType itemType = ((IterableType)manyType).getItemType() ;
-	    ArrowExpression arrow = predicate.toArrowExpression();
-	    arrow.declareFilter(transpiler, itemType);
+	    IType sourceType = this.source.check(transpiler.getContext());
+	    if(sourceType instanceof IterableType) {
+		    IType itemType = ((IterableType)sourceType).getItemType() ;
+		    ArrowExpression arrow = predicate.toArrowExpression();
+		    arrow.declareFilter(transpiler, itemType);
+	    } else
+	    	transpiler.getContext().getProblemListener().reportExpectingCollection(this, sourceType);
 	}
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    IType manyType = this.source.check(transpiler.getContext());
-	    IType itemType = ((IterableType)manyType).getItemType() ;
-		this.source.transpile(transpiler);
-	    transpiler.append(".filtered((");
-	    ArrowExpression arrow = predicate.toArrowExpression();
-	    arrow.transpileFilter(transpiler, itemType);
-	    transpiler.append(")");
-	    if(transpiler.getContext().getClosestInstanceContext()!=null)
-	    	transpiler.append(".bind(this)");
-	    transpiler.append(")");
-	    transpiler.flush();
+	    IType sourceType = this.source.check(transpiler.getContext());
+	    if(sourceType instanceof IterableType) {
+		    IType itemType = ((IterableType)sourceType).getItemType() ;
+			this.source.transpile(transpiler);
+		    transpiler.append(".filtered((");
+		    ArrowExpression arrow = predicate.toArrowExpression();
+		    arrow.transpileFilter(transpiler, itemType);
+		    transpiler.append(")");
+		    if(transpiler.getContext().getClosestInstanceContext()!=null)
+		    	transpiler.append(".bind(this)");
+		    transpiler.append(")");
+		    transpiler.flush();
+	    } else
+	    	transpiler.getContext().getProblemListener().reportExpectingCollection(this, sourceType);
 		return false;
 	}
 

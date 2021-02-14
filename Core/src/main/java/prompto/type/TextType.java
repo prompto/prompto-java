@@ -111,11 +111,11 @@ public class TextType extends NativeType {
 
 	
 	@Override
-	public void checkContains(Context context, IType other) {
+	public void checkContains(Context context, IType other, ICodeSection section) {
 		if(other instanceof TextType || other instanceof CharacterType)
 			return;
 		else
-			super.checkContains(context, other);
+			super.checkContains(context, other, section);
 	}
 	
 	@Override
@@ -616,7 +616,7 @@ public class TextType extends NativeType {
 	}
 	
 	@Override
-	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ICodeSection section) {
 	    // can add anything to text
 	    left.transpile(transpiler);
 	    transpiler.append(" + ");
@@ -688,7 +688,7 @@ public class TextType extends NativeType {
 	}
 	
 	@Override
-	public void declareHasValue(Transpiler transpiler, IType other, IExpression container, IExpression item) {
+	public void declareHasValue(Transpiler transpiler, IType other, IExpression container, IExpression item, ICodeSection section) {
 	    container.declare(transpiler);
 	    item.declare(transpiler);
 	}

@@ -16,6 +16,7 @@ import prompto.expression.IExpression;
 import prompto.grammar.Argument;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
+import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.DecimalType;
@@ -25,7 +26,7 @@ import prompto.value.IValue;
 import prompto.value.IntegerValue;
 
 
-public abstract class BaseParameter implements IParameter {
+public abstract class BaseParameter extends CodeSection implements IParameter {
 
 	Identifier id;
 	boolean mutable = false;

@@ -62,5 +62,6 @@ public interface IProblemListener {
 	IDeclaration popDeclaration();
 	String getEnclosingDeclaration();
 	
+	void reportError(ICodeSection section, String message);
 
 }

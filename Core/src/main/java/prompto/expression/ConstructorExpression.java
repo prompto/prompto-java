@@ -188,9 +188,10 @@ public class ConstructorExpression extends CodeSection implements IExpression {
 		if(arguments!=null) {
 			context = context.newChildContext();
 			for(Argument argument : arguments) {
-				if(!decl.hasAttribute(context, argument.getParameterId()))
-					throw new SyntaxError("\"" + argument.getParameterId() +  "\" is not an attribute of " + type.getTypeName());	
-				argument.check(context);
+				if(decl.hasAttribute(context, argument.getParameterId()))
+					argument.check(context);
+				else
+					context.getProblemListener().reportUnknownMember(argument, argument.getParameterId().toString());
 			}
 		}
 	}

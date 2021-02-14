@@ -50,17 +50,15 @@ public class CssType extends NativeType {
 	}
 
 	@Override
-	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) { 
+	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ICodeSection section) { 
 		if(other == this) {
 			transpiler.append("Object.assign(new Any(),");
 			left.transpile(transpiler);
 			transpiler.append(",");
 			right.transpile(transpiler);
 			transpiler.append(")");
-		} else if(tryReverse)
-			other.transpileAdd(transpiler, this, false, right, left);
-		else
-			throw new UnsupportedOperationException("transpileAdd " + this.getClass().getName());
+		} else 
+			super.transpileAdd(transpiler, other, tryReverse, left, right, section);
 	}
 
 

@@ -18,19 +18,21 @@ import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.IterableWithCounts;
 import prompto.intrinsic.PromptoIterable;
+import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.runtime.Variable;
 import prompto.statement.ReturnStatement;
 import prompto.statement.UnresolvedCall;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
+import prompto.type.IterableType;
 import prompto.type.IteratorType;
 import prompto.utils.CodeWriter;
 import prompto.value.IIterable;
 import prompto.value.IValue;
 import prompto.value.IterableValue;
 
-public class IteratorExpression implements IExpression {
+public class IteratorExpression extends CodeSection implements IExpression {
 
 	Identifier id;
 	IExpression source;
@@ -240,14 +242,20 @@ public class IteratorExpression implements IExpression {
 	public void declare(Transpiler transpiler) {
 		this.source.declare(transpiler);
 	    IType sourceType = this.source.check(transpiler.getContext());
-	    sourceType.declareIterator(transpiler, this.id, this.expression);
+	    if(sourceType instanceof IterableType)
+	    	sourceType.declareIterator(transpiler, this.id, this.expression);
+	    else
+	    	transpiler.getContext().getProblemListener().reportExpectingCollection(this, sourceType);
 	}
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 		IType sourceType = this.source.check(transpiler.getContext());
 	    this.source.transpile(transpiler);
-	    sourceType.transpileIterator(transpiler, this.id, this.expression);
+	    if(sourceType instanceof IterableType)
+	    	sourceType.transpileIterator(transpiler, this.id, this.expression);
+	    else
+	    	transpiler.getContext().getProblemListener().reportExpectingCollection(this, sourceType);
 	    return false;
 	}
 

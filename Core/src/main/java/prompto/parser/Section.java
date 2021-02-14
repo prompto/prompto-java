@@ -13,8 +13,8 @@ public final class Section implements ISection {
 	}
 	
 	String path;
-	private Location start;
-	private Location end;
+	private ILocation start;
+	private ILocation end;
 	private Dialect dialect;
 	private boolean breakpoint;
 	
@@ -50,6 +50,17 @@ public final class Section implements ISection {
 		this.setDialect(dialect);
 	}
 	
+	@Override
+	public ISection merge(ISection other) {
+		Section section = new Section();
+		section.path = this.path;
+		section.dialect = this.dialect;
+		section.start = ILocation.first(this.start, other.getStart());
+		section.end = ILocation.last(this.end, other.getEnd());
+		return section;
+	}
+
+	
 	public void setPath(String path) {
 		this.path = path;
 	}
@@ -60,12 +71,12 @@ public final class Section implements ISection {
 	}
 	
 	@Override
-	public Location getStart() {
+	public ILocation getStart() {
 		return start;
 	}
 	
 	@Override
-	public Location getEnd() {
+	public ILocation getEnd() {
 		return end;
 	}
 	
@@ -117,5 +128,6 @@ public final class Section implements ISection {
 	public boolean equals(Section other) {
 		return other != null && breakpoint == other.breakpoint && dialect == other.dialect && Objects.equals(end, other.end) && Objects.equals(path, other.path) && Objects.equals(start, other.start);
 	}
+
 
 }

@@ -305,5 +305,11 @@ public abstract class ProblemListener implements ANTLRErrorListener, IProblemLis
 	public void reportExpectingResource(ICodeSection section, IType actual) {
 		addProblem(new ExpectingResourceProblem(section, actual));
 	}
+	
+	@Override
+	public void reportError(ICodeSection section, String message) {
+		addProblem(new ErrorProblem(section, message));
+	}
+
 
 }

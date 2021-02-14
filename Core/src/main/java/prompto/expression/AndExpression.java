@@ -75,9 +75,11 @@ public class AndExpression extends CodeSection implements IPredicateExpression, 
 	@Override
 	public IType check(Context context) {
 		IType lt = left.check(context);
+		if(!(lt instanceof BooleanType))
+			context.getProblemListener().reportIllegalPredicate(this, left);
 		IType rt = right.check(context);
-		if(!(lt instanceof BooleanType) || !(rt instanceof BooleanType))
-			throw new SyntaxError("Cannot combine " + lt.getTypeName() + " and " + rt.getTypeName());
+		if(!(rt instanceof BooleanType))
+			context.getProblemListener().reportIllegalPredicate(this, right);
 		return BooleanType.instance();
 	}
 	

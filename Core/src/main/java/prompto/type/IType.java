@@ -83,7 +83,7 @@ public interface IType extends ICodeSection {
 	void checkCompare(Context context, IType other, ICodeSection section);
 	IType checkItem(Context context, IType itemType, ICodeSection section) ;
 	IType checkRange(Context context, IType other);
-	void checkContains(Context context, IType other);
+	void checkContains(Context context, IType other, ICodeSection section);
 	void checkContainsAllOrAny(Context context, IType other);
 	IType checkIterator(Context context);
 	IType checkSlice(Context context);
@@ -137,14 +137,14 @@ public interface IType extends ICodeSection {
 		if(tryReverse)
 			other.declareAdd(transpiler, this, false, right, left, section);
 		else
-			throw new UnsupportedOperationException("declareAdd " + this.getClass().getName());
+			transpiler.getContext().getProblemListener().reportIllegalOperation(section, " add ", other, this);
 	}
 
-	default void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) { 
+	default void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ICodeSection section) { 
 		if(tryReverse)
-			other.transpileAdd(transpiler, this, false, right, left);
+			other.transpileAdd(transpiler, this, false, right, left, section);
 		else
-			throw new UnsupportedOperationException("transpileAdd " + this.getClass().getName());
+			transpiler.getContext().getProblemListener().reportIllegalOperation(section, " add ", other, this);
 	}
 
 
@@ -276,8 +276,8 @@ public interface IType extends ICodeSection {
 		throw new UnsupportedOperationException("transpileRange " + this.getClass().getName());
 	}
 
-	default void declareHasValue(Transpiler transpiler, IType other, IExpression container, IExpression item)  {
-		throw new UnsupportedOperationException("declareHasValue " + this.getClass().getName());
+	default void declareHasValue(Transpiler transpiler, IType other, IExpression container, IExpression item, ICodeSection section)  {
+		transpiler.getContext().getProblemListener().reportError(section, "Cannot transpile " + this.getClass().getName());
 	}
 
 	default void transpileHasValue(Transpiler transpiler, IType other, IExpression container, IExpression item) {

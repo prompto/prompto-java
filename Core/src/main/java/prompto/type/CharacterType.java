@@ -137,7 +137,7 @@ public class CharacterType extends NativeType {
 	}
 
 	@Override
-	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ICodeSection section) {
 		// can add anything to text
 		left.transpile(transpiler);
 		transpiler.append(" + ");

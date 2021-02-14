@@ -327,17 +327,17 @@ public class CategoryType extends BaseType {
 		if("category".contentEquals(id.toString()))
 			return new CategoryType(new Identifier("Category"));
         IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, typeNameId);
-        if (decl == null)
-            throw new SyntaxError("Unknown type:" + typeNameId);
-        else if(decl instanceof EnumeratedNativeDeclaration) // for .value member
+        if(decl instanceof EnumeratedNativeDeclaration) // for .value member
         	return decl.getType(context).checkMember(context, id);
         else if(decl instanceof CategoryDeclaration)
-        	return checkMember(context, (CategoryDeclaration)decl, id);
-        else
-            throw new SyntaxError("Not a category:" + typeNameId);
+        	return checkMember(context, (CategoryDeclaration)decl, id, id);
+        else {
+        	context.getProblemListener().reportUnknownCategory(this, typeNameId.toString());
+        	return VoidType.instance();
+        } 
     }
 	
-	private IType checkMember(Context context, CategoryDeclaration decl, Identifier id) {
+	private IType checkMember(Context context, CategoryDeclaration decl, Identifier id, ICodeSection section) {
        	if(decl.isStorable(context) && IStore.dbIdName.equals(id.toString()))
     		return AnyType.instance();
     	else if (decl.hasAttribute(context, id)) {
@@ -345,14 +345,17 @@ public class CategoryType extends BaseType {
             if (ad != null)
             	return ad.getType(context);
             else
-                throw new SyntaxError("Missing atttribute:" + id);
+            	context.getProblemListener().reportUnknownAttribute(section, id.toString(), " in category " + decl.getName());
+                return VoidType.instance();
         } else if(decl.hasMethod(context, id)) {
         	IMethodDeclaration method = decl.getMemberMethods(context, id, true).getFirst();
         	return new MethodType(method);
         } else if("text".equals(id.toString()))
         	return TextType.instance();
-        else
-            throw new SyntaxError("No attribute:" + id + " in category:" + typeNameId);
+        else {
+        	context.getProblemListener().reportUnknownAttribute(section, id.toString(), " in category " + decl.getName());
+        	return VoidType.instance();
+        }
 	}
 
 	@Override
@@ -364,7 +367,7 @@ public class CategoryType extends BaseType {
        } else if(decl instanceof IEnumeratedDeclaration) {
     	   return decl.getType(context).checkStaticMember(context, id);
        } else if(decl instanceof SingletonCategoryDeclaration) {
-    	   return checkMember(context, (SingletonCategoryDeclaration)decl, id);
+    	   return checkMember(context, (SingletonCategoryDeclaration)decl, id, id);
        } else {
        	   context.getProblemListener().reportUnknownAttribute(this, id.toString());
     	   return null;
@@ -919,7 +922,7 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ICodeSection section) {
 	    left.transpile(transpiler);
 	    transpiler.append(".operator_PLUS").append("$").append(other.getTranspiledName(transpiler.getContext())).append("(");
 	    right.transpile(transpiler);

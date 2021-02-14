@@ -113,11 +113,11 @@ public class ContainsExpression extends CodeSection implements IPredicateExpress
 		switch(operator) {
 		case IN:
 		case NOT_IN:
-			rt.checkContains(context,lt);
+			rt.checkContains(context,lt, this);
 			break;
 		case HAS:
 		case NOT_HAS:
-			lt.checkContains(context, rt);
+			lt.checkContains(context, rt, this);
 			break;
 		default:
 			lt.checkContainsAllOrAny(context, rt);
@@ -559,18 +559,26 @@ public class ContainsExpression extends CodeSection implements IPredicateExpress
 
 	void declareValue(Transpiler transpiler) {
 	    IType lt = left.check(transpiler.getContext());
-	    IType rt = right.check(transpiler.getContext());
-	    switch(this.operator) {
-	        case IN:
-	        case NOT_IN:
-	            rt.declareHasValue(transpiler, lt, right, left);
-	            break;
-	        case HAS:
-	        case NOT_HAS:
-	            lt.declareHasValue(transpiler, rt, left, right);
-	            break;
-	        default:
-	            lt.declareHasAllOrAny(transpiler, rt, left, right);
+	    if(lt==null)
+	    	transpiler.getContext().getProblemListener().reportError(this, "Cannot transpile unresolved expression");
+	    else {
+	    	IType rt = right.check(transpiler.getContext());
+		    if(rt==null)
+		    	transpiler.getContext().getProblemListener().reportError(this, "Cannot transpile unresolved expression");
+		    else {
+			    switch(this.operator) {
+			        case IN:
+			        case NOT_IN:
+			            rt.declareHasValue(transpiler, lt, right, left, this);
+			            break;
+			        case HAS:
+			        case NOT_HAS:
+			            lt.declareHasValue(transpiler, rt, left, right, this);
+			            break;
+			        default:
+			            lt.declareHasAllOrAny(transpiler, rt, left, right);
+			    }
+		    }
 	    }
 	}
 	

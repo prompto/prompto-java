@@ -142,14 +142,14 @@ public class SetType extends ContainerType {
 	}
 	
 	@Override
-	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right) {
+	public void transpileAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ICodeSection section) {
 	    if((other instanceof SetType || other instanceof ListType) && this.getItemType().isAssignableFrom(transpiler.getContext(), ((ContainerType)other).getItemType())) {
 	        left.transpile(transpiler);
 	        transpiler.append(".addAll(");
 	        right.transpile(transpiler);
 	        transpiler.append(")");
 	    } else {
-	        super.transpileAdd(transpiler, other, tryReverse, left, right);
+	        super.transpileAdd(transpiler, other, tryReverse, left, right, section);
 	    }	
     }
 	
@@ -178,7 +178,7 @@ public class SetType extends ContainerType {
 	}
 
 	@Override
-	public void declareHasValue(Transpiler transpiler, IType other, IExpression container, IExpression item) {
+	public void declareHasValue(Transpiler transpiler, IType other, IExpression container, IExpression item, ICodeSection section) {
 	    container.declare(transpiler);
 	    item.declare(transpiler);
 	}

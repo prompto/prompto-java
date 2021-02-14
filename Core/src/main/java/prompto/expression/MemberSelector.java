@@ -40,6 +40,7 @@ import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.type.MethodType;
+import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.ClosureValue;
 import prompto.value.IInstance;
@@ -134,7 +135,12 @@ public class MemberSelector extends SelectorExpression {
 			return instance.getInstanceType();
 		} else {
 			IType parentType = checkParent(context);
-			return parentType.checkMember(context, id);
+			if(parentType!=null)
+				return parentType.checkMember(context, id);
+			else {
+				context.getProblemListener().reportError(this, "Cannot check " + this.toString());
+				return VoidType.instance();
+			}
 		}
 	}
 	
@@ -387,19 +393,33 @@ public class MemberSelector extends SelectorExpression {
 	@Override
 	public void declare(Transpiler transpiler) {
 	    IExpression parent = this.resolveParent(transpiler.getContext());
-	    parent.declareParent(transpiler);
-	    IType parentType = this.checkParent(transpiler.getContext());
-	    parentType.declareMember(transpiler, this.getId());
+	    if(parent==null)
+	    	transpiler.getContext().getProblemListener().reportError(this, "Cannot transpile " + this.toString());
+	    else {
+	    	parent.declareParent(transpiler);
+		    IType parentType = this.checkParent(transpiler.getContext());
+		    if(parentType==null)
+		    	transpiler.getContext().getProblemListener().reportError(this, "Cannot transpile " + this.toString());
+		    else
+		    	parentType.declareMember(transpiler, this.getId());
+	    }
 	}
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 	    IExpression parent = this.resolveParent(transpiler.getContext());
-	    parent.transpileParent(transpiler);
-	    transpiler.append(".");
-		IType parentType = this.checkParent(transpiler.getContext());
-		parentType.transpileMember(transpiler, this.getId());
-		return false;
+	    if(parent==null)
+	    	transpiler.getContext().getProblemListener().reportError(this, "Cannot transpile " + this.toString());
+	    else {
+		    parent.transpileParent(transpiler);
+		    transpiler.append(".");
+		    IType parentType = this.checkParent(transpiler.getContext());
+		    if(parentType==null)
+		    	transpiler.getContext().getProblemListener().reportError(this, "Cannot transpile " + this.toString());
+		    else
+		    	parentType.transpileMember(transpiler, this.getId());
+	    }
+	    return false;
 	}
 	
 	@Override
