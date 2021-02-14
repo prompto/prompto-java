@@ -139,5 +139,20 @@ public class TestCategories extends BaseOParserTest {
 		checkTranspiledOutput("categories/populateFalse.poc");
 	}
 
+	@Test
+	public void testInterpretedResourceAttribute() throws Exception {
+		checkInterpretedOutput("categories/resourceAttribute.poc");
+	}
+
+	@Test
+	public void testCompiledResourceAttribute() throws Exception {
+		checkCompiledOutput("categories/resourceAttribute.poc");
+	}
+
+	@Test
+	public void testTranspiledResourceAttribute() throws Exception {
+		checkTranspiledOutput("categories/resourceAttribute.poc");
+	}
+
 }
 

@@ -46,5 +46,10 @@ public class TestCategories extends BaseOParserTest {
 		compareResourceOMO("categories/populateFalse.poc");
 	}
 
+	@Test
+	public void testResourceAttribute() throws Exception {
+		compareResourceOMO("categories/resourceAttribute.poc");
+	}
+
 }
 
