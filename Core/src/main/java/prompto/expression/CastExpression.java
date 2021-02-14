@@ -78,8 +78,13 @@ public class CastExpression extends CodeSection implements IExpression {
 	
 	private static IType getTargetType(Context context, IType type, boolean mutable) {
 		if(type instanceof IterableType) {
-			IType itemType = getTargetType(context, ((IterableType)type).getItemType(), false);
-			return ((IterableType)type).withItemType(itemType).asMutable(context, mutable);
+			IType itemType = ((IterableType)type).getItemType();
+			IType resolvedItemType = getTargetType(context, itemType, false);
+			if(resolvedItemType==null) {
+				context.getProblemListener().reportUnknownCategory(type, itemType.getTypeName());
+				return null;
+			} else
+				return ((IterableType)type).withItemType(resolvedItemType).asMutable(context, mutable);
 		} else if(type instanceof NativeType)
 			return type.asMutable(context, mutable);
 		else
@@ -89,7 +94,7 @@ public class CastExpression extends CodeSection implements IExpression {
 	private static IType getTargetAtomicType(Context context, IType type, boolean mutable) {
 		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, type.getTypeNameId());
 		if(decl==null) {
-			context.getProblemListener().reportUnknownIdentifier(type, type.getTypeName());
+			context.getProblemListener().reportUnknownCategory(type, type.getTypeName());
 			return null;
 		} else if(decl instanceof MethodDeclarationMap) {
 			MethodDeclarationMap map = (MethodDeclarationMap)decl;

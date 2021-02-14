@@ -77,6 +77,11 @@ public class TestProblems extends BaseOParserTest {
 	}
 
 	@Test
+	public void testUnknownCastItemType() throws Exception {
+		checkProblems("problems/unknownCastItemType.poc");
+	}
+
+	@Test
 	public void testUnknownCastType() throws Exception {
 		checkProblems("problems/unknownCastType.poc");
 	}
