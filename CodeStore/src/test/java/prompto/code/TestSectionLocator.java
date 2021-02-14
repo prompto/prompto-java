@@ -24,7 +24,7 @@ public class TestSectionLocator extends BaseEParserTest {
 		URL file = getResourceAsURL("debug/stack.pec");
 		assertTrue(new File(file.getFile()).exists());
 		ICodeStore store = new ImmutableCodeStore(null, ModuleType.LIBRARY, file.toURI().toURL(), PromptoVersion.parse("1.0.0.0"));
-		Section section = new Section(file.toExternalForm(), new Location(0, 10, 1), new Location(0, 10, 20), Dialect.E, false);
+		Section section = new Section(file.toExternalForm(), new Location(-1, 10, 1), new Location(-1, 10, 20), Dialect.E, false);
 		ICodeSection found = store.findCodeSection(section);
 		assertNotNull(found);
 		assertTrue(found instanceof IStatement);

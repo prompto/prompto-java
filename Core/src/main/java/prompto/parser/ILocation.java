@@ -17,13 +17,23 @@ public interface ILocation {
 	int getColumn();
 	
 	default boolean isNotAfter(ILocation other) {
-		// assumption is that both locations come fromthe same parsing
-		return this.getTokenIndex() < other.getTokenIndex();
+		if(this.getTokenIndex() > -1 && other.getTokenIndex() > -1) {
+			// assumption is that both locations come fromthe same parsing
+			return this.getTokenIndex() <= other.getTokenIndex();
+		} else
+			return this.getLine()<other.getLine()
+					|| (this.getLine()==other.getLine() && this.getColumn()<=other.getColumn());
+	
 	}
 	
 	default boolean isNotBefore(ILocation other) {
-		// assumption is that both locations come fromthe same parsing
-		return this.getTokenIndex() > other.getTokenIndex();
+		if(this.getTokenIndex() > -1 && other.getTokenIndex() > -1) {
+			// assumption is that both locations come fromthe same parsing
+			return this.getTokenIndex() >= other.getTokenIndex();
+		} else
+			return this.getLine()>other.getLine()
+					|| (this.getLine()==other.getLine() && this.getColumn()>=other.getColumn());
+			
 	}
 	
 

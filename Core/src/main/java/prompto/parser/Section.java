@@ -49,6 +49,12 @@ public final class Section implements ISection {
 		this.setEnd(new Location(end, true));
 		this.setDialect(dialect);
 	}
+
+	@Override
+	public String toString() {
+		return "{ start: " + start + ", end: " + end + ", dialect: " + dialect + "}";
+	}
+
 	
 	@Override
 	public ISection merge(ISection other) {

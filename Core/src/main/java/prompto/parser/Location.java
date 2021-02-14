@@ -5,7 +5,7 @@ import org.antlr.v4.runtime.Token;
 
 public class Location implements ILocation {
 
-	int tokenIndex;
+	Integer tokenIndex;
 	int line;
 	int column;
 	
@@ -38,6 +38,11 @@ public class Location implements ILocation {
 		this.tokenIndex = index;
 		this.line = line;
 		this.column = column;
+	}
+	
+	@Override
+	public String toString() {
+		return "{ tokenIndex: " + tokenIndex + ", line: " + line + ", column: " + column + "}";
 	}
 	
 	public void setTokenIndex(int index) {
