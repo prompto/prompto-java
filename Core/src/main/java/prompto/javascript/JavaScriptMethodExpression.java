@@ -4,6 +4,7 @@ import prompto.declaration.IMethodDeclaration;
 import prompto.error.SyntaxError;
 import prompto.expression.IExpression;
 import prompto.grammar.Argument;
+import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.param.IParameter;
 import prompto.statement.MethodCall;
@@ -81,22 +82,39 @@ public class JavaScriptMethodExpression extends JavaScriptSelectorExpression {
 
 	private void transpileInlineArguments(Transpiler transpiler, IMethodDeclaration declaration, MethodCall methodCall) {
 		if(arguments!=null && arguments.size()>0) {
+			ArgumentList actualArguments = methodCall.makeArguments(transpiler.getContext(), declaration);
 			arguments.forEach(exp -> {
-				transpileInlineArgument(transpiler, exp, declaration, methodCall);
+				transpileInlineArgument(transpiler, exp, declaration, actualArguments);
 				transpiler.append(", ");
 			});
 			transpiler.trimLast(", ".length());
 		}
 	}
 
-	private void transpileInlineArgument(Transpiler transpiler, JavaScriptExpression exp, IMethodDeclaration declaration, MethodCall methodCall) {
-		// special case for arguments receiving method references and arrow expressions
-		if(exp instanceof JavaScriptIdentifierExpression && ((JavaScriptIdentifierExpression)exp).getParent()==null) {
-			Identifier id = new Identifier(exp.toString());
-			Argument argument = methodCall.getArguments().find(id);
-			if(argument==null && declaration.getParameters().size()==1)
-				argument = methodCall.getArguments().get(0);
-			if(argument!=null) try {
+	private void transpileInlineArgument(Transpiler transpiler, JavaScriptExpression exp, IMethodDeclaration declaration, ArgumentList actualArguments) {
+		if(exp instanceof JavaScriptIdentifierExpression)
+			transpileInlineArgument(transpiler, (JavaScriptIdentifierExpression)exp, declaration, actualArguments);
+		else
+			exp.transpile(transpiler); // and pray! TODO
+	}
+	
+	private void transpileInlineArgument(Transpiler transpiler, JavaScriptIdentifierExpression exp, IMethodDeclaration declaration, ArgumentList actualArguments) {
+		if(exp.getParent()==null)
+			transpileInlineArgumentRoot(transpiler, exp, declaration, actualArguments);
+		else {
+			transpileInlineArgument(transpiler, exp.getParent(), declaration, actualArguments);
+			transpiler.append(".").append(exp.toString());
+		}
+	}
+	
+	
+	private void transpileInlineArgumentRoot(Transpiler transpiler, JavaScriptIdentifierExpression exp, IMethodDeclaration declaration, ArgumentList actualArguments) {
+		Identifier id = new Identifier(exp.toString());
+		Argument argument = actualArguments.find(id);
+		if(argument==null && declaration.getParameters().size()==1)
+			argument = actualArguments.get(0);
+		if(argument!=null) {
+			try {
 				IParameter parameter = argument.getParameter();
 				if(parameter==null && declaration.getParameters().size()==1)
 					parameter = declaration.getParameters().get(0);
@@ -105,11 +123,11 @@ public class JavaScriptMethodExpression extends JavaScriptSelectorExpression {
 	            parameter.transpileCall(transpiler, expression);
 	            return;
 			} catch(SyntaxError error) {
-				// nothing to do
+				argument.getExpression().transpile(transpiler);
 			}
-		}
-		// default behaviour
-		exp.transpile(transpiler);
+		} else
+			exp.transpile(transpiler); // and pray! TODO 
 	}
+
 	
 }
