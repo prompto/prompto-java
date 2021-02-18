@@ -154,7 +154,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 	
 	private void terminateIfRequested() throws TerminatedError {
 		if(terminated) {
-			setWorkerStatus(WorkerStatus.WORKER_TERMINATED);
+			setWorkerStatus(WorkerStatus.WORKER_COMPLETED);
 			throw new TerminatedError();
 		}
 	}
