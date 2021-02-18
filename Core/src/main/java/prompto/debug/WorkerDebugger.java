@@ -26,7 +26,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 	
 	WorkerStack stack = new WorkerStack();
 	Object lock = new Object();
-	Status status = Status.STARTING;
+	WorkerStatus status = WorkerStatus.WORKER_UNREACHABLE;
 	boolean suspended = false;
 	boolean terminated = false;
 	ResumeReason resumeReason;
@@ -71,13 +71,13 @@ public class WorkerDebugger implements IWorkerDebugger {
 		return null;
 	}
 	
-	public void setStatus(Status status) {
+	public void setWorkerStatus(WorkerStatus status) {
 		logger.debug(()->"LocalDebugger sets status " + status);
 		this.status = status;
 	}
 	
 	@Override
-	public Status getStatus() {
+	public WorkerStatus getWorkerStatus() {
 		return status;
 	}
 	
@@ -154,7 +154,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 	
 	private void terminateIfRequested() throws TerminatedError {
 		if(terminated) {
-			setStatus(Status.TERMINATING);
+			setWorkerStatus(WorkerStatus.WORKER_TERMINATED);
 			throw new TerminatedError();
 		}
 	}
@@ -171,7 +171,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 	public void suspend(SuspendReason reason, final Context context, ISection section) {
 		logger.debug(()->"acquiring lock");
 		synchronized(lock) {
-			setStatus(Status.SUSPENDED);
+			setWorkerStatus(WorkerStatus.WORKER_SUSPENDED);
 			if(listener!=null)
 				listener.onWorkerSuspendedEvent(DebuggedWorker.wrap(Thread.currentThread()), reason);
 			try {
@@ -182,7 +182,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} finally {
-				setStatus( Status.RUNNING);
+				setWorkerStatus( WorkerStatus.WORKER_RUNNING);
 				if(listener!=null)
 					listener.onWorkerResumedEvent(DebuggedWorker.wrap(Thread.currentThread()), resumeReason);
 			}
@@ -201,7 +201,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 
 	@Override
 	public boolean isSuspended() {
-		return status==Status.SUSPENDED;
+		return status==WorkerStatus.WORKER_SUSPENDED;
 	}
 
 	@Override
@@ -273,7 +273,7 @@ public class WorkerDebugger implements IWorkerDebugger {
 	}
 	
 	public void notifyStarted(WorkerStartedDebugEvent event) {
-		setStatus(Status.RUNNING);
+		setWorkerStatus(WorkerStatus.WORKER_RUNNING);
 		if(listener!=null) {
 			IWorker worker = DebuggedWorker.parse(event.getWorkerId());
 			listener.onWorkerStartedEvent(worker); 

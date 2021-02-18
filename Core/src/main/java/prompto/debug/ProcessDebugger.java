@@ -41,7 +41,7 @@ public class ProcessDebugger implements IDebugger {
 
 	
 	Map<IWorker, IWorkerDebugger> debuggers = new HashMap<>();
-	Status status = Status.STARTING;
+	ProcessStatus processStatus = ProcessStatus.PROCESS_STARTING;
 	IDebugEventListener listener;
 	Context context;
 	
@@ -49,13 +49,13 @@ public class ProcessDebugger implements IDebugger {
 		this.context = context;
 	}
 	
-	public void setProcessStatus(Status status) {
-		this.status = status;
+	public void setProcessStatus(ProcessStatus status) {
+		this.processStatus = status;
 	}
 	
 	@Override
-	public Status getProcessStatus() {
-		return status;
+	public ProcessStatus getProcessStatus() {
+		return processStatus;
 	}
 	
 	public void register(Thread thread, WorkerDebugger debugger) {
@@ -88,7 +88,7 @@ public class ProcessDebugger implements IDebugger {
 
 	@Override
 	public boolean isTerminated() {
-		return status==Status.TERMINATED;
+		return processStatus==ProcessStatus.PROCESS_TERMINATED;
 	}
 
 	@Override
@@ -104,7 +104,7 @@ public class ProcessDebugger implements IDebugger {
 	@Override
 	public void notifyTerminated() {
 		if(!isTerminated()) {
-			setProcessStatus(Status.TERMINATED);
+			setProcessStatus(ProcessStatus.PROCESS_TERMINATED);
 			if(listener!=null)
 				listener.onProcessTerminatedEvent();
 		}
@@ -116,13 +116,13 @@ public class ProcessDebugger implements IDebugger {
 	}
 
 	@Override
-	public Status getWorkerStatus(IWorker worker) {
+	public WorkerStatus getWorkerStatus(IWorker worker) {
 		IWorkerDebugger debugger = debuggers.get(worker);
 		if(debugger==null) {
 			logger.warn(()->"Invalid worker: " + worker);
-			return Status.TERMINATED;
+			return WorkerStatus.WORKER_UNREACHABLE;
 		} else
-			return debugger.getStatus();
+			return debugger.getWorkerStatus();
 	}
 
 	@Override

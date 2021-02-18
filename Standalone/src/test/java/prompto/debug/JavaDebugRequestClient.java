@@ -46,8 +46,8 @@ public class JavaDebugRequestClient extends DebugRequestClient {
 	}
 	
 	@Override
-	public Status getProcessStatus() {
-		return isRemoteAlive() ? Status.RUNNING : Status.TERMINATED;
+	public ProcessStatus getProcessStatus() {
+		return isRemoteAlive() ? ProcessStatus.PROCESS_RUNNING : ProcessStatus.PROCESS_TERMINATED;
 	}
 
 	@Override

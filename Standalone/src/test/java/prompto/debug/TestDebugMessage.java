@@ -21,7 +21,7 @@ import prompto.debug.ack.Acknowledged;
 import prompto.debug.request.GetProcessStatusDebugRequest;
 import prompto.debug.request.GetWorkerStatusDebugRequest;
 import prompto.debug.request.InstallBreakpointDebugRequest;
-import prompto.debug.response.GetStatusDebugResponse;
+import prompto.debug.response.GetProcessStatusDebugResponse;
 import prompto.parser.Dialect;
 import prompto.parser.Location;
 import prompto.parser.Section;
@@ -108,11 +108,11 @@ public class TestDebugMessage {
 
 	@Test
 	public void testStatusResponseMessage() throws Exception {
-		Object value = new GetStatusDebugResponse(Status.SUSPENDED);
+		Object value = new GetProcessStatusDebugResponse(ProcessStatus.PROCESS_STARTING);
 		String message = Serializer.writeMessage(value);
 		Object response = Serializer.readDebugResponse(message);
-		assertTrue(response instanceof GetStatusDebugResponse);
-		assertEquals(Status.SUSPENDED, ((GetStatusDebugResponse)response).getStatus());
+		assertTrue(response instanceof GetProcessStatusDebugResponse);
+		assertEquals(ProcessStatus.PROCESS_STARTING, ((GetProcessStatusDebugResponse)response).getProcessStatus());
 	}
 	
 	

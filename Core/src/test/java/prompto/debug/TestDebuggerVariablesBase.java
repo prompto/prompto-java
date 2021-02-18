@@ -25,8 +25,8 @@ public abstract class TestDebuggerVariablesBase extends TestDebuggerBase {
 	public void testVariables() throws Exception {
 		setDebuggedResource("debug/variables.pec");
 		start();
-		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
+		waitWorkerSuspendedOrTerminated();
+		assertEquals(WorkerStatus.WORKER_SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
 		// main method,  printLevel1 "test"
 		IStack<?> stack = debugger.getWorkerStack(getDebuggedThread());
 		IStackFrame frame = stack.iterator().next();
@@ -34,7 +34,7 @@ public abstract class TestDebuggerVariablesBase extends TestDebuggerBase {
 		assertEquals(0, vars.size());
 		// into printLevel1 "test"
 		debugger.stepInto(getDebuggedThread());
-		waitSuspendedOrTerminated();
+		waitWorkerSuspendedOrTerminated();
 		// printLevel1, value = value + "1"
 		stack = debugger.getWorkerStack(getDebuggedThread());
 		frame = stack.iterator().next();
@@ -46,7 +46,7 @@ public abstract class TestDebuggerVariablesBase extends TestDebuggerBase {
 		assertEquals("test", var.getValue().getValueString());
 		// next, other = "other"
 		debugger.stepOver(getDebuggedThread());
-		waitSuspendedOrTerminated();
+		waitWorkerSuspendedOrTerminated();
 		stack = debugger.getWorkerStack(getDebuggedThread());
 		frame = stack.iterator().next();
 		vars = frame.getVariables();	
@@ -57,7 +57,7 @@ public abstract class TestDebuggerVariablesBase extends TestDebuggerBase {
 		assertEquals("test1", var.getValue().getValueString());
 		// next, value = value + other
 		debugger.stepOver(getDebuggedThread());
-		waitSuspendedOrTerminated();
+		waitWorkerSuspendedOrTerminated();
 		stack = debugger.getWorkerStack(getDebuggedThread());
 		frame = stack.iterator().next();
 		vars = frame.getVariables();	
@@ -73,7 +73,7 @@ public abstract class TestDebuggerVariablesBase extends TestDebuggerBase {
 		assertEquals("other", var.getValue().getValueString());
 		// next, printLevel2 value
 		debugger.stepOver(getDebuggedThread());
-		waitSuspendedOrTerminated();
+		waitWorkerSuspendedOrTerminated();
 		stack = debugger.getWorkerStack(getDebuggedThread());
 		frame = stack.iterator().next();
 		vars = frame.getVariables();	
@@ -215,15 +215,15 @@ public abstract class TestDebuggerVariablesBase extends TestDebuggerBase {
 	void testVariable(String resourceName, Consumer<JsonNode> validator) throws Exception {
 		setDebuggedResource(resourceName);
 		start();
-		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
+		waitWorkerSuspendedOrTerminated();
+		assertEquals(WorkerStatus.WORKER_SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
 		// main method, a = ...
 		IStack<?> stack = debugger.getWorkerStack(getDebuggedThread());
 		IStackFrame frame = stack.iterator().next();
 		Collection<? extends IVariable> vars = frame.getVariables();
 		assertEquals(0, vars.size());
 		debugger.stepOver(getDebuggedThread());
-		waitSuspendedOrTerminated();
+		waitWorkerSuspendedOrTerminated();
 		stack = debugger.getWorkerStack(getDebuggedThread());
 		frame = stack.iterator().next();
 		vars = frame.getVariables();

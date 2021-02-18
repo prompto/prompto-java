@@ -24,7 +24,7 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 	static final int LEVEL_2_LINE = 9;
 	
 	protected abstract void setDebuggedResource(String resourceName) throws Exception;
-	protected abstract void waitSuspendedOrTerminated() throws Exception;	
+	protected abstract void waitWorkerSuspendedOrTerminated() throws Exception;	
 	protected abstract void start() throws Exception;
 	protected abstract void join() throws Exception;
 	protected abstract String readOut() throws Exception;
@@ -45,8 +45,8 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 	public void testResume() throws Exception {
 		setDebuggedResource("debug/stack.pec");
 		start();
-		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
+		waitWorkerSuspendedOrTerminated();
+		assertEquals(WorkerStatus.WORKER_SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
 		assertEquals(MAIN_LINE + 1, debugger.getLineInFile(getDebuggedThread()));
 		assertTrue(debugger.isStepping(getDebuggedThread()));
 		IStack<?> stack = debugger.getWorkerStack(getDebuggedThread());
@@ -62,12 +62,12 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 	public void testStepOver() throws Exception {
 		setDebuggedResource("debug/stack.pec");
 		start();
-		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
+		waitWorkerSuspendedOrTerminated();
+		assertEquals(WorkerStatus.WORKER_SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
 		assertEquals(MAIN_LINE + 1, debugger.getLineInFile(getDebuggedThread()));
 		debugger.stepOver(getDebuggedThread());
-		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
+		waitWorkerSuspendedOrTerminated();
+		assertEquals(WorkerStatus.WORKER_SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
 		assertEquals(MAIN_LINE + 2, debugger.getLineInFile(getDebuggedThread()));
 		debugger.resume(getDebuggedThread());	
 		join();
@@ -79,12 +79,12 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 	public void testStepInto() throws Exception {
 		setDebuggedResource("debug/stack.pec");
 		start();
-		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
+		waitWorkerSuspendedOrTerminated();
+		assertEquals(WorkerStatus.WORKER_SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
 		assertEquals(MAIN_LINE + 1, debugger.getLineInFile(getDebuggedThread()));
 		debugger.stepInto(getDebuggedThread()); // printLevel1
-		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
+		waitWorkerSuspendedOrTerminated();
+		assertEquals(WorkerStatus.WORKER_SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
 		assertEquals(LEVEL_1_LINE + 1, debugger.getLineInFile(getDebuggedThread()));
 		debugger.resume(getDebuggedThread());	
 		join();
@@ -96,16 +96,16 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 	public void testSilentStepInto() throws Exception {
 		setDebuggedResource("debug/stack.pec");
 		start();
-		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
+		waitWorkerSuspendedOrTerminated();
+		assertEquals(WorkerStatus.WORKER_SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
 		assertEquals(MAIN_LINE + 1, debugger.getLineInFile(getDebuggedThread()));
 		debugger.stepInto(getDebuggedThread()); // printLevel1
-		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
+		waitWorkerSuspendedOrTerminated();
+		assertEquals(WorkerStatus.WORKER_SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
 		assertEquals(LEVEL_1_LINE + 1, debugger.getLineInFile(getDebuggedThread()));
 		debugger.stepInto(getDebuggedThread()); // value = value + "1", should step over
-		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
+		waitWorkerSuspendedOrTerminated();
+		assertEquals(WorkerStatus.WORKER_SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
 		assertEquals(LEVEL_1_LINE + 2, debugger.getLineInFile(getDebuggedThread()));
 		debugger.resume(getDebuggedThread());	
 		join();
@@ -117,24 +117,24 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 	public void testStepOut() throws Exception {
 		setDebuggedResource("debug/stack.pec");
 		start();
-		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
+		waitWorkerSuspendedOrTerminated();
+		assertEquals(WorkerStatus.WORKER_SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
 		assertEquals(MAIN_LINE + 1, debugger.getLineInFile(getDebuggedThread()));
 		debugger.stepInto(getDebuggedThread()); // printLevel1
-		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
+		waitWorkerSuspendedOrTerminated();
+		assertEquals(WorkerStatus.WORKER_SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
 		assertEquals(LEVEL_1_LINE + 1, debugger.getLineInFile(getDebuggedThread()));
 		debugger.stepOver(getDebuggedThread());
-		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
+		waitWorkerSuspendedOrTerminated();
+		assertEquals(WorkerStatus.WORKER_SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
 		assertEquals(LEVEL_1_LINE + 2, debugger.getLineInFile(getDebuggedThread()));
 		debugger.stepInto(getDebuggedThread()); // printLevel2
-		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
+		waitWorkerSuspendedOrTerminated();
+		assertEquals(WorkerStatus.WORKER_SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
 		assertEquals(LEVEL_2_LINE + 1, debugger.getLineInFile(getDebuggedThread()));
 		debugger.stepOut(getDebuggedThread()); // printLevel1
-		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
+		waitWorkerSuspendedOrTerminated();
+		assertEquals(WorkerStatus.WORKER_SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
 		assertEquals(LEVEL_1_LINE + 2, debugger.getLineInFile(getDebuggedThread()));
 		debugger.resume(getDebuggedThread());	
 		join();
@@ -146,14 +146,14 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 	public void testBreakpoint() throws Exception {
 		setDebuggedResource("debug/stack.pec");
 		start();
-		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
+		waitWorkerSuspendedOrTerminated();
+		assertEquals(WorkerStatus.WORKER_SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
 		assertEquals(MAIN_LINE + 1, debugger.getLineInFile(getDebuggedThread()));
 		int line = installBreakPoint("printLevel2", 0);
 		assertEquals(LEVEL_2_LINE + 1, line);
 		debugger.resume(getDebuggedThread());	
-		waitSuspendedOrTerminated();
-		assertEquals(Status.SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
+		waitWorkerSuspendedOrTerminated();
+		assertEquals(WorkerStatus.WORKER_SUSPENDED, debugger.getWorkerStatus(getDebuggedThread()));
 		assertEquals(LEVEL_2_LINE + 1, debugger.getLineInFile(getDebuggedThread()));
 		debugger.resume(getDebuggedThread());	
 		join();

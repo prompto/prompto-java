@@ -19,10 +19,10 @@ import prompto.debug.request.StepOverDebugRequest;
 import prompto.debug.request.SuspendDebugRequest;
 import prompto.debug.request.TerminateDebugRequest;
 import prompto.debug.response.GetLineDebugResponse;
-import prompto.debug.response.GetStatusDebugResponse;
 import prompto.debug.response.GetVariableDebugResponse;
 import prompto.debug.response.GetVariablesDebugResponse;
 import prompto.debug.response.GetWorkerStackDebugResponse;
+import prompto.debug.response.GetWorkerStatusDebugResponse;
 import prompto.debug.response.IDebugResponse;
 import prompto.debug.response.IsSteppingDebugResponse;
 import prompto.debug.stack.ClientStack;
@@ -64,22 +64,22 @@ public abstract class DebugRequestClient implements IDebugger {
 	
 	
 	@Override
-	public Status getWorkerStatus(IWorker worker) {
+	public WorkerStatus getWorkerStatus(IWorker worker) {
 		if(!isRemoteAlive())
-			return Status.TERMINATED;
+			return WorkerStatus.WORKER_TERMINATED;
 		else
 			return fetchWorkerStatus(worker);
 	}
 
-	private Status fetchWorkerStatus(IWorker worker) {
+	private WorkerStatus fetchWorkerStatus(IWorker worker) {
 		if(!connected)
-			return Status.UNREACHABLE;
+			return WorkerStatus.WORKER_UNREACHABLE;
 		IDebugRequest request = new GetWorkerStatusDebugRequest(worker);
 		IDebugResponse response = send(request) ;
-		if(response instanceof GetStatusDebugResponse)
-			return ((GetStatusDebugResponse)response).getStatus();
+		if(response instanceof GetWorkerStatusDebugResponse)
+			return ((GetWorkerStatusDebugResponse)response).getWorkerStatus();
 		else 
-			return Status.UNREACHABLE;
+			return WorkerStatus.WORKER_UNREACHABLE;
 	}
 
 	@Override
@@ -149,7 +149,7 @@ public abstract class DebugRequestClient implements IDebugger {
 	public boolean isSuspended(IWorker worker) {
 		if(!connected || isTerminated())
 			return false;
-		return fetchWorkerStatus(worker)==Status.SUSPENDED;
+		return fetchWorkerStatus(worker)==WorkerStatus.WORKER_SUSPENDED;
 	}
 
 	@Override

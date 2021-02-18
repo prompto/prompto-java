@@ -50,9 +50,9 @@ public class TestRemoteProcessDebugger extends TestDebuggerBase implements IDebu
 	
 	
 	@Override
-	protected void waitSuspendedOrTerminated() throws Exception {
-		Status status = debugger.getWorkerStatus(null);
-		while(status!=Status.SUSPENDED && status!=Status.TERMINATED) {
+	protected void waitWorkerSuspendedOrTerminated() throws Exception {
+		WorkerStatus status = debugger.getWorkerStatus(null);
+		while(status!=WorkerStatus.WORKER_SUSPENDED && status!=WorkerStatus.WORKER_TERMINATED) {
 			Thread.sleep(100);
 			status = debugger.getWorkerStatus(null);
 		}

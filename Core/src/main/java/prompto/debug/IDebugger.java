@@ -18,8 +18,8 @@ public interface IDebugger {
 	void terminate(IWorker worker);
 	void notifyTerminated();
 	Collection<? extends IWorker> getWorkers();
-	Status getProcessStatus();
-	Status getWorkerStatus(IWorker worker);
+	ProcessStatus getProcessStatus();
+	WorkerStatus getWorkerStatus(IWorker worker);
 	IStack<?> getWorkerStack(IWorker worker);
 	int getLineInFile(IWorker worker); 
 	int getLineInMethod(IWorker worker); 

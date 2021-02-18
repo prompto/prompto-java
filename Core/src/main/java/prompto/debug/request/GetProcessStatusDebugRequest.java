@@ -1,8 +1,8 @@
 package prompto.debug.request;
 
 import prompto.debug.IDebugger;
-import prompto.debug.Status;
-import prompto.debug.response.GetStatusDebugResponse;
+import prompto.debug.ProcessStatus;
+import prompto.debug.response.GetProcessStatusDebugResponse;
 
 public class GetProcessStatusDebugRequest implements IDebugRequest {
 
@@ -10,9 +10,9 @@ public class GetProcessStatusDebugRequest implements IDebugRequest {
 	}
 
 	@Override
-	public GetStatusDebugResponse execute(IDebugger debugger) {
-		Status status = debugger.getProcessStatus();
-		return new GetStatusDebugResponse(status);
+	public GetProcessStatusDebugResponse execute(IDebugger debugger) {
+		ProcessStatus status = debugger.getProcessStatus();
+		return new GetProcessStatusDebugResponse(status);
 	}
 	
 	@Override

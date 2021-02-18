@@ -45,7 +45,7 @@ public class TestLocalDebugger extends TestDebuggerVariablesBase {
 	}
 
 	@Override
-	protected void waitSuspendedOrTerminated() throws InterruptedException {
+	protected void waitWorkerSuspendedOrTerminated() throws InterruptedException {
 		State state = thread.getState();
 		while(state!=State.WAITING && state!=State.TERMINATED) {
 			Thread.sleep(10);

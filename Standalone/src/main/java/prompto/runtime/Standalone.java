@@ -36,8 +36,9 @@ import prompto.debug.IDebugRequestListenerFactory;
 import prompto.debug.IDebugger;
 import prompto.debug.ProcessDebugger;
 import prompto.debug.ProcessDebugger.DebuggedWorker;
-import prompto.debug.Status;
+import prompto.debug.ProcessStatus;
 import prompto.debug.WorkerDebugger;
+import prompto.debug.WorkerStatus;
 import prompto.debug.event.ConnectedDebugEvent;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.IDeclaration;
@@ -208,7 +209,9 @@ public abstract class Standalone {
 	private static void debugTest(IDebugConfiguration debug, String testMethod) throws Throwable {
 		Context local = null;
 		try {
-			local = startProcessDebugger(debug);
+			ProcessDebugger debugger = startProcessDebugger(debug);
+			local = ApplicationContext.get().newLocalContext();
+			wireProcessDebugger(debugger, local);
 			runTest(local, testMethod);
 		} catch(TerminatedError e) {
 			if(local!=null)
@@ -235,7 +238,9 @@ public abstract class Standalone {
 	private static void debugApplication(IDebugConfiguration debug, String mainMethod, IExpression args) throws Throwable {
 		Context local = null;
 		try {
-			local = startProcessDebugger(debug);
+			ProcessDebugger debugger = startProcessDebugger(debug);
+			local = ApplicationContext.get().newLocalContext();
+			wireProcessDebugger(debugger, local);
 			runApplication(local, mainMethod, args);
 		} catch(TerminatedError e) {
 			if(local!=null)
@@ -253,7 +258,7 @@ public abstract class Standalone {
 		return debugRequestListener;
 	}
 
-	public static Context startProcessDebugger(IDebugConfiguration config) throws Throwable {
+	public static ProcessDebugger startProcessDebugger(IDebugConfiguration config) throws Throwable {
 		// wire adapter which will send events to client
 		debugEventAdapter = createDebugEventAdapter(config);
 		ProcessDebugger processDebugger = ProcessDebugger.createInstance(ApplicationContext.get());
@@ -262,22 +267,25 @@ public abstract class Standalone {
 		debugRequestListener = createDebugRequestListener(config, processDebugger);
 		ConnectedDebugEvent connected = debugRequestListener.startListening();
 		debugEventAdapter.onConnectedEvent(connected);
-		// wire local context to debugger
-		Context local = ApplicationContext.get().newLocalContext();
-		WorkerDebugger workerDebugger = startWorkerDebugger(Thread.currentThread(), local);
-		processDebugger.setProcessStatus(Status.RUNNING);
+		return processDebugger;
+	}
+	
+	public static void wireProcessDebugger(ProcessDebugger processDebugger, Context context) {
+		logger.info(()->"Wiring process debugger...");
+		// wire context to debugger
+		WorkerDebugger workerDebugger = startWorkerDebugger(Thread.currentThread(), context);
+		processDebugger.setProcessStatus(ProcessStatus.PROCESS_RUNNING);
 		// step in start method by default
 		// TODO: make this configurable
 		workerDebugger.stepInto();
-		return local;
-
+		logger.info(()->"Process debugger wired.");
 	}
 
 	public static void stopProcessDebugger() {
 		ProcessDebugger processDebugger = ProcessDebugger.getInstance();
-		processDebugger.setProcessStatus(Status.TERMINATING);
+		processDebugger.setProcessStatus(ProcessStatus.PROCESS_TERMINATING);
 		debugEventAdapter.onProcessTerminatedEvent();
-		processDebugger.setProcessStatus(Status.TERMINATED);
+		processDebugger.setProcessStatus(ProcessStatus.PROCESS_TERMINATED);
 		debugRequestListener.stopListening();
 	}
 
@@ -289,7 +297,7 @@ public abstract class Standalone {
 		debugEventAdapter.onWorkerStartedEvent(DebuggedWorker.wrap(Thread.currentThread()));
 		workerDebugger.setListener(debugEventAdapter);
 		context.setDebugger(workerDebugger);
-		workerDebugger.setStatus(Status.RUNNING);
+		workerDebugger.setWorkerStatus(WorkerStatus.WORKER_RUNNING);
 		return workerDebugger;
 	}
 

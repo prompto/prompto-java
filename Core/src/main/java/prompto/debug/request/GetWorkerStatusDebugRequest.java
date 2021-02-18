@@ -1,8 +1,8 @@
 package prompto.debug.request;
 
 import prompto.debug.IDebugger;
-import prompto.debug.Status;
-import prompto.debug.response.GetStatusDebugResponse;
+import prompto.debug.WorkerStatus;
+import prompto.debug.response.GetWorkerStatusDebugResponse;
 import prompto.debug.worker.IWorker;
 import prompto.debug.ProcessDebugger.DebuggedWorker;
 
@@ -16,9 +16,9 @@ public class GetWorkerStatusDebugRequest extends WorkerRequest {
 	}
 
 	@Override
-	public GetStatusDebugResponse execute(IDebugger debugger) {
-		Status status = debugger.getWorkerStatus(DebuggedWorker.parse(workerId));
-		return new GetStatusDebugResponse(status);
+	public GetWorkerStatusDebugResponse execute(IDebugger debugger) {
+		WorkerStatus status = debugger.getWorkerStatus(DebuggedWorker.parse(workerId));
+		return new GetWorkerStatusDebugResponse(status);
 	}
 	
 	@Override

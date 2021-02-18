@@ -8,7 +8,7 @@ import prompto.debug.variable.IVariable;
 
 public interface IWorkerDebugger {
 
-	Status getStatus();
+	WorkerStatus getWorkerStatus();
 	IStack<?> getStack();
 	int getLineInFile();
 	int getLineInMethod();
