@@ -1017,6 +1017,8 @@ public class Context implements IContext {
 		switch(type) {
 		case "test":
 			return getTest(new Identifier(name), true);
+		case "category":
+			return getRegisteredDeclaration(CategoryDeclaration.class, new Identifier(name), true);
 		case "method":
 			{
 				idx = name.indexOf("/");

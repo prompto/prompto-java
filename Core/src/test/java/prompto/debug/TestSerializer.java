@@ -25,6 +25,7 @@ import prompto.debug.request.GetWorkerStackDebugRequest;
 import prompto.debug.request.GetWorkerStatusDebugRequest;
 import prompto.debug.request.GetWorkersDebugRequest;
 import prompto.debug.request.InstallBreakpointDebugRequest;
+import prompto.debug.request.InstallBreakpointsDebugRequest;
 import prompto.debug.request.IsSteppingDebugRequest;
 import prompto.debug.request.ResumeDebugRequest;
 import prompto.debug.request.StepIntoDebugRequest;
@@ -84,6 +85,7 @@ public class TestSerializer {
 		testRoundRobin(new GetProcessStatusDebugRequest());
 		testRoundRobin(new GetWorkersDebugRequest());
 		testRoundRobin(new InstallBreakpointDebugRequest().withSection(someSection()));
+		testRoundRobin(new InstallBreakpointsDebugRequest().withSections(Collections.singletonList(someSection())));
 	}
 	
 	@Test

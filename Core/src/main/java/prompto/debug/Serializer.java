@@ -162,12 +162,28 @@ public class Serializer {
 			return node.numberValue();
 		else if(node.isTextual())
 			return node.textValue();
+		else if(node.isArray())
+			return postDeserializeArray((ArrayNode)node);
 		else if(node.isObject())
 			return postDeserializeObject(null, (ObjectNode)node);
 		else
 			throw new UnsupportedOperationException(node.getNodeType().name());
 	}
 	
+	private static Object safePostDeserialize(JsonNode node) {
+		try {
+			return postDeserialize(node);
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	private static Object postDeserializeArray(ArrayNode node) {
+		return StreamSupport.stream(node.spliterator(), false)
+				.map(Serializer::safePostDeserialize)
+				.collect(Collectors.toList());
+	}
+
 	private static Object postDeserializeObject(Type type, ObjectNode node) throws Exception {
 		String typeName = node.get("type").asText();
 		Class<?> klass = getInstanceType(type, typeName); 
