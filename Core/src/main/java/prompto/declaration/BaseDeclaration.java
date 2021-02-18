@@ -152,9 +152,9 @@ public abstract class BaseDeclaration extends CodeSection implements IDeclaratio
 	@Override
 	public int computeStartLine() {
 		if(comments!=null && !comments.isEmpty())
-			return comments.iterator().next().getSection().getStart().getLine();
+			return comments.iterator().next().getSection().getStartLocation().getLine();
 		else if(annotations!=null && !annotations.isEmpty())
-			return annotations.iterator().next().getSection().getStart().getLine();
+			return annotations.iterator().next().getSection().getStartLocation().getLine();
 		else 
 			return super.computeStartLine();
 	}

@@ -24,32 +24,32 @@ public abstract class SyntaxProblemBase implements IProblem {
 	
 	@Override
 	public int getStartIndex() {
-		return section.getStart().getTokenIndex();
+		return section.getStartLocation().getTokenIndex();
 	}
 	
 	@Override
 	public int getStartLine() {
-		return section.getStart().getLine();
+		return section.getStartLocation().getLine();
 	}
 	
 	@Override
 	public int getStartColumn() {
-		return section.getStart().getColumn();
+		return section.getStartLocation().getColumn();
 	}
 
 	@Override
 	public int getEndIndex() {
-		return section.getEnd().getTokenIndex();
+		return section.getEndLocation().getTokenIndex();
 	}
 
 	@Override
 	public int getEndLine() {
-		return section.getEnd().getLine();
+		return section.getEndLocation().getLine();
 	}
 	
 	@Override
 	public int getEndColumn() {
-		return section.getEnd().getColumn();
+		return section.getEndLocation().getColumn();
 	}
 
 

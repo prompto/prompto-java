@@ -3,8 +3,8 @@ package prompto.parser;
 public interface ISection {
 	
 	String getPath();
-	ILocation getStart();
-	ILocation getEnd();
+	ILocation getStartLocation();
+	ILocation getEndLocation();
 	Dialect getDialect();
 	ISection merge(ISection other);
 	boolean isOrContains(ISection section);
@@ -12,16 +12,16 @@ public interface ISection {
 	void setAsBreakpoint(boolean set);
 	boolean isBreakpoint(); 
 	default int computeStartLine() {
-		return getStart()==null ? 0 : getStart().getLine();
+		return getStartLocation()==null ? 0 : getStartLocation().getLine();
 	}
 	default int computeStartTokenIndex() {
-		return getStart()==null ? 0 : getStart().getTokenIndex();
+		return getStartLocation()==null ? 0 : getStartLocation().getTokenIndex();
 	}
 	default int computeEndLine() {
-		return getEnd()==null ? 0 : getEnd().getLine();
+		return getEndLocation()==null ? 0 : getEndLocation().getLine();
 	}
 	default int computeEndTokenIndex() {
-		return getEnd()==null ? 0 : getEnd().getTokenIndex();
+		return getEndLocation()==null ? 0 : getEndLocation().getTokenIndex();
 	}
 
 }

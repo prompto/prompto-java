@@ -13,10 +13,10 @@ public final class Section implements ISection {
 	}
 	
 	String path;
-	private ILocation start;
-	private ILocation end;
+	private ILocation startLocation;
+	private ILocation endLocation;
 	private Dialect dialect;
-	private boolean breakpoint;
+	private boolean isBreakpoint;
 	
 	public Section() {
 	}
@@ -36,8 +36,8 @@ public final class Section implements ISection {
 	
 	public void copyFrom(ISection section) {
 		this.path = section.getPath();
-		this.setStart(section.getStart()==null ? null : new Location(section.getStart()));
-		this.setEnd(section.getEnd()==null ? null : new Location(section.getEnd()));
+		this.setStart(section.getStartLocation()==null ? null : new Location(section.getStartLocation()));
+		this.setEnd(section.getEndLocation()==null ? null : new Location(section.getEndLocation()));
 		this.setDialect(section.getDialect());
 		this.setBreakpoint(section.isBreakpoint());
 	}
@@ -52,7 +52,7 @@ public final class Section implements ISection {
 
 	@Override
 	public String toString() {
-		return "{ start: " + start + ", end: " + end + ", dialect: " + dialect + "}";
+		return "{ startLocation: " + startLocation + ", endLocation: " + endLocation + ", dialect: " + dialect + "}";
 	}
 
 	
@@ -61,8 +61,8 @@ public final class Section implements ISection {
 		Section section = new Section();
 		section.path = this.path;
 		section.dialect = this.dialect;
-		section.start = ILocation.first(this.start, other.getStart());
-		section.end = ILocation.last(this.end, other.getEnd());
+		section.startLocation = ILocation.first(this.startLocation, other.getStartLocation());
+		section.endLocation = ILocation.last(this.endLocation, other.getEndLocation());
 		return section;
 	}
 
@@ -77,13 +77,13 @@ public final class Section implements ISection {
 	}
 	
 	@Override
-	public ILocation getStart() {
-		return start;
+	public ILocation getStartLocation() {
+		return startLocation;
 	}
 	
 	@Override
-	public ILocation getEnd() {
-		return end;
+	public ILocation getEndLocation() {
+		return endLocation;
 	}
 	
 	@Override
@@ -98,23 +98,23 @@ public final class Section implements ISection {
 
 	@Override
 	public boolean isBreakpoint() {
-		return breakpoint;
+		return isBreakpoint;
 	}
 	
 	@Override
 	public boolean isOrContains(ISection section) {
 		return this.getDialect()==section.getDialect()
 				&& Objects.equals(this.path, section.getPath())
-				&& this.getStart().isNotAfter(section.getStart())
-				&& this.getEnd().isNotBefore(section.getEnd());
+				&& this.getStartLocation().isNotAfter(section.getStartLocation())
+				&& this.getEndLocation().isNotBefore(section.getEndLocation());
 	}
 
 	public void setStart(Location start) {
-		this.start = start;
+		this.startLocation = start;
 	}
 
 	public void setEnd(Location end) {
-		this.end = end;
+		this.endLocation = end;
 	}
 
 	public void setDialect(Dialect dialect) {
@@ -122,7 +122,7 @@ public final class Section implements ISection {
 	}
 
 	public void setBreakpoint(boolean breakpoint) {
-		this.breakpoint = breakpoint;
+		this.isBreakpoint = breakpoint;
 	}
 	
 	
@@ -132,7 +132,7 @@ public final class Section implements ISection {
 	}
 
 	public boolean equals(Section other) {
-		return other != null && breakpoint == other.breakpoint && dialect == other.dialect && Objects.equals(end, other.end) && Objects.equals(path, other.path) && Objects.equals(start, other.start);
+		return other != null && isBreakpoint == other.isBreakpoint && dialect == other.dialect && Objects.equals(endLocation, other.endLocation) && Objects.equals(path, other.path) && Objects.equals(startLocation, other.startLocation);
 	}
 
 

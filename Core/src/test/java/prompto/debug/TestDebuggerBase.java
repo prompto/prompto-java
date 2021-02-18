@@ -37,7 +37,7 @@ public abstract class TestDebuggerBase extends BaseEParserTest {
 		ISection section = cmd.getStatements().get(stmtNumber).getSection();
 		section.setAsBreakpoint(true);
 		debugger.installBreakpoint(section);
-		return section.getStart().getLine();
+		return section.getStartLocation().getLine();
 	}
 	
 
