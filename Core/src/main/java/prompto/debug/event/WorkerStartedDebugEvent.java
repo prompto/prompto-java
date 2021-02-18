@@ -4,13 +4,13 @@ import java.util.Objects;
 
 import prompto.debug.IDebugEventListener;
 import prompto.debug.ProcessDebugger.DebuggedWorker;
+import prompto.debug.WorkerStatus;
 import prompto.debug.worker.IWorker;
-import prompto.debug.worker.WorkerState;
 
 public class WorkerStartedDebugEvent extends WorkerDebugEvent {
 	
 	String name;
-	WorkerState workerState;
+	WorkerStatus workerStatus;
 	
 	public WorkerStartedDebugEvent() {
 	}
@@ -18,7 +18,7 @@ public class WorkerStartedDebugEvent extends WorkerDebugEvent {
 	public WorkerStartedDebugEvent(IWorker worker) {
 		super(worker);
 		this.name = worker.getName();
-		this.workerState = worker.getWorkerState();
+		this.workerStatus = worker.getWorkerStatus();
 	}
 	
 	public void setName(String name) {
@@ -29,12 +29,12 @@ public class WorkerStartedDebugEvent extends WorkerDebugEvent {
 		return name;
 	}
 	
-	public void setWorkerState(WorkerState state) {
-		this.workerState = state;
+	public void setWorkerState(WorkerStatus state) {
+		this.workerStatus = state;
 	}
 	
-	public WorkerState getWorkerState() {
-		return workerState;
+	public WorkerStatus getWorkerState() {
+		return workerStatus;
 	}
 	
 	@Override
@@ -48,8 +48,8 @@ public class WorkerStartedDebugEvent extends WorkerDebugEvent {
 		return this;
 	}
 
-	public WorkerStartedDebugEvent withWorkerState(WorkerState state) {
-		this.workerState = state;
+	public WorkerStartedDebugEvent withWorkerState(WorkerStatus state) {
+		this.workerStatus = state;
 		return this;
 	}
 
@@ -59,7 +59,7 @@ public class WorkerStartedDebugEvent extends WorkerDebugEvent {
 	}
 
 	public boolean equals(WorkerStartedDebugEvent other) {
-		return Objects.equals(name, other.name) && Objects.equals(workerState, other.workerState) && super.equals(other);
+		return Objects.equals(name, other.name) && Objects.equals(workerStatus, other.workerStatus) && super.equals(other);
 	}
 
 }

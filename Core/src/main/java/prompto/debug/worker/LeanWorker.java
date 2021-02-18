@@ -2,11 +2,13 @@ package prompto.debug.worker;
 
 import java.util.Objects;
 
+import prompto.debug.WorkerStatus;
+
 public class LeanWorker implements IWorker {
 	
 	protected String workerId;
 	protected String name;
-	protected WorkerState workerState;
+	protected WorkerStatus workerStatus;
 	
 	@Override
 	public String getWorkerId() {
@@ -21,8 +23,8 @@ public class LeanWorker implements IWorker {
 		this.name = name;
 	}
 
-	public void setWorkerState(WorkerState workerState) {
-		this.workerState = workerState;
+	public void setWorkerStatus(WorkerStatus workerStatus) {
+		this.workerStatus = workerStatus;
 	}
 
 	@Override
@@ -31,8 +33,8 @@ public class LeanWorker implements IWorker {
 	}
 	
 	@Override
-	public WorkerState getWorkerState() {
-		return workerState;
+	public WorkerStatus getWorkerStatus() {
+		return workerStatus;
 	}
 
 	public LeanWorker withWorkerId(String workerId) {
@@ -45,14 +47,14 @@ public class LeanWorker implements IWorker {
 		return this;
 	}
 
-	public LeanWorker withWorkerState(WorkerState workerState) {
-		this.workerState = workerState;
+	public LeanWorker withWorkerState(WorkerStatus workerStatus) {
+		this.workerStatus = workerStatus;
 		return this;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name, workerId, workerState);
+		return Objects.hash(name, workerId, workerStatus);
 	}
 
 	@Override
@@ -61,7 +63,7 @@ public class LeanWorker implements IWorker {
 	}
 	
 	public boolean equals(LeanWorker other) {
-		return Objects.equals(name, other.name) && Objects.equals(workerId, other.workerId) && workerState == other.workerState;
+		return Objects.equals(name, other.name) && Objects.equals(workerId, other.workerId) && workerStatus == other.workerStatus;
 	}
 
 	

@@ -12,7 +12,6 @@ import prompto.debug.stack.LeanStack;
 import prompto.debug.variable.IVariable;
 import prompto.debug.worker.IWorker;
 import prompto.debug.worker.LeanWorker;
-import prompto.debug.worker.WorkerState;
 import prompto.parser.ICodeSection;
 import prompto.parser.ISection;
 import prompto.runtime.Context;
@@ -333,7 +332,7 @@ public class ProcessDebugger implements IDebugger {
 			this.threadId = thread.getId();
 			this.workerId = String.valueOf(threadId);
 			this.name = thread.getName();
-			this.workerState = WorkerState.valueOf(thread.getState());
+			this.workerStatus = WorkerStatus.valueOf(thread.getState());
 		}
 		
 		@Override

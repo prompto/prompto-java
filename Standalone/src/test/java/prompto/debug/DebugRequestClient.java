@@ -66,7 +66,7 @@ public abstract class DebugRequestClient implements IDebugger {
 	@Override
 	public WorkerStatus getWorkerStatus(IWorker worker) {
 		if(!isRemoteAlive())
-			return WorkerStatus.WORKER_TERMINATED;
+			return WorkerStatus.WORKER_COMPLETED;
 		else
 			return fetchWorkerStatus(worker);
 	}

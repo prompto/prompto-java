@@ -49,7 +49,6 @@ import prompto.debug.variable.FatVariable;
 import prompto.debug.variable.IVariable;
 import prompto.debug.worker.IWorker;
 import prompto.debug.worker.LeanWorker;
-import prompto.debug.worker.WorkerState;
 import prompto.parser.Dialect;
 import prompto.parser.Location;
 import prompto.parser.Section;
@@ -111,7 +110,7 @@ public class TestSerializer {
 		return new LeanWorker()
 				.withWorkerId("123")
 				.withName("worker")
-				.withWorkerState(WorkerState.COMPLETED);
+				.withWorkerState(WorkerStatus.WORKER_COMPLETED);
 	}
 	
 	private IVariable someVariable() {

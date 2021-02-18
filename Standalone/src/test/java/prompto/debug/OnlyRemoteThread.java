@@ -1,7 +1,6 @@
 package prompto.debug;
 
 import prompto.debug.worker.IWorker;
-import prompto.debug.worker.WorkerState;
 
 public class OnlyRemoteThread implements IWorker {
 
@@ -16,8 +15,8 @@ public class OnlyRemoteThread implements IWorker {
 	}
 	
 	@Override
-	public WorkerState getWorkerState() {
-		return WorkerState.WORKING;
+	public WorkerStatus getWorkerStatus() {
+		return WorkerStatus.WORKER_RUNNING;
 	}
 		
 }

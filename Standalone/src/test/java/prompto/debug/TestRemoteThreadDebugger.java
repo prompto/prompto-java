@@ -49,7 +49,7 @@ public class TestRemoteThreadDebugger extends TestDebuggerVariablesBase implemen
 	protected void waitWorkerSuspendedOrTerminated() throws Exception {
 		Thread.sleep(10); // give time to remote thread
 		WorkerStatus status = debugger.getWorkerStatus(getDebuggedThread());
-		while(status!=WorkerStatus.WORKER_SUSPENDED && status!=WorkerStatus.WORKER_TERMINATED) {
+		while(status!=WorkerStatus.WORKER_SUSPENDED && status!=WorkerStatus.WORKER_COMPLETED) {
 			Thread.sleep(100);
 			status = debugger.getWorkerStatus(getDebuggedThread());
 		}
