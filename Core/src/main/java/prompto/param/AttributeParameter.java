@@ -131,6 +131,15 @@ public class AttributeParameter extends BaseParameter {
 	
 	@Override
 	public void compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
+		String instanceName = "%" + getName() + "%";
+		StackLocal local = method.getRegisteredLocal(instanceName);
+		if(local!=null)
+			CompilerUtils.compileALOAD(method, instanceName);
+		else
+			doCompileLocal(context, method, flags, assignments, isFirst);
+	}
+	
+	private void doCompileLocal(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
 		Argument assign = makeArgument(assignments, isFirst);
 		IType itype = assign.getExpression().check(context.getCallingContext());
 		// if param is a category, assume it implements the required attribute interface
