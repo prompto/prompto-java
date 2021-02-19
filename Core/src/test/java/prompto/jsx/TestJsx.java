@@ -8,15 +8,15 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.junit.Test;
 
-import prompto.parser.EIndentingLexer;
-import prompto.parser.e.BaseEParserTest;
+import prompto.parser.ONamingLexer;
+import prompto.parser.o.BaseOParserTest;
 
-public class TestJsx extends BaseEParserTest {
+public class TestJsx extends BaseOParserTest {
 
 	@Test
 	public void parsesNonAsciiText() {
 		CharStream stream = CharStreams.fromString("Création");
-		EIndentingLexer lexer = new EIndentingLexer(stream);
+		ONamingLexer lexer = new ONamingLexer(stream);
 		Token t1 = lexer.nextToken();
 		/* Token t2 = */lexer.nextToken();
 		Token t3 = lexer.nextToken();
