@@ -99,13 +99,13 @@ public abstract class BaseParameter extends CodeSection implements IParameter {
 		
 	}
 
-	protected Argument makeArgument(ArgumentList assignments, boolean isFirst) {
-		Argument assign = assignments.find(id);
-		if(assign!=null)
-			return assign;
+	protected Argument makeArgument(ArgumentList arguments, boolean isFirst) {
+		Argument argument = arguments.find(id);
+		if(argument!=null)
+			return argument;
 		// first argument can be anonymous
-		else if(isFirst && assignments.size()>0 && assignments.get(0).getParameter()==null)
-			return assignments.get(0);
+		else if(isFirst && arguments.size()>0 && arguments.get(0).getParameter()==null)
+			return arguments.get(0);
 		else if(defaultExpression!=null)
 			return new Argument(this, defaultExpression);
 		else
