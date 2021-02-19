@@ -75,6 +75,27 @@ public class MethodType extends BaseType {
 			throw new IllegalStateException("Should never get there!");
 	}
 	
+	/*
+	
+	@Override
+	public boolean isAssignableFrom(Context context, IType other) {
+		return other==this || (other instanceof MethodType && this.isAssignableFrom(context, (MethodType)other));
+	}
+	
+
+	public boolean isAssignableFrom(Context context, MethodType other) {
+		if(other==this)
+			return true;
+		else if(other==null)
+			return false;
+		else {
+			ParameterList these = method.getParameters();
+			ParameterList others = other.method.getParameters();
+			return these.isAssignableFrom(context, others);
+		}
+	}
+	*/
+	
 	@Override
 	public boolean equals(Object other) {
 		return other==this || (other instanceof MethodType && ((MethodType)other).equals(this));
