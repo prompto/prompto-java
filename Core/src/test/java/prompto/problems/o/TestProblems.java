@@ -27,6 +27,11 @@ public class TestProblems extends BaseOParserTest {
 	}
 
 	@Test
+	public void testAttributeCallback() throws Exception {
+		checkProblems("problems/attributeCallback.poc");
+	}
+
+	@Test
 	public void testCallbackArgument() throws Exception {
 		checkProblems("problems/callbackArgument.poc");
 	}
