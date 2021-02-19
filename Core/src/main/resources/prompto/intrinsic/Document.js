@@ -45,10 +45,15 @@ Document.prototype.equals = function(other) {
         return false;
     var thisNames = Object.getOwnPropertyNames(this);
     var otherNames = Object.getOwnPropertyNames(other);
-    if(!equalArrays(thisNames,otherNames))
+    if(!equalArrays(thisNames, otherNames))
         return false;
     return thisNames.every(function(name) {
-        return this[name]===other[name] || (this[name].equals && this[name].equals(other[name]));
+      	var thisVal = this[name];
+        var otherVal = other[name];
+        if (thisVal === null)
+        	return otherVal == null;
+    	else
+        	return thisVal === otherVal || (thisVal.equals && thisVal.equals(otherVal));
     }, this);
 };
 
@@ -89,8 +94,6 @@ Document.prototype.$safe_setItem = function(item, value) {
     else
     	this[item] = value;
 };
-
-var setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf : function(obj, proto) { obj.__proto__ = proto; };
 
 Document.prototype.$safe_add = function(other) {
     var result = Object.assign({}, this, other);
