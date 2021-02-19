@@ -26,26 +26,23 @@ $Root.prototype.equals = function(other) {
     if (this.$categories[this.$categories.length - 1] !== other.$categories[other.$categories.length - 1])
         return false;
     var thisNames = this.getAttributeNames();
-    for (var i = 0; i < thisNames.length; i++) {
-        var name = thisNames[i];
-        if (this[name] === null) {
-            if(other[name] == null)
-                continue;
-            else
-                return false;
-        }
-        if (!this[name].equals(other[name]))
-            return false;
-    }
-
-    return true;
+    var otherNames = other.getAttributeNames();
+    if(!equalArrays(thisNames, otherNames))
+    	return false;
+    return thisNames.every(function(name) {
+    	var thisVal = this[name];
+        var otherVal = other[name];
+        if (thisVal === null) 
+        	return otherVal == null;
+        else
+        	return thisVal === otherVal || (thisVal.equals && thisVal.equals(otherVal));
+    }, this);
 };
 
 
 $Root.prototype.toMutable = function() {
-	var result = Object.create(this);
-	result.$mutable = true;
-	return result;
+	var ctor = getPrototypeOf(this).constructor;
+	return new ctor(this, {}, true);
 };
 
 $Root.prototype.instanceOf = function(type) {
