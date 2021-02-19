@@ -121,21 +121,12 @@ Dictionary.prototype.hasAny = function(item) {
     return this.keys.hasAny(item, true);
 };
 
-//override property set on Object.prototype
-Object.defineProperty(Dictionary.prototype, "getItem", {
-    get: function() {
-        return function(item) {
-            if(!item)
-                throw new ReferenceError();
-            if(!this.hasOwnProperty(item))
-                throw new RangeError();
-            return this[item];
-        }
-    },
-    set: function() {
-    }
-});
-
+Dictionary.prototype.getItem = function(item) {
+    if(item)
+	    return this[item] || null;
+    else
+        throw new ReferenceError();
+};
 
 Dictionary.prototype.setItem = function (item, value) {
     if(!this.mutable)
