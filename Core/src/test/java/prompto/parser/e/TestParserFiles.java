@@ -34,7 +34,7 @@ public class TestParserFiles extends BaseEParserTest {
 	public void testAttribute() throws Exception {
 		DeclarationList stmts = parseResource("methods/attribute.pec");
 		assertNotNull(stmts);
-		assertEquals(6,stmts.size());
+		assertEquals(7,stmts.size());
 	}
 
 	@Test
