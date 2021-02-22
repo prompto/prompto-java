@@ -1,5 +1,8 @@
 package prompto.jsx;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
@@ -39,6 +42,9 @@ public class JsxText implements IJsxExpression {
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 		String text = HtmlUtils.decodeHtmlEntities(StringUtils.escape(this.text));
+		text = Arrays.stream(text.split("\n"))
+				.map(String::trim)
+				.collect(Collectors.joining(" "));
 		transpiler.append('"').append(text).append('"');
 		return false;
 	}
