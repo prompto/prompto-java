@@ -1,3 +1,10 @@
+var FinalizationRegistry = FinalizationRegistry || function() { 
+	this.register = function() {};
+	this.unregister = function() {};
+	return this;
+};
+
+
 var blobRefURLRegistry = new FinalizationRegistry(function(url) {
 	URL.revokeObjectURL(url);
 });

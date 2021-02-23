@@ -1,3 +1,9 @@
+var FinalizationRegistry = FinalizationRegistry || function() { 
+	this.register = function() {};
+	this.unregister = function() {};
+	return this;
+};
+
 var imageRefURLRegistry = new FinalizationRegistry(function(url) {
 	URL.revokeObjectURL(url);
 });
