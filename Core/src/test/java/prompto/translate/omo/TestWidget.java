@@ -17,6 +17,11 @@ public class TestWidget extends BaseOParserTest {
 	}
 
 	@Test
+	public void testWithDocumentLiteral() throws Exception {
+		compareResourceOMO("widget/withDocumentLiteral.poc");
+	}
+
+	@Test
 	public void testWithEvent() throws Exception {
 		compareResourceOMO("widget/withEvent.poc");
 	}
