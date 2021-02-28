@@ -110,6 +110,21 @@ public class TestCast extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedCastDocumentList() throws Exception {
+		checkInterpretedOutput("cast/castDocumentList.pec");
+	}
+
+	@Test
+	public void testCompiledCastDocumentList() throws Exception {
+		checkCompiledOutput("cast/castDocumentList.pec");
+	}
+
+	@Test
+	public void testTranspiledCastDocumentList() throws Exception {
+		checkTranspiledOutput("cast/castDocumentList.pec");
+	}
+
+	@Test
 	public void testInterpretedCastInteger() throws Exception {
 		checkInterpretedOutput("cast/castInteger.pec");
 	}

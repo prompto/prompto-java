@@ -37,6 +37,11 @@ public class TestCast extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCastDocumentList() throws Exception {
+		compareResourceEOE("cast/castDocumentList.pec");
+	}
+
+	@Test
 	public void testCastInteger() throws Exception {
 		compareResourceEOE("cast/castInteger.pec");
 	}
