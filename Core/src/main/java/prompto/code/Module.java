@@ -152,6 +152,8 @@ public abstract class Module extends PromptoStorableBase{
 		return parked;
 	}
 
-
+	public String getResourcePrefix() {
+		return getName().toLowerCase().replaceAll(" ", "-");
+	}
 
 }

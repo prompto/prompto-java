@@ -1,5 +1,6 @@
 package prompto.code;
 
+import java.util.Collections;
 import java.util.List;
 
 import prompto.error.PromptoError;
@@ -10,39 +11,17 @@ import prompto.store.IStored;
 
 public class WebLibrary extends Library {
 
-	String widgetLibrary;
 	String htmlEngine;
-	String uiFramework;
-	String nativeResource;
+	@Deprecated String widgetLibrary;
+	@Deprecated String uiFramework;
 	String stubResource;
+	List<String> javaScripts;
+	List<String> styleSheets;
+	List<String> resources;
 	
 	@Override
 	public ModuleType getType() {
 		return ModuleType.WEBLIBRARY;
-	}
-
-	public String getWidgetLibrary() {
-		return widgetLibrary;
-	}
-
-	public void setWidgetLibrary(String widgetLibrary) {
-		this.widgetLibrary = widgetLibrary;
-	}
-	
-	public String getNativeResource() {
-		return nativeResource;
-	}
-	
-	public void setNativeResource(String nativeResource) {
-		this.nativeResource = nativeResource;
-	}
-	
-	public String getStubResource() {
-		return stubResource;
-	}
-	
-	public void setStubResource(String stubResource) {
-		this.stubResource = stubResource;
 	}
 
 	public String getHtmlEngine() {
@@ -53,34 +32,111 @@ public class WebLibrary extends Library {
 		this.htmlEngine = htmlEngine;
 	}
 
-	public String getUIFramework() {
-		return uiFramework;
+	public String getStubResource() {
+		return stubResource;
 	}
 	
-	public void setUIFramework(String uiFramework) {
-		this.uiFramework = uiFramework;
+	public void setStubResource(String stubResource) {
+		this.stubResource = stubResource;
+	}
+	
+	public List<String> getJavaScripts() {
+		return javaScripts;
 	}
 
+	public void setJavaScripts(List<String> javaScripts) {
+		this.javaScripts = javaScripts;
+	}
+
+	public List<String> getStyleSheets() {
+		return styleSheets;
+	}
+
+	public void setStyleSheets(List<String> styleSheets) {
+		this.styleSheets = styleSheets;
+	}
+
+	public List<String> getResources() {
+		return resources;
+	}
+
+	public void setResources(List<String> resources) {
+		this.resources = resources;
+	}
+	
 	@Override
 	public IStorable collectStorables(Context context, IStore store, List<IStorable> storables) throws PromptoError {
 		IStorable storable = super.collectStorables(context, store, storables);
-		storable.setData("widgetLibrary", widgetLibrary);
-		storable.setData("htmlEngine", htmlEngine);
-		storable.setData("uiFramework", uiFramework);
-		storable.setData("nativeResource", nativeResource);
-		storable.setData("stubResource", stubResource);
+		if(htmlEngine!=null)
+			storable.setData("htmlEngine", htmlEngine);
+		if(widgetLibrary!=null)
+			storable.setData("widgetLibrary", widgetLibrary);
+		if(uiFramework!=null)
+			storable.setData("uiFramework", uiFramework);
+		if(stubResource!=null)
+			storable.setData("stubResource", stubResource);
+		if(javaScripts!=null && !javaScripts.isEmpty())
+			storable.setData("javaScripts", javaScripts);
+		if(styleSheets!=null && !styleSheets.isEmpty())
+			storable.setData("styleSheets", styleSheets);
+		if(resources!=null && !resources.isEmpty())
+			storable.setData("resources", resources);
 		return storable;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void fromStored(IStore store, IStored stored) {
 		super.fromStored(store, stored);
-		setWidgetLibrary((String)stored.getData("widgetLibrary"));
-		setHtmlEngine((String)stored.getData("htmlEngine"));
-		setUIFramework((String)stored.getData("uiFramework"));
-		setNativeResource((String)stored.getData("nativeResource"));
-		setStubResource((String)stored.getData("stubResource"));
+		Object value = stored.getData("htmlEngine");
+		if(value instanceof String)
+			setHtmlEngine((String)value);
+		value = stored.getData("widgetLibrary");
+		if(value instanceof String)
+			setWidgetLibrary((String)value);
+		value = stored.getData("uiFramework");
+		if(value instanceof String)
+			setUiFramework((String)value);
+		value = stored.getData("stubResource");
+		if(value instanceof String)
+			setStubResource((String)value);
+		value = stored.getData("javaScripts");
+		if(value instanceof List)
+			setJavaScripts((List<String>)value);
+		else {
+			value = stored.getData("nativeResource");
+			if(value instanceof String)
+				setJavaScripts(Collections.singletonList((String)value));
+		}
+		value = stored.getData("styleSheets");
+		if(value instanceof List)
+			setStyleSheets((List<String>)value);
+		value = stored.getData("resources");
+		if(value instanceof List)
+			setResources((List<String>)value);
 	}
+
+	@Deprecated
+	public String getWidgetLibrary() {
+		return widgetLibrary;
+	}
+
+	@Deprecated
+	public void setWidgetLibrary(String widgetLibrary) {
+		this.widgetLibrary = widgetLibrary;
+	}
+	
+	@Deprecated
+	public String getUiFramework() {
+		return uiFramework;
+	}
+	
+	@Deprecated
+	public void setUiFramework(String uiFramework) {
+		this.uiFramework = uiFramework;
+	}
+
+
 
 }
 
