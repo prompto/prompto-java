@@ -12,22 +12,21 @@ public abstract class ResourceReader {
 
 	public static Resource readResource(IStored stored) {
 		Resource resource = null;
-		String mimeType = (String)stored.getData("mimeType");
-		if(mimeType.startsWith("text/")) {
+		if(stored.hasData("body")) {
 			resource = new TextResource();
 			((TextResource)resource).setBody((String)stored.getData("body"));
-		} else {
+		} else if(stored.hasData("data")) {
 			resource = new BinaryResource();
 			((BinaryResource)resource).setData((PromptoBinary)stored.getData("data"));
 		}
-		resource.setMimeType(mimeType);
-		resource.setName((String)stored.getData("name"));
-		resource.setVersion((PromptoVersion)stored.getData("version"));
-		Long value = (Long)stored.getData("timeStamp");
-		if(value!=null)
-			resource.setLastModified(OffsetDateTime.ofInstant(Instant.ofEpochMilli(value), ZoneOffset.UTC));
+		if(resource!=null) {
+			resource.setMimeType((String)stored.getData("mimeType"));
+			resource.setName((String)stored.getData("name"));
+			resource.setVersion((PromptoVersion)stored.getData("version"));
+			Long value = (Long)stored.getData("timeStamp");
+			if(value!=null)
+				resource.setLastModified(OffsetDateTime.ofInstant(Instant.ofEpochMilli(value), ZoneOffset.UTC));
+		}
 		return resource;
 	}
-
-
 }
