@@ -12,11 +12,15 @@ public class PromptoVersion implements Comparable<PromptoVersion> {
 		String[] parts = version.split("\\.");
 		if(parts.length<3)
 			throw new InvalidParameterException("Version must be like 1.2.3!");
-		PromptoVersion v = new PromptoVersion();
-		v.major = Integer.parseInt(parts[0]);
-		v.minor = Integer.parseInt(parts[1]);
-		v.fix = Integer.parseInt(parts[2]);
-		return v;
+		try {
+			PromptoVersion v = new PromptoVersion();
+			v.major = Integer.parseInt(parts[0]);
+			v.minor = Integer.parseInt(parts[1]);
+			v.fix = Integer.parseInt(parts[2]);
+			return v;
+		} catch(NumberFormatException e) {
+			throw new InvalidParameterException("Version must be like 1.2.3!");
+		}
 	}
 
 	public static PromptoVersion parse(int version) {
