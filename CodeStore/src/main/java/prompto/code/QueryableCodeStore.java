@@ -97,7 +97,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 				collectStorables(list, method, dialect, version, moduleId);
 		} else {
 			String typeName = StringUtils.capitalizeFirst(declaration.getDeclarationType().name()) + "Declaration";
-			List<String> categories = Arrays.asList("Stuff", "Declaration", typeName);
+			List<String> categories = Arrays.asList("Resource", "NamedResource", "Declaration", typeName);
 			IStorable storable = populateDeclarationStorable(categories, declaration, dialect, version, moduleId);
 			list.add(storable);
 		}
