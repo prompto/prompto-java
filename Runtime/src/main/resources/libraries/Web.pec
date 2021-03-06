@@ -99,8 +99,12 @@ and methods:
 define ClickEventCallback as abstract method receiving ClickEvent event
 define MouseEventCallback as abstract method receiving MouseEvent event
 define KeyboardEventCallback as abstract method receiving KeyboardEvent event
+// TODO kept for compatibility, but should be removed
 define RadioChangedCallback as abstract method receiving RadioChangedEvent event
+define RadioChangedEventCallback as abstract method receiving RadioChangedEvent event
+// TODO kept for compatibility, but should be removed
 define InputChangedCallback as abstract method receiving InputChangedEvent event
+define InputChangedEventCallback as abstract method receiving InputChangedEvent event
 define SubmitEventCallback as abstract method receiving SubmitEvent event
 define DateChangedCallback as abstract method receiving Date value
 define ToggleChangedCallback as abstract method receiving Boolean value
