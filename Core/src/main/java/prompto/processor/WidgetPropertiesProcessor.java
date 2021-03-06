@@ -2,6 +2,7 @@ package prompto.processor;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -230,18 +231,28 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 		IType itemType = value.getItemType();
 		if(itemType instanceof TypeType)
 			return newTypeSetValidator(annotation, context, value);
-		else if(itemType == TextType.instance())
+		else if(itemType == TextType.instance() || itemType == IntegerType.instance())
 			return newValueSetValidator(annotation, context, value);
-		else if(itemType == AnyType.instance())
-			return newValidatorSetValidator(annotation, context, value);
-		else 
+		else if(itemType == AnyType.instance()) {
+			if(setContainsType(context, value))
+				return newValidatorSetValidator(annotation, context, value);
+			else
+				return newValueSetValidator(annotation, context, value);
+		} else 
 			return null;
+	}
+
+	private boolean setContainsType(Context context, SetValue value) {
+		return value.getItems().stream()
+				.map(IValue::getType)
+				.anyMatch(t -> t instanceof TypeType);
 	}
 
 	private IPropertyValidator newValidatorSetValidator(Annotation annotation, Context context, SetValue value) {
         List<IPropertyValidator> validators = value.getItems().stream()
                 .filter(l -> l != NullValue.instance())
                 .map(l -> newValidatorFromValue(annotation, context, l))
+                .filter(Objects::nonNull)
                 .map(v -> v.optional())
                 .collect(Collectors.toList());
         IPropertyValidator result = new ValidatorSetValidator(validators);

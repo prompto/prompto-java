@@ -310,5 +310,14 @@ public class WidgetPropertiesProcessorTest extends BaseOParserTest {
 		assertTrue(js.contains("this.selected$Integer.bind(this)(value)"));
 	}
 
+	@Test
+	public void transpilesWithValidatorForHybridValueSet() throws Exception {
+		String props = "@WidgetProperties({ expand: <true, \"sm\", \"md\", \"lg\", \"xl\", null> }) widget MyWidget {}";
+		loadString(props);
+		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, new Identifier("MyWidget"));
+		Transpiler transpiler = new Transpiler(new Nashorn8Engine(), context);
+		decl.declare(transpiler);
+		decl.transpile(transpiler);
+	}
 
 }
