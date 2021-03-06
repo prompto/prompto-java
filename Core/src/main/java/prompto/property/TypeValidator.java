@@ -30,10 +30,14 @@ public class TypeValidator implements IPropertyValidator {
 	}
 
 	@Override
-	public void validate(Context context, JsxProperty property) {
+	public boolean validate(Context context, JsxProperty property) {
 		IType actual = type instanceof MethodType ? property.checkProto(context, (MethodType)type) : property.check(context);
-		if(!type.isAssignableFrom(context, actual))
+		if(type.isAssignableFrom(context, actual))
+			return true;
+		else {
 			context.getProblemListener().reportIllegalAssignment(property, type, actual);
+			return false;
+		}
 	}
 	
 	@Override

@@ -26,11 +26,14 @@ public class TypeSetValidator implements IPropertyValidator {
 	}
 
 	@Override
-	public void validate(Context context, JsxProperty property) {
+	public boolean validate(Context context, JsxProperty property) {
 		IType actual = property.check(context);
-		if(!types.stream()
-				.anyMatch(t->t.isAssignableFrom(context, actual)))
+		if(types.stream().anyMatch(t->t.isAssignableFrom(context, actual)))
+			return true;
+		else {
 			context.getProblemListener().reportIllegalAssignment(property, types, actual);
+			return false;
+		}
 	}
 	
 	@Override

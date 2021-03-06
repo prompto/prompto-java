@@ -18,8 +18,9 @@ public class AlwaysValidator implements IPropertyValidator {
 	}
 	
 	@Override
-	public void validate(Context context, JsxProperty property) {
+	public boolean validate(Context context, JsxProperty property) {
 		// accept any property
+		return true;
 	}
 	
 	@Override

@@ -1,5 +1,7 @@
 package prompto.processor;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -10,6 +12,7 @@ import prompto.expression.MethodExpression;
 import prompto.expression.TypeExpression;
 import prompto.grammar.Annotation;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoSet;
 import prompto.literal.BooleanLiteral;
 import prompto.literal.DocEntry;
 import prompto.literal.DocEntryList;
@@ -17,22 +20,27 @@ import prompto.literal.DocumentLiteral;
 import prompto.literal.SetLiteral;
 import prompto.literal.TextLiteral;
 import prompto.literal.TypeLiteral;
+import prompto.property.IPropertyValidator;
 import prompto.property.Property;
 import prompto.property.PropertyMap;
 import prompto.property.TypeSetValidator;
 import prompto.property.TypeValidator;
+import prompto.property.ValidatorSetValidator;
 import prompto.property.ValueSetValidator;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
 import prompto.type.AnyType;
 import prompto.type.IType;
+import prompto.type.IntegerType;
 import prompto.type.PropertiesType;
 import prompto.type.TextType;
 import prompto.type.TypeType;
 import prompto.value.BooleanValue;
 import prompto.value.IValue;
+import prompto.value.IntegerValue;
 import prompto.value.NullValue;
 import prompto.value.SetValue;
+import prompto.value.TextValue;
 import prompto.value.TypeValue;
 
 public class WidgetPropertiesProcessor extends AnnotationProcessor {
@@ -112,18 +120,18 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 			value = new TypeLiteral(type);
 		}
 		if(value instanceof TypeLiteral)
-			return loadProperty(annotation, context, entry, prop, (TypeLiteral)value);
+			return loadPropertyFromTypeLiteral(annotation, context, entry, prop, (TypeLiteral)value);
 		else if(value instanceof SetLiteral)
-			return loadProperty(annotation, context, entry, prop, (SetLiteral)value);
+			return loadPropertyFromSetLiteral(annotation, context, entry, prop, (SetLiteral)value);
 		else if(value instanceof DocumentLiteral)
-			return loadProperty(annotation, context, entry, prop, (DocumentLiteral)value);
+			return loadPropertyFromDocumentLiteral(annotation, context, entry, prop, (DocumentLiteral)value);
 		else {
 			context.getProblemListener().reportIllegalAnnotation(annotation, "WidgetProperties expects a Document of types as unique parameter");
 			return null;
 		}
 	}
 			
-	private Property loadProperty(Annotation annotation, Context context, DocEntry entry, Property prop, DocumentLiteral doc) {
+	private Property loadPropertyFromDocumentLiteral(Annotation annotation, Context context, DocEntry entry, Property prop, DocumentLiteral doc) {
 		for(DocEntry child : doc.getEntries()) {
 			String name = child.getKey().toString();
 			Object value = child.getValue();
@@ -144,11 +152,11 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 				return null;
 			case "type":
 				if(value instanceof TypeLiteral) {
-					IType type = ((TypeLiteral)value).getType().resolve(context, t->context.getProblemListener().reportIllegalAnnotation(annotation, "Unkown type: " + t.getTypeName()));
-					if(type==null)
-						return null;
-					prop.setValidator(new TypeValidator(type));
-					break;
+					IPropertyValidator validator = newTypeValidator(annotation, context, entry, prop, ((TypeLiteral)value).getType());
+					if(validator != null) {
+						prop.setValidator(validator);
+						break;
+					}
 				} else if(value instanceof DocumentLiteral) {
 					PropertyMap embedded = loadProperties(annotation, context, ((DocumentLiteral)value).getEntries());
 					if(embedded!=null) {
@@ -156,23 +164,17 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 						break;
 					}
 				}
-				context.getProblemListener().reportIllegalAnnotation(child.getKey(), "Expected a Type value for 'type'.");
+				context.getProblemListener().reportIllegalAnnotation(child.getKey(), "Expected a Type for 'type'.");
 				return null;
 			case "types":
 				if(value instanceof SetLiteral) {
 					SetValue values = ((SetLiteral)value).interpret(context);
 					if(values.getItemType() instanceof TypeType) {
-						Set<IType> types = values.getItems().stream()
-								.filter(v->v!=NullValue.instance())
-								.map(v->(TypeValue)v)
-								.map(TypeValue::getValue)
-								.map(type->type.resolve(context,t->context.getProblemListener().reportIllegalAnnotation(annotation, "Unkown type: " + t.getTypeName())))
-								.collect(Collectors.toSet());
-						if(types.contains(null))
-							return null; // TODO something went wrong
-						prop.setValidator(new TypeSetValidator(types));
-						prop.setRequired(types.size()==values.getLength()); // no null filtered out
-						break;
+						IPropertyValidator validator = newTypeSetValidator(annotation, context, values);
+						if(validator != null) {
+							prop.setValidator(validator);
+							break;
+						}
 					}
 				}
 				context.getProblemListener().reportIllegalAnnotation(child.getKey(), "Expected a Set of types for 'types'.");
@@ -180,16 +182,15 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 			case "values":
 				if(value instanceof SetLiteral) {
 					SetValue values = ((SetLiteral)value).interpret(context);
-					Set<String> texts = values.getItems().stream()
-							.filter(v->v!=NullValue.instance())
-							.map(IValue::getStorableData)
-							.map(String::valueOf)
-							.collect(Collectors.toSet());
-					prop.setValidator(new ValueSetValidator(texts));
-					prop.setRequired(texts.size()==values.getLength()); // no null filtered out
-					break;
-				} 
-				context.getProblemListener().reportIllegalAnnotation(child.getKey(), "Expected a Set value for 'values'.");
+					if(values.getItemType() instanceof TextType || values.getItemType() instanceof IntegerType) {
+							IPropertyValidator validator = newValueSetValidator(annotation, context, values);
+						if(validator != null) {
+							prop.setValidator(validator);
+							break;
+						} 
+					}
+				}
+				context.getProblemListener().reportIllegalAnnotation(child.getKey(), "Expected a Set of values for 'values'.");
 				return null;
 			default:
 				context.getProblemListener().reportIllegalAnnotation(child.getKey(), "Unknown property attribute: " + name);
@@ -199,42 +200,93 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 		return prop;
 	}
 
-	private Property loadProperty(Annotation annotation, Context context, DocEntry entry, Property prop, SetLiteral literal) {
-		SetValue values = literal.interpret(context);
-		IType itemType = values.getItemType();
-		if(itemType instanceof TypeType) {
-			Set<IType> types = values.getItems().stream()
-				.filter(v->v!=NullValue.instance())
-				.map(v->(TypeValue)v)
-				.map(TypeValue::getValue)
-				.map(type->type.resolve(context,t->context.getProblemListener().reportIllegalAnnotation(annotation, "Unkown type: " + t.getTypeName())))
-				.collect(Collectors.toSet());
-			if(types.contains(null))
-				return null;
-			prop.setValidator(new TypeSetValidator(types));
-			prop.setRequired(types.size()==values.getLength()); // no null filtered out
+	private Property loadPropertyFromSetLiteral(Annotation annotation, Context context, DocEntry entry, Property prop, SetLiteral literal) {
+		SetValue value = literal.interpret(context);
+		IPropertyValidator validator = newValidatorFromSetValue(annotation, context, value) ;
+		if(validator != null) {
+			prop.setValidator(validator);
 			return prop;
-		} else if(itemType==AnyType.instance() || itemType==TextType.instance()) {
-			Set<String> texts = values.getItems().stream()
-					.filter(v->v!=NullValue.instance())
-					.map(Object::toString)
-					.collect(Collectors.toSet());
-				prop.setValidator(new ValueSetValidator(texts));
-				prop.setRequired(texts.size()==values.getLength()); // no null filtered out
-				return prop;
 		} else {
-			context.getProblemListener().reportIllegalAnnotation(entry.getKey(), "Expected a set of Types.");
+			context.getProblemListener().reportIllegalAnnotation(entry.getKey(), "Expected a Set of types or values.");
 			return null;
 		}
 	}
+	
 
-	private Property loadProperty(Annotation annotation, Context context, DocEntry entry, Property prop, TypeLiteral value) {
-		IType type = value.getType().resolve(context, t->context.getProblemListener().reportIllegalAnnotation(annotation, "Unkown type: " + t.getTypeName()));
-		if(type==null)
+	private Property loadPropertyFromTypeLiteral(Annotation annotation, Context context, DocEntry entry, Property prop, TypeLiteral value) {
+		IPropertyValidator validator = newTypeValidator(annotation, context, entry, prop, value.getType());
+		if(validator==null)
 			return null;
-		prop.setValidator(new TypeValidator(type));
+		prop.setValidator(validator);
 		return prop;
 	}
 
+	private IPropertyValidator newTypeValidator(Annotation annotation, Context context, DocEntry entry, Property prop, IType type) {
+		IType actual = type.resolve(context, t->context.getProblemListener().reportIllegalAnnotation(annotation, "Unkown type: " + t.getTypeName()));
+		return actual==null ? null : new TypeValidator(actual);
+	}
+
+	private IPropertyValidator newValidatorFromSetValue(Annotation annotation, Context context, SetValue value) {
+		IType itemType = value.getItemType();
+		if(itemType instanceof TypeType)
+			return newTypeSetValidator(annotation, context, value);
+		else if(itemType == TextType.instance())
+			return newValueSetValidator(annotation, context, value);
+		else if(itemType == AnyType.instance())
+			return newValidatorSetValidator(annotation, context, value);
+		else 
+			return null;
+	}
+
+	private IPropertyValidator newValidatorSetValidator(Annotation annotation, Context context, SetValue value) {
+        List<IPropertyValidator> validators = value.getItems().stream()
+                .filter(l -> l != NullValue.instance())
+                .map(l -> newValidatorFromValue(annotation, context, l))
+                .map(v -> v.optional())
+                .collect(Collectors.toList());
+        IPropertyValidator result = new ValidatorSetValidator(validators);
+        if(validators.size() == value.getLength()) // no null filtered out
+        	result = result.required();
+        return result;
+	}
+	
+	private IPropertyValidator newValidatorFromValue(Annotation annotation, Context context, IValue value) {
+       if(value instanceof SetValue)
+            return newValidatorFromSetValue(annotation, context, (SetValue)value);
+        else if(value instanceof TextValue || value instanceof IntegerValue) {
+            value = new SetValue(value.getType(), new PromptoSet<IValue>(Collections.singleton(value)));
+            return newValueSetValidator(annotation, context, (SetValue)value);
+        } else if(value instanceof TypeValue)
+           return new TypeValidator(((TypeValue)value).getValue());
+        else
+            return null;
+	}
+
+	private IPropertyValidator newValueSetValidator(Annotation annotation, Context context, SetValue value) {
+		Set<String> texts = value.getItems().stream()
+				.filter(v->v!=NullValue.instance())
+				.map(Object::toString)
+				.collect(Collectors.toSet());
+		IPropertyValidator result = new ValueSetValidator(texts);
+		if(texts.size()==value.getLength()) // no null filtered out
+			result = result.required();
+		return result;
+	}
+
+	private IPropertyValidator newTypeSetValidator(Annotation annotation, Context context, SetValue value) {
+		Set<IType> types = value.getItems().stream()
+			.filter(v->v!=NullValue.instance())
+			.map(v->(TypeValue)v)
+			.map(TypeValue::getValue)
+			.map(type->type.resolve(context,t->context.getProblemListener().reportIllegalAnnotation(annotation, "Unkown type: " + t.getTypeName())))
+			.collect(Collectors.toSet());
+		if(types.contains(null))
+			return null;
+		IPropertyValidator result = new TypeSetValidator(types);
+		if(types.size()==value.getLength()) // no null filtered out
+			result = result.required();
+		return result;
+	} 
+	
 
 }

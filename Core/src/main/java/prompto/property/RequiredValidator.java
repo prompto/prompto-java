@@ -33,8 +33,8 @@ public class RequiredValidator implements IPropertyValidator {
 	}
 	
 	@Override
-	public void validate(Context context, JsxProperty property) {
-		validator.validate(context, property);
+	public boolean validate(Context context, JsxProperty property) {
+		return validator.validate(context, property);
 	}
 	
 	@Override

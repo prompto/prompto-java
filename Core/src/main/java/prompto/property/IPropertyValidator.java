@@ -12,7 +12,7 @@ import prompto.type.MethodType;
 public interface IPropertyValidator {
 
 	IType getType(Context context);
-	void validate(Context context, JsxProperty property);
+	boolean validate(Context context, JsxProperty property);
 	String getKeyName();
 	String toLiteral();
 	default boolean isRequired() {

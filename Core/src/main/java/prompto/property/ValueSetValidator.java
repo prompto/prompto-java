@@ -23,17 +23,21 @@ public class ValueSetValidator implements IPropertyValidator {
 	}
 	
 	@Override
-	public void validate(Context context, JsxProperty property) {
+	public boolean validate(Context context, JsxProperty property) {
 		IJsxValue value = property.getValue();
-		if(value.isLiteral()) {
+		if(value!=null && value.isLiteral()) {
 			String text = value.toString();
 			if(text.startsWith("\"") && text.endsWith("\""))
 				text = text.substring(1, text.length() - 1);
-			if(!values.contains(text)) {
+			if(values.contains(text))
+				return true;
+			else {
 				String message = "Illegal value " + value.toString() + ", expected one of " + toLiteral(); 
 				context.getProblemListener().reportIllegalValue(property, message);
+				return false;
 			}
-		}
+		} else
+			return true; // can only check literals
 	}
 	
 	@Override
