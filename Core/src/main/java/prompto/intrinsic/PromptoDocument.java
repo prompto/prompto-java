@@ -27,7 +27,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @SuppressWarnings("serial")
 public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable {
 
-	public PromptoDocument<K, V> add(PromptoDocument<K, V> toAdd) {
+	public PromptoDocument() {
+		
+	}
+
+	public PromptoDocument(Map<K, V> from) {
+		super(from);
+	}
+	
+	public PromptoDocument<K, V> add(Map<K, V> toAdd) {
 		PromptoDocument<K, V> doc = new PromptoDocument<>();
 		doc.putAll(this);
 		doc.putAll(toAdd);
