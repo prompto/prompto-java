@@ -17,6 +17,7 @@ import prompto.compiler.Opcode;
 import prompto.compiler.StackState;
 import prompto.compiler.StringConstant;
 import prompto.error.ExecutionError;
+import prompto.error.NativeError;
 import prompto.error.PromptoError;
 import prompto.expression.SymbolExpression;
 import prompto.grammar.Identifier;
@@ -174,10 +175,19 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		if(expectedError!=null && expectedError.equals(actual))
 			printSuccess(context);
 		else {
-			String actualName = ((IInstance)actual).getMember(context, new Identifier("name"), false).toString();
+			String actualName = getErrorName(context, e, actual);
 			String expectedName = error==null ? "SUCCESS" : error.getName().toString();
 			printMissingError(context, expectedName, actualName);
 		}
+	}
+
+	private String getErrorName(Context context, ExecutionError e, IValue actual) {
+		if(actual instanceof IInstance)
+			return ((IInstance)actual).getMember(context, new Identifier("name"), false).toString();
+		else if(e instanceof NativeError)
+			return "NATIVE_ERROR";
+		else
+			return actual.toString();
 	}
 
 	@Override
