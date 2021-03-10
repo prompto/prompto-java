@@ -14,7 +14,6 @@ import prompto.compiler.comparator.ArrowExpressionComparatorCompiler;
 import prompto.compiler.comparator.ComparatorCompiler;
 import prompto.expression.ArrowExpression;
 import prompto.expression.IExpression;
-import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoList;
 import prompto.runtime.Context;
 import prompto.store.Family;
@@ -68,14 +67,6 @@ public abstract class NativeType extends BaseType {
 	
 	public Comparator<? extends IValue> getNativeComparator(boolean descending) {
 		throw new RuntimeException("Missing native comparator for " + this.getTypeName() + "!");
-	}
-	
-	@Override
-	public IType checkMember(Context context, Identifier name) {
-		if("text".equals(name.toString()))
-			return TextType.instance();
-		else
-			return super.checkMember(context, name);
 	}
 	
 	@Override

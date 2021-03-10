@@ -175,7 +175,10 @@ public class DictType extends ContainerType {
 		case "values":
 	        transpiler.require("List");
 	        break;
-       default: 
+		case "json":
+			transpiler.require("Document");
+	        break;
+		default: 
 	    	super.declareMember(transpiler, name);
 	    }
 	}
@@ -189,6 +192,9 @@ public class DictType extends ContainerType {
 		case "keys":
 		case "values":
 			transpiler.append(name);
+			break;
+		case "json":
+			transpiler.append("toJson()");
 			break;
 		default: 
 			super.transpileMember(transpiler, name);

@@ -154,32 +154,40 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	public IValue getMember(Context context, Identifier attrName, boolean autoCreate) throws PromptoError {
 		if("category".equals(attrName.toString()))
 			return getCategory(context);
-		Map<Identifier,Context> activeGetters = this.activeGetters.get();
-		Context stacked = activeGetters.get(attrName);
+		else if("json".equals(attrName.toString()))
+			return super.getMember(context, attrName, autoCreate);
+		else
+			return getAttributeMember(context, attrName, autoCreate);
+	}
+	
+	
+	protected IValue getAttributeMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
+			Map<Identifier,Context> activeGetters = this.activeGetters.get();
+		Context stacked = activeGetters.get(id);
 		boolean first = stacked==null;
 		if(first)
-			activeGetters.put(attrName, context);
+			activeGetters.put(id, context);
 		try {
-			return getMemberAllowGetter(context, attrName, first);
+			return getMemberAllowGetter(context, id, first);
 		} finally {
 			if(first)
-				activeGetters.remove(attrName);
+				activeGetters.remove(id);
 		}
 	}
 	
-	private IValue getCategory(Context context) {
+	protected IValue getCategory(Context context) {
 		NativeCategoryDeclaration decl = context.getRegisteredDeclaration(NativeCategoryDeclaration.class, new Identifier("Category"));
 		return new NativeInstance(decl, declaration);
 	}
 
-	protected IValue getMemberAllowGetter(Context context, Identifier attrName, boolean allowGetter) throws PromptoError {
-		GetterMethodDeclaration getter = allowGetter ? declaration.findGetter(context, attrName) : null;
+	protected IValue getMemberAllowGetter(Context context, Identifier id, boolean allowGetter) throws PromptoError {
+		GetterMethodDeclaration getter = allowGetter ? declaration.findGetter(context, id) : null;
 		if(getter!=null) {
 			context = context.newInstanceContext(this, false).newChildContext(); // mimic method call
 			return getter.interpret(context);
-		} else if(getDeclaration().hasAttribute(context, attrName) || IStore.dbIdName.equals(attrName.toString()))
-			return values.getOrDefault(attrName, NullValue.instance());
-		else if("text".equals(attrName.toString()))
+		} else if(getDeclaration().hasAttribute(context, id) || IStore.dbIdName.equals(id.toString()))
+			return values.getOrDefault(id, NullValue.instance());
+		else if("text".equals(id.toString()))
 			return new TextValue(this.toString());
 		else
 			return NullValue.instance();
@@ -195,19 +203,19 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	};
 	
 	@Override
-	public void setMember(Context context, Identifier attrName, IValue value) throws PromptoError {
+	public void setMember(Context context, Identifier id, IValue value) throws PromptoError {
 		if(!mutable)
 			throw new NotMutableError();
 		Map<Identifier,Context> activeSetters = this.activeSetters.get();
-		Context stacked = activeSetters.get(attrName);
+		Context stacked = activeSetters.get(id);
 		boolean first = stacked==null;
 		try {
 			if(first)
-				activeSetters.put(attrName, context);
-			setMember(context, attrName, value, first);
+				activeSetters.put(id, context);
+			setMember(context, id, value, first);
 		} finally {
 			if(first)
-				activeSetters.remove(attrName);
+				activeSetters.remove(id);
 		}
 	}
 	

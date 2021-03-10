@@ -1,5 +1,5 @@
 package prompto.intrinsic;
 
-public interface IDocumentable {
+public interface IDocumentProducer {
 	Object toDocument();
 }

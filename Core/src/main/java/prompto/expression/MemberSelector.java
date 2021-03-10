@@ -27,6 +27,7 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoAny;
+import prompto.intrinsic.PromptoConverter;
 import prompto.intrinsic.PromptoDict;
 import prompto.intrinsic.PromptoDocument;
 import prompto.intrinsic.PromptoRoot;
@@ -207,6 +208,9 @@ public class MemberSelector extends SelectorExpression {
 			return compileCharacterCodePoint(method, flags);
 		else if (shouldCompileStringLength(info))
 			return compileStringLength(method, flags);
+		// special case for o.json which translates to toJson
+		else if(shouldCompileToConvertToJson(context, parent))
+			return compileConvertToJson(method, flags);
 		else if(shouldCompileGetMember(info))
 			return compileGetMember(context, method, flags, info, resultType);
 		else if(shouldCompileToGetOrCreate(info.getType()))
@@ -234,6 +238,10 @@ public class MemberSelector extends SelectorExpression {
 		}
 	}
 		
+	private boolean shouldCompileToConvertToJson(Context context, IExpression parent) {
+		return "json".equals(getName());
+	}
+
 	private boolean shouldCompileGetMember(ResultInfo info) {
 		if("text".equals(getName()))
 			return PromptoAny.class==info.getType() || Object.class==info.getType();
@@ -377,6 +385,13 @@ public class MemberSelector extends SelectorExpression {
 	private ResultInfo compileObjectToString(MethodInfo method, Flags flags) {
 		IOperand oper = new MethodConstant(Object.class, "toString", String.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+		return new ResultInfo(String.class);
+	}
+
+
+	private ResultInfo compileConvertToJson(MethodInfo method, Flags flags) {
+		IOperand oper = new MethodConstant(PromptoConverter.class, "toJson", Object.class, String.class);
+		method.addInstruction(Opcode.INVOKESTATIC, oper);
 		return new ResultInfo(String.class);
 	}
 

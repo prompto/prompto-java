@@ -170,8 +170,14 @@ public abstract class BaseType extends CodeSection implements IType {
 
 	@Override
 	public IType checkMember(Context context, Identifier name) {
-		context.getProblemListener().reportUnknownMember(name, name.toString());
-		return VoidType.instance();
+		if("text".equals(name.toString()))
+			return TextType.instance();
+		else if("json".equals(name.toString()))
+			return TextType.instance();
+		else {
+			context.getProblemListener().reportUnknownMember(name, name.toString());
+			return VoidType.instance();
+		}
 	}
 
 	@Override

@@ -6,7 +6,7 @@ import org.joda.time.Period;
 import prompto.value.IMultiplyable;
 
 /* Period is final so can't just extend it */
-public class PromptoPeriod implements IMultiplyable, IDocumentable {
+public class PromptoPeriod implements IMultiplyable, IDocumentProducer {
 
 	public static PromptoPeriod parse(String text) {
 		return new PromptoPeriod(Period.parse(text));

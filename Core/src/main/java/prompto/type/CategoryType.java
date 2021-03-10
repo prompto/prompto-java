@@ -352,6 +352,8 @@ public class CategoryType extends BaseType {
         	return new MethodType(method);
         } else if("text".equals(id.toString()))
         	return TextType.instance();
+        else if("json".equals(id.toString()))
+        	return TextType.instance();
         else {
         	context.getProblemListener().reportUnknownAttribute(section, id.toString(), " in category " + decl.getName());
         	return VoidType.instance();
@@ -857,16 +859,23 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
-	public void declareMember(Transpiler transpiler, Identifier name) {
+	public void declareMember(Transpiler transpiler, Identifier id) {
+		if("json".equals(id.toString())) {
+			transpiler.register("Document");
+			transpiler.register("List");
+			transpiler.require("Utils"); // equals etc...
+		}
 		// TODO visit attributes
 	}
 	
 	@Override
-	public void transpileMember(Transpiler transpiler, Identifier name) {
-	    if ("text".equals(name.toString()))
+	public void transpileMember(Transpiler transpiler, Identifier id) {
+	    if ("text".equals(id.toString()))
 	        transpiler.append("getText()");
+	    else if ("json".equals(id.toString()))
+	        transpiler.append("toDocument().toJson()");
 	    else
-	        transpiler.append(name);
+	        transpiler.append(id);
 	}
 	
 	@Override

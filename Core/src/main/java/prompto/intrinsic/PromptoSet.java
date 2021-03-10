@@ -7,8 +7,12 @@ import java.util.TreeSet;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+
 @SuppressWarnings("serial")
-public class PromptoSet<V> extends HashSet<V> implements Filterable<PromptoSet<V>, V> {
+public class PromptoSet<V> extends HashSet<V> implements Filterable<PromptoSet<V>, V>, IJsonNodeProducer {
 
 	public PromptoSet() {
 	}
@@ -93,6 +97,13 @@ public class PromptoSet<V> extends HashSet<V> implements Filterable<PromptoSet<V
 	
 	public PromptoList<V> toList() {
 		return new PromptoList<V>(this, false);
+	}
+
+	@Override
+	public JsonNode toJsonNode() {
+		ArrayNode node = JsonNodeFactory.instance.arrayNode();
+		this.forEach(item -> node.add(PromptoConverter.toJsonNode(item)));
+		return node;
 	}
 
 }

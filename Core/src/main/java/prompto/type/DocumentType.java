@@ -248,6 +248,9 @@ public class DocumentType extends NativeType {
 		case "text":
 			transpiler.append("getText()");
 			break;
+		case "json":
+			transpiler.append("toJson()");
+			break;
 	    default:
 	        transpiler.append("$safe_getMember('").append(id).append("', false)");
 	    }

@@ -5,17 +5,17 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import prompto.error.NotStorableError;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.type.IType;
-
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /** IValue is a wrapper around intrinsic or primitive values 
  * which helps expose an API for the interpreter 
@@ -90,7 +90,10 @@ public interface IValue {
 	default IValue getMember(Context context, Identifier id, boolean autoCreate) throws PromptoError {
 		if("text".equals(id.toString()))
 			return new TextValue(this.toString());
-		else
+		else if("json".equals(id.toString())) {
+			JsonNode node = this.valueToJsonNode(context, value -> value.valueToJsonNode(context, null));
+			return new TextValue(node.toString());
+		} else
 			throw new UnsupportedOperationException("No member support for " + this.getClass().getSimpleName());
 	}
 

@@ -164,6 +164,8 @@ public interface IType extends ICodeSection {
 	default void transpileMember(Transpiler transpiler, Identifier name) {
 	    if("text".equals(name.toString()))
           transpiler.append("getText()");
+	    else if("json".equals(name.toString()))
+	          transpiler.append("toJson()");
 	    else
 	        throw new UnsupportedOperationException("transpileMember " + name + " for " + this.getClass().getName());
 	}

@@ -6,8 +6,10 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 @SuppressWarnings("serial")
-public class PromptoDict<K,V> extends HashMap<K,V> implements Iterable<PromptoDict.Entry<K,V>> {
+public class PromptoDict<K,V> extends HashMap<K,V> implements Iterable<PromptoDict.Entry<K,V>>, IJsonNodeProducer {
 
 	boolean mutable;
 
@@ -142,4 +144,10 @@ public class PromptoDict<K,V> extends HashMap<K,V> implements Iterable<PromptoDi
 			.collect(Collectors.toSet());
 		keys.forEach(this::remove);
 	}
+	
+	@Override
+	public JsonNode toJsonNode() {
+		return new PromptoDocument<K,V>(this).toJsonNode();
+	}
+
 }

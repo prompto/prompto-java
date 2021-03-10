@@ -8,10 +8,14 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+
 import prompto.value.IMultiplyable;
 
 @SuppressWarnings("serial")
-public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoList<V>, V>, IMultiplyable, IDocumentable {
+public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoList<V>, V>, IMultiplyable, IDocumentProducer, IJsonNodeProducer {
 
 	boolean mutable;
 	
@@ -129,8 +133,8 @@ public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoLi
 	public PromptoList<? extends V> toDocument() {
 		List<? extends V> items = (List<? extends V>)this.stream()
 				.map(item -> {
-					if(item instanceof IDocumentable)
-						return ((IDocumentable)item).toDocument();
+					if(item instanceof IDocumentProducer)
+						return ((IDocumentProducer)item).toDocument();
 					else
 						return item;
 				})
@@ -140,6 +144,13 @@ public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoLi
 	
 	public PromptoSet<V> toSet() {
 		return new PromptoSet<>(this);
+	}
+
+	@Override
+	public JsonNode toJsonNode() {
+		ArrayNode node = JsonNodeFactory.instance.arrayNode();
+		this.forEach(item -> node.add(PromptoConverter.toJsonNode(item)));
+		return node;
 	}
 
 }

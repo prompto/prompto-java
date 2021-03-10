@@ -76,6 +76,8 @@ public class DocumentValue extends BaseValue {
 			return getKeysValue();
 		case "values":
 			return new ListValue(AnyType.instance(), this.values.values());
+		case "json":
+			return super.getMember(context, id, autoCreate);
 		default:
 	    	return getMember(id, autoCreate);
 		}

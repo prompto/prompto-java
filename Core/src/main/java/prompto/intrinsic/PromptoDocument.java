@@ -23,9 +23,11 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @SuppressWarnings("serial")
-public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable {
+public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable, IJsonNodeProducer {
 
 	public PromptoDocument() {
 		
@@ -248,6 +250,15 @@ public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable 
 		} catch(Throwable t) {
 			return "<error:" + t.getMessage() + ">";
 		}
+	}
+	
+	@Override
+	public JsonNode toJsonNode() {
+		ObjectNode object = JsonNodeFactory.instance.objectNode();
+		entrySet().forEach( e -> {
+			object.set(e.getKey().toString(), PromptoConverter.toJsonNode(e.getValue()));
+		});
+		return object;
 	}
 
 }

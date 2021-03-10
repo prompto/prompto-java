@@ -12,6 +12,8 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.PromptoClassLoader;
 import prompto.declaration.CategoryDeclaration;
@@ -19,13 +21,13 @@ import prompto.error.NotStorableError;
 import prompto.grammar.Identifier;
 import prompto.runtime.ApplicationContext;
 import prompto.runtime.Context;
-import prompto.store.IStorable;
 import prompto.store.DataStore;
+import prompto.store.IStorable;
 import prompto.store.IStored;
 import prompto.store.IStoredIterable;
 import prompto.store.InvalidValueError;
 
-public abstract class PromptoRoot extends PromptoStorableBase implements IMutable, IDocumentable {
+public abstract class PromptoRoot extends PromptoStorableBase implements IMutable, IDocumentProducer, IJsonNodeProducer {
 
 	public static PromptoRoot newInstance(IStored stored) {
 		if(stored==null) // happens on an unsuccessful fetchOne
@@ -276,8 +278,8 @@ public abstract class PromptoRoot extends PromptoStorableBase implements IMutabl
 		List<Field> fields = collectFields();
 		fields.forEach(field-> {
 			Object value = getFieldValue(this, field);
-			if(value instanceof IDocumentable)
-				value = ((IDocumentable)value).toDocument();
+			if(value instanceof IDocumentProducer)
+				value = ((IDocumentProducer)value).toDocument();
 			doc.put(field.getName(), value);
 		});
 		return doc;
@@ -295,5 +297,11 @@ public abstract class PromptoRoot extends PromptoStorableBase implements IMutabl
 		}
 		return true;
 	}
+	
+	@Override
+	public JsonNode toJsonNode() {
+		return toDocument().toJsonNode();
+	}
+
 	
 }

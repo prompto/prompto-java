@@ -6,6 +6,7 @@ import java.util.stream.StreamSupport;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public abstract class PromptoConverter {
@@ -44,5 +45,27 @@ public abstract class PromptoConverter {
 				.map( PromptoConverter::nodeToPrompto)
 				.collect(Collectors.toList());
 		return new PromptoList<Object>(list, false);
+	}
+	
+	public static String toJson(Object value) {
+		JsonNode node = toJsonNode(value);
+		return node.toString();
+	}
+
+	public static JsonNode toJsonNode(Object value) {
+		if(value==null)
+			return JsonNodeFactory.instance.nullNode();
+		else if(value instanceof Boolean)
+			return JsonNodeFactory.instance.booleanNode((Boolean)value);
+		else if(value instanceof Long)
+			return JsonNodeFactory.instance.numberNode((Long)value);
+		else if(value instanceof Double)
+			return JsonNodeFactory.instance.numberNode((Double)value);
+		else if(value instanceof String)
+			return JsonNodeFactory.instance.textNode((String)value);
+		else if(value instanceof IJsonNodeProducer)
+			return ((IJsonNodeProducer)value).toJsonNode();
+		else
+			return JsonNodeFactory.instance.textNode(value.toString());
 	}
 }

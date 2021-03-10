@@ -107,6 +107,8 @@ public class DictionaryValue extends BaseValue implements IContainer<IValue> {
 			return new SetValue(TextType.instance(), (PromptoSet<IValue>)(Object)new PromptoSet<TextValue>(this.dict.keySet()));
 		case "values":
 			return new ListValue(((ContainerType) this.type).getItemType(), this.dict.values());
+		case "json":
+			// fallthrough
 		default:
 			return super.getMember(context, id, autoCreate);
 		}
