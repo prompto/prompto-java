@@ -90,6 +90,7 @@ public class Email {
 				props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory"); 
 				
 			}
+			props.put("mail.mime.charset", "utf-8");
 			Authenticator auth = null;
 			if(useTLS) {
 				props.put("mail.smtp.user", login);
