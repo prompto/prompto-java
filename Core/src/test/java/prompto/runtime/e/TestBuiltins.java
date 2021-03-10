@@ -20,6 +20,21 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedBooleanJson() throws Exception {
+		checkInterpretedOutput("builtins/booleanJson.pec");
+	}
+
+	@Test
+	public void testCompiledBooleanJson() throws Exception {
+		checkCompiledOutput("builtins/booleanJson.pec");
+	}
+
+	@Test
+	public void testTranspiledBooleanJson() throws Exception {
+		checkTranspiledOutput("builtins/booleanJson.pec");
+	}
+
+	@Test
 	public void testInterpretedBooleanText() throws Exception {
 		checkInterpretedOutput("builtins/booleanText.pec");
 	}
@@ -50,6 +65,21 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedCategoryJson() throws Exception {
+		checkInterpretedOutput("builtins/categoryJson.pec");
+	}
+
+	@Test
+	public void testCompiledCategoryJson() throws Exception {
+		checkCompiledOutput("builtins/categoryJson.pec");
+	}
+
+	@Test
+	public void testTranspiledCategoryJson() throws Exception {
+		checkTranspiledOutput("builtins/categoryJson.pec");
+	}
+
+	@Test
 	public void testInterpretedCategoryText() throws Exception {
 		checkInterpretedOutput("builtins/categoryText.pec");
 	}
@@ -77,6 +107,21 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testTranspiledCharCodePoint() throws Exception {
 		checkTranspiledOutput("builtins/charCodePoint.pec");
+	}
+
+	@Test
+	public void testInterpretedCharJson() throws Exception {
+		checkInterpretedOutput("builtins/charJson.pec");
+	}
+
+	@Test
+	public void testCompiledCharJson() throws Exception {
+		checkCompiledOutput("builtins/charJson.pec");
+	}
+
+	@Test
+	public void testTranspiledCharJson() throws Exception {
+		checkTranspiledOutput("builtins/charJson.pec");
 	}
 
 	@Test
@@ -137,6 +182,21 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testTranspiledDateDayOfYear() throws Exception {
 		checkTranspiledOutput("builtins/dateDayOfYear.pec");
+	}
+
+	@Test
+	public void testInterpretedDateJson() throws Exception {
+		checkInterpretedOutput("builtins/dateJson.pec");
+	}
+
+	@Test
+	public void testCompiledDateJson() throws Exception {
+		checkCompiledOutput("builtins/dateJson.pec");
+	}
+
+	@Test
+	public void testTranspiledDateJson() throws Exception {
+		checkTranspiledOutput("builtins/dateJson.pec");
 	}
 
 	@Test
@@ -227,6 +287,21 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testTranspiledDateTimeHour() throws Exception {
 		checkTranspiledOutput("builtins/dateTimeHour.pec");
+	}
+
+	@Test
+	public void testInterpretedDateTimeJson() throws Exception {
+		checkInterpretedOutput("builtins/dateTimeJson.pec");
+	}
+
+	@Test
+	public void testCompiledDateTimeJson() throws Exception {
+		checkCompiledOutput("builtins/dateTimeJson.pec");
+	}
+
+	@Test
+	public void testTranspiledDateTimeJson() throws Exception {
+		checkTranspiledOutput("builtins/dateTimeJson.pec");
 	}
 
 	@Test
@@ -350,6 +425,21 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedDecimalJson() throws Exception {
+		checkInterpretedOutput("builtins/decimalJson.pec");
+	}
+
+	@Test
+	public void testCompiledDecimalJson() throws Exception {
+		checkCompiledOutput("builtins/decimalJson.pec");
+	}
+
+	@Test
+	public void testTranspiledDecimalJson() throws Exception {
+		checkTranspiledOutput("builtins/decimalJson.pec");
+	}
+
+	@Test
 	public void testInterpretedDecimalText() throws Exception {
 		checkInterpretedOutput("builtins/decimalText.pec");
 	}
@@ -377,6 +467,21 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testTranspiledDictCount() throws Exception {
 		checkTranspiledOutput("builtins/dictCount.pec");
+	}
+
+	@Test
+	public void testInterpretedDictJson() throws Exception {
+		checkInterpretedOutput("builtins/dictJson.pec");
+	}
+
+	@Test
+	public void testCompiledDictJson() throws Exception {
+		checkCompiledOutput("builtins/dictJson.pec");
+	}
+
+	@Test
+	public void testTranspiledDictJson() throws Exception {
+		checkTranspiledOutput("builtins/dictJson.pec");
 	}
 
 	@Test
@@ -437,6 +542,21 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testTranspiledDocumentCount() throws Exception {
 		checkTranspiledOutput("builtins/documentCount.pec");
+	}
+
+	@Test
+	public void testInterpretedDocumentJson() throws Exception {
+		checkInterpretedOutput("builtins/documentJson.pec");
+	}
+
+	@Test
+	public void testCompiledDocumentJson() throws Exception {
+		checkCompiledOutput("builtins/documentJson.pec");
+	}
+
+	@Test
+	public void testTranspiledDocumentJson() throws Exception {
+		checkTranspiledOutput("builtins/documentJson.pec");
 	}
 
 	@Test
@@ -545,6 +665,21 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedIntegerJson() throws Exception {
+		checkInterpretedOutput("builtins/integerJson.pec");
+	}
+
+	@Test
+	public void testCompiledIntegerJson() throws Exception {
+		checkCompiledOutput("builtins/integerJson.pec");
+	}
+
+	@Test
+	public void testTranspiledIntegerJson() throws Exception {
+		checkTranspiledOutput("builtins/integerJson.pec");
+	}
+
+	@Test
 	public void testInterpretedIntegerText() throws Exception {
 		checkInterpretedOutput("builtins/integerText.pec");
 	}
@@ -605,6 +740,21 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedListJson() throws Exception {
+		checkInterpretedOutput("builtins/listJson.pec");
+	}
+
+	@Test
+	public void testCompiledListJson() throws Exception {
+		checkCompiledOutput("builtins/listJson.pec");
+	}
+
+	@Test
+	public void testTranspiledListJson() throws Exception {
+		checkTranspiledOutput("builtins/listJson.pec");
+	}
+
+	@Test
 	public void testInterpretedListText() throws Exception {
 		checkInterpretedOutput("builtins/listText.pec");
 	}
@@ -662,6 +812,21 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testTranspiledPeriodHours() throws Exception {
 		checkTranspiledOutput("builtins/periodHours.pec");
+	}
+
+	@Test
+	public void testInterpretedPeriodJson() throws Exception {
+		checkInterpretedOutput("builtins/periodJson.pec");
+	}
+
+	@Test
+	public void testCompiledPeriodJson() throws Exception {
+		checkCompiledOutput("builtins/periodJson.pec");
+	}
+
+	@Test
+	public void testTranspiledPeriodJson() throws Exception {
+		checkTranspiledOutput("builtins/periodJson.pec");
 	}
 
 	@Test
@@ -785,6 +950,21 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedSetJson() throws Exception {
+		checkInterpretedOutput("builtins/setJson.pec");
+	}
+
+	@Test
+	public void testCompiledSetJson() throws Exception {
+		checkCompiledOutput("builtins/setJson.pec");
+	}
+
+	@Test
+	public void testTranspiledSetJson() throws Exception {
+		checkTranspiledOutput("builtins/setJson.pec");
+	}
+
+	@Test
 	public void testInterpretedSetText() throws Exception {
 		checkInterpretedOutput("builtins/setText.pec");
 	}
@@ -857,6 +1037,21 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testTranspiledTextEndsWith() throws Exception {
 		checkTranspiledOutput("builtins/textEndsWith.pec");
+	}
+
+	@Test
+	public void testInterpretedTextJson() throws Exception {
+		checkInterpretedOutput("builtins/textJson.pec");
+	}
+
+	@Test
+	public void testCompiledTextJson() throws Exception {
+		checkCompiledOutput("builtins/textJson.pec");
+	}
+
+	@Test
+	public void testTranspiledTextJson() throws Exception {
+		checkTranspiledOutput("builtins/textJson.pec");
 	}
 
 	@Test
@@ -995,6 +1190,21 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedTimeJson() throws Exception {
+		checkInterpretedOutput("builtins/timeJson.pec");
+	}
+
+	@Test
+	public void testCompiledTimeJson() throws Exception {
+		checkCompiledOutput("builtins/timeJson.pec");
+	}
+
+	@Test
+	public void testTranspiledTimeJson() throws Exception {
+		checkTranspiledOutput("builtins/timeJson.pec");
+	}
+
+	@Test
 	public void testInterpretedTimeMilli() throws Exception {
 		checkInterpretedOutput("builtins/timeMilli.pec");
 	}
@@ -1082,6 +1292,21 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testTranspiledTupleText() throws Exception {
 		checkTranspiledOutput("builtins/tupleText.pec");
+	}
+
+	@Test
+	public void testInterpretedUuidJson() throws Exception {
+		checkInterpretedOutput("builtins/uuidJson.pec");
+	}
+
+	@Test
+	public void testCompiledUuidJson() throws Exception {
+		checkCompiledOutput("builtins/uuidJson.pec");
+	}
+
+	@Test
+	public void testTranspiledUuidJson() throws Exception {
+		checkTranspiledOutput("builtins/uuidJson.pec");
 	}
 
 	@Test

@@ -7,6 +7,11 @@ import prompto.parser.e.BaseEParserTest;
 public class TestBuiltins extends BaseEParserTest {
 
 	@Test
+	public void testBooleanJson() throws Exception {
+		compareResourceEOE("builtins/booleanJson.pec");
+	}
+
+	@Test
 	public void testBooleanText() throws Exception {
 		compareResourceEOE("builtins/booleanText.pec");
 	}
@@ -17,6 +22,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCategoryJson() throws Exception {
+		compareResourceEOE("builtins/categoryJson.pec");
+	}
+
+	@Test
 	public void testCategoryText() throws Exception {
 		compareResourceEOE("builtins/categoryText.pec");
 	}
@@ -24,6 +34,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testCharCodePoint() throws Exception {
 		compareResourceEOE("builtins/charCodePoint.pec");
+	}
+
+	@Test
+	public void testCharJson() throws Exception {
+		compareResourceEOE("builtins/charJson.pec");
 	}
 
 	@Test
@@ -44,6 +59,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testDateDayOfYear() throws Exception {
 		compareResourceEOE("builtins/dateDayOfYear.pec");
+	}
+
+	@Test
+	public void testDateJson() throws Exception {
+		compareResourceEOE("builtins/dateJson.pec");
 	}
 
 	@Test
@@ -74,6 +94,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testDateTimeHour() throws Exception {
 		compareResourceEOE("builtins/dateTimeHour.pec");
+	}
+
+	@Test
+	public void testDateTimeJson() throws Exception {
+		compareResourceEOE("builtins/dateTimeJson.pec");
 	}
 
 	@Test
@@ -127,6 +152,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testDecimalJson() throws Exception {
+		compareResourceEOE("builtins/decimalJson.pec");
+	}
+
+	@Test
 	public void testDecimalText() throws Exception {
 		compareResourceEOE("builtins/decimalText.pec");
 	}
@@ -134,6 +164,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testDictCount() throws Exception {
 		compareResourceEOE("builtins/dictCount.pec");
+	}
+
+	@Test
+	public void testDictJson() throws Exception {
+		compareResourceEOE("builtins/dictJson.pec");
 	}
 
 	@Test
@@ -154,6 +189,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testDocumentCount() throws Exception {
 		compareResourceEOE("builtins/documentCount.pec");
+	}
+
+	@Test
+	public void testDocumentJson() throws Exception {
+		compareResourceEOE("builtins/documentJson.pec");
 	}
 
 	@Test
@@ -192,6 +232,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testIntegerJson() throws Exception {
+		compareResourceEOE("builtins/integerJson.pec");
+	}
+
+	@Test
 	public void testIntegerText() throws Exception {
 		compareResourceEOE("builtins/integerText.pec");
 	}
@@ -212,6 +257,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testListJson() throws Exception {
+		compareResourceEOE("builtins/listJson.pec");
+	}
+
+	@Test
 	public void testListText() throws Exception {
 		compareResourceEOE("builtins/listText.pec");
 	}
@@ -229,6 +279,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testPeriodHours() throws Exception {
 		compareResourceEOE("builtins/periodHours.pec");
+	}
+
+	@Test
+	public void testPeriodJson() throws Exception {
+		compareResourceEOE("builtins/periodJson.pec");
 	}
 
 	@Test
@@ -272,6 +327,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testSetJson() throws Exception {
+		compareResourceEOE("builtins/setJson.pec");
+	}
+
+	@Test
 	public void testSetText() throws Exception {
 		compareResourceEOE("builtins/setText.pec");
 	}
@@ -294,6 +354,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testTextEndsWith() throws Exception {
 		compareResourceEOE("builtins/textEndsWith.pec");
+	}
+
+	@Test
+	public void testTextJson() throws Exception {
+		compareResourceEOE("builtins/textJson.pec");
 	}
 
 	@Test
@@ -342,6 +407,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testTimeJson() throws Exception {
+		compareResourceEOE("builtins/timeJson.pec");
+	}
+
+	@Test
 	public void testTimeMilli() throws Exception {
 		compareResourceEOE("builtins/timeMilli.pec");
 	}
@@ -369,6 +439,11 @@ public class TestBuiltins extends BaseEParserTest {
 	@Test
 	public void testTupleText() throws Exception {
 		compareResourceEOE("builtins/tupleText.pec");
+	}
+
+	@Test
+	public void testUuidJson() throws Exception {
+		compareResourceEOE("builtins/uuidJson.pec");
 	}
 
 	@Test
