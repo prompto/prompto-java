@@ -1,6 +1,10 @@
 package prompto.value;
 
 import java.lang.reflect.Type;
+import java.util.function.Function;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -31,6 +35,17 @@ public class PeriodValue extends BaseValue implements IMultiplyable {
 	public PromptoPeriod getStorableData() {
 		return value;
 	}
+	
+	@Override
+	public String toString() {
+		return value.toString();
+	}
+
+	@Override
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		return JsonNodeFactory.instance.textNode(this.toString());
+	}
+
 	
 	@Override
 	public IValue plus(Context context, IValue value) throws PromptoError {
@@ -93,11 +108,6 @@ public class PeriodValue extends BaseValue implements IMultiplyable {
 	@Override
 	public Object convertTo(Context context, Type type) {
 		return value;
-	}
-
-	@Override
-	public String toString() {
-		return value.toString();
 	}
 
 	@Override

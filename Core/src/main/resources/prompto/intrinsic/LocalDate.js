@@ -14,6 +14,8 @@ LocalDate.prototype.toString = function() {
     return this.toISOString().substring(0, 10);
 };
 
+LocalDate.prototype.toJson = function() { return JSON.stringify(this.toString()); };
+
 LocalDate.prototype.getText = LocalDate.prototype.toString;
 
 LocalDate.prototype.equals = function(other) {

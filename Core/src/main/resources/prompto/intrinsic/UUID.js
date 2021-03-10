@@ -82,6 +82,8 @@ UUID.prototype.toString = function() {
 
 UUID.prototype.getText = UUID.prototype.toString;
 
+UUID.prototype.toJson = function() { return JSON.stringify(this.toString()); };
+
 UUID.prototype.toDocument = UUID.prototype.toString;
 
 UUID.prototype.toBytes = function() {

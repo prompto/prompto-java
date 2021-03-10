@@ -20,6 +20,7 @@ LocalTime.prototype.toString = function() {
     return this.toISOString().substring(11, 23);
 };
 
+LocalTime.prototype.toJson = function() { return JSON.stringify(this.toString()); };
 
 LocalTime.prototype.getText = LocalTime.prototype.toString;
 

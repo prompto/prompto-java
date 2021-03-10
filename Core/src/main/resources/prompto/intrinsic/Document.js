@@ -1,6 +1,6 @@
 function Document(entries) {
     if(entries)
-        Object.getOwnPropertyNames(entries).forEach(function(name) { this[name] = entries[name]; }, this);
+        Object.getOwnPropertyNames(entries).filter(function(name) { return name !== "mutable"; }).forEach(function(name) { this[name] = entries[name]; }, this);
     return this;
 }
 
@@ -37,6 +37,7 @@ Document.prototype.toString = function() {
     return JSON.stringify(this);
 };
 
+Document.prototype.toJson = function() { return this; };
 
 Document.prototype.equals = function(other) {
     if(this===other)
@@ -109,7 +110,7 @@ Document.prototype.toDocument = function() {
 };
 
 
-Document.prototype.toJson = function(json, instanceId, fieldName, withType, binaries) {
+Document.prototype.toJsonBlob = function(json, instanceId, fieldName, withType, binaries) {
     var values = {};
     Object.getOwnPropertyNames(this).forEach(function (key) {
         var value = this[key];
@@ -117,7 +118,7 @@ Document.prototype.toJson = function(json, instanceId, fieldName, withType, bina
             values[key] = value;
         else {
             var id = this; // TODO create identifier
-            value.toJson(values, id, key, withType, binaries);
+            value.toJsonBlob(values, id, key, withType, binaries);
         }
     }, this);
     var doc = withType ? {type: "Document", value: values} : values;
@@ -127,7 +128,7 @@ Document.prototype.toJson = function(json, instanceId, fieldName, withType, bina
         json[fieldName] = doc;
 };
 
-Document.prototype.fromJson = function(node, parts) {
+Document.prototype.fromJsonBlob = function(node, parts) {
     for (var key in node) {
         this[key] = this.readJsonField(node[key], parts);
     }

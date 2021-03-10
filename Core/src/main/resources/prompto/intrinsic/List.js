@@ -205,6 +205,9 @@ List.prototype.toString = function() {
 
 List.prototype.getText = List.prototype.toString;
 
+List.prototype.toJson = function() {
+	return JSON.stringify(this.map(function(item) { return convertToJson(item); }));
+};
 
 List.prototype.toDocument = function() {
     var items = this.map(function(item) {

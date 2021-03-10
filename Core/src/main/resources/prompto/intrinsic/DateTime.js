@@ -151,6 +151,7 @@ DateTime.prototype.toString = function() {
 
 DateTime.prototype.getText = DateTime.prototype.toString;
 
+DateTime.prototype.toJson = function() { return JSON.stringify(this.toString()); };
 
 DateTime.prototype.equals = function(other) {
     return other instanceof DateTime && this.date.valueOf() == other.date.valueOf() && this.tzOffset == other.tzOffset;

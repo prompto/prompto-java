@@ -22,6 +22,11 @@ StrictSet.prototype.join = function(separator) {
 StrictSet.prototype.getText = StrictSet.prototype.toString;
 
 
+StrictSet.prototype.toJson = function() {
+	return JSON.stringify(Array.from(this.set.values()).map(function(item) { return convertToJson(item); }));
+};
+
+
 StrictSet.prototype.iterator = function() {
     var iter = this.set.values();
     var item = iter.next();

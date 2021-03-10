@@ -205,6 +205,7 @@ Period.prototype.toString = function() {
     return s;
 };
 
+Period.prototype.toJson = function() { return JSON.stringify(this.toString()); };
 
 Period.prototype.totalMilliseconds = function() {
     return this.milliseconds + (this.seconds * 1000) + (this.minutes * 60 * 1000) + (this.hours * 60 * 60 * 1000)

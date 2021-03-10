@@ -136,3 +136,8 @@ Dictionary.prototype.setItem = function (item, value) {
     else
         this[item] = value;
 };
+
+Dictionary.prototype.toJson = function() {
+	return new Document(this).toJson();
+};
+

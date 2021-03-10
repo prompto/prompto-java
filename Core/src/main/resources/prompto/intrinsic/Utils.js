@@ -78,6 +78,18 @@ function equalArrays(o1, o2) {
 	return true;
 }
 
+function convertToJson(o) {
+	var type = typeof(o);
+	switch(type) {
+	case 'boolean':
+	case 'number':
+	case 'string':
+		return o;
+	default:	
+		return o && o.toJson ? o.toJson() : JSON.stringify(o);
+	}
+};
+
 TypeError.prototype.getText = function() { return 'Null reference!'; };
 ReferenceError.prototype.getText = function() { return 'Null reference!'; };
 RangeError.prototype.getText = function() { return 'Index out of range!'; };
@@ -91,9 +103,11 @@ if(!Object.values) {
 }
 
 Boolean.prototype.getText = Boolean.prototype.toString;
+Boolean.prototype.toJson = function() { return JSON.stringify(this); };
 Boolean.prototype.equals = function(value) {
 	return this == value;
 };
+
 Number.prototype.formatInteger = function(format) {
     var value = "000000000000" + this;
     return value.substr(value.length - format.length);
@@ -113,6 +127,7 @@ Number.prototype.toDecimalString = function() {
         return s + ".0";
 };
 Number.prototype.getText = Number.prototype.toString;
+Number.prototype.toJson = function() { return JSON.stringify(this); };
 Number.prototype.equals = function(value) {
 	return this == value;
 };
@@ -159,6 +174,7 @@ String.prototype.slice1Based = function(start, last) {
     }
 };
 String.prototype.getText = String.prototype.toString;
+String.prototype.toJson = function() { return JSON.stringify(this); };
 String.prototype.indexOf1Based = function(value, fromIndex) {
 	return 1 + this.indexOf(value, fromIndex - 1);
 };
