@@ -9,36 +9,36 @@ define Email as native category with bindings:
 
 and methods:
 
-	define setFrom as method receiving email doing:
-		Java: this.setFrom(email);
-		C#: this.setFrom(email);
-		Python2: this.setFrom(email)
-		Python3: this.setFrom(email);
-		JavaScript: this.setFrom(email);
+	define setFrom as method receiving email and name = nothing doing:
+		Java: this.setFrom(email, name);
+		C#: this.setFrom(email, name);
+		Python2: this.setFrom(email, name)
+		Python3: this.setFrom(email, name);
+		JavaScript: this.setFrom(email, name);
 
 
-	define addTo as method receiving email doing:
-		Java: this.addTo(email);
-		C#: this.addTo(email);
-		Python2: this.addTo(email)
-		Python3: this.addTo(email);
-		JavaScript: this.addTo(email);
+	define addTo as method receiving email and name = nothing doing:
+		Java: this.addTo(email, name);
+		C#: this.addTo(email, name);
+		Python2: this.addTo(email, name)
+		Python3: this.addTo(email, name);
+		JavaScript: this.addTo(email, name);
 
 
-	define addCC as method receiving email doing:
-		Java: this.addCC(email);
-		C#: this.addCC(email);
-		Python2: this.addCC(email)
-		Python3: this.addCC(email);
-		JavaScript: this.addCC(email);
+	define addCC as method receiving email and name = nothing doing:
+		Java: this.addCC(email, name);
+		C#: this.addCC(email, name);
+		Python2: this.addCC(email, name)
+		Python3: this.addCC(email, name);
+		JavaScript: this.addCC(email, name);
 
 
-	define addBCC as method receiving email doing:
-		Java: this.addBCC(email);
-		C#: this.addBCC(email);
-		Python2: this.addBCC(email)
-		Python3: this.addBCC(email);
-		JavaScript: this.addBCC(email);
+	define addBCC as method receiving email and name = nothing doing:
+		Java: this.addBCC(email, name);
+		C#: this.addBCC(email, name);
+		Python2: this.addBCC(email, name)
+		Python3: this.addBCC(email, name);
+		JavaScript: this.addBCC(email, name);
 
 
 	define setSubject as method receiving Text subject doing:

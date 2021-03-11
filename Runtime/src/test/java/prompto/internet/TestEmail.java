@@ -50,6 +50,7 @@ public class TestEmail extends BaseParserTest {
 		assertEquals("Hi there général!", received.getSubject());
 		Address address = received.getFrom()[0];
 		assertEquals("xyz@abc.com", ((InternetAddress)address).getAddress());
+		assertEquals("Alain Térieur", ((InternetAddress)address).getPersonal());
 		address = received.getRecipients(RecipientType.TO)[0];
 		assertEquals("abc@xyz.com", ((InternetAddress)address).getAddress());
 		address = received.getRecipients(RecipientType.TO)[1];
@@ -114,11 +115,11 @@ public class TestEmail extends BaseParserTest {
 	private Email newEmail() throws Exception {
 		Email email = new Email();
 		email.setSubject("Hi there général!");
-		email.setFrom("xyz@abc.com");
-		email.addTo("abc@xyz.com");
-		email.addTo("def@xyz.com");
-		email.addCC("cc@xyz.com");
-		email.addBCC("bcc@xyz.com");
+		email.setFrom("xyz@abc.com", "Alain Térieur");
+		email.addTo("abc@xyz.com", null);
+		email.addTo("def@xyz.com", null);
+		email.addCC("cc@xyz.com", null);
+		email.addBCC("bcc@xyz.com", null);
 		email.addBody("Hello général", "text/plain");
 		email.addBody("<html><body>Hello général</body></html>", "text/html");
 		return email;

@@ -1,5 +1,6 @@
 package prompto.internet;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -37,22 +38,22 @@ public class Email {
 		this.subject = subject;
 	}
 
-	public void setFrom(String address) throws AddressException {
-		this.from = new InternetAddress(address);
+	public void setFrom(String address, String name) throws AddressException, UnsupportedEncodingException {
+		this.from = new InternetAddress(address, name, "utf8");
 	}
 
-	public void addTo(String address) throws AddressException {
-		to.add(new InternetAddress(address));
+	public void addTo(String address, String name) throws AddressException, UnsupportedEncodingException {
+		to.add(new InternetAddress(address, name, "utf8"));
 	}
 
 
-	public void addCC(String address) throws AddressException {
-		cc.add(new InternetAddress(address));
+	public void addCC(String address, String name) throws AddressException, UnsupportedEncodingException {
+		cc.add(new InternetAddress(address, name, "utf8"));
 	}
 
 	
-	public void addBCC(String address) throws AddressException {
-		bcc.add(new InternetAddress(address));
+	public void addBCC(String address, String name) throws AddressException, UnsupportedEncodingException {
+		bcc.add(new InternetAddress(address, name, "utf8"));
 	}
 
 	public void addBody(String body, String mimeType) throws MessagingException {
