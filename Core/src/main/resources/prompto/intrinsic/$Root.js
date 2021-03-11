@@ -63,9 +63,10 @@ $Root.prototype.getOrCreateDbId = function() {
 		return null;
 };
 
+
 $Root.prototype.getAttributeNames = function() {
     return Object.getOwnPropertyNames(this).filter(function(name) {
-        return name!=="dbId" && name!=="$mutable" && name!=="$storable" && name!=="$categories" && typeof(this[name])!='function';
+        return name!=="dbId" && !name.startsWith('$') && typeof(this[name])!='function';
     }, this);
 };
 
@@ -101,7 +102,7 @@ $Root.prototype.setMember = function(name, value, storable, mutable, isEnum) {
 };
 
 $Root.prototype.fromStored = function(stored) {
-	this.dbId = stored.dbId;
+	this.dbId = stored.getData("dbId");
 	var names = this.getAttributeNames();
 	names.forEach( function(name) {
         var value = stored.getData(name);
@@ -132,7 +133,6 @@ $Root.prototype.collectDbIds = function(idsToDelete) {
     }
 };
 
-
 $Root.prototype.toDocument = function() {
     var doc = new Document();
     var names = this.getAttributeNames();
@@ -145,4 +145,19 @@ $Root.prototype.toDocument = function() {
         }
     }, this);
     return doc;
+};
+
+$Root.prototype.toJson = function() {
+    return convertToJson(this);
+};
+
+$Root.prototype.toJsonNode = function() {
+    var value = {};
+    var names = this.getAttributeNames();
+    names.forEach(function(name) {
+        value[name] = convertToJsonNode(this[name]);
+    }, this);
+    if(this.hasOwnProperty("dbId"))
+        value.dbId = this.dbId ? "" + this.dbId : null;
+    return value;
 };

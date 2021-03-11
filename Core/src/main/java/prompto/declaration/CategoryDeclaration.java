@@ -41,6 +41,7 @@ import prompto.value.BinaryValue;
 import prompto.value.DbIdValue;
 import prompto.value.IInstance;
 import prompto.value.IValue;
+import prompto.value.NullValue;
 
 public abstract class CategoryDeclaration extends BaseDeclaration {
 	
@@ -203,16 +204,19 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		instance.setMember(context, new Identifier(IStore.dbIdName), value);
 	}
 
-	private void populateMember(Context context, IStored stored, IInstance instance, Identifier name) throws PromptoError {
-		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, name);
+	private void populateMember(Context context, IStored stored, IInstance instance, Identifier id) throws PromptoError {
+		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
 		if(!decl.isStorable(context))
 			return;
-		Object data = stored.getData(name.toString());
-		populateMember(context, data, instance, decl);
+		String name = id.toString();
+		if(stored.hasData(name)) {
+			Object data = stored.getData(name);
+			populateMember(context, data, instance, decl);
+		}
 	}
 	
 	protected void populateMember(Context context, Object data, IInstance instance, AttributeDeclaration decl) throws PromptoError {
-		IValue value = data==null ? null : decl.getType().convertJavaValueToIValue(context, data);
+		IValue value = data==null ? NullValue.instance() : decl.getType().convertJavaValueToIValue(context, data);
 		if(value!=null) {
 			if(value instanceof BinaryValue)
 				((BinaryValue)value).setSource(instance.getStorable().getOrCreateDbId(), decl.getName());

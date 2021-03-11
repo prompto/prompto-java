@@ -14,9 +14,9 @@ LocalDate.prototype.toString = function() {
     return this.toISOString().substring(0, 10);
 };
 
-LocalDate.prototype.toJson = function() { return JSON.stringify(this.toString()); };
-
 LocalDate.prototype.getText = LocalDate.prototype.toString;
+LocalDate.prototype.toDocument = LocalDate.prototype.toString;
+LocalDate.prototype.toJson = function() { return JSON.stringify(this.toString()); };
 
 LocalDate.prototype.equals = function(other) {
     return other instanceof LocalDate && this.valueOf() === other.valueOf();
@@ -41,7 +41,6 @@ LocalDate.prototype.lte = function(other) {
     return other instanceof LocalDate && this.valueOf() <= other.valueOf();
 };
 
-
 LocalDate.prototype.addPeriod = function (period) {
     var result = new LocalDate();
     var year = this.getUTCFullYear() + (period.years || 0);
@@ -53,10 +52,7 @@ LocalDate.prototype.addPeriod = function (period) {
     return result;
 };
 
-
 LocalDate.prototype.addTime = function (time) {
-    v1 = this.valueOf();
-    v2 = time.valueOf();
     var dateTime = new Date(this.valueOf() + time.valueOf());
     return new DateTime(dateTime, 0);
 };
@@ -102,5 +98,3 @@ LocalDate.prototype.getDayOfYear = function() {
     var numDays = (this - first) / (1000 * 60 * 60 * 24);
     return 1 + Math.floor(numDays);
 };
-
-LocalDate.prototype.toDocument = LocalDate.prototype.toString;

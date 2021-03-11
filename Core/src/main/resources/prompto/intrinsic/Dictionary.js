@@ -1,13 +1,17 @@
 function Dictionary(mutable, entries) {
     if(entries)
-        Object.getOwnPropertyNames(entries).forEach(function(name) { this[name] = entries[name]; }, this);
+        Object.getOwnPropertyNames(entries).forEach(function(name) { 
+            this[name] = entries[name];
+        }, this);
     this.mutable = mutable || false;
     return this;
 }
 
 Object.defineProperty(Dictionary.prototype, "$keys", {
     get : function() {
-        return Object.getOwnPropertyNames(this).filter(function(name) { return name!=="mutable"; });
+        return Object.getOwnPropertyNames(this).filter(function(name) { 
+            return name!=="mutable"; 
+        });
     }
 });
 
@@ -27,7 +31,9 @@ Object.defineProperty(Dictionary.prototype, "keys", {
 
 Object.defineProperty(Dictionary.prototype, "values", {
     get : function() {
-        var names = this.$keys.map(function(name) { return this[name]; }, this);
+        var names = this.$keys.map(function(name) { 
+            return this[name]; 
+        }, this);
         return new List(false, names);
     }
 });
@@ -41,6 +47,7 @@ Dictionary.prototype.iterator = function() {
     };
 };
 
+
 Dictionary.prototype.swap = function() {
 	var swapped = new Dictionary(true);
 	this.$keys.forEach(function(name) {
@@ -53,12 +60,6 @@ Dictionary.prototype.swap = function() {
 	return swapped;
 };
 
-Dictionary.prototype.add = function(dict) {
-    var result = Object.assign({}, this, dict);
-    result.__proto__ = Dictionary.prototype;
-    return result;
-};
-
 
 Dictionary.prototype.removeKey = function(key) {
     delete this[key];
@@ -67,7 +68,14 @@ Dictionary.prototype.removeKey = function(key) {
 
 Dictionary.prototype.removeValue = function(value) {
     var keys = this.$keys.filter(function(key) { return this[key].equals(value); }, this);
-    keys.forEach(function(key) { delete this[key]; });
+    keys.forEach(function(key) { delete this[key]; }, this);
+};
+
+
+Dictionary.prototype.add = function(dict) {
+    var result = Object.assign({}, this, dict);
+    result.__proto__ = Dictionary.prototype;
+    return result;
 };
 
 
@@ -81,10 +89,13 @@ Dictionary.prototype.toString = function() {
 
 Dictionary.prototype.getText = Dictionary.prototype.toString;
 
+Dictionary.prototype.toJson = function() {
+    return new Document(this).toJson();
+};
 
 Dictionary.prototype.equals = function(dict) {
     var keys = this.$keys;
-    if (this.length != dict.length)
+    if (this.length !== dict.length)
         return false;
     for (var i = 0; i < keys.length; i++) {
         var key = keys[i];
@@ -137,7 +148,6 @@ Dictionary.prototype.setItem = function (item, value) {
         this[item] = value;
 };
 
-Dictionary.prototype.toJson = function() {
-	return new Document(this).toJson();
+Dictionary.prototype.toJsonNode = function() {
+	return new Document(this).toJsonNode();
 };
-

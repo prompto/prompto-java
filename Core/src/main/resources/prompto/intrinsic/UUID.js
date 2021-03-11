@@ -81,10 +81,7 @@ UUID.prototype.toString = function() {
 };
 
 UUID.prototype.getText = UUID.prototype.toString;
-
 UUID.prototype.toJson = function() { return JSON.stringify(this.toString()); };
-
-UUID.prototype.toDocument = UUID.prototype.toString;
 
 UUID.prototype.toBytes = function() {
     var parts = this.hex.split('-');
@@ -99,6 +96,10 @@ UUID.prototype.toBytes = function() {
     }
     return ints;
 };
+
+
+UUID.prototype.toDocument = UUID.prototype.toString;
+
 
 UUID.prototype.equals = function(uuid) {
     if (uuid instanceof UUID) {
@@ -186,7 +187,7 @@ UUID.lastFromTime = function(time) {
 UUID.fromString = function(strId) {
     var p = new RegExp("([0-9a-f]{8})-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{2})([0-9a-f]{2})-([0-9a-f]{12})");
     var r = p.exec(strId);
-    if (r.length==7) {
+    if (r.length === 7) {
         r.splice(0, 1);
         var ints = r.map(function (s) {
             return parseInt(s, 16);

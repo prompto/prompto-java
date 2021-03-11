@@ -78,17 +78,28 @@ function equalArrays(o1, o2) {
 	return true;
 }
 
-function convertToJson(o) {
+function convertToJsonNode(o) {
 	var type = typeof(o);
 	switch(type) {
-	case 'boolean':
-	case 'number':
-	case 'string':
-		return o;
-	default:	
-		return o && o.toJson ? o.toJson() : JSON.stringify(o);
+        case 'undefined':
+            return null;
+		case 'boolean':
+		case 'number':
+		case 'string':
+			return o;
+		default:	
+            if(o == null)
+                return null;
+            else
+                return o.toJsonNode ? o.toJsonNode() : JSON.stringify(o);
 	}
 };
+
+function convertToJson(o) {
+    var node = convertToJsonNode(o);
+    return JSON.stringify(node);
+}
+
 
 TypeError.prototype.getText = function() { return 'Null reference!'; };
 ReferenceError.prototype.getText = function() { return 'Null reference!'; };

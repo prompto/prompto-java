@@ -13,6 +13,8 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.PromptoClassLoader;
@@ -300,7 +302,14 @@ public abstract class PromptoRoot extends PromptoStorableBase implements IMutabl
 	
 	@Override
 	public JsonNode toJsonNode() {
-		return toDocument().toJsonNode();
+		ObjectNode object = JsonNodeFactory.instance.objectNode();
+		for(Field field : collectFields()) {
+			Object value = getFieldValue(this, field);
+			object.set(field.getName(), PromptoConverter.toJsonNode(value));
+		}
+		Object dbId = getDbId();
+		object.set("dbId", JsonNodeFactory.instance.textNode(String.valueOf(dbId)));
+		return object;
 	}
 
 	

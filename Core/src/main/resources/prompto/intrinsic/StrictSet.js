@@ -21,11 +21,13 @@ StrictSet.prototype.join = function(separator) {
 
 StrictSet.prototype.getText = StrictSet.prototype.toString;
 
-
 StrictSet.prototype.toJson = function() {
-	return JSON.stringify(Array.from(this.set.values()).map(function(item) { return convertToJson(item); }));
+    return convertToJson(this);
 };
 
+StrictSet.prototype.toJsonNode = function() {
+    return Array.from(this.set.values()).map(function(item) { return convertToJsonNode(item); });
+};
 
 StrictSet.prototype.iterator = function() {
     var iter = this.set.values();
@@ -35,6 +37,7 @@ StrictSet.prototype.iterator = function() {
         next: function() { var value = item.value; item = iter.next(); return value; }
     };
 };
+
 
 StrictSet.prototype.iterate = function (fn, instance) {
     return this.toList().iterate(fn, instance);
@@ -72,6 +75,7 @@ StrictSet.prototype.addItems = function(items) {
     return this; // enable fluid API
 };
 
+
 StrictSet.prototype.addAll = function(items) {
     var result = new StrictSet(this.set);
     result.addItems(items);
@@ -81,8 +85,8 @@ StrictSet.prototype.addAll = function(items) {
 
 StrictSet.prototype.remove = function(items) {
 	var excluded = (items instanceof StrictSet) ? items : new Set(items);
-	items = Array.from(this.set.values());
-    var remaining = items.filter(function(item) { return !excluded.has(item); });
+    var current = Array.from(this.set.values());
+    var remaining = current.filter(function(item) { return !excluded.has(item); });
     return new StrictSet(remaining);
 };
 
@@ -133,7 +137,7 @@ StrictSet.prototype.hasAny = function(items, noCheckEquals) {
         }
         return false;
     } else {
-        for (var i = 0; i < items.length; i++) {
+        for (i = 0; i < items.length; i++) {
             if (this.has(items[i]))
                 return true;
         }

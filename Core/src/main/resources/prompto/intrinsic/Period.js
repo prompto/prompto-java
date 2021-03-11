@@ -16,85 +16,91 @@ Period.parse = function (text) {
     var inTime = false;
     var inMillis = false;
 
-    for(var i=0;i<text.length;i++) {
-        var c = text[i];
-        // leading 'P' is mandatory
-        if (!inPeriod) {
-            if (c == 'P') {
-                inPeriod = true;
+    var Exception = function() {};
+
+    try {
+        for(var i=0;i<text.length;i++) {
+            var c = text[i];
+            // leading 'P' is mandatory
+            if (!inPeriod) {
+                if (c == 'P') {
+                    inPeriod = true;
+                    continue;
+                } else {
+                    throw new Exception();
+                }
+            }
+            // check for time section
+            if (c == 'T') {
+                if (!inTime) {
+                    inTime = true;
+                    continue;
+                } else {
+                    throw new Exception();
+                }
+            }
+            // check for value type
+            var step = inTime ? steps.indexOf(c, 4) : steps.indexOf(c);
+            if (step >= 0) {
+                if (step <= lastStep) {
+                    throw new Exception();
+                } else if (step > 3 && !inTime) {
+                    throw new Exception();
+                } else if (value === null) {
+                    throw new Exception();
+                } else if (step === 6) { // milliseconds '.'
+                    inMillis = true;
+                } else if (step === 7 && !inMillis) {
+                    step = 6;
+                }
+                data[step] = value;
+                lastStep = step;
+                value = null;
                 continue;
-            } else {
+            }
+            if (c == '-') {
+                if (value != null) {
+                    throw new Exception();
+                }
+                if (isNeg || inMillis) {
+                    throw new Exception();
+                }
+                isNeg = true;
+            }
+            if (c < '0' || c > '9') {
                 throw new Exception();
             }
-        }
-        // check for time section
-        if (c == 'T') {
-            if (!inTime) {
-                inTime = true;
-                continue;
-            } else {
-                throw new Exception();
-            }
-        }
-        // check for value type
-        var step = inTime ? steps.indexOf(c, 4) : steps.indexOf(c);
-        if (step >= 0) {
-            if (step <= lastStep) {
-                throw new Exception();
-            } else if (step > 3 && !inTime) {
-                throw new Exception();
-            } else if (value == null) {
-                throw new Exception();
-            } else if (step == 6) { // milliseconds '.'
-                inMillis = true;
-            } else if (step == 7 && !inMillis) {
-                step = 6;
-            }
-            data[step] = value;
-            lastStep = step;
-            value = null;
-            continue;
-        }
-        if (c == '-') {
             if (value!=null) {
-                throw new Exception();
-            }
-            if (isNeg || inMillis) {
-                throw new Exception();
-            }
-            isNeg = true;
-        }
-        if (c < '0' || c > '9') {
-            throw new Exception();
-        }
-        if (value!=null) {
-            value *= 10;
-            value += c - '0';
-        } else {
-            value = c - '0';
-            if (isNeg) {
-                value = -value;
-                isNeg = false;
+                value *= 10;
+                value += c - '0';
+            } else {
+                value = c - '0';
+                if (isNeg) {
+                    value = -value;
+                    isNeg = false;
+                }
             }
         }
-    }
-    // must terminate by a value type
-    if (value != null) {
+        // must terminate by a value type
+        if (value != null) {
+            throw new Error("Failed parsing period literal: " + text);
+        }
+        return new Period(data);
+    } catch(e) {
         throw new Error("Failed parsing period literal: " + text);
     }
-    return new Period(data);
 };
 
 
 Period.prototype.equals = function(obj) {
-    return this.years == obj.years &&
-        this.months == obj.months &&
-        this.weeks == obj.weeks &&
-        this.days == obj.days &&
-        this.hours == obj.hours &&
-        this.minutes == obj.minutes &&
-        this.seconds == obj.seconds &&
-        this.milliseconds == obj.milliseconds;
+    return this.years === obj.years &&
+        this.months === obj.months &&
+        this.weeks === obj.weeks &&
+        this.days === obj.days &&
+        this.hours === obj.hours &&
+        this.minutes === obj.minutes &&
+        this.seconds === obj.seconds &&
+        this.milliseconds === obj.milliseconds;
 };
 
 
@@ -145,9 +151,9 @@ Period.prototype.subtract = function(period) {
 
 Period.prototype.multiply = function(value) {
     var count = value;
-    if (count == 0) {
+    if (count === 0) {
         return new Period([]);
-    } else if (count == 1) {
+    } else if (count === 1) {
         return this;
     } else {
         var data = [];
@@ -205,8 +211,6 @@ Period.prototype.toString = function() {
     return s;
 };
 
-Period.prototype.toJson = function() { return JSON.stringify(this.toString()); };
-
 Period.prototype.totalMilliseconds = function() {
     return this.milliseconds + (this.seconds * 1000) + (this.minutes * 60 * 1000) + (this.hours * 60 * 60 * 1000)
         + (this.days * 24 * 60 * 60 * 1000) + (this.weeks * 7 * 24 * 60 * 60 * 1000) + (this.months * (365 / 12) * 24 * 60 * 60 * 1000)
@@ -214,3 +218,6 @@ Period.prototype.totalMilliseconds = function() {
 };
 
 Period.prototype.getText = Period.prototype.toString;
+Period.prototype.toDocument = Period.prototype.toString;
+Period.prototype.toJson = function() { return JSON.stringify(this.toString()); };
+

@@ -4,29 +4,30 @@ function Document(entries) {
     return this;
 }
 
-Document.prototype.$user_keys = function() {
+Object.defineProperty(Document.prototype, "$user_keys", {
+    get : function() {
     return Object.getOwnPropertyNames(this).filter(function(name) {
-        return name!=="mutable" && !name.startsWith("$");
+            return name!=="mutable";
     });
-};
-
+    }
+});
 
 Object.defineProperty(Document.prototype, "$safe_length", {
     get : function() {
-        return this.$user_keys().length;
+        return this.$user_keys.length;
     }
 });
 
 Object.defineProperty(Document.prototype, "$safe_keys", {
     get : function() {
-        return new StrictSet(this.$user_keys());
+        return new StrictSet(this.$user_keys);
     }
 });
 
 
 Object.defineProperty(Document.prototype, "$safe_values", {
     get : function() {
-        var names = this.$user_keys().map(function(name) {
+        var names = this.$user_keys.map(function(name) {
             return this[name];
         }, this);
         return new List(false, names);
@@ -37,7 +38,18 @@ Document.prototype.toString = function() {
     return JSON.stringify(this);
 };
 
-Document.prototype.toJson = function() { return this; };
+Document.prototype.toJson = function() { 
+    return convertToJson(this);
+};
+
+Document.prototype.toJsonNode = function() {
+    var value = {};
+    Object.getOwnPropertyNames(this).forEach(function (name) {
+        value[name] = convertToJsonNode(this[name]);
+    	}, this);
+    return value;
+};
+
 
 Document.prototype.equals = function(other) {
     if(this===other)
@@ -96,6 +108,8 @@ Document.prototype.$safe_setItem = function(item, value) {
     	this[item] = value;
 };
 
+var setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf : function(obj, proto) { obj.__proto__ = proto; };
+
 Document.prototype.$safe_add = function(other) {
     var result = Object.assign({}, this, other);
     setPrototypeOf(result, Document.prototype);
@@ -147,8 +161,7 @@ Document.prototype.readJsonField = function(node, parts) {
 };
 
 
-// ensure objects created from Documents (such as React state) exhibit the same behaviour
-
+// ensure objects created from Documents exhibit the same behaviour
 Object.getOwnPropertyNames(Document.prototype).forEach( function(name) {
     if(name.startsWith("$safe_")) {
         Object.defineProperty(Object.prototype, name, {
@@ -161,5 +174,3 @@ Object.getOwnPropertyNames(Document.prototype).forEach( function(name) {
         });
     }
 });
-
-

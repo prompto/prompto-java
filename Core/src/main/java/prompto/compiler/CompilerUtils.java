@@ -613,7 +613,7 @@ public abstract class CompilerUtils {
 		else
 			throw new CompilerException("Cannot convert " + info.getType().getTypeName() + " to long");
 	}
-	
+
 	public static ResultInfo numberToLong(MethodInfo method, ResultInfo info) {
 		 if(long.class==info.getType())
 			return longToLong(method);
@@ -623,10 +623,17 @@ public abstract class CompilerUtils {
 			return info;
 		else if(Double.class==info.getType())
 			return DoubleToLong(method);
+		else if(Object.class==info.getType())
+			return objectToLong(method);
 		else
 			throw new CompilerException("Cannot convert " + info.getType().getTypeName() + " to long");
 	}
 
+
+	private static ResultInfo objectToLong(MethodInfo method) {
+		// unsafe, but only happens when assigned value is null
+		return new ResultInfo(Long.class);
+	}
 
 	public static ResultInfo numberToint(MethodInfo method, ResultInfo info) {
 		numberTolong(method, info);

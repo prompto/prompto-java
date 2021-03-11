@@ -107,7 +107,7 @@ BlobRef.prototype.zippedToDocument = function() {
     if (typeName == null)
         throw new Error("Expecting a 'type' field!");
     var type = eval(typeName)
-    if (type != Document)
+    if (type !== Document)
         throw new Error("Expecting a Document type!");
     value = value["value"] || null;
     if (value == null)

@@ -108,7 +108,7 @@ List.prototype.hasAny = function(items, noCheckEquals) {
 
 
 List.prototype.slice1Based = function(start, last) {
-    if(start && start != 0) {
+    if(start && start !== 0) {
         if (start < 1 || start > this.length)
             throw new RangeError();
         start = start - 1;
@@ -206,11 +206,15 @@ List.prototype.toString = function() {
 List.prototype.getText = List.prototype.toString;
 
 List.prototype.toJson = function() {
-	return JSON.stringify(this.map(function(item) { return convertToJson(item); }));
+    return convertToJson(this);
+};
+
+List.prototype.toJsonNode = function() {
+    return this.map(function(item) { return convertToJsonNode(item); });
 };
 
 List.prototype.toDocument = function() {
-    var items = this.map(function(item) {
+    var items = this.map( function(item) {
         if(item && item.toDocument)
             return item.toDocument();
         else

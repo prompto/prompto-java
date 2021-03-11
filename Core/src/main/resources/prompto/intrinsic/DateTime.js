@@ -15,11 +15,11 @@ DateTime.parse = function(text) {
     text = text.substring(4);
     var month = 1;
     var day = 1;
-    if(text[0]=='-') {
+    if(text[0] === '-') {
         text = text.substring(1); // skip "-"
         month = parseInt(text.substring(0,2));
         text = text.substring(2);
-        if(text[0]=='-') {
+        if(text[0] === '-') {
             text = text.substring(1); // skip "-"
             day = parseInt(text.substring(0,2));
             text = text.substring(2);
@@ -29,19 +29,19 @@ DateTime.parse = function(text) {
     var minute = 0;
     var second = 0;
     var milli = 0;
-    if(text[0]=='T') {
+    if(text[0] === 'T') {
         text = text.substring(1); // skip "T"
         hour = parseInt(text.substring(0,2));
         text = text.substring(2);
-        if(text[0]==':') {
+        if(text[0] === ':') {
             text = text.substring(1); // skip ":"
             minute = parseInt(text.substring(0,2));
             text = text.substring(2);
-            if(text[0]==':') {
+            if(text[0] === ':') {
                 text = text.substring(1); // skip ":"
                 second = parseInt(text.substring(0, 2));
                 text = text.substring(2);
-                if (text[0] == '.') {
+                if (text[0] === '.') {
                     text = text.substring(1); // skip "."
                     milli = parseInt(text.substring(0, 3));
                     text = text.substring(3);
@@ -51,18 +51,27 @@ DateTime.parse = function(text) {
     }
     var date = new Date(Date.UTC(year, month-1, day, hour, minute, second, milli));
     var tzOffset = 0; // in seconds
-    if(text[0]=='+' || text[0]=='-') {
-        tzOffset = text[0]=='+' ? 1 : -1;
+    if(text[0] === '+' || text[0] === '-') {
+        var sign = text[0] === '+' ? 1 : -1;
         text = text.substring(1); // skip "+/-"
-        tzOffset *= parseInt(text.substring(0, 2)) * 3600;
-        text.substring(2);
-        if (text[0] == ':') {
+        tzOffset = parseInt(text.substring(0, 2)) * 60 * 60;
+        text = text.substring(2);
+        if (text[0] === ':') {
             text = text.substring(1); // skip ":"
-            tzOffset *= parseInt(text.substring(0, 2)) * 60;
+            tzOffset += parseInt(text.substring(0, 2)) * 60;
         }
+        tzOffset *= sign;
    }
     return new DateTime(date, tzOffset);
 };
+
+
+DateTime.fromDateAndTime = function (date, time) {
+    var date_ = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0, 0));
+    var tzOffset = 0; // in seconds
+    return new DateTime(date_, tzOffset);
+};
+
 
 DateTime.prototype.addPeriod = function (period) {
     var date = new Date();
@@ -133,7 +142,7 @@ DateTime.prototype.toString = function() {
     s += ("00" + this.date.getUTCSeconds()).slice(-2);
     s += ".";
     s += ("000" + this.date.getUTCMilliseconds()).slice(-3);
-    if(this.tzOffset == 0)
+    if(this.tzOffset === 0)
         return s + "Z";
     var offset = this.tzOffset;
     if (offset > 0)
@@ -150,11 +159,12 @@ DateTime.prototype.toString = function() {
 
 
 DateTime.prototype.getText = DateTime.prototype.toString;
-
+DateTime.prototype.toDocument = DateTime.prototype.toString;
 DateTime.prototype.toJson = function() { return JSON.stringify(this.toString()); };
 
-DateTime.prototype.equals = function(other) {
-    return other instanceof DateTime && this.date.valueOf() == other.date.valueOf() && this.tzOffset == other.tzOffset;
+
+DateTime.prototype.equals = function(value) {
+    return value instanceof DateTime && this.date.valueOf() === value.date.valueOf() && this.tzOffset === value.tzOffset;
 };
 
 DateTime.prototype.gt = function(other) {
@@ -180,7 +190,7 @@ DateTime.prototype.lte = function(other) {
 DateTime.prototype.compareTo = function(date, tzOffset) {
     var a = this.date.valueOf() + this.tzOffset*60000;
     var b = date.valueOf() + tzOffset*60000;
-    return a > b ? 1 : (a == b ? 0 : -1);
+    return a > b ? 1 : (a === b ? 0 : -1);
 };
 
 
@@ -200,7 +210,7 @@ DateTime.prototype.getDayOfMonth = function() {
 
 DateTime.prototype.getDayOfYear = function() {
     var first = new Date(this.date.getUTCFullYear(), 0, 1, 0, 0, 0, 0);
-    var numDays = (this - first) / (1000 * 60 * 60 * 24);
+    var numDays = (this - first) / (24 * 60 * 60 * 1000);
     return 1 + Math.floor(numDays);
 };
 
@@ -244,5 +254,6 @@ DateTime.prototype.getTime = function() {
     return new LocalTime(new Date(epoch));
 };
 
-
-DateTime.prototype.toDocument = DateTime.prototype.toString;
+DateTime.prototype.toJsonNode = function() {
+    return this.toString();
+};

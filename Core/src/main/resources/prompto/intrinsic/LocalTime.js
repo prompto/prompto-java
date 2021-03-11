@@ -20,12 +20,13 @@ LocalTime.prototype.toString = function() {
     return this.toISOString().substring(11, 23);
 };
 
-LocalTime.prototype.toJson = function() { return JSON.stringify(this.toString()); };
 
 LocalTime.prototype.getText = LocalTime.prototype.toString;
+LocalTime.prototype.toDocument = LocalTime.prototype.toString;
+LocalTime.prototype.toJson = function() { return JSON.stringify(this.toString()); };
 
 LocalTime.prototype.equals = function(obj) {
-    return obj instanceof LocalTime && this.valueOf() == obj.valueOf();
+    return obj instanceof LocalTime && this.valueOf() === obj.valueOf();
 };
 
 
@@ -103,4 +104,3 @@ LocalTime.prototype.getMillisecond = function(value) {
     return this.getUTCMilliseconds();
 };
 
-LocalTime.prototype.toDocument = LocalTime.prototype.toString;

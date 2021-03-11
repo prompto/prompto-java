@@ -861,7 +861,6 @@ public class CategoryType extends BaseType {
 	@Override
 	public void declareMember(Transpiler transpiler, Identifier id) {
 		if("json".equals(id.toString())) {
-			transpiler.register("Document");
 			transpiler.register("List");
 			transpiler.require("Utils"); // equals etc...
 		}
@@ -873,7 +872,7 @@ public class CategoryType extends BaseType {
 	    if ("text".equals(id.toString()))
 	        transpiler.append("getText()");
 	    else if ("json".equals(id.toString()))
-	        transpiler.append("toDocument().toJson()");
+	        transpiler.append("toJson()");
 	    else
 	        transpiler.append(id);
 	}
