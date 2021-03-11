@@ -91,7 +91,7 @@ public interface IValue {
 		if("text".equals(id.toString()))
 			return new TextValue(this.toString());
 		else if("json".equals(id.toString())) {
-			JsonNode node = this.valueToJsonNode(context, value -> value.valueToJsonNode(context, null));
+			JsonNode node = valueToJsonNode(context, value -> value.toUntypedJsonNode(context));
 			return new TextValue(node.toString());
 		} else
 			throw new UnsupportedOperationException("No member support for " + this.getClass().getSimpleName());
@@ -128,10 +128,14 @@ public interface IValue {
 		return result;
 	}
 
+	default JsonNode toUntypedJsonNode(Context context) throws PromptoError {
+		return valueToJsonNode(context, value -> value.toUntypedJsonNode(context));
+	}
+	
 	default JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
 		throw new UnsupportedOperationException("valueToJsonNode not supported by " + this.getClass().getSimpleName());
 	}
-	
+
 	default void toJsonStream(Context context, JsonGenerator generator, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
 		throw new UnsupportedOperationException("toJsonStream not supported by " + this.getClass().getSimpleName());
 	}

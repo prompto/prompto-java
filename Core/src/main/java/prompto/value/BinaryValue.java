@@ -7,6 +7,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
@@ -15,10 +22,6 @@ import prompto.intrinsic.PromptoBinary;
 import prompto.runtime.Context;
 import prompto.type.IType;
 import prompto.utils.ResourceUtils;
-
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class BinaryValue extends BaseValue {
 
@@ -146,5 +149,12 @@ public abstract class BinaryValue extends BaseValue {
 		} 
 	}
 
+	@Override
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		ObjectNode result = JsonNodeFactory.instance.objectNode();
+		result.set("mimeType", JsonNodeFactory.instance.textNode(getMimeType()));
+		result.set("url", JsonNodeFactory.instance.textNode(getSourceUrl()));
+		return result;
+	}
 
 }

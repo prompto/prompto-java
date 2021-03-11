@@ -3,8 +3,11 @@ package prompto.value;
 import java.io.IOException;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 import prompto.error.NotStorableError;
 import prompto.error.PromptoError;
@@ -68,6 +71,11 @@ public class DbIdValue implements IValue {
 	@Override
 	public IValue toDocumentValue(Context context) {
 		return new TextValue(this.toString());
+	}
+
+	@Override
+	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
+		return JsonNodeFactory.instance.textNode(this.toString());
 	}
 
 
