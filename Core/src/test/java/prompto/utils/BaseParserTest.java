@@ -518,9 +518,13 @@ public class BaseParserTest extends BaseTest {
 			((IMethodDeclaration)decl).check(context, true);
 		else
 			decl.check(context);
-		List<ProblemDescriptor> expected = readExpectedProblems(resourceName);
-		List<ProblemDescriptor> actual = readActualProblems(collector);
-		assertEquals(expected, actual);
+		List<ProblemDescriptor> expecteds = readExpectedProblems(resourceName);
+		List<ProblemDescriptor> actuals = readActualProblems(collector);
+		for(int i=0, count = Math.max(expecteds.size(), actuals.size());i < count;i++) {
+			ProblemDescriptor expected = i < expecteds.size() ? expecteds.get(i) : null;
+			ProblemDescriptor actual = i < actuals.size() ? actuals.get(i) : null;
+			assertEquals(String.valueOf(expected), String.valueOf(actual));
+		}
 	}
 	
 	static public class ProblemDescriptor {

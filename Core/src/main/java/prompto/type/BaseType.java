@@ -165,7 +165,8 @@ public abstract class BaseType extends CodeSection implements IType {
 
 	@Override
 	public IType checkItem(Context context, IType itemType, ICodeSection section) {
-		throw new SyntaxError("Cannot read item from " + this.getTypeName());
+		context.getProblemListener().reportIllegalItemOperator(section, this);
+		return VoidType.instance();
 	}
 
 	@Override

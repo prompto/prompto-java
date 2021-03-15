@@ -96,8 +96,10 @@ public class TextType extends NativeType {
 	public IType checkItem(Context context, IType other, ICodeSection section) {
 		if(other==IntegerType.instance())
 			return CharacterType.instance();
-		else
-			return super.checkItem(context,other, section);
+		else {
+			context.getProblemListener().reportIllegalItemType(section, Collections.singleton(IntegerType.instance()), other);
+			return VoidType.instance();
+		}
 	}
 	
 	@Override

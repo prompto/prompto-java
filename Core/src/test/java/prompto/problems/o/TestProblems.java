@@ -62,6 +62,16 @@ public class TestProblems extends BaseOParserTest {
 	}
 
 	@Test
+	public void testIllegalComparison() throws Exception {
+		checkProblems("problems/illegalComparison.poc");
+	}
+
+	@Test
+	public void testIllegalItemType() throws Exception {
+		checkProblems("problems/illegalItemType.poc");
+	}
+
+	@Test
 	public void testIllegalOperation() throws Exception {
 		checkProblems("problems/illegalOperation.poc");
 	}

@@ -118,6 +118,11 @@ public abstract class ProblemListener implements ANTLRErrorListener, IProblemLis
 	}
 
 	@Override
+	public void reportIllegalItemOperator(ICodeSection section, IType culprit) {
+		addProblem(new IllegalItemOperatorProblem(section, culprit));
+	}
+
+	@Override
 	public void reportIllegalReturn(ICodeSection section) {
 		addProblem(new IllegalReturnProblem(section));
 	}
