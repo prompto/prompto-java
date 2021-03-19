@@ -1,34 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="INFO">
     <Appenders>
-        <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
-        </Console>
+    	<ScriptAppenderSelector name="FileOrConsole">
+    		<Script language="JavaScript"><![CDATA[
+    			var File = Java.type("java.io.File");
+    			var exists = new File("/logs").exists();
+    			var appender = exists ? "LogFile" : "Console";
+    			var System = Java.type("java.lang.System");
+    			System.out.println("Using Appender: " + appender);
+    			appender;
+    			
+    		]]></Script>
+    		<AppenderSet>
+		        <Console name="Console" target="SYSTEM_OUT">
+		            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+		        </Console>
+		        <RollingFile name="LogFile" fileName="/logs/prompto.log" filePattern="/logs/prompto-%d{MM-dd-yyyy}.log.gz">
+		            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+		            <Policies>
+		            	<CronTriggeringPolicy schedule="0 0 0 * * ?"/>
+		            </Policies>
+		        </RollingFile>
+    		</AppenderSet>
+    	</ScriptAppenderSelector>
+        <Async name="Appender">
+        	<AppenderRef ref="FileOrConsole"/>
+        </Async>
     </Appenders>
     <Loggers>
         <Logger name="org.apache.http" level="warn">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="Appender"/>
         </Logger>
         <Logger name="org.apache.solr" level="error">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="Appender"/>
         </Logger>
         <Logger name="org.eclipse.jetty" level="warn">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="Appender"/>
         </Logger>
         <Logger name="org.eclipse.jetty.jaas.JAASLoginService" level="error">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="Appender"/>
         </Logger>
         <Logger name="org.mongodb" level="warn">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="Appender"/>
         </Logger>
          <Logger name="org.mongodb.driver" level="warn">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="Appender"/>
         </Logger>
         <Logger name="log4j.test.Log4jTest" level="trace">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="Appender"/>
         </Logger>
         <Root level="info">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="Appender"/>
         </Root>
     </Loggers>
 </Configuration>
