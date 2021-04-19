@@ -95,7 +95,8 @@ public abstract class BaseCodeStore implements ICodeStore {
 	
 	@Override
 	public void setMainModule(String name, PromptoVersion version) {
-		registerModule(name, version);
+		if(name!=null && version!=null)
+			registerModule(name, version);
 	}
 
 	private void registerModule(String name, PromptoVersion version) {
