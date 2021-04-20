@@ -164,7 +164,7 @@ public abstract class Standalone {
 		synchronizeSchema(codeStore, dataStore);
 	}
 	
-	private static ICodeStore initializeCodeStore(IRuntimeConfiguration config) throws Throwable {
+	public static ICodeStore initializeCodeStore(IRuntimeConfiguration config) throws Throwable {
 		// in SEED scenario, cfg from store is null to ensure latest code from resource is always used
 		// so we use MemStore to stay consistent, but its content will never be persisted 
 		IStore store = null;
@@ -179,7 +179,7 @@ public abstract class Standalone {
 	}
 
 
-	private static IStore initializeDataStore(IRuntimeConfiguration config) throws Throwable {
+	public static IStore initializeDataStore(IRuntimeConfiguration config) throws Throwable {
 		IStoreConfiguration cfg = config.getDataStoreConfiguration();
 		logger.debug(()->"Using " + (cfg==null ? "MemStore" : cfg.toString()) + " as data store");
 		IStore store = IStoreFactory.newStoreFromConfig(cfg);
