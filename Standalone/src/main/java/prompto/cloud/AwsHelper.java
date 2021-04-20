@@ -62,6 +62,16 @@ class AwsHelper implements Cloud.Helper {
 		}
 	}
 
+	@Override
+	public boolean isInClassPath() {
+		try {
+			Class.forName("prompto.aws.EC2");
+			return true;
+		} catch(Throwable t) {
+			return false;
+		}
+	}
+
 } /*
 path = "file:/sys/devices/virtual/dmi/id/bios_version"
 data = read all from Url with path as path

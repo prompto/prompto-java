@@ -24,6 +24,10 @@ public enum Cloud {
 	public Collection<URL> getJarURsL() {
 		return helper.getJarURLs();
 	}
+	
+	public boolean isInClassPath() {
+		return helper.isInClassPath();
+	}
 
 	public static Cloud current() {
 		logger.info(()->"Checking current cloud...");
@@ -40,6 +44,7 @@ public enum Cloud {
 	interface Helper {
 
 		boolean checkHost();
+		boolean isInClassPath();
 		Collection<URL> getJarURLs();
 	}
 
