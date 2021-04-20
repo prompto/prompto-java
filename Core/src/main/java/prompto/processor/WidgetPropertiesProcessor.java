@@ -223,7 +223,7 @@ public class WidgetPropertiesProcessor extends AnnotationProcessor {
 	}
 
 	private IPropertyValidator newTypeValidator(Annotation annotation, Context context, DocEntry entry, Property prop, IType type) {
-		IType actual = type.resolve(context, t->context.getProblemListener().reportIllegalAnnotation(annotation, "Unkown type: " + t.getTypeName()));
+		IType actual = type.resolve(context, t->context.getProblemListener().reportIllegalAnnotation(annotation, "Unknown type: " + t.getTypeName()));
 		return actual==null ? null : new TypeValidator(actual);
 	}
 
