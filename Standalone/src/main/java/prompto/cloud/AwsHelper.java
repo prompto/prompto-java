@@ -16,24 +16,27 @@ import java.util.stream.Stream;
 
 class AwsHelper implements Cloud.Helper {
 	
-	private Boolean isThisCloud = null;
+	private Boolean isAWS = null;
 	
 	@Override
 	public boolean checkHost() {
-		if(isThisCloud==null)
-			isThisCloud = checkThisCloud();
-		return isThisCloud;
+		if(isAWS==null)
+			isAWS = checkIsAWS();
+		return isAWS;
 	}
 	
 	@Override
 	public Collection<URL> getJarURLs() {
-		if(!checkHost())
-			return null;
 		File awsDir = new File("/AwsClient/");
-		return Stream.of(awsDir.listFiles())
-				.map(File::toURI)
-				.map(this::safeURItoURL)
-				.collect(Collectors.toList());
+		if(awsDir.exists())
+			return Stream.of(awsDir.listFiles())
+					.filter(file->file.isFile())
+					.filter(file->file.getAbsolutePath().endsWith(".jar"))
+					.map(File::toURI)
+					.map(this::safeURItoURL)
+					.collect(Collectors.toList());
+		else
+			return null;
 	}
 	
 	URL safeURItoURL(URI uri) {
@@ -44,7 +47,7 @@ class AwsHelper implements Cloud.Helper {
 		}
 	}
 
-	private Boolean checkThisCloud() {
+	private Boolean checkIsAWS() {
 		try {
 			try(Reader reader = new FileReader("/sys/devices/virtual/dmi/id/bios_version")) {
 				try(BufferedReader buffer = new BufferedReader(reader)) {
