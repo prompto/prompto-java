@@ -21,7 +21,7 @@ public enum Cloud {
 		return helper.checkHost();
 	}
 
-	public Collection<URL> getJarURsL() {
+	public Collection<URL> getJarURLs() {
 		return helper.getJarURLs();
 	}
 	
