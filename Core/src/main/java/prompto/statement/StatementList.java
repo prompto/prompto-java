@@ -19,12 +19,14 @@ import prompto.type.IType;
 import prompto.type.TypeMap;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
+import prompto.utils.Logger;
 import prompto.value.IValue;
 
 
+@SuppressWarnings("serial")
 public class StatementList extends LinkedList<IStatement> {
 
-	private static final long serialVersionUID = 1L;
+	static final Logger logger = new Logger();
 
 	public StatementList() {
 	}
@@ -133,6 +135,9 @@ public class StatementList extends LinkedList<IStatement> {
 				IValue result = statement.interpret(context);
 				if(result!=null && statement.canReturn())
 					return result;
+			} catch(PromptoError e) {
+				logger.error(()->e.getMessage() + " while interpreting " + statement.toString() + " in method " + context.getProblemListener().getEnclosingDeclaration());
+				throw e;
 			} finally {
 				context.leaveStatement(statement);
 			}
