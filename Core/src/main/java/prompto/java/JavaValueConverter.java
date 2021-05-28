@@ -1,12 +1,16 @@
 package prompto.java;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
+import prompto.intrinsic.PromptoList;
 
 public abstract class JavaValueConverter {
 
@@ -26,15 +30,25 @@ public abstract class JavaValueConverter {
 		map.put(Float.class, CompilerUtils::FloatToDouble);
 		map.put(double.class, CompilerUtils::doubleToDouble);
 		map.put(char.class, CompilerUtils::charToCharacter);
+		map.put(List.class, JavaValueConverter::ListToPromptoList);
 		return map;
 	}
 
+	
 	public static ResultInfo convertResult(MethodInfo method, ResultInfo info) {
 		Function<MethodInfo, ResultInfo> converter = resultConverters.get(info.getType());
 		if(converter!=null)
 			return converter.apply(method);
 		else
 			return info;
+	}
+	
+	public static ResultInfo ListToPromptoList(MethodInfo method) {
+		CompilerUtils.compileNewRawInstance(method, PromptoList.class);
+		method.addInstruction(Opcode.DUP_X1); // need to keep a reference on top of stack
+		method.addInstruction(Opcode.SWAP);
+		method.addInstruction(Opcode.ICONST_0);
+		return CompilerUtils.compileCallConstructor(method, PromptoList.class, Collection.class, boolean.class);
 	}
 
 	public static boolean canBeAutoboxed(Class<?> from, Class<?> to) {
