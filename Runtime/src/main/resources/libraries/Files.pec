@@ -1,0 +1,15 @@
+define listVolumes as native method returning Text[] doing:
+	Java: return prompto.files.listVolumes();
+	C#: return prompto.files.listVolumes(); 
+	Python2: return listVolumes() from module: prompto.files
+	Python3: return listVolumes() from module: prompto.files
+	JavaScript: return listVolumes(); from module: prompto/files/Files.js
+
+
+define "listVolumes returns a Text[]" as test method doing:
+	volumes = listVolumes
+and verifying:
+	volumes is a Text[]
+	volumes.count > 0
+
+
