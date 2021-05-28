@@ -196,9 +196,24 @@ public class JavaClassType extends BaseType {
 				}
 				return new ListValue(itemType, list);
 			}
+		} else if(value != null && value.getClass().isArray()) {
+			if(returnType instanceof ListType || returnType==AnyType.instance()) {
+				Class<?> elemType = value.getClass().getComponentType();
+				IType itemType = returnType instanceof ListType ? ((ContainerType)returnType).getItemType() : AnyType.instance();
+				PromptoList<IValue> list = new PromptoList<IValue>(false);
+				if(elemType.isPrimitive()) {
+					return null; // TBD
+				} else {
+					for(Object obj : (Object[])value) {
+						IValue val = convertJavaValueToPromptoValue(context, obj, elemType, itemType);
+						list.add(val);
+					}
+					return new ListValue(itemType, list);
+				}
+			}
 		}
 		return null;
-	}
+	} 
 	
 	@SuppressWarnings("unchecked")
 	private static IValue convertSet(Context context, Object value, Type type, IType returnType) {
