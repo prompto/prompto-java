@@ -288,7 +288,9 @@ public class BaseParserTest extends BaseTest {
 	protected void testCompiled(Identifier test) {
 		TempDirectories.create();
 		Executor.executeTest(coreContext, test.toString(), true);
-		
+		String expected = test.toString() + " test successful\n";
+		String read = Out.read();
+		assertEquals(expected, read);
 	}
 
 	protected void testTranspiled(Identifier name) {
