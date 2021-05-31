@@ -51,6 +51,7 @@ public class BaseParserTest extends BaseTest {
 	@Before  
 	public void __before__test__() {
 		JsxElementBase.setTestMode(true);
+		DataStore.setInstance(new MemStore());
 		context = ApplicationContext.init();
 	}
 
