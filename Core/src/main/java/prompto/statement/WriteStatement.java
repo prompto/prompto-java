@@ -122,19 +122,22 @@ public class WriteStatement extends BaseStatement {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		Context resContext = context instanceof ResourceContext ? context : context.newResourceContext();
 		/*ResultInfo info = */resource.compile(resContext, method, flags);
-		if(resContext!=context)
-			method.addInstruction(Opcode.DUP);
-		content.compile(resContext, method, flags);
-		if(thenWith!=null) {
-			Type consumerType = compileConsumerClass(context, method, flags);
-			CompilerUtils.compileNewInstance(method, consumerType);
-			InterfaceConstant c = new InterfaceConstant(IResource.class, "writeFully", String.class, Consumer.class, void.class);
+		if(context==resContext) {
+			content.compile(resContext, method, flags);
+			InterfaceConstant c = new InterfaceConstant(IResource.class, "writeLine", String.class, void.class);
 			method.addInstruction(Opcode.INVOKEINTERFACE, c);
 		} else {
-			InterfaceConstant c = new InterfaceConstant(IResource.class, "writeFully", String.class, void.class);
-			method.addInstruction(Opcode.INVOKEINTERFACE, c);
-		}
-		if(resContext!=context) {
+			method.addInstruction(Opcode.DUP);
+			content.compile(resContext, method, flags);
+			if(thenWith!=null) {
+				Type consumerType = compileConsumerClass(context, method, flags);
+				CompilerUtils.compileNewInstance(method, consumerType);
+				InterfaceConstant c = new InterfaceConstant(IResource.class, "writeFully", String.class, Consumer.class, void.class);
+				method.addInstruction(Opcode.INVOKEINTERFACE, c);
+			} else {
+				InterfaceConstant c = new InterfaceConstant(IResource.class, "writeFully", String.class, void.class);
+				method.addInstruction(Opcode.INVOKEINTERFACE, c);
+			}
 			InterfaceConstant c = new InterfaceConstant(IResource.class, "close", void.class);
 			method.addInstruction(Opcode.INVOKEINTERFACE, c);
 		}
