@@ -36,8 +36,8 @@ public class DateTimeLiteral extends Literal<DateTimeValue> {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		PromptoDateTime dateTime = value.getStorableData();
-		method.addInstruction(Opcode.LDC_W, new StringConstant(dateTime.toString()));
+		String text = this.text.get();
+		method.addInstruction(Opcode.LDC_W, new StringConstant(text.substring(1,text.length()-1)));
 		IOperand oper = new MethodConstant(PromptoDateTime.class, "parse", 
 				String.class, PromptoDateTime.class);
 		method.addInstruction(Opcode.INVOKESTATIC, oper);
