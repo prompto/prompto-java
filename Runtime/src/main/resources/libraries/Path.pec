@@ -1,8 +1,8 @@
 define listRootPaths as native method returning Text[] doing:
 	Java: return prompto.path.Path.listRoots();
 	C#: return prompto.path.Path.listRoots(); 
-	Python2: return listRoots() from module: prompto.path
-	Python3: return listRoots() from module: prompto.path
+	Python2: return listRoots() from module: prompto.path.Path
+	Python3: return listRoots() from module: prompto.path.Path
 	JavaScript: return listRoots(); from module: prompto/path/Path.js
 
 
@@ -16,8 +16,8 @@ and verifying:
 define listChildPaths as native method receiving Text path returning Text[] doing:
 	Java: return prompto.path.Path.listChildren(path);
 	C#: return prompto.path.Path.listChildren(path); 
-	Python2: return listChildren(path) from module: prompto.path
-	Python3: return listChildren(path) from module: prompto.path
+	Python2: return listChildren(path) from module: prompto.path.Path
+	Python3: return listChildren(path) from module: prompto.path.Path
 	JavaScript: return listChildren(path); from module: prompto/path/Path.js
 
 
@@ -30,8 +30,8 @@ and verifying:
 define pathExists as native method receiving Text path returning Boolean doing:
 	Java: return prompto.path.Path.pathExists(path);
 	C#: return prompto.path.Path.pathExists(path); 
-	Python2: return pathExists(path) from module: prompto.path
-	Python3: return pathExists(path) from module: prompto.path
+	Python2: return pathExists(path) from module: prompto.path.Path
+	Python3: return pathExists(path) from module: prompto.path.Path
 	JavaScript: return pathExists(path); from module: prompto/path/Path.js
 
 
@@ -44,8 +44,8 @@ and verifying:
 define pathIsFile as native method receiving Text path returning Boolean doing:
 	Java: return prompto.path.Path.pathIsFile(path);
 	C#: return prompto.path.Path.pathIsFile(path); 
-	Python2: return pathIsFile(path) from module: prompto.path
-	Python3: return pathIsFile(path) from module: prompto.path
+	Python2: return pathIsFile(path) from module: prompto.path.Path
+	Python3: return pathIsFile(path) from module: prompto.path.Path
 	JavaScript: return pathIsFile(path); from module: prompto/path/Path.js
 
 
@@ -58,8 +58,8 @@ and verifying:
 define pathIsDirectory as native method receiving Text path returning Boolean doing:
 	Java: return prompto.path.Path.pathIsDirectory(path);
 	C#: return prompto.path.Path.pathIsDirectory(path); 
-	Python2: return pathIsDirectory(path) from module: prompto.path
-	Python3: return pathIsDirectory(path) from module: prompto.path
+	Python2: return pathIsDirectory(path) from module: prompto.path.Path
+	Python3: return pathIsDirectory(path) from module: prompto.path.Path
 	JavaScript: return pathIsDirectory(path); from module: prompto/path/Path.js
 
 
@@ -72,8 +72,8 @@ and verifying:
 define pathIsLink as native method receiving Text path returning Boolean doing:
 	Java: return prompto.path.Path.pathIsLink(path);
 	C#: return prompto.path.Path.pathIsLink(path); 
-	Python2: return pathIsLink(path) from module: prompto.path
-	Python3: return pathIsLink(path) from module: prompto.path
+	Python2: return pathIsLink(path) from module: prompto.path.Path
+	Python3: return pathIsLink(path) from module: prompto.path.Path
 	JavaScript: return pathIsLink(path); from module: prompto/path/Path.js
 
 
