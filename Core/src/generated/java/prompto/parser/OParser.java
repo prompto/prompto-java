@@ -17558,51 +17558,51 @@ public class OParser extends AbstractParser {
 			super.copyFrom(ctx);
 		}
 	}
-	public static class JavaScriptMemberExpressionContext extends Javascript_selector_expressionContext {
+	public static class JavascriptMemberExpressionContext extends Javascript_selector_expressionContext {
 		public Javascript_identifierContext name;
 		public TerminalNode DOT() { return getToken(OParser.DOT, 0); }
 		public Javascript_identifierContext javascript_identifier() {
 			return getRuleContext(Javascript_identifierContext.class,0);
 		}
-		public JavaScriptMemberExpressionContext(Javascript_selector_expressionContext ctx) { copyFrom(ctx); }
+		public JavascriptMemberExpressionContext(Javascript_selector_expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OParserListener ) ((OParserListener)listener).enterJavaScriptMemberExpression(this);
+			if ( listener instanceof OParserListener ) ((OParserListener)listener).enterJavascriptMemberExpression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OParserListener ) ((OParserListener)listener).exitJavaScriptMemberExpression(this);
+			if ( listener instanceof OParserListener ) ((OParserListener)listener).exitJavascriptMemberExpression(this);
 		}
 	}
-	public static class JavaScriptItemExpressionContext extends Javascript_selector_expressionContext {
+	public static class JavascriptItemExpressionContext extends Javascript_selector_expressionContext {
 		public Javascript_item_expressionContext exp;
 		public Javascript_item_expressionContext javascript_item_expression() {
 			return getRuleContext(Javascript_item_expressionContext.class,0);
 		}
-		public JavaScriptItemExpressionContext(Javascript_selector_expressionContext ctx) { copyFrom(ctx); }
+		public JavascriptItemExpressionContext(Javascript_selector_expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OParserListener ) ((OParserListener)listener).enterJavaScriptItemExpression(this);
+			if ( listener instanceof OParserListener ) ((OParserListener)listener).enterJavascriptItemExpression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OParserListener ) ((OParserListener)listener).exitJavaScriptItemExpression(this);
+			if ( listener instanceof OParserListener ) ((OParserListener)listener).exitJavascriptItemExpression(this);
 		}
 	}
-	public static class JavaScriptMethodExpressionContext extends Javascript_selector_expressionContext {
+	public static class JavascriptMethodExpressionContext extends Javascript_selector_expressionContext {
 		public Javascript_method_expressionContext method;
 		public TerminalNode DOT() { return getToken(OParser.DOT, 0); }
 		public Javascript_method_expressionContext javascript_method_expression() {
 			return getRuleContext(Javascript_method_expressionContext.class,0);
 		}
-		public JavaScriptMethodExpressionContext(Javascript_selector_expressionContext ctx) { copyFrom(ctx); }
+		public JavascriptMethodExpressionContext(Javascript_selector_expressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OParserListener ) ((OParserListener)listener).enterJavaScriptMethodExpression(this);
+			if ( listener instanceof OParserListener ) ((OParserListener)listener).enterJavascriptMethodExpression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OParserListener ) ((OParserListener)listener).exitJavaScriptMethodExpression(this);
+			if ( listener instanceof OParserListener ) ((OParserListener)listener).exitJavascriptMethodExpression(this);
 		}
 	}
 
@@ -17614,31 +17614,31 @@ public class OParser extends AbstractParser {
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,216,_ctx) ) {
 			case 1:
-				_localctx = new JavaScriptMethodExpressionContext(_localctx);
+				_localctx = new JavascriptMethodExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(2371);
 				match(DOT);
 				setState(2372);
-				((JavaScriptMethodExpressionContext)_localctx).method = javascript_method_expression();
+				((JavascriptMethodExpressionContext)_localctx).method = javascript_method_expression();
 				}
 				break;
 			case 2:
-				_localctx = new JavaScriptMemberExpressionContext(_localctx);
+				_localctx = new JavascriptMemberExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(2373);
 				match(DOT);
 				setState(2374);
-				((JavaScriptMemberExpressionContext)_localctx).name = javascript_identifier();
+				((JavascriptMemberExpressionContext)_localctx).name = javascript_identifier();
 				}
 				break;
 			case 3:
-				_localctx = new JavaScriptItemExpressionContext(_localctx);
+				_localctx = new JavascriptItemExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(2375);
-				((JavaScriptItemExpressionContext)_localctx).exp = javascript_item_expression();
+				((JavascriptItemExpressionContext)_localctx).exp = javascript_item_expression();
 				}
 				break;
 			}

@@ -3950,41 +3950,41 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitJavascript_new_expression(EParser.Javascript_new_expressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code JavaScriptMethodExpression}
+	 * Enter a parse tree produced by the {@code JavascriptMethodExpression}
 	 * labeled alternative in {@link EParser#javascript_selector_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterJavaScriptMethodExpression(EParser.JavaScriptMethodExpressionContext ctx);
+	void enterJavascriptMethodExpression(EParser.JavascriptMethodExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code JavaScriptMethodExpression}
+	 * Exit a parse tree produced by the {@code JavascriptMethodExpression}
 	 * labeled alternative in {@link EParser#javascript_selector_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitJavaScriptMethodExpression(EParser.JavaScriptMethodExpressionContext ctx);
+	void exitJavascriptMethodExpression(EParser.JavascriptMethodExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code JavaScriptMemberExpression}
+	 * Enter a parse tree produced by the {@code JavascriptMemberExpression}
 	 * labeled alternative in {@link EParser#javascript_selector_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterJavaScriptMemberExpression(EParser.JavaScriptMemberExpressionContext ctx);
+	void enterJavascriptMemberExpression(EParser.JavascriptMemberExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code JavaScriptMemberExpression}
+	 * Exit a parse tree produced by the {@code JavascriptMemberExpression}
 	 * labeled alternative in {@link EParser#javascript_selector_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitJavaScriptMemberExpression(EParser.JavaScriptMemberExpressionContext ctx);
+	void exitJavascriptMemberExpression(EParser.JavascriptMemberExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code JavaScriptItemExpression}
+	 * Enter a parse tree produced by the {@code JavascriptItemExpression}
 	 * labeled alternative in {@link EParser#javascript_selector_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterJavaScriptItemExpression(EParser.JavaScriptItemExpressionContext ctx);
+	void enterJavascriptItemExpression(EParser.JavascriptItemExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code JavaScriptItemExpression}
+	 * Exit a parse tree produced by the {@code JavascriptItemExpression}
 	 * labeled alternative in {@link EParser#javascript_selector_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitJavaScriptItemExpression(EParser.JavaScriptItemExpressionContext ctx);
+	void exitJavascriptItemExpression(EParser.JavascriptItemExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link EParser#javascript_method_expression}.
 	 * @param ctx the parse tree

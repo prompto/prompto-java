@@ -1865,7 +1865,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	}
 	
 	@Override
-	public void exitJavaScriptItemExpression(JavaScriptItemExpressionContext ctx) {
+	public void exitJavascriptItemExpression(JavascriptItemExpressionContext ctx) {
 		JavaScriptExpression item = getNodeValue(ctx.exp);
 		setNodeValue(ctx, item);
 	}
@@ -1877,13 +1877,13 @@ public class MPromptoBuilder extends MParserBaseListener {
 	}
 
 	@Override
-	public void exitJavaScriptMemberExpression(JavaScriptMemberExpressionContext ctx) {
+	public void exitJavascriptMemberExpression(JavascriptMemberExpressionContext ctx) {
 		String name = ctx.name.getText();
 		setNodeValue(ctx, new JavaScriptMemberExpression(name));
 	}
 	
 	@Override
-	public void exitJavaScriptMethodExpression(JavaScriptMethodExpressionContext ctx) {
+	public void exitJavascriptMethodExpression(JavascriptMethodExpressionContext ctx) {
 		JavaScriptExpression method = getNodeValue(ctx.method);
 		setNodeValue(ctx, method);
 	}

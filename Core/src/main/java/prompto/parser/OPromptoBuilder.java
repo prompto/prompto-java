@@ -1883,7 +1883,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	}
 	
 	@Override
-	public void exitJavaScriptItemExpression(JavaScriptItemExpressionContext ctx) {
+	public void exitJavascriptItemExpression(JavascriptItemExpressionContext ctx) {
 		JavaScriptExpression item = getNodeValue(ctx.exp);
 		setNodeValue(ctx, item);
 	}
@@ -1895,13 +1895,13 @@ public class OPromptoBuilder extends OParserBaseListener {
 	}
 
 	@Override
-	public void exitJavaScriptMemberExpression(JavaScriptMemberExpressionContext ctx) {
+	public void exitJavascriptMemberExpression(JavascriptMemberExpressionContext ctx) {
 		String name = getNodeValue(ctx.name);
 		setNodeValue(ctx, new JavaScriptMemberExpression(name));
 	}
 	
 	@Override
-	public void exitJavaScriptMethodExpression(JavaScriptMethodExpressionContext ctx) {
+	public void exitJavascriptMethodExpression(JavascriptMethodExpressionContext ctx) {
 		JavaScriptExpression exp = getNodeValue(ctx.method); 
 		setNodeValue(ctx, exp);
 	}	

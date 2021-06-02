@@ -4252,37 +4252,37 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavaScriptMethodExpression(EParser.JavaScriptMethodExpressionContext ctx) { }
+	@Override public void enterJavascriptMethodExpression(EParser.JavascriptMethodExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavaScriptMethodExpression(EParser.JavaScriptMethodExpressionContext ctx) { }
+	@Override public void exitJavascriptMethodExpression(EParser.JavascriptMethodExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavaScriptMemberExpression(EParser.JavaScriptMemberExpressionContext ctx) { }
+	@Override public void enterJavascriptMemberExpression(EParser.JavascriptMemberExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavaScriptMemberExpression(EParser.JavaScriptMemberExpressionContext ctx) { }
+	@Override public void exitJavascriptMemberExpression(EParser.JavascriptMemberExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavaScriptItemExpression(EParser.JavaScriptItemExpressionContext ctx) { }
+	@Override public void enterJavascriptItemExpression(EParser.JavascriptItemExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavaScriptItemExpression(EParser.JavaScriptItemExpressionContext ctx) { }
+	@Override public void exitJavascriptItemExpression(EParser.JavascriptItemExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

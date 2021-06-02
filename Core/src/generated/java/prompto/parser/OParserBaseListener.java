@@ -4096,37 +4096,37 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavaScriptMethodExpression(OParser.JavaScriptMethodExpressionContext ctx) { }
+	@Override public void enterJavascriptMethodExpression(OParser.JavascriptMethodExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavaScriptMethodExpression(OParser.JavaScriptMethodExpressionContext ctx) { }
+	@Override public void exitJavascriptMethodExpression(OParser.JavascriptMethodExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavaScriptMemberExpression(OParser.JavaScriptMemberExpressionContext ctx) { }
+	@Override public void enterJavascriptMemberExpression(OParser.JavascriptMemberExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavaScriptMemberExpression(OParser.JavaScriptMemberExpressionContext ctx) { }
+	@Override public void exitJavascriptMemberExpression(OParser.JavascriptMemberExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavaScriptItemExpression(OParser.JavaScriptItemExpressionContext ctx) { }
+	@Override public void enterJavascriptItemExpression(OParser.JavascriptItemExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavaScriptItemExpression(OParser.JavaScriptItemExpressionContext ctx) { }
+	@Override public void exitJavascriptItemExpression(OParser.JavascriptItemExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
