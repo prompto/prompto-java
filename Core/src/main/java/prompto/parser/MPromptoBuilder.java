@@ -146,6 +146,7 @@ import prompto.javascript.JavaScriptExpression;
 import prompto.javascript.JavaScriptExpressionList;
 import prompto.javascript.JavaScriptIdentifierExpression;
 import prompto.javascript.JavaScriptIntegerLiteral;
+import prompto.javascript.JavaScriptItemExpression;
 import prompto.javascript.JavaScriptMemberExpression;
 import prompto.javascript.JavaScriptMethodExpression;
 import prompto.javascript.JavaScriptModule;
@@ -1863,6 +1864,18 @@ public class MPromptoBuilder extends MParserBaseListener {
 		setNodeValue(ctx, new JavaScriptIntegerLiteral(text));		
 	}
 	
+	@Override
+	public void exitJavaScriptItemExpression(JavaScriptItemExpressionContext ctx) {
+		JavaScriptExpression item = getNodeValue(ctx.exp);
+		setNodeValue(ctx, item);
+	}
+	
+	@Override
+	public void exitJavascript_item_expression(Javascript_item_expressionContext ctx) {
+		JavaScriptExpression item = getNodeValue(ctx.exp);
+		setNodeValue(ctx, new JavaScriptItemExpression(item));
+	}
+
 	@Override
 	public void exitJavaScriptMemberExpression(JavaScriptMemberExpressionContext ctx) {
 		String name = ctx.name.getText();
