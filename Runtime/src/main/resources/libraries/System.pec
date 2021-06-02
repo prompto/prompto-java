@@ -1,0 +1,14 @@
+define sysGetEnvironmentVariable as native method receiving Text name returning Text doing:
+	Java: return java.lang.System.getenv(name);
+	C#: return System.Environment.GetEnvironmentVariable(name); 
+	Python2: return getenv(name) from module: os
+	Python3: return getenv(name) from module: os
+	JavaScript: return process.env[name]; 
+
+
+define "sysGetEnvironmentVariable returns a Text" as test method doing:
+	home = sysGetEnvironmentVariable "HOME"
+and verifying:
+	home is a Text
+
+	
