@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="INFO">
     <Appenders>
-    	<ScriptAppenderSelector name="FileOrConsole">
+    	<ScriptAppenderSelector name="PromptoFileOrConsole">
     		<Script language="JavaScript"><![CDATA[
+     			var System = Java.type("java.lang.System");
+     			var logsFolder = System.getenv("LOGS_FOLDER") || "/logs";
     			var File = Java.type("java.io.File");
-    			var exists = new File("/logs").exists();
+    			var exists = new File(logsFolder).exists();
     			var appender = exists ? "LogFile" : "Console";
-    			var System = Java.type("java.lang.System");
-    			System.out.println("Using Appender: " + appender);
+    			if(exists)
+    				System.out.println("Using Appender: LogFile @" + logsFolder + " for PromptoFileOrConsole");
+    			else
+   					System.out.println("Using Appender: Console for PromptoFileOrConsole");
     			appender;
     			
     		]]></Script>
@@ -15,7 +19,7 @@
 		        <Console name="Console" target="SYSTEM_OUT">
 		            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
 		        </Console>
-		        <RollingFile name="LogFile" fileName="/logs/prompto.log" filePattern="/logs/prompto-%d{MM-dd-yyyy}.log.gz">
+		        <RollingFile name="LogFile" fileName="${env:LOGS_FOLDER:-/logs}/prompto.log" filePattern="${env:LOGS_FOLDER:-/logs}/prompto-%d{MM-dd-yyyy}.log.gz">
 		            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
 		            <Policies>
 		            	<CronTriggeringPolicy schedule="0 0 0 * * ?"/>
@@ -23,34 +27,98 @@
 		        </RollingFile>
     		</AppenderSet>
     	</ScriptAppenderSelector>
-        <Async name="Appender">
-        	<AppenderRef ref="FileOrConsole"/>
+        <Async name="PromptoAppender">
+        	<AppenderRef ref="PromptoFileOrConsole"/>
+        </Async>
+     	<ScriptAppenderSelector name="OutFileOrConsole">
+    		<Script language="JavaScript"><![CDATA[
+     			var System = Java.type("java.lang.System");
+     			var logsFolder = System.getenv("LOGS_FOLDER") || "/logs";
+    			var File = Java.type("java.io.File");
+    			var exists = new File(logsFolder).exists();
+    			var appender = exists ? "LogFile" : "Console";
+    			if(exists)
+    				System.out.println("Using Appender: LogFile @" + logsFolder + " for OutFileOrConsole");
+    			else
+   					System.out.println("Using Appender: Console for OutFileOrConsole");
+    			appender;
+    			
+    		]]></Script>
+    		<AppenderSet>
+		        <Console name="Console" target="SYSTEM_OUT">
+		            <PatternLayout pattern="%d{HH:mm:ss.SSS} %msg"/>
+		        </Console>
+		        <RollingFile name="LogFile" fileName="${env:LOGS_FOLDER:-/logs}/out.log" filePattern="${env:LOGS_FOLDER:-/logs}/out-%d{MM-dd-yyyy}.log.gz">
+		            <PatternLayout pattern="%d{HH:mm:ss.SSS} %msg"/>
+		            <Policies>
+		            	<CronTriggeringPolicy schedule="0 0 0 * * ?"/>
+		            </Policies>
+		        </RollingFile>
+    		</AppenderSet>
+    	</ScriptAppenderSelector>
+        <Async name="OutAppender">
+        	<AppenderRef ref="OutFileOrConsole"/>
+        </Async>
+     	<ScriptAppenderSelector name="ErrorFileOrConsole">
+    		<Script language="JavaScript"><![CDATA[
+     			var System = Java.type("java.lang.System");
+     			var logsFolder = System.getenv("LOGS_FOLDER") || "/logs";
+    			var File = Java.type("java.io.File");
+    			var exists = new File(logsFolder).exists();
+    			var appender = exists ? "LogFile" : "Console";
+    			if(exists)
+    				System.out.println("Using Appender: LogFile @" + logsFolder + " for ErrorFileOrConsole");
+    			else
+   					System.out.println("Using Appender: Console for ErrorFileOrConsole");
+    			appender;
+    			
+    		]]></Script>
+    		<AppenderSet>
+		        <Console name="Console" target="SYSTEM_ERR">
+		            <PatternLayout pattern="%d{HH:mm:ss.SSS} %msg"/>
+		        </Console>
+		        <RollingFile name="LogFile" fileName="${env:LOGS_FOLDER:-/logs}/error.log" filePattern="${env:LOGS_FOLDER:-/logs}/error-%d{MM-dd-yyyy}.log.gz">
+		            <PatternLayout pattern="%d{HH:mm:ss.SSS} %msg"/>
+		            <Policies>
+		            	<CronTriggeringPolicy schedule="0 0 0 * * ?"/>
+		            </Policies>
+		        </RollingFile>
+    		</AppenderSet>
+    	</ScriptAppenderSelector>
+        <Async name="ErrorAppender">
+        	<AppenderRef ref="ErrorFileOrConsole"/>
         </Async>
     </Appenders>
     <Loggers>
         <Logger name="org.apache.http" level="warn">
-            <AppenderRef ref="Appender"/>
+            <AppenderRef ref="PromptoAppender"/>
         </Logger>
         <Logger name="org.apache.solr" level="error">
-            <AppenderRef ref="Appender"/>
+            <AppenderRef ref="PromptoAppender"/>
         </Logger>
         <Logger name="org.eclipse.jetty" level="warn">
-            <AppenderRef ref="Appender"/>
+            <AppenderRef ref="PromptoAppender"/>
         </Logger>
         <Logger name="org.eclipse.jetty.jaas.JAASLoginService" level="error">
-            <AppenderRef ref="Appender"/>
+            <AppenderRef ref="PromptoAppender"/>
         </Logger>
         <Logger name="org.mongodb" level="warn">
-            <AppenderRef ref="Appender"/>
+            <AppenderRef ref="PromptoAppender"/>
         </Logger>
          <Logger name="org.mongodb.driver" level="warn">
-            <AppenderRef ref="Appender"/>
+            <AppenderRef ref="PromptoAppender"/>
         </Logger>
         <Logger name="log4j.test.Log4jTest" level="trace">
-            <AppenderRef ref="Appender"/>
+            <AppenderRef ref="PromptoAppender"/>
         </Logger>
         <Root level="info">
-            <AppenderRef ref="Appender"/>
+            <AppenderRef ref="PromptoAppender"/>
         </Root>
+        <Logger name="prompto.utils.OutLogger" level="info">
+            <AppenderRef ref="OutAppender"/>
+        </Logger>
+         <Logger name="prompto.utils.ErrorLogger" level="info">
+            <AppenderRef ref="ErrorAppender"/>
+        </Logger>
     </Loggers>
 </Configuration>
