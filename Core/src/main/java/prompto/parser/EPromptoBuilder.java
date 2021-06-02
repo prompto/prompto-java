@@ -1926,7 +1926,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitJavaScriptCategoryBinding(JavaScriptCategoryBindingContext ctx) {
+	public void exitJavascriptCategoryBinding(JavascriptCategoryBindingContext ctx) {
 		JavaScriptNativeCategoryBinding binding = getNodeValue(ctx.binding);
 		setNodeValue(ctx, binding);
 	}
@@ -1974,7 +1974,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	}
 	
 	@Override
-	public void exitJavaScriptNativeStatement(JavaScriptNativeStatementContext ctx) {
+	public void exitJavascriptNativeStatement(JavascriptNativeStatementContext ctx) {
 		JavaScriptStatement stmt = getNodeValue(ctx.javascript_native_statement());
 		setNodeValue(ctx, new JavaScriptNativeCall(stmt));
 	}

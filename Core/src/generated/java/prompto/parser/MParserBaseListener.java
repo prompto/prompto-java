@@ -2836,13 +2836,13 @@ public class MParserBaseListener implements MParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavaScriptCategoryBinding(MParser.JavaScriptCategoryBindingContext ctx) { }
+	@Override public void enterJavascriptCategoryBinding(MParser.JavascriptCategoryBindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavaScriptCategoryBinding(MParser.JavaScriptCategoryBindingContext ctx) { }
+	@Override public void exitJavascriptCategoryBinding(MParser.JavascriptCategoryBindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2992,13 +2992,13 @@ public class MParserBaseListener implements MParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavaScriptNativeStatement(MParser.JavaScriptNativeStatementContext ctx) { }
+	@Override public void enterJavascriptNativeStatement(MParser.JavascriptNativeStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavaScriptNativeStatement(MParser.JavaScriptNativeStatementContext ctx) { }
+	@Override public void exitJavascriptNativeStatement(MParser.JavascriptNativeStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

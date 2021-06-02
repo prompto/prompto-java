@@ -3028,13 +3028,13 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavaScriptCategoryBinding(EParser.JavaScriptCategoryBindingContext ctx) { }
+	@Override public void enterJavascriptCategoryBinding(EParser.JavascriptCategoryBindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavaScriptCategoryBinding(EParser.JavaScriptCategoryBindingContext ctx) { }
+	@Override public void exitJavascriptCategoryBinding(EParser.JavascriptCategoryBindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -3196,13 +3196,13 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavaScriptNativeStatement(EParser.JavaScriptNativeStatementContext ctx) { }
+	@Override public void enterJavascriptNativeStatement(EParser.JavascriptNativeStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavaScriptNativeStatement(EParser.JavaScriptNativeStatementContext ctx) { }
+	@Override public void exitJavascriptNativeStatement(EParser.JavascriptNativeStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

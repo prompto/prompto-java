@@ -12383,20 +12383,20 @@ public class OParser extends AbstractParser {
 			if ( listener instanceof OParserListener ) ((OParserListener)listener).exitCSharpCategoryBinding(this);
 		}
 	}
-	public static class JavaScriptCategoryBindingContext extends Native_category_bindingContext {
+	public static class JavascriptCategoryBindingContext extends Native_category_bindingContext {
 		public Javascript_category_bindingContext binding;
 		public TerminalNode JAVASCRIPT() { return getToken(OParser.JAVASCRIPT, 0); }
 		public Javascript_category_bindingContext javascript_category_binding() {
 			return getRuleContext(Javascript_category_bindingContext.class,0);
 		}
-		public JavaScriptCategoryBindingContext(Native_category_bindingContext ctx) { copyFrom(ctx); }
+		public JavascriptCategoryBindingContext(Native_category_bindingContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OParserListener ) ((OParserListener)listener).enterJavaScriptCategoryBinding(this);
+			if ( listener instanceof OParserListener ) ((OParserListener)listener).enterJavascriptCategoryBinding(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OParserListener ) ((OParserListener)listener).exitJavaScriptCategoryBinding(this);
+			if ( listener instanceof OParserListener ) ((OParserListener)listener).exitJavascriptCategoryBinding(this);
 		}
 	}
 
@@ -12448,13 +12448,13 @@ public class OParser extends AbstractParser {
 				}
 				break;
 			case JAVASCRIPT:
-				_localctx = new JavaScriptCategoryBindingContext(_localctx);
+				_localctx = new JavascriptCategoryBindingContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
 				setState(1918);
 				match(JAVASCRIPT);
 				setState(1919);
-				((JavaScriptCategoryBindingContext)_localctx).binding = javascript_category_binding();
+				((JavascriptCategoryBindingContext)_localctx).binding = javascript_category_binding();
 				}
 				break;
 			default:
@@ -13116,19 +13116,19 @@ public class OParser extends AbstractParser {
 			if ( listener instanceof OParserListener ) ((OParserListener)listener).exitJavaNativeStatement(this);
 		}
 	}
-	public static class JavaScriptNativeStatementContext extends Native_statementContext {
+	public static class JavascriptNativeStatementContext extends Native_statementContext {
 		public TerminalNode JAVASCRIPT() { return getToken(OParser.JAVASCRIPT, 0); }
 		public Javascript_native_statementContext javascript_native_statement() {
 			return getRuleContext(Javascript_native_statementContext.class,0);
 		}
-		public JavaScriptNativeStatementContext(Native_statementContext ctx) { copyFrom(ctx); }
+		public JavascriptNativeStatementContext(Native_statementContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OParserListener ) ((OParserListener)listener).enterJavaScriptNativeStatement(this);
+			if ( listener instanceof OParserListener ) ((OParserListener)listener).enterJavascriptNativeStatement(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OParserListener ) ((OParserListener)listener).exitJavaScriptNativeStatement(this);
+			if ( listener instanceof OParserListener ) ((OParserListener)listener).exitJavascriptNativeStatement(this);
 		}
 	}
 	public static class Python2NativeStatementContext extends Native_statementContext {
@@ -13210,7 +13210,7 @@ public class OParser extends AbstractParser {
 				}
 				break;
 			case JAVASCRIPT:
-				_localctx = new JavaScriptNativeStatementContext(_localctx);
+				_localctx = new JavascriptNativeStatementContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
 				setState(2007);
