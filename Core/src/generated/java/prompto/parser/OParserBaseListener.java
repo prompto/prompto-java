@@ -2848,13 +2848,13 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavaScriptCategoryBinding(OParser.JavaScriptCategoryBindingContext ctx) { }
+	@Override public void enterJavascriptCategoryBinding(OParser.JavascriptCategoryBindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavaScriptCategoryBinding(OParser.JavaScriptCategoryBindingContext ctx) { }
+	@Override public void exitJavascriptCategoryBinding(OParser.JavascriptCategoryBindingContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -3016,13 +3016,13 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterJavaScriptNativeStatement(OParser.JavaScriptNativeStatementContext ctx) { }
+	@Override public void enterJavascriptNativeStatement(OParser.JavascriptNativeStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitJavaScriptNativeStatement(OParser.JavaScriptNativeStatementContext ctx) { }
+	@Override public void exitJavascriptNativeStatement(OParser.JavascriptNativeStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

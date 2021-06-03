@@ -1841,7 +1841,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	}
 
 	@Override
-	public void exitJavaScriptCategoryBinding(JavaScriptCategoryBindingContext ctx) {
+	public void exitJavascriptCategoryBinding(JavascriptCategoryBindingContext ctx) {
 		JavaScriptNativeCategoryBinding binding = getNodeValue(ctx.binding);
 		setNodeValue(ctx, binding);
 	}
@@ -1888,7 +1888,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 		setNodeValue(ctx, method);
 	}
 	@Override
-	public void exitJavaScriptNativeStatement(JavaScriptNativeStatementContext ctx) {
+	public void exitJavascriptNativeStatement(JavascriptNativeStatementContext ctx) {
 		JavaScriptStatement stmt = getNodeValue(ctx.javascript_native_statement());
 		setNodeValue(ctx, new JavaScriptNativeCall(stmt));
 	}

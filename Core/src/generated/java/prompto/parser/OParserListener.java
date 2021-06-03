@@ -2652,17 +2652,17 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitPython3CategoryBinding(OParser.Python3CategoryBindingContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code JavaScriptCategoryBinding}
+	 * Enter a parse tree produced by the {@code JavascriptCategoryBinding}
 	 * labeled alternative in {@link OParser#native_category_binding}.
 	 * @param ctx the parse tree
 	 */
-	void enterJavaScriptCategoryBinding(OParser.JavaScriptCategoryBindingContext ctx);
+	void enterJavascriptCategoryBinding(OParser.JavascriptCategoryBindingContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code JavaScriptCategoryBinding}
+	 * Exit a parse tree produced by the {@code JavascriptCategoryBinding}
 	 * labeled alternative in {@link OParser#native_category_binding}.
 	 * @param ctx the parse tree
 	 */
-	void exitJavaScriptCategoryBinding(OParser.JavaScriptCategoryBindingContext ctx);
+	void exitJavascriptCategoryBinding(OParser.JavascriptCategoryBindingContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#python_category_binding}.
 	 * @param ctx the parse tree
@@ -2802,17 +2802,17 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitPython3NativeStatement(OParser.Python3NativeStatementContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code JavaScriptNativeStatement}
+	 * Enter a parse tree produced by the {@code JavascriptNativeStatement}
 	 * labeled alternative in {@link OParser#native_statement}.
 	 * @param ctx the parse tree
 	 */
-	void enterJavaScriptNativeStatement(OParser.JavaScriptNativeStatementContext ctx);
+	void enterJavascriptNativeStatement(OParser.JavascriptNativeStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code JavaScriptNativeStatement}
+	 * Exit a parse tree produced by the {@code JavascriptNativeStatement}
 	 * labeled alternative in {@link OParser#native_statement}.
 	 * @param ctx the parse tree
 	 */
-	void exitJavaScriptNativeStatement(OParser.JavaScriptNativeStatementContext ctx);
+	void exitJavascriptNativeStatement(OParser.JavascriptNativeStatementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#python_native_statement}.
 	 * @param ctx the parse tree
