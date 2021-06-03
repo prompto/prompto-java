@@ -11,4 +11,3 @@ define "sysGetEnvironmentVariable returns a Text" as test method doing:
 and verifying:
 	home is a Text
 
-	

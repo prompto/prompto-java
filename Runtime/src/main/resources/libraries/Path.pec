@@ -82,4 +82,3 @@ define "pathIsLink returns a Boolean" as test method doing:
 and verifying:
 	isLink is false
 
-	
