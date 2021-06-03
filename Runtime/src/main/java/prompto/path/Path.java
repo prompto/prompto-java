@@ -3,6 +3,7 @@ package prompto.path;
 import java.io.File;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -31,9 +32,7 @@ public abstract class Path {
 
 	
 	public static List<String> listChildren(String path) {
-		return StreamSupport.stream(java.nio.file.Paths.get("/Volumes/").spliterator(), false)
-				.map(java.nio.file.Path::toString)
-				.collect(Collectors.toList());
+		return Arrays.asList(new File(path).list());
 	}
 	
 	public static boolean pathExists(String path) {
