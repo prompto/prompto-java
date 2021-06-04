@@ -7,6 +7,26 @@ import prompto.parser.o.BaseOParserTest;
 public class TestResource extends BaseOParserTest {
 
 	@Test
+	public void testReadInDoWhile() throws Exception {
+		compareResourceOEO("resource/readInDoWhile.poc");
+	}
+
+	@Test
+	public void testReadInForEach() throws Exception {
+		compareResourceOEO("resource/readInForEach.poc");
+	}
+
+	@Test
+	public void testReadInIf() throws Exception {
+		compareResourceOEO("resource/readInIf.poc");
+	}
+
+	@Test
+	public void testReadInWhile() throws Exception {
+		compareResourceOEO("resource/readInWhile.poc");
+	}
+
+	@Test
 	public void testReadResource() throws Exception {
 		compareResourceOEO("resource/readResource.poc");
 	}

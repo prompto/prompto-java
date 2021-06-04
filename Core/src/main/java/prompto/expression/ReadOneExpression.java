@@ -13,7 +13,6 @@ import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.runtime.Context;
-import prompto.runtime.Context.ResourceContext;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.ResourceType;
@@ -21,6 +20,7 @@ import prompto.type.TextType;
 import prompto.utils.CodeWriter;
 import prompto.value.IResource;
 import prompto.value.IValue;
+import prompto.value.NullValue;
 import prompto.value.TextValue;
 
 public class ReadOneExpression implements IExpression {
@@ -40,7 +40,7 @@ public class ReadOneExpression implements IExpression {
 	
 	@Override
 	public IType check(Context context) {
-		if(!(context instanceof ResourceContext))
+		if(!(context.isInResourceContext()))
 			throw new SyntaxError("Not a resource context!");
 		IType sourceType = resource.check(context);
 		if(!(sourceType instanceof ResourceType))
@@ -50,7 +50,7 @@ public class ReadOneExpression implements IExpression {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		if(!(context instanceof ResourceContext))
+		if(!(context.isInResourceContext()))
 			throw new SyntaxError("Not a resource context!");
 		IValue o = resource.interpret(context);
 		if(o==null)
@@ -61,7 +61,8 @@ public class ReadOneExpression implements IExpression {
 		if(!res.isReadable())
 			throw new InvalidResourceError("Not readable");
 		try {
-			return new TextValue(res.readLine());
+			String line = res.readLine();
+			return line==null ? NullValue.instance() : new TextValue(line);
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		} 

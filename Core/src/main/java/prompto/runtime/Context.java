@@ -222,7 +222,10 @@ public class Context implements IContext {
 		return context==this.parent || (this.parent!=null && this.parent.isChildOf(context));
 	}
 
-	
+	public boolean isInResourceContext() {
+		return parent!=null && parent!=this && parent.isInResourceContext();
+	}
+
 	public Context newResourceContext() {
 		Context context = new ResourceContext();
 		context.globals = this.globals;
@@ -1096,6 +1099,10 @@ public class Context implements IContext {
 		
 		ResourceContext() {
 		}
+		
+		public boolean isInResourceContext() {
+			return true;
+		}
 
 	}
 
@@ -1353,5 +1360,6 @@ public class Context implements IContext {
 		}
 		
 	}
+
 
 }

@@ -20,6 +20,66 @@ public class TestResource extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedReadInDoWhile() throws Exception {
+		checkInterpretedOutput("resource/readInDoWhile.poc");
+	}
+
+	@Test
+	public void testCompiledReadInDoWhile() throws Exception {
+		checkCompiledOutput("resource/readInDoWhile.poc");
+	}
+
+	@Test
+	public void testTranspiledReadInDoWhile() throws Exception {
+		checkTranspiledOutput("resource/readInDoWhile.poc");
+	}
+
+	@Test
+	public void testInterpretedReadInForEach() throws Exception {
+		checkInterpretedOutput("resource/readInForEach.poc");
+	}
+
+	@Test
+	public void testCompiledReadInForEach() throws Exception {
+		checkCompiledOutput("resource/readInForEach.poc");
+	}
+
+	@Test
+	public void testTranspiledReadInForEach() throws Exception {
+		checkTranspiledOutput("resource/readInForEach.poc");
+	}
+
+	@Test
+	public void testInterpretedReadInIf() throws Exception {
+		checkInterpretedOutput("resource/readInIf.poc");
+	}
+
+	@Test
+	public void testCompiledReadInIf() throws Exception {
+		checkCompiledOutput("resource/readInIf.poc");
+	}
+
+	@Test
+	public void testTranspiledReadInIf() throws Exception {
+		checkTranspiledOutput("resource/readInIf.poc");
+	}
+
+	@Test
+	public void testInterpretedReadInWhile() throws Exception {
+		checkInterpretedOutput("resource/readInWhile.poc");
+	}
+
+	@Test
+	public void testCompiledReadInWhile() throws Exception {
+		checkCompiledOutput("resource/readInWhile.poc");
+	}
+
+	@Test
+	public void testTranspiledReadInWhile() throws Exception {
+		checkTranspiledOutput("resource/readInWhile.poc");
+	}
+
+	@Test
 	public void testInterpretedReadResource() throws Exception {
 		checkInterpretedOutput("resource/readResource.poc");
 	}
