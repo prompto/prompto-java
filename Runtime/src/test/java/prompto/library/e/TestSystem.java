@@ -13,6 +13,7 @@ public class TestSystem extends BaseEParserTest {
 	public void before() throws Exception {
 		Out.init();
 		loadDependency("system");
+		loadDependency("core");
 	}
 
 	@After
