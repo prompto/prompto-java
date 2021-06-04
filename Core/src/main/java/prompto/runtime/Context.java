@@ -222,8 +222,8 @@ public class Context implements IContext {
 		return context==this.parent || (this.parent!=null && this.parent.isChildOf(context));
 	}
 
-	public boolean isInResourceContext() {
-		return parent!=null && parent!=this && parent.isInResourceContext();
+	public boolean isWithResourceContext() {
+		return parent!=null && parent!=this && parent.isWithResourceContext();
 	}
 
 	public Context newResourceContext() {
@@ -1100,7 +1100,7 @@ public class Context implements IContext {
 		ResourceContext() {
 		}
 		
-		public boolean isInResourceContext() {
+		public boolean isWithResourceContext() {
 			return true;
 		}
 

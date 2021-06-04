@@ -40,7 +40,7 @@ public class ReadOneExpression implements IExpression {
 	
 	@Override
 	public IType check(Context context) {
-		if(!(context.isInResourceContext()))
+		if(!(context.isWithResourceContext()))
 			throw new SyntaxError("Not a resource context!");
 		IType sourceType = resource.check(context);
 		if(!(sourceType instanceof ResourceType))
@@ -50,7 +50,7 @@ public class ReadOneExpression implements IExpression {
 	
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		if(!(context.isInResourceContext()))
+		if(!(context.isWithResourceContext()))
 			throw new SyntaxError("Not a resource context!");
 		IValue o = resource.interpret(context);
 		if(o==null)
