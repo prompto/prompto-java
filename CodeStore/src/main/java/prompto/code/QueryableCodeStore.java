@@ -603,7 +603,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 		if(PromptoVersion.LATEST.equals(version))
 			return builder;
 		else 
-			return builder.verify(AttributeInfo.VERSION, MatchOp.EQUALS, version.asInt()).and();
+			return builder.verify(AttributeInfo.VERSION, MatchOp.EQUALS, version).and();
 	}
 
 	private IQueryBuilder orderByVersion(IQueryBuilder builder) {
