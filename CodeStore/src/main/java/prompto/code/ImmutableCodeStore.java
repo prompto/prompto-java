@@ -1,7 +1,9 @@
 package prompto.code;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -145,6 +147,17 @@ public class ImmutableCodeStore extends BaseCodeStore {
 			return new URLResource(this.resource);
 		else
 			return null;
+	}
+	
+	@Override
+	protected void doFetchLatestResourcesWithMimeTypes(List<Resource> resources, Set<String> mimeTypes) {
+		try {
+			URLConnection cnx = resource.openConnection();
+			if(mimeTypes.contains(cnx.getContentType()))
+				resources.add(new URLResource(resource));
+		} catch (IOException e) {
+			logger.error(()->"Failed to load resource " + resource.toString(), e);
+		}
 	}
 	
 	@Override

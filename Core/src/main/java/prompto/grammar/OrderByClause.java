@@ -42,11 +42,11 @@ public class OrderByClause extends CodeSection {
 			writer.append(" descending");
 	}
 
-	public void interpretQuery(Context context, IQueryBuilder q) {
+	public IQueryBuilder interpretQuery(Context context, IQueryBuilder builder) {
 		// TODO members
 		Identifier name = qualifiedName.getFirst();
 		AttributeInfo info = context.findAttribute(name.toString()).getAttributeInfo(context);
-		q.orderBy(info, isDescending());
+		return builder.orderBy(info, isDescending());
 	}
 
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {

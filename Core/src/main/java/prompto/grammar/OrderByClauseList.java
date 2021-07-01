@@ -32,9 +32,10 @@ public class OrderByClauseList extends ObjectList<OrderByClause> {
 			writer.append(" )");
 	}
 
-	public void interpretQuery(Context context, IQueryBuilder q) {
-		this.forEach((clause)->
-			clause.interpretQuery(context, q));
+	public IQueryBuilder interpretQuery(Context context, IQueryBuilder builder) {
+		for(OrderByClause clause : this)
+			builder = clause.interpretQuery(context, builder);
+		return builder;
 	}
 
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {

@@ -1,8 +1,13 @@
 package prompto.code;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.CategoryDeclaration;
@@ -75,6 +80,15 @@ public abstract class BaseCodeStore implements ICodeStore {
 		return next==null ? null : next.fetchVersionedResource(path, version);
 	}
 	
+	@Override
+	public final Iterable<Resource> fetchLatestResourcesWithMimeTypes(String ... mimeTypes) {
+		List<Resource> resources = new ArrayList<>();
+		doFetchLatestResourcesWithMimeTypes(resources, new HashSet<>(Arrays.asList(mimeTypes)));
+		return resources;
+	}
+	
+	protected abstract void doFetchLatestResourcesWithMimeTypes(List<Resource> resources, Set<String> mimeTypes);
+
 	@Override
 	public IDeclaration fetchLatestSymbol(String name) throws PromptoError {
 		IDeclaration decl = ICodeStore.super.fetchLatestSymbol(name);

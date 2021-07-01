@@ -41,7 +41,7 @@ public interface ICodeStore {
 		instance.set(store);
 	}
 
-	public static ICodeStore getInstance() {
+	static ICodeStore getInstance() {
 		return instance.get();
 	}
 	
@@ -51,16 +51,16 @@ public interface ICodeStore {
 		moduleDbIds.add(dbId);
 	}
 
-	public static Set<Object> getModuleDbIds() {
+	static Set<Object> getModuleDbIds() {
 		return moduleDbIds;
 	}
 	
-	public static DeclarationList parse(String sourceName, InputStream data) throws Exception {
+	static DeclarationList parse(String sourceName, InputStream data) throws Exception {
 		Dialect dialect = dialectFromResourceName(sourceName);
 		return parse(dialect, sourceName, data);
 	}
 	
-	public static DeclarationList parse(Dialect dialect, String sourceName, InputStream data) throws Exception {
+	static DeclarationList parse(Dialect dialect, String sourceName, InputStream data) throws Exception {
 		AbstractParser parser = parserForDialect(dialect, sourceName, data);
 		return parser.parse_declaration_list();
 	}
@@ -116,31 +116,31 @@ public interface ICodeStore {
 	Collection<CategoryDeclaration> fetchDerivedCategoryDeclarations(Identifier id);
 
 	
-	default public Batch fetchVersionedBatch(String name, PromptoVersion version) throws PromptoError {
+	default Batch fetchVersionedBatch(String name, PromptoVersion version) throws PromptoError {
 		return fetchVersionedModule(ModuleType.BATCH, name, version);
 	}
 	
-	default public WebSite fetchVersionedApplication(String name, PromptoVersion version) throws PromptoError {
+	default WebSite fetchVersionedApplication(String name, PromptoVersion version) throws PromptoError {
 		return fetchVersionedModule(ModuleType.WEBSITE, name, version);
 	}
 	
-	default public Script fetchVersionedScript(String name, PromptoVersion version) throws PromptoError {
+	default Script fetchVersionedScript(String name, PromptoVersion version) throws PromptoError {
 		return fetchVersionedModule(ModuleType.SCRIPT, name, version);
 	}
 	
-	default public Service fetchVersionedService(String name, PromptoVersion version) throws PromptoError {
+	default Service fetchVersionedService(String name, PromptoVersion version) throws PromptoError {
 		return fetchVersionedModule(ModuleType.SERVICE, name, version);
 	}
 
-	default public Library fetchVersionedLibrary(String name, PromptoVersion version) throws PromptoError {
+	default Library fetchVersionedLibrary(String name, PromptoVersion version) throws PromptoError {
 		return fetchVersionedModule(ModuleType.LIBRARY, name, version);
 	}
 	
-	default public Script fetchThesaurus(PromptoVersion version) throws PromptoError {
+	default Script fetchThesaurus(PromptoVersion version) throws PromptoError {
 		return fetchVersionedModule(ModuleType.THESAURUS, ModuleType.THESAURUS.name(), version);
 	}
 	
-	public Iterable<Module> fetchAllModules() throws PromptoError;
+	Iterable<Module> fetchAllModules() throws PromptoError;
 	<T extends Module> T fetchVersionedModule(ModuleType type, String name, PromptoVersion version) throws PromptoError;
 	Object fetchVersionedModuleDbId(String name, PromptoVersion version) throws PromptoError;
 	void storeModule(Module module) throws PromptoError;
@@ -162,15 +162,18 @@ public interface ICodeStore {
 
 	void storeResource(Resource resource, Object moduleId);
 
-	default public Resource fetchLatestResource(String path) throws PromptoError {
+	default Resource fetchLatestResource(String path) throws PromptoError {
 		return fetchVersionedResource(path, PromptoVersion.LATEST);
 	}
 
 	Resource fetchVersionedResource(String path, PromptoVersion version);
 	
-	default public AttributeInfo fetchLatestAttributeInfo(Context context, String name) {
-		if("category".equals(name))
-			return AttributeInfo.CATEGORY;
+	Iterable<Resource> fetchLatestResourcesWithMimeTypes(String ... mimeTypes);
+
+	default AttributeInfo fetchLatestAttributeInfo(Context context, String name) {
+		AttributeInfo info = AttributeInfo.BUILT_IN_ATTRIBUTE_INFOS.get(name);
+		if(info != null)
+			return info;
 		else {
 			Iterable<IDeclaration> decls = fetchLatestDeclarations(name);
 			if(decls==null)
@@ -187,6 +190,7 @@ public interface ICodeStore {
 	void upgradeIfRequired();
 
 	NativeCategoryDeclaration fetchLatestNativeCategoryDeclarationWithJavaBinding(String typeName);
+
 
 
 }

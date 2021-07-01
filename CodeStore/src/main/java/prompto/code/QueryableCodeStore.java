@@ -28,20 +28,12 @@ import prompto.declaration.IEnumeratedDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
 import prompto.error.PromptoError;
-import prompto.expression.AndExpression;
-import prompto.expression.EqualsExpression;
-import prompto.expression.IExpression;
-import prompto.expression.IPredicateExpression;
 import prompto.expression.Symbol;
-import prompto.expression.UnresolvedIdentifier;
 import prompto.grammar.Annotation;
-import prompto.grammar.EqOp;
 import prompto.grammar.Identifier;
 import prompto.grammar.OrderByClause;
 import prompto.grammar.OrderByClauseList;
 import prompto.intrinsic.PromptoVersion;
-import prompto.literal.TextLiteral;
-import prompto.literal.VersionLiteral;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
@@ -256,6 +248,13 @@ public class QueryableCodeStore extends BaseCodeStore {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	@Override
+	protected void doFetchLatestResourcesWithMimeTypes(List<Resource> resources, Set<String> mimeTypes) {
+		IStoredIterable found = fetchManyInStore(new CategoryType(new Identifier("Resource")), PromptoVersion.LATEST, "mimeType", mimeTypes, true);
+		found.forEach(stored -> resources.add(ResourceReader.readResource(stored)));
+	}
+
 	
 	static ThreadLocal<Map<String, Iterable<IDeclaration>>> registering = new ThreadLocal<Map<String, Iterable<IDeclaration>>>() {
 		@Override protected Map<String, Iterable<IDeclaration>> initialValue() {
@@ -579,41 +578,58 @@ public class QueryableCodeStore extends BaseCodeStore {
 		return null;
 	}
 
-	private IStoredIterable fetchManyInStore(CategoryType type, PromptoVersion version, String attribute, String value, boolean filterOnModules) throws PromptoError {
+	private IStoredIterable fetchManyInStore(CategoryType type, PromptoVersion version, String attribute, Object value, boolean filterOnModules) throws PromptoError {
 		IQueryBuilder builder = store.newQueryBuilder();
 		if(uniqueDecls.contains(type.toString().toUpperCase())) {
 			builder.first(1L).last(1L);
 		}
-		builder.verify(AttributeInfo.CATEGORY, MatchOp.HAS, type.getTypeName());
-		IPredicateExpression filter = buildFilter(version, attribute, value);
-		filter.interpretQuery(context, builder, null);
-		builder.and();
+		builder = verifyCategory(builder, type);
+		builder = verifyVersion(builder, version);
+		builder = verifyAttribute(builder, attribute, value);
 		builder = filterOnModules(builder, filterOnModules);
 		if(PromptoVersion.LATEST.equals(version)) {
-			IdentifierList names = new IdentifierList("prototype", "version");
-			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
-			orderBy.interpretQuery(context, builder);
+			builder = orderByVersion(builder);
 			IStoredIterable stored = store.fetchMany(builder.build());
 			return fetchDistinct(stored);
 		} else
 			return store.fetchMany(builder.build()); 
 	}
 	
+	private IQueryBuilder verifyCategory(IQueryBuilder builder, CategoryType type) {
+		return builder.verify(AttributeInfo.CATEGORY, MatchOp.HAS, type.getTypeName());
+	}
+
+	private IQueryBuilder verifyVersion(IQueryBuilder builder, PromptoVersion version) {
+		if(PromptoVersion.LATEST.equals(version))
+			return builder;
+		else 
+			return builder.verify(AttributeInfo.VERSION, MatchOp.EQUALS, version.asInt()).and();
+	}
+
+	private IQueryBuilder orderByVersion(IQueryBuilder builder) {
+		IdentifierList names = new IdentifierList("prototype", "version");
+		OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
+		return orderBy.interpretQuery(context, builder);
+	}
+
+	private IQueryBuilder verifyAttribute(IQueryBuilder builder, String attribute, Object value) {
+		AttributeInfo info = fetchLatestAttributeInfo(context, attribute);
+		MatchOp op = value instanceof Collection ? MatchOp.IN : MatchOp.EQUALS;
+		return builder.verify(info, op, value).and();
+	}
+
 	private IStored fetchOneNamedInStore(CategoryType type, PromptoVersion version, String name, boolean filterOnModules) throws PromptoError {
 		return fetchOneInStore(type, version, "name", name, filterOnModules);
 	}
 	
 	private IStored fetchOneInStore(CategoryType type, PromptoVersion version, String attribute, String value, boolean filterOnModules) throws PromptoError {
 		IQueryBuilder builder = store.newQueryBuilder();
-		builder.verify(AttributeInfo.CATEGORY, MatchOp.HAS, type.getTypeName());
-		IPredicateExpression filter = buildFilter(version, attribute, value);
-		filter.interpretQuery(context, builder, null);
-		builder.and();
+		builder = verifyCategory(builder, type);
+		builder = verifyVersion(builder, version);
+		builder = verifyAttribute(builder, attribute, value);
 		builder = filterOnModules(builder, filterOnModules);
 		if(PromptoVersion.LATEST.equals(version)) {
-			IdentifierList names = new IdentifierList("version");
-			OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
-			orderBy.interpretQuery(context, builder);
+			builder = orderByVersion(builder);
 			builder.first(1L).last(1L);
 			IStoredIterable iterable = store.fetchMany(builder.build());
 			Iterator<IStored> stored = iterable.iterator();
@@ -662,18 +678,6 @@ public class QueryableCodeStore extends BaseCodeStore {
 		};
 	}
 
-	private IPredicateExpression buildFilter(PromptoVersion version, String attribute, String value) {
-		IExpression left = new UnresolvedIdentifier(new Identifier(attribute));
-		IExpression right = new TextLiteral("'" + value + "'");
-		IPredicateExpression filter = new EqualsExpression(left, EqOp.EQUALS, right);
-		if(!PromptoVersion.LATEST.equals(version)) {
-			left = new UnresolvedIdentifier(new Identifier("version"));
-			right = new VersionLiteral("'v" + version.toString() + "'");
-			IExpression condition = new EqualsExpression(left, EqOp.EQUALS, right);
-			filter = new AndExpression(filter, condition);
-		} 
-		return filter;
-	}
 
 	@SuppressWarnings("unchecked")
 	private <T extends IDeclaration> T parseDeclaration(IStored stored) {

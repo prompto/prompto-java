@@ -1,6 +1,9 @@
 package prompto.store;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AttributeInfo extends FamilyInfo {
 
@@ -11,6 +14,16 @@ public class AttributeInfo extends FamilyInfo {
 	public static final AttributeInfo DERIVED_FROM = new AttributeInfo("derivedFrom", Family.TEXT, true, null);
 	public static final AttributeInfo ANNOTATIONS = new AttributeInfo("annotations", Family.TEXT, true, null);
 	public static final AttributeInfo MODULE = new AttributeInfo("module", Family.CATEGORY, false, null);
+	public static final AttributeInfo VERSION = new AttributeInfo("version", Family.VERSION, false, null);
+	public static final AttributeInfo MIMETYPE = new AttributeInfo("mimeType", Family.TEXT, false, null);
+	
+	public static final Map<String, AttributeInfo> BUILT_IN_ATTRIBUTE_INFOS = new HashMap<>();
+	
+	static {
+		Arrays.asList(CATEGORY, NAME, STORABLE, SYMBOLS, DERIVED_FROM, ANNOTATIONS, MODULE, VERSION, MIMETYPE).forEach(info->{
+			BUILT_IN_ATTRIBUTE_INFOS.put(info.getName(), info);
+		});
+	}
 	
 	public static final String GENERAL = "general";
 	public static final String KEY = "key";
