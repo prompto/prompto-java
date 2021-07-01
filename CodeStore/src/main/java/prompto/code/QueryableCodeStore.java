@@ -607,8 +607,9 @@ public class QueryableCodeStore extends BaseCodeStore {
 	}
 
 	private IQueryBuilder orderByVersion(IQueryBuilder builder) {
-		IdentifierList names = new IdentifierList("prototype", "version");
-		OrderByClauseList orderBy = new OrderByClauseList( new OrderByClause(names, true) );
+		OrderByClauseList orderBy = new OrderByClauseList();
+		orderBy.add(new OrderByClause(new IdentifierList("prototype"), false));
+		orderBy.add(new OrderByClause(new IdentifierList("version"), true));
 		return orderBy.interpretQuery(context, builder);
 	}
 
