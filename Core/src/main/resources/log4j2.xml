@@ -120,5 +120,9 @@
          <Logger name="prompto.utils.ErrorLogger" level="info">
             <AppenderRef ref="ErrorAppender"/>
         </Logger>
+         <Logger name="org.apache.logging.log4j.status.StatusLogger" level="debug">
+            <AppenderRef ref="ErrorAppender"/>
+        </Logger>
+        
     </Loggers>
 </Configuration>
