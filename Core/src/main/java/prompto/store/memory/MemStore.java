@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 import prompto.error.PromptoError;
 import prompto.intrinsic.PromptoBinary;
+import prompto.intrinsic.PromptoDateTime;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoTuple;
 import prompto.store.AttributeInfo;
@@ -32,11 +33,16 @@ import prompto.store.IStoredIterable;
 /* a utility class for running unit tests only */
 public final class MemStore implements IStore {
 
-	private Map<Long, StoredDocument> documents = new HashMap<>();
+	private Map<Long, StoredDocument> instances = new HashMap<>();
 	private AtomicLong lastDbId = new AtomicLong(0);
 	private Map<String, AttributeInfo> attributes = new HashMap<>();
 	private Map<String, AtomicLong> sequences = new ConcurrentHashMap<>();
 	private Map<String, Map<String, Object>> configs = new ConcurrentHashMap<>();
+	private List<StoredDocument> transactions = new ArrayList<>();
+	Map<String, Object> transaction;
+	private AtomicLong lastTransactionId = new AtomicLong(0);
+	private List<StoredDocument> audits = new ArrayList<>();
+	private AtomicLong lastAuditId = new AtomicLong(0);
 	
 	@Override
 	public boolean checkConnection() {
@@ -73,47 +79,88 @@ public final class MemStore implements IStore {
 	
 	@Override
 	public void store(Collection<?> toDelete, Collection<IStorable> toStore) throws PromptoError {
+		createTransaction();
 		if(toDelete!=null) 
-			delete(toDelete);
+			doDelete(toDelete);
 		if(toStore!=null)
-			store(toStore);
+			doStore(toStore);
 	}
 
 	@Override
-	public void store(Collection<IStorable> storables) throws PromptoError {
-		for(IStorable storable : storables) {
+	public void store(Collection<IStorable> toStore) throws PromptoError {
+		store(null, toStore);
+	}
+	
+	
+	private void createTransaction() {
+		transaction = new HashMap<>();
+		transaction.put("txnId", lastTransactionId.incrementAndGet());
+		transaction.put("txnTimeStamp", PromptoDateTime.now());
+		// TODO populate metadata
+		transactions.add(new StoredDocument(null, transaction));
+	}
+
+	private void doStore(Collection<IStorable> toStore) {
+		for(IStorable storable : toStore) {
 			if(!(storable instanceof StorableDocument))
 				throw new IllegalStateException("Expecting a StorableDocument");
-			store((StorableDocument)storable);
+			doStore((StorableDocument)storable);
 		}
 	}
 
-	public void store(StorableDocument storable) throws PromptoError {
+	private void doStore(StorableDocument storable) throws PromptoError {
+		String operation = "UPDATE";
 		// ensure db id
 		Object dbId = storable.getData(dbIdName);
 		if(!(dbId instanceof Long)) {
 			dbId = Long.valueOf(lastDbId.incrementAndGet());
 			storable.setData(dbIdName, dbId);
+			operation = "INSERT";
 		}
-		documents.put((Long)dbId, new StoredDocument(storable.getCategories(), storable.getDocument()));
+		StoredDocument stored = new StoredDocument(storable.getCategories(), storable.getDocument());
+		instances.put((Long)dbId, stored);
+		Map<String, Object> audit = new HashMap<>();
+		audit.put(dbIdName, lastAuditId.incrementAndGet());
+		audit.put("txnId", transaction.get("txnId"));
+		audit.put("txnTimeStamp", transaction.get("txnTimeStamp"));
+		audit.put("instanceId", dbId);
+		audit.put("operation", operation);
+		audit.put("instance", stored);
+		audits.add(new StoredDocument(null, audit));
+		
 	}
 	
 	@Override
-	public void delete(Collection<?> dbIds) throws PromptoError {
-		for(Object dbId : dbIds)
-			documents.remove(dbId);
+	public void delete(Collection<?> toDelete) throws PromptoError {
+		store(toDelete, null);
 	}
 	
+	private void doDelete(Collection<?> toDelete) {
+		for(Object dbId : toDelete)
+			doDelete(dbId);
+	}
+
+	private void doDelete(Object dbId) {
+		instances.remove(dbId);
+		Map<String, Object> audit = new HashMap<>();
+		audit.put(dbIdName, lastAuditId.incrementAndGet());
+		audit.put("txnId", transaction.get("txnId"));
+		audit.put("txnTimeStamp", transaction.get("txnTimeStamp"));
+		audit.put("instanceId", dbId);
+		audit.put("operation", "DELETE");
+		audits.add(new StoredDocument(null, audit));
+	}
+
 	@Override
 	public void deleteAll() throws PromptoError {
-		documents = new HashMap<>();
+		instances = new HashMap<>();
 	}
 	
 	@Override
 	public PromptoBinary fetchBinary(Object dbId, String attr) {
 		if(!(dbId instanceof Long))
 			dbId = Long.decode(dbId.toString());
-		StoredDocument doc = documents.get(dbId);
+		StoredDocument doc = instances.get(dbId);
 		if(doc==null)
 			return null;
 		else
@@ -122,7 +169,7 @@ public final class MemStore implements IStore {
 	
 	@Override
 	public IStored fetchUnique(Object dbId) throws PromptoError {
-		return documents.get(dbId);
+		return instances.get(dbId);
 	}
 	
 	
@@ -134,7 +181,7 @@ public final class MemStore implements IStore {
 	@Override
 	public IStored fetchOne(IQuery query) throws PromptoError {
 		Query q = (Query)query;
-		for(StoredDocument doc : documents.values()) {
+		for(StoredDocument doc : instances.values()) {
 			if(doc.matches(q.getPredicate()))
 				return doc;
 		}
@@ -172,9 +219,9 @@ public final class MemStore implements IStore {
 
 	private List<StoredDocument> filterDocs(IPredicate predicate) throws PromptoError {
 		if(predicate==null)
-			return new ArrayList<>(documents.values()); // need a copy to avoid concurrent modification;
+			return new ArrayList<>(instances.values()); // need a copy to avoid concurrent modification;
 		else
-			return documents.values().stream()
+			return instances.values().stream()
 					.filter(doc->doc.matches(predicate))
 					.collect(Collectors.toList());
 	}
@@ -389,8 +436,6 @@ public final class MemStore implements IStore {
 			else
 				return predicate.matches(document);
 		}
-		
-
 
 	}
 
@@ -477,5 +522,14 @@ public final class MemStore implements IStore {
 		configs.put(name, data);
 	}
 
+	public List<StoredDocument> getTransactions() {
+		return transactions;
+	}
+
+	public List<StoredDocument> getAudits() {
+		return audits;
+	}
+
+	
 	
 }

@@ -6,6 +6,9 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,10 +37,12 @@ import prompto.utils.IdentifierList;
 public class TestMemStore {
 
 	Context context;
+	MemStore store;
 	
 	@Before
 	public void before() throws Exception {
-		DataStore.setInstance(new MemStore());
+		store = new MemStore();
+		DataStore.setInstance(store);
 		context = Context.newGlobalsContext();
 		AttributeDeclaration attr = new AttributeDeclaration(new Identifier("__id__"), TextType.instance());
 		attr.setStorable(true);
@@ -316,5 +321,44 @@ public class TestMemStore {
 		docs.next();
 		assertFalse(docs.hasNext());
 	}
+	
+	@Test
+	public void audits3Inserts() throws Exception {
+		List<IStorable> docs = IntStream.of(1, 2, 3)
+				.mapToObj(i->{
+					IStorable doc = DataStore.getInstance().newStorable(new String[0], null);
+					doc.setData("name", "hello " + i);
+					return doc;
+				})
+				.collect(Collectors.toList());
+		DataStore.getInstance().store(docs);
+		assertEquals(1L, store.getTransactions().size());
+		assertEquals(3L, store.getAudits().size());		
+	}
+
+	@Test
+	public void audits1Update() throws Exception {
+		IStorable doc1 = DataStore.getInstance().newStorable(new String[0], null);
+		doc1.setData("name", "hello");
+		DataStore.getInstance().store(doc1);
+		IStored stored = store.fetchUnique(doc1.getOrCreateDbId());
+		IStorable doc2 = DataStore.getInstance().newStorable(new String[0], null);
+		doc2.setDbId(stored.getDbId());
+		doc2.setData("name", "bye");
+		DataStore.getInstance().store(doc2);
+		assertEquals(2L, store.getTransactions().size());
+		assertEquals(2L, store.getAudits().size());		
+	}
+	
+	@Test
+	public void audits1Delete() throws Exception {
+		IStorable doc = DataStore.getInstance().newStorable(new String[0], null);
+		doc.setData("name", "hello");
+		DataStore.getInstance().store(doc);
+		DataStore.getInstance().delete(doc.getOrCreateDbId());
+		assertEquals(2L, store.getTransactions().size());
+		assertEquals(2L, store.getAudits().size());		
+	}
+
 
 }
