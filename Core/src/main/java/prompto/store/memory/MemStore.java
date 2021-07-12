@@ -1,6 +1,8 @@
 package prompto.store.memory;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -13,14 +15,17 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import prompto.error.PromptoError;
 import prompto.intrinsic.PromptoBinary;
-import prompto.intrinsic.PromptoDateTime;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoTuple;
 import prompto.store.AttributeInfo;
+import prompto.store.IAuditMetadata;
+import prompto.store.IAuditRecord;
 import prompto.store.IQuery;
 import prompto.store.IQueryBuilder;
 import prompto.store.IStorable;
@@ -29,6 +34,7 @@ import prompto.store.IStorable.IDbIdListener;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.store.IStoredIterable;
+import prompto.store.IAuditRecord.Operation;
 
 /* a utility class for running unit tests only */
 public final class MemStore implements IStore {
@@ -38,10 +44,9 @@ public final class MemStore implements IStore {
 	private Map<String, AttributeInfo> attributes = new HashMap<>();
 	private Map<String, AtomicLong> sequences = new ConcurrentHashMap<>();
 	private Map<String, Map<String, Object>> configs = new ConcurrentHashMap<>();
-	private List<StoredDocument> transactions = new ArrayList<>();
-	Map<String, Object> transaction;
-	private AtomicLong lastTransactionId = new AtomicLong(0);
-	private List<StoredDocument> audits = new ArrayList<>();
+	Map<Long, AuditMetadata> auditMetadatas = new HashMap<>();
+	private AtomicLong lastAuditMetadataId = new AtomicLong(0);
+	Map<Long, AuditRecord> audits = new HashMap<>();
 	private AtomicLong lastAuditId = new AtomicLong(0);
 	
 	@Override
@@ -78,12 +83,12 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
-	public void store(Collection<?> toDelete, Collection<IStorable> toStore) throws PromptoError {
-		createTransaction();
+	public void store(Collection<?> toDelete, Collection<IStorable> toStore, IAuditMetadata auditMeta) throws PromptoError {
+		auditMeta = storeAuditMetadata(auditMeta);
 		if(toDelete!=null) 
-			doDelete(toDelete);
+			doDelete(toDelete, auditMeta);
 		if(toStore!=null)
-			doStore(toStore);
+			doStore(toStore, auditMeta);
 	}
 
 	@Override
@@ -92,63 +97,51 @@ public final class MemStore implements IStore {
 	}
 	
 	
-	private void createTransaction() {
-		transaction = new HashMap<>();
-		transaction.put("txnId", lastTransactionId.incrementAndGet());
-		transaction.put("txnTimeStamp", PromptoDateTime.now());
-		// TODO populate metadata
-		transactions.add(new StoredDocument(null, transaction));
+	private IAuditMetadata storeAuditMetadata(IAuditMetadata auditMeta) {
+		if(auditMeta==null)
+			auditMeta = newAuditMetadata();
+		auditMetadatas.put((Long)auditMeta.getAuditMetadataId(), (AuditMetadata)auditMeta);
+		return auditMeta;
 	}
 
-	private void doStore(Collection<IStorable> toStore) {
+	private void doStore(Collection<IStorable> toStore, IAuditMetadata auditMeta) {
 		for(IStorable storable : toStore) {
 			if(!(storable instanceof StorableDocument))
 				throw new IllegalStateException("Expecting a StorableDocument");
-			doStore((StorableDocument)storable);
+			doStore((StorableDocument)storable, auditMeta);
 		}
 	}
 
-	private void doStore(StorableDocument storable) throws PromptoError {
-		String operation = "UPDATE";
+	private void doStore(StorableDocument storable, IAuditMetadata auditMeta) throws PromptoError {
+		IAuditRecord.Operation operation = IAuditRecord.Operation.UPDATE;
 		// ensure db id
 		Object dbId = storable.getData(dbIdName);
 		if(!(dbId instanceof Long)) {
 			dbId = Long.valueOf(lastDbId.incrementAndGet());
 			storable.setData(dbIdName, dbId);
-			operation = "INSERT";
+			operation = IAuditRecord.Operation.INSERT;
 		}
 		StoredDocument stored = new StoredDocument(storable.getCategories(), storable.getDocument());
 		instances.put((Long)dbId, stored);
-		Map<String, Object> audit = new HashMap<>();
-		audit.put(dbIdName, lastAuditId.incrementAndGet());
-		audit.put("txnId", transaction.get("txnId"));
-		audit.put("txnTimeStamp", transaction.get("txnTimeStamp"));
-		audit.put("instanceId", dbId);
-		audit.put("operation", operation);
-		audit.put("instance", stored);
-		audits.add(new StoredDocument(null, audit));
+		AuditRecord audit = newAuditRecord(auditMeta);
+		audit.setInstanceDbId(dbId);
+		audit.setOperation(operation);
+		audit.setInstance(stored);
+		audits.put((Long)audit.getAuditRecordId(), audit);
 		
 	}
 	
-	@Override
-	public void delete(Collection<?> toDelete) throws PromptoError {
-		store(toDelete, null);
-	}
-	
-	private void doDelete(Collection<?> toDelete) {
+	private void doDelete(Collection<?> toDelete, IAuditMetadata auditMeta) {
 		for(Object dbId : toDelete)
-			doDelete(dbId);
+			doDelete(dbId, auditMeta);
 	}
 
-	private void doDelete(Object dbId) {
+	private void doDelete(Object dbId, IAuditMetadata auditMeta) {
 		instances.remove(dbId);
-		Map<String, Object> audit = new HashMap<>();
-		audit.put(dbIdName, lastAuditId.incrementAndGet());
-		audit.put("txnId", transaction.get("txnId"));
-		audit.put("txnTimeStamp", transaction.get("txnTimeStamp"));
-		audit.put("instanceId", dbId);
-		audit.put("operation", "DELETE");
-		audits.add(new StoredDocument(null, audit));
+		AuditRecord audit = newAuditRecord(auditMeta);
+		audit.setInstanceDbId(dbId);
+		audit.setOperation(IAuditRecord.Operation.DELETE);
+		audits.put((Long)audit.getAuditRecordId(), audit);
 	}
 
 	@Override
@@ -511,7 +504,7 @@ public final class MemStore implements IStore {
 		}
 		
 	}
-
+	
 	@Override
 	public Map<String, Object> fetchConfiguration(String name) {
 		return configs.get(name);
@@ -522,14 +515,183 @@ public final class MemStore implements IStore {
 		configs.put(name, data);
 	}
 
-	public List<StoredDocument> getTransactions() {
-		return transactions;
+	@Override 
+	public boolean supportsAudit() {
+		return true;
+	}
+	
+	
+	@SuppressWarnings("serial")
+	static class AuditMetadata extends HashMap<String, Object> implements IAuditMetadata {
+		
 	}
 
-	public List<StoredDocument> getAudits() {
-		return audits;
+	@Override
+	public AuditMetadata newAuditMetadata() {
+		AuditMetadata meta = new AuditMetadata();
+		meta.setAuditMetadataId(lastAuditMetadataId.incrementAndGet());
+		meta.setUTCTimestamp(LocalDateTime.now(ZoneId.of("UTC")));
+		return meta;
+	}
+	
+	
+	
+	@Override
+	public Object fetchLatestAuditMetadataId(Object dbId) {
+		return fetchAllAuditMetadataIdsStream(dbId)
+				.findFirst()
+				.orElse(null);
+	}
+	
+	
+	@Override
+	public Collection<Object> fetchAllAuditMetadataIds(Object dbId) {
+		return fetchAllAuditMetadataIdsStream(dbId)
+				.collect(Collectors.toList());
+	}
+	
+	private Stream<Object> fetchAllAuditMetadataIdsStream(Object dbId) {
+		return audits.values().stream()
+				.filter(a -> dbId.equals(a.getInstanceDbId()))
+				.sorted((a,b) -> a.getUTCTimestamp().isBefore(b.getUTCTimestamp()) ? 1 : -1)
+				.map(IAuditRecord::getAuditMetadataId);
+		
+	}
+
+	@Override
+	public IAuditMetadata fetchAuditMetadata(Object metaId) {
+		return auditMetadatas.get(metaId);
+	}
+
+
+	@SuppressWarnings("serial")
+	static class AuditRecord extends HashMap<String, Object> implements IAuditRecord {
+
+		Object auditId;
+		Object metadataId;
+		LocalDateTime utcTimeStamp;
+		Object instanceDbId;
+		Operation operation;
+		IStored instance;
+		
+		@Override
+		public void setAuditRecordId(Object id) {
+			this.auditId = id;
+		}
+
+		@Override
+		public Object getAuditRecordId() {
+			return auditId;
+		}
+		
+		@Override
+		public void setAuditMetadataId(Object id) {
+			metadataId = id;
+		}
+
+		@Override
+		public Object getAuditMetadataId() {
+			return metadataId;
+		}
+
+		@Override
+		public void setUTCTimestamp(LocalDateTime timeStamp) {
+			this.utcTimeStamp = timeStamp;
+		}
+
+		@Override
+		public LocalDateTime getUTCTimestamp() {
+			return utcTimeStamp;
+		}
+
+		@Override
+		public void setInstanceDbId(Object dbId) {
+			this.instanceDbId = dbId;
+		}
+
+		@Override
+		public Object getInstanceDbId() {
+			return instanceDbId;
+		}
+
+		@Override
+		public void setOperation(Operation operation) {
+			this.operation = operation;
+		}
+
+		@Override
+		public Operation getOperation() {
+			return operation;
+		}
+
+		@Override
+		public void setInstance(IStored instance) {
+			this.instance = instance;
+		}
+
+		@Override
+		public IStored getInstance() {
+			return instance;
+		}
+
+		public boolean matches(Map<String, Object> predicates) {
+			return predicates.size() > 0 && predicates.entrySet().stream()
+					.allMatch(this::matches);
+		}
+		
+		boolean matches(Map.Entry<String, Object> predicate) {
+			return instance!=null && Objects.equals(instance.getData(predicate.getKey()), predicate.getValue());
+		}
+		
+	}
+
+	private AuditRecord newAuditRecord(IAuditMetadata auditMeta) {
+		AuditRecord audit = new AuditRecord();
+		audit.setAuditRecordId(lastAuditId.incrementAndGet());
+		audit.setAuditMetadataId(auditMeta.getAuditMetadataId());
+		audit.setUTCTimestamp(auditMeta.getUTCTimestamp());
+		return audit;
+	}
+
+	@Override
+	public AuditRecord fetchLatestAuditRecord(Object dbId) {
+		return fetchAuditRecordsStream(a -> dbId.equals(a.getInstanceDbId()))
+				.findFirst()
+				.orElse(null);
+	}
+
+	private Stream<AuditRecord> fetchAuditRecordsStream(Predicate<AuditRecord> filter) {
+		return audits.values().stream()
+				.filter(filter)
+				.sorted((a,b) -> a.getUTCTimestamp().isBefore(b.getUTCTimestamp()) ? 1 : -1);
+	}
+
+	@Override
+	public Collection<AuditRecord> fetchAllAuditRecords(Object dbId) {
+		return fetchAuditRecordsCollection(a -> dbId.equals(a.getInstanceDbId()));
+	}
+	
+	private Collection<AuditRecord> fetchAuditRecordsCollection(Predicate<AuditRecord> filter) {
+		return fetchAuditRecordsStream(filter).collect(Collectors.toList());
+	}
+
+	@Override
+	public Collection<AuditRecord> fetchAuditRecordsMatching(Map<String, Object> predicates) {
+		return audits.values().stream()
+				.filter(a -> a.matches(predicates))
+				.sorted((a,b) -> a.getUTCTimestamp().isBefore(b.getUTCTimestamp()) ? 1 : -1)
+				.collect(Collectors.toList());
+	}
+
+	public Collection<AuditRecord> fetchDeletedAuditRecords() {
+		return audits.values().stream()
+				.filter(a -> a.getOperation()==Operation.DELETE)
+				.sorted((a,b) -> a.getUTCTimestamp().isBefore(b.getUTCTimestamp()) ? 1 : -1)
+				.collect(Collectors.toList());
 	}
 
 	
 	
+
+
 }

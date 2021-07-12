@@ -29,16 +29,30 @@ public interface IStore extends Closeable {
 		return newStorable(categories.toArray(new String[0]), dbIdFactory);
 	}
 	
-	void store(Collection<?> deletables, Collection<IStorable> storables) throws PromptoError;
+	void store(Collection<?> deletables, Collection<IStorable> storables, IAuditMetadata auditMeta) throws PromptoError;
+	default void store(Collection<?> deletables, Collection<IStorable> storables) throws PromptoError {
+		store(deletables, storables, null);
+	}
+	default void store(Collection<IStorable> storables, IAuditMetadata auditMeta) throws PromptoError {
+		store(null, storables, auditMeta);
+	}
 	default void store(Collection<IStorable> storables) throws PromptoError {
-		store(null, storables);
+		store(null, storables, null);
+	}
+	default void store(IStorable storable, IAuditMetadata auditMeta) throws PromptoError {
+		store(null, Collections.singletonList(storable), auditMeta);
 	}
 	default void store(IStorable storable) throws PromptoError {
 		store(null, Collections.singletonList(storable));
 	}
-	
+	default void delete(Collection<?> dbIds, IAuditMetadata auditMeta) throws PromptoError {
+		store(dbIds, null, auditMeta);
+	}
 	default void delete(Collection<?> dbIds) throws PromptoError {
-		store(dbIds, null);
+		store(dbIds, null, null);
+	}
+	default void delete(Object dbId, IAuditMetadata auditMeta) throws PromptoError {
+		store(Arrays.asList(dbId), null, auditMeta);
 	}
 	default void delete(Object dbId) throws PromptoError {
 		store(Arrays.asList(dbId), null);
@@ -60,4 +74,30 @@ public interface IStore extends Closeable {
 	Map<String, Object> fetchConfiguration(String name);
 	void storeConfiguration(String name, Map<String, Object> data);
 	
+	boolean supportsAudit();
+	default IAuditMetadata newAuditMetadata() {
+		throw new UnsupportedOperationException();
+	}
+	default Object fetchLatestAuditMetadataId(Object dbId) {
+		throw new UnsupportedOperationException();
+	}
+	default Collection<Object> fetchAllAuditMetadataIds(Object dbId) {
+		throw new UnsupportedOperationException();
+	}
+	default IAuditMetadata fetchAuditMetadata(Object metaId) {
+		throw new UnsupportedOperationException();
+	}
+	default Collection<Object> fetchDbIdsAffectedByAuditId(Object auditId) {
+		throw new UnsupportedOperationException();
+	}
+	default IAuditRecord fetchLatestAuditRecord(Object dbId) {
+		throw new UnsupportedOperationException();
+	}
+	default Collection<? extends IAuditRecord> fetchAllAuditRecords(Object dbId) {
+		throw new UnsupportedOperationException();
+	}
+	default Collection<? extends IAuditRecord> fetchAuditRecordsMatching(Map<String, Object> predicates) {
+		throw new UnsupportedOperationException();
+	}
+
 }
