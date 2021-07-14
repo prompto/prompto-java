@@ -29,35 +29,35 @@ public interface IStore extends Closeable {
 		return newStorable(categories.toArray(new String[0]), dbIdFactory);
 	}
 	
-	void store(Collection<?> deletables, Collection<IStorable> storables, IAuditMetadata auditMeta) throws PromptoError;
+	void deleteAndStore(Collection<?> deletables, Collection<IStorable> storables, IAuditMetadata auditMeta) throws PromptoError;
 	default void store(Collection<?> deletables, Collection<IStorable> storables) throws PromptoError {
-		store(deletables, storables, null);
+		deleteAndStore(deletables, storables, null);
 	}
 	default void store(Collection<IStorable> storables, IAuditMetadata auditMeta) throws PromptoError {
-		store(null, storables, auditMeta);
+		deleteAndStore(null, storables, auditMeta);
 	}
 	default void store(Collection<IStorable> storables) throws PromptoError {
-		store(null, storables, null);
+		deleteAndStore(null, storables, null);
 	}
 	default void store(IStorable storable, IAuditMetadata auditMeta) throws PromptoError {
-		store(null, Collections.singletonList(storable), auditMeta);
+		deleteAndStore(null, Collections.singletonList(storable), auditMeta);
 	}
 	default void store(IStorable storable) throws PromptoError {
-		store(null, Collections.singletonList(storable));
+		deleteAndStore(null, Collections.singletonList(storable), null);
 	}
 	default void delete(Collection<?> dbIds, IAuditMetadata auditMeta) throws PromptoError {
-		store(dbIds, null, auditMeta);
+		deleteAndStore(dbIds, null, auditMeta);
 	}
 	default void delete(Collection<?> dbIds) throws PromptoError {
-		store(dbIds, null, null);
+		deleteAndStore(dbIds, null, null);
 	}
 	default void delete(Object dbId, IAuditMetadata auditMeta) throws PromptoError {
-		store(Arrays.asList(dbId), null, auditMeta);
+		deleteAndStore(Arrays.asList(dbId), null, auditMeta);
 	}
 	default void delete(Object dbId) throws PromptoError {
-		store(Arrays.asList(dbId), null);
+		deleteAndStore(Arrays.asList(dbId), null, null);
 	}
-	void deleteAll() throws PromptoError;
+	void deleteAll() throws PromptoError; // for test purpose only
 
 	PromptoBinary fetchBinary(Object dbId, String attr) throws PromptoError;
 	IStored fetchUnique(Object dbId) throws PromptoError;
@@ -87,7 +87,7 @@ public interface IStore extends Closeable {
 	default IAuditMetadata fetchAuditMetadata(Object metaId) {
 		throw new UnsupportedOperationException();
 	}
-	default Collection<Object> fetchDbIdsAffectedByAuditId(Object auditId) {
+	default Collection<Object> fetchDbIdsAffectedByAuditMetadataId(Object auditId) {
 		throw new UnsupportedOperationException();
 	}
 	default IAuditRecord fetchLatestAuditRecord(Object dbId) {
@@ -96,7 +96,7 @@ public interface IStore extends Closeable {
 	default Collection<? extends IAuditRecord> fetchAllAuditRecords(Object dbId) {
 		throw new UnsupportedOperationException();
 	}
-	default Collection<? extends IAuditRecord> fetchAuditRecordsMatching(Map<String, Object> predicates) {
+	default Collection<? extends IAuditRecord> fetchAuditRecordsMatching(Map<String, Object> auditPredicates, Map<String, Object> instancePredicates) {
 		throw new UnsupportedOperationException();
 	}
 

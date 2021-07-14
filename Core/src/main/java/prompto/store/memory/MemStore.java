@@ -1,6 +1,7 @@
 package prompto.store.memory;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -34,7 +36,6 @@ import prompto.store.IStorable.IDbIdListener;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.store.IStoredIterable;
-import prompto.store.IAuditRecord.Operation;
 
 /* a utility class for running unit tests only */
 public final class MemStore implements IStore {
@@ -83,7 +84,7 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
-	public void store(Collection<?> toDelete, Collection<IStorable> toStore, IAuditMetadata auditMeta) throws PromptoError {
+	public void deleteAndStore(Collection<?> toDelete, Collection<IStorable> toStore, IAuditMetadata auditMeta) throws PromptoError {
 		auditMeta = storeAuditMetadata(auditMeta);
 		if(toDelete!=null) 
 			doDelete(toDelete, auditMeta);
@@ -452,6 +453,12 @@ public final class MemStore implements IStore {
 				return false;
 		}
 		
+		
+		@Override
+		public String toString() {
+			return document.toString() + " (" + categories.toString() + ")";
+		}
+
 		public boolean equals(StoredDocument doc) {
 			return Arrays.deepEquals(categories, doc.categories)
 					&& Objects.deepEquals(document, doc.document);
@@ -564,6 +571,8 @@ public final class MemStore implements IStore {
 	}
 
 
+	static final Map<String, Function<AuditRecord, Object>> GETTERS = new HashMap<>();
+	
 	@SuppressWarnings("serial")
 	static class AuditRecord extends HashMap<String, Object> implements IAuditRecord {
 
@@ -574,6 +583,12 @@ public final class MemStore implements IStore {
 		Operation operation;
 		IStored instance;
 		
+		
+		@Override
+		public String toString() {
+			return "{auditId=" + auditId + ", metadataId=" + metadataId + ", utcTimeStamp=" + utcTimeStamp + ", instanceDbId=" + instanceDbId + ", operation=" + operation + ", instance=" + instance + "}";
+		}
+
 		@Override
 		public void setAuditRecordId(Object id) {
 			this.auditId = id;
@@ -634,12 +649,41 @@ public final class MemStore implements IStore {
 			return instance;
 		}
 
-		public boolean matches(Map<String, Object> predicates) {
-			return predicates.size() > 0 && predicates.entrySet().stream()
-					.allMatch(this::matches);
+		public boolean matches(Map<String, Object> auditPredicates, Map<String, Object> instancePredicates) {
+			// at least 1 predicate is mandatory
+			if((auditPredicates==null ? 0 : auditPredicates.size()) + (instancePredicates==null ? 0 : instancePredicates.size())==0)
+				return false;
+			else
+				return (auditPredicates==null || auditPredicates.entrySet().stream()
+						.allMatch(this::auditMatches))
+						&& (instancePredicates==null || instancePredicates.entrySet().stream()
+						.allMatch(this::instanceMatches));
 		}
 		
-		boolean matches(Map.Entry<String, Object> predicate) {
+		boolean auditMatches(Map.Entry<String, Object> predicate) {
+			Function<AuditRecord, Object> getter = findOrCreateGetter(predicate.getKey());
+			return getter!=null && Objects.equals(getter.apply(this), predicate.getValue());
+		}
+
+		private Function<AuditRecord, Object> findOrCreateGetter(String key) {
+			Function<AuditRecord, Object> getter = GETTERS.get(key);
+			if(getter==null) try {
+				Field field = AuditRecord.class.getDeclaredField(key);
+				getter = record -> { 
+					try {
+						return field.get(record);
+					} catch(IllegalAccessException e) {
+						throw new RuntimeException(e);
+					}
+				};
+				GETTERS.put(key, getter);
+			} catch (NoSuchFieldException ignored) {
+				
+			}
+			return getter;
+		}
+
+		boolean instanceMatches(Map.Entry<String, Object> predicate) {
 			return instance!=null && Objects.equals(instance.getData(predicate.getKey()), predicate.getValue());
 		}
 		
@@ -676,22 +720,12 @@ public final class MemStore implements IStore {
 	}
 
 	@Override
-	public Collection<AuditRecord> fetchAuditRecordsMatching(Map<String, Object> predicates) {
+	public Collection<AuditRecord> fetchAuditRecordsMatching(Map<String, Object> auditPredicates, Map<String, Object> instancePredicates) {
 		return audits.values().stream()
-				.filter(a -> a.matches(predicates))
+				.filter(a -> a.matches(auditPredicates, instancePredicates))
 				.sorted((a,b) -> a.getUTCTimestamp().isBefore(b.getUTCTimestamp()) ? 1 : -1)
 				.collect(Collectors.toList());
 	}
-
-	public Collection<AuditRecord> fetchDeletedAuditRecords() {
-		return audits.values().stream()
-				.filter(a -> a.getOperation()==Operation.DELETE)
-				.sorted((a,b) -> a.getUTCTimestamp().isBefore(b.getUTCTimestamp()) ? 1 : -1)
-				.collect(Collectors.toList());
-	}
-
-	
-	
 
 
 }

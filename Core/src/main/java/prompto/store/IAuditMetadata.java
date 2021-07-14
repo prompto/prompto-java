@@ -15,8 +15,7 @@ public interface IAuditMetadata extends Map<String, Object> {
 		put("timeStamp", timeStamp);
 	}
 	default LocalDateTime getUTCTimestamp() {
-		Object timeStamp = get("timeStamp");
-		return timeStamp instanceof LocalDateTime ? (LocalDateTime)timeStamp : null;
+		return get("timeStamp", LocalDateTime.class);
 	}
 	default void setLogin(String login) {
 		put("login", login);
@@ -24,5 +23,9 @@ public interface IAuditMetadata extends Map<String, Object> {
 	default String getLogin() {
 		Object login = get("login");
 		return login instanceof String ? (String)login : "<anonymous>";
+	}
+	@SuppressWarnings("unchecked")
+	default <T> T get(String fieldName, Class<T> resultClass) {
+		return (T)get(fieldName);
 	}
 }
