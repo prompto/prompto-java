@@ -23,6 +23,7 @@ import java.util.stream.Stream;
 
 import prompto.error.PromptoError;
 import prompto.intrinsic.PromptoBinary;
+import prompto.intrinsic.PromptoDocument;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoTuple;
 import prompto.store.AttributeInfo;
@@ -530,6 +531,11 @@ public final class MemStore implements IStore {
 	
 	@SuppressWarnings("serial")
 	static class AuditMetadata extends HashMap<String, Object> implements IAuditMetadata {
+
+		@Override
+		public PromptoDocument<String, Object> toDocument() {
+			return new PromptoDocument<String, Object>(this);
+		}
 		
 	}
 
@@ -542,14 +548,12 @@ public final class MemStore implements IStore {
 	}
 	
 	
-	
 	@Override
 	public Object fetchLatestAuditMetadataId(Object dbId) {
 		return fetchAllAuditMetadataIdsStream(dbId)
 				.findFirst()
 				.orElse(null);
 	}
-	
 	
 	@Override
 	public Collection<Object> fetchAllAuditMetadataIds(Object dbId) {
@@ -562,7 +566,6 @@ public final class MemStore implements IStore {
 				.filter(a -> dbId.equals(a.getInstanceDbId()))
 				.sorted((a,b) -> a.getUTCTimestamp().isBefore(b.getUTCTimestamp()) ? 1 : -1)
 				.map(IAuditRecord::getAuditMetadataId);
-		
 	}
 
 	@Override

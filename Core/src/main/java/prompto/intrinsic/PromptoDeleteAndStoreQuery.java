@@ -10,17 +10,20 @@ import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.DataStore;
+import prompto.store.IAuditMetadata;
 import prompto.store.IStorable;
 import prompto.store.IStore;
+import prompto.value.DocumentValue;
 import prompto.value.IInstance;
 import prompto.value.IIterable;
 import prompto.value.IValue;
 import prompto.value.NullValue;
 
-public class PromptoStoreQuery {
+public class PromptoDeleteAndStoreQuery {
 
 	Set<Object> deletables = new HashSet<>();
 	Map<Object, IStorable> storables = new HashMap<>();
+	IAuditMetadata metadata;
 	
 	public void execute() {
 		if(deletables.isEmpty())
@@ -30,7 +33,7 @@ public class PromptoStoreQuery {
 		if(deletables!=null || storables!=null) {
 			IStore store = DataStore.getInstance();
 			try {
-				store.store(deletables, storables==null ? null : storables.values());
+				store.deleteAndStore(deletables, storables==null ? null : storables.values(), metadata);
 				if(storables!=null)
 					storables.values().forEach(IStorable::clear);
 			} catch(PromptoError e) {
@@ -116,6 +119,20 @@ public class PromptoStoreQuery {
 				store(iter.next());
 		} else
 			throw new UnsupportedOperationException("Can't delete " + value.getClass());
+	}
+
+	public void metadata(Context context, IValue value) {
+		if(value instanceof DocumentValue)
+			metadata(value.convertTo(context, PromptoDocument.class));
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void metadata(Object value) {
+		IStore store = DataStore.getInstance();
+		if(store.supportsAudit() && value instanceof Map) {
+			metadata = store.newAuditMetadata();
+			metadata.putAll((Map<String,Object>) value);
+		}
 	}
 	
 	

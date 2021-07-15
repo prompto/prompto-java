@@ -22,6 +22,11 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testAuditRecord() throws Exception {
+		compareResourceEOE("store/auditRecord.pec");
+	}
+
+	@Test
 	public void testDeleteRecords() throws Exception {
 		compareResourceEOE("store/deleteRecords.pec");
 	}

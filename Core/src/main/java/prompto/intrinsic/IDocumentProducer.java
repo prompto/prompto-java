@@ -1,5 +1,5 @@
 package prompto.intrinsic;
 
 public interface IDocumentProducer {
-	Object toDocument();
+	PromptoDocument<String, Object> toDocument();
 }

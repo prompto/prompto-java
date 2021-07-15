@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.security.InvalidParameterException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -14,6 +15,7 @@ import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.parser.ECleverParser;
 import prompto.type.CharacterType;
+import prompto.type.DateTimeType;
 import prompto.type.DocumentType;
 import prompto.type.IType;
 import prompto.utils.IOUtils;
@@ -113,7 +115,17 @@ public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable,
 			generator.writeNumber(((Double)value).doubleValue());
 		else if(value instanceof String)
 			generator.writeString((String)value);
-		else if(value instanceof PromptoList) {
+		else if(value instanceof LocalDateTime) {
+			if(withType) {
+				generator.writeStartObject();
+				generator.writeFieldName("type");
+				generator.writeString(DateTimeType.instance().getTypeName());
+				generator.writeFieldName("value");
+				generator.writeString(value.toString());
+				generator.writeEndObject();
+			} else
+				generator.writeString(value.toString());
+		} else if(value instanceof PromptoList) {
 			generator.writeStartArray();
 			for(V item : (PromptoList<V>)value)
 				valueToJson(item, generator, null, null, withType, binaries);
@@ -137,7 +149,7 @@ public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable,
 		if(value instanceof PromptoBinary)
 			populateFromBinary((PromptoBinary)value);
 		else if(value instanceof PromptoRoot) {
-			PromptoDocument<String,Object> doc = ((PromptoRoot)value).toDocument();
+			PromptoDocument<String,Object> doc = ((PromptoRoot)value).toDocumentValue();
 			putAll((Map<? extends K, ? extends V>) doc);
 		} else
 			throw new UnsupportedOperationException();

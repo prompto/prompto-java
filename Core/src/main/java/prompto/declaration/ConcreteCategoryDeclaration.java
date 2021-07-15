@@ -36,6 +36,7 @@ import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.grammar.MethodDeclarationList;
 import prompto.grammar.Operator;
+import prompto.intrinsic.IPromptoStorable;
 import prompto.intrinsic.PromptoEnum;
 import prompto.intrinsic.PromptoRoot;
 import prompto.intrinsic.PromptoStorableBase;
@@ -607,6 +608,8 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 
 	private void compileInterfaces(Context context, ClassFile classFile) {
+		if(isStorable(context))
+			classFile.addInterface(IPromptoStorable.class);
 		if(derivedFrom!=null)
 			derivedFrom.forEach((id)->
 				classFile.addInterface(CompilerUtils.getCategoryInterfaceType(id)));

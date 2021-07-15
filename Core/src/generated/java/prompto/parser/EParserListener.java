@@ -3572,6 +3572,16 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitIsOtherExpression(EParser.IsOtherExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link EParser#metadata}.
+	 * @param ctx the parse tree
+	 */
+	void enterMetadata(EParser.MetadataContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#metadata}.
+	 * @param ctx the parse tree
+	 */
+	void exitMetadata(EParser.MetadataContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code ArrowExpressionBody}
 	 * labeled alternative in {@link EParser#arrow_expression}.
 	 * @param ctx the parse tree

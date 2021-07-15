@@ -2,14 +2,16 @@ package prompto.intrinsic;
 
 import prompto.store.IStorable.IDbIdFactory;
 
-public class PromptoStorableBase {
+public class PromptoStorableBase implements IPromptoStorable {
 
 	protected Object dbId;
 
+	@Override
 	public Object getDbId() {
 		return dbId;
 	}
 	
+	@Override
 	public void setDbId(Object dbId) {
 		this.dbId = dbId;
 	}

@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import prompto.value.IMultiplyable;
 
 @SuppressWarnings("serial")
-public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoList<V>, V>, IMultiplyable, IDocumentProducer, IJsonNodeProducer {
+public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoList<V>, V>, IMultiplyable, IDocumentValueProducer, IJsonNodeProducer {
 
 	boolean mutable;
 	
@@ -130,11 +130,11 @@ public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoLi
 		
 	@SuppressWarnings("unchecked")
 	@Override
-	public PromptoList<? extends V> toDocument() {
+	public PromptoList<? extends V> toDocumentValue() {
 		List<? extends V> items = (List<? extends V>)this.stream()
 				.map(item -> {
-					if(item instanceof IDocumentProducer)
-						return ((IDocumentProducer)item).toDocument();
+					if(item instanceof IDocumentValueProducer)
+						return ((IDocumentValueProducer)item).toDocumentValue();
 					else
 						return item;
 				})

@@ -9,6 +9,7 @@ import java.util.Map;
 
 import prompto.error.PromptoError;
 import prompto.intrinsic.PromptoBinary;
+import prompto.intrinsic.PromptoDocument;
 import prompto.store.IStorable.IDbIdFactory;
 
 /* a mean to store and fetch data */
@@ -86,6 +87,10 @@ public interface IStore extends Closeable {
 	}
 	default IAuditMetadata fetchAuditMetadata(Object metaId) {
 		throw new UnsupportedOperationException();
+	}
+	default PromptoDocument<String, Object> fetchAuditMetadataAsDocument(Object metaId) {
+		IAuditMetadata metaData = fetchAuditMetadata(metaId);
+		return metaData==null ? null : metaData.toDocument();
 	}
 	default Collection<Object> fetchDbIdsAffectedByAuditMetadataId(Object auditId) {
 		throw new UnsupportedOperationException();

@@ -29,7 +29,7 @@ import prompto.store.IStored;
 import prompto.store.IStoredIterable;
 import prompto.store.InvalidValueError;
 
-public abstract class PromptoRoot extends PromptoStorableBase implements IMutable, IDocumentProducer, IJsonNodeProducer {
+public abstract class PromptoRoot extends PromptoStorableBase implements IMutable, IDocumentProducer, IDocumentValueProducer, IJsonNodeProducer {
 
 	public static PromptoRoot newInstance(IStored stored) {
 		if(stored==null) // happens on an unsuccessful fetchOne
@@ -275,13 +275,18 @@ public abstract class PromptoRoot extends PromptoStorableBase implements IMutabl
 	}
 
 	@Override
+	public PromptoDocument<String, Object> toDocumentValue() {
+		return toDocument();
+	}
+	
+	@Override
 	public PromptoDocument<String, Object> toDocument() {
 		PromptoDocument<String, Object> doc = new PromptoDocument<>(); 
 		List<Field> fields = collectFields();
 		fields.forEach(field-> {
 			Object value = getFieldValue(this, field);
-			if(value instanceof IDocumentProducer)
-				value = ((IDocumentProducer)value).toDocument();
+			if(value instanceof IDocumentValueProducer)
+				value = ((IDocumentValueProducer)value).toDocumentValue();
 			doc.put(field.getName(), value);
 		});
 		return doc;

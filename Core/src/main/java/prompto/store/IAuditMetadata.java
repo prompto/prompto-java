@@ -3,7 +3,9 @@ package prompto.store;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-public interface IAuditMetadata extends Map<String, Object> {
+import prompto.intrinsic.IDocumentProducer;
+
+public interface IAuditMetadata extends Map<String, Object>, IDocumentProducer {
 
 	default void setAuditMetadataId(Object id) {
 		put("auditMetadataId", id);

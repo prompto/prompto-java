@@ -327,7 +327,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			IExpression expression = argument.resolve(local, declaration, true, false);
 			IParameter parameter = argument.getParameter();
 			IValue value = parameter.checkValue(calling, expression);
-			if(value!=null && parameter.isMutable() & !value.isMutable()) 
+			if(value!=null && parameter.isMutable() && !value.isMutable()) 
 				throw new NotMutableError();
 			local.setValue(argument.getParameterId(), value);
 		}

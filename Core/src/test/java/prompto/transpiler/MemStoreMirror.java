@@ -1,5 +1,6 @@
 package prompto.transpiler;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,8 +15,10 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import prompto.intrinsic.PromptoDocument;
 import prompto.store.AttributeInfo;
 import prompto.store.Family;
+import prompto.store.IAuditMetadata;
 import prompto.store.IQuery;
 import prompto.store.IQueryBuilder;
 import prompto.store.IQueryBuilder.MatchOp;
@@ -29,6 +32,11 @@ import prompto.store.memory.Query;
 @SuppressWarnings("restriction")
 public class MemStoreMirror {
 	
+	private static boolean isFunction(Object v) {
+		return v instanceof ScriptObjectMirror && ((ScriptObjectMirror)v).isFunction();
+	}
+
+
 	MemStore store = new MemStore();
 	ScriptEngine nashorn;
 	ValueConverter converter;
@@ -44,17 +52,30 @@ public class MemStoreMirror {
 		return new StorableMirror(storable);
 	}
 	
-	public void store(Object[] toDelete, Object[] toStore) {
+	public void deleteAndStore(Object[] toDelete, Object[] toStore, Object metaData) {
 		Set<Object> del = toDelete==null ? null : Stream.of(toDelete).map(dbId->store.convertToDbId(dbId)).collect(Collectors.toSet());
 		Set<IStorable> add = toStore==null ? null : Stream.of(toStore).map(item->((StorableMirror)item).getStorable()).collect(Collectors.toSet());
-		store.store(del, add);
+		IAuditMetadata meta = toAuditMetadata(metaData);
+		store.deleteAndStore(del, add, meta);
 	}
 	
-	public void storeAsync(Object[] toDelete, Object[] toStore, ScriptObjectMirror andThen) {
+	public void deleteAndStoreAsync(Object[] toDelete, Object[] toStore, Object metaData, ScriptObjectMirror andThen) {
 		Set<Object> del = toDelete==null ? null : Stream.of(toDelete).collect(Collectors.toSet());
 		Set<IStorable> add = toStore==null ? null : Stream.of(toStore).map(item->((StorableMirror)item).getStorable()).collect(Collectors.toSet());
-		store.store(del, add);
+		IAuditMetadata meta = toAuditMetadata(metaData);
+		store.deleteAndStore(del, add, meta);
 		andThen.call(null);
+	}
+
+	@SuppressWarnings("unchecked")
+	private IAuditMetadata toAuditMetadata(Object metaData) {
+		if(metaData instanceof Map) {
+			IAuditMetadata meta = store.newAuditMetadata();
+			Map<String, Object> entries = (Map<String, Object>)converter.fromJS(metaData);
+			meta.putAll(entries);
+			return meta;
+		} else
+			return null;
 	}
 
 	public void flush() {
@@ -216,11 +237,6 @@ public class MemStoreMirror {
 		}
 
 
-		private boolean isFunction(Object v) {
-			return v instanceof ScriptObjectMirror && ((ScriptObjectMirror)v).isFunction();
-		}
-
-
 		@SuppressWarnings("unchecked")
 		public Object toJS(Object value, boolean isStorable) {
 			if(value==null || value instanceof Boolean || value instanceof Integer || value instanceof Long || value instanceof Double || value instanceof String || value instanceof StoredMirror || value instanceof StorableMirror)
@@ -231,12 +247,28 @@ public class MemStoreMirror {
 				return new StorableMirror((IStorable)value);
 			else if(value instanceof List) 
 				return isStorable ? toJSList((List<Object>)value, isStorable) : toJSArray((List<Object>)value, isStorable);
+			else if(value instanceof PromptoDocument) 
+				return toJSDocument((PromptoDocument<String,Object>)value);
 			else if(value instanceof Map) 
 				return toJSObject((Map<String,Object>)value, isStorable); 
+			else if(value instanceof LocalDateTime)
+				return toJSLocalDateTime((LocalDateTime)value);
 			else
 				throw new UnsupportedOperationException(value.getClass().getName());
 		}
 		
+		private Object toJSLocalDateTime(LocalDateTime value) {
+			String expression = "typeof(DateTime) == typeof({}) ? DateTime.parse('" + value.toString() + "') : new Date('" + value.toString().substring(0,19) + "')";
+			return safeEval("(" + expression + ")");
+		}
+
+		private Object toJSDocument(PromptoDocument<String, Object> value) {
+			ScriptObjectMirror docFn = (ScriptObjectMirror)nashorn.get("Document");
+			ScriptObjectMirror object = (ScriptObjectMirror)docFn.newObject();
+			value.forEach((k,v)->object.setMember(k, toJS(v, false)));
+			return object;
+		}
+
 		private ScriptObjectMirror toJSObject(Map<String, Object> value, boolean isStorable) {
 			ScriptObjectMirror object = safeEval("({})");
 			value.forEach((k,v)->object.setMember(k, toJS(v, isStorable)));
@@ -432,6 +464,14 @@ public class MemStoreMirror {
 			}
 			return String.join(", ", items);
 		}
-}
+	}
 
+	public Object fetchLatestAuditMetadataId(Object dbId) {
+		return store.fetchLatestAuditMetadataId(dbId);
+	}
+	
+	public Object fetchAuditMetadata(Object dbId) {
+		PromptoDocument<String, Object> metadata = store.fetchAuditMetadataAsDocument(dbId);
+		return metadata==null ? null : converter.toJS(metadata, true);
+	}
 }
