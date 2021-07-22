@@ -1,6 +1,7 @@
 package prompto.transpiler;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,7 +24,9 @@ import prompto.store.IQuery;
 import prompto.store.IQueryBuilder;
 import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStorable;
+import prompto.store.IStorable.IDbIdFactory;
 import prompto.store.IStorable.IDbIdListener;
+import prompto.store.IStorable.IDbIdProvider;
 import prompto.store.IStored;
 import prompto.store.IStoredIterable;
 import prompto.store.memory.MemStore;
@@ -46,9 +49,11 @@ public class MemStoreMirror {
 		this.converter = new ValueConverter();
 	}
 
-	public StorableMirror newStorableDocument(String[] categories, ScriptObjectMirror dbIdListener) {
-		IDbIdListener listener = dbIdListener==null ? null : dbId->dbIdListener.call(null, dbId);
-		IStorable storable = store.newStorable(categories, listener);
+	public StorableMirror newStorableDocument(String[] categories, ScriptObjectMirror dbIdFactory) {
+		IDbIdProvider provider = () -> dbIdFactory.callMember("provider");
+		IDbIdListener listener = dbId -> dbIdFactory.callMember("listener", dbId);
+		IDbIdFactory factory = IDbIdFactory.of(provider, listener, ()->true);
+		IStorable storable = store.newStorable(categories, factory);
 		return new StorableMirror(storable);
 	}
 	
@@ -69,13 +74,13 @@ public class MemStoreMirror {
 
 	@SuppressWarnings("unchecked")
 	private IAuditMetadata toAuditMetadata(Object metaData) {
+		IAuditMetadata meta = store.newAuditMetadata();
+		meta.setUTCTimestamp(LocalDateTime.now(ZoneId.of("UTC")));
 		if(metaData instanceof Map) {
-			IAuditMetadata meta = store.newAuditMetadata();
 			Map<String, Object> entries = (Map<String, Object>)converter.fromJS(metaData);
 			meta.putAll(entries);
-			return meta;
-		} else
-			return null;
+		} 
+		return meta;
 	}
 
 	public void flush() {
@@ -473,5 +478,9 @@ public class MemStoreMirror {
 	public Object fetchAuditMetadata(Object dbId) {
 		PromptoDocument<String, Object> metadata = store.fetchAuditMetadataAsDocument(dbId);
 		return metadata==null ? null : converter.toJS(metadata, true);
+	}
+	
+	public Object fetchAllAuditMetadataIds(Object dbId) {
+		return store.fetchAllAuditMetadataIds(dbId);
 	}
 }

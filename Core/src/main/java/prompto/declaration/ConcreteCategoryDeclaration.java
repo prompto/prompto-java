@@ -1113,8 +1113,9 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    transpiler.indent();
 	    List<String> categories = collectCategories(transpiler.getContext());
 	    if(storable) {
-	    	transpiler.append("if(!this.$storable) {").newLine().indent()
-	        	.append("this.$storable = $DataStore.instance.newStorableDocument(['").append(categories.stream().collect(Collectors.joining("', '"))).append("'], this.dbIdListener.bind(this));").newLine()
+	    	transpiler.append("if(!this.$storable) {").indent()
+	    		.append("var dbIdFactory = { provider: this.getDbId.bind(this), listener: this.setDbId.bind(this) };").newLine()
+	        	.append("this.$storable = $DataStore.instance.newStorableDocument(['").append(categories.stream().collect(Collectors.joining("', '"))).append("'], dbIdFactory);").newLine()
 	    		.dedent().append("}").newLine();
 	    }
 	    transpileGetterSetterAttributes(transpiler);
@@ -1122,10 +1123,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    transpiler.append("this.$categories = [").append(categories.stream().collect(Collectors.joining(", "))).append("];").newLine();
 	    transpileLocalAttributes(transpiler);
 	    transpiler.append("this.$mutable = mutable;").newLine();
-	    transpiler.append("return this;");
-	    transpiler.dedent();
-	    transpiler.append("}");
-	    transpiler.newLine();
+	    transpiler.append("return this;").dedent().append("}").newLine();
 	    Identifier parent = derivedFrom!=null && derivedFrom.size()>0 ? derivedFrom.get(0) : null;
 	    if(parent!=null)
 	        transpiler.append(getName()).append(".prototype = Object.create(").append(parent.toString()).append(".prototype);").newLine();

@@ -350,7 +350,7 @@ public class TestMemStore {
 		assertNotNull(metaId);
 		IAuditMetadata meta = store.fetchAuditMetadata(metaId);
 		assertNotNull(meta);
-		assertEquals(3L, store.audits.size());	
+		assertEquals(3L, store.auditRecords.size());	
 		IAuditRecord audit = store.fetchLatestAuditRecord(docs.get(0).getOrCreateDbId());
 		assertNotNull(audit);
 		assertEquals("hello 1", audit.getInstance().getData("name"));
@@ -393,7 +393,7 @@ public class TestMemStore {
 		DataStore.getInstance().store(doc);
 		DataStore.getInstance().delete(doc.getOrCreateDbId());
 		assertEquals(2L, store.auditMetadatas.size());
-		assertEquals(2L, store.audits.size());		
+		assertEquals(2L, store.auditRecords.size());		
 		Collection<AuditRecord> audits = store.fetchAllAuditRecords(doc.getOrCreateDbId());
 		assertEquals(2L, audits.size());	
 		Iterator<AuditRecord> iter = audits.iterator();

@@ -10,6 +10,7 @@ import java.util.Map;
 import prompto.error.PromptoError;
 import prompto.intrinsic.PromptoBinary;
 import prompto.intrinsic.PromptoDocument;
+import prompto.intrinsic.PromptoList;
 import prompto.store.IStorable.IDbIdFactory;
 
 /* a mean to store and fetch data */
@@ -82,7 +83,7 @@ public interface IStore extends Closeable {
 	default Object fetchLatestAuditMetadataId(Object dbId) {
 		throw new UnsupportedOperationException();
 	}
-	default Collection<Object> fetchAllAuditMetadataIds(Object dbId) {
+	default PromptoList<Object> fetchAllAuditMetadataIds(Object dbId) {
 		throw new UnsupportedOperationException();
 	}
 	default IAuditMetadata fetchAuditMetadata(Object metaId) {
@@ -92,16 +93,16 @@ public interface IStore extends Closeable {
 		IAuditMetadata metaData = fetchAuditMetadata(metaId);
 		return metaData==null ? null : metaData.toDocument();
 	}
-	default Collection<Object> fetchDbIdsAffectedByAuditMetadataId(Object auditId) {
+	default PromptoList<Object> fetchDbIdsAffectedByAuditMetadataId(Object auditId) {
 		throw new UnsupportedOperationException();
 	}
 	default IAuditRecord fetchLatestAuditRecord(Object dbId) {
 		throw new UnsupportedOperationException();
 	}
-	default Collection<? extends IAuditRecord> fetchAllAuditRecords(Object dbId) {
+	default PromptoList<? extends IAuditRecord> fetchAllAuditRecords(Object dbId) {
 		throw new UnsupportedOperationException();
 	}
-	default Collection<? extends IAuditRecord> fetchAuditRecordsMatching(Map<String, Object> auditPredicates, Map<String, Object> instancePredicates) {
+	default PromptoList<? extends IAuditRecord> fetchAuditRecordsMatching(Map<String, Object> auditPredicates, Map<String, Object> instancePredicates) {
 		throw new UnsupportedOperationException();
 	}
 

@@ -33,7 +33,6 @@ import prompto.store.IQuery;
 import prompto.store.IQueryBuilder;
 import prompto.store.IStorable;
 import prompto.store.IStorable.IDbIdFactory;
-import prompto.store.IStorable.IDbIdListener;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.store.IStoredIterable;
@@ -48,8 +47,8 @@ public final class MemStore implements IStore {
 	private Map<String, Map<String, Object>> configs = new ConcurrentHashMap<>();
 	Map<Long, AuditMetadata> auditMetadatas = new HashMap<>();
 	private AtomicLong lastAuditMetadataId = new AtomicLong(0);
-	Map<Long, AuditRecord> audits = new HashMap<>();
-	private AtomicLong lastAuditId = new AtomicLong(0);
+	Map<Long, AuditRecord> auditRecords = new HashMap<>();
+	private AtomicLong lastAuditRecordId = new AtomicLong(0);
 	
 	@Override
 	public boolean checkConnection() {
@@ -129,7 +128,7 @@ public final class MemStore implements IStore {
 		audit.setInstanceDbId(dbId);
 		audit.setOperation(operation);
 		audit.setInstance(stored);
-		audits.put((Long)audit.getAuditRecordId(), audit);
+		auditRecords.put((Long)audit.getAuditRecordId(), audit);
 		
 	}
 	
@@ -143,7 +142,7 @@ public final class MemStore implements IStore {
 		AuditRecord audit = newAuditRecord(auditMeta);
 		audit.setInstanceDbId(dbId);
 		audit.setOperation(IAuditRecord.Operation.DELETE);
-		audits.put((Long)audit.getAuditRecordId(), audit);
+		auditRecords.put((Long)audit.getAuditRecordId(), audit);
 	}
 
 	@Override
@@ -272,22 +271,6 @@ public final class MemStore implements IStore {
 		return new StorableDocument(categories, dbIdFactory);
 	}
 	
-	// for testing
-	public IStorable newStorable(List<String> categories, IDbIdListener listener) {
-		return newStorable(categories.toArray(new String[0]), listener);
-	}
-	
-	// for testing
-	public IStorable newStorable(String[] categories, IDbIdListener listener) {
-		IDbIdFactory factory = new IDbIdFactory() {
-			@Override public void accept(Object dbId) { listener.accept(dbId); }
-			@Override public Object get() { return null; }
-			@Override public boolean isUpdate() { return false; }
-		};
-		return newStorable(categories, factory);
-	}
-
-
 	@Override
 	public void flush() throws PromptoError {
 		// nothing to do
@@ -556,13 +539,13 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
-	public Collection<Object> fetchAllAuditMetadataIds(Object dbId) {
+	public PromptoList<Object> fetchAllAuditMetadataIds(Object dbId) {
 		return fetchAllAuditMetadataIdsStream(dbId)
-				.collect(Collectors.toList());
+				.collect(PromptoList.collector());
 	}
 	
 	private Stream<Object> fetchAllAuditMetadataIdsStream(Object dbId) {
-		return audits.values().stream()
+		return auditRecords.values().stream()
 				.filter(a -> dbId.equals(a.getInstanceDbId()))
 				.sorted((a,b) -> a.getUTCTimestamp().isBefore(b.getUTCTimestamp()) ? 1 : -1)
 				.map(IAuditRecord::getAuditMetadataId);
@@ -694,7 +677,7 @@ public final class MemStore implements IStore {
 
 	private AuditRecord newAuditRecord(IAuditMetadata auditMeta) {
 		AuditRecord audit = new AuditRecord();
-		audit.setAuditRecordId(lastAuditId.incrementAndGet());
+		audit.setAuditRecordId(lastAuditRecordId.incrementAndGet());
 		audit.setAuditMetadataId(auditMeta.getAuditMetadataId());
 		audit.setUTCTimestamp(auditMeta.getUTCTimestamp());
 		return audit;
@@ -708,26 +691,26 @@ public final class MemStore implements IStore {
 	}
 
 	private Stream<AuditRecord> fetchAuditRecordsStream(Predicate<AuditRecord> filter) {
-		return audits.values().stream()
+		return auditRecords.values().stream()
 				.filter(filter)
 				.sorted((a,b) -> a.getUTCTimestamp().isBefore(b.getUTCTimestamp()) ? 1 : -1);
 	}
 
 	@Override
-	public Collection<AuditRecord> fetchAllAuditRecords(Object dbId) {
+	public PromptoList<AuditRecord> fetchAllAuditRecords(Object dbId) {
 		return fetchAuditRecordsCollection(a -> dbId.equals(a.getInstanceDbId()));
 	}
 	
-	private Collection<AuditRecord> fetchAuditRecordsCollection(Predicate<AuditRecord> filter) {
-		return fetchAuditRecordsStream(filter).collect(Collectors.toList());
+	private PromptoList<AuditRecord> fetchAuditRecordsCollection(Predicate<AuditRecord> filter) {
+		return fetchAuditRecordsStream(filter).collect(PromptoList.collector());
 	}
 
 	@Override
-	public Collection<AuditRecord> fetchAuditRecordsMatching(Map<String, Object> auditPredicates, Map<String, Object> instancePredicates) {
-		return audits.values().stream()
+	public PromptoList<AuditRecord> fetchAuditRecordsMatching(Map<String, Object> auditPredicates, Map<String, Object> instancePredicates) {
+		return auditRecords.values().stream()
 				.filter(a -> a.matches(auditPredicates, instancePredicates))
 				.sorted((a,b) -> a.getUTCTimestamp().isBefore(b.getUTCTimestamp()) ? 1 : -1)
-				.collect(Collectors.toList());
+				.collect(PromptoList.collector());
 	}
 
 

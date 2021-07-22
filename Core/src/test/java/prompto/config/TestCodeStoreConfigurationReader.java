@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import prompto.store.IStorable;
+import prompto.store.IStorable.IDbIdFactory;
 import prompto.store.memory.MemStore;
 
 
@@ -25,26 +26,26 @@ public class TestCodeStoreConfigurationReader {
 	
 	@Before
 	public void before() {
-		store = new MemStore();
-		IStorable doc = store.newStorable(Collections.singletonList("config"), (dbId)->this.dbId=dbId);
+	store = new MemStore();
+		IStorable doc = store.newStorable(Collections.singletonList("config"), IDbIdFactory.of(null, dbId -> this.dbId=dbId, null));
 		doc.setData("string", "some string");
 		doc.setData("empty", null);
 		doc.setData("boolean", true);
 		doc.setData("integer", 23456);
 		doc.setData("array", Arrays.asList("abc", "def"));
 		// child record ref
-		IStorable child = store.newStorable(Collections.singletonList("child"), (dbId)->doc.setData("ref", dbId));
+		IStorable child = store.newStorable(Collections.singletonList("child"), IDbIdFactory.of(null, dbId -> doc.setData("ref", dbId), null));
 		child.setData("string", "some string");
 		child.setData("integer", 23456);
 		child.setData("array", Arrays.asList("abc", "def"));
 		store.store(child);	
 		// array record refs
 		List<Object> children = new ArrayList<>();
-		child = store.newStorable(Collections.singletonList("child"), (dbId)->children.add(dbId));
+		child = store.newStorable(Collections.singletonList("child"), IDbIdFactory.of(null, dbId -> children.add(dbId), null));
 		child.setData("key", "abc");
 		child.setData("value", "def");
 		store.store(child);	
-		child = store.newStorable(Collections.singletonList("child"), (dbId)->children.add(dbId));
+		child = store.newStorable(Collections.singletonList("child"), IDbIdFactory.of(null, dbId -> children.add(dbId), null));
 		child.setData("key", "abcd");
 		child.setData("value", "defg");
 		store.store(child);	

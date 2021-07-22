@@ -25,7 +25,17 @@ public interface IStorable {
 	public static interface IDbIdListener extends Consumer<Object> {}
 	
 	public static interface IDbIdFactory extends IDbIdProvider, IDbIdListener {
+	
+		static IDbIdFactory of(IDbIdProvider provider, IDbIdListener listener, Supplier<Boolean> isUpdate) {
+			return new IDbIdFactory() {
+				@Override public Object get() { return provider==null ? null : provider.get(); }
+				@Override public void accept(Object dbId) { if(listener!=null) listener.accept(dbId); }
+				@Override public boolean isUpdate() { return isUpdate==null ? true : isUpdate.get(); }
+			};
+		}
+
 		boolean isUpdate();
+
 	}
 
 }
