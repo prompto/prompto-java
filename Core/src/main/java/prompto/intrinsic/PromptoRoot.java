@@ -31,7 +31,7 @@ import prompto.store.InvalidValueError;
 
 public abstract class PromptoRoot extends PromptoStorableBase implements IMutable, IDocumentProducer, IDocumentValueProducer, IJsonNodeProducer {
 
-	public static PromptoRoot newInstance(IStored stored) {
+	public static PromptoRoot newInstance(IStored stored, boolean mutable) {
 		if(stored==null) // happens on an unsuccessful fetchOne
 			return null;
 		else try {
@@ -45,6 +45,7 @@ public abstract class PromptoRoot extends PromptoStorableBase implements IMutabl
 			Class<?> klass = Class.forName(concreteName, true, loader);
 			Constructor<?> cons = klass.getConstructor(IStored.class);
 			Object instance = cons.newInstance(stored);
+			((PromptoRoot)instance).setMutable(mutable);
 			return (PromptoRoot)instance;
 		} catch (Exception e) {
 			throw new RuntimeException(e); // TODO for now
@@ -57,7 +58,7 @@ public abstract class PromptoRoot extends PromptoStorableBase implements IMutabl
 		if(DataStore.getInstance().getDbIdClass().isInstance(value))
 			value = DataStore.getInstance().fetchUnique(value);
 		if(value instanceof IStored)
-			return newInstance((IStored)value);
+			return newInstance((IStored)value, false);
 		else
 			return (PromptoRoot)value; // will eventually throw an InvalidCastException 
 	}
@@ -85,7 +86,7 @@ public abstract class PromptoRoot extends PromptoStorableBase implements IMutabl
 						return iterator.hasNext(); 
 					}
 					@Override public PromptoRoot next() { 
-						return newInstance(iterator.next()); 
+						return newInstance(iterator.next(), false); 
 					}
 				};
 			}

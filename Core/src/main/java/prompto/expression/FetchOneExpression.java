@@ -168,7 +168,9 @@ public class FetchOneExpression extends CodeSection implements IFetchExpression 
 	}
 
 	private ResultInfo compileInstantiation(Context context, MethodInfo method, Flags flags) {
-		MethodConstant m = new MethodConstant(PromptoRoot.class, "newInstance", IStored.class, PromptoRoot.class);
+		boolean mutable = this.type!=null ? this.type.isMutable() : false;
+		method.addInstruction(mutable ? Opcode.ICONST_1 : Opcode.ICONST_0);
+		MethodConstant m = new MethodConstant(PromptoRoot.class, "newInstance", IStored.class, boolean.class, PromptoRoot.class);
 		method.addInstruction(Opcode.INVOKESTATIC, m);
 		if(type!=null) {
 			method.addInstruction(Opcode.CHECKCAST, new ClassConstant(type.getJavaType(context)));
