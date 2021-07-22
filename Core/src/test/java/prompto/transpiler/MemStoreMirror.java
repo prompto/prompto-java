@@ -475,7 +475,7 @@ public class MemStoreMirror {
 		return store.fetchLatestAuditMetadataId(dbId);
 	}
 	
-	public Object fetchAuditMetadata(Object dbId) {
+	public Object fetchAuditMetadataAsDocument(Object dbId) {
 		PromptoDocument<String, Object> metadata = store.fetchAuditMetadataAsDocument(dbId);
 		return metadata==null ? null : converter.toJS(metadata, true);
 	}
