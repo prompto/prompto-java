@@ -226,7 +226,7 @@ public class BaseParserTest extends BaseTest {
 	}
 
 	protected void checkOutput(String resource, ResourceRunner runner) throws Exception {
-		DataStore.setInstance(new MemStore());
+		DataStore.setInstance(new MemStore(()->true));
 		boolean trimNewLines = runner.runResource(resource, false);
 		String read = Out.read();
 		if(trimNewLines)

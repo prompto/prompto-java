@@ -49,7 +49,7 @@ public class TestMemStore {
 	
 	@Before
 	public void before() throws Exception {
-		store = new MemStore();
+		store = new MemStore(()->true);
 		DataStore.setInstance(store);
 		context = Context.newGlobalsContext();
 		AttributeDeclaration attr = new AttributeDeclaration(new Identifier("__id__"), TextType.instance());

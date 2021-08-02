@@ -40,7 +40,7 @@ public class MemStoreMirror {
 	}
 
 
-	MemStore store = new MemStore();
+	MemStore store = new MemStore(()->true);
 	ScriptEngine nashorn;
 	ValueConverter converter;
 	
