@@ -49,10 +49,9 @@ $Root.prototype.instanceOf = function(type) {
     return this.$categories.indexOf(type)>=0;
 };
 
-$Root.prototype.dbIdListener = function(dbId) {
-	this.dbId = dbId;
+$Root.prototype.getDbId = function() {
+    return this.dbId;
 };
-
 
 $Root.prototype.getOrCreateDbId = function() {
 	if(this.dbId)
@@ -62,6 +61,11 @@ $Root.prototype.getOrCreateDbId = function() {
 	else
 		return null;
 };
+
+$Root.prototype.setDbId = function(dbId) {
+	this.dbId = dbId;
+};
+
 
 
 $Root.prototype.getAttributeNames = function() {

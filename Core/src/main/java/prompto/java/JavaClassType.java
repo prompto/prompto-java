@@ -10,6 +10,7 @@ import java.util.Set;
 import prompto.declaration.AnyNativeCategoryDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
+import prompto.intrinsic.IDocumentProducer;
 import prompto.intrinsic.PromptoBinary;
 import prompto.intrinsic.PromptoDict;
 import prompto.intrinsic.PromptoDocument;
@@ -175,8 +176,10 @@ public class JavaClassType extends BaseType {
 	}
 
 	private static IValue convertDocument(Context context, Object value, Type type, IType returnType) {
-		if(value instanceof PromptoDocument<?,?>) {
+		if(value instanceof PromptoDocument<?,?> || value instanceof IDocumentProducer) {
 			if(returnType==DocumentType.instance() || returnType==AnyType.instance()) {
+				if(value instanceof IDocumentProducer)
+					value = ((IDocumentProducer)value).toDocument();
 				return new DocumentValue(context, (PromptoDocument<?,?>)value, true);
 			}
 		}

@@ -7,7 +7,7 @@ public class MemStoreFactory implements IStoreFactory {
 
 	@Override
 	public MemStore newStore(IStoreConfiguration config) {
-		return new MemStore();
+		return new MemStore(config::getAudit);
 	}
 
 }

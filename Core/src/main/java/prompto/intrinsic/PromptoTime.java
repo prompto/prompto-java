@@ -3,7 +3,7 @@ package prompto.intrinsic;
 import org.joda.time.LocalTime;
 
 /* DateTime is final so can't just extend it */
-public class PromptoTime implements Comparable<PromptoTime>, IDocumentProducer {
+public class PromptoTime implements Comparable<PromptoTime>, IDocumentValueProducer {
 
 	public static PromptoTime parse(String text) {
 		return new PromptoTime(LocalTime.parse(text));
@@ -112,7 +112,7 @@ public class PromptoTime implements Comparable<PromptoTime>, IDocumentProducer {
 	}
 
 	@Override
-	public Object toDocument() {
+	public Object toDocumentValue() {
 		return toString();
 	}
 

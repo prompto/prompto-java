@@ -2,9 +2,12 @@ package prompto.store.memory;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,11 +29,16 @@ import prompto.literal.TextLiteral;
 import prompto.runtime.Context;
 import prompto.store.AttributeInfo;
 import prompto.store.DataStore;
+import prompto.store.IAuditMetadata;
+import prompto.store.IAuditRecord;
 import prompto.store.IQueryBuilder;
+import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStorable;
+import prompto.store.IStorable.IDbIdFactory;
 import prompto.store.IStored;
 import prompto.store.IStoredIterable;
-import prompto.store.IQueryBuilder.MatchOp;
+import prompto.store.IAuditRecord.Operation;
+import prompto.store.memory.MemStore.AuditRecord;
 import prompto.type.TextType;
 import prompto.utils.IdentifierList;
 
@@ -41,7 +49,7 @@ public class TestMemStore {
 	
 	@Before
 	public void before() throws Exception {
-		store = new MemStore();
+		store = new MemStore(()->true);
 		DataStore.setInstance(store);
 		context = Context.newGlobalsContext();
 		AttributeDeclaration attr = new AttributeDeclaration(new Identifier("__id__"), TextType.instance());
@@ -323,6 +331,11 @@ public class TestMemStore {
 	}
 	
 	@Test
+	public void supportsAudit() {
+		assertTrue(DataStore.getInstance().isAuditEnabled());
+	}
+	
+	@Test
 	public void audits3Inserts() throws Exception {
 		List<IStorable> docs = IntStream.of(1, 2, 3)
 				.mapToObj(i->{
@@ -332,8 +345,15 @@ public class TestMemStore {
 				})
 				.collect(Collectors.toList());
 		DataStore.getInstance().store(docs);
-		assertEquals(1L, store.getTransactions().size());
-		assertEquals(3L, store.getAudits().size());		
+		assertEquals(1L, store.auditMetadatas.size());
+		Object metaId = store.fetchLatestAuditMetadataId(docs.get(0).getOrCreateDbId());
+		assertNotNull(metaId);
+		IAuditMetadata meta = store.fetchAuditMetadata(metaId);
+		assertNotNull(meta);
+		assertEquals(3L, store.auditRecords.size());	
+		IAuditRecord audit = store.fetchLatestAuditRecord(docs.get(0).getOrCreateDbId());
+		assertNotNull(audit);
+		assertEquals("hello 1", audit.getInstance().getData("name"));
 	}
 
 	@Test
@@ -342,12 +362,28 @@ public class TestMemStore {
 		doc1.setData("name", "hello");
 		DataStore.getInstance().store(doc1);
 		IStored stored = store.fetchUnique(doc1.getOrCreateDbId());
-		IStorable doc2 = DataStore.getInstance().newStorable(new String[0], null);
+		class DbIdFactory implements IDbIdFactory {
+
+			@Override public Object get() { return stored.getDbId(); }
+			@Override public void accept(Object dbId) {  }
+			@Override public boolean isUpdate() { return true; }
+		}
+
+		IStorable doc2 = DataStore.getInstance().newStorable(new String[0], new DbIdFactory());
 		doc2.setDbId(stored.getDbId());
 		doc2.setData("name", "bye");
 		DataStore.getInstance().store(doc2);
-		assertEquals(2L, store.getTransactions().size());
-		assertEquals(2L, store.getAudits().size());		
+		assertEquals(2L, store.auditMetadatas.size());
+		Collection<AuditRecord> audits = store.fetchAllAuditRecords(doc2.getOrCreateDbId());
+		assertEquals(2L, audits.size());	
+		Iterator<AuditRecord> iter = audits.iterator();
+		IAuditRecord audit = iter.next();
+		assertEquals("bye", audit.getInstance().getData("name"));
+		audit = iter.next();
+		assertEquals("hello", audit.getInstance().getData("name"));
+		Collection<Object> metaIds = store.fetchAllAuditMetadataIds(doc2.getOrCreateDbId());
+		assertEquals(2L, metaIds.size());
+		metaIds.forEach(metaId -> assertNotNull(store.fetchAuditMetadata(metaId)));
 	}
 	
 	@Test
@@ -356,9 +392,23 @@ public class TestMemStore {
 		doc.setData("name", "hello");
 		DataStore.getInstance().store(doc);
 		DataStore.getInstance().delete(doc.getOrCreateDbId());
-		assertEquals(2L, store.getTransactions().size());
-		assertEquals(2L, store.getAudits().size());		
+		assertEquals(2L, store.auditMetadatas.size());
+		assertEquals(2L, store.auditRecords.size());		
+		Collection<AuditRecord> audits = store.fetchAllAuditRecords(doc.getOrCreateDbId());
+		assertEquals(2L, audits.size());	
+		Iterator<AuditRecord> iter = audits.iterator();
+		IAuditRecord audit = iter.next();
+		assertNull(audit.getInstance());
+		audit = iter.next();
+		assertEquals("hello", audit.getInstance().getData("name"));
+		audits = store.fetchAuditRecordsMatching(null, Collections.singletonMap("name", "hello"));
+		assertEquals(1L, audits.size());
+		audit = audits.iterator().next();
+		assertEquals("hello", audit.getInstance().getData("name"));
+		audits = store.fetchAuditRecordsMatching(Collections.singletonMap("operation", Operation.DELETE), null);
+		assertEquals(1L, audits.size());
+		audit = audits.iterator().next();
+		assertNull(audit.getInstance());
 	}
-
-
+	
 }

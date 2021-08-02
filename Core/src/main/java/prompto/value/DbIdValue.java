@@ -1,6 +1,7 @@
 package prompto.value;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -77,6 +78,16 @@ public class DbIdValue implements IValue {
 	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
 		return JsonNodeFactory.instance.textNode(this.toString());
 	}
+
+	@Override
+	public Object convertTo(Context context, Type type) throws PromptoError {
+		if(type==Object.class)
+			return getStorableData();
+		else
+			return IValue.super.convertTo(context, type);
+	}
+	
+	
 
 
 }

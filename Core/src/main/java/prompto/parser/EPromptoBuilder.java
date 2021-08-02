@@ -257,7 +257,7 @@ import prompto.statement.ReadStatement;
 import prompto.statement.RemoteCall;
 import prompto.statement.ReturnStatement;
 import prompto.statement.StatementList;
-import prompto.statement.StoreStatement;
+import prompto.statement.DeleteAndStoreStatement;
 import prompto.statement.SwitchCase;
 import prompto.statement.SwitchErrorStatement;
 import prompto.statement.SwitchStatement;
@@ -3076,8 +3076,9 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitStore_statement(Store_statementContext ctx) {
 		ExpressionList deletables = getNodeValue(ctx.to_del);
 		ExpressionList storables = getNodeValue(ctx.to_add);
+		IExpression metadata = getNodeValue(ctx.with_meta);
 		StatementList andThen = getNodeValue(ctx.stmts);
-		StoreStatement stmt = new StoreStatement(deletables, storables, andThen);
+		DeleteAndStoreStatement stmt = new DeleteAndStoreStatement(deletables, storables, metadata, andThen);
 		setNodeValue(ctx, stmt);
 	}
 	

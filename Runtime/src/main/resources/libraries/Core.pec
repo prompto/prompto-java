@@ -107,6 +107,34 @@ define password as Text attribute
 // users typically have an email  
 define email as storable Text attribute with value index
 
+define isAuditEnabled as native method returning Boolean doing:
+	Java: return $store.isAuditEnabled();
+	C#: return $store.IsAuditEnabled();
+	Python2: return $store.isAuditEnabled()
+	Python3: return $store.isAuditEnabled()
+	JavaScript: return $store.isAuditEnabled();
+
+define fetchLatestAuditMetadataId as native method receiving dbId returning Any doing:
+	Java: return $store.fetchLatestAuditMetadataId(dbId);
+	C#: return $store.FetchLatestAuditMetadataId(dbId);
+	Python2: return $store.fetchLatestAuditMetadataId(dbId)
+	Python3: return $store.fetchLatestAuditMetadataId(dbId)
+	JavaScript: return $store.fetchLatestAuditMetadataId(dbId);
+
+define fetchAllAuditMetadataIds as native method receiving dbId returning Any[] doing:
+	Java: return $store.fetchAllAuditMetadataIds(dbId);
+	C#: return $store.FetchAllAuditMetadataIds(dbId);
+	Python2: return $store.fetchAllAuditMetadataIds(dbId)
+	Python3: return $store.fetchAllAuditMetadataIds(dbId)
+	JavaScript: return $store.fetchAllAuditMetadataIds(dbId);
+
+define fetchAuditMetadata as native method receiving dbId returning Document doing:
+	Java: return $store.fetchAuditMetadataAsDocument(dbId);
+	C#: return $store.FetchAuditMetadataAsDocument(dbId);
+	Python2: return $store.fetchAuditMetadataAsDocument(dbId)
+	Python3: return $store.fetchAuditMetadataAsDocument(dbId)
+	JavaScript: return $store.fetchAuditMetadataAsDocument(dbId);
+
 define Category as native category with attribute name, and bindings:
 
 	define category bindings as:
@@ -127,6 +155,7 @@ define Error as enumerated category with attributes name and text, and symbols:
 	NULL_REFERENCE with "Null reference!" as text
 	NOT_MUTABLE with "Not a mutable object!" as text
 	NOT_STORABLE with "Not a storable object!" as text
+	AUDIT_DISABLED with "Audit is disabled!" as text
 	READ_WRITE with "Read/write failed!" as text
 
 define DecimalConstant as enumerated Decimal with symbols:

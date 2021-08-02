@@ -1,5 +1,7 @@
 package prompto.statement;
 
+import java.util.Objects;
+
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
@@ -8,11 +10,12 @@ import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
-import prompto.intrinsic.PromptoStoreQuery;
+import prompto.intrinsic.PromptoDeleteAndStoreQuery;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.AnyType;
+import prompto.type.DocumentType;
 import prompto.type.IType;
 import prompto.type.IterableType;
 import prompto.type.VoidType;
@@ -20,15 +23,17 @@ import prompto.utils.CodeWriter;
 import prompto.utils.ExpressionList;
 import prompto.value.IValue;
 
-public class StoreStatement extends BaseStatement {
+public class DeleteAndStoreStatement extends BaseStatement {
 	
 	ExpressionList deletables;
 	ExpressionList storables;
+	IExpression metadata;
 	StatementList andThen;
 	
-	public StoreStatement(ExpressionList deletables, ExpressionList storables, StatementList andThen) {
+	public DeleteAndStoreStatement(ExpressionList deletables, ExpressionList storables, IExpression metadata, StatementList andThen) {
 		this.deletables = deletables;
 		this.storables = storables;
+		this.metadata = metadata;
 		this.andThen = andThen;
 	}
 	
@@ -61,6 +66,17 @@ public class StoreStatement extends BaseStatement {
 				writer.append(')');
 			}
 		}
+		if(metadata!=null) {
+			if(writer.getDialect()==Dialect.E) {
+				writer.append(" with ");
+				metadata.toDialect(writer);
+				writer.append(" as metadata");
+			} else {
+				writer.append(" with metadata(");
+				metadata.toDialect(writer);
+				writer.append(')');
+			}
+		}
 		if(andThen!=null) {
 			if(writer.getDialect()==Dialect.O) {
 				writer.append(" then {").newLine().indent();
@@ -85,16 +101,19 @@ public class StoreStatement extends BaseStatement {
 			return true;
 		if(obj==null)
 			return false;
-		if(!(obj instanceof StoreStatement))
+		if(!(obj instanceof DeleteAndStoreStatement))
 			return false;
-		StoreStatement other = (StoreStatement)obj;
-		return this.storables.equals(other.storables);
+		DeleteAndStoreStatement other = (DeleteAndStoreStatement)obj;
+		return Objects.equals(this.deletables, other.deletables)
+				&& Objects.equals(this.storables, other.storables)
+				&& Objects.equals(this.metadata, other.metadata);
 	}
 	
 	@Override
 	public IType check(Context context) {
 		checkDeletables(context);
 		checkStorables(context);
+		checkMetadata(context);
 		checkFuture(context);
 		return VoidType.instance();
 	}
@@ -124,6 +143,14 @@ public class StoreStatement extends BaseStatement {
 		}
 	}
 
+	private void checkMetadata(Context context) {
+		if(metadata!=null) {
+			IType type = metadata.check(context);
+			if(type != DocumentType.instance())
+				context.getProblemListener().reportIllegalAssignment(this, DocumentType.instance(), type);
+		}
+	}
+
 	private void checkFuture(Context context) {
 		if(andThen!=null) {
 			context = context.newChildContext();
@@ -133,7 +160,7 @@ public class StoreStatement extends BaseStatement {
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		PromptoStoreQuery query = new PromptoStoreQuery();
+		PromptoDeleteAndStoreQuery query = new PromptoDeleteAndStoreQuery();
 		if(deletables!=null) for(IExpression exp : deletables) {
 			IValue value = exp.interpret(context);
 			query.delete(context, value);
@@ -141,6 +168,10 @@ public class StoreStatement extends BaseStatement {
 		if(storables!=null) for(IExpression exp : storables) {
 			IValue value = exp.interpret(context);
 			query.store(context, value);
+		}
+		if(metadata!=null) {
+			IValue value = metadata.interpret(context);
+			query.metadata(context, value);
 		}
 		query.execute();
 		if(andThen!=null)
@@ -150,9 +181,10 @@ public class StoreStatement extends BaseStatement {
 
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		CompilerUtils.compileNewInstance(method, PromptoStoreQuery.class);
+		CompilerUtils.compileNewInstance(method, PromptoDeleteAndStoreQuery.class);
 		compileObjectsToDelete(context, method, flags);
 		compileStorablesToStore(context, method, flags);
+		compileMetaData(context, method, flags);
 		compileExecute(context, method, flags);
 		if(andThen!=null)
 			andThen.compile(context, method, flags);
@@ -161,7 +193,7 @@ public class StoreStatement extends BaseStatement {
 
 	private void compileStorablesToStore(Context context, MethodInfo method, Flags flags) {
 		if(storables!=null) {
-			MethodConstant m = new MethodConstant(PromptoStoreQuery.class, "store", Object.class, void.class);
+			MethodConstant m = new MethodConstant(PromptoDeleteAndStoreQuery.class, "store", Object.class, void.class);
 			for(IExpression exp : storables) {
 				method.addInstruction(Opcode.DUP);
 				exp.compile(context, method, flags);
@@ -172,7 +204,7 @@ public class StoreStatement extends BaseStatement {
 	
 	private void compileObjectsToDelete(Context context, MethodInfo method, Flags flags) {
 		if(deletables!=null) {
-			MethodConstant m = new MethodConstant(PromptoStoreQuery.class, "delete", Object.class, void.class);
+			MethodConstant m = new MethodConstant(PromptoDeleteAndStoreQuery.class, "delete", Object.class, void.class);
 			for(IExpression exp : deletables) {
 				method.addInstruction(Opcode.DUP);
 				exp.compile(context, method, flags);
@@ -181,8 +213,18 @@ public class StoreStatement extends BaseStatement {
 		}
 	}
 
+	private void compileMetaData(Context context, MethodInfo method, Flags flags) {
+		if(metadata!=null) {
+			MethodConstant m = new MethodConstant(PromptoDeleteAndStoreQuery.class, "metadata", Object.class, void.class);
+			method.addInstruction(Opcode.DUP);
+			metadata.compile(context, method, flags);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, m);
+		}
+		
+	}
+
 	private void compileExecute(Context context, MethodInfo method, Flags flags) {
-		MethodConstant m = new MethodConstant(PromptoStoreQuery.class, "execute", void.class);
+		MethodConstant m = new MethodConstant(PromptoDeleteAndStoreQuery.class, "execute", void.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, m);
 	}
 	
@@ -198,34 +240,15 @@ public class StoreStatement extends BaseStatement {
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
-	    transpiler.append("$DataStore.instance.store").append(andThen==null?"":"Async").append("(");
+	    transpiler.append("$DataStore.instance.deleteAndStore").append(andThen==null?"":"Async").append("(");
 	    this.transpileIdsToDelete(transpiler);
 	    transpiler.append(", ");
 	    this.transpileStorablesToAdd(transpiler);
-	    if(andThen!=null) {
-	    	transpiler.append(", function() {").indent();
-	    	andThen.transpile(transpiler);
-	    	transpiler.dedent().append("}.bind(this)");
-	    }
+	    transpiler.append(", ");
+	    this.transpileMetadata(transpiler);
+	    this.transpileFuture(transpiler);
 	    transpiler.append(")");
 	    return false;
-	}
-
-	private void transpileStorablesToAdd(Transpiler transpiler) {
-	    if (this.storables==null)
-	        transpiler.append("null");
-	    else {
-	        transpiler.append("(function() { ").indent();
-	        transpiler.append("var storablesToAdd = new Set();").newLine();
-	        this.storables.forEach(exp-> {
-	            exp.transpile(transpiler);
-	            transpiler.append(" && ");
-	            exp.transpile(transpiler);
-	            transpiler.append(".collectStorables(storablesToAdd);").newLine();
-	        });
-	        transpiler.append("return Array.from(storablesToAdd);").newLine();
-	        transpiler.dedent().append("})()");
-	    }
 	}
 
 	private void transpileIdsToDelete(Transpiler transpiler) {
@@ -245,5 +268,38 @@ public class StoreStatement extends BaseStatement {
 	    }
 	}
 
-	
+	private void transpileStorablesToAdd(Transpiler transpiler) {
+	    if (this.storables==null)
+	        transpiler.append("null");
+	    else {
+	        transpiler.append("(function() { ").indent();
+	        transpiler.append("var storablesToAdd = new Set();").newLine();
+	        this.storables.forEach(exp-> {
+	            exp.transpile(transpiler);
+	            transpiler.append(" && ");
+	            exp.transpile(transpiler);
+	            transpiler.append(".collectStorables(storablesToAdd);").newLine();
+	        });
+	        transpiler.append("return Array.from(storablesToAdd);").newLine();
+	        transpiler.dedent().append("})()");
+	    }
+	}
+
+	private void transpileMetadata(Transpiler transpiler) {
+		if(metadata!=null)
+			metadata.transpile(transpiler);
+		else
+			transpiler.append("null");
+		
+	}
+
+	private void transpileFuture(Transpiler transpiler) {
+	    if(andThen!=null) {
+	    	transpiler.append(", function() {").indent();
+	    	andThen.transpile(transpiler);
+	    	transpiler.dedent().append("}.bind(this)");
+	    } 
+	}
+
+
 }

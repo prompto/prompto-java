@@ -3,9 +3,17 @@ package prompto.intrinsic;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -15,7 +23,38 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import prompto.value.IMultiplyable;
 
 @SuppressWarnings("serial")
-public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoList<V>, V>, IMultiplyable, IDocumentProducer, IJsonNodeProducer {
+public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoList<V>, V>, IMultiplyable, IDocumentValueProducer, IJsonNodeProducer {
+
+	public static <T> Collector<T, PromptoList<T>, PromptoList<T>> collector() {
+		return new Collector<T, PromptoList<T>, PromptoList<T>>() {
+
+			@Override
+			public Supplier<PromptoList<T>> supplier() {
+				return () -> new PromptoList<T>(false);
+			}
+
+			@Override
+			public BiConsumer<PromptoList<T>, T> accumulator() {
+				return PromptoList::add;
+			}
+
+			@Override
+			public BinaryOperator<PromptoList<T>> combiner() {
+				return (l1, l2) -> { l1.addAll(l2); return l1; };
+			}
+
+			@Override
+			public Function<PromptoList<T>, PromptoList<T>> finisher() {
+				return Function.identity();
+			}
+
+			@Override
+			public Set<Characteristics> characteristics() {
+				return Collections.unmodifiableSet(EnumSet.of(Collector.Characteristics.IDENTITY_FINISH));
+			}
+			
+		};        
+    }
 
 	boolean mutable;
 	
@@ -130,11 +169,11 @@ public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoLi
 		
 	@SuppressWarnings("unchecked")
 	@Override
-	public PromptoList<? extends V> toDocument() {
+	public PromptoList<? extends V> toDocumentValue() {
 		List<? extends V> items = (List<? extends V>)this.stream()
 				.map(item -> {
-					if(item instanceof IDocumentProducer)
-						return ((IDocumentProducer)item).toDocument();
+					if(item instanceof IDocumentValueProducer)
+						return ((IDocumentValueProducer)item).toDocumentValue();
 					else
 						return item;
 				})

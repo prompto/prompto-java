@@ -1,5 +1,7 @@
 package prompto.transpiler;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,13 +16,17 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import prompto.intrinsic.PromptoDocument;
 import prompto.store.AttributeInfo;
 import prompto.store.Family;
+import prompto.store.IAuditMetadata;
 import prompto.store.IQuery;
 import prompto.store.IQueryBuilder;
 import prompto.store.IQueryBuilder.MatchOp;
 import prompto.store.IStorable;
+import prompto.store.IStorable.IDbIdFactory;
 import prompto.store.IStorable.IDbIdListener;
+import prompto.store.IStorable.IDbIdProvider;
 import prompto.store.IStored;
 import prompto.store.IStoredIterable;
 import prompto.store.memory.MemStore;
@@ -29,7 +35,12 @@ import prompto.store.memory.Query;
 @SuppressWarnings("restriction")
 public class MemStoreMirror {
 	
-	MemStore store = new MemStore();
+	private static boolean isFunction(Object v) {
+		return v instanceof ScriptObjectMirror && ((ScriptObjectMirror)v).isFunction();
+	}
+
+
+	MemStore store = new MemStore(()->true);
 	ScriptEngine nashorn;
 	ValueConverter converter;
 	
@@ -38,23 +49,38 @@ public class MemStoreMirror {
 		this.converter = new ValueConverter();
 	}
 
-	public StorableMirror newStorableDocument(String[] categories, ScriptObjectMirror dbIdListener) {
-		IDbIdListener listener = dbIdListener==null ? null : dbId->dbIdListener.call(null, dbId);
-		IStorable storable = store.newStorable(categories, listener);
+	public StorableMirror newStorableDocument(String[] categories, ScriptObjectMirror dbIdFactory) {
+		IDbIdProvider provider = () -> dbIdFactory.callMember("provider");
+		IDbIdListener listener = dbId -> dbIdFactory.callMember("listener", dbId);
+		IDbIdFactory factory = IDbIdFactory.of(provider, listener, ()->true);
+		IStorable storable = store.newStorable(categories, factory);
 		return new StorableMirror(storable);
 	}
 	
-	public void store(Object[] toDelete, Object[] toStore) {
+	public void deleteAndStore(Object[] toDelete, Object[] toStore, Object metaData) {
 		Set<Object> del = toDelete==null ? null : Stream.of(toDelete).map(dbId->store.convertToDbId(dbId)).collect(Collectors.toSet());
 		Set<IStorable> add = toStore==null ? null : Stream.of(toStore).map(item->((StorableMirror)item).getStorable()).collect(Collectors.toSet());
-		store.store(del, add);
+		IAuditMetadata meta = toAuditMetadata(metaData);
+		store.deleteAndStore(del, add, meta);
 	}
 	
-	public void storeAsync(Object[] toDelete, Object[] toStore, ScriptObjectMirror andThen) {
+	public void deleteAndStoreAsync(Object[] toDelete, Object[] toStore, Object metaData, ScriptObjectMirror andThen) {
 		Set<Object> del = toDelete==null ? null : Stream.of(toDelete).collect(Collectors.toSet());
 		Set<IStorable> add = toStore==null ? null : Stream.of(toStore).map(item->((StorableMirror)item).getStorable()).collect(Collectors.toSet());
-		store.store(del, add);
+		IAuditMetadata meta = toAuditMetadata(metaData);
+		store.deleteAndStore(del, add, meta);
 		andThen.call(null);
+	}
+
+	@SuppressWarnings("unchecked")
+	private IAuditMetadata toAuditMetadata(Object metaData) {
+		IAuditMetadata meta = store.newAuditMetadata();
+		meta.setUTCTimestamp(LocalDateTime.now(ZoneId.of("UTC")));
+		if(metaData instanceof Map) {
+			Map<String, Object> entries = (Map<String, Object>)converter.fromJS(metaData);
+			meta.putAll(entries);
+		} 
+		return meta;
 	}
 
 	public void flush() {
@@ -216,11 +242,6 @@ public class MemStoreMirror {
 		}
 
 
-		private boolean isFunction(Object v) {
-			return v instanceof ScriptObjectMirror && ((ScriptObjectMirror)v).isFunction();
-		}
-
-
 		@SuppressWarnings("unchecked")
 		public Object toJS(Object value, boolean isStorable) {
 			if(value==null || value instanceof Boolean || value instanceof Integer || value instanceof Long || value instanceof Double || value instanceof String || value instanceof StoredMirror || value instanceof StorableMirror)
@@ -231,12 +252,28 @@ public class MemStoreMirror {
 				return new StorableMirror((IStorable)value);
 			else if(value instanceof List) 
 				return isStorable ? toJSList((List<Object>)value, isStorable) : toJSArray((List<Object>)value, isStorable);
+			else if(value instanceof PromptoDocument) 
+				return toJSDocument((PromptoDocument<String,Object>)value);
 			else if(value instanceof Map) 
 				return toJSObject((Map<String,Object>)value, isStorable); 
+			else if(value instanceof LocalDateTime)
+				return toJSLocalDateTime((LocalDateTime)value);
 			else
 				throw new UnsupportedOperationException(value.getClass().getName());
 		}
 		
+		private Object toJSLocalDateTime(LocalDateTime value) {
+			String expression = "typeof(DateTime) == typeof({}) ? DateTime.parse('" + value.toString() + "') : new Date('" + value.toString().substring(0,19) + "')";
+			return safeEval("(" + expression + ")");
+		}
+
+		private Object toJSDocument(PromptoDocument<String, Object> value) {
+			ScriptObjectMirror docFn = (ScriptObjectMirror)nashorn.get("Document");
+			ScriptObjectMirror object = (ScriptObjectMirror)docFn.newObject();
+			value.forEach((k,v)->object.setMember(k, toJS(v, false)));
+			return object;
+		}
+
 		private ScriptObjectMirror toJSObject(Map<String, Object> value, boolean isStorable) {
 			ScriptObjectMirror object = safeEval("({})");
 			value.forEach((k,v)->object.setMember(k, toJS(v, isStorable)));
@@ -432,6 +469,18 @@ public class MemStoreMirror {
 			}
 			return String.join(", ", items);
 		}
-}
+	}
 
+	public Object fetchLatestAuditMetadataId(Object dbId) {
+		return store.fetchLatestAuditMetadataId(dbId);
+	}
+	
+	public Object fetchAuditMetadataAsDocument(Object dbId) {
+		PromptoDocument<String, Object> metadata = store.fetchAuditMetadataAsDocument(dbId);
+		return metadata==null ? null : converter.toJS(metadata, true);
+	}
+	
+	public Object fetchAllAuditMetadataIds(Object dbId) {
+		return store.fetchAllAuditMetadataIds(dbId);
+	}
 }

@@ -9,6 +9,8 @@ import java.util.Map;
 
 import prompto.error.PromptoError;
 import prompto.intrinsic.PromptoBinary;
+import prompto.intrinsic.PromptoDocument;
+import prompto.intrinsic.PromptoList;
 import prompto.store.IStorable.IDbIdFactory;
 
 /* a mean to store and fetch data */
@@ -29,21 +31,35 @@ public interface IStore extends Closeable {
 		return newStorable(categories.toArray(new String[0]), dbIdFactory);
 	}
 	
-	void store(Collection<?> deletables, Collection<IStorable> storables) throws PromptoError;
+	void deleteAndStore(Collection<?> deletables, Collection<IStorable> storables, IAuditMetadata auditMeta) throws PromptoError;
+	default void store(Collection<?> deletables, Collection<IStorable> storables) throws PromptoError {
+		deleteAndStore(deletables, storables, null);
+	}
+	default void store(Collection<IStorable> storables, IAuditMetadata auditMeta) throws PromptoError {
+		deleteAndStore(null, storables, auditMeta);
+	}
 	default void store(Collection<IStorable> storables) throws PromptoError {
-		store(null, storables);
+		deleteAndStore(null, storables, null);
+	}
+	default void store(IStorable storable, IAuditMetadata auditMeta) throws PromptoError {
+		deleteAndStore(null, Collections.singletonList(storable), auditMeta);
 	}
 	default void store(IStorable storable) throws PromptoError {
-		store(null, Collections.singletonList(storable));
+		deleteAndStore(null, Collections.singletonList(storable), null);
 	}
-	
+	default void delete(Collection<?> dbIds, IAuditMetadata auditMeta) throws PromptoError {
+		deleteAndStore(dbIds, null, auditMeta);
+	}
 	default void delete(Collection<?> dbIds) throws PromptoError {
-		store(dbIds, null);
+		deleteAndStore(dbIds, null, null);
+	}
+	default void delete(Object dbId, IAuditMetadata auditMeta) throws PromptoError {
+		deleteAndStore(Arrays.asList(dbId), null, auditMeta);
 	}
 	default void delete(Object dbId) throws PromptoError {
-		store(Arrays.asList(dbId), null);
+		deleteAndStore(Arrays.asList(dbId), null, null);
 	}
-	void deleteAll() throws PromptoError;
+	void deleteAll() throws PromptoError; // for test purpose only
 
 	PromptoBinary fetchBinary(Object dbId, String attr) throws PromptoError;
 	IStored fetchUnique(Object dbId) throws PromptoError;
@@ -60,4 +76,34 @@ public interface IStore extends Closeable {
 	Map<String, Object> fetchConfiguration(String name);
 	void storeConfiguration(String name, Map<String, Object> data);
 	
+	boolean isAuditEnabled();
+	default IAuditMetadata newAuditMetadata() {
+		throw new UnsupportedOperationException();
+	}
+	default Object fetchLatestAuditMetadataId(Object dbId) {
+		throw new UnsupportedOperationException();
+	}
+	default PromptoList<Object> fetchAllAuditMetadataIds(Object dbId) {
+		throw new UnsupportedOperationException();
+	}
+	default IAuditMetadata fetchAuditMetadata(Object metaId) {
+		throw new UnsupportedOperationException();
+	}
+	default PromptoDocument<String, Object> fetchAuditMetadataAsDocument(Object metaId) {
+		IAuditMetadata metaData = fetchAuditMetadata(metaId);
+		return metaData==null ? null : metaData.toDocument();
+	}
+	default PromptoList<Object> fetchDbIdsAffectedByAuditMetadataId(Object auditId) {
+		throw new UnsupportedOperationException();
+	}
+	default IAuditRecord fetchLatestAuditRecord(Object dbId) {
+		throw new UnsupportedOperationException();
+	}
+	default PromptoList<? extends IAuditRecord> fetchAllAuditRecords(Object dbId) {
+		throw new UnsupportedOperationException();
+	}
+	default PromptoList<? extends IAuditRecord> fetchAuditRecordsMatching(Map<String, Object> auditPredicates, Map<String, Object> instancePredicates) {
+		throw new UnsupportedOperationException();
+	}
+
 }

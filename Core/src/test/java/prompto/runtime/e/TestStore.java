@@ -65,6 +65,21 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedAuditRecord() throws Exception {
+		checkInterpretedOutput("store/auditRecord.pec");
+	}
+
+	@Test
+	public void testCompiledAuditRecord() throws Exception {
+		checkCompiledOutput("store/auditRecord.pec");
+	}
+
+	@Test
+	public void testTranspiledAuditRecord() throws Exception {
+		checkTranspiledOutput("store/auditRecord.pec");
+	}
+
+	@Test
 	public void testInterpretedDeleteRecords() throws Exception {
 		checkInterpretedOutput("store/deleteRecords.pec");
 	}
