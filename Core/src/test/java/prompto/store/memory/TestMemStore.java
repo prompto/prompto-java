@@ -332,7 +332,7 @@ public class TestMemStore {
 	
 	@Test
 	public void supportsAudit() {
-		assertTrue(DataStore.getInstance().supportsAudit());
+		assertTrue(DataStore.getInstance().isAuditEnabled());
 	}
 	
 	@Test

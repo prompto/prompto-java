@@ -18,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -33,6 +34,7 @@ import prompto.store.IQuery;
 import prompto.store.IQueryBuilder;
 import prompto.store.IStorable;
 import prompto.store.IStorable.IDbIdFactory;
+import prompto.utils.Logger;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.store.IStoredIterable;
@@ -40,15 +42,31 @@ import prompto.store.IStoredIterable;
 /* a utility class for running unit tests only */
 public final class MemStore implements IStore {
 
+	static final Logger logger = new Logger();
+
 	private Map<Long, StoredDocument> instances = new HashMap<>();
 	private AtomicLong lastDbId = new AtomicLong(0);
 	private Map<String, AttributeInfo> attributes = new HashMap<>();
 	private Map<String, AtomicLong> sequences = new ConcurrentHashMap<>();
 	private Map<String, Map<String, Object>> configs = new ConcurrentHashMap<>();
+	boolean audit = false;
 	Map<Long, AuditMetadata> auditMetadatas = new HashMap<>();
 	private AtomicLong lastAuditMetadataId = new AtomicLong(0);
 	Map<Long, AuditRecord> auditRecords = new HashMap<>();
 	private AtomicLong lastAuditRecordId = new AtomicLong(0);
+	
+	public MemStore() {
+		this(null);
+	}
+	
+	public MemStore(Supplier<Boolean> supplier) {
+		Boolean audit = supplier==null ? null : supplier.get();
+		if(audit!=null && audit) {
+			this.audit = true;
+			logger.info(()->"Auditor enabled");
+		} else
+			logger.info(()->"Auditor disabled");
+	}
 	
 	@Override
 	public boolean checkConnection() {
@@ -85,19 +103,13 @@ public final class MemStore implements IStore {
 	
 	@Override
 	public void deleteAndStore(Collection<?> toDelete, Collection<IStorable> toStore, IAuditMetadata auditMeta) throws PromptoError {
-		auditMeta = storeAuditMetadata(auditMeta);
+		auditMeta = audit ? storeAuditMetadata(auditMeta) : null;
 		if(toDelete!=null) 
 			doDelete(toDelete, auditMeta);
 		if(toStore!=null)
 			doStore(toStore, auditMeta);
 	}
 
-	@Override
-	public void store(Collection<IStorable> toStore) throws PromptoError {
-		store(null, toStore);
-	}
-	
-	
 	private IAuditMetadata storeAuditMetadata(IAuditMetadata auditMeta) {
 		if(auditMeta==null)
 			auditMeta = newAuditMetadata();
@@ -124,12 +136,13 @@ public final class MemStore implements IStore {
 		}
 		StoredDocument stored = new StoredDocument(storable.getCategories(), storable.getDocument());
 		instances.put((Long)dbId, stored);
-		AuditRecord audit = newAuditRecord(auditMeta);
-		audit.setInstanceDbId(dbId);
-		audit.setOperation(operation);
-		audit.setInstance(stored);
-		auditRecords.put((Long)audit.getAuditRecordId(), audit);
-		
+		if(audit) {
+			AuditRecord audit = newAuditRecord(auditMeta);
+			audit.setInstanceDbId(dbId);
+			audit.setOperation(operation);
+			audit.setInstance(stored);
+			auditRecords.put((Long)audit.getAuditRecordId(), audit);
+		}
 	}
 	
 	private void doDelete(Collection<?> toDelete, IAuditMetadata auditMeta) {
@@ -139,10 +152,12 @@ public final class MemStore implements IStore {
 
 	private void doDelete(Object dbId, IAuditMetadata auditMeta) {
 		instances.remove(dbId);
-		AuditRecord audit = newAuditRecord(auditMeta);
-		audit.setInstanceDbId(dbId);
-		audit.setOperation(IAuditRecord.Operation.DELETE);
-		auditRecords.put((Long)audit.getAuditRecordId(), audit);
+		if(audit) {
+			AuditRecord audit = newAuditRecord(auditMeta);
+			audit.setInstanceDbId(dbId);
+			audit.setOperation(IAuditRecord.Operation.DELETE);
+			auditRecords.put((Long)audit.getAuditRecordId(), audit);
+		}
 	}
 
 	@Override
@@ -507,8 +522,8 @@ public final class MemStore implements IStore {
 	}
 
 	@Override 
-	public boolean supportsAudit() {
-		return true;
+	public boolean isAuditEnabled() {
+		return audit;
 	}
 	
 	

@@ -14,6 +14,7 @@ public interface IStoreConfiguration {
 	String getHost();
 	Integer getPort();
 	String getDbName();
+	Boolean getAudit();
 	String getUser();
 	ISecretKeyConfiguration getSecretKeyConfiguration();
 	IStoreConfiguration withDbName(String dbName);
@@ -24,6 +25,8 @@ public interface IStoreConfiguration {
 		mapping.setEntry("host", getHost());
 		mapping.setEntry("port", getPort());
 		mapping.setEntry("dbName", getDbName());
+		if(getAudit()!=null)
+			mapping.setEntry("audit", getAudit());
 		ISecretKeyConfiguration secret = getSecretKeyConfiguration();
 		if(secret!=null) {
 			mapping.setEntry("user", getUser());
@@ -37,6 +40,7 @@ public interface IStoreConfiguration {
 		@Override public String getHost() { return null; }
 		@Override public Integer getPort() { return null; }
 		@Override public String getDbName() { return null; }
+		@Override public Boolean getAudit() { return null; }
 		@Override public String getUser() { return null; }
 		@Override public ISecretKeyConfiguration getSecretKeyConfiguration() { return null; }
 		@Override public IStoreConfiguration withDbName(String dbName) { return this; }
@@ -47,6 +51,7 @@ public interface IStoreConfiguration {
 		@Override public String getHost() { return null; }
 		@Override public Integer getPort() { return null; }
 		@Override public String getDbName() { return null; }
+		@Override public Boolean getAudit() { return null; }
 		@Override public String getUser() { return null; }
 		@Override public ISecretKeyConfiguration getSecretKeyConfiguration() { return null; }
 		@Override public IStoreConfiguration withDbName(String dbName) { return this; }
@@ -58,6 +63,7 @@ public interface IStoreConfiguration {
 		Supplier<String> host = ()->null;
 		protected Supplier<Integer> port = ()->null;
 		Supplier<String> dbName = ()->null;
+		Supplier<Boolean> audit = ()->null;
 		Supplier<String> user = ()->null;
 		Supplier<ISecretKeyConfiguration> secretKey = ()->null;
 		
@@ -65,6 +71,7 @@ public interface IStoreConfiguration {
 		@Override public String getHost() { return host.get(); }
 		@Override public Integer getPort() { return port.get(); }
 		@Override public String getDbName() { return dbName.get(); }
+		@Override public Boolean getAudit() { return audit.get(); }
 		@Override public String getUser() { return user.get(); }
 		@Override public ISecretKeyConfiguration getSecretKeyConfiguration() { return secretKey.get(); }
 		@Override public IStoreConfiguration withDbName(String dbName) {

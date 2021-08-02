@@ -76,7 +76,7 @@ public interface IStore extends Closeable {
 	Map<String, Object> fetchConfiguration(String name);
 	void storeConfiguration(String name, Map<String, Object> data);
 	
-	boolean supportsAudit();
+	boolean isAuditEnabled();
 	default IAuditMetadata newAuditMetadata() {
 		throw new UnsupportedOperationException();
 	}

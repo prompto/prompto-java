@@ -10,6 +10,7 @@ public class StoreConfiguration extends IStoreConfiguration.Inline {
 		this.host = ()->reader.getString("host");
 		this.port = ()->reader.getInteger("port");
 		this.dbName = ()->reader.getString("dbName");
+		this.audit = ()->reader.getBooleanOrDefault("audit", false);
 		this.user = ()->reader.getString("user");
 		this.secretKey = ()->reader.readSecretKeyConfiguration("secretKey");
 	}

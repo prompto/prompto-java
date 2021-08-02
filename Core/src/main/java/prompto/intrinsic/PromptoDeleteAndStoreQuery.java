@@ -129,7 +129,7 @@ public class PromptoDeleteAndStoreQuery {
 	@SuppressWarnings("unchecked")
 	public void metadata(Object value) {
 		IStore store = DataStore.getInstance();
-		if(store.supportsAudit() && value instanceof Map) {
+		if(store.isAuditEnabled() && value instanceof Map) {
 			metadata = store.newAuditMetadata();
 			metadata.putAll((Map<String,Object>) value);
 		}
