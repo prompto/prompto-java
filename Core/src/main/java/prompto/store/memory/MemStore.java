@@ -63,9 +63,9 @@ public final class MemStore implements IStore {
 		Boolean audit = supplier==null ? null : supplier.get();
 		if(audit!=null && audit) {
 			this.audit = true;
-			logger.info(()->"Auditor enabled");
+			logger.debug(()->"Auditor enabled");
 		} else
-			logger.info(()->"Auditor disabled");
+			logger.debug(()->"Auditor disabled");
 	}
 	
 	@Override
