@@ -38,6 +38,7 @@ import prompto.utils.Logger;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.store.IStoredIterable;
+import prompto.store.IAuditRecord.Operation;
 
 /* a utility class for running unit tests only */
 public final class MemStore implements IStore {
@@ -126,19 +127,18 @@ public final class MemStore implements IStore {
 	}
 
 	private void doStore(StorableDocument storable, IAuditMetadata auditMeta) throws PromptoError {
-		IAuditRecord.Operation operation = IAuditRecord.Operation.UPDATE;
 		// ensure db id
 		Object dbId = storable.getData(dbIdName);
 		if(!(dbId instanceof Long)) {
 			dbId = Long.valueOf(lastDbId.incrementAndGet());
 			storable.setData(dbIdName, dbId);
-			operation = IAuditRecord.Operation.INSERT;
 		}
 		StoredDocument stored = new StoredDocument(storable.getCategories(), storable.getDocument());
-		instances.put((Long)dbId, stored);
+		StoredDocument previous = instances.put((Long)dbId, stored);
 		if(audit) {
 			AuditRecord audit = newAuditRecord(auditMeta);
 			audit.setInstanceDbId(dbId);
+			IAuditRecord.Operation operation = previous==null ? Operation.INSERT : Operation.UPDATE;
 			audit.setOperation(operation);
 			audit.setInstance(stored);
 			auditRecords.put((Long)audit.getAuditRecordId(), audit);
