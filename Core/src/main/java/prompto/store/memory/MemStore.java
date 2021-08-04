@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -572,7 +572,7 @@ public final class MemStore implements IStore {
 	}
 
 
-	static final Map<String, Function<AuditRecord, Object>> GETTERS = new HashMap<>();
+	static final Map<String, BiFunction<AuditRecord, Object, Boolean>> MATCHERS = new HashMap<>();
 	
 	@SuppressWarnings("serial")
 	static class AuditRecord extends HashMap<String, Object> implements IAuditRecord {
@@ -662,26 +662,35 @@ public final class MemStore implements IStore {
 		}
 		
 		boolean auditMatches(Map.Entry<String, Object> predicate) {
-			Function<AuditRecord, Object> getter = findOrCreateGetter(predicate.getKey());
-			return getter!=null && Objects.equals(getter.apply(this), predicate.getValue());
+			BiFunction<AuditRecord, Object, Boolean> matcher = findOrCreateMatcher(predicate.getKey());
+			return matcher!=null && matcher.apply(this, predicate.getValue());
 		}
 
-		private Function<AuditRecord, Object> findOrCreateGetter(String key) {
-			Function<AuditRecord, Object> getter = GETTERS.get(key);
-			if(getter==null) try {
+		private BiFunction<AuditRecord, Object, Boolean> findOrCreateMatcher(String key) {
+			BiFunction<AuditRecord, Object, Boolean> matcher = MATCHERS.get(key);
+			if(matcher==null) try {
 				Field field = AuditRecord.class.getDeclaredField(key);
-				getter = record -> { 
+				if(Enum.class.isAssignableFrom(field.getType()))
+					matcher = (record, value) -> { 
+						try {
+							return Objects.equals(String.valueOf(field.get(record)), String.valueOf(value));
+						} catch(IllegalAccessException e) {
+							throw new RuntimeException(e);
+						}
+					};
+				else
+					matcher = (record, value) -> { 
 					try {
-						return field.get(record);
+						return Objects.equals(field.get(record), value);
 					} catch(IllegalAccessException e) {
 						throw new RuntimeException(e);
 					}
 				};
-				GETTERS.put(key, getter);
+				MATCHERS.put(key, matcher);
 			} catch (NoSuchFieldException ignored) {
 				
 			}
-			return getter;
+			return matcher;
 		}
 
 		boolean instanceMatches(Map.Entry<String, Object> predicate) {
