@@ -43,8 +43,8 @@ public class EParser extends AbstractParser {
 		BOOLEAN_LITERAL=165, CHAR_LITERAL=166, MIN_INTEGER=167, MAX_INTEGER=168, 
 		SYMBOL_IDENTIFIER=169, TYPE_IDENTIFIER=170, VARIABLE_IDENTIFIER=171, NATIVE_IDENTIFIER=172, 
 		DOLLAR_IDENTIFIER=173, ARONDBASE_IDENTIFIER=174, TEXT_LITERAL=175, UUID_LITERAL=176, 
-		INTEGER_LITERAL=177, HEXA_LITERAL=178, DECIMAL_LITERAL=179, DATETIME_LITERAL=180, 
-		TIME_LITERAL=181, DATE_LITERAL=182, PERIOD_LITERAL=183, VERSION_LITERAL=184, 
+		VERSION_LITERAL=177, INTEGER_LITERAL=178, HEXA_LITERAL=179, DECIMAL_LITERAL=180, 
+		DATETIME_LITERAL=181, TIME_LITERAL=182, DATE_LITERAL=183, PERIOD_LITERAL=184, 
 		JSX_TEXT=185;
 	public static final int
 		RULE_enum_category_declaration = 0, RULE_enum_native_declaration = 1, 
@@ -273,9 +273,9 @@ public class EParser extends AbstractParser {
 			"WHEN", "WHERE", "WHILE", "WRITE", "BOOLEAN_LITERAL", "CHAR_LITERAL", 
 			"MIN_INTEGER", "MAX_INTEGER", "SYMBOL_IDENTIFIER", "TYPE_IDENTIFIER", 
 			"VARIABLE_IDENTIFIER", "NATIVE_IDENTIFIER", "DOLLAR_IDENTIFIER", "ARONDBASE_IDENTIFIER", 
-			"TEXT_LITERAL", "UUID_LITERAL", "INTEGER_LITERAL", "HEXA_LITERAL", "DECIMAL_LITERAL", 
-			"DATETIME_LITERAL", "TIME_LITERAL", "DATE_LITERAL", "PERIOD_LITERAL", 
-			"VERSION_LITERAL", "JSX_TEXT"
+			"TEXT_LITERAL", "UUID_LITERAL", "VERSION_LITERAL", "INTEGER_LITERAL", 
+			"HEXA_LITERAL", "DECIMAL_LITERAL", "DATETIME_LITERAL", "TIME_LITERAL", 
+			"DATE_LITERAL", "PERIOD_LITERAL", "JSX_TEXT"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -2605,6 +2605,7 @@ public class EParser extends AbstractParser {
 			case VARIABLE_IDENTIFIER:
 			case TEXT_LITERAL:
 			case UUID_LITERAL:
+			case VERSION_LITERAL:
 			case INTEGER_LITERAL:
 			case HEXA_LITERAL:
 			case DECIMAL_LITERAL:
@@ -2612,7 +2613,6 @@ public class EParser extends AbstractParser {
 			case TIME_LITERAL:
 			case DATE_LITERAL:
 			case PERIOD_LITERAL:
-			case VERSION_LITERAL:
 				{
 				setState(880);
 				((Concrete_method_declarationContext)_localctx).stmts = statement_list();
@@ -3848,6 +3848,7 @@ public class EParser extends AbstractParser {
 			case VARIABLE_IDENTIFIER:
 			case TEXT_LITERAL:
 			case UUID_LITERAL:
+			case VERSION_LITERAL:
 			case INTEGER_LITERAL:
 			case HEXA_LITERAL:
 			case DECIMAL_LITERAL:
@@ -3855,7 +3856,6 @@ public class EParser extends AbstractParser {
 			case TIME_LITERAL:
 			case DATE_LITERAL:
 			case PERIOD_LITERAL:
-			case VERSION_LITERAL:
 				_localctx = new UnresolvedWithArgsStatementContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
@@ -5230,7 +5230,7 @@ public class EParser extends AbstractParser {
 			setState(1207);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << LTGT) | (1L << LTCOLONGT))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (METHOD_COLON - 64)) | (1L << (CODE - 64)) | (1L << (DOCUMENT - 64)) | (1L << (BLOB - 64)) | (1L << (TYPE - 64)) | (1L << (CATEGORY - 64)) | (1L << (EXECUTE - 64)) | (1L << (FETCH - 64)) | (1L << (INVOKE_COLON - 64)) | (1L << (MUTABLE - 64)) | (1L << (NOT - 64)))) != 0) || ((((_la - 128)) & ~0x3f) == 0 && ((1L << (_la - 128)) & ((1L << (NOTHING - 128)) | (1L << (READ - 128)) | (1L << (RESOURCE - 128)) | (1L << (SELF - 128)) | (1L << (SORTED - 128)) | (1L << (SUPER - 128)) | (1L << (THIS - 128)) | (1L << (BOOLEAN_LITERAL - 128)) | (1L << (CHAR_LITERAL - 128)) | (1L << (MIN_INTEGER - 128)) | (1L << (MAX_INTEGER - 128)) | (1L << (SYMBOL_IDENTIFIER - 128)) | (1L << (TYPE_IDENTIFIER - 128)) | (1L << (VARIABLE_IDENTIFIER - 128)) | (1L << (TEXT_LITERAL - 128)) | (1L << (UUID_LITERAL - 128)) | (1L << (INTEGER_LITERAL - 128)) | (1L << (HEXA_LITERAL - 128)) | (1L << (DECIMAL_LITERAL - 128)) | (1L << (DATETIME_LITERAL - 128)) | (1L << (TIME_LITERAL - 128)) | (1L << (DATE_LITERAL - 128)) | (1L << (PERIOD_LITERAL - 128)) | (1L << (VERSION_LITERAL - 128)))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << LTGT) | (1L << LTCOLONGT))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (METHOD_COLON - 64)) | (1L << (CODE - 64)) | (1L << (DOCUMENT - 64)) | (1L << (BLOB - 64)) | (1L << (TYPE - 64)) | (1L << (CATEGORY - 64)) | (1L << (EXECUTE - 64)) | (1L << (FETCH - 64)) | (1L << (INVOKE_COLON - 64)) | (1L << (MUTABLE - 64)) | (1L << (NOT - 64)))) != 0) || ((((_la - 128)) & ~0x3f) == 0 && ((1L << (_la - 128)) & ((1L << (NOTHING - 128)) | (1L << (READ - 128)) | (1L << (RESOURCE - 128)) | (1L << (SELF - 128)) | (1L << (SORTED - 128)) | (1L << (SUPER - 128)) | (1L << (THIS - 128)) | (1L << (BOOLEAN_LITERAL - 128)) | (1L << (CHAR_LITERAL - 128)) | (1L << (MIN_INTEGER - 128)) | (1L << (MAX_INTEGER - 128)) | (1L << (SYMBOL_IDENTIFIER - 128)) | (1L << (TYPE_IDENTIFIER - 128)) | (1L << (VARIABLE_IDENTIFIER - 128)) | (1L << (TEXT_LITERAL - 128)) | (1L << (UUID_LITERAL - 128)) | (1L << (VERSION_LITERAL - 128)) | (1L << (INTEGER_LITERAL - 128)) | (1L << (HEXA_LITERAL - 128)) | (1L << (DECIMAL_LITERAL - 128)) | (1L << (DATETIME_LITERAL - 128)) | (1L << (TIME_LITERAL - 128)) | (1L << (DATE_LITERAL - 128)) | (1L << (PERIOD_LITERAL - 128)))) != 0)) {
 				{
 				setState(1206);
 				((Return_statementContext)_localctx).exp = expression(0);
@@ -9859,6 +9859,7 @@ public class EParser extends AbstractParser {
 				case TYPE_IDENTIFIER:
 				case TEXT_LITERAL:
 				case UUID_LITERAL:
+				case VERSION_LITERAL:
 				case INTEGER_LITERAL:
 				case HEXA_LITERAL:
 				case DECIMAL_LITERAL:
@@ -9866,7 +9867,6 @@ public class EParser extends AbstractParser {
 				case TIME_LITERAL:
 				case DATE_LITERAL:
 				case PERIOD_LITERAL:
-				case VERSION_LITERAL:
 					{
 					setState(1707);
 					((Annotation_constructorContext)_localctx).exp = annotation_argument_value();
@@ -10118,6 +10118,7 @@ public class EParser extends AbstractParser {
 			case SYMBOL_IDENTIFIER:
 			case TEXT_LITERAL:
 			case UUID_LITERAL:
+			case VERSION_LITERAL:
 			case INTEGER_LITERAL:
 			case HEXA_LITERAL:
 			case DECIMAL_LITERAL:
@@ -10125,7 +10126,6 @@ public class EParser extends AbstractParser {
 			case TIME_LITERAL:
 			case DATE_LITERAL:
 			case PERIOD_LITERAL:
-			case VERSION_LITERAL:
 				_localctx = new AnnotationLiteralValueContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
@@ -10667,7 +10667,7 @@ public class EParser extends AbstractParser {
 			setState(1783);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << LTGT) | (1L << LTCOLONGT))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (METHOD_COLON - 64)) | (1L << (CODE - 64)) | (1L << (DOCUMENT - 64)) | (1L << (BLOB - 64)) | (1L << (TYPE - 64)) | (1L << (CATEGORY - 64)) | (1L << (EXECUTE - 64)) | (1L << (FETCH - 64)) | (1L << (INVOKE_COLON - 64)) | (1L << (MUTABLE - 64)) | (1L << (NOT - 64)))) != 0) || ((((_la - 128)) & ~0x3f) == 0 && ((1L << (_la - 128)) & ((1L << (NOTHING - 128)) | (1L << (READ - 128)) | (1L << (RESOURCE - 128)) | (1L << (SELF - 128)) | (1L << (SORTED - 128)) | (1L << (SUPER - 128)) | (1L << (THIS - 128)) | (1L << (BOOLEAN_LITERAL - 128)) | (1L << (CHAR_LITERAL - 128)) | (1L << (MIN_INTEGER - 128)) | (1L << (MAX_INTEGER - 128)) | (1L << (SYMBOL_IDENTIFIER - 128)) | (1L << (TYPE_IDENTIFIER - 128)) | (1L << (VARIABLE_IDENTIFIER - 128)) | (1L << (TEXT_LITERAL - 128)) | (1L << (UUID_LITERAL - 128)) | (1L << (INTEGER_LITERAL - 128)) | (1L << (HEXA_LITERAL - 128)) | (1L << (DECIMAL_LITERAL - 128)) | (1L << (DATETIME_LITERAL - 128)) | (1L << (TIME_LITERAL - 128)) | (1L << (DATE_LITERAL - 128)) | (1L << (PERIOD_LITERAL - 128)) | (1L << (VERSION_LITERAL - 128)))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << LTGT) | (1L << LTCOLONGT))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (METHOD_COLON - 64)) | (1L << (CODE - 64)) | (1L << (DOCUMENT - 64)) | (1L << (BLOB - 64)) | (1L << (TYPE - 64)) | (1L << (CATEGORY - 64)) | (1L << (EXECUTE - 64)) | (1L << (FETCH - 64)) | (1L << (INVOKE_COLON - 64)) | (1L << (MUTABLE - 64)) | (1L << (NOT - 64)))) != 0) || ((((_la - 128)) & ~0x3f) == 0 && ((1L << (_la - 128)) & ((1L << (NOTHING - 128)) | (1L << (READ - 128)) | (1L << (RESOURCE - 128)) | (1L << (SELF - 128)) | (1L << (SORTED - 128)) | (1L << (SUPER - 128)) | (1L << (THIS - 128)) | (1L << (BOOLEAN_LITERAL - 128)) | (1L << (CHAR_LITERAL - 128)) | (1L << (MIN_INTEGER - 128)) | (1L << (MAX_INTEGER - 128)) | (1L << (SYMBOL_IDENTIFIER - 128)) | (1L << (TYPE_IDENTIFIER - 128)) | (1L << (VARIABLE_IDENTIFIER - 128)) | (1L << (TEXT_LITERAL - 128)) | (1L << (UUID_LITERAL - 128)) | (1L << (VERSION_LITERAL - 128)) | (1L << (INTEGER_LITERAL - 128)) | (1L << (HEXA_LITERAL - 128)) | (1L << (DECIMAL_LITERAL - 128)) | (1L << (DATETIME_LITERAL - 128)) | (1L << (TIME_LITERAL - 128)) | (1L << (DATE_LITERAL - 128)) | (1L << (PERIOD_LITERAL - 128)))) != 0)) {
 				{
 				setState(1782);
 				expression_list();
@@ -10732,7 +10732,7 @@ public class EParser extends AbstractParser {
 			setState(1792);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << LTGT) | (1L << LTCOLONGT))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (METHOD_COLON - 64)) | (1L << (CODE - 64)) | (1L << (DOCUMENT - 64)) | (1L << (BLOB - 64)) | (1L << (TYPE - 64)) | (1L << (CATEGORY - 64)) | (1L << (EXECUTE - 64)) | (1L << (FETCH - 64)) | (1L << (INVOKE_COLON - 64)) | (1L << (MUTABLE - 64)) | (1L << (NOT - 64)))) != 0) || ((((_la - 128)) & ~0x3f) == 0 && ((1L << (_la - 128)) & ((1L << (NOTHING - 128)) | (1L << (READ - 128)) | (1L << (RESOURCE - 128)) | (1L << (SELF - 128)) | (1L << (SORTED - 128)) | (1L << (SUPER - 128)) | (1L << (THIS - 128)) | (1L << (BOOLEAN_LITERAL - 128)) | (1L << (CHAR_LITERAL - 128)) | (1L << (MIN_INTEGER - 128)) | (1L << (MAX_INTEGER - 128)) | (1L << (SYMBOL_IDENTIFIER - 128)) | (1L << (TYPE_IDENTIFIER - 128)) | (1L << (VARIABLE_IDENTIFIER - 128)) | (1L << (TEXT_LITERAL - 128)) | (1L << (UUID_LITERAL - 128)) | (1L << (INTEGER_LITERAL - 128)) | (1L << (HEXA_LITERAL - 128)) | (1L << (DECIMAL_LITERAL - 128)) | (1L << (DATETIME_LITERAL - 128)) | (1L << (TIME_LITERAL - 128)) | (1L << (DATE_LITERAL - 128)) | (1L << (PERIOD_LITERAL - 128)) | (1L << (VERSION_LITERAL - 128)))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << LTGT) | (1L << LTCOLONGT))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (METHOD_COLON - 64)) | (1L << (CODE - 64)) | (1L << (DOCUMENT - 64)) | (1L << (BLOB - 64)) | (1L << (TYPE - 64)) | (1L << (CATEGORY - 64)) | (1L << (EXECUTE - 64)) | (1L << (FETCH - 64)) | (1L << (INVOKE_COLON - 64)) | (1L << (MUTABLE - 64)) | (1L << (NOT - 64)))) != 0) || ((((_la - 128)) & ~0x3f) == 0 && ((1L << (_la - 128)) & ((1L << (NOTHING - 128)) | (1L << (READ - 128)) | (1L << (RESOURCE - 128)) | (1L << (SELF - 128)) | (1L << (SORTED - 128)) | (1L << (SUPER - 128)) | (1L << (THIS - 128)) | (1L << (BOOLEAN_LITERAL - 128)) | (1L << (CHAR_LITERAL - 128)) | (1L << (MIN_INTEGER - 128)) | (1L << (MAX_INTEGER - 128)) | (1L << (SYMBOL_IDENTIFIER - 128)) | (1L << (TYPE_IDENTIFIER - 128)) | (1L << (VARIABLE_IDENTIFIER - 128)) | (1L << (TEXT_LITERAL - 128)) | (1L << (UUID_LITERAL - 128)) | (1L << (VERSION_LITERAL - 128)) | (1L << (INTEGER_LITERAL - 128)) | (1L << (HEXA_LITERAL - 128)) | (1L << (DECIMAL_LITERAL - 128)) | (1L << (DATETIME_LITERAL - 128)) | (1L << (TIME_LITERAL - 128)) | (1L << (DATE_LITERAL - 128)) | (1L << (PERIOD_LITERAL - 128)))) != 0)) {
 				{
 				setState(1791);
 				expression_list();
@@ -15523,6 +15523,7 @@ public class EParser extends AbstractParser {
 			case SYMBOL_IDENTIFIER:
 			case TEXT_LITERAL:
 			case UUID_LITERAL:
+			case VERSION_LITERAL:
 			case INTEGER_LITERAL:
 			case HEXA_LITERAL:
 			case DECIMAL_LITERAL:
@@ -15530,7 +15531,6 @@ public class EParser extends AbstractParser {
 			case TIME_LITERAL:
 			case DATE_LITERAL:
 			case PERIOD_LITERAL:
-			case VERSION_LITERAL:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(2235);
@@ -15702,7 +15702,7 @@ public class EParser extends AbstractParser {
 			setState(2252);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << LTGT) | (1L << LTCOLONGT))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (METHOD_COLON - 64)) | (1L << (CODE - 64)) | (1L << (DOCUMENT - 64)) | (1L << (BLOB - 64)) | (1L << (TYPE - 64)) | (1L << (CATEGORY - 64)) | (1L << (EXECUTE - 64)) | (1L << (FETCH - 64)) | (1L << (INVOKE_COLON - 64)) | (1L << (MUTABLE - 64)) | (1L << (NOT - 64)))) != 0) || ((((_la - 128)) & ~0x3f) == 0 && ((1L << (_la - 128)) & ((1L << (NOTHING - 128)) | (1L << (READ - 128)) | (1L << (RESOURCE - 128)) | (1L << (SELF - 128)) | (1L << (SORTED - 128)) | (1L << (SUPER - 128)) | (1L << (THIS - 128)) | (1L << (BOOLEAN_LITERAL - 128)) | (1L << (CHAR_LITERAL - 128)) | (1L << (MIN_INTEGER - 128)) | (1L << (MAX_INTEGER - 128)) | (1L << (SYMBOL_IDENTIFIER - 128)) | (1L << (TYPE_IDENTIFIER - 128)) | (1L << (VARIABLE_IDENTIFIER - 128)) | (1L << (TEXT_LITERAL - 128)) | (1L << (UUID_LITERAL - 128)) | (1L << (INTEGER_LITERAL - 128)) | (1L << (HEXA_LITERAL - 128)) | (1L << (DECIMAL_LITERAL - 128)) | (1L << (DATETIME_LITERAL - 128)) | (1L << (TIME_LITERAL - 128)) | (1L << (DATE_LITERAL - 128)) | (1L << (PERIOD_LITERAL - 128)) | (1L << (VERSION_LITERAL - 128)))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << LTGT) | (1L << LTCOLONGT))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (METHOD_COLON - 64)) | (1L << (CODE - 64)) | (1L << (DOCUMENT - 64)) | (1L << (BLOB - 64)) | (1L << (TYPE - 64)) | (1L << (CATEGORY - 64)) | (1L << (EXECUTE - 64)) | (1L << (FETCH - 64)) | (1L << (INVOKE_COLON - 64)) | (1L << (MUTABLE - 64)) | (1L << (NOT - 64)))) != 0) || ((((_la - 128)) & ~0x3f) == 0 && ((1L << (_la - 128)) & ((1L << (NOTHING - 128)) | (1L << (READ - 128)) | (1L << (RESOURCE - 128)) | (1L << (SELF - 128)) | (1L << (SORTED - 128)) | (1L << (SUPER - 128)) | (1L << (THIS - 128)) | (1L << (BOOLEAN_LITERAL - 128)) | (1L << (CHAR_LITERAL - 128)) | (1L << (MIN_INTEGER - 128)) | (1L << (MAX_INTEGER - 128)) | (1L << (SYMBOL_IDENTIFIER - 128)) | (1L << (TYPE_IDENTIFIER - 128)) | (1L << (VARIABLE_IDENTIFIER - 128)) | (1L << (TEXT_LITERAL - 128)) | (1L << (UUID_LITERAL - 128)) | (1L << (VERSION_LITERAL - 128)) | (1L << (INTEGER_LITERAL - 128)) | (1L << (HEXA_LITERAL - 128)) | (1L << (DECIMAL_LITERAL - 128)) | (1L << (DATETIME_LITERAL - 128)) | (1L << (TIME_LITERAL - 128)) | (1L << (DATE_LITERAL - 128)) | (1L << (PERIOD_LITERAL - 128)))) != 0)) {
 				{
 				setState(2251);
 				expression_tuple();
@@ -15904,7 +15904,7 @@ public class EParser extends AbstractParser {
 			setState(2285);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << LTGT) | (1L << LTCOLONGT))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (METHOD_COLON - 64)) | (1L << (CODE - 64)) | (1L << (DOCUMENT - 64)) | (1L << (BLOB - 64)) | (1L << (TYPE - 64)) | (1L << (CATEGORY - 64)) | (1L << (EXECUTE - 64)) | (1L << (FETCH - 64)) | (1L << (INVOKE_COLON - 64)) | (1L << (MUTABLE - 64)) | (1L << (NOT - 64)))) != 0) || ((((_la - 128)) & ~0x3f) == 0 && ((1L << (_la - 128)) & ((1L << (NOTHING - 128)) | (1L << (READ - 128)) | (1L << (RESOURCE - 128)) | (1L << (SELF - 128)) | (1L << (SORTED - 128)) | (1L << (SUPER - 128)) | (1L << (THIS - 128)) | (1L << (BOOLEAN_LITERAL - 128)) | (1L << (CHAR_LITERAL - 128)) | (1L << (MIN_INTEGER - 128)) | (1L << (MAX_INTEGER - 128)) | (1L << (SYMBOL_IDENTIFIER - 128)) | (1L << (TYPE_IDENTIFIER - 128)) | (1L << (VARIABLE_IDENTIFIER - 128)) | (1L << (TEXT_LITERAL - 128)) | (1L << (UUID_LITERAL - 128)) | (1L << (INTEGER_LITERAL - 128)) | (1L << (HEXA_LITERAL - 128)) | (1L << (DECIMAL_LITERAL - 128)) | (1L << (DATETIME_LITERAL - 128)) | (1L << (TIME_LITERAL - 128)) | (1L << (DATE_LITERAL - 128)) | (1L << (PERIOD_LITERAL - 128)) | (1L << (VERSION_LITERAL - 128)))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << LTGT) | (1L << LTCOLONGT))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (METHOD_COLON - 64)) | (1L << (CODE - 64)) | (1L << (DOCUMENT - 64)) | (1L << (BLOB - 64)) | (1L << (TYPE - 64)) | (1L << (CATEGORY - 64)) | (1L << (EXECUTE - 64)) | (1L << (FETCH - 64)) | (1L << (INVOKE_COLON - 64)) | (1L << (MUTABLE - 64)) | (1L << (NOT - 64)))) != 0) || ((((_la - 128)) & ~0x3f) == 0 && ((1L << (_la - 128)) & ((1L << (NOTHING - 128)) | (1L << (READ - 128)) | (1L << (RESOURCE - 128)) | (1L << (SELF - 128)) | (1L << (SORTED - 128)) | (1L << (SUPER - 128)) | (1L << (THIS - 128)) | (1L << (BOOLEAN_LITERAL - 128)) | (1L << (CHAR_LITERAL - 128)) | (1L << (MIN_INTEGER - 128)) | (1L << (MAX_INTEGER - 128)) | (1L << (SYMBOL_IDENTIFIER - 128)) | (1L << (TYPE_IDENTIFIER - 128)) | (1L << (VARIABLE_IDENTIFIER - 128)) | (1L << (TEXT_LITERAL - 128)) | (1L << (UUID_LITERAL - 128)) | (1L << (VERSION_LITERAL - 128)) | (1L << (INTEGER_LITERAL - 128)) | (1L << (HEXA_LITERAL - 128)) | (1L << (DECIMAL_LITERAL - 128)) | (1L << (DATETIME_LITERAL - 128)) | (1L << (TIME_LITERAL - 128)) | (1L << (DATE_LITERAL - 128)) | (1L << (PERIOD_LITERAL - 128)))) != 0)) {
 				{
 				setState(2277);
 				expression(0);
@@ -24253,6 +24253,7 @@ public class EParser extends AbstractParser {
 			case ARONDBASE_IDENTIFIER:
 			case TEXT_LITERAL:
 			case UUID_LITERAL:
+			case VERSION_LITERAL:
 			case INTEGER_LITERAL:
 			case HEXA_LITERAL:
 			case DECIMAL_LITERAL:
@@ -24260,7 +24261,6 @@ public class EParser extends AbstractParser {
 			case TIME_LITERAL:
 			case DATE_LITERAL:
 			case PERIOD_LITERAL:
-			case VERSION_LITERAL:
 			case JSX_TEXT:
 				_localctx = new JsxTextContext(_localctx);
 				enterOuterAlt(_localctx, 1);
@@ -24286,7 +24286,7 @@ public class EParser extends AbstractParser {
 				setState(2918);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << LTGT) | (1L << LTCOLONGT))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (METHOD_COLON - 64)) | (1L << (CODE - 64)) | (1L << (DOCUMENT - 64)) | (1L << (BLOB - 64)) | (1L << (TYPE - 64)) | (1L << (CATEGORY - 64)) | (1L << (EXECUTE - 64)) | (1L << (FETCH - 64)) | (1L << (INVOKE_COLON - 64)) | (1L << (MUTABLE - 64)) | (1L << (NOT - 64)))) != 0) || ((((_la - 128)) & ~0x3f) == 0 && ((1L << (_la - 128)) & ((1L << (NOTHING - 128)) | (1L << (READ - 128)) | (1L << (RESOURCE - 128)) | (1L << (SELF - 128)) | (1L << (SORTED - 128)) | (1L << (SUPER - 128)) | (1L << (THIS - 128)) | (1L << (BOOLEAN_LITERAL - 128)) | (1L << (CHAR_LITERAL - 128)) | (1L << (MIN_INTEGER - 128)) | (1L << (MAX_INTEGER - 128)) | (1L << (SYMBOL_IDENTIFIER - 128)) | (1L << (TYPE_IDENTIFIER - 128)) | (1L << (VARIABLE_IDENTIFIER - 128)) | (1L << (TEXT_LITERAL - 128)) | (1L << (UUID_LITERAL - 128)) | (1L << (INTEGER_LITERAL - 128)) | (1L << (HEXA_LITERAL - 128)) | (1L << (DECIMAL_LITERAL - 128)) | (1L << (DATETIME_LITERAL - 128)) | (1L << (TIME_LITERAL - 128)) | (1L << (DATE_LITERAL - 128)) | (1L << (PERIOD_LITERAL - 128)) | (1L << (VERSION_LITERAL - 128)))) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LPAR) | (1L << LBRAK) | (1L << LCURL) | (1L << MINUS) | (1L << LT) | (1L << LTGT) | (1L << LTCOLONGT))) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & ((1L << (METHOD_COLON - 64)) | (1L << (CODE - 64)) | (1L << (DOCUMENT - 64)) | (1L << (BLOB - 64)) | (1L << (TYPE - 64)) | (1L << (CATEGORY - 64)) | (1L << (EXECUTE - 64)) | (1L << (FETCH - 64)) | (1L << (INVOKE_COLON - 64)) | (1L << (MUTABLE - 64)) | (1L << (NOT - 64)))) != 0) || ((((_la - 128)) & ~0x3f) == 0 && ((1L << (_la - 128)) & ((1L << (NOTHING - 128)) | (1L << (READ - 128)) | (1L << (RESOURCE - 128)) | (1L << (SELF - 128)) | (1L << (SORTED - 128)) | (1L << (SUPER - 128)) | (1L << (THIS - 128)) | (1L << (BOOLEAN_LITERAL - 128)) | (1L << (CHAR_LITERAL - 128)) | (1L << (MIN_INTEGER - 128)) | (1L << (MAX_INTEGER - 128)) | (1L << (SYMBOL_IDENTIFIER - 128)) | (1L << (TYPE_IDENTIFIER - 128)) | (1L << (VARIABLE_IDENTIFIER - 128)) | (1L << (TEXT_LITERAL - 128)) | (1L << (UUID_LITERAL - 128)) | (1L << (VERSION_LITERAL - 128)) | (1L << (INTEGER_LITERAL - 128)) | (1L << (HEXA_LITERAL - 128)) | (1L << (DECIMAL_LITERAL - 128)) | (1L << (DATETIME_LITERAL - 128)) | (1L << (TIME_LITERAL - 128)) | (1L << (DATE_LITERAL - 128)) | (1L << (PERIOD_LITERAL - 128)))) != 0)) {
 					{
 					setState(2917);
 					((JsxCodeContext)_localctx).exp = expression(0);
@@ -26276,12 +26276,12 @@ public class EParser extends AbstractParser {
 		"\u0095\2\u088b\u088c\7)\2\2\u088c\u088e\3\2\2\2\u088d\u087f\3\2\2\2\u088d"+
 		"\u0885\3\2\2\2\u088d\u0889\3\2\2\2\u088e\u0125\3\2\2\2\u088f\u08a7\7\u00a9"+
 		"\2\2\u0890\u08a7\7\u00aa\2\2\u0891\u0893\7#\2\2\u0892\u0891\3\2\2\2\u0892"+
-		"\u0893\3\2\2\2\u0893\u0894\3\2\2\2\u0894\u08a7\7\u00b3\2\2\u0895\u08a7"+
-		"\7\u00b4\2\2\u0896\u08a7\7\u00a8\2\2\u0897\u08a7\7\u00b8\2\2\u0898\u08a7"+
-		"\7\u00b7\2\2\u0899\u08a7\7\u00b1\2\2\u089a\u089c\7#\2\2\u089b\u089a\3"+
-		"\2\2\2\u089b\u089c\3\2\2\2\u089c\u089d\3\2\2\2\u089d\u08a7\7\u00b5\2\2"+
-		"\u089e\u08a7\7\u00b6\2\2\u089f\u08a7\7\u00a7\2\2\u08a0\u08a7\7\u00b9\2"+
-		"\2\u08a1\u08a7\7\u00ba\2\2\u08a2\u08a7\7\u00b2\2\2\u08a3\u08a7\5\u00ea"+
+		"\u0893\3\2\2\2\u0893\u0894\3\2\2\2\u0894\u08a7\7\u00b4\2\2\u0895\u08a7"+
+		"\7\u00b5\2\2\u0896\u08a7\7\u00a8\2\2\u0897\u08a7\7\u00b9\2\2\u0898\u08a7"+
+		"\7\u00b8\2\2\u0899\u08a7\7\u00b1\2\2\u089a\u089c\7#\2\2\u089b\u089a\3"+
+		"\2\2\2\u089b\u089c\3\2\2\2\u089c\u089d\3\2\2\2\u089d\u08a7\7\u00b6\2\2"+
+		"\u089e\u08a7\7\u00b7\2\2\u089f\u08a7\7\u00a7\2\2\u08a0\u08a7\7\u00ba\2"+
+		"\2\u08a1\u08a7\7\u00b3\2\2\u08a2\u08a7\7\u00b2\2\2\u08a3\u08a7\5\u00ea"+
 		"v\2\u08a4\u08a7\5\u009cO\2\u08a5\u08a7\5\u009eP\2\u08a6\u088f\3\2\2\2"+
 		"\u08a6\u0890\3\2\2\2\u08a6\u0892\3\2\2\2\u08a6\u0895\3\2\2\2\u08a6\u0896"+
 		"\3\2\2\2\u08a6\u0897\3\2\2\2\u08a6\u0898\3\2\2\2\u08a6\u0899\3\2\2\2\u08a6"+
@@ -26396,7 +26396,7 @@ public class EParser extends AbstractParser {
 		"\u09cf\5\u017e\u00c0\2\u09cf\u09d0\7\31\2\2\u09d0\u018d\3\2\2\2\u09d1"+
 		"\u09d2\7\26\2\2\u09d2\u09d3\5\u017e\u00c0\2\u09d3\u09d4\7\27\2\2\u09d4"+
 		"\u018f\3\2\2\2\u09d5\u09d6\5\u0194\u00cb\2\u09d6\u0191\3\2\2\2\u09d7\u09dd"+
-		"\7\u00b3\2\2\u09d8\u09dd\7\u00b5\2\2\u09d9\u09dd\7\u00b1\2\2\u09da\u09dd"+
+		"\7\u00b4\2\2\u09d8\u09dd\7\u00b6\2\2\u09d9\u09dd\7\u00b1\2\2\u09da\u09dd"+
 		"\7\u00a7\2\2\u09db\u09dd\7\u00a8\2\2\u09dc\u09d7\3\2\2\2\u09dc\u09d8\3"+
 		"\2\2\2\u09dc\u09d9\3\2\2\2\u09dc\u09da\3\2\2\2\u09dc\u09db\3\2\2\2\u09dd"+
 		"\u0193\3\2\2\2\u09de\u09e4\7\u00ad\2\2\u09df\u09e4\7\u00ab\2\2\u09e0\u09e4"+
@@ -26435,8 +26435,8 @@ public class EParser extends AbstractParser {
 		"\5\u01ae\u00d8\2\u0a36\u0a33\3\2\2\2\u0a36\u0a35\3\2\2\2\u0a37\u0a3d\3"+
 		"\2\2\2\u0a38\u0a39\f\3\2\2\u0a39\u0a3a\7\25\2\2\u0a3a\u0a3c\5\u01ae\u00d8"+
 		"\2\u0a3b\u0a38\3\2\2\2\u0a3c\u0a3f\3\2\2\2\u0a3d\u0a3b\3\2\2\2\u0a3d\u0a3e"+
-		"\3\2\2\2\u0a3e\u01ab\3\2\2\2\u0a3f\u0a3d\3\2\2\2\u0a40\u0a46\7\u00b3\2"+
-		"\2\u0a41\u0a46\7\u00b5\2\2\u0a42\u0a46\7\u00b1\2\2\u0a43\u0a46\7\u00a7"+
+		"\3\2\2\2\u0a3e\u01ab\3\2\2\2\u0a3f\u0a3d\3\2\2\2\u0a40\u0a46\7\u00b4\2"+
+		"\2\u0a41\u0a46\7\u00b6\2\2\u0a42\u0a46\7\u00b1\2\2\u0a43\u0a46\7\u00a7"+
 		"\2\2\u0a44\u0a46\7\u00a8\2\2\u0a45\u0a40\3\2\2\2\u0a45\u0a41\3\2\2\2\u0a45"+
 		"\u0a42\3\2\2\2\u0a45\u0a43\3\2\2\2\u0a45\u0a44\3\2\2\2\u0a46\u01ad\3\2"+
 		"\2\2\u0a47\u0a4d\7\u00ad\2\2\u0a48\u0a4d\7\u00ab\2\2\u0a49\u0a4d\7\u00af"+
@@ -26472,7 +26472,7 @@ public class EParser extends AbstractParser {
 		"\u0a98\b\u00e4\1\2\u0a98\u0a99\5\u01c4\u00e3\2\u0a99\u0a9e\3\2\2\2\u0a9a"+
 		"\u0a9b\f\3\2\2\u0a9b\u0a9d\7\u00af\2\2\u0a9c\u0a9a\3\2\2\2\u0a9d\u0aa0"+
 		"\3\2\2\2\u0a9e\u0a9c\3\2\2\2\u0a9e\u0a9f\3\2\2\2\u0a9f\u01c7\3\2\2\2\u0aa0"+
-		"\u0a9e\3\2\2\2\u0aa1\u0aa7\7\u00b3\2\2\u0aa2\u0aa7\7\u00b5\2\2\u0aa3\u0aa7"+
+		"\u0a9e\3\2\2\2\u0aa1\u0aa7\7\u00b4\2\2\u0aa2\u0aa7\7\u00b6\2\2\u0aa3\u0aa7"+
 		"\7\u00b1\2\2\u0aa4\u0aa7\7\u00a7\2\2\u0aa5\u0aa7\7\u00a8\2\2\u0aa6\u0aa1"+
 		"\3\2\2\2\u0aa6\u0aa2\3\2\2\2\u0aa6\u0aa3\3\2\2\2\u0aa6\u0aa4\3\2\2\2\u0aa6"+
 		"\u0aa5\3\2\2\2\u0aa7\u01c9\3\2\2\2\u0aa8\u0aae\7\u00ad\2\2\u0aa9\u0aae"+
@@ -26506,7 +26506,7 @@ public class EParser extends AbstractParser {
 		"\3\2\2\2\u0af1\u0af7\3\2\2\2\u0af2\u0af3\f\3\2\2\u0af3\u0af4\7\25\2\2"+
 		"\u0af4\u0af6\5\u01e4\u00f3\2\u0af5\u0af2\3\2\2\2\u0af6\u0af9\3\2\2\2\u0af7"+
 		"\u0af5\3\2\2\2\u0af7\u0af8\3\2\2\2\u0af8\u01e1\3\2\2\2\u0af9\u0af7\3\2"+
-		"\2\2\u0afa\u0b00\7\u00b3\2\2\u0afb\u0b00\7\u00b5\2\2\u0afc\u0b00\7\u00b1"+
+		"\2\2\u0afa\u0b00\7\u00b4\2\2\u0afb\u0b00\7\u00b6\2\2\u0afc\u0b00\7\u00b1"+
 		"\2\2\u0afd\u0b00\7\u00a7\2\2\u0afe\u0b00\7\u00a8\2\2\u0aff\u0afa\3\2\2"+
 		"\2\u0aff\u0afb\3\2\2\2\u0aff\u0afc\3\2\2\2\u0aff\u0afd\3\2\2\2\u0aff\u0afe"+
 		"\3\2\2\2\u0b00\u01e3\3\2\2\2\u0b01\u0b07\7\u00ad\2\2\u0b02\u0b07\7\u00ab"+

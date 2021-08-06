@@ -18,7 +18,7 @@ import prompto.value.VersionValue;
 public class VersionLiteral extends Literal<VersionValue> {
 
 	public VersionLiteral(String text) {
-		super(text,parseVersion(text.substring(2,text.length()-1)));
+		super(text, parseVersion(text.substring(1,text.length()-1)));
 	}
 	
 	public VersionLiteral(PromptoVersion version) {

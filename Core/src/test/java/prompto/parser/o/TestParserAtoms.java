@@ -5,6 +5,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.stream.Stream;
+
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.joda.time.DateTime;
@@ -43,6 +45,7 @@ import prompto.literal.RangeLiteral;
 import prompto.literal.TextLiteral;
 import prompto.literal.TimeLiteral;
 import prompto.literal.TupleLiteral;
+import prompto.literal.VersionLiteral;
 import prompto.param.CategoryParameter;
 import prompto.param.ExtendedParameter;
 import prompto.param.IParameter;
@@ -66,7 +69,7 @@ import prompto.utils.IdentifierList;
 public class TestParserAtoms {
 
 	@Test
-	public void testComplexTuple() throws Exception {
+	public void parsesComplexTuple() throws Exception {
 		String statement = "(1,\"John\",'12:12:12')";
 		OTestParser parser = new OTestParser(statement);
 		TupleLiteral literal = parser.parse_tuple_literal();
@@ -79,7 +82,7 @@ public class TestParserAtoms {
 	}
 	
 	@Test
-	public void testRange() throws Exception {
+	public void parsesRange() throws Exception {
 		String statement = "[1..100]";
 		OTestParser parser = new OTestParser(statement);
 		RangeLiteral rl = parser.parse_range_literal();
@@ -92,7 +95,7 @@ public class TestParserAtoms {
 	}
 
 	@Test
-	public void testAttribute() throws Exception {
+	public void parsesAttribute() throws Exception {
 		String statement = "attribute id : Integer; ";
 		OTestParser parser = new OTestParser(statement);
 		AttributeDeclaration ad = parser.parse_attribute_declaration();
@@ -103,7 +106,7 @@ public class TestParserAtoms {
 	}
 
 	@Test
-	public void testArrayAttribute() throws Exception {
+	public void parsesArrayAttribute() throws Exception {
 		String statement = "attribute id : Integer[]; ";
 		OTestParser parser = new OTestParser(statement);
 		AttributeDeclaration ad = parser.parse_attribute_declaration();
@@ -114,7 +117,7 @@ public class TestParserAtoms {
 	}
 
 	@Test
-	public void testCategory1Attribute() throws Exception {
+	public void parsesCategory1Attribute() throws Exception {
 		String statement = "category Person ( id );";
 		OTestParser parser = new OTestParser(statement);
 		CategoryDeclaration cd = parser.parse_category_declaration();
@@ -126,7 +129,7 @@ public class TestParserAtoms {
 	}
 
 	@Test
-	public void testCategory2Attributes() throws Exception {
+	public void parsesCategory2Attributes() throws Exception {
 		String statement = "category Person ( id, name );";
 		OTestParser parser = new OTestParser(statement);
 		CategoryDeclaration cd = parser.parse_category_declaration();
@@ -139,7 +142,7 @@ public class TestParserAtoms {
 	}
 	
 	@Test
-	public void testCategory1Derived1Attribute() throws Exception {
+	public void parsesCategory1Derived1Attribute() throws Exception {
 		String statement = "category Employee( company ) extends Person ;";
 		OTestParser parser = new OTestParser(statement);
 		CategoryDeclaration cd = parser.parse_category_declaration();
@@ -152,7 +155,7 @@ public class TestParserAtoms {
 	}
 
 	@Test
-	public void testCategory2DerivedNoAttribute() throws Exception {
+	public void parsesCategory2DerivedNoAttribute() throws Exception {
 		String statement = "category Entrepreneur extends Person, Company;";
 		OTestParser parser = new OTestParser(statement);
 		CategoryDeclaration cd = parser.parse_category_declaration();
@@ -165,7 +168,7 @@ public class TestParserAtoms {
 	}
 
 	@Test
-	public void testMemberExpression() throws Exception {
+	public void parsesMemberExpression() throws Exception {
 		String statement = "p.name";
 		OTestParser parser = new OTestParser(statement);
 		IExpression e = parser.parse_instance_expression();
@@ -178,7 +181,7 @@ public class TestParserAtoms {
 	}
 
 	@Test
-	public void testArgument() throws Exception {
+	public void parsesArgument() throws Exception {
 		String statement = "Person p";
 		OTestParser parser = new OTestParser(statement);
 		ITypedParameter a = parser.parse_typed_argument();
@@ -189,7 +192,7 @@ public class TestParserAtoms {
 	}
 
 	@Test
-	public void testList1Argument() throws Exception {
+	public void parsesList1Argument() throws Exception {
 		String statement = "Person p"; 
 		OTestParser parser = new OTestParser(statement);
 		ParameterList l = parser.parse_argument_list();
@@ -198,7 +201,7 @@ public class TestParserAtoms {
 	}
 
 	@Test
-	public void testList2ArgumentsComma() throws Exception {
+	public void parsesList2ArgumentsComma() throws Exception {
 		String statement = "Person p, Employee e"; 
 		OTestParser parser = new OTestParser(statement);
 		ParameterList l = parser.parse_argument_list();
@@ -208,7 +211,7 @@ public class TestParserAtoms {
 
 
 	@Test
-	public void testUnresolvedCallExpression() throws Exception {
+	public void parsesUnresolvedCallExpression() throws Exception {
 		String statement = "print (\"person\" + p.name );";
 		OTestParser parser = new OTestParser(statement);
 		UnresolvedCall ac = parser.parse_method_call_statement();
@@ -216,7 +219,7 @@ public class TestParserAtoms {
 	}
 
 	@Test
-	public void testMethodCallWith() throws Exception {
+	public void parsesMethodCallWith() throws Exception {
 		String statement = "print( value = \"person\" + p.name );";
 		OTestParser parser = new OTestParser(statement);
 		UnresolvedCall mc = parser.parse_method_call_statement();
@@ -234,7 +237,7 @@ public class TestParserAtoms {
 	}
 
 	@Test
-	public void testMethod1Parameter1Statement() throws Exception {
+	public void parsesMethod1Parameter1Statement() throws Exception {
 		String statement = "method printName ( Person p ) { print ( value = \"person\" + p.name); }";
 		OTestParser parser = new OTestParser(statement);
 		ConcreteMethodDeclaration ad = parser.parse_concrete_method_declaration();
@@ -252,7 +255,7 @@ public class TestParserAtoms {
 	}
 	
 	@Test
-	public void testMethod1Extended1Statement() throws Exception {
+	public void parsesMethod1Extended1Statement() throws Exception {
 		String statement = "method printName ( Object(name) o ) { print ( value = \"object\" + o.name ); }";
 		OTestParser parser = new OTestParser(statement);
 		ConcreteMethodDeclaration ad = parser.parse_concrete_method_declaration();
@@ -272,7 +275,7 @@ public class TestParserAtoms {
 	}
 	
 	@Test
-	public void testMethod1Array1Statement() throws Exception {
+	public void parsesMethod1Array1Statement() throws Exception {
 		String statement = "method printName ( Option[] options ) { print ( value = \"array\" + options ); }";
 		OTestParser parser = new OTestParser(statement);
 		ConcreteMethodDeclaration ad = parser.parse_concrete_method_declaration();
@@ -291,7 +294,7 @@ public class TestParserAtoms {
 	}
 	
 	@Test 
-	public void testConstructor1Attribute() throws Exception {
+	public void parsesConstructor1Attribute() throws Exception {
 		String statement = "Company(id=1)";
 		OTestParser parser = new OTestParser(statement);
 		ConstructorExpression c = parser.parse_constructor_expression();
@@ -299,7 +302,7 @@ public class TestParserAtoms {
 	}
 	
 	@Test 
-	public void testConstructorFrom1Attribute() throws Exception {
+	public void parsesConstructorFrom1Attribute() throws Exception {
 		String statement = "Company(entity,id=1)";
 		OTestParser parser = new OTestParser(statement);
 		ConstructorExpression c = parser.parse_constructor_expression();
@@ -307,7 +310,7 @@ public class TestParserAtoms {
 	}
 
 	@Test 
-	public void testConstructor2AttributesComma() throws Exception {
+	public void parsesConstructor2AttributesComma() throws Exception {
 		String statement = "Company(id=1, name=\"IBM\")";
 		OTestParser parser = new OTestParser(statement);
 		ConstructorExpression c = parser.parse_constructor_expression();
@@ -330,7 +333,7 @@ public class TestParserAtoms {
 	}
 	
 	@Test 
-	public void testAssignmentConstructor() throws Exception {
+	public void parsesAssignmentConstructor() throws Exception {
 		String statement = "c = Company ( id = 1, name = \"IBM\" );";
 		OTestParser parser = new OTestParser(statement);
 		AssignInstanceStatement a = parser.parse_assign_instance_statement();
@@ -339,7 +342,7 @@ public class TestParserAtoms {
 	}
 	
 	@Test 
-	public void testNativeJava() throws Exception {
+	public void parsesNativeJava() throws Exception {
 		String statement = "Java: System.out.println(value);";
 		OTestParser parser = new OTestParser(statement);
 		NativeCall call = parser.parse_native_statement();
@@ -348,7 +351,7 @@ public class TestParserAtoms {
 	}
 	
 	@Test 
-	public void testNativeCSharp() throws Exception {
+	public void parsesNativeCSharp() throws Exception {
 		String statement = "C#: Console.println(value);";
 		OTestParser parser = new OTestParser(statement);
 		NativeCall call = parser.parse_native_statement();
@@ -357,7 +360,7 @@ public class TestParserAtoms {
 	}
 	
 	@Test 
-	public void testNativeMethod() throws Exception {
+	public void parsesNativeMethod() throws Exception {
 		String statement = "native method print (String value) {\r\n"
 				+ "\tJava: System.out.println(value); \r\n"
 				+ "\tC#: Console.println(value); }";
@@ -369,7 +372,7 @@ public class TestParserAtoms {
 	}
 	
 	@Test
-	public void testBooleanLiteral() throws Exception {
+	public void parsesBooleanLiteral() throws Exception {
 		String statement = "true";
 		OTestParser parser = new OTestParser(statement);
 		IExpression literal = parser.parse_literal_expression();
@@ -387,7 +390,7 @@ public class TestParserAtoms {
 	}
 
 	@Test
-	public void testStringLiteral() throws Exception {
+	public void parsesStringLiteral() throws Exception {
 		String statement = "\"hello\"";
 		OTestParser parser = new OTestParser(statement);
 		IExpression literal = parser.parse_literal_expression();
@@ -400,7 +403,7 @@ public class TestParserAtoms {
 	}
 	
 	@Test
-	public void testIntegerLiteral() throws Exception {
+	public void parsesIntegerLiteral() throws Exception {
 		String statement = "1234";
 		OTestParser parser = new OTestParser(statement);
 		IExpression literal = parser.parse_literal_expression();
@@ -411,12 +414,12 @@ public class TestParserAtoms {
 	}
 	
 	@Test
-	public void testParseHexa() throws Exception {
+	public void parsesParseHexa() throws Exception {
 		assertEquals(0x0A11, HexaLiteral.parseHexa("0x0A11").longValue());
 	}
 	
 	@Test
-	public void testHexaLiteral() throws Exception {
+	public void parsesHexaLiteral() throws Exception {
 		String statement = "0x0A11";
 		OTestParser parser = new OTestParser(statement);
 		IExpression literal = parser.parse_literal_expression();
@@ -429,7 +432,7 @@ public class TestParserAtoms {
 	}
 
 	@Test
-	public void testDecimalLiteral() throws Exception {
+	public void parsesDecimalLiteral() throws Exception {
 		String statement = "1234.13";
 		OTestParser parser = new OTestParser(statement);
 		IExpression literal = parser.parse_literal_expression();
@@ -440,7 +443,7 @@ public class TestParserAtoms {
 	}
 	
 	@Test
-	public void testEmptyListLiteral() throws Exception {
+	public void parsesEmptyListLiteral() throws Exception {
 		String statement = "[]";
 		OTestParser parser = new OTestParser(statement);
 		IExpression literal = parser.parse_literal_expression();
@@ -451,7 +454,7 @@ public class TestParserAtoms {
 	}
 	
 	@Test
-	public void testSimpleListLiteral() throws Exception {
+	public void parsesSimpleListLiteral() throws Exception {
 		String statement = "[ john, 123]";
 		OTestParser parser = new OTestParser(statement);
 		IExpression literal = parser.parse_literal_expression();
@@ -464,7 +467,7 @@ public class TestParserAtoms {
 	}
 	
 	@Test
-	public void testEmptyDictLiteral() throws Exception {
+	public void parsesEmptyDictLiteral() throws Exception {
 		String statement = "<:>";
 		OTestParser parser = new OTestParser(statement);
 		IExpression literal = parser.parse_literal_expression();
@@ -474,7 +477,7 @@ public class TestParserAtoms {
 	}
 	
 	@Test
-	public void testSimpleDictLiteral() throws Exception {
+	public void parsesSimpleDictLiteral() throws Exception {
 		String statement = "< \"john\" : 1234, eric : 5678 >";
 		OTestParser parser = new OTestParser(statement);
 		IExpression literal = parser.parse_literal_expression();
@@ -486,7 +489,7 @@ public class TestParserAtoms {
 	}
 	
 	@Test
-	public void testMultiLineDictLiteral() throws Exception {
+	public void parsesMultiLineDictLiteral() throws Exception {
 		String statement = "< \"john\" : 1234,\n \t\"eric\" : 5678 >";
 		OTestParser parser = new OTestParser(statement);
 		IExpression literal = parser.parse_literal_expression();
@@ -500,7 +503,7 @@ public class TestParserAtoms {
 
 	
 	@Test
-	public void testSimpleDate() throws Exception {
+	public void parsesSimpleDate() throws Exception {
 		String statement = "'2012-10-09'";
 		OTestParser parser = new OTestParser(statement);
 		IExpression literal = parser.parse_literal_expression();
@@ -513,7 +516,7 @@ public class TestParserAtoms {
 	}
 
 	@Test
-	public void testSimpleTime() throws Exception {
+	public void parsesSimpleTime() throws Exception {
 		String statement = "'15:03:10'";
 		OTestParser parser = new OTestParser(statement);
 		IExpression literal = parser.parse_literal_expression();
@@ -526,7 +529,7 @@ public class TestParserAtoms {
 	}
 
 	@Test
-	public void testDateTime() throws Exception {
+	public void parsesDateTime() throws Exception {
 		String statement = "'2012-10-09T15:18:17'";
 		OTestParser parser = new OTestParser(statement);
 		IExpression literal = parser.parse_literal_expression();
@@ -539,7 +542,7 @@ public class TestParserAtoms {
 	}
 	
 	@Test
-	public void testDateTimeWithMillis() throws Exception {
+	public void parsesDateTimeWithMillis() throws Exception {
 		String statement = "'2012-10-09T15:18:17.487'";
 		OTestParser parser = new OTestParser(statement);
 		IExpression literal = parser.parse_literal_expression();
@@ -552,7 +555,7 @@ public class TestParserAtoms {
 	}
 	
 	@Test
-	public void testDateTimeWithTZ() throws Exception {
+	public void parsesDateTimeWithTZ() throws Exception {
 		String statement = "'2012-10-09T15:18:17+02:00'";
 		OTestParser parser = new OTestParser(statement);
 		IExpression literal = parser.parse_literal_expression();
@@ -570,7 +573,7 @@ public class TestParserAtoms {
 	}
 	
 	@Test
-	public void testPeriod() throws Exception {
+	public void parsesPeriod() throws Exception {
 		String statement = "'P3Y'";
 		OTestParser parser = new OTestParser(statement);
 		IExpression literal = parser.parse_literal_expression();
@@ -583,7 +586,7 @@ public class TestParserAtoms {
 	}
 
 	@Test
-	public void testNativeSymbol() throws Exception {
+	public void parsesNativeSymbol() throws Exception {
 		String statement = "ENTITY_1 = \"1\";";
 		OTestParser parser = new OTestParser(statement);
 		IExpression symbol = parser.parse_native_symbol();
@@ -595,7 +598,7 @@ public class TestParserAtoms {
 	}
 
 	@Test
-	public void testExpressionMethod() throws Exception {
+	public void parsesExpressionMethod() throws Exception {
 		String statement = "x = print ( value = \"1\" );";
 		OTestParser parser = new OTestParser(statement);
 		IStatement stmt = parser.parse_statement();
@@ -606,7 +609,7 @@ public class TestParserAtoms {
 	}
 
 	@Test
-	public void testMethod() throws Exception {
+	public void parsesMethod() throws Exception {
 		String statement = "print (\"a\", value = \"1\");";
 		OTestParser parser = new OTestParser(statement);
 		IStatement stmt = parser.parse_statement();
@@ -617,7 +620,7 @@ public class TestParserAtoms {
 	}
 	
 	@Test
-	public void testInstanceExpression() throws Exception {
+	public void parsesInstanceExpression() throws Exception {
 		String statement = "prefix";
 		OTestParser parser = new OTestParser(statement);
 		IExpression exp = parser.parse_expression();
@@ -625,12 +628,28 @@ public class TestParserAtoms {
 	}
 
 	@Test
-	public void testTernaryExpression() throws Exception {
+	public void parsesTernaryExpression() throws Exception {
 		String statement = "a is not null ? x : y";
 		OTestParser parser = new OTestParser(statement);
 		IExpression exp = parser.parse_expression();
 		assertTrue(exp instanceof TernaryExpression);
 	}
+	
+	@Test
+	public void parsesVersionLiterals() throws Exception {
+		Stream.of("'v1.3'", "'v1.3.15'", "'v1.3-alpha'", "'v1.3-beta'", "'v1.3-candidate'",
+				"'v1.3.15-alpha'", "'v1.3.15-beta'", "'v1.3.15-candidate'",
+				"'latest'", "'development'")
+			.forEach(this::parsesVersionLiteral);
+	}
+
+	private void parsesVersionLiteral(String literal) {
+		OTestParser parser = new OTestParser(literal);
+		IExpression exp = parser.parse_expression();
+		assertTrue(exp instanceof VersionLiteral);
+		assertEquals(literal, "'" + ((VersionLiteral)exp).getValue().toString() + "'");
+	}
+
 
 	static class OTestParser extends OCleverParser {
 		
