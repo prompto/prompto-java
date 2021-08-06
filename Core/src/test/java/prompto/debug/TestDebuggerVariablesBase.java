@@ -173,7 +173,7 @@ public abstract class TestDebuggerVariablesBase extends TestDebuggerBase {
 
 	@Test
 	public void testVariableVersion() throws Exception {
-		testVariable("debug/variable-version.pec", value -> { assertTrue(value.isTextual()); assertEquals("12.3.7", value.asText()); });
+		testVariable("debug/variable-version.pec", value -> { assertTrue(value.isTextual()); assertEquals("v12.3.7", value.asText()); });
 	}
 
 
