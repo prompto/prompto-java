@@ -96,7 +96,7 @@ public interface ICodeStore {
 	String getModuleName();
 	PromptoVersion getModuleVersion();
 
-	void storeDeclarations(Iterable<IDeclaration> declarations, Dialect dialect, PromptoVersion version, Object moduleId) throws PromptoError;
+	void storeDeclarations(Iterable<IDeclaration> declarations, Dialect dialect, Object moduleId) throws PromptoError;
 
 	default Iterable<IDeclaration> fetchLatestDeclarations(String name) throws PromptoError {
 		return fetchVersionedDeclarations(name, PromptoVersion.LATEST);

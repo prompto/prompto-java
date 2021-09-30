@@ -53,7 +53,7 @@ import prompto.utils.Logger;
 import prompto.utils.StringUtils;
 
 
-public class QueryableCodeStore extends BaseCodeStore {
+public class MutableCodeStore extends BaseCodeStore {
 
 	static final Logger logger = new Logger();
 	
@@ -66,7 +66,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 	// storing resource code is optional
 	boolean storeExternals = false;
 	
-	public QueryableCodeStore(IStore store, ICodeStore runtime, String application, PromptoVersion version, URL[] addOns, URL ...resourceNames) throws PromptoError {
+	public MutableCodeStore(IStore store, ICodeStore runtime, String application, PromptoVersion version, URL[] addOns, URL ...resourceNames) throws PromptoError {
 		super(null);
 		this.store = store;
 		this.application = application;
@@ -83,14 +83,14 @@ public class QueryableCodeStore extends BaseCodeStore {
 		this.store = store;
 	}
 	
-	public void collectStorables(List<IStorable> list, IDeclaration declaration, Dialect dialect, PromptoVersion version, Object moduleId) {
+	public void collectStorables(List<IStorable> list, IDeclaration declaration, Dialect dialect, Object moduleId) {
 		if(declaration instanceof MethodDeclarationMap) {
 			for(IDeclaration method : ((MethodDeclarationMap)declaration).values())
-				collectStorables(list, method, dialect, version, moduleId);
+				collectStorables(list, method, dialect, moduleId);
 		} else {
 			String typeName = StringUtils.capitalizeFirst(declaration.getDeclarationType().name()) + "Declaration";
 			List<String> categories = Arrays.asList("Resource", "NamedResource", "Declaration", typeName);
-			IStorable storable = populateDeclarationStorable(categories, declaration, dialect, version, moduleId);
+			IStorable storable = populateDeclarationStorable(categories, declaration, dialect, moduleId);
 			list.add(storable);
 		}
 	}
@@ -444,16 +444,16 @@ public class QueryableCodeStore extends BaseCodeStore {
 		Object moduleId = fetchDeclarationModuleDbId(decl);
 		if(moduleId==null)
 			moduleId = storeDeclarationModule(decl);
-		storeDeclarations(decls, origin.getModuleDialect(), origin.getModuleVersion(), moduleId);
+		storeDeclarations(decls, origin.getModuleDialect(), moduleId);
 		return decls;
 	}
 
 
 	@Override
-	public void storeDeclarations(Iterable<IDeclaration> declarations, Dialect dialect, PromptoVersion version, Object moduleId) throws PromptoError {
+	public void storeDeclarations(Iterable<IDeclaration> declarations, Dialect dialect, Object moduleId) throws PromptoError {
 		List<IStorable> list = new ArrayList<>();
 		declarations.forEach((decl)->
-			collectStorables(list, decl, dialect, version, moduleId));
+			collectStorables(list, decl, dialect, moduleId));
 		store.store(null, list);
 	}
 	
@@ -466,11 +466,10 @@ public class QueryableCodeStore extends BaseCodeStore {
 			return stored.getDbId();
 	}
 
-	private IStorable populateDeclarationStorable(List<String> categories, IDeclaration decl, Dialect dialect, PromptoVersion version, Object moduleId) {
+	private IStorable populateDeclarationStorable(List<String> categories, IDeclaration decl, Dialect dialect, Object moduleId) {
 		IStorable storable = store.newStorable(categories, null); 
 		try {
 			storable.setData("name", decl.getId().toString());
-			storable.setData("version", version);
 			if(decl instanceof IMethodDeclaration) {
 				String proto = ((IMethodDeclaration)decl).getProto();
 				storable.setData("prototype", proto);

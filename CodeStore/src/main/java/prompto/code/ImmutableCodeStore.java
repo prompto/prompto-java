@@ -161,7 +161,7 @@ public class ImmutableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public void storeDeclarations(Iterable<IDeclaration> declarations, Dialect dialect, PromptoVersion version, Object moduleId) throws PromptoError {
+	public void storeDeclarations(Iterable<IDeclaration> declarations, Dialect dialect, Object moduleId) throws PromptoError {
 		throw new UnsupportedOperationException();
 	}
 	

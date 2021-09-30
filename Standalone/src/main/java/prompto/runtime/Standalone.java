@@ -16,7 +16,7 @@ import com.esotericsoftware.yamlbeans.document.YamlMapping;
 
 import prompto.code.ICodeStore;
 import prompto.code.ImmutableCodeStore;
-import prompto.code.QueryableCodeStore;
+import prompto.code.MutableCodeStore;
 import prompto.compiler.PromptoClassLoader;
 import prompto.config.CmdLineConfigurationReader;
 import prompto.config.IConfigurationReader;
@@ -369,7 +369,7 @@ public abstract class Standalone {
 	}
 
 	private static ICodeStore newQueryableCodeStore(IStore store, ICodeStore runtime, IRuntimeConfiguration config) {
-		return new QueryableCodeStore(store, 
+		return new MutableCodeStore(store, 
 				runtime, 
 				config.getApplicationName(), 
 				config.getApplicationVersion(), 
