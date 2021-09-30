@@ -341,7 +341,7 @@ public abstract class Standalone {
 		Map<String, AttributeDeclaration> columns = getMinimalDataColumns(dataStore);
 		codeStore.collectStorableAttributes(columns);
 		Function<Identifier, IDeclaration> locator = id->{
-			Iterable<IDeclaration> found = codeStore.fetchLatestDeclarations(id.toString());
+			Iterable<IDeclaration> found = codeStore.fetchDeclarations(id.toString());
 			if(found==null)
 				return null;
 			Iterator<IDeclaration> decls = found.iterator();

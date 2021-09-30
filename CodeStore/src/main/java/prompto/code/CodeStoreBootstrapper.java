@@ -60,7 +60,7 @@ public class CodeStoreBootstrapper {
 		registerColumnAttributes(columns.values());
 		if(store!=null) {
 			Function<Identifier, IDeclaration> locator = id -> {
-				Iterator<IDeclaration> decls = next.fetchLatestDeclarations(id.toString()).iterator();
+				Iterator<IDeclaration> decls = next.fetchDeclarations(id.toString()).iterator();
 				return decls.hasNext() ? decls.next() : null;
 			};
 			List<AttributeInfo> infos = columns.values().stream().map(c->c.getAttributeInfo(context, locator)).collect(Collectors.toList());
@@ -77,7 +77,7 @@ public class CodeStoreBootstrapper {
 		try {
 			Map<String, AttributeDeclaration> latest = new HashMap<>();
 			for(Map.Entry<String, AttributeDeclaration> entry : decls.entrySet())
-				latest.put(entry.getKey(), fetchLatestDeclaration(entry.getValue()));
+				latest.put(entry.getKey(), fetchAttributeDeclaration(entry.getValue()));
 			return latest;
 		} catch (RuntimeException e) {
 			if(e.getCause() instanceof PromptoError)
@@ -89,12 +89,12 @@ public class CodeStoreBootstrapper {
 
 	static final Set<String> reserved = new HashSet<>(Arrays.asList(IStore.dbIdName, "category", "storable", "module"));
 	
-	private AttributeDeclaration fetchLatestDeclaration(AttributeDeclaration column) {
+	private AttributeDeclaration fetchAttributeDeclaration(AttributeDeclaration column) {
 		try {
 			// can't write a declaration for a column with a reserved name, so use the hard coded one
 			if(reserved.contains(column.getName()))
 				return column;
-			Iterable<IDeclaration> decls = next.fetchLatestDeclarations(column.getName());
+			Iterable<IDeclaration> decls = next.fetchDeclarations(column.getName());
 			if(decls==null || !decls.iterator().hasNext())
 				throw new RuntimeException("Invalid column attribute: " + column.getName());
 			IDeclaration decl = decls.iterator().next(); // can only get one attribute

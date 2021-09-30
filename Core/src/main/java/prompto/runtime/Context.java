@@ -493,7 +493,7 @@ public class Context implements IContext {
 			if(decl!=null)
 				return decl;
 			try {
-				Iterable<IDeclaration> decls = store.fetchLatestDeclarations(id.toString());
+				Iterable<IDeclaration> decls = store.fetchDeclarations(id.toString());
 				if(decls==null)
 					return null;
 				// register prototypes locally first to avoid partial resolution 
@@ -969,7 +969,7 @@ public class Context implements IContext {
 			if(decl!=null)
 				return decl;
 			try {
-				Iterable<IDeclaration> decls = store.fetchLatestDeclarations(name.toString());
+				Iterable<IDeclaration> decls = store.fetchDeclarations(name.toString());
 				if(decls==null)
 					return null;
 				decls.forEach((d) -> {

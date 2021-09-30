@@ -49,19 +49,13 @@ public abstract class BaseCodeStore implements ICodeStore {
 	}
 	
 	@Override
-	public Iterable<IDeclaration> fetchLatestDeclarations(String name) throws PromptoError {
-		Iterable<IDeclaration> decls = ICodeStore.super.fetchLatestDeclarations(name);
-		return decls != null ? decls : (next==null ? null : next.fetchLatestDeclarations(name));
+	public Iterable<IDeclaration> fetchDeclarations(String name) throws PromptoError {
+		return next==null ? null : next.fetchDeclarations(name);
 	}
 	
 	@Override
 	public Collection<CategoryDeclaration> fetchDerivedCategoryDeclarations(Identifier id) {
 		return next==null ? Collections.emptyList() : next.fetchDerivedCategoryDeclarations(id);
-	}
-	
-	@Override
-	public Iterable<IDeclaration> fetchVersionedDeclarations(String name, PromptoVersion version) throws PromptoError {
-		return next==null ? null : next.fetchVersionedDeclarations(name, version);
 	}
 	
 	@Override

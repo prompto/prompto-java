@@ -146,7 +146,7 @@ public class ImmutableCodeStore extends BaseCodeStore {
 		if(this.resource.toString().endsWith(path))
 			return new URLResource(this.resource);
 		else
-			return null;
+			return super.fetchResource(path);
 	}
 	
 	@Override
@@ -172,12 +172,12 @@ public class ImmutableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public Iterable<IDeclaration> fetchLatestDeclarations(String name) throws PromptoError {
+	public Iterable<IDeclaration> fetchDeclarations(String name) throws PromptoError {
 		Iterable<IDeclaration> fetched = fetchInResource(decls->decls.get(name));
 		if(fetched!=null)
 			return fetched;
 		else
-			return super.fetchLatestDeclarations(name);
+			return super.fetchDeclarations(name);
 	}
 	
 	@Override
@@ -201,15 +201,6 @@ public class ImmutableCodeStore extends BaseCodeStore {
 				.iterator();
 	}
 
-	@Override
-	public Iterable<IDeclaration> fetchVersionedDeclarations(String name, PromptoVersion version) throws PromptoError {
-		Iterable<IDeclaration> fetched = fetchInResource(decls->decls.get(name));
-		if(fetched!=null)
-			return fetched;
-		else
-			return super.fetchVersionedDeclarations(name, version);
-	}
-	
 	@Override
 	public Iterable<IDeclaration> fetchDeclarationsWithAnnotations(Set<String> annotations) {
 		Iterable<IDeclaration> fetched = fetchInResource(decls->decls.values().stream()

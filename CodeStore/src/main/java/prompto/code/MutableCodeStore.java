@@ -240,10 +240,11 @@ public class MutableCodeStore extends BaseCodeStore {
 	@Override
 	public Resource fetchResource(String name) {
 		try {
-			IStored stored = fetchOneInStore(new CategoryType(new Identifier("Resource")), version, "name", name, true);
+			IStored stored = fetchOneInStore(new CategoryType(new Identifier("Resource")), null, "name", name, true);
 			if(stored==null)
-				return null;
-			return ResourceReader.readResource(stored);
+				return super.fetchResource(name);
+			else
+				return ResourceReader.readResource(stored);
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -251,7 +252,7 @@ public class MutableCodeStore extends BaseCodeStore {
 	
 	@Override
 	protected void doFetchLatestResourcesWithMimeTypes(List<Resource> resources, Set<String> mimeTypes) {
-		IStoredIterable found = fetchManyInStore(new CategoryType(new Identifier("Resource")), PromptoVersion.LATEST, "mimeType", mimeTypes, true);
+		IStoredIterable found = fetchManyInStore(new CategoryType(new Identifier("Resource")), null, "mimeType", mimeTypes, true);
 		found.forEach(stored -> resources.add(ResourceReader.readResource(stored)));
 	}
 
@@ -295,14 +296,14 @@ public class MutableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public Iterable<IDeclaration> fetchVersionedDeclarations(String name, PromptoVersion version) throws PromptoError {
-		Iterable<IDeclaration> decls = fetchDeclarationsInStore(name, version);
+	public Iterable<IDeclaration> fetchDeclarations(String name) throws PromptoError {
+		Iterable<IDeclaration> decls = fetchDeclarationsInStore(name);
 		if(decls!=null)
 			return decls;
 		if(storeExternals)
-			return fetchAndStoreExternalSpecificDeclarations(name, version);
+			return fetchAndStoreExternalDeclarations(name);
 		else
-			return super.fetchVersionedDeclarations(name, version);
+			return super.fetchDeclarations(name);
 	}
 	
 	@Override
@@ -320,17 +321,17 @@ public class MutableCodeStore extends BaseCodeStore {
 		}
 	}
 	
-	private synchronized Iterable<IDeclaration> fetchAndStoreExternalSpecificDeclarations(String name, PromptoVersion version2) {
+	private synchronized Iterable<IDeclaration> fetchAndStoreExternalDeclarations(String name) {
 		// when called from the AppServer, multiple threads may be attempting to do this
 		// TODO: need to deal with multiple cloud nodes doing this
 		synchronized(this) {
-			Iterable<IDeclaration> decls = fetchDeclarationsInStore(name, version);
+			Iterable<IDeclaration> decls = fetchDeclarationsInStore(name);
 			if(decls!=null)
 				return decls;
 			decls = getRegisteringDeclarations(name);
 			if(decls!=null)
 				return decls;
-			decls = super.fetchVersionedDeclarations(name, version);
+			decls = super.fetchDeclarations(name);
 			if(store!=null && decls!=null && decls.iterator().hasNext()) {
 				// avoid infinite reentrance loop
 				setRegisteringDeclarations(name, decls);
@@ -501,12 +502,12 @@ public class MutableCodeStore extends BaseCodeStore {
 	}
 
 	
-	private Iterable<IDeclaration> fetchDeclarationsInStore(String name, PromptoVersion version) {
+	private Iterable<IDeclaration> fetchDeclarationsInStore(String name) {
 		if(store==null)
 			return null;
 		else try {
 			CategoryType category = new CategoryType(new Identifier("Declaration"));
-			IStoredIterable iterable = fetchManyInStore(category, version, "name", name, true);
+			IStoredIterable iterable = fetchManyInStore(category, null, "name", name, true);
 			if(iterable.iterator().hasNext()) {
 				Iterator<IStored> iterator = iterable.iterator();
 				return () -> new Iterator<IDeclaration>() {
@@ -599,7 +600,7 @@ public class MutableCodeStore extends BaseCodeStore {
 	}
 
 	private IQueryBuilder verifyVersion(IQueryBuilder builder, PromptoVersion version) {
-		if(PromptoVersion.LATEST.equals(version))
+		if(version==null || PromptoVersion.LATEST.equals(version))
 			return builder;
 		else 
 			return builder.verify(AttributeInfo.VERSION, MatchOp.EQUALS, version).and();
@@ -613,7 +614,7 @@ public class MutableCodeStore extends BaseCodeStore {
 	}
 
 	private IQueryBuilder verifyAttribute(IQueryBuilder builder, String attribute, Object value) {
-		AttributeInfo info = fetchLatestAttributeInfo(context, attribute);
+		AttributeInfo info = fetchAttributeInfo(context, attribute);
 		MatchOp op = value instanceof Collection ? MatchOp.IN : MatchOp.EQUALS;
 		return builder.verify(info, op, value).and();
 	}

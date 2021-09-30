@@ -98,11 +98,7 @@ public interface ICodeStore {
 
 	void storeDeclarations(Iterable<IDeclaration> declarations, Dialect dialect, Object moduleId) throws PromptoError;
 
-	default Iterable<IDeclaration> fetchLatestDeclarations(String name) throws PromptoError {
-		return fetchVersionedDeclarations(name, PromptoVersion.LATEST);
-	}
-	
-	Iterable<IDeclaration> fetchVersionedDeclarations(String name, PromptoVersion version) throws PromptoError;
+	Iterable<IDeclaration> fetchDeclarations(String name) throws PromptoError;
 
 	Iterable<IDeclaration> fetchDeclarationsWithAnnotations(Set<String> annotations);
 
@@ -166,12 +162,12 @@ public interface ICodeStore {
 	
 	Iterable<Resource> fetchResourcesWithMimeTypes(String ... mimeTypes);
 
-	default AttributeInfo fetchLatestAttributeInfo(Context context, String name) {
+	default AttributeInfo fetchAttributeInfo(Context context, String name) {
 		AttributeInfo info = AttributeInfo.BUILT_IN_ATTRIBUTE_INFOS.get(name);
 		if(info != null)
 			return info;
 		else {
-			Iterable<IDeclaration> decls = fetchLatestDeclarations(name);
+			Iterable<IDeclaration> decls = fetchDeclarations(name);
 			if(decls==null)
 				return null;
 			else return StreamSupport.stream(decls.spliterator(), false)
