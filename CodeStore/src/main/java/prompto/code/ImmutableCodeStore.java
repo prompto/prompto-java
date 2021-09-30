@@ -142,7 +142,7 @@ public class ImmutableCodeStore extends BaseCodeStore {
 	}
 	
 	@Override
-	public Resource fetchVersionedResource(String path, PromptoVersion version) {
+	public Resource fetchResource(String path) {
 		if(this.resource.toString().endsWith(path))
 			return new URLResource(this.resource);
 		else

@@ -6,7 +6,6 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 
-import prompto.intrinsic.PromptoVersion;
 import prompto.store.IStorable;
 import prompto.store.IStore;
 
@@ -14,7 +13,6 @@ public abstract class Resource {
 	
 	private Object dbId;
 	private String name;
-	private PromptoVersion version;
 	private String mimeType;
 	private OffsetDateTime lastModified; // always UTC
 	
@@ -32,14 +30,6 @@ public abstract class Resource {
 	
 	public void setName(String name) {
 		this.name = name;
-	}
-	
-	public PromptoVersion getVersion() {
-		return version;
-	}
-	
-	public void setVersion(PromptoVersion version) {
-		this.version = version;
 	}
 	
 	public String getMimeType() {
@@ -63,7 +53,6 @@ public abstract class Resource {
 		setDbId(storable.getOrCreateDbId());
 		storable.setData("name", this.getName());
 		storable.setData("mimeType", this.getMimeType());
-		storable.setData("version", this.getVersion());
 		if(this.getLastModified()==null)
 			this.setLastModified(OffsetDateTime.now(ZoneOffset.UTC));
 		storable.setData("lastModified", this.getLastModified().toInstant().toEpochMilli());

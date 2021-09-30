@@ -238,7 +238,7 @@ public class MutableCodeStore extends BaseCodeStore {
 	
 	
 	@Override
-	public Resource fetchVersionedResource(String name, PromptoVersion version) {
+	public Resource fetchResource(String name) {
 		try {
 			IStored stored = fetchOneInStore(new CategoryType(new Identifier("Resource")), version, "name", name, true);
 			if(stored==null)

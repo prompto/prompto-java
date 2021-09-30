@@ -1076,7 +1076,7 @@ public class Context implements IContext {
 	}
 
 	public String fetchTextResource(String path) {
-		Resource resource = ICodeStore.getInstance().fetchLatestResource(path);
+		Resource resource = ICodeStore.getInstance().fetchResource(path);
 		if(resource==null)
 			return null;
 		else if(resource instanceof TextResource)
@@ -1086,7 +1086,7 @@ public class Context implements IContext {
 	}
 
 	public PromptoBinary fetchBinaryResource(String path) {
-		Resource resource = ICodeStore.getInstance().fetchLatestResource(path);
+		Resource resource = ICodeStore.getInstance().fetchResource(path);
 		if(resource==null)
 			return null;
 		else if(resource instanceof BinaryResource)

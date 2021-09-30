@@ -162,13 +162,9 @@ public interface ICodeStore {
 
 	void storeResource(Resource resource, Object moduleId);
 
-	default Resource fetchLatestResource(String path) throws PromptoError {
-		return fetchVersionedResource(path, PromptoVersion.LATEST);
-	}
-
-	Resource fetchVersionedResource(String path, PromptoVersion version);
+	Resource fetchResource(String path);
 	
-	Iterable<Resource> fetchLatestResourcesWithMimeTypes(String ... mimeTypes);
+	Iterable<Resource> fetchResourcesWithMimeTypes(String ... mimeTypes);
 
 	default AttributeInfo fetchLatestAttributeInfo(Context context, String name) {
 		AttributeInfo info = AttributeInfo.BUILT_IN_ATTRIBUTE_INFOS.get(name);

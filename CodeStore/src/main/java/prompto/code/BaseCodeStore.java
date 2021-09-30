@@ -70,18 +70,12 @@ public abstract class BaseCodeStore implements ICodeStore {
 	}
 
 	@Override
-	public Resource fetchLatestResource(String path) throws PromptoError {
-		Resource res = ICodeStore.super.fetchLatestResource(path);
-		return res != null ? res : (next==null ? null : next.fetchLatestResource(path));
+	public Resource fetchResource(String path) throws PromptoError {
+		return next==null ? null : next.fetchResource(path);
 	}
 	
 	@Override
-	public Resource fetchVersionedResource(String path, PromptoVersion version) {
-		return next==null ? null : next.fetchVersionedResource(path, version);
-	}
-	
-	@Override
-	public final Iterable<Resource> fetchLatestResourcesWithMimeTypes(String ... mimeTypes) {
+	public final Iterable<Resource> fetchResourcesWithMimeTypes(String ... mimeTypes) {
 		List<Resource> resources = new ArrayList<>();
 		doFetchLatestResourcesWithMimeTypes(resources, new HashSet<>(Arrays.asList(mimeTypes)));
 		return resources;
