@@ -33,7 +33,7 @@ public class PromptoVersion implements Comparable<PromptoVersion> {
 	public static PromptoVersion parseVersionNumber(String literal) {
 		String[] parts = literal.split("\\.");
 		if(parts.length<2)
-			throw new InvalidParameterException("Version number must be like 1.2{.3}!");
+			throw new InvalidParameterException("Version number must be like 1.2{.3}, found: " + literal);
 		try {
 			PromptoVersion v = new PromptoVersion();
 			v.major = Integer.parseInt(parts[0]);
@@ -42,7 +42,7 @@ public class PromptoVersion implements Comparable<PromptoVersion> {
 				v.fix = Integer.parseInt(parts[2]);
 			return v;
 		} catch(NumberFormatException e) {
-			throw new InvalidParameterException("Version number must be like 1.2{.3}!");
+			throw new InvalidParameterException("Version number must be like 1.2{.3}, found: " + literal);
 		}
 	}
 
@@ -55,7 +55,7 @@ public class PromptoVersion implements Comparable<PromptoVersion> {
 		case "candidate":
 			return -1;
 		default:
-			throw new InvalidParameterException("Version qualifier must be 'alpha', 'beta' or 'candidate'!");
+			throw new InvalidParameterException("Version qualifier must be 'alpha', 'beta' or 'candidate', found: " + literal);
 		}
 	}
 
@@ -117,7 +117,8 @@ public class PromptoVersion implements Comparable<PromptoVersion> {
 	public int asInt() {
 		return major << 24 & 0xFF000000
 			| minor << 16 & 0x00FF0000
-			| fix & 0x0000FFFF;
+			| fix << 8 & 0x0000FF00
+			| qualifier & 0x000000FF;
 	}
 	
 	@Override

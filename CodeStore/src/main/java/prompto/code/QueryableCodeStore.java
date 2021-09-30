@@ -699,9 +699,38 @@ public class QueryableCodeStore extends BaseCodeStore {
 	@Override
 	public void upgradeIfRequired() {
 		upgradeDerivedFrom();
+		upgradeVersionQualifiers();
 		super.upgradeIfRequired();
 	}
 
+	private void upgradeVersionQualifiers() {
+		Map<String, Object> config = store.fetchConfiguration("CodeStoreConfiguration");
+		if(config==null)
+			config = new HashMap<>();
+		if(config.containsKey("versionQualifiers"))
+			return;
+		logger.info(()->"Upgrading code store for versionQualifiers...");
+		IQueryBuilder builder = store.newQueryBuilder()
+				.verify(AttributeInfo.VERSION, MatchOp.EQUALS, null)
+				.not();
+		IStoredIterable stored = store.fetchMany(builder.build());
+		StreamSupport.stream(stored.spliterator(), false)
+				.forEach(this::upgradeVersionQualifiers);
+		config.put("versionQualifiers", true);
+		store.storeConfiguration("CodeStoreConfiguration", config);
+		logger.info(()->"Code store upgraded for versionQualifiers");
+	}
+
+	private void upgradeVersionQualifiers(IStored stored) {
+		Object value = stored.getRawData("version");
+		if(value instanceof Integer) {
+			PromptoVersion version = PromptoVersion.parseInt((Integer)value);
+			IStorable storable = store.newStorable(stored.getCategories(), IDbIdFactory.of(()->stored.getDbId(), null, ()->true));
+			storable.setData("version", version.asInt());
+			store.store(storable);
+		}
+	}
+	
 	private void upgradeDerivedFrom() {
 		Map<String, Object> config = store.fetchConfiguration("CodeStoreConfiguration");
 		if(config==null)
@@ -716,7 +745,7 @@ public class QueryableCodeStore extends BaseCodeStore {
 				.forEach(this::upgradeDerivedFrom);
 		config.put("derivedFrom", true);
 		store.storeConfiguration("CodeStoreConfiguration", config);
-		logger.info(()->"Code store upgraded");
+		logger.info(()->"Code store upgraded or derivedFrom attribute");
 	}
 
 	private void upgradeDerivedFrom(IStored stored) {

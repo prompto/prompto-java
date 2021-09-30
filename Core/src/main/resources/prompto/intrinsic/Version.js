@@ -1,21 +1,10 @@
-function Version(major, minor, fix) {
+function Version(major, minor, fix, qualifier) {
     this.major = major;
     this.minor = minor;
-    this.fix = fix;
+    this.fix = fix || 0;
+    this.qualifier = qualifier || 0;
     return this;
 }
-
-Version.parse = function(text) {
-	if(text.startsWith("v"))
-		text = text.substring(1);
-    var d1 = text.indexOf('.');
-    var major = parseInt(text.substring(0, d1));
-    var d2 = text.indexOf('.', d1 + 1);
-    var minor = parseInt(text.substring(d1 + 1, d2));
-    var fix = parseInt(text.substring(d2 + 1));
-    return new Version(major, minor, fix);
-};
-
 
 Version.prototype.equals = function(obj) {
     return obj instanceof Version && this.asInt() == obj.asInt();
@@ -23,7 +12,31 @@ Version.prototype.equals = function(obj) {
 
 
 Version.prototype.toString = function() {
-    return "" + this.major + "." + this.minor + "." + this.fix;
+    if (this === Version.LATEST)
+        return "latest";
+    else if (this === Version.DEVELOPMENT)
+        return "development";
+    else {
+        var s = "v" + this.major + "." + this.minor;
+        if (this.fix)
+            s = s + "." + this.fix;
+        if (this.qualifier)
+            s = s + "-" + this.qualifierToString();
+        return s;
+    }
+};
+
+Version.prototype.qualifierToString = function() {
+    switch(this.qualifier) {
+        case -3:
+            return "alpha";
+        case -2:
+            return "beta";
+        case -1:
+            return "candidate";
+        default:
+            throw new Error("Unsupported qualifier: " + this.qualifier);
+     }
 };
 
 Version.prototype.getText = Version.prototype.toString;
@@ -56,3 +69,51 @@ Version.prototype.cmp = function(value) {
     var b = value.asInt();
     return a > b ? 1 : (a == b ? 0 : -1);
 };
+
+Version.parse = function(literal) {
+    if (literal === "latest")
+        return Version.LATEST;
+    else if (literal === "development")
+        return Version.DEVELOPMENT;
+    else
+        return Version.parsePrefixedSemanticVersion(literal);
+};
+
+Version.parsePrefixedSemanticVersion = function(literal) {
+    if (literal.startsWith("v"))
+        literal = literal.substring(1);
+    return Version.parseSemanticVersion(literal);
+}
+
+Version.parseSemanticVersion = function(literal) {
+    var parts = literal.split("-");
+    var version = Version.parseVersionNumber(parts[0]);
+    if (parts.length > 1)
+        version.qualifier = Version.parseQualifier(parts[1]);
+    return version;
+};
+
+Version.parseVersionNumber = function(literal) {
+    var parts = literal.split(".");
+    var major = parseInt(parts[0]);
+    var minor = parseInt(parts[1]);
+    var fix = parts.length > 2 ? parseInt(parts[2]) : 0;
+    return new Version(major, minor, fix);
+};
+
+Version.parseQualifier = function(literal) {
+    switch(literal) {
+        case "alpha":
+            return -3;
+        case "beta":
+            return -2;
+        case "candidate":
+            return -1;
+        default:
+            throw new Error("Version qualifier must be 'alpha', 'beta' or 'candidate'!");
+    }
+}
+
+Version.LATEST = new Version(-1, -1, -1, -1);
+Version.DEVELOPMENT = new Version(0xEF, 0xEF, 0xEF, 0xEF);
+
