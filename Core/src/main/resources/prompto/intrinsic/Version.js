@@ -114,6 +114,6 @@ Version.parseQualifier = function(literal) {
     }
 }
 
-Version.LATEST = new Version(-1, -1, -1, -1);
-Version.DEVELOPMENT = new Version(0xEF, 0xEF, 0xEF, 0xEF);
+Version.LATEST = new Version(0xFF, 0xFF, 0xFF, 0xFF);
+Version.DEVELOPMENT = new Version(0xFE, 0xFE, 0xFE, 0xFE);
 

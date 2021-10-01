@@ -4,8 +4,8 @@ import java.security.InvalidParameterException;
 
 public class PromptoVersion implements Comparable<PromptoVersion> {
 	
-	public static final PromptoVersion LATEST = parseInt(0xFFFFFFFF);
-	public static final PromptoVersion DEVELOPMENT = parseInt(0xEFEFEFEF);
+	public static final PromptoVersion LATEST = parseSemanticInt(0xFFFFFFFF);
+	public static final PromptoVersion DEVELOPMENT = parseSemanticInt(0xFEFEFEFE);
 
 	public static PromptoVersion parse(String literal) {
 		if("latest".equals(literal))
@@ -60,6 +60,15 @@ public class PromptoVersion implements Comparable<PromptoVersion> {
 	}
 
 	public static PromptoVersion parseInt(int version) {
+		if(version==0xFFFFFFFF)
+			return LATEST;
+		else if(version==0xFEFEFEFE)
+			return DEVELOPMENT;
+		else
+			return parseSemanticInt(version);
+	}
+	
+	private static PromptoVersion parseSemanticInt(int version) {
 		PromptoVersion v = new PromptoVersion();
 		v.major = version >> 24 & 0x000000FF;
 		v.minor = version >> 16 & 0x000000FF;
