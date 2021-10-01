@@ -13,6 +13,7 @@ public class TestPath extends BaseEParserTest {
 	public void before() throws Exception {
 		Out.init();
 		loadDependency("path");
+		loadDependency("core");
 	}
 
 	@After
