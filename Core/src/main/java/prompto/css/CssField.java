@@ -1,5 +1,8 @@
 package prompto.css;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -10,11 +13,11 @@ import prompto.utils.CodeWriter;
 public class CssField {
 
 	String name;
-	ICssValue value;
+	List<ICssValue> values;
 	
-	public CssField(String name, ICssValue value) {
+	public CssField(String name, List<ICssValue> values) {
 		this.name = name;
-		this.value = value;
+		this.values = values;
 	}
 	
 	public String getName() {
@@ -22,34 +25,48 @@ public class CssField {
 	}
 
 	public void toDialect(CodeWriter writer) {
-		writer.append(name).append(":");
-		value.toDialect(writer);
+		writer.append(name).append(": ");
+		values.forEach(v -> v.toDialect(writer));
 		writer.append(";");
 	}
 	
 	@Override
 	public String toString() {
-		return name + ": "  + value.toString();
+		return name + ": "  + this.valuesToString();
+	}
+	
+	private String valuesToString() {
+		return values.stream().map(ICssValue::toString).collect(Collectors.joining(""));
 	}
 	
 	public void toJson(ObjectNode result, boolean withType) {
 		if(withType) {
 			ObjectNode value = JsonNodeFactory.instance.objectNode();
 			value.put("typeName", TextType.instance().toString());
-			value.put("value", this.value.toString());
+			value.put("value", this.valuesToString());
 			result.set(name, value);
 		} else
-			result.put(name, value.toString());
+			result.put(name, valuesToString());
 	}
 
 
 	public void declare(Transpiler transpiler) {
-		value.declare(transpiler);
+		values.forEach(v -> v.declare(transpiler));
 	}
 
 	public void transpile(Transpiler transpiler) {
 		transpiler.append("'").append(name).append("':");
-		value.transpile(transpiler);
+		if(values.size()==1)
+			values.get(0).transpile(transpiler);
+		else {
+			transpiler.append("\"\" + ");
+			values.forEach(v -> {
+				v.transpile(transpiler);
+				transpiler.append(" + ");
+			});
+			transpiler.trimLast(" + ".length());
+		}
+		
 	}
 
 
