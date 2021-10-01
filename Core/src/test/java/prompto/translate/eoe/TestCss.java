@@ -12,6 +12,11 @@ public class TestCss extends BaseEParserTest {
 	}
 
 	@Test
+	public void testCompositeValue() throws Exception {
+		compareResourceEOE("css/compositeValue.pec");
+	}
+
+	@Test
 	public void testHyphenName() throws Exception {
 		compareResourceEOE("css/hyphenName.pec");
 	}

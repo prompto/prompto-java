@@ -35,6 +35,21 @@ public class TestCss extends BaseMParserTest {
 	}
 
 	@Test
+	public void testInterpretedCompositeValue() throws Exception {
+		checkInterpretedOutput("css/compositeValue.pmc");
+	}
+
+	@Test
+	public void testCompiledCompositeValue() throws Exception {
+		checkCompiledOutput("css/compositeValue.pmc");
+	}
+
+	@Test
+	public void testTranspiledCompositeValue() throws Exception {
+		checkTranspiledOutput("css/compositeValue.pmc");
+	}
+
+	@Test
 	public void testInterpretedHyphenName() throws Exception {
 		checkInterpretedOutput("css/hyphenName.pmc");
 	}

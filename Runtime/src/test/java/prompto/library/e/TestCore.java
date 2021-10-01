@@ -76,6 +76,21 @@ public class TestCore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedAudit() throws Exception {
+		runInterpretedTests("core/audit.pec");
+	}
+
+	@Test
+	public void testCompiledAudit() throws Exception {
+		runCompiledTests("core/audit.pec");
+	}
+
+	@Test
+	public void testTranspiledAudit() throws Exception {
+		runTranspiledTests("core/audit.pec");
+	}
+
+	@Test
 	public void testInterpretedCategory() throws Exception {
 		runInterpretedTests("core/category.pec");
 	}

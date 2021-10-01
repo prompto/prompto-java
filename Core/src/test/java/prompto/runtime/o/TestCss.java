@@ -35,6 +35,21 @@ public class TestCss extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedCompositeValue() throws Exception {
+		checkInterpretedOutput("css/compositeValue.poc");
+	}
+
+	@Test
+	public void testCompiledCompositeValue() throws Exception {
+		checkCompiledOutput("css/compositeValue.poc");
+	}
+
+	@Test
+	public void testTranspiledCompositeValue() throws Exception {
+		checkTranspiledOutput("css/compositeValue.poc");
+	}
+
+	@Test
 	public void testInterpretedHyphenName() throws Exception {
 		checkInterpretedOutput("css/hyphenName.poc");
 	}

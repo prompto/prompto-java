@@ -12,6 +12,11 @@ public class TestCss extends BaseOParserTest {
 	}
 
 	@Test
+	public void testCompositeValue() throws Exception {
+		compareResourceOMO("css/compositeValue.poc");
+	}
+
+	@Test
 	public void testHyphenName() throws Exception {
 		compareResourceOMO("css/hyphenName.poc");
 	}
