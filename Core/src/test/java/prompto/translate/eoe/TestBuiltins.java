@@ -451,5 +451,10 @@ public class TestBuiltins extends BaseEParserTest {
 		compareResourceEOE("builtins/uuidText.pec");
 	}
 
+	@Test
+	public void testVersionMembers() throws Exception {
+		compareResourceEOE("builtins/versionMembers.pec");
+	}
+
 }
 

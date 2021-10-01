@@ -1324,5 +1324,20 @@ public class TestBuiltins extends BaseEParserTest {
 		checkTranspiledOutput("builtins/uuidText.pec");
 	}
 
+	@Test
+	public void testInterpretedVersionMembers() throws Exception {
+		checkInterpretedOutput("builtins/versionMembers.pec");
+	}
+
+	@Test
+	public void testCompiledVersionMembers() throws Exception {
+		checkCompiledOutput("builtins/versionMembers.pec");
+	}
+
+	@Test
+	public void testTranspiledVersionMembers() throws Exception {
+		checkTranspiledOutput("builtins/versionMembers.pec");
+	}
+
 }
 

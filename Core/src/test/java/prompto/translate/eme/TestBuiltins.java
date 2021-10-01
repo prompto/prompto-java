@@ -451,5 +451,10 @@ public class TestBuiltins extends BaseEParserTest {
 		compareResourceEME("builtins/uuidText.pec");
 	}
 
+	@Test
+	public void testVersionMembers() throws Exception {
+		compareResourceEME("builtins/versionMembers.pec");
+	}
+
 }
 
