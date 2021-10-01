@@ -15,6 +15,6 @@ public interface IInstance extends IValue {
 	boolean setMutable(boolean set);
 	CategoryDeclaration getDeclaration();
 	IStorable getStorable();
-	IValue toMutable();
+	IInstance toMutable();
 	
 }

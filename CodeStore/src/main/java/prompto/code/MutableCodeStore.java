@@ -700,7 +700,37 @@ public class MutableCodeStore extends BaseCodeStore {
 	public void upgradeIfRequired() {
 		upgradeDerivedFrom();
 		upgradeVersionQualifiers();
+		dropResourceVersions();
 		super.upgradeIfRequired();
+	}
+
+	private void dropResourceVersions() {
+		Map<String, Object> config = store.fetchConfiguration("CodeStoreConfiguration");
+		if(config==null)
+			config = new HashMap<>();
+		if(config.containsKey("resourceVersions"))
+			return;
+		logger.info(()->"Upgrading code store for resourceVersions...");
+		IQueryBuilder builder = store.newQueryBuilder()
+				.verify(AttributeInfo.CATEGORY, MatchOp.HAS, "Resource")
+				.verify(AttributeInfo.VERSION, MatchOp.EQUALS, null)
+				.not()
+				.and();
+		IStoredIterable stored = store.fetchMany(builder.build());
+		StreamSupport.stream(stored.spliterator(), false)
+				.forEach(this::dropResourceVersion);
+		config.put("resourceVersions", true);
+		store.storeConfiguration("CodeStoreConfiguration", config);
+		logger.info(()->"Code store upgraded for resourceVersions");
+	}
+
+	private void dropResourceVersion(IStored stored) {
+		Object value = stored.getRawData("version");
+		if(value!=null) {
+			IStorable storable = store.newStorable(stored.getCategories(), IDbIdFactory.of(()->stored.getDbId(), null, ()->true));
+			storable.removeData("version");
+			store.store(storable);
+		}
 	}
 
 	private void upgradeVersionQualifiers() {

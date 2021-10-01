@@ -412,6 +412,14 @@ public final class MemStore implements IStore {
 			document.put(fieldName, value);
 		}
 		
+		
+		@Override
+		public void removeData(String fieldName) {
+			ensureDocument();
+			document.remove(fieldName);
+		}
+		
+	
 		private Map<String, Object> newDocument() {
 			Map<String, Object> doc = new HashMap<>();
 			if(categories!=null) {

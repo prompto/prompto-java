@@ -76,7 +76,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	}
 	
 	@Override
-	public IValue toMutable() {
+	public ConcreteInstance toMutable() {
 		String[] categories = this.storable!=null ? this.storable.getCategories() : null;
 		return new ConcreteInstance(this.getType(), this.declaration, this.values, categories);
 	}

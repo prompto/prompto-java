@@ -17,7 +17,8 @@ public interface IStorable {
 	String[] getCategories();
 	
 	void setData(String name, Object value) throws PromptoError;
-
+	void removeData(String name) throws PromptoError;
+	
 	@FunctionalInterface
 	public static interface IDbIdProvider extends Supplier<Object>  {}
 	

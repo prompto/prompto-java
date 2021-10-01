@@ -314,7 +314,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 	}
 	
 	@Override
-	public IValue toMutable() {
+	public NativeInstance toMutable() {
 		throw new UnsupportedOperationException();
 	}
 }
