@@ -136,7 +136,7 @@ public class StatementList extends LinkedList<IStatement> {
 				if(result!=null && statement.canReturn())
 					return result;
 			} catch(PromptoError e) {
-				logger.error(()->e.getMessage() + " while interpreting " + statement.toString() + " in method " + context.getProblemListener().getEnclosingDeclaration());
+				logger.error(()->e.getMessage() + " while interpreting " + statement.toString() + " in method " + context.getProblemListener().getEnclosingDeclaration(), e);
 				throw e;
 			} finally {
 				context.leaveStatement(statement);
