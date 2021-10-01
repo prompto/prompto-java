@@ -1054,8 +1054,10 @@ public class OPromptoBuilder extends OParserBaseListener {
 	@Override
 	public void exitCss_field(Css_fieldContext ctx) {
 		String name = ctx.name.getText();
-		ICssValue value = getNodeValue(ctx.value);
-		setNodeValue(ctx, new CssField(name, value));
+		List<ICssValue> values = ctx.css_value().stream()
+				.map(x -> (ICssValue)getNodeValue(x))
+				.collect(Collectors.toList());
+	setNodeValue(ctx, new CssField(name, values));
 	}
 	
 	
