@@ -86,7 +86,24 @@ public class PromptoVersion implements Comparable<PromptoVersion> {
 	int minor;
 	int fix;
 	int qualifier;
+
 	
+	public Long getMajor() {
+		return (long) major;
+	}
+
+	public Long getMinor() {
+		return (long) minor;
+	}
+
+	public Long getFix() {
+		return (long) fix;
+	}
+
+	public String getQualifier() {
+		return qualifierString();
+	}
+
 	@Override
 	public String toString() {
 		if(this==LATEST)

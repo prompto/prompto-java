@@ -8,6 +8,7 @@ import java.util.function.Function;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
+import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoVersion;
 import prompto.runtime.Context;
 import prompto.type.VersionType;
@@ -36,17 +37,15 @@ public class VersionValue extends BaseValue implements Comparable<VersionValue> 
 		return value;
 	}
 
-	
 	@Override
 	public int compareTo(Context context, IValue value) throws PromptoError {
 		if (value instanceof VersionValue)
 			return this.value.compareTo(((VersionValue) value).value);
 		else
-			throw new SyntaxError("Illegal comparison: Version - "
-					+ value.getClass().getSimpleName());
+			throw new SyntaxError("Illegal comparison: Version - " + value.getClass().getSimpleName());
 
 	}
-	
+
 	@Override
 	public Object convertTo(Context context, Type type) {
 		return value;
@@ -64,7 +63,7 @@ public class VersionValue extends BaseValue implements Comparable<VersionValue> 
 		else
 			return value.equals(obj);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return value.hashCode();
@@ -74,26 +73,43 @@ public class VersionValue extends BaseValue implements Comparable<VersionValue> 
 	public String toString() {
 		return value.toString();
 	}
-	
+
 	@Override
 	public JsonNode valueToJsonNode(Context context, Function<IValue, JsonNode> producer) throws PromptoError {
 		return JsonNodeFactory.instance.textNode(this.toString());
 	}
-	
+
 	@Override
-	public void toJsonStream(Context context, JsonGenerator generator, boolean withType, Map<String, byte[]> data) throws PromptoError {
+	public void toJsonStream(Context context, JsonGenerator generator, boolean withType, Map<String, byte[]> data)
+			throws PromptoError {
 		try {
-			if(withType) {
+			if (withType) {
 				generator.writeStartObject();
 				generator.writeStringField("type", VersionType.instance().getTypeName());
 				generator.writeFieldName("value");
 			}
 			generator.writeString(value.toString());
-			if(withType)
+			if (withType)
 				generator.writeEndObject();
-		} catch(IOException e) {
+		} catch (IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}
 	}
-	
+
+	@Override
+	public IValue getMember(Context context, Identifier id, boolean autoCreate) {
+		switch (id.toString()) {
+		case "major":
+			return new IntegerValue(value.getMajor());
+		case "minor":
+			return new IntegerValue(value.getMinor());
+		case "fix":
+			return new IntegerValue(value.getFix());
+		case "qualifier":
+			return new TextValue(value.getQualifier());
+		default:
+			return super.getMember(context, id, autoCreate);
+		}
+	}
+
 }
