@@ -145,9 +145,9 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 
 	@Override
 	protected void checkSwitchCasesType(Context context) {
-		Context local = context.newLocalContext();
-		local.registerValue(new ErrorVariable(errorId));
-		super.checkSwitchCasesType(local);
+		Context child = context.newChildContext();
+		child.registerValue(new ErrorVariable(errorId));
+		super.checkSwitchCasesType(child);
 	}
 	
 	@Override
@@ -160,9 +160,9 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 		IType type = statements.check(context, null);
 		if(type!=VoidType.instance())
 			types.add(type);
-		Context local = context.newLocalContext();
-		local.registerValue(new ErrorVariable(errorId));
-		super.collectReturnTypes(local, types);
+		Context child = context.newChildContext();
+		child.registerValue(new ErrorVariable(errorId));
+		super.collectReturnTypes(child, types);
 		if(finallyStatements!=null) {
 			type = finallyStatements.check(context, null);
 			if(type!=VoidType.instance())
@@ -234,10 +234,10 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 		StackLocal error = method.registerLocal(errorId.toString(), 
 				VerifierType.ITEM_Object, new ClassConstant(exception));
 		CompilerUtils.compileASTORE(method, error);
-		Context local = context.newLocalContext();
-		local.registerValue(new ErrorVariable(errorId));
+		Context child = context.newChildContext();
+		child.registerValue(new ErrorVariable(errorId));
 		ResultInfo result = switchCase!=null ? 
-				switchCase.statements.compile(local, method, flags) :
+				switchCase.statements.compile(child, method, flags) :
 				defaultCase.compile(context, method, flags);
 		if(finalOffsets!=null && !result.isReturn() && !result.isThrow()) {
 			OffsetListenerConstant finalOffset = method.addOffsetListener(new OffsetListenerConstant());
@@ -358,9 +358,9 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 	public void declare(Transpiler transpiler) {
 		transpiler.require("NativeError");
 	    this.statements.declare(transpiler);
-	    transpiler = transpiler.newLocalTranspiler();
-	    transpiler.getContext().registerValue(new ErrorVariable(this.errorId));
-	    this.declareSwitch(transpiler);
+	    Transpiler child = transpiler.newChildTranspiler();
+	    child.getContext().registerValue(new ErrorVariable(this.errorId));
+	    this.declareSwitch(child);
 	}
 	
 	@Override
@@ -368,7 +368,7 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 	    transpiler.append("try {").indent();
 	    this.statements.transpile(transpiler);
 	    transpiler.dedent().append("} catch(").append(this.errorId.toString()).append(") {").indent();
-	    Transpiler child = transpiler.newLocalTranspiler();
+	    Transpiler child = transpiler.newChildTranspiler();
 	    child.getContext().registerValue(new ErrorVariable(this.errorId));
 	    child.append("switch(translateError(").append(this.errorId.toString()).append(")) {").indent();
 	    this.switchCases.forEach(switchCase -> {
