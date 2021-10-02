@@ -151,7 +151,7 @@ public class WhileStatement extends BaseStatement {
 	@Override
 	public void declare(Transpiler transpiler) {
 	    this.condition.declare(transpiler);
-	    transpiler = transpiler.newChildTranspiler(null);
+	    transpiler = transpiler.newChildTranspiler();
 	    this.statements.declare(transpiler);
 	}
 	
@@ -161,7 +161,7 @@ public class WhileStatement extends BaseStatement {
 	    this.condition.transpile(transpiler);
 	    transpiler.append(") {");
 	    transpiler.indent();
-	    Transpiler child = transpiler.newChildTranspiler(null);
+	    Transpiler child = transpiler.newChildTranspiler();
 	    this.statements.transpile(child);
 	    child.dedent().flush();
 	    transpiler.append("}").newLine();

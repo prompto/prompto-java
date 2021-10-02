@@ -116,14 +116,14 @@ public class WithSingletonStatement extends BaseStatement {
 	public void declare(Transpiler transpiler) {
 	    this.type.declare(transpiler);
 	    transpiler = transpiler.newInstanceTranspiler(this.type);
-	    transpiler = transpiler.newChildTranspiler(null);
+	    transpiler = transpiler.newChildTranspiler();
 	    this.statements.declare(transpiler);
 	}
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 		Transpiler instance = transpiler.newInstanceTranspiler(this.type);
-		Transpiler child = instance.newChildTranspiler(null);
+		Transpiler child = instance.newChildTranspiler();
 	    this.statements.transpile(child);
 	    child.flush();
 	    instance.flush();

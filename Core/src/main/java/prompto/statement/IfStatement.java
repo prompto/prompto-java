@@ -412,7 +412,7 @@ public class IfStatement extends BaseStatement {
 			if (context != transpiler.getContext())
 				transpiler = transpiler.newChildTranspiler(context);
 			else
-				transpiler = transpiler.newChildTranspiler(null);
+				transpiler = transpiler.newChildTranspiler();
 			this.statements.declare(transpiler);
 		}
 
@@ -423,7 +423,7 @@ public class IfStatement extends BaseStatement {
 			if (context != transpiler.getContext())
 				transpiler = transpiler.newChildTranspiler(context);
 			else
-				transpiler = transpiler.newChildTranspiler(null);
+				transpiler = transpiler.newChildTranspiler();
 			this.statements.transpile(transpiler);
 			transpiler.flush();
 			return false;

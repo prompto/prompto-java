@@ -1077,7 +1077,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    this.methods.stream().filter(decl -> {
 	        return !(decl instanceof SetterMethodDeclaration || decl instanceof GetterMethodDeclaration);
 	    }).forEach(method -> {
-			Transpiler t = transpiler.newChildTranspiler(null);
+			Transpiler t = transpiler.newChildTranspiler();
 	        method.declare(t);
 	        t.flush();
 	    });
@@ -1192,7 +1192,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    this.methods.stream().filter(decl -> {
 	        return !(decl instanceof SetterMethodDeclaration || decl instanceof GetterMethodDeclaration);
 	    }).forEach(method -> {
-	    	Transpiler t = transpiler.newChildTranspiler(null);
+	    	Transpiler t = transpiler.newChildTranspiler();
 	        method.transpile(t);
 	        t.flush();
 	    });

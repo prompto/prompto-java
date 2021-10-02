@@ -228,7 +228,7 @@ public class ArrowExpression extends PredicateExpression implements IExpression 
 	public void declareFilter(Transpiler transpiler, IType itemType) {
 		if(args==null || args.size()!=1)
 			throw new SyntaxError("Expecting 1 parameter only!");
-	    transpiler = transpiler.newChildTranspiler(null);
+	    transpiler = transpiler.newChildTranspiler();
 	    transpiler.getContext().registerValue(new Variable(args.get(0), itemType));
 	    this.statements.declare(transpiler);
 	}
@@ -237,7 +237,7 @@ public class ArrowExpression extends PredicateExpression implements IExpression 
 	public void transpileFilter(Transpiler transpiler, IType itemType) {
 		if(args==null || args.size()!=1)
 			throw new SyntaxError("Expecting 1 parameter only!");
-	    transpiler = transpiler.newChildTranspiler(null);
+	    transpiler = transpiler.newChildTranspiler();
 		transpiler.getContext().registerValue(new Variable(args.get(0), itemType));
     	transpiler.append("function(").append(args.get(0)).append(") { ");
     	statements.transpile(transpiler);

@@ -91,7 +91,7 @@ public class MatchingPatternConstraint extends MatchingConstraintBase {
 	
 	@Override
 	public void declare(Transpiler transpiler, String name, IType type) {
-	    transpiler = transpiler.newChildTranspiler(null);
+	    transpiler = transpiler.newChildTranspiler();
 	    Identifier id = new Identifier("value");
 	    transpiler.getContext().registerValue(new Variable(id, type));
 	    this.expression.declare(transpiler);
@@ -101,7 +101,7 @@ public class MatchingPatternConstraint extends MatchingConstraintBase {
 
 	private boolean transpileChecker(Transpiler transpiler, String name, IType type) {
 	    transpiler.append("function $check_").append(name).append("(value) {").indent();
-	    transpiler = transpiler.newChildTranspiler(null);
+	    transpiler = transpiler.newChildTranspiler();
 	    Identifier id = new Identifier("value");
 	    transpiler.getContext().registerValue(new Variable(id, type));
 	    transpiler.append("if(new RegExp(");

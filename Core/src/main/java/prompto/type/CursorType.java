@@ -111,7 +111,7 @@ public class CursorType extends IterableType {
 	
 	@Override
 	public void declareIterator(Transpiler transpiler, Identifier id, IExpression expression) {
-	    transpiler = transpiler.newChildTranspiler(null);
+	    transpiler = transpiler.newChildTranspiler();
 	    transpiler.getContext().registerValue(new Variable(id, this.itemType));
 	    expression.declare(transpiler);
 	}
@@ -119,7 +119,7 @@ public class CursorType extends IterableType {
 	@Override
 	public void transpileIterator(Transpiler transpiler, Identifier id, IExpression expression) {
 	    transpiler.append(".iterate(function(").append(id.toString()).append(") { return ");
-	    transpiler = transpiler.newChildTranspiler(null);
+	    transpiler = transpiler.newChildTranspiler();
 	    transpiler.getContext().registerValue(new Variable(id, this.itemType));
 	    expression.transpile(transpiler);
 	    transpiler.append("; }, this)");

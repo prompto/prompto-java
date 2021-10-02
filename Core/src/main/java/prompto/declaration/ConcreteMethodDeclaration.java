@@ -480,7 +480,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	@Override
 	public void declareChild(Transpiler transpiler) {
 	    this.declareParameters(transpiler);
-	    transpiler = transpiler.newChildTranspiler(null);
+	    transpiler = transpiler.newChildTranspiler();
 	    this.registerParameters(transpiler.getContext());
 	    this.statements.declare(transpiler);
 	}

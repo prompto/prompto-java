@@ -153,14 +153,14 @@ public class DoWhileStatement extends BaseStatement {
 	@Override
 	public void declare(Transpiler transpiler) {
 	    this.condition.declare(transpiler);
-	    transpiler = transpiler.newChildTranspiler(null);
+	    transpiler = transpiler.newChildTranspiler();
 	    this.statements.declare(transpiler);
 	}
 	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 		transpiler.append("do {").indent();
-		Transpiler child = transpiler.newChildTranspiler(null);
+		Transpiler child = transpiler.newChildTranspiler();
 		this.statements.transpile(child);
 		child.dedent().flush();
 		transpiler.append("} while(");

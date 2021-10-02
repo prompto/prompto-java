@@ -94,9 +94,11 @@ public class Transpiler {
 		return this.copyTranspiler(context);
 	}
 
+	public Transpiler newChildTranspiler() {
+		return newChildTranspiler(this.context.newChildContext());
+	}
+	
 	public Transpiler newChildTranspiler(Context calling) {
-		if(calling==null)
-			calling = this.context.newChildContext();
 		return this.copyTranspiler(calling);
 	}
 	
@@ -117,13 +119,13 @@ public class Transpiler {
 	}
 
 	public Transpiler newGetterTranspiler(String name) {
-		Transpiler transpiler = this.newChildTranspiler(null);
+		Transpiler transpiler = this.newChildTranspiler();
 	    transpiler.getterName = name;
 	    return transpiler;
 	}
 
 	public Transpiler newSetterTranspiler(String name) {
-		Transpiler transpiler = this.newChildTranspiler(null);
+		Transpiler transpiler = this.newChildTranspiler();
 	    transpiler.setterName = name;
 	    return transpiler;
 	}

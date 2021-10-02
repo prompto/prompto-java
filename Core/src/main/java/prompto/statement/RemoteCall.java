@@ -106,7 +106,7 @@ public class RemoteCall extends UnresolvedCall {
 		else
 			transpiler.require("Remote");
 		transpiler.require("RemoteRunner");
-	    transpiler = transpiler.newChildTranspiler(null);
+	    transpiler = transpiler.newChildTranspiler();
 		if(resultName!=null) {
 			IType type = resolveAndCheck(transpiler.getContext());
 			type.declare(transpiler);
@@ -134,7 +134,7 @@ public class RemoteCall extends UnresolvedCall {
 	    if(resultName!=null)
 	    	transpiler.append(resultName.toString());
 	    transpiler.append(") {").indent();
-	    transpiler = transpiler.newChildTranspiler(null);
+	    transpiler = transpiler.newChildTranspiler();
 		if(resultName!=null) {
 			IType type = resolveAndCheck(transpiler.getContext());
 			transpiler.getContext().registerValue(new Variable(resultName, type));
@@ -151,7 +151,7 @@ public class RemoteCall extends UnresolvedCall {
 	    if(resultName!=null)
 	    	transpiler.append(resultName.toString());
 	    transpiler.append(") {").indent();
-	    transpiler = transpiler.newChildTranspiler(null);
+	    transpiler = transpiler.newChildTranspiler();
 		if(resultName!=null) {
 			IType type = resolveAndCheck(transpiler.getContext());
 			transpiler.getContext().registerValue(new Variable(resultName, type));

@@ -159,13 +159,13 @@ public class MethodType extends BaseType {
 	}
 
 	public void declareArrowExpression(Transpiler transpiler, ArrowExpression expression) {
-		transpiler = transpiler.newChildTranspiler(null);
+		transpiler = transpiler.newChildTranspiler();
 		this.method.registerParameters(transpiler.getContext());
 		expression.declare(transpiler);
 	}
 
 	public void transpileArrowExpression(Transpiler transpiler, ArrowExpression expression) {
-		transpiler = transpiler.newChildTranspiler(null);
+		transpiler = transpiler.newChildTranspiler();
 		transpiler.append("(function(");
 		expression.transpileArguments(transpiler);
 		transpiler.append(") {");

@@ -357,7 +357,7 @@ public class ForEachStatement extends BaseStatement {
 	        transpiler.require("StrictSet");
 	    IType elemType = srcType.checkIterator(transpiler.getContext());
 	    this.source.declare(transpiler);
-	    transpiler = transpiler.newChildTranspiler(null);
+	    transpiler = transpiler.newChildTranspiler();
 	    if(this.v2!=null) {
 	        transpiler.getContext().registerValue(new Variable(this.v1, IntegerType.instance()));
 	        transpiler.getContext().registerValue(new Variable(this.v2, elemType));
@@ -392,7 +392,7 @@ public class ForEachStatement extends BaseStatement {
 	    transpiler.append(".iterator();");
 	    transpiler.newLine();
 	    transpiler.append("while(").append(iterName).append(".hasNext()) {");
-	    Transpiler child = transpiler.newChildTranspiler(null);
+	    Transpiler child = transpiler.newChildTranspiler();
 	    child.indent();
 	    child.getContext().registerValue(new Variable(this.v1, elemType));
 	    child.append("var ").append(this.v1.toString()).append(" = ").append(iterName).append(".next();");
@@ -413,7 +413,7 @@ public class ForEachStatement extends BaseStatement {
 	    transpiler.append(";").newLine();
 	    String idxName = "$" + this.v1 + "_idx";
 	    transpiler.append("for(var ").append(idxName).append(" = 0; ").append(idxName).append(" < ").append(itemsName).append(".length; ").append(idxName).append("++) {");
-	    Transpiler child = transpiler.newChildTranspiler(null);
+	    Transpiler child = transpiler.newChildTranspiler();
 	    child.indent();
 	    child.getContext().registerValue(new Variable(this.v1, elemType));
 	    child.append("var ").append(this.v1.toString()).append(" = ").append(itemsName).append("[").append(idxName).append("];").newLine();
@@ -442,7 +442,7 @@ public class ForEachStatement extends BaseStatement {
 	    transpiler.append(".iterator();");
 	    transpiler.newLine();
 	    transpiler.append("while(").append(iterName).append(".hasNext()) {");
-	    Transpiler child = transpiler.newChildTranspiler(null);
+	    Transpiler child = transpiler.newChildTranspiler();
 	    child.indent();
 	    child.getContext().registerValue(new Variable(this.v1, IntegerType.instance()));
 	    child.getContext().registerValue(new Variable(this.v2, elemType));
@@ -463,7 +463,7 @@ public class ForEachStatement extends BaseStatement {
 	    this.source.transpile(transpiler);
 	    transpiler.append(";").newLine();
 	    transpiler.append("for(var ").append(this.v1.toString()).append(" = 1; ").append(this.v1.toString()).append(" <= ").append(itemsName).append(".length; ").append(this.v1.toString()).append("++) {");
-	    Transpiler child = transpiler.newChildTranspiler(null);
+	    Transpiler child = transpiler.newChildTranspiler();
 	    child.indent();
 	    child.getContext().registerValue(new Variable(this.v1, IntegerType.instance()));
 	    child.getContext().registerValue(new Variable(this.v2, elemType));
