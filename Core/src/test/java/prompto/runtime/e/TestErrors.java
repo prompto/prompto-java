@@ -95,6 +95,21 @@ public class TestErrors extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedMemberInCatch() throws Exception {
+		checkInterpretedOutput("errors/memberInCatch.pec");
+	}
+
+	@Test
+	public void testCompiledMemberInCatch() throws Exception {
+		checkCompiledOutput("errors/memberInCatch.pec");
+	}
+
+	@Test
+	public void testTranspiledMemberInCatch() throws Exception {
+		checkTranspiledOutput("errors/memberInCatch.pec");
+	}
+
+	@Test
 	public void testInterpretedNullDict() throws Exception {
 		checkInterpretedOutput("errors/nullDict.pec");
 	}

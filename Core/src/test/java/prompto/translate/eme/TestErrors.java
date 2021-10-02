@@ -32,6 +32,11 @@ public class TestErrors extends BaseEParserTest {
 	}
 
 	@Test
+	public void testMemberInCatch() throws Exception {
+		compareResourceEME("errors/memberInCatch.pec");
+	}
+
+	@Test
 	public void testNullDict() throws Exception {
 		compareResourceEME("errors/nullDict.pec");
 	}

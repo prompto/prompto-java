@@ -32,6 +32,11 @@ public class TestErrors extends BaseOParserTest {
 	}
 
 	@Test
+	public void testMemberInCatch() throws Exception {
+		compareResourceOMO("errors/memberInCatch.poc");
+	}
+
+	@Test
 	public void testNullDict() throws Exception {
 		compareResourceOMO("errors/nullDict.poc");
 	}

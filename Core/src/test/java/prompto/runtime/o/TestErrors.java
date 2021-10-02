@@ -95,6 +95,21 @@ public class TestErrors extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedMemberInCatch() throws Exception {
+		checkInterpretedOutput("errors/memberInCatch.poc");
+	}
+
+	@Test
+	public void testCompiledMemberInCatch() throws Exception {
+		checkCompiledOutput("errors/memberInCatch.poc");
+	}
+
+	@Test
+	public void testTranspiledMemberInCatch() throws Exception {
+		checkTranspiledOutput("errors/memberInCatch.poc");
+	}
+
+	@Test
 	public void testInterpretedNullDict() throws Exception {
 		checkInterpretedOutput("errors/nullDict.poc");
 	}
