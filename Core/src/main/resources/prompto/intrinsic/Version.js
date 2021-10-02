@@ -35,7 +35,7 @@ Version.prototype.qualifierToString = function() {
         case -1:
             return "candidate";
         default:
-            throw new Error("Unsupported qualifier: " + this.qualifier);
+            return "";
      }
 };
 
@@ -103,14 +103,16 @@ Version.parseVersionNumber = function(literal) {
 
 Version.parseQualifier = function(literal) {
     switch(literal) {
-        case "alpha":
+        case "":
+			return 0;
+		case "alpha":
             return -3;
         case "beta":
             return -2;
         case "candidate":
             return -1;
         default:
-            throw new Error("Version qualifier must be 'alpha', 'beta' or 'candidate'!");
+            throw new Error("Version qualifier must be <empty>, 'alpha', 'beta' or 'candidate'!");
     }
 }
 
