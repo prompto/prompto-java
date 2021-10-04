@@ -86,7 +86,7 @@ public class JsxExpression implements IJsxValue, IJsxExpression {
 	@Override
 	public boolean transpile(Transpiler transpiler, Property property) {
 		if(!transpileArrowExpressionCall(transpiler, expression, property))
-			expression.transpile(transpiler);
+			expression.transpileProperty(transpiler, property);
 		return false;
 	}
 

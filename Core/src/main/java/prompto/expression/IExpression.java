@@ -7,6 +7,7 @@ import prompto.declaration.AttributeDeclaration;
 import prompto.error.PromptoError;
 import prompto.parser.Dialect;
 import prompto.parser.ICodeSection;
+import prompto.property.Property;
 import prompto.runtime.Context;
 import prompto.store.AttributeInfo;
 import prompto.store.IStore;
@@ -56,6 +57,9 @@ public interface IExpression {
 	}
 	default boolean transpile(Transpiler transpiler) {
 		throw new UnsupportedOperationException("transpile " + this.getClass().getName());
+	}
+	default boolean transpileProperty(Transpiler transpiler, Property property) {
+		return transpile(transpiler);
 	}
 	default boolean transpileParent(Transpiler transpiler) {
 		return transpile(transpiler);

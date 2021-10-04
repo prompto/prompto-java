@@ -13,6 +13,7 @@ import prompto.expression.TypeExpression;
 import prompto.intrinsic.PromptoType;
 import prompto.parser.CodeSection;
 import prompto.parser.Dialect;
+import prompto.property.Property;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.transpiler.Transpiler;
@@ -96,6 +97,13 @@ public class TypeLiteral extends CodeSection implements IExpression {
 		return false;
 	}
 	
+	
+	@Override
+	public boolean transpileProperty(Transpiler transpiler, Property property) {
+		type.transpile(transpiler);
+		return false;
+	}
+
 	@Override
 	public boolean transpileParent(Transpiler transpiler) {
 		transpiler.append(type.toString());

@@ -65,6 +65,11 @@ public class NativeWidgetDeclaration extends NativeCategoryDeclaration implement
 	    return true;
 	}
 
+	public void transpileTypename(Transpiler transpiler) {
+		JavaScriptNativeCategoryBinding binding = this.getJavaScriptBinding(true);
+	    binding.transpileTypename(transpiler);
+	}
+
 
 	
 }
