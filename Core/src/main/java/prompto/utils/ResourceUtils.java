@@ -120,7 +120,7 @@ public abstract class ResourceUtils {
 
 	public static byte[] getResourceAsBytes(String path) throws IOException {
 		URL url = Thread.currentThread().getContextClassLoader().getResource(path);
-		return getResourceAsBytes(url);
+		return url==null ? null : getResourceAsBytes(url);
 	}
 	
 	
