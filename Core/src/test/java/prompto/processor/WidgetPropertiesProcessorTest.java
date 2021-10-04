@@ -333,6 +333,7 @@ public class WidgetPropertiesProcessorTest extends BaseOParserTest {
 		}
 		assertTrue(js.contains("stuff"));
 		assertTrue(js.contains("function(value)"));
+		assertTrue(js.contains("componentClass: Entity"));
 	}
 
 
