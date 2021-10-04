@@ -12,6 +12,7 @@ import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
+import prompto.utils.CodeWriter;
 
 public class TypeType extends BaseType {
 
@@ -24,6 +25,19 @@ public class TypeType extends BaseType {
 	
 	public IType getType() {
 		return type;
+	}
+	
+	@Override
+	public String toString() {
+		return "Type<" + type.toString() + ">";
+	}
+	
+	
+	@Override
+	public void toDialect(CodeWriter writer) {
+		writer.append("Type<");
+		type.toDialect(writer);
+		writer.append(">");
 	}
 
 	@Override

@@ -282,6 +282,7 @@ import prompto.type.PeriodType;
 import prompto.type.SetType;
 import prompto.type.TextType;
 import prompto.type.TimeType;
+import prompto.type.TypeType;
 import prompto.type.UuidType;
 import prompto.type.VersionType;
 import prompto.utils.AssertionList;
@@ -748,6 +749,12 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitTypeExpression(TypeExpressionContext ctx) {
 		IExpression exp = getNodeValue(ctx.exp);
 		setNodeValue(ctx, exp);
+	}
+
+	@Override
+	public void exitTypeType(TypeTypeContext ctx) {
+		IType type = getNodeValue(ctx.t);
+		setNodeValue(ctx, new TypeType(type));
 	}
 
 	@Override

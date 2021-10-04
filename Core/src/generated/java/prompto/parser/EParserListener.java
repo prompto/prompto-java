@@ -2164,6 +2164,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitCursorType(EParser.CursorTypeContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code TypeType}
+	 * labeled alternative in {@link EParser#typedef}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypeType(EParser.TypeTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code TypeType}
+	 * labeled alternative in {@link EParser#typedef}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypeType(EParser.TypeTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code PrimaryType}
 	 * labeled alternative in {@link EParser#typedef}.
 	 * @param ctx the parse tree

@@ -1988,6 +1988,18 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitCursorType(OParser.CursorTypeContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code TypeType}
+	 * labeled alternative in {@link OParser#typedef}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypeType(OParser.TypeTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code TypeType}
+	 * labeled alternative in {@link OParser#typedef}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypeType(OParser.TypeTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code PrimaryType}
 	 * labeled alternative in {@link OParser#typedef}.
 	 * @param ctx the parse tree

@@ -1966,6 +1966,18 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitCursorType(MParser.CursorTypeContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code TypeType}
+	 * labeled alternative in {@link MParser#typedef}.
+	 * @param ctx the parse tree
+	 */
+	void enterTypeType(MParser.TypeTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code TypeType}
+	 * labeled alternative in {@link MParser#typedef}.
+	 * @param ctx the parse tree
+	 */
+	void exitTypeType(MParser.TypeTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code PrimaryType}
 	 * labeled alternative in {@link MParser#typedef}.
 	 * @param ctx the parse tree

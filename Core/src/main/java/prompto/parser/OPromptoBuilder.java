@@ -284,6 +284,7 @@ import prompto.type.PeriodType;
 import prompto.type.SetType;
 import prompto.type.TextType;
 import prompto.type.TimeType;
+import prompto.type.TypeType;
 import prompto.type.UuidType;
 import prompto.type.VersionType;
 import prompto.utils.AssertionList;
@@ -734,7 +735,13 @@ public class OPromptoBuilder extends OParserBaseListener {
 		setNodeValue(ctx, exp);
 	}
 
-		@Override
+	@Override
+	public void exitTypeType(TypeTypeContext ctx) {
+		IType type = getNodeValue(ctx.t);
+		setNodeValue(ctx, new TypeType(type));
+	}
+
+	@Override
 	public void exitClosureStatement(ClosureStatementContext ctx) {
 		ConcreteMethodDeclaration decl = getNodeValue(ctx.decl);
 		setNodeValue(ctx, new DeclarationStatement<ConcreteMethodDeclaration>(decl));
