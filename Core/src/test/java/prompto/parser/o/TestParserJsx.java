@@ -14,7 +14,7 @@ import prompto.utils.CodeWriter;
 public class TestParserJsx extends BaseOParserTest {
 
 	@Test
-	public void canParseAndTranslateMultilineElements() {
+	public void parsesAndTranslatesMultilineElements() {
 		String jsx = "return <a>\n\t<b/>\n\t<b/>\n</a>;";
 		OCleverParser parser = new OCleverParser(jsx);
 		ReturnStatement stmt = parser.<ReturnStatement>doParse(parser::return_statement);
@@ -27,7 +27,7 @@ public class TestParserJsx extends BaseOParserTest {
 	}
 	
 	@Test
-	public void canParseAndTranslateMultilineAttributes() {
+	public void parsesAndTranslatesMultilineAttributes() {
 		String jsx = "return <a \n\tx=\"abc\"\n\ty=\"def\"\n\tz=\"stuff\" />;";
 		OCleverParser parser = new OCleverParser(jsx);
 		ReturnStatement stmt = parser.<ReturnStatement>doParse(parser::return_statement);
@@ -38,4 +38,5 @@ public class TestParserJsx extends BaseOParserTest {
 		String out = writer.toString();
 		assertEquals(jsx, out);
 	}
+	
 }
