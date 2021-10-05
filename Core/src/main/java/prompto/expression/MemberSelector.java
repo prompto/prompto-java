@@ -153,7 +153,7 @@ public class MemberSelector extends SelectorExpression {
         if (instance == null || instance == NullValue.instance())
             throw new NullReferenceError();
         else
-        	return instance.getMember(context, id, true);
+        	return instance.getMember(context, id, false);
 	}
 	
 	@Override
@@ -173,14 +173,14 @@ public class MemberSelector extends SelectorExpression {
 	}
 	
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags, boolean asParent) {
         // resolve parent to keep clarity
 		IExpression parent = resolveParent(context);
 		ResultInfo info = parent.compileParent(context, method, flags);
 		if(info.isStatic())
 			return compileStaticMember(context, method, flags, parent);
 		else
-			return compileInstanceMember(context, method, flags, info);
+			return compileInstanceMember(context, method, flags, info, asParent);
 	}
 	
 	@Override
@@ -201,7 +201,7 @@ public class MemberSelector extends SelectorExpression {
 		return type.compileGetStaticMember(context, method, flags, id);
 	}
 
-	private ResultInfo compileInstanceMember(Context context, MethodInfo method, Flags flags, ResultInfo info) {
+	private ResultInfo compileInstanceMember(Context context, MethodInfo method, Flags flags, ResultInfo info, boolean asParent) {
 		IType type = check(context);
 		Type resultType = type.getJavaType(context);
 		if(shouldCompileCharacterCodePoint(info))
@@ -214,7 +214,7 @@ public class MemberSelector extends SelectorExpression {
 		else if(shouldCompileGetMember(info))
 			return compileGetMember(context, method, flags, info, resultType);
 		else if(shouldCompileToGetOrCreate(info.getType()))
-			return compileGetOrCreate(context, method, flags, info, resultType);		
+			return compileGetOrCreate(context, method, flags, info, resultType, asParent);		
 		// special case for o.text which translates to toString
 		else if(shouldCompileToObjectToString(context, parent))
 			return compileObjectToString(method, flags);
@@ -262,7 +262,7 @@ public class MemberSelector extends SelectorExpression {
 	}
 
 	private boolean shouldCompileToGetOrCreate(Type type) {
-		if(PromptoDocument.class!=type)
+		if(PromptoDocument.class!=type && Object.class!=type)
 			return false;
 		else switch(getName()) {
 		case "count":
@@ -337,11 +337,16 @@ public class MemberSelector extends SelectorExpression {
 		method.addInstruction(Opcode.CHECKCAST, new ClassConstant(resultType));
 	}
 
-	private ResultInfo compileGetOrCreate(Context context, MethodInfo method, Flags flags, ResultInfo info, Type resultType) {
+	private ResultInfo compileGetOrCreate(Context context, MethodInfo method, Flags flags, ResultInfo info, Type resultType, boolean asParent) {
+		if(info.getType()!=PromptoDocument.class)
+			method.addInstruction(Opcode.CHECKCAST, new ClassConstant(PromptoDocument.class));
 		IOperand oper = new StringConstant(getName());
 		method.addInstruction(Opcode.LDC_W, oper);
-		oper = new ClassConstant(PromptoDocument.class);
-		method.addInstruction(Opcode.LDC_W, oper);
+		if(asParent) {
+			oper = new ClassConstant(PromptoDocument.class);
+			method.addInstruction(Opcode.LDC_W, oper);
+		} else
+			method.addInstruction(Opcode.ACONST_NULL);
 		oper = new MethodConstant(PromptoDocument.class, "getOrCreate", Object.class, 
 				Class.class, Object.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);

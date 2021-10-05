@@ -109,7 +109,7 @@ public class ItemSelector extends SelectorExpression {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags, boolean asParent) {
 		IType type = check(context);
 		ResultInfo parentInfo = parent.compile(context, method, flags);
 		ResultInfo itemInfo = compileGetItem(context, method, flags, parentInfo, item);

@@ -1,5 +1,8 @@
 package prompto.expression;
 
+import prompto.compiler.Flags;
+import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.type.IType;
@@ -38,7 +41,18 @@ public abstract class SelectorExpression extends CodeSection implements IExpress
         } else
         	return parent;
 	}
-	
 
+	@Override
+	public ResultInfo compileParent(Context context, MethodInfo method, Flags flags) {
+		return compile(context, method, flags, true);
+	}
+
+	@Override
+	public final ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+		return compile(context, method, flags, false);
+	}
+
+	public abstract ResultInfo compile(Context context, MethodInfo method, Flags flags, boolean asParent);
+	
 
 }

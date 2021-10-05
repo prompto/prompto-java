@@ -107,7 +107,7 @@ public class SliceSelector extends SelectorExpression {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags, boolean asParent) {
 		ResultInfo pinfo = parent.compile(context, method, flags.withPrimitive(false));
 		ISlicerFunction slicer = slicers.get(pinfo.getType());
 		if(slicer==null) {

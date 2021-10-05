@@ -73,7 +73,7 @@ public class UnresolvedSelector extends SelectorExpression {
 	}
 
 	@Override
-	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
+	public ResultInfo compile(Context context, MethodInfo method, Flags flags, boolean asParent) {
 		resolveAndCheck(context);
 		return resolved.compile(context, method, flags);
 	}
