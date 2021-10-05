@@ -135,6 +135,33 @@ define fetchAuditMetadata as native method receiving dbId returning Document doi
 	Python3: return $store.fetchAuditMetadataAsDocument(dbId)
 	JavaScript: return $store.fetchAuditMetadataAsDocument(dbId);
 
+define fetchDbIdsAffectedByAuditMetadataId as native method receiving dbId returning Any[] doing:
+	Java: return $store.fetchDbIdsAffectedByAuditMetadataId(dbId);
+	C#: return $store.fetchDbIdsAffectedByAuditMetadataId(dbId);
+	Python2: return $store.fetchDbIdsAffectedByAuditMetadataId(dbId)
+	Python3: return $store.fetchDbIdsAffectedByAuditMetadataId(dbId)
+	JavaScript: return $store.fetchDbIdsAffectedByAuditMetadataId(dbId);
+
+define fetchLatestAuditRecord as native method receiving dbId returning Document doing:
+	Java: return $store.fetchLatestAuditRecord(dbId);
+	C#: return $store.fetchLatestAuditRecord(dbId);
+	Python2: return $store.fetchLatestAuditRecord(dbId)
+	Python3: return $store.fetchLatestAuditRecord(dbId)
+	JavaScript: return $store.fetchLatestAuditRecord(dbId);
+
+define fetchAllAuditRecords as native method receiving dbId returning Document[] doing:
+	Java: return $store.fetchAllAuditRecords(dbId);
+	C#: return $store.fetchAllAuditRecords(dbId);
+	Python2: return $store.fetchAllAuditRecords(dbId)
+	Python3: return $store.fetchAllAuditRecords(dbId)
+	JavaScript: return $store.fetchAllAuditRecords(dbId);
+
+define fetchAuditRecordsMatching as native method receiving Document auditPredicates and Document instancePredicates returning Document[] doing:
+	Java: return $store.fetchAuditRecordsMatching(auditPredicates, instancePredicates);
+	C#: return $store.fetchAuditRecordsMatching(auditPredicates, instancePredicates);
+	Python2: return $store.fetchAuditRecordsMatching(auditPredicates, instancePredicates)
+	Python3: return $store.fetchAuditRecordsMatching(auditPredicates, instancePredicates)
+	JavaScript: return $store.fetchAuditRecordsMatching(auditPredicates, instancePredicates);
 define Category as native category with attribute name, and bindings:
 
 	define category bindings as:

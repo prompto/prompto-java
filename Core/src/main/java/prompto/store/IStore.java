@@ -12,6 +12,7 @@ import prompto.intrinsic.PromptoBinary;
 import prompto.intrinsic.PromptoDocument;
 import prompto.intrinsic.PromptoList;
 import prompto.store.IStorable.IDbIdFactory;
+import prompto.utils.PromptoCollectors;
 
 /* a mean to store and fetch data */
 public interface IStore extends Closeable {
@@ -99,11 +100,21 @@ public interface IStore extends Closeable {
 	default IAuditRecord fetchLatestAuditRecord(Object dbId) {
 		throw new UnsupportedOperationException();
 	}
+	default PromptoDocument<String, Object> fetchLatestAuditRecordAsDocument(Object dbId) {
+		IAuditRecord record = fetchLatestAuditRecord(dbId);
+		return record==null ? null : record.toDocument();
+	}
 	default PromptoList<? extends IAuditRecord> fetchAllAuditRecords(Object dbId) {
 		throw new UnsupportedOperationException();
 	}
+	default PromptoList<PromptoDocument<String, Object>> fetchAllAuditRecordsAsDocuments(Object dbId) {
+		return fetchAllAuditRecords(dbId).stream().map(IAuditRecord::toDocument).collect(PromptoCollectors.toPromptoList());
+	}
 	default PromptoList<? extends IAuditRecord> fetchAuditRecordsMatching(Map<String, Object> auditPredicates, Map<String, Object> instancePredicates) {
 		throw new UnsupportedOperationException();
+	}
+	default PromptoList<PromptoDocument<String, Object>> fetchAuditRecordsMatchingAsDocuments(Map<String, Object> auditPredicates, Map<String, Object> instancePredicates) {
+		return fetchAuditRecordsMatching(auditPredicates, instancePredicates).stream().map(IAuditRecord::toDocument).collect(PromptoCollectors.toPromptoList());
 	}
 
 }

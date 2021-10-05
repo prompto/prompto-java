@@ -483,4 +483,14 @@ public class MemStoreMirror {
 	public Object fetchAllAuditMetadataIds(Object dbId) {
 		return store.fetchAllAuditMetadataIds(dbId);
 	}
+	
+	public Object fetchLatestAuditRecordAsDocument(Object dbId) {
+		PromptoDocument<String, Object> record = store.fetchLatestAuditRecordAsDocument(dbId);
+		return record==null ? null : converter.toJS(record, false);
+	}
+
+	public Object fetchAllAuditRecordsAsDocuments(Object dbId) {
+		List<PromptoDocument<String, Object>> records = store.fetchAllAuditRecordsAsDocuments(dbId);
+		return converter.toJS(records, false);
+	}
 }

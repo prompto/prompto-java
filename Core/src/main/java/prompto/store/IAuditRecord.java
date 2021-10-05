@@ -2,7 +2,9 @@ package prompto.store;
 
 import java.time.LocalDateTime;
 
-public interface IAuditRecord {
+import prompto.intrinsic.IDocumentProducer;
+
+public interface IAuditRecord extends IDocumentProducer {
 
 	void setAuditRecordId(Object id);
 	Object getAuditRecordId();

@@ -582,8 +582,7 @@ public final class MemStore implements IStore {
 
 	static final Map<String, BiFunction<AuditRecord, Object, Boolean>> MATCHERS = new HashMap<>();
 	
-	@SuppressWarnings("serial")
-	static class AuditRecord extends HashMap<String, Object> implements IAuditRecord {
+	static class AuditRecord implements IAuditRecord {
 
 		Object auditId;
 		Object metadataId;
@@ -704,6 +703,35 @@ public final class MemStore implements IStore {
 		boolean instanceMatches(Map.Entry<String, Object> predicate) {
 			return instance!=null && Objects.equals(instance.getData(predicate.getKey()), predicate.getValue());
 		}
+
+		@Override
+		public PromptoDocument<String, Object> toDocument() {
+			PromptoDocument<String, Object> doc = new PromptoDocument<>();
+			doc.put("dbId", auditId);
+			doc.put("metadataId", metadataId);
+			doc.put("utcTimeStamp", utcTimeStamp);
+			doc.put("instanceDbId", instanceDbId);
+			doc.put("operation", operation.name());
+			if(instance!=null)
+				doc.put("instance", convertInstance(instance));
+			return doc;
+		}
+
+		private PromptoDocument<String, Object> convertInstance(IStored stored) {
+			PromptoDocument<String, Object> doc = new PromptoDocument<>();
+			doc.put("dbId", stored.getDbId());
+			stored.getNames().forEach(name -> doc.put(name, convertValue(stored.getRawData(name))));
+			return doc;
+		}
+
+		private Object convertValue(Object value) {
+			if(value==null)
+				return null;
+			else
+				return value; // TODO convert to Prompto native types if required
+		}
+		
+		
 		
 	}
 
@@ -744,6 +772,5 @@ public final class MemStore implements IStore {
 				.sorted((a,b) -> a.getUTCTimestamp().isBefore(b.getUTCTimestamp()) ? 1 : -1)
 				.collect(PromptoList.collector());
 	}
-
 
 }
