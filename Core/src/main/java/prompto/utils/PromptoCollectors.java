@@ -11,7 +11,7 @@ import java.util.stream.Collector;
 
 import prompto.intrinsic.PromptoList;
 
-public abstract class CollectionUtils {
+public abstract class PromptoCollectors {
 	
 	   public static <T> Collector<T, ?, PromptoList<T>> toPromptoList() {
 	    return new Collector<T, PromptoList<T>, PromptoList<T>>() {

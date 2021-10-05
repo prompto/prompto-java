@@ -54,7 +54,7 @@ import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.type.NativeType;
 import prompto.utils.CodeWriter;
-import prompto.utils.CollectionUtils;
+import prompto.utils.PromptoCollectors;
 import prompto.utils.Logger;
 import prompto.utils.ObjectUtils;
 import prompto.utils.SectionLocator;
@@ -374,7 +374,7 @@ public class Context implements IContext {
 		return declarations.values().stream()
 				.filter(decl -> decl instanceof AttributeDeclaration)
 				.map(decl -> (AttributeDeclaration)decl)
-				.collect(CollectionUtils.toPromptoList());
+				.collect(PromptoCollectors.toPromptoList());
 	}
 
 	public INamed getRegistered(Identifier name) {
