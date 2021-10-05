@@ -65,18 +65,48 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
-	public void testInterpretedAuditRecord() throws Exception {
-		checkInterpretedOutput("store/auditRecord.pec");
+	public void testInterpretedAuditDelete() throws Exception {
+		checkInterpretedOutput("store/auditDelete.pec");
 	}
 
 	@Test
-	public void testCompiledAuditRecord() throws Exception {
-		checkCompiledOutput("store/auditRecord.pec");
+	public void testCompiledAuditDelete() throws Exception {
+		checkCompiledOutput("store/auditDelete.pec");
 	}
 
 	@Test
-	public void testTranspiledAuditRecord() throws Exception {
-		checkTranspiledOutput("store/auditRecord.pec");
+	public void testTranspiledAuditDelete() throws Exception {
+		checkTranspiledOutput("store/auditDelete.pec");
+	}
+
+	@Test
+	public void testInterpretedAuditInsert() throws Exception {
+		checkInterpretedOutput("store/auditInsert.pec");
+	}
+
+	@Test
+	public void testCompiledAuditInsert() throws Exception {
+		checkCompiledOutput("store/auditInsert.pec");
+	}
+
+	@Test
+	public void testTranspiledAuditInsert() throws Exception {
+		checkTranspiledOutput("store/auditInsert.pec");
+	}
+
+	@Test
+	public void testInterpretedAuditUpdate() throws Exception {
+		checkInterpretedOutput("store/auditUpdate.pec");
+	}
+
+	@Test
+	public void testCompiledAuditUpdate() throws Exception {
+		checkCompiledOutput("store/auditUpdate.pec");
+	}
+
+	@Test
+	public void testTranspiledAuditUpdate() throws Exception {
+		checkTranspiledOutput("store/auditUpdate.pec");
 	}
 
 	@Test

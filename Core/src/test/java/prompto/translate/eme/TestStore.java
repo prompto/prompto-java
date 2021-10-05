@@ -22,8 +22,18 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
-	public void testAuditRecord() throws Exception {
-		compareResourceEME("store/auditRecord.pec");
+	public void testAuditDelete() throws Exception {
+		compareResourceEME("store/auditDelete.pec");
+	}
+
+	@Test
+	public void testAuditInsert() throws Exception {
+		compareResourceEME("store/auditInsert.pec");
+	}
+
+	@Test
+	public void testAuditUpdate() throws Exception {
+		compareResourceEME("store/auditUpdate.pec");
 	}
 
 	@Test
