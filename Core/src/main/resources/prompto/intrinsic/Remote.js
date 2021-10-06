@@ -26,6 +26,8 @@ function readPromptoValue(value) {
 	else if(value.type.startsWith("Cursor<"))
 		return readPromptoCursor(value.value);
 	else switch(value.type) {
+		case "DbId":
+			return value.value;
 		case "Uuid":
 			return UUID.fromString(value.value);
 		case "Date":
