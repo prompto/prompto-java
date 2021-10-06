@@ -86,8 +86,23 @@ public class DbIdValue implements IValue {
 		else
 			return IValue.super.convertTo(context, type);
 	}
-	
-	
 
+	@Override
+	public int hashCode() {
+		return dbId.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof DbIdValue)
+			return ((DbIdValue)obj).equals(this);
+		else
+			return dbId.toString().equals(obj.toString());
+	}
+	
+	
+	public boolean equals(DbIdValue obj) {
+		return dbId.equals(obj.dbId);
+	}
 
 }
