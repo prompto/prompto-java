@@ -2206,6 +2206,18 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitUUIDType(MParser.UUIDTypeContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code DbIdType}
+	 * labeled alternative in {@link MParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterDbIdType(MParser.DbIdTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code DbIdType}
+	 * labeled alternative in {@link MParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitDbIdType(MParser.DbIdTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code HtmlType}
 	 * labeled alternative in {@link MParser#native_type}.
 	 * @param ctx the parse tree

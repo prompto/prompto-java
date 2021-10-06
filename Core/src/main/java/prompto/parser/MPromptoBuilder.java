@@ -268,6 +268,7 @@ import prompto.type.CodeType;
 import prompto.type.CssType;
 import prompto.type.DateTimeType;
 import prompto.type.DateType;
+import prompto.type.DbIdType;
 import prompto.type.DecimalType;
 import prompto.type.DictType;
 import prompto.type.DocumentType;
@@ -1106,6 +1107,11 @@ public class MPromptoBuilder extends MParserBaseListener {
 		setNodeValue(ctx, new DateTimeLiteral(ctx.getText()));
 	}
 	
+	@Override
+	public void exitDbIdType(DbIdTypeContext ctx) {
+		setNodeValue(ctx, DbIdType.instance());
+	}
+
 	@Override
 	public void exitDateTimeType(DateTimeTypeContext ctx) {
 		setNodeValue(ctx, DateTimeType.instance());

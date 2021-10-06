@@ -270,6 +270,7 @@ import prompto.type.CodeType;
 import prompto.type.CssType;
 import prompto.type.DateTimeType;
 import prompto.type.DateType;
+import prompto.type.DbIdType;
 import prompto.type.DecimalType;
 import prompto.type.DictType;
 import prompto.type.DocumentType;
@@ -1118,6 +1119,11 @@ public class OPromptoBuilder extends OParserBaseListener {
 		setNodeValue(ctx, DateType.instance());
 	}
 	
+	@Override
+	public void exitDbIdType(DbIdTypeContext ctx) {
+		setNodeValue(ctx, DbIdType.instance());
+	}
+
 	@Override
 	public void exitDecimalLiteral(DecimalLiteralContext ctx) {
 		setNodeValue(ctx, new DecimalLiteral(ctx.getText()));
