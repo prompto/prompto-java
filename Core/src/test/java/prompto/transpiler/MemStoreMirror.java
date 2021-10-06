@@ -12,10 +12,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import prompto.intrinsic.PromptoDbId;
 import prompto.intrinsic.PromptoDocument;
 import prompto.store.AttributeInfo;
 import prompto.store.Family;
@@ -39,33 +41,41 @@ public class MemStoreMirror {
 		return v instanceof ScriptObjectMirror && ((ScriptObjectMirror)v).isFunction();
 	}
 
+	public static void dump(Object o) {
+		System.err.println(o);
+	}
 
 	MemStore store = new MemStore(()->true);
 	ScriptEngine nashorn;
 	ValueConverter converter;
 	
-	public MemStoreMirror(ScriptEngine nashorn) {
+	public MemStoreMirror(ScriptEngine nashorn) throws ScriptException {
 		this.nashorn = nashorn;
 		this.converter = new ValueConverter();
+		Object code = nashorn.eval("Java.type('prompto.transpiler.MemStoreMirror').dump");
+		nashorn.getBindings(ScriptContext.ENGINE_SCOPE).put("dump", code);
+		code = nashorn.eval("function(o) { dump(typeof(o)); }");
+		nashorn.getBindings(ScriptContext.ENGINE_SCOPE).put("dumpType", code);
+	
 	}
 
 	public StorableMirror newStorableDocument(String[] categories, ScriptObjectMirror dbIdFactory) {
-		IDbIdProvider provider = () -> dbIdFactory.callMember("provider");
-		IDbIdListener listener = dbId -> dbIdFactory.callMember("listener", dbId);
+		IDbIdProvider provider = () -> PromptoDbId.of(dbIdFactory.callMember("provider"));
+		IDbIdListener listener = dbId -> dbIdFactory.callMember("listener", ((Long)dbId.getValue()).intValue()); // workaround horrible Nashorn JS logic where Long(1) !== Integer(1)
 		IDbIdFactory factory = IDbIdFactory.of(provider, listener, ()->true);
 		IStorable storable = store.newStorable(categories, factory);
 		return new StorableMirror(storable);
 	}
 	
-	public void deleteAndStore(Object[] toDelete, Object[] toStore, Object metaData) {
-		Set<Object> del = toDelete==null ? null : Stream.of(toDelete).map(dbId->store.convertToDbId(dbId)).collect(Collectors.toSet());
+	public void deleteAndStore(Object[] toDelete, Object[] toStore, Object metaData) throws ScriptException {
+		Set<PromptoDbId> del = toDelete==null ? null : Stream.of(toDelete).map(dbId->store.convertToNativeDbId(dbId)).map(PromptoDbId::of).collect(Collectors.toSet());
 		Set<IStorable> add = toStore==null ? null : Stream.of(toStore).map(item->((StorableMirror)item).getStorable()).collect(Collectors.toSet());
 		IAuditMetadata meta = toAuditMetadata(metaData);
 		store.deleteAndStore(del, add, meta);
 	}
 	
 	public void deleteAndStoreAsync(Object[] toDelete, Object[] toStore, Object metaData, ScriptObjectMirror andThen) {
-		Set<Object> del = toDelete==null ? null : Stream.of(toDelete).collect(Collectors.toSet());
+		Set<PromptoDbId> del = toDelete==null ? null : Stream.of(toDelete).map(id-> PromptoDbId.of(id)).collect(Collectors.toSet());
 		Set<IStorable> add = toStore==null ? null : Stream.of(toStore).map(item->((StorableMirror)item).getStorable()).collect(Collectors.toSet());
 		IAuditMetadata meta = toAuditMetadata(metaData);
 		store.deleteAndStore(del, add, meta);
@@ -258,6 +268,8 @@ public class MemStoreMirror {
 				return toJSObject((Map<String,Object>)value, isStorable); 
 			else if(value instanceof LocalDateTime)
 				return toJSLocalDateTime((LocalDateTime)value);
+			else if(value instanceof PromptoDbId)
+				return toJS(((PromptoDbId)value).getValue(), isStorable);
 			else
 				throw new UnsupportedOperationException(value.getClass().getName());
 		}
@@ -371,7 +383,7 @@ public class MemStoreMirror {
 		}
 		
 		public Object getOrCreateDbId() {
-			return storable.getOrCreateDbId();
+			return converter.toJS(storable.getOrCreateDbId(), true);
 		}
 		
 		public void setData(String name, Object value, Object dbId) {
@@ -472,25 +484,40 @@ public class MemStoreMirror {
 	}
 
 	public Object fetchLatestAuditMetadataId(Object dbId) {
-		return store.fetchLatestAuditMetadataId(dbId);
+		return store.fetchLatestAuditMetadataId(PromptoDbId.of(castDbId(dbId)));
 	}
 	
 	public Object fetchAuditMetadataAsDocument(Object dbId) {
-		PromptoDocument<String, Object> metadata = store.fetchAuditMetadataAsDocument(dbId);
+		PromptoDocument<String, Object> metadata = store.fetchAuditMetadataAsDocument(PromptoDbId.of(castDbId(dbId)));
 		return metadata==null ? null : converter.toJS(metadata, true);
 	}
 	
 	public Object fetchAllAuditMetadataIds(Object dbId) {
-		return store.fetchAllAuditMetadataIds(dbId);
+		List<PromptoDbId> dbIds = store.fetchAllAuditMetadataIds(PromptoDbId.of(castDbId(dbId)));
+		return converter.toJS(dbIds, true);
 	}
 	
 	public Object fetchLatestAuditRecordAsDocument(Object dbId) {
-		PromptoDocument<String, Object> record = store.fetchLatestAuditRecordAsDocument(dbId);
+		PromptoDocument<String, Object> record = store.fetchLatestAuditRecordAsDocument(PromptoDbId.of(castDbId(dbId)));
 		return record==null ? null : converter.toJS(record, false);
 	}
 
 	public Object fetchAllAuditRecordsAsDocuments(Object dbId) {
-		List<PromptoDocument<String, Object>> records = store.fetchAllAuditRecordsAsDocuments(dbId);
-		return converter.toJS(records, false);
+		List<PromptoDocument<String, Object>> records = store.fetchAllAuditRecordsAsDocuments(PromptoDbId.of(castDbId(dbId)));
+		return converter.toJS(records, true);
 	}
+	
+	public Object fetchDbIdsAffectedByAuditMetadataId(Object dbId) {
+		List<PromptoDbId> dbIds = store.fetchDbIdsAffectedByAuditMetadataId(PromptoDbId.of(castDbId(dbId)));
+		return converter.toJS(dbIds, true);
+	}
+	
+	public Object castDbId(Object dbId) {
+		if(dbId instanceof Number)
+			return ((Number)dbId).longValue();
+		else
+			return dbId;
+	}
+
+
 }

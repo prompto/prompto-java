@@ -3,17 +3,18 @@ package prompto.store;
 import java.time.LocalDateTime;
 
 import prompto.intrinsic.IDocumentProducer;
+import prompto.intrinsic.PromptoDbId;
 
 public interface IAuditRecord extends IDocumentProducer {
 
-	void setAuditRecordId(Object id);
-	Object getAuditRecordId();
-	void setAuditMetadataId(Object id);
-	Object getAuditMetadataId();
+	void setDbId(PromptoDbId id);
+	PromptoDbId getDbId();
+	void setMetadataDbId(PromptoDbId id);
+	PromptoDbId getMetadataDbId();
 	void setUTCTimestamp(LocalDateTime timeStamp);
 	LocalDateTime getUTCTimestamp();
-	void setInstanceDbId(Object dbId);
-	Object getInstanceDbId();
+	void setInstanceDbId(PromptoDbId dbId);
+	PromptoDbId getInstanceDbId();
 	void setOperation(Operation operation);
 	Operation getOperation();
 	void setInstance(IStored stored);

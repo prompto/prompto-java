@@ -56,6 +56,7 @@ import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
 import prompto.instance.MemberInstance;
 import prompto.instance.VariableInstance;
+import prompto.intrinsic.PromptoDbId;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoRoot;
 import prompto.parser.ICodeSection;
@@ -340,7 +341,7 @@ public class CategoryType extends BaseType {
 	
 	private IType checkMember(Context context, CategoryDeclaration decl, Identifier id, ICodeSection section) {
        	if(decl.isStorable(context) && IStore.dbIdName.equals(id.toString()))
-    		return AnyType.instance();
+    		return DbIdType.instance();
     	else if (decl.hasAttribute(context, id)) {
             AttributeDeclaration ad = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
             if (ad != null)
@@ -624,7 +625,7 @@ public class CategoryType extends BaseType {
 
 	private void readJSONDbId(Context context, JsonNode value, IInstance instance) throws PromptoError {
 		if(value.has(IStore.dbIdName)) {
-			IType fieldType = TypeUtils.typeToIType(DataStore.getInstance().getDbIdClass());
+			IType fieldType = TypeUtils.typeToIType(DataStore.getInstance().getNativeDbIdClass());
 			JsonNode fieldData = value.get(IStore.dbIdName);
 			if(fieldData.isObject())
 				fieldData = fieldData.get("value");
@@ -656,8 +657,10 @@ public class CategoryType extends BaseType {
 	}
 
 	private IValue convertJavaValueToPromptoValue(Context context, CategoryDeclaration decl, Object value) throws PromptoError {
-		if(DataStore.getInstance().getDbIdClass().isInstance(value))
-			value = DataStore.getInstance().fetchUnique(value);
+		if(DataStore.getInstance().getNativeDbIdClass().isInstance(value))
+			value = PromptoDbId.of(value);
+		if(value instanceof PromptoDbId)
+			value = DataStore.getInstance().fetchUnique((PromptoDbId)value);
 		if(value==null)
 			return NullValue.instance();
 		else if(value instanceof IStored)

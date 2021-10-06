@@ -28,6 +28,7 @@ import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
 import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
+import prompto.intrinsic.PromptoDbId;
 import prompto.intrinsic.PromptoDocument;
 import prompto.param.IParameter;
 import prompto.runtime.Context;
@@ -60,8 +61,8 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	
 	class DbIdFactory implements IDbIdFactory {
 
-		@Override public Object get() { return getDbId(); }
-		@Override public void accept(Object dbId) { setDbId(dbId); }
+		@Override public PromptoDbId get() { return getDbId(); }
+		@Override public void accept(PromptoDbId dbId) { setDbId(dbId); }
 		// sensitive topic: isUpdate is called only when getDbId() returns non-null
 		@Override public boolean isUpdate() { return true; }
 	}
@@ -236,22 +237,22 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		}
 	}
 	
-	private Object getDbId() {
+	public PromptoDbId getDbId() {
 		try {
 			IValue dbId = values.get(new Identifier(IStore.dbIdName));
-			return dbId==null ? null : dbId.getStorableData();
+			return dbId==null ? null : (PromptoDbId)dbId.getStorableData();
 		} catch (NotStorableError e) {
 			throw new RuntimeException(e);
 		}
 	}
 	
-	private void setDbId(Object dbId) {
+	public void setDbId(PromptoDbId dbId) {
 		IValue value = new DbIdValue(dbId);
 		values.put(new Identifier(IStore.dbIdName), value);
 	}
 
-	private Object getOrCreateDbId() throws NotStorableError {
-		Object dbId = getDbId();
+	public Object getOrCreateDbId() throws NotStorableError {
+		PromptoDbId dbId = getDbId();
 		if(dbId==null) {
 			dbId = this.storable.getOrCreateDbId();
 			setDbId(dbId);

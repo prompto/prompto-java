@@ -107,7 +107,7 @@ public class CodeStoreBootstrapper {
 	}
 
 	private Map<String, AttributeDeclaration> getMinimalColumns(IStore store) {
-		final IType dbIdIType = store==null ? IntegerType.instance() : TypeUtils.typeToIType(store.getDbIdClass());
+		final IType dbIdIType = store==null ? IntegerType.instance() : TypeUtils.typeToIType(store.getNativeDbIdClass());
 		return Stream.of(
 				// attributes with reserved names, the below declarations will be used
 				new AttributeDeclaration(new Identifier(IStore.dbIdName), dbIdIType),

@@ -24,6 +24,7 @@ import prompto.grammar.Annotation;
 import prompto.grammar.Identifier;
 import prompto.grammar.MethodDeclarationList;
 import prompto.grammar.Operator;
+import prompto.intrinsic.PromptoDbId;
 import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
@@ -38,7 +39,7 @@ import prompto.utils.IdentifierList;
 import prompto.utils.Instance;
 import prompto.utils.TypeUtils;
 import prompto.value.BinaryValue;
-import prompto.value.DbIdValue;
+import prompto.value.ConcreteInstance;
 import prompto.value.IInstance;
 import prompto.value.IValue;
 import prompto.value.NullValue;
@@ -191,7 +192,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	}
 
 	private void populateInstance(Context context, IStored stored, IInstance instance) throws PromptoError {
-		Object dbId = stored.getDbId();
+		PromptoDbId dbId = stored.getDbId();
 		setDbId(context, instance, dbId);
 		for(Identifier name : this.getAllAttributes(context)) 
 			populateMember(context, stored, instance, name);
@@ -199,9 +200,11 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 			instance.getStorable().clear();
 	}
 	
-	protected void setDbId(Context context, IInstance instance, Object dbId) {
-		IValue value = new DbIdValue(dbId);
-		instance.setMember(context, new Identifier(IStore.dbIdName), value);
+	protected void setDbId(Context context, IInstance instance, PromptoDbId dbId) {
+		if(instance instanceof ConcreteInstance)
+			((ConcreteInstance)instance).setDbId(dbId);
+		else
+			throw new UnsupportedOperationException("setDbId on native instance");
 	}
 
 	private void populateMember(Context context, IStored stored, IInstance instance, Identifier id) throws PromptoError {

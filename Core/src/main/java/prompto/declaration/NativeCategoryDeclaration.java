@@ -7,6 +7,7 @@ import prompto.grammar.MethodDeclarationList;
 import prompto.grammar.NativeAttributeBindingListMap;
 import prompto.grammar.NativeCategoryBinding;
 import prompto.grammar.NativeCategoryBindingList;
+import prompto.intrinsic.PromptoDbId;
 import prompto.java.JavaNativeCategoryBinding;
 import prompto.javascript.JavaScriptNativeCategoryBinding;
 import prompto.runtime.Context;
@@ -41,7 +42,7 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 	}
 	
 	@Override
-	protected void setDbId(Context context, IInstance instance, Object dbId) {
+	protected void setDbId(Context context, IInstance instance, PromptoDbId dbId) {
 		((NativeInstance)instance).setDbId(dbId);
 	}
 	

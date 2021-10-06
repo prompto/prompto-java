@@ -365,7 +365,7 @@ public class EqualsExpression extends CodeSection implements IPredicateExpressio
 		Object data = null;
 		if(value!=null)
 		if(IStore.dbIdName.equals(info.getName()))
-			data = DataStore.getInstance().convertToDbId(value);
+			data = DataStore.getInstance().convertToNativeDbId(value);
 		else
 			data = value.getStorableData();
 		MatchOp match = getMatchOp();

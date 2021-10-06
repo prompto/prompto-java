@@ -2228,6 +2228,18 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitUUIDType(OParser.UUIDTypeContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code DbIdType}
+	 * labeled alternative in {@link OParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void enterDbIdType(OParser.DbIdTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code DbIdType}
+	 * labeled alternative in {@link OParser#native_type}.
+	 * @param ctx the parse tree
+	 */
+	void exitDbIdType(OParser.DbIdTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code HtmlType}
 	 * labeled alternative in {@link OParser#native_type}.
 	 * @param ctx the parse tree

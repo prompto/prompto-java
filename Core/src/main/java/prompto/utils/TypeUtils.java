@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import prompto.intrinsic.PromptoDate;
 import prompto.intrinsic.PromptoDateTime;
+import prompto.intrinsic.PromptoDbId;
 import prompto.intrinsic.PromptoDocument;
 import prompto.intrinsic.PromptoPeriod;
 import prompto.intrinsic.PromptoTime;
@@ -19,6 +20,7 @@ import prompto.type.BooleanType;
 import prompto.type.CharacterType;
 import prompto.type.DateTimeType;
 import prompto.type.DateType;
+import prompto.type.DbIdType;
 import prompto.type.DecimalType;
 import prompto.type.DocumentType;
 import prompto.type.IType;
@@ -71,6 +73,7 @@ public abstract class TypeUtils {
 		map.put(String.class, TextType.instance());
 		map.put(UUID.class, UuidType.instance());
 		map.put(PromptoDate.class, DateType.instance());
+		map.put(PromptoDbId.class, DbIdType.instance());
 		map.put(PromptoTime.class, TimeType.instance());
 		map.put(PromptoDateTime.class, DateTimeType.instance());
 		map.put(PromptoPeriod.class, PeriodType.instance());

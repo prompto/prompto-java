@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 
 import prompto.error.PromptoError;
 import prompto.intrinsic.PromptoBinary;
+import prompto.intrinsic.PromptoDbId;
 import prompto.intrinsic.PromptoDocument;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoTuple;
@@ -75,18 +76,20 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
-	public Class<?> getDbIdClass() {
+	public Class<?> getNativeDbIdClass() {
 		return Long.class;
 	}
 	
 	@Override
-	public Object newDbId() {
+	public Object newNativeDbId() {
 		return Long.valueOf(lastDbId.incrementAndGet());
 	}
 	
 	@Override
-	public Long convertToDbId(Object dbId) {
-		if(dbId instanceof Long)
+	public Long convertToNativeDbId(Object dbId) {
+		if(dbId instanceof PromptoDbId)
+			return convertToNativeDbId(((PromptoDbId)dbId).getValue());
+		else if(dbId instanceof Long)
 			return (Long)dbId;
 		else
 			return Long.decode(String.valueOf(dbId));
@@ -103,7 +106,7 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
-	public void deleteAndStore(Collection<?> toDelete, Collection<IStorable> toStore, IAuditMetadata auditMeta) throws PromptoError {
+	public void deleteAndStore(Collection<PromptoDbId> toDelete, Collection<IStorable> toStore, IAuditMetadata auditMeta) throws PromptoError {
 		auditMeta = audit ? storeAuditMetadata(auditMeta) : null;
 		if(toDelete!=null) 
 			doDelete(toDelete, auditMeta);
@@ -114,7 +117,7 @@ public final class MemStore implements IStore {
 	private IAuditMetadata storeAuditMetadata(IAuditMetadata auditMeta) {
 		if(auditMeta==null)
 			auditMeta = newAuditMetadata();
-		auditMetadatas.put((Long)auditMeta.getAuditMetadataId(), (AuditMetadata)auditMeta);
+		auditMetadatas.put((Long)auditMeta.getAuditMetadataId().getValue(), (AuditMetadata)auditMeta);
 		return auditMeta;
 	}
 
@@ -137,26 +140,26 @@ public final class MemStore implements IStore {
 		StoredDocument previous = instances.put((Long)dbId, stored);
 		if(audit) {
 			AuditRecord audit = newAuditRecord(auditMeta);
-			audit.setInstanceDbId(dbId);
+			audit.setInstanceDbId(PromptoDbId.of(dbId));
 			IAuditRecord.Operation operation = previous==null ? Operation.INSERT : Operation.UPDATE;
 			audit.setOperation(operation);
 			audit.setInstance(stored);
-			auditRecords.put((Long)audit.getAuditRecordId(), audit);
+			auditRecords.put((Long)audit.getDbId().getValue(), audit);
 		}
 	}
 	
-	private void doDelete(Collection<?> toDelete, IAuditMetadata auditMeta) {
-		for(Object dbId : toDelete)
+	private void doDelete(Collection<PromptoDbId> toDelete, IAuditMetadata auditMeta) {
+		for(PromptoDbId dbId : toDelete)
 			doDelete(dbId, auditMeta);
 	}
 
-	private void doDelete(Object dbId, IAuditMetadata auditMeta) {
-		instances.remove(dbId);
+	private void doDelete(PromptoDbId dbId, IAuditMetadata auditMeta) {
+		instances.remove(dbId.getValue());
 		if(audit) {
 			AuditRecord audit = newAuditRecord(auditMeta);
 			audit.setInstanceDbId(dbId);
 			audit.setOperation(IAuditRecord.Operation.DELETE);
-			auditRecords.put((Long)audit.getAuditRecordId(), audit);
+			auditRecords.put((Long)audit.getDbId().getValue(), audit);
 		}
 	}
 
@@ -166,10 +169,11 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
-	public PromptoBinary fetchBinary(Object dbId, String attr) {
-		if(!(dbId instanceof Long))
-			dbId = Long.decode(dbId.toString());
-		StoredDocument doc = instances.get(dbId);
+	public PromptoBinary fetchBinary(PromptoDbId dbId, String attr) {
+		Object id = dbId.getValue();
+		if(!(id instanceof Long))
+			id = Long.decode(dbId.toString());
+		StoredDocument doc = instances.get(id);
 		if(doc==null)
 			return null;
 		else
@@ -177,8 +181,11 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
-	public IStored fetchUnique(Object dbId) throws PromptoError {
-		return instances.get(dbId);
+	public IStored fetchUnique(PromptoDbId dbId) throws PromptoError {
+		Object id = dbId.getValue();
+		if(!(id instanceof Long))
+			id = Long.decode(dbId.toString());
+		return instances.get(id);
 	}
 	
 	
@@ -322,15 +329,15 @@ public final class MemStore implements IStore {
 		private void ensureDocument() {
 			if(document==null) {
 				document = newDocument();
-				Object dbId = null;
+				PromptoDbId dbId = null;
 				if(dbIdFactory!=null)
 					dbId = dbIdFactory.get();
 				if(dbId==null) {
-					dbId = Long.valueOf(lastDbId.incrementAndGet());
+					dbId = PromptoDbId.of(Long.valueOf(lastDbId.incrementAndGet()));
 					if(dbIdFactory!=null)
 						dbIdFactory.accept(dbId);
 				}
-				setData(dbIdName, dbId);
+				setData(dbIdName, dbId.getValue());
 			}
 		}
 
@@ -375,23 +382,25 @@ public final class MemStore implements IStore {
 		}
 		
 		@Override
-		public void setDbId(Object dbId) {
+		public void setDbId(PromptoDbId dbId) {
 			if(document!=null)
-				document.put(dbIdName, dbId);
+				document.put(dbIdName, dbId.getValue());
 		}
 		
 		@Override
-		public Object getOrCreateDbId() {
-			Object dbId = getData(dbIdName);
-			if(dbId==null) {
+		public PromptoDbId getOrCreateDbId() {
+			Object value = getData(dbIdName);
+			PromptoDbId dbId = value==null ? null : PromptoDbId.of(value);
+			if(value==null) {
 				if(dbIdFactory!=null)
-					dbId = dbIdFactory.get();
-				if(dbId==null) {
-					dbId = Long.valueOf(lastDbId.incrementAndGet());
+					value = dbIdFactory.get();
+				if(value==null) {
+					value = Long.valueOf(lastDbId.incrementAndGet());
+					dbId = PromptoDbId.of(value);
 					if(dbIdFactory!=null)
 						dbIdFactory.accept(dbId);
 				}
-				setData(dbIdName, dbId);
+				setData(dbIdName, value);
 			}
 			return dbId;
 		}
@@ -483,8 +492,9 @@ public final class MemStore implements IStore {
 
 		
 		@Override
-		public Object getDbId() {
-			return getData(dbIdName);
+		public PromptoDbId getDbId() {
+			Object value =  getData(dbIdName);
+			return value==null ? null : PromptoDbId.of(value);
 		}
 		
 		public boolean matches(IPredicate predicate) {
@@ -548,35 +558,38 @@ public final class MemStore implements IStore {
 	@Override
 	public AuditMetadata newAuditMetadata() {
 		AuditMetadata meta = new AuditMetadata();
-		meta.setAuditMetadataId(lastAuditMetadataId.incrementAndGet());
+		meta.setAuditMetadataId(PromptoDbId.of(lastAuditMetadataId.incrementAndGet()));
 		meta.setUTCTimestamp(LocalDateTime.now(ZoneId.of("UTC")));
 		return meta;
 	}
 	
 	
 	@Override
-	public Object fetchLatestAuditMetadataId(Object dbId) {
+	public PromptoDbId fetchLatestAuditMetadataId(PromptoDbId dbId) {
 		return fetchAllAuditMetadataIdsStream(dbId)
 				.findFirst()
 				.orElse(null);
 	}
 	
 	@Override
-	public PromptoList<Object> fetchAllAuditMetadataIds(Object dbId) {
+	public PromptoList<PromptoDbId> fetchAllAuditMetadataIds(PromptoDbId dbId) {
 		return fetchAllAuditMetadataIdsStream(dbId)
 				.collect(PromptoList.collector());
 	}
 	
-	private Stream<Object> fetchAllAuditMetadataIdsStream(Object dbId) {
+	private Stream<PromptoDbId> fetchAllAuditMetadataIdsStream(PromptoDbId dbId) {
 		return auditRecords.values().stream()
 				.filter(a -> dbId.equals(a.getInstanceDbId()))
 				.sorted((a,b) -> a.getUTCTimestamp().isBefore(b.getUTCTimestamp()) ? 1 : -1)
-				.map(IAuditRecord::getAuditMetadataId);
+				.map(IAuditRecord::getMetadataDbId);
 	}
 
 	@Override
-	public IAuditMetadata fetchAuditMetadata(Object metaId) {
-		return auditMetadatas.get(metaId);
+	public IAuditMetadata fetchAuditMetadata(PromptoDbId metaId) {
+		Object id = metaId.getValue();
+		if(!(id instanceof Long))
+			id = Long.decode(id.toString());
+		return auditMetadatas.get(id);
 	}
 
 
@@ -584,10 +597,10 @@ public final class MemStore implements IStore {
 	
 	static class AuditRecord implements IAuditRecord {
 
-		Object auditId;
-		Object metadataId;
+		PromptoDbId auditId;
+		PromptoDbId metadataId;
 		LocalDateTime utcTimeStamp;
-		Object instanceDbId;
+		PromptoDbId instanceDbId;
 		Operation operation;
 		IStored instance;
 		
@@ -598,22 +611,22 @@ public final class MemStore implements IStore {
 		}
 
 		@Override
-		public void setAuditRecordId(Object id) {
+		public void setDbId(PromptoDbId id) {
 			this.auditId = id;
 		}
 
 		@Override
-		public Object getAuditRecordId() {
+		public PromptoDbId getDbId() {
 			return auditId;
 		}
 		
 		@Override
-		public void setAuditMetadataId(Object id) {
+		public void setMetadataDbId(PromptoDbId id) {
 			metadataId = id;
 		}
 
 		@Override
-		public Object getAuditMetadataId() {
+		public PromptoDbId getMetadataDbId() {
 			return metadataId;
 		}
 
@@ -628,12 +641,12 @@ public final class MemStore implements IStore {
 		}
 
 		@Override
-		public void setInstanceDbId(Object dbId) {
+		public void setInstanceDbId(PromptoDbId dbId) {
 			this.instanceDbId = dbId;
 		}
 
 		@Override
-		public Object getInstanceDbId() {
+		public PromptoDbId getInstanceDbId() {
 			return instanceDbId;
 		}
 
@@ -737,14 +750,14 @@ public final class MemStore implements IStore {
 
 	private AuditRecord newAuditRecord(IAuditMetadata auditMeta) {
 		AuditRecord audit = new AuditRecord();
-		audit.setAuditRecordId(lastAuditRecordId.incrementAndGet());
-		audit.setAuditMetadataId(auditMeta.getAuditMetadataId());
+		audit.setDbId(PromptoDbId.of(lastAuditRecordId.incrementAndGet()));
+		audit.setMetadataDbId(auditMeta.getAuditMetadataId());
 		audit.setUTCTimestamp(auditMeta.getUTCTimestamp());
 		return audit;
 	}
 
 	@Override
-	public AuditRecord fetchLatestAuditRecord(Object dbId) {
+	public AuditRecord fetchLatestAuditRecord(PromptoDbId dbId) {
 		return fetchAuditRecordsStream(a -> dbId.equals(a.getInstanceDbId()))
 				.findFirst()
 				.orElse(null);
@@ -757,18 +770,10 @@ public final class MemStore implements IStore {
 	}
 
 	@Override
-	public PromptoList<AuditRecord> fetchAllAuditRecords(Object dbId) {
+	public PromptoList<AuditRecord> fetchAllAuditRecords(PromptoDbId dbId) {
 		return fetchAuditRecordsCollection(a -> dbId.equals(a.getInstanceDbId()));
 	}
 	
-	
-	@Override
-	public PromptoList<Object> fetchDbIdsAffectedByAuditMetadataId(Object auditId) {
-		return fetchAuditRecordsStream(rec -> Objects.equals(auditId, rec.getAuditMetadataId()))
-				.map(AuditRecord::getInstanceDbId)
-				.collect(PromptoList.collector());
-	}
-
 	private PromptoList<AuditRecord> fetchAuditRecordsCollection(Predicate<AuditRecord> filter) {
 		return fetchAuditRecordsStream(filter).collect(PromptoList.collector());
 	}
@@ -780,5 +785,16 @@ public final class MemStore implements IStore {
 				.sorted((a,b) -> a.getUTCTimestamp().isBefore(b.getUTCTimestamp()) ? 1 : -1)
 				.collect(PromptoList.collector());
 	}
+
+	@Override
+	public PromptoList<PromptoDbId> fetchDbIdsAffectedByAuditMetadataId(PromptoDbId metaId) {
+		return auditRecords.values().stream()
+				.filter(a -> metaId.equals(a.getMetadataDbId()))
+				.sorted((a,b) -> a.getUTCTimestamp().isBefore(b.getUTCTimestamp()) ? 1 : -1)
+				.map(IAuditRecord::getInstanceDbId)
+				.collect(PromptoList.collector());
+	}
+	
+	
 
 }

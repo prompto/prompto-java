@@ -27,6 +27,7 @@ public enum Family {
 	// non storable
 	VOID,
 	NULL,
+	DBID,
 	ANY,
 	METHOD,
 	CURSOR,

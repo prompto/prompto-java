@@ -3,11 +3,12 @@ package prompto.store;
 import java.util.Set;
 
 import prompto.error.PromptoError;
+import prompto.intrinsic.PromptoDbId;
 
 
 public interface IStored {
 
-	Object getDbId();
+	PromptoDbId getDbId();
 	String[] getCategories();
 	boolean hasData(String fieldName);
 	Object getRawData(String fieldName);

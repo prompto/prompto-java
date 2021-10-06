@@ -381,7 +381,7 @@ public abstract class Standalone {
 	public static Map<String, AttributeDeclaration> getMinimalDataColumns(IStore dataStore) {
 		Map<String, AttributeDeclaration> columns = new HashMap<String, AttributeDeclaration>();
 		// attributes with reserved names, the below declarations will be used
-		IType dbIdIType = TypeUtils.typeToIType(dataStore.getDbIdClass());
+		IType dbIdIType = TypeUtils.typeToIType(dataStore.getNativeDbIdClass());
 		columns.put(IStore.dbIdName, new AttributeDeclaration(new Identifier(IStore.dbIdName), dbIdIType).withStorable(true));
 		columns.put("category", new AttributeDeclaration(new Identifier("category"), 
 				new ListType(TextType.instance()), new IdentifierList(new Identifier("key"))));

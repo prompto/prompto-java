@@ -21,7 +21,7 @@ import prompto.value.NullValue;
 
 public class PromptoDeleteAndStoreQuery {
 
-	Set<Object> deletables = new HashSet<>();
+	Set<PromptoDbId> deletables = new HashSet<>();
 	Map<Object, IStorable> storables = new HashMap<>();
 	IAuditMetadata metadata;
 	
@@ -49,7 +49,7 @@ public class PromptoDeleteAndStoreQuery {
 		else if(value instanceof IInstance) try {
 			IValue dbId = ((IInstance)value).getMember(context, new Identifier(IStore.dbIdName), false);
 			if(dbId!=null)
-				deletables.add(dbId.getStorableData());
+				deletables.add((PromptoDbId)dbId.getStorableData());
 		} catch(PromptoError e) {
 			throw new RuntimeException(e); // TODO for now
 		} else if(value instanceof IIterable)
@@ -88,7 +88,7 @@ public class PromptoDeleteAndStoreQuery {
 		if(value==null)
 			return;
 		else if(value instanceof PromptoRoot) try {
-			Object dbId = ((PromptoRoot)value).getDbId();
+			PromptoDbId dbId = ((PromptoRoot)value).getDbId();
 			if(dbId!=null)
 				deletables.add(dbId);
 		} catch(PromptoError e) {
