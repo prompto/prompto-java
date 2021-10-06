@@ -761,6 +761,14 @@ public final class MemStore implements IStore {
 		return fetchAuditRecordsCollection(a -> dbId.equals(a.getInstanceDbId()));
 	}
 	
+	
+	@Override
+	public PromptoList<Object> fetchDbIdsAffectedByAuditMetadataId(Object auditId) {
+		return fetchAuditRecordsStream(rec -> Objects.equals(auditId, rec.getAuditMetadataId()))
+				.map(AuditRecord::getInstanceDbId)
+				.collect(PromptoList.collector());
+	}
+
 	private PromptoList<AuditRecord> fetchAuditRecordsCollection(Predicate<AuditRecord> filter) {
 		return fetchAuditRecordsStream(filter).collect(PromptoList.collector());
 	}
