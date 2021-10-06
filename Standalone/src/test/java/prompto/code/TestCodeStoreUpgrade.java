@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import prompto.config.IRuntimeConfiguration;
 import prompto.config.TempDirectories;
+import prompto.intrinsic.PromptoDbId;
 import prompto.intrinsic.PromptoVersion;
 import prompto.libraries.Libraries;
 import prompto.runtime.Standalone;
@@ -24,11 +25,11 @@ public class TestCodeStoreUpgrade {
 	
 	@Test
 	public void upgradesDerivedFrom() throws Exception {
-		Instance<Object> dbId = new Instance<>();
+		Instance<PromptoDbId> dbId = new Instance<>();
 		IStore store = new MemStore();
 		IStorable storable = store.newStorable(Arrays.asList("Declaration", "CategoryDeclaration", "ConcreteCategoryDeclaration"), new IDbIdFactory() {
-			@Override public void accept(Object id) { dbId.set(id); }
-			@Override public Object get() { return null; }
+			@Override public void accept(PromptoDbId id) { dbId.set(id); }
+			@Override public PromptoDbId get() { return null; }
 			@Override public boolean isUpdate() { return false; }
 		});
 		storable.setData("name", "Child");

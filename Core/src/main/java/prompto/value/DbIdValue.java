@@ -13,24 +13,25 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import prompto.error.NotStorableError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
+import prompto.intrinsic.PromptoDbId;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
-import prompto.type.AnyType;
+import prompto.type.DbIdType;
 import prompto.type.IType;
 
 public class DbIdValue implements IValue {
 
-	Object dbId;
+	PromptoDbId dbId;
 
-	public DbIdValue(Object dbId) {
+	public DbIdValue(PromptoDbId dbId) {
 		this.dbId = dbId;
 	}
 
-	public void setDbId(Object dbId) {
+	public void setDbId(PromptoDbId dbId) {
 		this.dbId = dbId;
 	}
 	
-	public Object getDbId() {
+	public PromptoDbId getDbId() {
 		return dbId;
 	}
 	
@@ -50,17 +51,17 @@ public class DbIdValue implements IValue {
 	
 	@Override
 	public IType getType() {
-		return AnyType.instance();
+		return DbIdType.instance();
 	}
 
 	@Override
 	public void setType(IType type) {
-		if(type!=AnyType.instance())
+		if(type!=DbIdType.instance())
 			throw new RuntimeException("Should never get there!");
 	}
 	
 	@Override
-	public Object getStorableData() throws NotStorableError {
+	public PromptoDbId getStorableData() throws NotStorableError {
 		return dbId;
 	}
 	
@@ -81,7 +82,7 @@ public class DbIdValue implements IValue {
 
 	@Override
 	public Object convertTo(Context context, Type type) throws PromptoError {
-		if(type==Object.class)
+		if(type==PromptoDbId.class)
 			return getStorableData();
 		else
 			return IValue.super.convertTo(context, type);

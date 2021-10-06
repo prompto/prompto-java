@@ -33,6 +33,7 @@ import prompto.grammar.Annotation;
 import prompto.grammar.Identifier;
 import prompto.grammar.OrderByClause;
 import prompto.grammar.OrderByClauseList;
+import prompto.intrinsic.PromptoDbId;
 import prompto.intrinsic.PromptoVersion;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
@@ -144,9 +145,9 @@ public class MutableCodeStore extends BaseCodeStore {
 		IQueryBuilder builder = store.newQueryBuilder();
 		builder.verify(AttributeInfo.MODULE, MatchOp.HAS, module.getDbId());
 		Iterable<IStored> stuff = store.fetchMany(builder.build());
-		Stream<Object> stuffDbIds = StreamSupport.stream(stuff.spliterator(), false)
+		Stream<PromptoDbId> stuffDbIds = StreamSupport.stream(stuff.spliterator(), false)
 				.map(IStored::getDbId);
-		List<Object> dbIds = Stream.concat(Stream.of(module.getDbId()), stuffDbIds)
+		List<PromptoDbId> dbIds = Stream.concat(Stream.of(module.getDbId()), stuffDbIds)
 					.collect(Collectors.toList());
 		store.delete(dbIds);
 	}
@@ -785,8 +786,8 @@ public class MutableCodeStore extends BaseCodeStore {
 			if(derivedFrom!=null && !derivedFrom.isEmpty()) {
 				List<String> names = derivedFrom.stream().map(Object::toString).collect(Collectors.toList());
 				IStorable storable = store.newStorable(stored.getCategories(), new IDbIdFactory() {
-					@Override public void accept(Object t) { }
-					@Override public Object get() { return stored.getDbId(); }
+					@Override public void accept(PromptoDbId t) { }
+					@Override public PromptoDbId get() { return stored.getDbId(); }
 					@Override public boolean isUpdate() { return true; }
 				});
 				storable.setData("derivedFrom", names);

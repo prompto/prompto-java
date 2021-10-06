@@ -34,7 +34,7 @@ public class RemoteArgument {
 		param.setName(field.asText());
 		// dbId type resolves to Any category, when it's actually a value, need a hack for this one
 		if(IStore.dbIdName.equals(param.getName()))
-			param.setType(TypeUtils.typeToIType(DataStore.getInstance().getDbIdClass()));
+			param.setType(TypeUtils.typeToIType(DataStore.getInstance().getNativeDbIdClass()));
 		else {
 			field = jsonParam.get("type");
 			if(field!=null)

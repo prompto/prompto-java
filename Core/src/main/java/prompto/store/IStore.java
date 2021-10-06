@@ -1,7 +1,6 @@
 package prompto.store;
 
 import java.io.Closeable;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -21,9 +20,18 @@ public interface IStore extends Closeable {
 	
 	boolean checkConnection();
 
-	Class<?> getDbIdClass();
-	Object newDbId();
-	Object convertToDbId(Object dbId);
+	default PromptoDbId newDbId() {
+		return PromptoDbId.of(newNativeDbId());
+	}
+	default PromptoDbId convertToDbId(Object dbId) {
+		if(dbId instanceof PromptoDbId)
+			return (PromptoDbId)dbId;
+		else
+			return PromptoDbId.of(convertToNativeDbId(dbId));
+	}
+	Class<?> getNativeDbIdClass();
+	Object newNativeDbId();
+	Object convertToNativeDbId(Object dbId);
 	AttributeInfo getAttributeInfo(String name) throws PromptoError;
 	void createOrUpdateAttributes(Collection<AttributeInfo> attributes) throws PromptoError;
 	
@@ -32,8 +40,8 @@ public interface IStore extends Closeable {
 		return newStorable(categories.toArray(new String[0]), dbIdFactory);
 	}
 	
-	void deleteAndStore(Collection<?> deletables, Collection<IStorable> storables, IAuditMetadata auditMeta) throws PromptoError;
-	default void store(Collection<?> deletables, Collection<IStorable> storables) throws PromptoError {
+	void deleteAndStore(Collection<PromptoDbId> deletables, Collection<IStorable> storables, IAuditMetadata auditMeta) throws PromptoError;
+	default void store(Collection<PromptoDbId> deletables, Collection<IStorable> storables) throws PromptoError {
 		deleteAndStore(deletables, storables, null);
 	}
 	default void store(Collection<IStorable> storables, IAuditMetadata auditMeta) throws PromptoError {
@@ -48,22 +56,22 @@ public interface IStore extends Closeable {
 	default void store(IStorable storable) throws PromptoError {
 		deleteAndStore(null, Collections.singletonList(storable), null);
 	}
-	default void delete(Collection<?> dbIds, IAuditMetadata auditMeta) throws PromptoError {
+	default void delete(Collection<PromptoDbId> dbIds, IAuditMetadata auditMeta) throws PromptoError {
 		deleteAndStore(dbIds, null, auditMeta);
 	}
-	default void delete(Collection<?> dbIds) throws PromptoError {
+	default void delete(Collection<PromptoDbId> dbIds) throws PromptoError {
 		deleteAndStore(dbIds, null, null);
 	}
-	default void delete(Object dbId, IAuditMetadata auditMeta) throws PromptoError {
-		deleteAndStore(Arrays.asList(dbId), null, auditMeta);
+	default void delete(PromptoDbId dbId, IAuditMetadata auditMeta) throws PromptoError {
+		deleteAndStore(Collections.singletonList(dbId), null, auditMeta);
 	}
-	default void delete(Object dbId) throws PromptoError {
-		deleteAndStore(Arrays.asList(dbId), null, null);
+	default void delete(PromptoDbId dbId) throws PromptoError {
+		deleteAndStore(Collections.singletonList(dbId), null, null);
 	}
 	void deleteAll() throws PromptoError; // for test purpose only
 
-	PromptoBinary fetchBinary(Object dbId, String attr) throws PromptoError;
-	IStored fetchUnique(Object dbId) throws PromptoError;
+	PromptoBinary fetchBinary(PromptoDbId dbId, String attr) throws PromptoError;
+	IStored fetchUnique(PromptoDbId dbId) throws PromptoError;
 
 	IQueryBuilder newQueryBuilder();
 	// for the below, it is guaranteed that IQuery was produced by the above IQueryBuilder
@@ -81,33 +89,33 @@ public interface IStore extends Closeable {
 	default IAuditMetadata newAuditMetadata() {
 		throw new UnsupportedOperationException();
 	}
-	default Object fetchLatestAuditMetadataId(Object dbId) {
+	default PromptoDbId fetchLatestAuditMetadataId(PromptoDbId dbId) {
 		throw new UnsupportedOperationException();
 	}
-	default PromptoList<Object> fetchAllAuditMetadataIds(Object dbId) {
+	default PromptoList<PromptoDbId> fetchAllAuditMetadataIds(PromptoDbId dbId) {
 		throw new UnsupportedOperationException();
 	}
-	default IAuditMetadata fetchAuditMetadata(Object metaId) {
+	default IAuditMetadata fetchAuditMetadata(PromptoDbId metaId) {
 		throw new UnsupportedOperationException();
 	}
-	default PromptoDocument<String, Object> fetchAuditMetadataAsDocument(Object metaId) {
+	default PromptoDocument<String, Object> fetchAuditMetadataAsDocument(PromptoDbId metaId) {
 		IAuditMetadata metaData = fetchAuditMetadata(metaId);
 		return metaData==null ? null : metaData.toDocument();
 	}
-	default PromptoList<Object> fetchDbIdsAffectedByAuditMetadataId(Object auditId) {
+	default PromptoList<PromptoDbId> fetchDbIdsAffectedByAuditMetadataId(PromptoDbId auditId) {
 		throw new UnsupportedOperationException();
 	}
-	default IAuditRecord fetchLatestAuditRecord(Object dbId) {
+	default IAuditRecord fetchLatestAuditRecord(PromptoDbId dbId) {
 		throw new UnsupportedOperationException();
 	}
-	default PromptoDocument<String, Object> fetchLatestAuditRecordAsDocument(Object dbId) {
+	default PromptoDocument<String, Object> fetchLatestAuditRecordAsDocument(PromptoDbId dbId) {
 		IAuditRecord record = fetchLatestAuditRecord(dbId);
 		return record==null ? null : record.toDocument();
 	}
-	default PromptoList<? extends IAuditRecord> fetchAllAuditRecords(Object dbId) {
+	default PromptoList<? extends IAuditRecord> fetchAllAuditRecords(PromptoDbId dbId) {
 		throw new UnsupportedOperationException();
 	}
-	default PromptoList<PromptoDocument<String, Object>> fetchAllAuditRecordsAsDocuments(Object dbId) {
+	default PromptoList<PromptoDocument<String, Object>> fetchAllAuditRecordsAsDocuments(PromptoDbId dbId) {
 		return fetchAllAuditRecords(dbId).stream().map(IAuditRecord::toDocument).collect(PromptoList.collector());
 	}
 	default PromptoList<? extends IAuditRecord> fetchAuditRecordsMatching(Map<String, Object> auditPredicates, Map<String, Object> instancePredicates) {
@@ -116,5 +124,6 @@ public interface IStore extends Closeable {
 	default PromptoList<PromptoDocument<String, Object>> fetchAuditRecordsMatchingAsDocuments(Map<String, Object> auditPredicates, Map<String, Object> instancePredicates) {
 		return fetchAuditRecordsMatching(auditPredicates, instancePredicates).stream().map(IAuditRecord::toDocument).collect(PromptoList.collector());
 	}
+
 
 }

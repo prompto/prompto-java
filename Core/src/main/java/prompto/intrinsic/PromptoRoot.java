@@ -55,8 +55,10 @@ public abstract class PromptoRoot extends PromptoStorableBase implements IMutabl
 	public static PromptoRoot newInstanceFromDbIdRef(Object value) {
 		if(value instanceof PromptoRoot)
 			return (PromptoRoot)value;
-		if(DataStore.getInstance().getDbIdClass().isInstance(value))
-			value = DataStore.getInstance().fetchUnique(value);
+		if(DataStore.getInstance().getNativeDbIdClass().isInstance(value))
+			value = PromptoDbId.of(value);
+		if(value instanceof PromptoDbId)
+			value = DataStore.getInstance().fetchUnique((PromptoDbId)value);
 		if(value instanceof IStored)
 			return newInstance((IStored)value, false);
 		else
@@ -149,8 +151,8 @@ public abstract class PromptoRoot extends PromptoStorableBase implements IMutabl
 			return this.getOrCreateDbId();
 	}
 	
-	private Object getOrCreateDbId() throws NotStorableError {
-		Object dbId = getDbId();
+	private PromptoDbId getOrCreateDbId() throws NotStorableError {
+		PromptoDbId dbId = getDbId();
 		if(dbId==null) {
 			dbId = this.storable.getOrCreateDbId();
 			setDbId(dbId);

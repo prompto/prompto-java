@@ -24,6 +24,7 @@ import prompto.grammar.EqOp;
 import prompto.grammar.Identifier;
 import prompto.grammar.OrderByClause;
 import prompto.grammar.OrderByClauseList;
+import prompto.intrinsic.PromptoDbId;
 import prompto.intrinsic.PromptoList;
 import prompto.literal.TextLiteral;
 import prompto.runtime.Context;
@@ -346,7 +347,7 @@ public class TestMemStore {
 				.collect(Collectors.toList());
 		DataStore.getInstance().store(docs);
 		assertEquals(1L, store.auditMetadatas.size());
-		Object metaId = store.fetchLatestAuditMetadataId(docs.get(0).getOrCreateDbId());
+		PromptoDbId metaId = store.fetchLatestAuditMetadataId(docs.get(0).getOrCreateDbId());
 		assertNotNull(metaId);
 		IAuditMetadata meta = store.fetchAuditMetadata(metaId);
 		assertNotNull(meta);
@@ -364,8 +365,8 @@ public class TestMemStore {
 		IStored stored = store.fetchUnique(doc1.getOrCreateDbId());
 		class DbIdFactory implements IDbIdFactory {
 
-			@Override public Object get() { return stored.getDbId(); }
-			@Override public void accept(Object dbId) {  }
+			@Override public PromptoDbId get() { return stored.getDbId(); }
+			@Override public void accept(PromptoDbId dbId) {  }
 			@Override public boolean isUpdate() { return true; }
 		}
 
@@ -381,7 +382,7 @@ public class TestMemStore {
 		assertEquals("bye", audit.getInstance().getData("name"));
 		audit = iter.next();
 		assertEquals("hello", audit.getInstance().getData("name"));
-		Collection<Object> metaIds = store.fetchAllAuditMetadataIds(doc2.getOrCreateDbId());
+		Collection<PromptoDbId> metaIds = store.fetchAllAuditMetadataIds(doc2.getOrCreateDbId());
 		assertEquals(2L, metaIds.size());
 		metaIds.forEach(metaId -> assertNotNull(store.fetchAuditMetadata(metaId)));
 	}

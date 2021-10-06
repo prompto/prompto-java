@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import prompto.intrinsic.PromptoDbId;
 import prompto.store.IStore;
 import prompto.store.IStored;
 import prompto.utils.Logger;
@@ -23,7 +24,7 @@ public class StoredRecordConfigurationReader implements IConfigurationReader  {
 	IStore store;
 	IStored stored;
 	
-	public StoredRecordConfigurationReader(IStore store, Object dbId) {
+	public StoredRecordConfigurationReader(IStore store, PromptoDbId dbId) {
 		this(store, fetchStored(store, dbId));
 	}
 
@@ -67,11 +68,11 @@ public class StoredRecordConfigurationReader implements IConfigurationReader  {
 		Object value = stored.getRawData(key);
 		if(value==null)
 			return null;
-		if(!store.getDbIdClass().isInstance(value)) {
+		if(!store.getNativeDbIdClass().isInstance(value)) {
 			logger.warn(()->"Not a valid dbId: " + value.toString());
 			return null;
 		}
-		return new StoredRecordConfigurationReader(store, value);
+		return new StoredRecordConfigurationReader(store, PromptoDbId.of(value));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -86,11 +87,11 @@ public class StoredRecordConfigurationReader implements IConfigurationReader  {
 		}
 		List<StoredRecordConfigurationReader> readers = new ArrayList<>();
 		for(Object item : (Collection<Object>)value) {
-			if(!store.getDbIdClass().isInstance(item)) {
+			if(!store.getNativeDbIdClass().isInstance(item)) {
 				logger.warn(()->"Not a valid dbId: " + value.toString());
 				return null;
 			}
-			readers.add(new StoredRecordConfigurationReader(store, item));
+			readers.add(new StoredRecordConfigurationReader(store, PromptoDbId.of(item)));
 		}
 		return readers;
 	}

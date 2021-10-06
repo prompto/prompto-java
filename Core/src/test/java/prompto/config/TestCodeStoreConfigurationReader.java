@@ -14,6 +14,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import prompto.intrinsic.PromptoDbId;
 import prompto.store.IStorable;
 import prompto.store.IStorable.IDbIdFactory;
 import prompto.store.memory.MemStore;
@@ -22,11 +23,11 @@ import prompto.store.memory.MemStore;
 public class TestCodeStoreConfigurationReader {
 
 	MemStore store;
-	Object dbId;
+	PromptoDbId dbId;
 	
 	@Before
 	public void before() {
-	store = new MemStore();
+		store = new MemStore();
 		IStorable doc = store.newStorable(Collections.singletonList("config"), IDbIdFactory.of(null, dbId -> this.dbId=dbId, null));
 		doc.setData("string", "some string");
 		doc.setData("empty", null);
@@ -34,18 +35,18 @@ public class TestCodeStoreConfigurationReader {
 		doc.setData("integer", 23456);
 		doc.setData("array", Arrays.asList("abc", "def"));
 		// child record ref
-		IStorable child = store.newStorable(Collections.singletonList("child"), IDbIdFactory.of(null, dbId -> doc.setData("ref", dbId), null));
+		IStorable child = store.newStorable(Collections.singletonList("child"), IDbIdFactory.of(null, dbId -> doc.setData("ref", dbId.getValue()), null));
 		child.setData("string", "some string");
 		child.setData("integer", 23456);
 		child.setData("array", Arrays.asList("abc", "def"));
 		store.store(child);	
 		// array record refs
 		List<Object> children = new ArrayList<>();
-		child = store.newStorable(Collections.singletonList("child"), IDbIdFactory.of(null, dbId -> children.add(dbId), null));
+		child = store.newStorable(Collections.singletonList("child"), IDbIdFactory.of(null, dbId -> children.add(dbId.getValue()), null));
 		child.setData("key", "abc");
 		child.setData("value", "def");
 		store.store(child);	
-		child = store.newStorable(Collections.singletonList("child"), IDbIdFactory.of(null, dbId -> children.add(dbId), null));
+		child = store.newStorable(Collections.singletonList("child"), IDbIdFactory.of(null, dbId -> children.add(dbId.getValue()), null));
 		child.setData("key", "abcd");
 		child.setData("value", "defg");
 		store.store(child);	
@@ -55,41 +56,41 @@ public class TestCodeStoreConfigurationReader {
 	
 	
 	@Test
-	public void testThatReaderReadsStrings() throws Exception  {
+	public void readerReadsStrings() throws Exception  {
 		IConfigurationReader reader = new StoredRecordConfigurationReader(store, dbId);
 		assertEquals("some string", reader.getString("string"));
 	}
 	
 	
 	@Test
-	public void testThatReaderReadsNull() throws IOException  {
+	public void readerReadsNull() throws IOException  {
 		IConfigurationReader reader = new StoredRecordConfigurationReader(store, dbId);
 		assertNull(reader.getString("empty"));
 	}
 	
 	@Test
-	public void testThatReaderReadsBoolean() throws IOException  {
+	public void readerReadsBoolean() throws IOException  {
 		IConfigurationReader reader = new StoredRecordConfigurationReader(store, dbId);
 		assertTrue(reader.getBoolean("boolean"));
 	}
 
 	
 	@Test
-	public void testThatReaderReadsInteger() throws IOException  {
+	public void readerReadsInteger() throws IOException  {
 		IConfigurationReader reader = new StoredRecordConfigurationReader(store, dbId);
 		assertEquals(23456, reader.getInteger("integer").intValue());
 	}
 
 	
 	@Test
-	public void testThatReaderReadsArray() throws IOException  {
+	public void readerReadsArray() throws IOException  {
 		IConfigurationReader reader = new StoredRecordConfigurationReader(store, dbId);
 		assertEquals(Arrays.asList("abc", "def"), reader.getArray("array"));
 	}
 
 	
 	@Test
-	public void testThatReaderReadsRefObject() throws IOException  {
+	public void readerReadsRefObject() throws IOException  {
 		IConfigurationReader reader = new StoredRecordConfigurationReader(store, dbId);
 		IConfigurationReader child = reader.getObject("ref");
 		assertEquals("some string", child.getString("string"));
@@ -98,7 +99,7 @@ public class TestCodeStoreConfigurationReader {
 	}
 	
 	@Test
-	public void testThatReaderReadsObjectsArray() throws IOException  {
+	public void readerReadsObjectsArray() throws IOException  {
 		IConfigurationReader reader = new StoredRecordConfigurationReader(store, dbId);
 		Collection<? extends IConfigurationReader> list = reader.getObjectsArray("objectsArray");
 		assertEquals(2, list.size());

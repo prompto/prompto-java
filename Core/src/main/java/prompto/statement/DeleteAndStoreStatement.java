@@ -236,6 +236,8 @@ public class DeleteAndStoreStatement extends BaseStatement {
 		transpiler.require("DataStore");
 		if(andThen!=null)
 			andThen.declare(transpiler);
+		if(metadata!=null)
+			transpiler.require("Document");
 	}
 	
 	@Override

@@ -4,14 +4,15 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 import prompto.intrinsic.IDocumentProducer;
+import prompto.intrinsic.PromptoDbId;
 
 public interface IAuditMetadata extends Map<String, Object>, IDocumentProducer {
 
-	default void setAuditMetadataId(Object id) {
-		put("auditMetadataId", id);
+	default void setAuditMetadataId(PromptoDbId id) {
+		put("auditMetadataId", id.getValue());
 	}
-	default Object getAuditMetadataId() {
-		return get("auditMetadataId");
+	default PromptoDbId getAuditMetadataId() {
+		return PromptoDbId.of(get("auditMetadataId"));
 	}
 	default void setUTCTimestamp(LocalDateTime timeStamp) {
 		put("timeStamp", timeStamp);
