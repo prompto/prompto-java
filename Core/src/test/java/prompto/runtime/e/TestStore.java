@@ -95,6 +95,21 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedAuditMany() throws Exception {
+		checkInterpretedOutput("store/auditMany.pec");
+	}
+
+	@Test
+	public void testCompiledAuditMany() throws Exception {
+		checkCompiledOutput("store/auditMany.pec");
+	}
+
+	@Test
+	public void testTranspiledAuditMany() throws Exception {
+		checkTranspiledOutput("store/auditMany.pec");
+	}
+
+	@Test
 	public void testInterpretedAuditUpdate() throws Exception {
 		checkInterpretedOutput("store/auditUpdate.pec");
 	}
