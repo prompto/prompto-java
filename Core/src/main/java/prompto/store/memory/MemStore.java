@@ -721,7 +721,7 @@ public final class MemStore implements IStore {
 		public PromptoDocument<String, Object> toDocument() {
 			PromptoDocument<String, Object> doc = new PromptoDocument<>();
 			doc.put("dbId", auditId);
-			doc.put("metadataId", metadataId);
+			doc.put("metadataDbId", metadataId);
 			doc.put("utcTimeStamp", utcTimeStamp);
 			doc.put("instanceDbId", instanceDbId);
 			doc.put("operation", operation.name());
