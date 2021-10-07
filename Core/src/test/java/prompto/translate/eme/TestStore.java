@@ -37,6 +37,11 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testAuditMatching() throws Exception {
+		compareResourceEME("store/auditMatching.pec");
+	}
+
+	@Test
 	public void testAuditUpdate() throws Exception {
 		compareResourceEME("store/auditUpdate.pec");
 	}

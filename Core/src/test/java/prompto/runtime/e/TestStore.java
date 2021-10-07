@@ -110,6 +110,21 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedAuditMatching() throws Exception {
+		checkInterpretedOutput("store/auditMatching.pec");
+	}
+
+	@Test
+	public void testCompiledAuditMatching() throws Exception {
+		checkCompiledOutput("store/auditMatching.pec");
+	}
+
+	@Test
+	public void testTranspiledAuditMatching() throws Exception {
+		checkTranspiledOutput("store/auditMatching.pec");
+	}
+
+	@Test
 	public void testInterpretedAuditUpdate() throws Exception {
 		checkInterpretedOutput("store/auditUpdate.pec");
 	}
