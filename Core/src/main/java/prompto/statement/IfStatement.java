@@ -237,7 +237,7 @@ public class IfStatement extends BaseStatement {
 	private void compileCondition(Context context, MethodInfo method, Flags flags, IfElement element) {
 		if (element.condition != null) {
 			ResultInfo info = element.condition.compile(context, method, flags.withPrimitive(true));
-			if (BooleanValue.class == info.getType())
+			if (java.lang.Boolean.class == info.getType())
 				CompilerUtils.BooleanToboolean(method);
 		}
 	}
