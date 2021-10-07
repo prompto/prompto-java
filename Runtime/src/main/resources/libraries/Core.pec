@@ -13,7 +13,7 @@ define DocumentCallback as abstract method receiving Document value
 define Any as native category with attributes id and text, and bindings:
 
 	define category bindings as:
-		Java: java.lang.Object
+		Java: prompto.intrinsic.PromptoAny
 		C#: prompto.value.AnyValue
 		Python2: AnyValue from module: prompto.value.AnyValue
 		Python3: AnyValue from module: prompto.value.AnyValue
@@ -22,18 +22,18 @@ define Any as native category with attributes id and text, and bindings:
 and methods: 
 
 	define id as getter doing:
-		Java: return System.identityHashCode(self);
-		C#: return System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(self);
+		Java: return System.identityHashCode(this);
+		C#: return System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(this);
 		Python2: return id(self)
 		Python3: return id(self)
-		JavaScript: return self.id;
+		JavaScript: return this.id;
 	
 	define text as getter doing:
-		Java: return self.toString();
-		C#: return self.ToString();
+		Java: return this.toString();
+		C#: return this.ToString();
 		Python2: return str(self)
 		Python3: return str(self)
-		JavaScript: return self.toString();
+		JavaScript: return this.toString();
 
 define Attribute as native category with attribute name, and bindings:
 
@@ -83,9 +83,9 @@ and verifying:
 	l.count >= 3
 
 // runtime reference of any object
-define id as Any attribute
+define id as Integer attribute
 // database reference of stored object
-define dbId as storable Any attribute
+define dbId as storable DbId attribute
 // any object has a text attribute, used for display 
 define text as storable Text attribute with value and words index
 // many objects have a name, it is not unique 
@@ -114,54 +114,54 @@ define isAuditEnabled as native method returning Boolean doing:
 	Python3: return $store.isAuditEnabled()
 	JavaScript: return $store.isAuditEnabled();
 
-define fetchLatestAuditMetadataId as native method receiving dbId returning Any doing:
+define fetchLatestAuditMetadataId as native method receiving DbId dbId returning Any doing:
 	Java: return $store.fetchLatestAuditMetadataId(dbId);
 	C#: return $store.FetchLatestAuditMetadataId(dbId);
 	Python2: return $store.fetchLatestAuditMetadataId(dbId)
 	Python3: return $store.fetchLatestAuditMetadataId(dbId)
 	JavaScript: return $store.fetchLatestAuditMetadataId(dbId);
 
-define fetchAllAuditMetadataIds as native method receiving dbId returning Any[] doing:
+define fetchAllAuditMetadataIds as native method receiving DbId dbId returning DbId[] doing:
 	Java: return $store.fetchAllAuditMetadataIds(dbId);
 	C#: return $store.FetchAllAuditMetadataIds(dbId);
 	Python2: return $store.fetchAllAuditMetadataIds(dbId)
 	Python3: return $store.fetchAllAuditMetadataIds(dbId)
 	JavaScript: return $store.fetchAllAuditMetadataIds(dbId);
 
-define fetchAuditMetadata as native method receiving dbId returning Document doing:
+define fetchAuditMetadata as native method receiving DbId dbId returning Document doing:
 	Java: return $store.fetchAuditMetadataAsDocument(dbId);
 	C#: return $store.FetchAuditMetadataAsDocument(dbId);
 	Python2: return $store.fetchAuditMetadataAsDocument(dbId)
 	Python3: return $store.fetchAuditMetadataAsDocument(dbId)
 	JavaScript: return $store.fetchAuditMetadataAsDocument(dbId);
 
-define fetchDbIdsAffectedByAuditMetadataId as native method receiving dbId returning Any[] doing:
+define fetchDbIdsAffectedByAuditMetadataId as native method receiving DbId dbId returning DbId[] doing:
 	Java: return $store.fetchDbIdsAffectedByAuditMetadataId(dbId);
 	C#: return $store.fetchDbIdsAffectedByAuditMetadataId(dbId);
 	Python2: return $store.fetchDbIdsAffectedByAuditMetadataId(dbId)
 	Python3: return $store.fetchDbIdsAffectedByAuditMetadataId(dbId)
 	JavaScript: return $store.fetchDbIdsAffectedByAuditMetadataId(dbId);
 
-define fetchLatestAuditRecord as native method receiving dbId returning Document doing:
+define fetchLatestAuditRecord as native method receiving DbId dbId returning Document doing:
 	Java: return $store.fetchLatestAuditRecord(dbId);
-	C#: return $store.fetchLatestAuditRecord(dbId);
+	C#: return $store.FetchLatestAuditRecord(dbId);
 	Python2: return $store.fetchLatestAuditRecord(dbId)
 	Python3: return $store.fetchLatestAuditRecord(dbId)
 	JavaScript: return $store.fetchLatestAuditRecord(dbId);
 
-define fetchAllAuditRecords as native method receiving dbId returning Document[] doing:
-	Java: return $store.fetchAllAuditRecords(dbId);
-	C#: return $store.fetchAllAuditRecords(dbId);
-	Python2: return $store.fetchAllAuditRecords(dbId)
-	Python3: return $store.fetchAllAuditRecords(dbId)
-	JavaScript: return $store.fetchAllAuditRecords(dbId);
+define fetchAllAuditRecords as native method receiving DbId dbId returning Document[] doing:
+	Java: return $store.fetchAllAuditRecordsAsDocuments(dbId);
+	C#: return $store.FetchAllAuditRecordsAsDocuments(dbId);
+	Python2: return $store.fetchAllAuditRecordsAsDocuments(dbId)
+	Python3: return $store.fetchAllAuditRecordsAsDocuments(dbId)
+	JavaScript: return $store.fetchAllAuditRecordsAsDocuments(dbId);
 
-define fetchAuditRecordsMatching as native method receiving Document auditPredicates and Document instancePredicates returning Document[] doing:
-	Java: return $store.fetchAuditRecordsMatching(auditPredicates, instancePredicates);
-	C#: return $store.fetchAuditRecordsMatching(auditPredicates, instancePredicates);
-	Python2: return $store.fetchAuditRecordsMatching(auditPredicates, instancePredicates)
-	Python3: return $store.fetchAuditRecordsMatching(auditPredicates, instancePredicates)
-	JavaScript: return $store.fetchAuditRecordsMatching(auditPredicates, instancePredicates);
+define fetchAuditRecordsMatching as native method receiving Document auditPredicates = nothing and Document instancePredicates = nothing returning Document[] doing:
+	Java: return $store.fetchAuditRecordsMatchingAsDocuments(auditPredicates, instancePredicates);
+	C#: return $store.FetchAuditRecordsMatchingAsDocuments(auditPredicates, instancePredicates);
+	Python2: return $store.fetchAuditRecordsMatchingAsDocuments(auditPredicates, instancePredicates)
+	Python3: return $store.fetchAuditRecordsMatchingAsDocuments(auditPredicates, instancePredicates)
+	JavaScript: return $store.fetchAuditRecordsMatchingAsDocuments(auditPredicates, instancePredicates);
 define Category as native category with attribute name, and bindings:
 
 	define category bindings as:
