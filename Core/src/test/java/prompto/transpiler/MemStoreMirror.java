@@ -482,6 +482,10 @@ public class MemStoreMirror {
 			return String.join(", ", items);
 		}
 	}
+	
+	public Object isAuditEnabled() {
+		return store.isAuditEnabled();
+	}
 
 	public Object fetchLatestAuditMetadataId(Object dbId) {
 		return store.fetchLatestAuditMetadataId(PromptoDbId.of(castDbId(dbId)));
@@ -510,6 +514,14 @@ public class MemStoreMirror {
 	public Object fetchDbIdsAffectedByAuditMetadataId(Object dbId) {
 		List<PromptoDbId> dbIds = store.fetchDbIdsAffectedByAuditMetadataId(PromptoDbId.of(castDbId(dbId)));
 		return converter.toJS(dbIds, true);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Object fetchAuditRecordsMatchingAsDocuments(Object auditPredicates, Object instancePredicates) {
+		Map<String, Object> ap = (Map<String, Object>) converter.fromJS(auditPredicates);
+		Map<String, Object> ip = (Map<String, Object>) converter.fromJS(instancePredicates);
+		List<PromptoDocument<String, Object>> records = store.fetchAuditRecordsMatchingAsDocuments(ap, ip);
+		return converter.toJS(records, true);
 	}
 	
 	public Object castDbId(Object dbId) {
