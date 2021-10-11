@@ -98,6 +98,9 @@ public interface IStore extends Closeable {
 	default IAuditMetadata fetchAuditMetadata(PromptoDbId metaId) {
 		throw new UnsupportedOperationException();
 	}
+	default boolean deleteAuditMetadata(PromptoDbId dbId) {
+		throw new UnsupportedOperationException();
+	}
 	default PromptoDocument<String, Object> fetchAuditMetadataAsDocument(PromptoDbId metaId) {
 		IAuditMetadata metaData = fetchAuditMetadata(metaId);
 		return metaData==null ? null : metaData.toDocument();
@@ -106,6 +109,9 @@ public interface IStore extends Closeable {
 		throw new UnsupportedOperationException();
 	}
 	default IAuditRecord fetchLatestAuditRecord(PromptoDbId dbId) {
+		throw new UnsupportedOperationException();
+	}
+	default boolean deleteAuditRecord(PromptoDbId dbId) {
 		throw new UnsupportedOperationException();
 	}
 	default PromptoDocument<String, Object> fetchLatestAuditRecordAsDocument(PromptoDbId dbId) {

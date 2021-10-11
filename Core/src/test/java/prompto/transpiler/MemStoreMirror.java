@@ -496,6 +496,10 @@ public class MemStoreMirror {
 		return metadata==null ? null : converter.toJS(metadata, true);
 	}
 	
+	public Object deleteAuditMetadata(Object dbId) {
+		return store.deleteAuditMetadata(PromptoDbId.of(castDbId(dbId)));
+	}
+
 	public Object fetchAllAuditMetadataIds(Object dbId) {
 		List<PromptoDbId> dbIds = store.fetchAllAuditMetadataIds(PromptoDbId.of(castDbId(dbId)));
 		return converter.toJS(dbIds, true);
@@ -504,6 +508,10 @@ public class MemStoreMirror {
 	public Object fetchLatestAuditRecordAsDocument(Object dbId) {
 		PromptoDocument<String, Object> record = store.fetchLatestAuditRecordAsDocument(PromptoDbId.of(castDbId(dbId)));
 		return record==null ? null : converter.toJS(record, false);
+	}
+
+	public Object deleteAuditRecord(Object dbId) {
+		return store.deleteAuditRecord(PromptoDbId.of(castDbId(dbId)));
 	}
 
 	public Object fetchAllAuditRecordsAsDocuments(Object dbId) {

@@ -114,7 +114,7 @@ define isAuditEnabled as native method returning Boolean doing:
 	Python3: return $store.isAuditEnabled()
 	JavaScript: return $store.isAuditEnabled();
 
-define fetchLatestAuditMetadataId as native method receiving DbId dbId returning Any doing:
+define fetchLatestAuditMetadataId as native method receiving DbId dbId returning DbId doing:
 	Java: return $store.fetchLatestAuditMetadataId(dbId);
 	C#: return $store.FetchLatestAuditMetadataId(dbId);
 	Python2: return $store.fetchLatestAuditMetadataId(dbId)
@@ -162,6 +162,20 @@ define fetchAuditRecordsMatching as native method receiving Document auditPredic
 	Python2: return $store.fetchAuditRecordsMatchingAsDocuments(auditPredicates, instancePredicates)
 	Python3: return $store.fetchAuditRecordsMatchingAsDocuments(auditPredicates, instancePredicates)
 	JavaScript: return $store.fetchAuditRecordsMatchingAsDocuments(auditPredicates, instancePredicates);
+
+define deleteAuditRecord as native method receiving DbId dbId returning Boolean doing:
+	Java: return $store.deleteAuditRecord(dbId);
+	C#: return $store.DeleteAuditRecord(dbId);
+	Python2: return $store.deleteAuditRecord(dbId)
+	Python3: return $store.deleteAuditRecord(dbId)
+	JavaScript: return $store.deleteAuditRecord(dbId);
+
+define deleteAuditMetadata as native method receiving DbId dbId returning Boolean doing:
+	Java: return $store.deleteAuditMetadata(dbId);
+	C#: return $store.DeleteAuditMetadata(dbId);
+	Python2: return $store.deleteAuditMetadata(dbId)
+	Python3: return $store.deleteAuditMetadata(dbId)
+	JavaScript: return $store.deleteAuditMetadata(dbId);
 define Category as native category with attribute name, and bindings:
 
 	define category bindings as:

@@ -593,6 +593,12 @@ public final class MemStore implements IStore {
 	}
 
 
+	@Override
+	public boolean deleteAuditMetadata(PromptoDbId dbId) {
+		return auditMetadatas.remove(dbId.getValue()) != null;
+	}
+
+
 	static final Map<String, BiFunction<AuditRecord, Object, Boolean>> MATCHERS = new HashMap<>();
 	
 	static class AuditRecord implements IAuditRecord {
@@ -761,6 +767,13 @@ public final class MemStore implements IStore {
 		return fetchAuditRecordsStream(a -> dbId.equals(a.getInstanceDbId()))
 				.findFirst()
 				.orElse(null);
+	}
+	
+	
+
+	@Override
+	public boolean deleteAuditRecord(PromptoDbId dbId) {
+		return auditRecords.remove(dbId.getValue()) != null;
 	}
 
 	private Stream<AuditRecord> fetchAuditRecordsStream(Predicate<AuditRecord> filter) {
