@@ -140,6 +140,36 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedDeleteAudit() throws Exception {
+		checkInterpretedOutput("store/deleteAudit.pec");
+	}
+
+	@Test
+	public void testCompiledDeleteAudit() throws Exception {
+		checkCompiledOutput("store/deleteAudit.pec");
+	}
+
+	@Test
+	public void testTranspiledDeleteAudit() throws Exception {
+		checkTranspiledOutput("store/deleteAudit.pec");
+	}
+
+	@Test
+	public void testInterpretedDeleteMeta() throws Exception {
+		checkInterpretedOutput("store/deleteMeta.pec");
+	}
+
+	@Test
+	public void testCompiledDeleteMeta() throws Exception {
+		checkCompiledOutput("store/deleteMeta.pec");
+	}
+
+	@Test
+	public void testTranspiledDeleteMeta() throws Exception {
+		checkTranspiledOutput("store/deleteMeta.pec");
+	}
+
+	@Test
 	public void testInterpretedDeleteRecords() throws Exception {
 		checkInterpretedOutput("store/deleteRecords.pec");
 	}

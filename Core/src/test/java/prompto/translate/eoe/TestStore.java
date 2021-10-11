@@ -47,6 +47,16 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testDeleteAudit() throws Exception {
+		compareResourceEOE("store/deleteAudit.pec");
+	}
+
+	@Test
+	public void testDeleteMeta() throws Exception {
+		compareResourceEOE("store/deleteMeta.pec");
+	}
+
+	@Test
 	public void testDeleteRecords() throws Exception {
 		compareResourceEOE("store/deleteRecords.pec");
 	}
