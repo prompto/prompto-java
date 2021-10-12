@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -60,6 +61,12 @@ public class NativeInstance extends BaseValue implements IInstance {
 		}
 	}
 	
+	
+	@Override
+	public Object toJavaValue(Context context, Type type) throws PromptoError {
+		return instance;
+	}
+
 	@Override
 	public Object getStorableData() {
 		if(this.storable==null)
