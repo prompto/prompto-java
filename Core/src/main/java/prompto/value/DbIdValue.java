@@ -43,7 +43,11 @@ public class DbIdValue implements IValue {
 	@Override
 	public void toJsonStream(Context context, JsonGenerator generator, boolean withType, Map<String, byte[]> binaries) throws PromptoError {
 		try {
-			generator.writeString(dbId.toString());
+			Class<?> klass = dbId.getValue().getClass();
+			if(Number.class.isAssignableFrom(klass))
+				generator.writeNumber(dbId.toString());
+			else
+				generator.writeString(dbId.toString());
 		} catch(IOException e) {
 			throw new ReadWriteError(e.getMessage());
 		}
