@@ -87,7 +87,9 @@ public final class MemStore implements IStore {
 	
 	@Override
 	public Long convertToNativeDbId(Object dbId) {
-		if(dbId instanceof PromptoDbId)
+		if(dbId==null)
+			return null;
+		else if(dbId instanceof PromptoDbId)
 			return convertToNativeDbId(((PromptoDbId)dbId).getValue());
 		else if(dbId instanceof Long)
 			return (Long)dbId;
