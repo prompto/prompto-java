@@ -333,6 +333,7 @@ public abstract class Standalone {
 
 	public static IStore bootstrapDataStore(IStore store) throws Exception {
 		DataStore.setGlobal(store);
+		DataStore.useGlobal();
 		return store;
 	}
 

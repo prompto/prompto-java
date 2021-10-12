@@ -15,7 +15,7 @@ public abstract class DataStore {
 	
 	static ThreadLocal<Supplier<IStore>> threadInstance = ThreadLocal.withInitial(()->()->globalInstance.get());
 	
-	public static void setGlobal(IStore store) throws Exception {
+	public static void setGlobal(IStore store) {
 		globalInstance.set(store);
 	}
 
