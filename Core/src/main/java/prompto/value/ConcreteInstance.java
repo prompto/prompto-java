@@ -240,7 +240,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	public PromptoDbId getDbId() {
 		try {
 			IValue dbId = values.get(new Identifier(IStore.dbIdName));
-			return dbId==null ? null : (PromptoDbId)dbId.getStorableData();
+			return PromptoDbId.of(dbId.getStorableData());
 		} catch (NotStorableError e) {
 			throw new RuntimeException(e);
 		}
