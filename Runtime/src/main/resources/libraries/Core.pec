@@ -143,11 +143,11 @@ define fetchDbIdsAffectedByAuditMetadataId as native method receiving DbId dbId 
 	JavaScript: return $store.fetchDbIdsAffectedByAuditMetadataId(dbId);
 
 define fetchLatestAuditRecord as native method receiving DbId dbId returning Document doing:
-	Java: return $store.fetchLatestAuditRecord(dbId);
-	C#: return $store.FetchLatestAuditRecord(dbId);
-	Python2: return $store.fetchLatestAuditRecord(dbId)
-	Python3: return $store.fetchLatestAuditRecord(dbId)
-	JavaScript: return $store.fetchLatestAuditRecord(dbId);
+	Java: return $store.fetchLatestAuditRecordAsDocument(dbId);
+	C#: return $store.FetchLatestAuditRecordAsDocument(dbId);
+	Python2: return $store.fetchLatestAuditRecordAsDocument(dbId)
+	Python3: return $store.fetchLatestAuditRecordAsDocument(dbId)
+	JavaScript: return $store.fetchLatestAuditRecordAsDocument(dbId);
 
 define fetchAllAuditRecords as native method receiving DbId dbId returning Document[] doing:
 	Java: return $store.fetchAllAuditRecordsAsDocuments(dbId);
