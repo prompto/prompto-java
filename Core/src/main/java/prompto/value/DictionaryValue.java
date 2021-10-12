@@ -138,19 +138,19 @@ public class DictionaryValue extends BaseValue implements IContainer<IValue> {
 
 
 	@Override
-	public Object convertTo(Context context, Type type) {
+	public Object toJavaValue(Context context, Type type) {
 		if(canConvertTo(type)) {
 			Type itemType = getItemType(type);
 			PromptoDict<String, Object> dict = new PromptoDict<>(true);
 			for(Map.Entry<TextValue, IValue> entry : this.dict.entrySet()) {
 				String key = entry.getKey().toString();
-				Object value = entry.getValue().convertTo(context, itemType);
+				Object value = entry.getValue().toJavaValue(context, itemType);
 				dict.put(key, value);
 			}
 			dict.setMutable(this.isMutable());
 			return dict;
 		} else
-			return super.convertTo(context, type);
+			return super.toJavaValue(context, type);
 	}
 
 	private boolean canConvertTo(Type type) {

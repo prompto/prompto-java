@@ -36,7 +36,7 @@ public class DecimalType extends NativeType implements INumberType {
 	}
 
 	@Override
-	public Type getJavaType(Context context) {
+	public Type toJavaType(Context context) {
 		return Double.class;
 	}
 

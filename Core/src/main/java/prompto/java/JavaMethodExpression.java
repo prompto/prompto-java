@@ -141,7 +141,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
         if (value instanceof IExpression)
             value = ((IExpression)value).interpret(context);
         if (value instanceof IValue)
-            value = ((IValue)value).convertTo(context, type);
+            value = ((IValue)value).toJavaValue(context, type);
         return value;
     }
 
@@ -162,7 +162,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 			if(named instanceof NativeCategoryDeclaration) 
 				return ((NativeCategoryDeclaration)named).getBoundClass(true);
 		}
-		return type.getJavaType(context);
+		return type.toJavaType(context);
 	}
 
 	public Method findMethod(Context context, Object instance) throws ClassNotFoundException {
@@ -189,7 +189,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		int i = 0;
 		try {
 			for(JavaExpression exp  : arguments) {
-				Type argType = exp.check(context).getJavaType(context);
+				Type argType = exp.check(context).toJavaType(context);
 				if(argType instanceof NamedType)
 					argType = Class.forName(argType.getTypeName());
 				types[i++] = (Class<?>)argType;
@@ -229,7 +229,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		if(argIType instanceof MethodType && klass==IMethodDeclaration.class) {
 			return true;
 		} else {
-			Type argType = argIType.getJavaType(context);
+			Type argType = argIType.toJavaType(context);
 			if(argType instanceof NamedType) try {
 				argType = Class.forName(argType.getTypeName());
 			} catch (ClassNotFoundException e) {

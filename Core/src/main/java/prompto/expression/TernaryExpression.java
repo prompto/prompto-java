@@ -77,7 +77,7 @@ public class TernaryExpression extends CodeSection implements IExpression {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		Type resultType = check(context).getJavaType(context);
+		Type resultType = check(context).toJavaType(context);
 		StackState initialState = method.captureStackState();
 		ResultInfo li = condition.compile(context, method, flags.withPrimitive(true));
 		if(BooleanValue.class==li.getType())

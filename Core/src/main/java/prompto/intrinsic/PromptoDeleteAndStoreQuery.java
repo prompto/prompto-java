@@ -123,7 +123,7 @@ public class PromptoDeleteAndStoreQuery {
 
 	public void metadata(Context context, IValue value) {
 		if(value instanceof DocumentValue)
-			metadata(value.convertTo(context, PromptoDocument.class));
+			metadata(value.toJavaValue(context, PromptoDocument.class));
 	}
 	
 	@SuppressWarnings("unchecked")

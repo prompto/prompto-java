@@ -17,7 +17,7 @@ public class EntryComparatorCompiler extends ComparatorCompilerBase {
 
 	@Override
 	protected void compileMethodBody(Context context, MethodInfo method, IType paramIType, IExpression key) {
-		Type paramType = paramIType.getJavaType(context);
+		Type paramType = paramIType.toJavaType(context);
 		String keyName = ((TextLiteral)key).getValue().getStorableData();
 		MethodConstant getter = new MethodConstant(paramType, "get", Object.class, Object.class);
 		method.addInstruction(Opcode.ALOAD_1, new ClassConstant(paramType));

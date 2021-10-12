@@ -239,7 +239,7 @@ public class EqualsExpression extends CodeSection implements IPredicateExpressio
 			Identifier name = readLeftName();
 			if(name!=null && right instanceof TypeExpression) {
 				IType type = ((TypeExpression)right).getType().resolve(context, null);
-				ClassConstant c = new ClassConstant(type.getJavaType(context));
+				ClassConstant c = new ClassConstant(type.toJavaType(context));
 				StackLocal local = method.getRegisteredLocal(name.toString());
 				((StackLocal.ObjectLocal)local).markForAutodowncast(c);
 				return downcastForCheck(context);
@@ -516,7 +516,7 @@ public class EqualsExpression extends CodeSection implements IPredicateExpressio
 		// the reference we are checking
 		left.compile(context, method, flags.withPrimitive(false));
 		// what interface we would be casting to
-		ClassConstant dest = new ClassConstant(target.getJavaType(context));
+		ClassConstant dest = new ClassConstant(target.toJavaType(context));
 		method.addInstruction(Opcode.LDC, dest);
 		// call helper
 		MethodConstant m = new MethodConstant(PromptoProxy.class, "isProxyableTo", Object.class, Class.class, boolean.class);

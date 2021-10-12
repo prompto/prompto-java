@@ -296,14 +296,14 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	}
 	
 	@Override
-	public Object convertTo(Context context, Type type) {
+	public Object toJavaValue(Context context, Type type) {
 		if(canConvertTo(type)) {
 			Type itemType = getItemType(type);
 			PromptoList<Object> result = new PromptoList<>(true);
-			items.forEach((item)->result.add(item.convertTo(context, itemType)));
+			items.forEach((item)->result.add(item.toJavaValue(context, itemType)));
 			return result;
 		} else
-			return super.convertTo(context, type);
+			return super.toJavaValue(context, type);
 	}
 
 	private boolean canConvertTo(Type type) {

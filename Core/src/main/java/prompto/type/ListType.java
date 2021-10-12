@@ -59,7 +59,7 @@ public class ListType extends ContainerType {
 	
 	
 	@Override
-	public Type getJavaType(Context context) {
+	public Type toJavaType(Context context) {
 		return PromptoList.class;
 	}
 	

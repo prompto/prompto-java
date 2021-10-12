@@ -130,8 +130,8 @@ public class IteratorExpression extends CodeSection implements IExpression {
 		IType paramIType = source.check(context).checkIterator(context);
 		context = context.newChildContext();
 		context.registerValue(new Variable(id, paramIType));
-		Type paramType = paramIType.getJavaType(context);
-		Type resultType = expression.check(context).getJavaType(context);
+		Type paramType = paramIType.toJavaType(context);
+		Type resultType = expression.check(context).toJavaType(context);
 		compileInnerClassBridgeMethod(classFile, paramType, resultType);
 		compileInnerClassApplyMethod(context, classFile, paramType, resultType);
 	}

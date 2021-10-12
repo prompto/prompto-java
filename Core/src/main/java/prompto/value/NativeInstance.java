@@ -226,7 +226,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 			value = promptoSetter.interpret(context);
 		} else {
 			Method nativeSetter = getSetter(attrName);
-			Object data = value.convertTo(context, nativeSetter.getParameterTypes()[0]);
+			Object data = value.toJavaValue(context, nativeSetter.getParameterTypes()[0]);
 			setValue(nativeSetter, data);
 			if(storable!=null && decl.isStorable(context)) {
 				storable.setData(attrName.toString(), data);

@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import prompto.error.NotStorableError;
 import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoDbId;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.type.IType;
@@ -117,8 +118,13 @@ public interface IValue {
 		throw new UnsupportedOperationException("asSliceable not supported by " + this.getClass().getSimpleName());
 	}
 
-	default Object convertTo(Context context, Type type) throws PromptoError {
-		throw new UnsupportedOperationException("convertTo " + type.getTypeName() + " not supported by " + this.getClass().getSimpleName());
+	default Object toJavaValue(Context context, Type type) throws PromptoError {
+		if(type==PromptoDbId.class)
+			return PromptoDbId.of(this.getStorableData());
+		else if(type==Object.class)
+			return this.getStorableData();
+		else
+			throw new UnsupportedOperationException("convertTo " + type.getTypeName() + " not supported by " + this.getClass().getSimpleName());
 	}
 
 	default JsonNode toTypedJsonNode(Context context) throws PromptoError {

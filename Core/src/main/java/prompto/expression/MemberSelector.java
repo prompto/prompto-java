@@ -203,7 +203,7 @@ public class MemberSelector extends SelectorExpression {
 
 	private ResultInfo compileInstanceMember(Context context, MethodInfo method, Flags flags, ResultInfo info, boolean asParent) {
 		IType type = check(context);
-		Type resultType = type.getJavaType(context);
+		Type resultType = type.toJavaType(context);
 		if(shouldCompileCharacterCodePoint(info))
 			return compileCharacterCodePoint(method, flags);
 		else if (shouldCompileStringLength(info))

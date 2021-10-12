@@ -173,10 +173,10 @@ public class FetchOneExpression extends CodeSection implements IFetchExpression 
 		MethodConstant m = new MethodConstant(PromptoRoot.class, "newInstance", IStored.class, boolean.class, PromptoRoot.class);
 		method.addInstruction(Opcode.INVOKESTATIC, m);
 		if(type!=null) {
-			method.addInstruction(Opcode.CHECKCAST, new ClassConstant(type.getJavaType(context)));
-			return new ResultInfo(type.getJavaType(context));
+			method.addInstruction(Opcode.CHECKCAST, new ClassConstant(type.toJavaType(context)));
+			return new ResultInfo(type.toJavaType(context));
 		} else
-			return new ResultInfo(AnyType.instance().getJavaType(context));
+			return new ResultInfo(AnyType.instance().toJavaType(context));
 	}
 
 	protected void compileFetchOne(Context context, MethodInfo method, Flags flags) {

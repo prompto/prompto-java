@@ -5,6 +5,10 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.function.Function;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
@@ -13,10 +17,6 @@ import prompto.intrinsic.PromptoDate;
 import prompto.intrinsic.PromptoPeriod;
 import prompto.runtime.Context;
 import prompto.type.DateType;
-
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 public class DateValue extends BaseValue implements Comparable<DateValue> {
 
@@ -92,8 +92,11 @@ public class DateValue extends BaseValue implements Comparable<DateValue> {
 	}
 
 	@Override
-	public Object convertTo(Context context, Type type) {
-		return value;
+	public Object toJavaValue(Context context, Type type) {
+		if(type==PromptoDate.class)
+			return value;
+		else
+			return super.toJavaValue(context, type);
 	}
 
 	public DateValue toDateMidnight() {

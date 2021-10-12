@@ -72,7 +72,7 @@ public interface IType extends ICodeSection {
 			return this;
 	}
 	
-	Type getJavaType(Context context);
+	Type toJavaType(Context context);
 
 	IType checkAdd(Context context, IType other, boolean tryReverse, ICodeSection section);
 	IType checkSubstract(Context context, IType other, ICodeSection section);

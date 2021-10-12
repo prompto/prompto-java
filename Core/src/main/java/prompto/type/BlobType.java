@@ -22,7 +22,7 @@ public class BlobType extends BinaryType {
 	}
 
 	@Override
-	public Type getJavaType(Context context) {
+	public Type toJavaType(Context context) {
 		return BlobValue.class;
 	}
 	

@@ -212,7 +212,7 @@ public class AttributeDeclaration extends BaseDeclaration {
 	}
 
 	public FieldInfo toFieldInfo(Context context) {
-		return new FieldInfo(getName(), type.getJavaType(context));
+		return new FieldInfo(getName(), type.toJavaType(context));
 	}
 
 	public ClassFile compile(Context context, String fullName) {

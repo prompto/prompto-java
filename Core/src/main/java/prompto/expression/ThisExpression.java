@@ -54,7 +54,7 @@ public class ThisExpression extends CodeSection implements IExpression {
 			return null;
 		CompilerUtils.compileALOAD(method, local);
 		IType type = check(context);
-		return new ResultInfo(type.getJavaType(context));	
+		return new ResultInfo(type.toJavaType(context));	
 	}
 	
 	

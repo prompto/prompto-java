@@ -58,7 +58,7 @@ public class TextType extends NativeType {
 	}
 	
 	@Override
-	public Type getJavaType(Context context) {
+	public Type toJavaType(Context context) {
 		return String.class;
 	}
 	

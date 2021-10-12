@@ -41,7 +41,7 @@ public class MethodType extends BaseType {
 	
 	
 	@Override
-	public Type getJavaType(Context context) {
+	public Type toJavaType(Context context) {
 		if(method.getClosureOf()!=null && method.getMemberOf()!=null)
 			return getMemberClosureJavaType(context);
 		else if(method.getMemberOf()!=null)

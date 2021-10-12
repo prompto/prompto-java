@@ -82,8 +82,11 @@ public class TimeValue extends BaseValue implements Comparable<TimeValue> {
 	}
 
 	@Override
-	public Object convertTo(Context context, Type type) {
-		return value;
+	public Object toJavaValue(Context context, Type type) {
+		if(type==PromptoTime.class)
+			return value;
+		else
+			return super.toJavaValue(context, type);
 	}
 
 	public long getMillisOfDay() {

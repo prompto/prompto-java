@@ -24,7 +24,7 @@ public class NativeCategoryType extends CategoryType {
 	}
 	
 	@Override
-	public Type getJavaType(Context context) {
+	public Type toJavaType(Context context) {
 		try {
 			return decl.getBoundClass(true);
 		} catch (SyntaxError e) {

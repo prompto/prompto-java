@@ -101,7 +101,7 @@ public class InterfaceType {
 		if(!isVoid())
 			types = Stream.concat(types, Stream.of(returnType));
 		List<Type> javaTypes = types
-				.map(t->t.getJavaType(context))
+				.map(t->t.toJavaType(context))
 				.collect(Collectors.toList());
 		String sis = CompilerUtils.getGenericDescriptor(getInterfaceType(), javaTypes);
 		return new SignatureAttribute(scs + sis);

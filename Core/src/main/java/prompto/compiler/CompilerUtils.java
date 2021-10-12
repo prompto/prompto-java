@@ -122,7 +122,7 @@ public abstract class CompilerUtils {
 			.map((arg)->
 				arg.getJavaType(context))
 			.collect(Collectors.toList());
-		return new Descriptor.Method(paramTypes.toArray(new Type[paramTypes.size()]), returnType.getJavaType(context));
+		return new Descriptor.Method(paramTypes.toArray(new Type[paramTypes.size()]), returnType.toJavaType(context));
 	}
 
 	public static String createProto(Type[] parameterTypes, Type returnType) {
@@ -853,7 +853,7 @@ public abstract class CompilerUtils {
 
 	public static void compileInnerClassExpression(Context context, ClassFile classFile, IExpression source, PredicateExpression predicate) {
 		IType paramIType = source.check(context).checkIterator(context);
-		Type paramType = paramIType.getJavaType(context);
+		Type paramType = paramIType.toJavaType(context);
 		compileInnerClassBridgeMethod(classFile, paramType, predicate);
 		ArrowExpression arrow = predicate.toArrowExpression();
 		arrow.compileFilter(context, classFile, paramIType, paramType);

@@ -213,7 +213,7 @@ public class ForEachStatement extends BaseStatement {
 		List<IInstructionListener> breakLoopListeners = new ArrayList<>();
 		flags = flags.withBreakLoopListeners(breakLoopListeners);
 		IType itemType = source.check(context).checkIterator(context);
-		java.lang.reflect.Type itemClass = itemType.getJavaType(context);
+		java.lang.reflect.Type itemClass = itemType.toJavaType(context);
 		StackLocal iterLocal = compileIterator(context, method, flags);
 		StackLocal v1Local = compileInitCounter(method);
 		StackState iteratorState = method.captureStackState();
@@ -294,7 +294,7 @@ public class ForEachStatement extends BaseStatement {
 		List<IInstructionListener> breakLoopListeners = new ArrayList<>();
 		flags = flags.withBreakLoopListeners(breakLoopListeners);
 		IType itemType = source.check(context).checkIterator(context);
-		java.lang.reflect.Type itemClass = itemType.getJavaType(context);
+		java.lang.reflect.Type itemClass = itemType.toJavaType(context);
 		StackLocal iterLocal = compileIterator(context, method, flags);
 		StackState iteratorState = method.captureStackState();
 		IInstructionListener test = method.addOffsetListener(new OffsetListenerConstant());

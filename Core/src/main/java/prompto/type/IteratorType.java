@@ -39,7 +39,7 @@ public class IteratorType extends IterableType {
 	}
 
 	@Override
-	public Type getJavaType(Context context) {
+	public Type toJavaType(Context context) {
 		return Iterator.class;
 	}
 	

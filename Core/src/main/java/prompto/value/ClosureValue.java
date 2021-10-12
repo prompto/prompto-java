@@ -20,11 +20,11 @@ public class ClosureValue extends BaseValue {
 	}
 	
 	@Override
-	public Object convertTo(Context context, Type type) {
+	public Object toJavaValue(Context context, Type type) {
 		if(type==IMethodDeclaration.class)
 			return getMethod();
 		else
-			return super.convertTo(context, type);
+			return super.toJavaValue(context, type);
 	}
 	
 	public Context getContext() {

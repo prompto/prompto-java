@@ -41,7 +41,7 @@ public class TypeType extends BaseType {
 	}
 
 	@Override
-	public Type getJavaType(Context context) {
+	public Type toJavaType(Context context) {
 		return Type.class;
 	}
 

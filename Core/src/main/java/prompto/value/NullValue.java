@@ -39,7 +39,7 @@ public class NullValue extends BaseValue {
 	
 	
 	@Override
-	public Object convertTo(Context context, Type type) {
+	public Object toJavaValue(Context context, Type type) {
 		return null; // YES! you read correctly
 	}
 	

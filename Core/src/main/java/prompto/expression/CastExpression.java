@@ -139,7 +139,7 @@ public class CastExpression extends CodeSection implements IExpression {
 		// 1st parameter is method reference
 		expression.compile(context, method, flags); // this would return a lambda
 		// what interface we are casting to
-		ClassConstant dest = new ClassConstant(target.getJavaType(context));
+		ClassConstant dest = new ClassConstant(target.toJavaType(context));
 		method.addInstruction(Opcode.LDC, dest);
 		// method name
 		InterfaceType intf = new InterfaceType(args, decl.getReturnType());
@@ -158,7 +158,7 @@ public class CastExpression extends CodeSection implements IExpression {
 
 	public ResultInfo compileCast(Context context, MethodInfo method, Flags flags, IType target) {
 		ResultInfo src = expression.compile(context, method, flags);
-		Type dest = target.getJavaType(context);
+		Type dest = target.toJavaType(context);
 		if(dest==Long.class)
 			return CompilerUtils.numberToLong(method, src);
 		else if(dest==Double.class)

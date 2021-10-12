@@ -63,7 +63,7 @@ public class IntegerType extends NativeType implements INumberType {
 	}
 	
 	@Override
-	public Type getJavaType(Context context) {
+	public Type toJavaType(Context context) {
 		return Long.class;
 	}
 	
@@ -514,9 +514,9 @@ public class IntegerType extends NativeType implements INumberType {
 			return compileMultiplyCharacter(context, method, flags, left, exp);
 		else if(type==TextType.instance())
 			return compileMultiplyText(context, method, flags, left, exp);
-		else if(type.getJavaType(context) instanceof NamedType)
+		else if(type.toJavaType(context) instanceof NamedType)
 			return compileMultiplyCategory(context, method, flags, left, exp);
-		else if(IMultiplyable.class.isAssignableFrom((Class<?>)type.getJavaType(context)))
+		else if(IMultiplyable.class.isAssignableFrom((Class<?>)type.toJavaType(context)))
 			return compileMultiplyMultiplyable(context, method, flags, left, exp);
 		else
 			throw new SyntaxError("Illegal: Integer * " + type.getClass().getSimpleName());

@@ -60,7 +60,7 @@ public class TypeExpression implements IExpression {
 	}
 	
 	private NamedType getCompiledType(Context context) {
-		return new NamedType(type.getJavaType(context).getTypeName());
+		return new NamedType(type.toJavaType(context).getTypeName());
 	}
 	
 	public IType getType() {

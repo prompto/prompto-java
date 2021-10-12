@@ -50,7 +50,7 @@ public class WithSingletonStatement extends BaseStatement {
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		Type singletonType = type.getJavaType(context);
+		Type singletonType = type.toJavaType(context);
 		ClassConstant cc = new ClassConstant(singletonType);
 		method.addInstruction(Opcode.LDC, cc);
 		method.addInstruction(Opcode.DUP); // for MONITOREXIT

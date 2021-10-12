@@ -1,9 +1,18 @@
 package prompto.intrinsic;
 
+import prompto.store.DataStore;
+
 public class PromptoDbId {
 
 	public static PromptoDbId of(Object value) {
-		return value==null ? null : value instanceof PromptoDbId ? (PromptoDbId)value : new PromptoDbId(value);
+		if(value==null)
+			return null;
+		else if(value instanceof PromptoDbId)
+			return (PromptoDbId)value;
+		else {
+			value = DataStore.getInstance().convertToNativeDbId(value);
+			return new PromptoDbId(value);
+		}
 	}
 
 	Object value;

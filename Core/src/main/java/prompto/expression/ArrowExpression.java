@@ -358,7 +358,7 @@ public class ArrowExpression extends PredicateExpression implements IExpression 
 
 	public void compileGetKeyMethod(Context context, ClassFile classFile, IType paramIType) {
 		Identifier arg = args.get(0);
-		Type paramType = paramIType.getJavaType(context);
+		Type paramType = paramIType.toJavaType(context);
 		Descriptor.Method proto = new Descriptor.Method(paramType, Object.class);
 		MethodInfo method = classFile.newMethod("getKey", proto);
 		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());

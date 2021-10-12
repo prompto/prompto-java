@@ -28,7 +28,7 @@ public class HtmlType extends NativeType {
 	}
 	
 	@Override
-	public Type getJavaType(Context context) {
+	public Type toJavaType(Context context) {
 		// just need an opaque instance 
 		return Object.class;
 	}

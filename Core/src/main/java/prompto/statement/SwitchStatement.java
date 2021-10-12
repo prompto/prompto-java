@@ -95,7 +95,7 @@ public class SwitchStatement extends BaseSwitchStatement {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		IType result = check(context);
 		compileSwitchCases(context, method, flags);
-		return new ResultInfo(result.getJavaType(context));
+		return new ResultInfo(result.toJavaType(context));
 	}
 	
 	static class SwitchCaseBranch {

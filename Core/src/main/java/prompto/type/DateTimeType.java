@@ -45,7 +45,7 @@ public class DateTimeType extends NativeType {
 	}
 	
 	@Override
-	public Type getJavaType(Context context) {
+	public Type toJavaType(Context context) {
 		return PromptoDateTime.class;
 	}
 	

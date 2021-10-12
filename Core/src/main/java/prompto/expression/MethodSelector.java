@@ -191,7 +191,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getParameters(), returnType);
 		MethodConstant constant = new MethodConstant(classType, methodName, descriptor);
 		method.addInstruction(Opcode.INVOKESTATIC, constant);
-		return new ResultInfo(returnType.getJavaType(context));
+		return new ResultInfo(returnType.toJavaType(context));
 	}
 
 	private ResultInfo compileTemplateAbstractMethod(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration, ArgumentList arguments, String methodName) {
@@ -231,7 +231,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		NameAndTypeConstant nameAndType = new NameAndTypeConstant(methodName, descriptor);
 		CallSiteConstant constant = new CallSiteConstant(bsm, nameAndType);
 		method.addInstruction(Opcode.INVOKEDYNAMIC, constant);
-		return new ResultInfo(returnType.getJavaType(context));
+		return new ResultInfo(returnType.toJavaType(context));
 	}
 
 	private ResultInfo compileDynamicImplicitMember(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration, ArgumentList arguments) {
@@ -254,7 +254,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getParameters(), returnType);
 		InterfaceConstant constant = new InterfaceConstant(classType, methodName, descriptor);
 		method.addInstruction(Opcode.INVOKEINTERFACE, constant);
-		return new ResultInfo(returnType.getJavaType(context));
+		return new ResultInfo(returnType.toJavaType(context));
 	}
 
 	
@@ -273,11 +273,11 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		InterfaceConstant constant = new InterfaceConstant(classType, methodName, descriptor);
 		method.addInstruction(Opcode.INVOKEINTERFACE, constant);
 		// cast result
-		Type returnType = returnIType.getJavaType(context);
+		Type returnType = returnIType.toJavaType(context);
 		if(!intf.isVoid())
 			method.addInstruction(Opcode.CHECKCAST, new ClassConstant(returnType));
 		// done
-		return new ResultInfo(returnIType.getJavaType(context));
+		return new ResultInfo(returnIType.toJavaType(context));
 	}
 
 
@@ -311,7 +311,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getParameters(), returnType);
 		MethodConstant constant = new MethodConstant(classType, methodName, descriptor);
 		method.addInstruction(Opcode.INVOKESTATIC, constant);
-		return new ResultInfo(returnType.getJavaType(context));
+		return new ResultInfo(returnType.toJavaType(context));
 	}
 
 	private ResultInfo compileExactImplicitMember(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration, ArgumentList arguments) {
@@ -353,7 +353,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			MethodConstant constant = new MethodConstant(klass, declaration.getName(), descriptor);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, constant);
 		}
-		return new ResultInfo(returnType.getJavaType(context));
+		return new ResultInfo(returnType.toJavaType(context));
 	}
 	
 	private ResultInfo compileExactStaticMember(Context context, MethodInfo method, Flags flags, Type parent, IMethodDeclaration declaration, ArgumentList arguments) {
@@ -366,7 +366,7 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		Descriptor.Method descriptor = CompilerUtils.createMethodDescriptor(context, declaration.getParameters(), returnType);
 		MethodConstant constant = new MethodConstant(parentClass, declaration.getName(), descriptor);
 		method.addInstruction(Opcode.INVOKESTATIC, constant);
-		return new ResultInfo(returnType.getJavaType(context));
+		return new ResultInfo(returnType.toJavaType(context));
 	}
 	
 	private IType checkStaticMemberReturntype(Context context, IMethodDeclaration declaration) {

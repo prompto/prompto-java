@@ -106,8 +106,11 @@ public class DateTimeValue extends BaseValue implements Comparable<DateTimeValue
 	}
 
 	@Override
-	public Object convertTo(Context context, Type type) {
-		return value;
+	public Object toJavaValue(Context context, Type type) {
+		if(type==PromptoDateTime.class)
+			return value;
+		else
+			return super.toJavaValue(context, type);
 	}
 
 	@Override

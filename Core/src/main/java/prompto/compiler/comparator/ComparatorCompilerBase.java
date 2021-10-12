@@ -28,14 +28,14 @@ public abstract class ComparatorCompilerBase implements ComparatorCompiler {
 		classFile.setSuperClass(new ClassConstant(Object.class));
 		classFile.addInterface(new ClassConstant(Comparator.class));
 		CompilerUtils.compileEmptyConstructor(classFile);
-		compileBridge(context, classFile, itemType.getJavaType(context), descending);
+		compileBridge(context, classFile, itemType.toJavaType(context), descending);
 		compileMethods(context, classFile, itemType, key);
 		parentClass.addInnerClass(classFile);
 		return innerClassType;
 	}
 
 	private void compileCompareMethod(Context context, ClassFile classFile, IType paramIType, IExpression key) {
-		Type paramType = paramIType.getJavaType(context);
+		Type paramType = paramIType.toJavaType(context);
 		Descriptor.Method proto = new Descriptor.Method(paramType, paramType, int.class);
 		MethodInfo method = classFile.newMethod("compare", proto);
 		// use a dummy '$this', since we never use it, and we need 'this' for compiling expressions

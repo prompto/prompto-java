@@ -35,7 +35,7 @@ public class PeriodType extends NativeType {
 	}
 
 	@Override
-	public Type getJavaType(Context context) {
+	public Type toJavaType(Context context) {
 		return PromptoPeriod.class;
 	}
 	

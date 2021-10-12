@@ -18,7 +18,7 @@ public class JsxType extends NativeType {
 	}
 
 	@Override
-	public Type getJavaType(Context context) {
+	public Type toJavaType(Context context) {
 		throw new UnsupportedOperationException("Should never get there!");
 	}
 

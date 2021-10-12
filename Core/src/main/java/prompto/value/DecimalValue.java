@@ -122,8 +122,15 @@ public class DecimalValue extends BaseValue implements INumberValue, Comparable<
 	}
 	
 	@Override
-	public Object convertTo(Context context, Type type) {
-		return value;
+	public Object toJavaValue(Context context, Type type) {
+		if(type==double.class || type==Double.class)
+			return value;
+		else if(type==long.class || type==Long.class)
+			return (long)value;
+		else if(type==int.class || type==Integer.class)
+			return (int)value;
+		else
+			return super.toJavaValue(context, type);
 	}
 
 	@Override

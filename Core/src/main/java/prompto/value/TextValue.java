@@ -149,8 +149,11 @@ public class TextValue extends BaseValue implements Comparable<TextValue>, ICont
 	}
 	
 	@Override
-	public Object convertTo(Context context, Type type) {
-		return value;
+	public Object toJavaValue(Context context, Type type) {
+		if(type==String.class)
+			return value;
+		else
+			return super.toJavaValue(context, type);
 	}
 
 	@Override

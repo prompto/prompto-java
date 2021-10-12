@@ -78,7 +78,7 @@ public class DocumentType extends NativeType {
 	}
 	
 	@Override
-	public Type getJavaType(Context context) {
+	public Type toJavaType(Context context) {
 		return PromptoDocument.class;
 	}
 	
@@ -500,7 +500,7 @@ public class DocumentType extends NativeType {
 
 		@Override
 		protected void compileMethodBody(Context context, MethodInfo method, IType paramIType, IExpression key) {
-			Type paramType = paramIType.getJavaType(context);
+			Type paramType = paramIType.toJavaType(context);
 			compileValue(context, method, paramType, "o1");
 			compileValue(context, method, paramType, "o2");
 			MethodConstant compare = new MethodConstant(ObjectUtils.class, "safeCompare", Object.class, Object.class, int.class);
@@ -523,7 +523,7 @@ public class DocumentType extends NativeType {
 		
 		@Override
 		protected void compileMethodBody(Context context, MethodInfo method, IType paramIType, IExpression key) {
-			Type paramType = paramIType.getJavaType(context);
+			Type paramType = paramIType.toJavaType(context);
 			StackLocal tmpThis = method.registerLocal("this", VerifierType.ITEM_Object, new ClassConstant(paramType));
 			compileValue(context, method, paramType, key, tmpThis, "o1");
 			compileValue(context, method, paramType, key, tmpThis, "o2");

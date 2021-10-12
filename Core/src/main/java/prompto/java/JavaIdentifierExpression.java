@@ -309,7 +309,7 @@ public class JavaIdentifierExpression extends CodeSection implements JavaExpress
 	IType check_field(Context context, IType t) {
 		if(!(t instanceof JavaClassType))
 			return null;
-		Type klass = t.getJavaType(context);
+		Type klass = t.toJavaType(context);
 		if(klass instanceof Class) try {
 			Field field = ((Class<?>)klass).getField(name);
 			return new JavaClassType(field.getType());

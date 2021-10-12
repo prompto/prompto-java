@@ -5,6 +5,10 @@ import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.function.Function;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
@@ -12,10 +16,6 @@ import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoVersion;
 import prompto.runtime.Context;
 import prompto.type.VersionType;
-
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 public class VersionValue extends BaseValue implements Comparable<VersionValue> {
 
@@ -47,8 +47,11 @@ public class VersionValue extends BaseValue implements Comparable<VersionValue> 
 	}
 
 	@Override
-	public Object convertTo(Context context, Type type) {
-		return value;
+	public Object toJavaValue(Context context, Type type) {
+		if(type==PromptoVersion.class)
+			return value;
+		else
+			return super.toJavaValue(context, type);
 	}
 
 	@Override

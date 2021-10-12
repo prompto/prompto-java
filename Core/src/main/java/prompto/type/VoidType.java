@@ -20,7 +20,7 @@ public class VoidType extends NativeType {
 	}
 	
 	@Override
-	public Type getJavaType(Context context) {
+	public Type toJavaType(Context context) {
 		return void.class;
 	}
 

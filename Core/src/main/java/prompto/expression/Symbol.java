@@ -109,8 +109,11 @@ public abstract class Symbol extends CodeSection implements IExpression, INamed,
 	}
 	
 	@Override
-	public Object convertTo(Context context, Type type) {
-		return this;
+	public Object toJavaValue(Context context, Type type) {
+		if(type==String.class)
+			return symbol.toString();
+		else
+			return IValue.super.toJavaValue(context, type);
 	}
 	
 	@Override

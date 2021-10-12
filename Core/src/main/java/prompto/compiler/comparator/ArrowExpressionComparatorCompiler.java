@@ -58,7 +58,7 @@ public class ArrowExpressionComparatorCompiler extends ComparatorCompilerBase {
 	
 	
 	private void compileMethodBody1Arg(Context context, MethodInfo method, IType paramIType, ArrowExpression arrow) {
-		Type paramType = paramIType.getJavaType(context);
+		Type paramType = paramIType.toJavaType(context);
 		Type thisType = method.getClassFile().getThisClass().getType();
 		MethodConstant getKey = new MethodConstant(thisType, "getKey", paramType, Object.class);
 		method.addInstruction(Opcode.ALOAD_0, new ClassConstant(thisType)); // load this comparator

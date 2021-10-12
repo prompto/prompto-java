@@ -84,7 +84,7 @@ public class RemoteArgument {
 	}
 
 	public Class<?> toJavaType(Context context, ClassLoader classLoader) {
-		Type type = this.type.getJavaType(context);
+		Type type = this.type.toJavaType(context);
 		if(type instanceof Class<?>)
 			return (Class<?>)type;
 		else try {
@@ -95,7 +95,7 @@ public class RemoteArgument {
 	}
 	
 	public Object toJavaValue(Context context) {
-		return value.convertTo(context, Object.class);
+		return value.toJavaValue(context, Object.class);
 	}
 	
 	public Argument toAssignment(Context context) {

@@ -33,7 +33,7 @@ public class UuidType extends NativeType {
 	}
 	
 	@Override
-	public Type getJavaType(Context context) {
+	public Type toJavaType(Context context) {
 		return UUID.class;
 	}
 	

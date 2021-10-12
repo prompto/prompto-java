@@ -75,7 +75,7 @@ public abstract class BaseParameter extends CodeSection implements IParameter {
 	
 	@Override
 	public Type getJavaType(Context context) {
-		return getType(context).getJavaType(context);
+		return getType(context).toJavaType(context);
 	}
 	
 	@Override

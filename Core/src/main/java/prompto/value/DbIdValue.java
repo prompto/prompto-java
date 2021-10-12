@@ -81,11 +81,11 @@ public class DbIdValue implements IValue {
 	}
 
 	@Override
-	public Object convertTo(Context context, Type type) throws PromptoError {
-		if(type==PromptoDbId.class)
-			return getStorableData();
+	public Object toJavaValue(Context context, Type type) throws PromptoError {
+		if(type==PromptoDbId.class || type==Object.class)
+			return dbId;
 		else
-			return IValue.super.convertTo(context, type);
+			return IValue.super.toJavaValue(context, type);
 	}
 
 	@Override

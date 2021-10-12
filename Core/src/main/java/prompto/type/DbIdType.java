@@ -36,7 +36,7 @@ public class DbIdType extends NativeType {
 	}
 	
 	@Override
-	public Type getJavaType(Context context) {
+	public Type toJavaType(Context context) {
 		return PromptoDbId.class;
 	}
 	

@@ -68,8 +68,11 @@ public class BooleanValue extends BaseValue implements Comparable<BooleanValue> 
 	}
 
 	@Override
-	public Object convertTo(Context context, Type type) {
-		return value;
+	public Object toJavaValue(Context context, Type type) {
+		if(type==boolean.class || type==Boolean.class)
+			return value;
+		else
+			return super.toJavaValue(context, type);
 	}
 
 	@Override

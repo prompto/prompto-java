@@ -1,6 +1,5 @@
 package prompto.value;
 
-import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -44,11 +43,6 @@ public abstract class BaseValue implements IValue {
 	@Override
 	public ISliceable<IValue> asSliceable(Context context) throws PromptoError {
 		return (this instanceof ISliceable) ? (ISliceable<IValue>)this : null;
-	}
-	
-	@Override
-	public Object convertTo(Context context, Type type) {
-		return this;
 	}
 	
 	@Override

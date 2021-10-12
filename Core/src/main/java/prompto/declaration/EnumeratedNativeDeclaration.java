@@ -188,7 +188,7 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 	
 	private void compileFieldGetters(Context context, ClassFile classFile, Flags flags) {
 		compileFieldGetter(context, classFile, flags, "name", String.class);
-		compileFieldGetter(context, classFile, flags, "value", type.getDerivedFrom().getJavaType(context));
+		compileFieldGetter(context, classFile, flags, "value", type.getDerivedFrom().toJavaType(context));
 	}
 	
 	private void compileFieldGetter(Context context, ClassFile classFile, Flags flags, String fieldName, Type fieldType) {
@@ -222,13 +222,13 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 	}
 
 	private void compileValueField(Context context, ClassFile classFile, Flags flags) {
-		FieldInfo field = new FieldInfo("value", type.getDerivedFrom().getJavaType(context));
+		FieldInfo field = new FieldInfo("value", type.getDerivedFrom().toJavaType(context));
 		field.clearModifier(Modifier.PROTECTED);
 		classFile.addField(field);
 	}
 	
 	private void compileValueConstructor(Context context, ClassFile classFile, Flags flags) {
-		Descriptor.Method proto = new Descriptor.Method(type.getDerivedFrom().getJavaType(context), void.class);
+		Descriptor.Method proto = new Descriptor.Method(type.getDerivedFrom().toJavaType(context), void.class);
 		MethodInfo method = classFile.newMethod("<init>", proto);
 		// call super()
 		StackLocal local = method.registerLocal("this", VerifierType.ITEM_UninitializedThis, classFile.getThisClass());
@@ -237,9 +237,9 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 		method.addInstruction(Opcode.INVOKESPECIAL, m);
 		// set field
 		CompilerUtils.compileALOAD(method, local);
-		StackLocal value = method.registerLocal("%value%", VerifierType.ITEM_Object, new ClassConstant(type.getDerivedFrom().getJavaType(context)));
+		StackLocal value = method.registerLocal("%value%", VerifierType.ITEM_Object, new ClassConstant(type.getDerivedFrom().toJavaType(context)));
 		CompilerUtils.compileALOAD(method, value);
-		FieldConstant f = new FieldConstant(method.getClassFile().getThisClass(), "value", type.getDerivedFrom().getJavaType(context));
+		FieldConstant f = new FieldConstant(method.getClassFile().getThisClass(), "value", type.getDerivedFrom().toJavaType(context));
 		method.addInstruction(Opcode.PUTFIELD, f);
 		// done
 		method.addInstruction(Opcode.RETURN);
