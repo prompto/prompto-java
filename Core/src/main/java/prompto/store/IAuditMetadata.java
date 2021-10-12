@@ -11,8 +11,8 @@ public interface IAuditMetadata extends Map<String, Object>, IDocumentProducer {
 	default void setAuditMetadataId(PromptoDbId id) {
 		put("auditMetadataId", id.getValue());
 	}
-	default PromptoDbId getAuditMetadataId() {
-		return PromptoDbId.of(get("auditMetadataId"));
+	default PromptoDbId getAuditMetadataId(IStore store) {
+		return store.convertToDbId(get("auditMetadataId"));
 	}
 	default void setUTCTimestamp(LocalDateTime timeStamp) {
 		put("timeStamp", timeStamp);

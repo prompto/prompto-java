@@ -56,7 +56,6 @@ import prompto.grammar.Identifier;
 import prompto.grammar.Operator;
 import prompto.instance.MemberInstance;
 import prompto.instance.VariableInstance;
-import prompto.intrinsic.PromptoDbId;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoRoot;
 import prompto.parser.ICodeSection;
@@ -657,10 +656,7 @@ public class CategoryType extends BaseType {
 	}
 
 	private IValue convertJavaValueToPromptoValue(Context context, CategoryDeclaration decl, Object value) throws PromptoError {
-		if(DataStore.getInstance().getNativeDbIdClass().isInstance(value))
-			value = PromptoDbId.of(value);
-		if(value instanceof PromptoDbId)
-			value = DataStore.getInstance().fetchUnique((PromptoDbId)value);
+		value = DataStore.getInstance().fetchUnique(DataStore.getInstance().convertToDbId(value));
 		if(value==null)
 			return NullValue.instance();
 		else if(value instanceof IStored)

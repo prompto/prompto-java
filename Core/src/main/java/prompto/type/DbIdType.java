@@ -12,6 +12,7 @@ import prompto.compiler.ResultInfo;
 import prompto.expression.IExpression;
 import prompto.intrinsic.PromptoDbId;
 import prompto.runtime.Context;
+import prompto.store.DataStore;
 import prompto.store.Family;
 import prompto.transpiler.Transpiler;
 import prompto.value.DbIdValue;
@@ -47,7 +48,7 @@ public class DbIdType extends NativeType {
 	
 	@Override
 	public IValue convertJavaValueToIValue(Context context, Object value) {
-		PromptoDbId dbId = PromptoDbId.of(value);
+		PromptoDbId dbId = DataStore.getInstance().convertToDbId(value);
 		return dbId==null ? NullValue.instance() : new DbIdValue(dbId);
 	}
 	

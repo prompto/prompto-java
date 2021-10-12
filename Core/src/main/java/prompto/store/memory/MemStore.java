@@ -117,7 +117,7 @@ public final class MemStore implements IStore {
 	private IAuditMetadata storeAuditMetadata(IAuditMetadata auditMeta) {
 		if(auditMeta==null)
 			auditMeta = newAuditMetadata();
-		auditMetadatas.put((Long)auditMeta.getAuditMetadataId().getValue(), (AuditMetadata)auditMeta);
+		auditMetadatas.put((Long)auditMeta.getAuditMetadataId(this).getValue(), (AuditMetadata)auditMeta);
 		return auditMeta;
 	}
 
@@ -140,7 +140,7 @@ public final class MemStore implements IStore {
 		StoredDocument previous = instances.put((Long)dbId, stored);
 		if(audit) {
 			AuditRecord audit = newAuditRecord(auditMeta);
-			audit.setInstanceDbId(PromptoDbId.of(dbId));
+			audit.setInstanceDbId(this.convertToDbId(dbId));
 			IAuditRecord.Operation operation = previous==null ? Operation.INSERT : Operation.UPDATE;
 			audit.setOperation(operation);
 			audit.setInstance(stored);
@@ -333,7 +333,7 @@ public final class MemStore implements IStore {
 				if(dbIdFactory!=null)
 					dbId = dbIdFactory.get();
 				if(dbId==null) {
-					dbId = PromptoDbId.of(Long.valueOf(lastDbId.incrementAndGet()));
+					dbId = MemStore.this.convertToDbId(Long.valueOf(lastDbId.incrementAndGet()));
 					if(dbIdFactory!=null)
 						dbIdFactory.accept(dbId);
 				}
@@ -390,13 +390,13 @@ public final class MemStore implements IStore {
 		@Override
 		public PromptoDbId getOrCreateDbId() {
 			Object value = getData(dbIdName);
-			PromptoDbId dbId = value==null ? null : PromptoDbId.of(value);
+			PromptoDbId dbId = value==null ? null : MemStore.this.convertToDbId(value);
 			if(value==null) {
 				if(dbIdFactory!=null)
 					value = dbIdFactory.get();
 				if(value==null) {
 					value = Long.valueOf(lastDbId.incrementAndGet());
-					dbId = PromptoDbId.of(value);
+					dbId = MemStore.this.convertToDbId(value);
 					if(dbIdFactory!=null)
 						dbIdFactory.accept(dbId);
 				}
@@ -494,7 +494,7 @@ public final class MemStore implements IStore {
 		@Override
 		public PromptoDbId getDbId() {
 			Object value =  getData(dbIdName);
-			return value==null ? null : PromptoDbId.of(value);
+			return value==null ? null : MemStore.this.convertToDbId(value);
 		}
 		
 		public boolean matches(IPredicate predicate) {
@@ -558,7 +558,7 @@ public final class MemStore implements IStore {
 	@Override
 	public AuditMetadata newAuditMetadata() {
 		AuditMetadata meta = new AuditMetadata();
-		meta.setAuditMetadataId(PromptoDbId.of(lastAuditMetadataId.incrementAndGet()));
+		meta.setAuditMetadataId(this.convertToDbId(lastAuditMetadataId.incrementAndGet()));
 		meta.setUTCTimestamp(LocalDateTime.now(ZoneId.of("UTC")));
 		return meta;
 	}
@@ -756,8 +756,8 @@ public final class MemStore implements IStore {
 
 	private AuditRecord newAuditRecord(IAuditMetadata auditMeta) {
 		AuditRecord audit = new AuditRecord();
-		audit.setDbId(PromptoDbId.of(lastAuditRecordId.incrementAndGet()));
-		audit.setMetadataDbId(auditMeta.getAuditMetadataId());
+		audit.setDbId(this.convertToDbId(lastAuditRecordId.incrementAndGet()));
+		audit.setMetadataDbId(auditMeta.getAuditMetadataId(this));
 		audit.setUTCTimestamp(auditMeta.getUTCTimestamp());
 		return audit;
 	}

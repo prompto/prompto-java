@@ -6,9 +6,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import prompto.intrinsic.PromptoVersion;
-import prompto.intrinsic.PromptoDbId;
 import prompto.intrinsic.PromptoStorableBase;
+import prompto.intrinsic.PromptoVersion;
 import prompto.runtime.Context;
 import prompto.store.IStorable;
 import prompto.store.IStore;
@@ -28,7 +27,7 @@ public class Dependency extends PromptoStorableBase {
 	}
 
 	public static Dependency fromStored(IStore store, Object data) {
-		IStored stored = store.fetchUnique(PromptoDbId.of(data));
+		IStored stored = store.fetchUnique(store.convertToDbId(data));
 		if(stored==null)
 			return null;
 		Dependency result = new Dependency();

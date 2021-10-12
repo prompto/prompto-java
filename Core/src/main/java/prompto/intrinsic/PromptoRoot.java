@@ -55,8 +55,7 @@ public abstract class PromptoRoot extends PromptoStorableBase implements IMutabl
 	public static PromptoRoot newInstanceFromDbIdRef(Object value) {
 		if(value instanceof PromptoRoot)
 			return (PromptoRoot)value;
-		if(DataStore.getInstance().getNativeDbIdClass().isInstance(value))
-			value = PromptoDbId.of(value);
+		value = DataStore.getInstance().convertToDbId(value);
 		if(value instanceof PromptoDbId)
 			value = DataStore.getInstance().fetchUnique((PromptoDbId)value);
 		if(value instanceof IStored)

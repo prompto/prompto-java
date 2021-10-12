@@ -60,7 +60,7 @@ public class MemStoreMirror {
 	}
 
 	public StorableMirror newStorableDocument(String[] categories, ScriptObjectMirror dbIdFactory) {
-		IDbIdProvider provider = () -> PromptoDbId.of(dbIdFactory.callMember("provider"));
+		IDbIdProvider provider = () -> store.convertToDbId(dbIdFactory.callMember("provider"));
 		IDbIdListener listener = dbId -> dbIdFactory.callMember("listener", ((Long)dbId.getValue()).intValue()); // workaround horrible Nashorn JS logic where Long(1) !== Integer(1)
 		IDbIdFactory factory = IDbIdFactory.of(provider, listener, ()->true);
 		IStorable storable = store.newStorable(categories, factory);
@@ -68,14 +68,14 @@ public class MemStoreMirror {
 	}
 	
 	public void deleteAndStore(Object[] toDelete, Object[] toStore, Object metaData) throws ScriptException {
-		Set<PromptoDbId> del = toDelete==null ? null : Stream.of(toDelete).map(dbId->store.convertToNativeDbId(dbId)).map(PromptoDbId::of).collect(Collectors.toSet());
+		Set<PromptoDbId> del = toDelete==null ? null : Stream.of(toDelete).map(dbId->store.convertToNativeDbId(dbId)).map(store::convertToDbId).collect(Collectors.toSet());
 		Set<IStorable> add = toStore==null ? null : Stream.of(toStore).map(item->((StorableMirror)item).getStorable()).collect(Collectors.toSet());
 		IAuditMetadata meta = toAuditMetadata(metaData);
 		store.deleteAndStore(del, add, meta);
 	}
 	
 	public void deleteAndStoreAsync(Object[] toDelete, Object[] toStore, Object metaData, ScriptObjectMirror andThen) {
-		Set<PromptoDbId> del = toDelete==null ? null : Stream.of(toDelete).map(id-> PromptoDbId.of(id)).collect(Collectors.toSet());
+		Set<PromptoDbId> del = toDelete==null ? null : Stream.of(toDelete).map(store::convertToDbId).collect(Collectors.toSet());
 		Set<IStorable> add = toStore==null ? null : Stream.of(toStore).map(item->((StorableMirror)item).getStorable()).collect(Collectors.toSet());
 		IAuditMetadata meta = toAuditMetadata(metaData);
 		store.deleteAndStore(del, add, meta);
@@ -488,39 +488,39 @@ public class MemStoreMirror {
 	}
 
 	public Object fetchLatestAuditMetadataId(Object dbId) {
-		return store.fetchLatestAuditMetadataId(PromptoDbId.of(castDbId(dbId)));
+		return store.fetchLatestAuditMetadataId(convertDbId(dbId));
 	}
 	
 	public Object fetchAuditMetadataAsDocument(Object dbId) {
-		PromptoDocument<String, Object> metadata = store.fetchAuditMetadataAsDocument(PromptoDbId.of(castDbId(dbId)));
+		PromptoDocument<String, Object> metadata = store.fetchAuditMetadataAsDocument(convertDbId(dbId));
 		return metadata==null ? null : converter.toJS(metadata, true);
 	}
 	
 	public Object deleteAuditMetadata(Object dbId) {
-		return store.deleteAuditMetadata(PromptoDbId.of(castDbId(dbId)));
+		return store.deleteAuditMetadata(convertDbId(dbId));
 	}
 
 	public Object fetchAllAuditMetadataIds(Object dbId) {
-		List<PromptoDbId> dbIds = store.fetchAllAuditMetadataIds(PromptoDbId.of(castDbId(dbId)));
+		List<PromptoDbId> dbIds = store.fetchAllAuditMetadataIds(convertDbId(dbId));
 		return converter.toJS(dbIds, true);
 	}
 	
 	public Object fetchLatestAuditRecordAsDocument(Object dbId) {
-		PromptoDocument<String, Object> record = store.fetchLatestAuditRecordAsDocument(PromptoDbId.of(castDbId(dbId)));
+		PromptoDocument<String, Object> record = store.fetchLatestAuditRecordAsDocument(convertDbId(dbId));
 		return record==null ? null : converter.toJS(record, false);
 	}
 
 	public Object deleteAuditRecord(Object dbId) {
-		return store.deleteAuditRecord(PromptoDbId.of(castDbId(dbId)));
+		return store.deleteAuditRecord(convertDbId(dbId));
 	}
 
 	public Object fetchAllAuditRecordsAsDocuments(Object dbId) {
-		List<PromptoDocument<String, Object>> records = store.fetchAllAuditRecordsAsDocuments(PromptoDbId.of(castDbId(dbId)));
+		List<PromptoDocument<String, Object>> records = store.fetchAllAuditRecordsAsDocuments(convertDbId(dbId));
 		return converter.toJS(records, true);
 	}
 	
 	public Object fetchDbIdsAffectedByAuditMetadataId(Object dbId) {
-		List<PromptoDbId> dbIds = store.fetchDbIdsAffectedByAuditMetadataId(PromptoDbId.of(castDbId(dbId)));
+		List<PromptoDbId> dbIds = store.fetchDbIdsAffectedByAuditMetadataId(convertDbId(dbId));
 		return converter.toJS(dbIds, true);
 	}
 	
@@ -532,11 +532,10 @@ public class MemStoreMirror {
 		return converter.toJS(records, true);
 	}
 	
-	public Object castDbId(Object dbId) {
+	public PromptoDbId convertDbId(Object dbId) {
 		if(dbId instanceof Number)
-			return ((Number)dbId).longValue();
-		else
-			return dbId;
+			dbId = ((Number)dbId).longValue();
+		return PromptoDbId.of(dbId);
 	}
 
 

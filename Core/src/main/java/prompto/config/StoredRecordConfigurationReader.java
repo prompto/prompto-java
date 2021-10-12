@@ -72,7 +72,7 @@ public class StoredRecordConfigurationReader implements IConfigurationReader  {
 			logger.warn(()->"Not a valid dbId: " + value.toString());
 			return null;
 		}
-		return new StoredRecordConfigurationReader(store, PromptoDbId.of(value));
+		return new StoredRecordConfigurationReader(store, store.convertToDbId(value));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -91,7 +91,7 @@ public class StoredRecordConfigurationReader implements IConfigurationReader  {
 				logger.warn(()->"Not a valid dbId: " + value.toString());
 				return null;
 			}
-			readers.add(new StoredRecordConfigurationReader(store, PromptoDbId.of(item)));
+			readers.add(new StoredRecordConfigurationReader(store, store.convertToDbId(item)));
 		}
 		return readers;
 	}

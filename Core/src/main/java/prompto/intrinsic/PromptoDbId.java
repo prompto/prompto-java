@@ -1,7 +1,5 @@
 package prompto.intrinsic;
 
-import prompto.store.DataStore;
-
 public class PromptoDbId {
 
 	public static PromptoDbId of(Object value) {
@@ -9,10 +7,8 @@ public class PromptoDbId {
 			return null;
 		else if(value instanceof PromptoDbId)
 			return (PromptoDbId)value;
-		else {
-			value = DataStore.getInstance().convertToNativeDbId(value);
+		else 
 			return new PromptoDbId(value);
-		}
 	}
 
 	Object value;

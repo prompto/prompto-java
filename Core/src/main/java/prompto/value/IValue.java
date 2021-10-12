@@ -15,6 +15,7 @@ import prompto.error.PromptoError;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoDbId;
 import prompto.runtime.Context;
+import prompto.store.DataStore;
 import prompto.store.IStorable;
 import prompto.type.IType;
 
@@ -120,7 +121,7 @@ public interface IValue {
 
 	default Object toJavaValue(Context context, Type type) throws PromptoError {
 		if(type==PromptoDbId.class)
-			return PromptoDbId.of(this.getStorableData());
+			return DataStore.getInstance().convertToDbId(this.getStorableData());
 		else if(type==Object.class)
 			return this.getStorableData();
 		else
