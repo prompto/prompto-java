@@ -30,4 +30,20 @@ public class WidgetFieldProcessorTest extends BaseOParserTest {
 		}
 		assertTrue(js.contains("this.state.$safe_getMember('stuff', false)"));
 	}
+	
+	@Test
+	public void transpilesTypedState() throws Exception {
+		JsxElementBase.setTestMode(true);
+		loadResource("annotations/ReactState1.poc");
+		IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, new Identifier("MyWidget"));
+		Transpiler transpiler = new Transpiler(new Nashorn8Engine(), context);
+		decl.declare(transpiler);
+		decl.transpile(transpiler);
+		String js = transpiler.toString();
+		try(OutputStream output = new FileOutputStream("transpiled.js")) {
+			output.write(js.getBytes());
+		}
+		assertTrue(js.contains("this.state.$safe_getMember('items', false)"));
+	}
+
 }
