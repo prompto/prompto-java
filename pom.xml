@@ -16,16 +16,16 @@
 
 	<name>Prompto Core</name>
 	<description>Prompto Core POM</description>
-	<url>http://www.prompto.org</url>
+	<url>https://www.prompto.org</url>
 	<organization>
 		<name>Prompto</name>
-		<url>http://www.prompto.org</url>
+		<url>https://www.prompto.org</url>
 	</organization>
 
 	<licenses>
 		<license>
 			<name>The Prompto License</name>
-			<url>http://www.prompto.org/license.html</url>
+			<url>https://www.prompto.org/license.html</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
