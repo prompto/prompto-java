@@ -1,0 +1,73 @@
+NACE Macro-sector;Activity;Type of contribution ;Own performance;Enabling;Transition activity;2. Climate change adaptation;3. Water;4. Circular economy;5. Pollution;6. Ecosystems
+Agriculture and Forestry;Afforestation;Substantial contribution;x;;;DNSH;DNSH;;DNSH;DNSH
+Agriculture and Forestry;Rehabilitation, Reforestation ;Substantial contribution;x;;;DNSH;DNSH;;DNSH;DNSH
+Agriculture and Forestry;Reforestation;Substantial contribution;x;;;DNSH;DNSH;;DNSH;DNSH
+Agriculture and Forestry;Existing forest management;Substantial contribution;x;;;DNSH;DNSH;;DNSH;DNSH
+Agriculture and Forestry;Conservation forest;Substantial contribution;x;;;DNSH;DNSH;;DNSH;DNSH
+Agriculture and Forestry;Growing of perennial crops;Substantial contribution;x;;x;DNSH;DNSH;DNSH;DNSH;DNSH
+Agriculture and Forestry;Growing of non-perennial crops;Substantial contribution;x;;x;DNSH;DNSH;DNSH;DNSH;DNSH
+Agriculture and Forestry;Livestock production;Substantial contribution;x;;x;DNSH;DNSH;DNSH;DNSH;DNSH
+Manufacturing;Manufacture of low carbon technologies;Substantial contribution;;x;;DNSH;DNSH;DNSH;DNSH;DNSH
+Manufacturing;Manufacture of Cement;Substantial contribution;x;;x;DNSH;DNSH;DNSH;DNSH;DNSH
+Manufacturing;Manufacture of Aluminium;Substantial contribution;x;;x;DNSH;DNSH;DNSH;DNSH;DNSH
+Manufacturing;Manufacture of Iron and Steel;Substantial contribution;x;;x;DNSH;DNSH;DNSH;DNSH;DNSH
+Manufacturing;Manufacture of Hydrogen;Substantial contribution;x;;;DNSH;DNSH;DNSH;DNSH;DNSH
+Manufacturing;Manufacture of other inorganic basic chemicals - Manufacture of carbon black;Substantial contribution;x;;x;DNSH;DNSH;DNSH;DNSH;DNSH
+Manufacturing;Manufacture of other inorganic basic chemicals - Manufacture of disodium carbonate (soda ash)  ;Substantial contribution;x;;x;DNSH;DNSH;DNSH;DNSH;DNSH
+Manufacturing;Manufacture of other inorganic basic chemicals - Manufacture of chlorine ;Substantial contribution;x;;x;DNSH;DNSH;DNSH;DNSH;DNSH
+Manufacturing;Manufacture of other organic basic chemicals;Substantial contribution;x;;x;DNSH;DNSH;DNSH;DNSH;DNSH
+Manufacturing;Manufacture of fertilizers and nitrogen compounds ;Substantial contribution;x;;x;DNSH;DNSH;DNSH;DNSH;DNSH
+Manufacturing;Manufacture of plastics in primary form;Substantial contribution;x;;x;DNSH;DNSH;DNSH;DNSH;DNSH
+Electricity, gas, steam and air conditioning supply;Production of Electricity from Solar PV;Substantial contribution;x;;;DNSH;;DNSH;;DNSH
+Electricity, gas, steam and air conditioning supply;Production of Electricity from Concentrated Solar Power;Substantial contribution;x;;;DNSH;DNSH;DNSH;;DNSH
+Electricity, gas, steam and air conditioning supply;Production of Electricity from Wind Power;Substantial contribution;x;;;DNSH;DNSH;DNSH;;DNSH
+Electricity, gas, steam and air conditioning supply;Production of Electricity from Ocean Energy;Substantial contribution;x;;;DNSH;;DNSH;DNSH;DNSH
+Electricity, gas, steam and air conditioning supply;Production of Electricity from Hydropower;Substantial contribution;x;;x;DNSH;DNSH;;DNSH;DNSH
+Electricity, gas, steam and air conditioning supply;Production of Electricity from Geothermal;Substantial contribution;x;;x;DNSH;DNSH;;DNSH;DNSH
+Electricity, gas, steam and air conditioning supply;Production of Electricity from Gas (not exclusive to natural gas) ;Substantial contribution;x;;x;DNSH;DNSH;;DNSH;DNSH
+Electricity, gas, steam and air conditioning supply;Production of Electricity from Bioenergy (Biomass, Biogas and Biofuels);Substantial contribution;x;;x;DNSH;DNSH;DNSH;DNSH;DNSH
+Electricity, gas, steam and air conditioning supply;Transmission and Distribution of Electricity;Substantial contribution;x;x;;DNSH;DNSH;DNSH;DNSH;DNSH
+Electricity, gas, steam and air conditioning supply;Storage of Electricity;Substantial contribution;;x;;DNSH;;DNSH;;DNSH
+Electricity, gas, steam and air conditioning supply;Storage of Thermal Energy;Substantial contribution;;x;;DNSH;;DNSH;;DNSH
+Electricity, gas, steam and air conditioning supply;Storage of Hydrogen;Substantial contribution;;x;;DNSH;;DNSH;;DNSH
+Electricity, gas, steam and air conditioning supply;Manufacture of Biogas or Biofuels;Substantial contribution;x;;x;DNSH;DNSH;DNSH;DNSH;DNSH
+Electricity, gas, steam and air conditioning supply;Retrofit of Gas Transmission and Distribution Networks;Substantial contribution;x;;;DNSH;DNSH;DNSH;DNSH;DNSH
+Electricity, gas, steam and air conditioning supply;District Heating/Cooling Distribution;Substantial contribution;x;;;DNSH;DNSH;;DNSH;DNSH
+Electricity, gas, steam and air conditioning supply;Installation and operation of Electric Heat Pumps;Substantial contribution;x;;;DNSH;DNSH;;;
+Electricity, gas, steam and air conditioning supply;Cogeneration of Heat/cool and Power from Concentrated Solar Power ;Substantial contribution;x;;;DNSH;DNSH;DNSH;;DNSH
+Electricity, gas, steam and air conditioning supply;Cogeneration of Heat/Cool and Power from Geothermal Energy;Substantial contribution;x;;x;DNSH;DNSH;;DNSH;DNSH
+Electricity, gas, steam and air conditioning supply;Cogeneration of Heat/Cool and Power from Gas (not exclusive to natural gas);Substantial contribution;x;;x;DNSH;DNSH;DNSH;DNSH;DNSH
+Electricity, gas, steam and air conditioning supply;Cogeneration of Heat/Cool and Power from Bioenergy (Biomass, Biogas, Biofuels);Substantial contribution;x;;x;DNSH;DNSH;DNSH;DNSH;DNSH
+Electricity, gas, steam and air conditioning supply;Production of Heat/cool from Concentrated Solar Power ;Substantial contribution;x;;;DNSH;DNSH;DNSH;;DNSH
+Electricity, gas, steam and air conditioning supply;Production of Heat/cool from Geothermal ;Substantial contribution;x;;x;DNSH;DNSH;;DNSH;DNSH
+Electricity, gas, steam and air conditioning supply;Production of Heat/Cool from Gas (not exclusive to natural gas);Substantial contribution;x;;x;DNSH;DNSH;DNSH;DNSH;DNSH
+Electricity, gas, steam and air conditioning supply;Production of Heat/cool from Bioenergy (Biomass, Biogas, Biofuels);Substantial contribution;x;;x;DNSH;DNSH;DNSH;DNSH;DNSH
+Electricity, gas, steam and air conditioning supply;Production of Heat/cool using Waste Heat;Substantial contribution;x;;;DNSH;;DNSH;DNSH;DNSH
+Water, sewerage, waste and remediation;Water collection, treatment and supply;Substantial contribution;x;;;DNSH;DNSH;;;DNSH
+Water, sewerage, waste and remediation;Centralized wastewater treatment;Substantial contribution;x;;;DNSH;;;DNSH;DNSH
+Water, sewerage, waste and remediation;Anaerobic Digestion of Sewage sludge;Substantial contribution;x;;;DNSH;;;DNSH;
+Water, sewerage, waste and remediation;Separate collection and transport of non-hazardous waste in source segregated fractions;Substantial contribution;x;;;DNSH;;DNSH;DNSH;
+Water, sewerage, waste and remediation;Anaerobic digestion of bio-waste;Substantial contribution;x;;;DNSH;;;DNSH;
+Water, sewerage, waste and remediation;Composting of bio-waste;Substantial contribution;x;;;DNSH;;;DNSH;
+Water, sewerage, waste and remediation;Material recovery from non-hazardous waste;Substantial contribution;x;;;DNSH;;;;
+Water, sewerage, waste and remediation;Landfill gas capture and utilization;Substantial contribution;x;;;DNSH;;;DNSH;
+Water, sewerage, waste and remediation;Direct Air Capture of CO2;Substantial contribution;;x;;DNSH;DNSH;;DNSH;DNSH
+Water, sewerage, waste and remediation;Capture of anthropogenic emissions;Substantial contribution;;x;;DNSH;DNSH;DNSH;DNSH;DNSH
+Water, sewerage, waste and remediation;Transport of CO2;Substantial contribution;;x;;DNSH;DNSH;;DNSH;DNSH
+Water, sewerage, waste and remediation;Permanent Sequestration of captured CO2;Substantial contribution;x;;;DNSH;DNSH;;DNSH;DNSH
+Transportation and storage;Passenger Rail Transport (Interurban);Substantial contribution;x;;x;DNSH;;DNSH;DNSH;
+Transportation and storage;Freight Rail Transport;Substantial contribution;x;;x;DNSH;;DNSH;DNSH;
+Transportation and storage;Public transport;Substantial contribution;x;;x;DNSH;;DNSH;DNSH;
+Transportation and storage;Infrastructure for low carbon transport (land transport);Substantial contribution;;x;;DNSH;DNSH;DNSH;DNSH;DNSH
+Transportation and storage;Passenger cars and commercial vehicles;Substantial contribution;x;;x;DNSH;;DNSH;DNSH;
+Transportation and storage;Freight transport services by road;Substantial contribution;x;;x;DNSH;;DNSH;DNSH;
+Transportation and storage;Interurban scheduled road transport;Substantial contribution;x;;x;DNSH;;DNSH;DNSH;
+Transportation and storage;Inland passenger water transport;Substantial contribution;x;;x;DNSH;DNSH;DNSH;DNSH;DNSH
+Transportation and storage;Inland freight water transport;Substantial contribution;x;;x;DNSH;DNSH;DNSH;DNSH;DNSH
+Transportation and storage;Infrastructure for low carbon transport (water transport);Substantial contribution;;x;;DNSH;DNSH;DNSH;DNSH;DNSH
+Buildings;Construction of new buildings;Substantial contribution;x;;;DNSH;DNSH;DNSH;DNSH;DNSH
+Buildings;Building renovation;Substantial contribution;x;;x;DNSH;DNSH;DNSH;DNSH;DNSH
+Buildings;Individual renovation measures, installation of renewables on-site and professional, scientific and technical activities;Substantial contribution;;x;;DNSH;;;DNSH;
+Buildings;Acquisition and ownership of buildings;Substantial contribution;x;;x;DNSH;;;DNSH;DNSH
+ICT;Data processing, hosting and related activities;Substantial contribution;x;;x;DNSH;;DNSH;DNSH;
+ICT;Data-driven climate change monitoring solutions;Substantial contribution;;x;;DNSH;;;;

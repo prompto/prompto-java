@@ -150,4 +150,38 @@ public class TestCSVReader {
 		}
 		
 	}
+	
+	@Test
+	public void testMitigationSummary() throws Exception {
+		long docsCount = 0;
+		try(InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("MitigationSummary.csv")) {
+			try(InputStreamReader reader = new InputStreamReader(input)) {
+				Iterator<PromptoDocument<String, Object>> iter = CSVReader.iterator(reader, null, ';', '"');
+				while(iter.hasNext()) {
+					PromptoDocument<String, Object> doc = iter.next();
+					assertNotNull(doc.get("Activity"));
+					docsCount += 1;
+				}
+			}
+		}
+		assertEquals(72, docsCount);
+	}
+	
+	@Test
+	public void testMitigationFullData() throws Exception {
+		long docsCount = 0;
+		try(InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("MitigationFullData.csv")) {
+			try(InputStreamReader reader = new InputStreamReader(input)) {
+				Iterator<PromptoDocument<String, Object>> iter = CSVReader.iterator(reader, null, ';', '"');
+				while(iter.hasNext()) {
+					PromptoDocument<String, Object> doc = iter.next();
+					assertNotNull(doc.get("Activity"));
+					docsCount += 1;
+				}
+			}
+		}
+		assertEquals(72, docsCount);
+	}
+
+
 }
