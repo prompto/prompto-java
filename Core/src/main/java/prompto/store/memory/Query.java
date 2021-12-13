@@ -12,6 +12,7 @@ import prompto.store.IQueryBuilder.MatchOp;
 public class Query implements IQuery {
 
 	Stack<IPredicate> predicates = new Stack<>();
+	List<String> projection = null;
 	List<IOrderBy> orderBys = new ArrayList<>();
 	Long first; // 1 based
 	Long last; // 1 based
@@ -68,6 +69,10 @@ public class Query implements IQuery {
 
 	public void not() {
 		predicates.push(new NotPredicate(predicates.pop()));
+	}
+
+	public void setProjection(List<String> attributeNames) {
+		projection = attributeNames;
 	}
 
 

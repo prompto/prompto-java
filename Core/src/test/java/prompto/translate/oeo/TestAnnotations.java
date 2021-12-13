@@ -7,6 +7,11 @@ import prompto.parser.o.BaseOParserTest;
 public class TestAnnotations extends BaseOParserTest {
 
 	@Test
+	public void testReactState1() throws Exception {
+		compareResourceOEO("annotations/ReactState1.poc");
+	}
+
+	@Test
 	public void testReactWidgetProps1() throws Exception {
 		compareResourceOEO("annotations/ReactWidgetProps1.poc");
 	}

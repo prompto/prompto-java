@@ -1,6 +1,6 @@
 package prompto.store;
 
-
+import java.util.List;
 
 public interface IQueryBuilder {
 
@@ -17,7 +17,7 @@ public interface IQueryBuilder {
 	}
 	
 	// create atomic predicates
-	<T> IQueryBuilder verify(AttributeInfo info, MatchOp match, T fieldValue);
+	<T> IQueryBuilder verify(AttributeInfo info, MatchOp match, T value);
 	// the below make the assumption that the atomic predicates are available from a stack
 	IQueryBuilder and();
 	IQueryBuilder or();
@@ -25,6 +25,8 @@ public interface IQueryBuilder {
 	// 1 based range limits
 	IQueryBuilder first(Long first); 
 	IQueryBuilder last(Long last);
+	// projecting
+	IQueryBuilder project(List<String> attributeNames);
 	// ordering
 	IQueryBuilder orderBy(AttributeInfo attribute, boolean descending);
 	// return the built IQuery object

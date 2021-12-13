@@ -97,6 +97,11 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testFetchInclude() throws Exception {
+		compareResourceEME("store/fetchInclude.pec");
+	}
+
+	@Test
 	public void testFetchLesser() throws Exception {
 		compareResourceEME("store/fetchLesser.pec");
 	}

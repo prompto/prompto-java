@@ -166,6 +166,10 @@ public class MemStoreMirror {
 		public void setLast(long last) {
 			builder.last(last);
 		}
+		
+		public void project(List<String> names) {
+			builder.project(names);
+		}
 
 	}
 	

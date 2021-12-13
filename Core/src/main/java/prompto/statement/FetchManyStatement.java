@@ -15,14 +15,15 @@ import prompto.type.CategoryType;
 import prompto.type.CursorType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
+import prompto.utils.IdentifierList;
 import prompto.value.IValue;
 
 public class FetchManyStatement extends FetchManyExpression implements IStatement {
 
 	ThenWith thenWith;
 	
-	public FetchManyStatement(CategoryType category, IExpression start, IExpression stop, IExpression predicate, OrderByClauseList orderBy, ThenWith thenWith) {
-		super(category, start, stop, predicate, orderBy);
+	public FetchManyStatement(CategoryType category, IExpression start, IExpression stop, IExpression predicate, IdentifierList include, OrderByClauseList orderBy, ThenWith thenWith) {
+		super(category, start, stop, predicate, include, orderBy);
 		this.thenWith = thenWith;
 	}
 
@@ -40,7 +41,7 @@ public class FetchManyStatement extends FetchManyExpression implements IStatemen
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		return thenWith.compile(context, method, flags, new FetchManyExpression(type, first, last, predicate, orderBy));
+		return thenWith.compile(context, method, flags, new FetchManyExpression(type, first, last, predicate, include, orderBy));
 	}
 	
 	@Override

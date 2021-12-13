@@ -1,8 +1,14 @@
 package prompto.expression;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
+import prompto.compiler.IConstantOperand;
+import prompto.compiler.IOperand;
 import prompto.compiler.InterfaceConstant;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
@@ -31,6 +37,7 @@ import prompto.type.AnyType;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
+import prompto.utils.IdentifierList;
 import prompto.value.IValue;
 import prompto.value.NullValue;
 
@@ -38,10 +45,12 @@ public class FetchOneExpression extends CodeSection implements IFetchExpression 
 
 	protected CategoryType type;
 	protected IExpression predicate;
+	protected IdentifierList include;
 	
-	public FetchOneExpression(CategoryType type, IExpression predicate) {
+	public FetchOneExpression(CategoryType type, IExpression predicate, IdentifierList include) {
 		this.type = type;
 		this.predicate = predicate;
+		this.include = include;
 	}
 	
 	@Override
@@ -73,6 +82,10 @@ public class FetchOneExpression extends CodeSection implements IFetchExpression 
 			}
 			writer.append("where ");
 			predicate.toDialect(writer);
+			if(include != null) {
+				writer.append(" include ");
+				include.toDialect(writer, true);
+			}
 			break;
 		case O:
 			writer.append("fetch one ");
@@ -84,6 +97,11 @@ public class FetchOneExpression extends CodeSection implements IFetchExpression 
 			writer.append("where (");
 			predicate.toDialect(writer);
 			writer.append(")");
+			if(include != null) {
+				writer.append(" include (");
+				include.toDialect(writer, false);
+				writer.append(")");
+			}
 			break;
 		case M:
 			writer.append("fetch one ");
@@ -93,6 +111,10 @@ public class FetchOneExpression extends CodeSection implements IFetchExpression 
 			}
 			writer.append("where ");
 			predicate.toDialect(writer);
+			if(include != null) {
+				writer.append(" include ");
+				include.toDialect(writer, true);
+			}
 			break;
 		}
 	}
@@ -111,6 +133,10 @@ public class FetchOneExpression extends CodeSection implements IFetchExpression 
 			((IPredicateExpression)predicate).checkQuery(context);
 		else
 			context.getProblemListener().reportIllegalPredicate(this, predicate);
+		if(include != null) {
+			for(Identifier id : include)
+				checkAttribute(context, id);
+		}
 		return type!=null ? type : AnyType.instance();
 	}
 	
@@ -149,6 +175,8 @@ public class FetchOneExpression extends CodeSection implements IFetchExpression 
 		}
 		if(type!=null && predicate!=null)
 			builder.and();
+		if(include!=null)
+			builder.project(include.stream().map(Identifier::toString).collect(Collectors.toList()));
 		return builder.build();
 	}
 
@@ -156,6 +184,7 @@ public class FetchOneExpression extends CodeSection implements IFetchExpression 
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		compileNewQueryBuilder(context, method, flags); // -> IStore, IQueryBuilder
 		compilePredicates(context, method, flags); // -> IStore, IQueryBuilder
+		compileProject(context, method, flags); // -> IStore, IQueryBuilder
 		compileBuildQuery(context, method, flags); // -> IStore, IQuery
 		compileFetchOne(context, method, flags); // -> IStored
 		return compileInstantiation(context, method, flags);
@@ -201,7 +230,23 @@ public class FetchOneExpression extends CodeSection implements IFetchExpression 
 			method.addInstruction(Opcode.INVOKEINTERFACE, i);
 		}
 	}
-
+	
+	protected void compileProject(Context context, MethodInfo method, Flags flags) {
+		if(include != null) {
+			CompilerUtils.compileNewInstance(method, ArrayList.class);
+			for(Identifier id : include) {
+				method.addInstruction(Opcode.DUP); // need to keep a reference to the list on top of stack
+				IConstantOperand operand = new StringConstant(id.toString());
+				method.addInstruction(Opcode.LDC_W, operand);
+				IOperand c = new MethodConstant(ArrayList.class, "add", Object.class, boolean.class);
+				method.addInstruction(Opcode.INVOKEVIRTUAL, c);
+				method.addInstruction(Opcode.POP); // consume the returned boolean		
+			}
+			InterfaceConstant i = new InterfaceConstant(IQueryBuilder.class, "project", List.class, IQueryBuilder.class);
+			method.addInstruction(Opcode.INVOKEINTERFACE, i);
+		}
+	}
+	
 	protected void compileNewQueryBuilder(Context context, MethodInfo method, Flags flags) {
 		// need the data store
 		MethodConstant m = new MethodConstant(DataStore.class, "getInstance", IStore.class);
@@ -251,6 +296,12 @@ public class FetchOneExpression extends CodeSection implements IFetchExpression 
 	        transpiler.append("builder.verify(new AttributeInfo('category', TypeFamily.TEXT, true, null), MatchOp.HAS, '").append(this.type.getTypeName()).append("');").newLine();
 	    if (this.predicate != null)
 	        this.predicate.transpileQuery(transpiler, "builder");
+	    if (this.include != null) {
+	    	transpiler.append("builder.project([");
+	    	this.include.forEach(id->transpiler.append('"').append(id.toString()).append('"').append(", "));
+	    	transpiler.trimLast(", ".length());
+	    	transpiler.append("]);").newLine();
+	    }
 	    if (this.type != null && this.predicate != null)
 	        transpiler.append("builder.and();").newLine();
 	}

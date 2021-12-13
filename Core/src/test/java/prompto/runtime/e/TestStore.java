@@ -290,6 +290,21 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedFetchInclude() throws Exception {
+		checkInterpretedOutput("store/fetchInclude.pec");
+	}
+
+	@Test
+	public void testCompiledFetchInclude() throws Exception {
+		checkCompiledOutput("store/fetchInclude.pec");
+	}
+
+	@Test
+	public void testTranspiledFetchInclude() throws Exception {
+		checkTranspiledOutput("store/fetchInclude.pec");
+	}
+
+	@Test
 	public void testInterpretedFetchLesser() throws Exception {
 		checkInterpretedOutput("store/fetchLesser.pec");
 	}

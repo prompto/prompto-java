@@ -1,5 +1,7 @@
 package prompto.expression;
 
+import java.util.stream.Collectors;
+
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
 import prompto.compiler.InterfaceConstant;
@@ -28,6 +30,7 @@ import prompto.type.CategoryType;
 import prompto.type.CursorType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
+import prompto.utils.IdentifierList;
 import prompto.value.CursorValue;
 import prompto.value.IValue;
 
@@ -38,8 +41,8 @@ public class FetchManyExpression extends FetchOneExpression {
 	protected IExpression last;
 	protected OrderByClauseList orderBy;
 	
-	public FetchManyExpression(CategoryType type, IExpression first, IExpression last, IExpression filter, OrderByClauseList orderBy) {
-		super(type, filter);
+	public FetchManyExpression(CategoryType type, IExpression first, IExpression last, IExpression predicate, IdentifierList include, OrderByClauseList orderBy) {
+		super(type, predicate, include);
 		this.first = first;
 		this.last = last;
 		this.orderBy = orderBy;
@@ -233,6 +236,8 @@ public class FetchManyExpression extends FetchOneExpression {
 			builder.and();
 		builder.first(interpretLimit(context, first));
 		builder.last(interpretLimit(context, last));
+		if(include!=null)
+			builder.project(include.stream().map(Object::toString).collect(Collectors.toList()));
 		if(orderBy!=null)
 			orderBy.interpretQuery(context, builder);
 		return builder.build();
@@ -252,6 +257,7 @@ public class FetchManyExpression extends FetchOneExpression {
 		compileNewQueryBuilder(context, method, flags); // -> IStore, IQueryBuilder
 		compilePredicates(context, method, flags); // -> IStore, IQueryBuilder
 		compileLimits(context, method, flags); // -> IStore, IQueryBuilder
+		compileProject(context, method, flags); // -> IStore, IQueryBuilder
 		compileOrderBy(context, method, flags); // -> IStore, IQueryBuilder
 		compileBuildQuery(context, method, flags); // -> IStore, IQuery
 		compileFetchMany(context, method, flags); // -> IStored
@@ -340,6 +346,12 @@ public class FetchManyExpression extends FetchOneExpression {
 	        transpiler.append("builder.setLast(");
 	        this.last.transpile(transpiler);
 	        transpiler.append(");").newLine();
+	    }
+	    if (this.include != null) {
+	    	transpiler.append("builder.project([");
+	    	this.include.forEach(id->transpiler.append('"').append(id.toString()).append('"').append(", "));
+	    	transpiler.trimLast(", ".length());
+	    	transpiler.append("]);").newLine();
 	    }
 	    if (this.orderBy  != null)
 	        this.orderBy.transpileQuery(transpiler, "builder");

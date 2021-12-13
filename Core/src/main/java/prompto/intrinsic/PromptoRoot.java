@@ -214,6 +214,7 @@ public abstract class PromptoRoot extends PromptoStorableBase implements IMutabl
 		// sb.append(System.identityHashCode(this));
 		// sb.append(", ");
 		List<Field> fields = collectFields();
+		fields = fields.stream().filter(field -> getFieldValue(this, field) != null).collect(Collectors.toList());
 		fields.forEach(field-> {
 			sb.append(field.getName());
 			sb.append(':');

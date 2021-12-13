@@ -13,14 +13,15 @@ import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
+import prompto.utils.IdentifierList;
 import prompto.value.IValue;
 
 public class FetchOneStatement extends FetchOneExpression implements IStatement {
 
 	ThenWith thenWith;
 	
-	public FetchOneStatement(CategoryType category, IExpression filter, ThenWith thenWith) {
-		super(category, filter);
+	public FetchOneStatement(CategoryType category, IExpression predicate, IdentifierList include, ThenWith thenWith) {
+		super(category, predicate, include);
 		this.thenWith = thenWith;
 	}
 	
@@ -38,7 +39,7 @@ public class FetchOneStatement extends FetchOneExpression implements IStatement 
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		return thenWith.compile(context, method, flags, new FetchOneExpression(type, predicate));
+		return thenWith.compile(context, method, flags, new FetchOneExpression(type, predicate, include));
 	}
 
 	

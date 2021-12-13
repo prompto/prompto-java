@@ -76,6 +76,9 @@ $Root.prototype.getAttributeNames = function() {
 
 $Root.prototype.toString = function() {
     var names = this.getAttributeNames();
+	names = names.filter(function (name) {
+        return this[name] !== null;
+    }, this);
     var vals = names.map(function (name) {
         return name + ':' + this[name];
     }, this);

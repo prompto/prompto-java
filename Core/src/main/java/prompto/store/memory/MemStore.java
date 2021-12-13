@@ -201,7 +201,7 @@ public final class MemStore implements IStore {
 		Query q = (Query)query;
 		for(StoredDocument doc : instances.values()) {
 			if(doc.matches(q.getPredicate()))
-				return doc;
+				return q.projection == null ? doc : doc.project(q.projection);
 		}
 		return null;
 	}
@@ -211,6 +211,7 @@ public final class MemStore implements IStore {
 		Query q = (Query)query;
 		final List<StoredDocument> allDocs = fetchManyDocs(q);
 		final List<StoredDocument> slicedDocs = slice(q, allDocs);
+		
 		return new IStoredIterable() {
 			@Override
 			public long count() {
@@ -230,8 +231,10 @@ public final class MemStore implements IStore {
 	
 	private List<StoredDocument> fetchManyDocs(Query query) throws PromptoError {
 		List<StoredDocument> docs = filterDocs(query==null ? null : query.getPredicate());
-		if(query!=null)
+		if(query!=null && query.getOrdering()!=null)
 			docs = sort(query.getOrdering(), docs);
+		if(query!=null && query.projection != null)
+			docs = docs.stream().map(doc -> doc.project(query.projection)).collect(Collectors.toList());
 		return docs;
 	}
 
@@ -528,6 +531,16 @@ public final class MemStore implements IStore {
 			names.remove("dbId");
 			return names;
 		}
+		
+		public StoredDocument project(List<String> fieldNames) {
+			Map<String, Object> remaining = new HashMap<>();
+			fieldNames.forEach(name -> remaining.put(name, getData(name)));
+			remaining.put("category", getData("category"));
+			remaining.put("dbId", getData("dbId"));
+			return new StoredDocument(categories, remaining);
+		}
+
+
 		
 	}
 	

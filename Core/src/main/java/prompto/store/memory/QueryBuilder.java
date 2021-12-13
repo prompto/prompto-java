@@ -1,5 +1,7 @@
 package prompto.store.memory;
 
+import java.util.List;
+
 import prompto.store.AttributeInfo;
 import prompto.store.IQuery;
 import prompto.store.IQueryBuilder;
@@ -41,6 +43,13 @@ public class QueryBuilder implements IQueryBuilder {
 	@Override
 	public QueryBuilder last(Long last) {
 		query.setLast(last);
+		return this;
+	}
+
+	
+	@Override
+	public IQueryBuilder project(List<String> attributeNames) {
+		query.setProjection(attributeNames);
 		return this;
 	}
 

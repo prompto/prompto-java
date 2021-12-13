@@ -1412,16 +1412,18 @@ public class MPromptoBuilder extends MParserBaseListener {
 	@Override
 	public void exitFetchOne(FetchOneContext ctx) {
 		CategoryType category = getNodeValue(ctx.typ);
-		IExpression filter = getNodeValue(ctx.predicate);
-		setNodeValue(ctx, new FetchOneExpression(category, filter));
+		IExpression predicate = getNodeValue(ctx.predicate);
+		IdentifierList include = getNodeValue(ctx.include);
+		setNodeValue(ctx, new FetchOneExpression(category, predicate, include));
 	}
 	
 	@Override
 	public void exitFetchOneAsync(FetchOneAsyncContext ctx) {
 		CategoryType category = getNodeValue(ctx.typ);
-		IExpression filter = getNodeValue(ctx.predicate);
+		IExpression predicate = getNodeValue(ctx.predicate);
+		IdentifierList include = getNodeValue(ctx.include);
 		ThenWith thenWith = ThenWith.orEmpty(getNodeValue(ctx.then()));
-		setNodeValue(ctx, new FetchOneStatement(category, filter, thenWith));
+		setNodeValue(ctx, new FetchOneStatement(category, predicate, include, thenWith));
 	}
 
 	@Override
@@ -1429,9 +1431,10 @@ public class MPromptoBuilder extends MParserBaseListener {
 		CategoryType category = getNodeValue(ctx.typ);
 		IExpression start = getNodeValue(ctx.xstart);
 		IExpression stop = getNodeValue(ctx.xstop);
-		IExpression filter = getNodeValue(ctx.predicate);
-		OrderByClauseList orderBy = getNodeValue(ctx.orderby);
-		setNodeValue(ctx, new FetchManyExpression(category, start, stop, filter, orderBy));
+		IExpression predicate = getNodeValue(ctx.predicate);
+		IdentifierList include = getNodeValue(ctx.include);
+	OrderByClauseList orderBy = getNodeValue(ctx.orderby);
+		setNodeValue(ctx, new FetchManyExpression(category, start, stop, predicate, include, orderBy));
 	}
 	
 	
@@ -1441,9 +1444,10 @@ public class MPromptoBuilder extends MParserBaseListener {
 		IExpression start = getNodeValue(ctx.xstart);
 		IExpression stop = getNodeValue(ctx.xstop);
 		IExpression predicate = getNodeValue(ctx.predicate);
+		IdentifierList include = getNodeValue(ctx.include);
 		OrderByClauseList orderBy = getNodeValue(ctx.orderby);
 		ThenWith thenWith = ThenWith.orEmpty(getNodeValue(ctx.then()));
-		setNodeValue(ctx, new FetchManyStatement(category, start, stop, predicate, orderBy, thenWith));
+		setNodeValue(ctx, new FetchManyStatement(category, start, stop, predicate, include, orderBy, thenWith));
 	}
 
 	@Override
@@ -1557,6 +1561,14 @@ public class MPromptoBuilder extends MParserBaseListener {
 		setNodeValue(ctx, ImageType.instance());
 	}
 	
+	@Override
+	public void exitInclude_list(Include_listContext ctx) {
+		IdentifierList list = new IdentifierList();
+		for(Variable_identifierContext ctx_ : ctx.variable_identifier())
+			list.add(getNodeValue(ctx_));
+		setNodeValue(ctx, list);
+	}
+
 	@Override
 	public void exitInExpression(InExpressionContext ctx) {
 		IExpression left = getNodeValue(ctx.left);
