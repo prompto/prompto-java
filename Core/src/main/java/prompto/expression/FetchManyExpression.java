@@ -110,6 +110,10 @@ public class FetchManyExpression extends FetchOneExpression {
 			predicate.toDialect(writer);
 			writer.append(" ");
 		}
+		if(include != null) {
+			writer.append(" include ");
+			include.toDialect(writer, false);
+		}
 		if(orderBy!=null)
 			orderBy.toDialect(writer);
 	}
@@ -136,6 +140,11 @@ public class FetchManyExpression extends FetchOneExpression {
 			predicate.toDialect(writer);
 			writer.append(") ");
 		}
+		if(include != null) {
+			writer.append(" include (");
+			include.toDialect(writer, true);
+			writer.append(") ");
+		}
 		if(orderBy!=null)
 			orderBy.toDialect(writer);
 	}
@@ -158,6 +167,10 @@ public class FetchManyExpression extends FetchOneExpression {
 		if(predicate!=null) {
 			writer.append("where ");
 			predicate.toDialect(writer);
+		}
+		if(include != null) {
+			writer.append(" include ");
+			include.toDialect(writer, true);
 		}
 		if(orderBy!=null) {
 			writer.append(" ");

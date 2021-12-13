@@ -113,7 +113,7 @@ public class FetchOneExpression extends CodeSection implements IFetchExpression 
 			predicate.toDialect(writer);
 			if(include != null) {
 				writer.append(" include ");
-				include.toDialect(writer, true);
+				include.toDialect(writer, false);
 			}
 			break;
 		}
