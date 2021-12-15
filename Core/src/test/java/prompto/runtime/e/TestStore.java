@@ -35,6 +35,21 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedAsyncFetchManyInclude() throws Exception {
+		checkInterpretedOutput("store/asyncFetchManyInclude.pec");
+	}
+
+	@Test
+	public void testCompiledAsyncFetchManyInclude() throws Exception {
+		checkCompiledOutput("store/asyncFetchManyInclude.pec");
+	}
+
+	@Test
+	public void testTranspiledAsyncFetchManyInclude() throws Exception {
+		checkTranspiledOutput("store/asyncFetchManyInclude.pec");
+	}
+
+	@Test
 	public void testInterpretedAsyncFetchOne() throws Exception {
 		checkInterpretedOutput("store/asyncFetchOne.pec");
 	}
@@ -47,6 +62,21 @@ public class TestStore extends BaseEParserTest {
 	@Test
 	public void testTranspiledAsyncFetchOne() throws Exception {
 		checkTranspiledOutput("store/asyncFetchOne.pec");
+	}
+
+	@Test
+	public void testInterpretedAsyncFetchOneInclude() throws Exception {
+		checkInterpretedOutput("store/asyncFetchOneInclude.pec");
+	}
+
+	@Test
+	public void testCompiledAsyncFetchOneInclude() throws Exception {
+		checkCompiledOutput("store/asyncFetchOneInclude.pec");
+	}
+
+	@Test
+	public void testTranspiledAsyncFetchOneInclude() throws Exception {
+		checkTranspiledOutput("store/asyncFetchOneInclude.pec");
 	}
 
 	@Test
@@ -290,21 +320,6 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
-	public void testInterpretedFetchInclude() throws Exception {
-		checkInterpretedOutput("store/fetchInclude.pec");
-	}
-
-	@Test
-	public void testCompiledFetchInclude() throws Exception {
-		checkCompiledOutput("store/fetchInclude.pec");
-	}
-
-	@Test
-	public void testTranspiledFetchInclude() throws Exception {
-		checkTranspiledOutput("store/fetchInclude.pec");
-	}
-
-	@Test
 	public void testInterpretedFetchLesser() throws Exception {
 		checkInterpretedOutput("store/fetchLesser.pec");
 	}
@@ -332,6 +347,21 @@ public class TestStore extends BaseEParserTest {
 	@Test
 	public void testTranspiledFetchLesserEqual() throws Exception {
 		checkTranspiledOutput("store/fetchLesserEqual.pec");
+	}
+
+	@Test
+	public void testInterpretedFetchManyInclude() throws Exception {
+		checkInterpretedOutput("store/fetchManyInclude.pec");
+	}
+
+	@Test
+	public void testCompiledFetchManyInclude() throws Exception {
+		checkCompiledOutput("store/fetchManyInclude.pec");
+	}
+
+	@Test
+	public void testTranspiledFetchManyInclude() throws Exception {
+		checkTranspiledOutput("store/fetchManyInclude.pec");
 	}
 
 	@Test
@@ -392,6 +422,21 @@ public class TestStore extends BaseEParserTest {
 	@Test
 	public void testTranspiledFetchNotIn() throws Exception {
 		checkTranspiledOutput("store/fetchNotIn.pec");
+	}
+
+	@Test
+	public void testInterpretedFetchOneInclude() throws Exception {
+		checkInterpretedOutput("store/fetchOneInclude.pec");
+	}
+
+	@Test
+	public void testCompiledFetchOneInclude() throws Exception {
+		checkCompiledOutput("store/fetchOneInclude.pec");
+	}
+
+	@Test
+	public void testTranspiledFetchOneInclude() throws Exception {
+		checkTranspiledOutput("store/fetchOneInclude.pec");
 	}
 
 	@Test

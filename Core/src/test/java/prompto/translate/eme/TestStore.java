@@ -12,8 +12,18 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testAsyncFetchManyInclude() throws Exception {
+		compareResourceEME("store/asyncFetchManyInclude.pec");
+	}
+
+	@Test
 	public void testAsyncFetchOne() throws Exception {
 		compareResourceEME("store/asyncFetchOne.pec");
+	}
+
+	@Test
+	public void testAsyncFetchOneInclude() throws Exception {
+		compareResourceEME("store/asyncFetchOneInclude.pec");
 	}
 
 	@Test
@@ -97,11 +107,6 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
-	public void testFetchInclude() throws Exception {
-		compareResourceEME("store/fetchInclude.pec");
-	}
-
-	@Test
 	public void testFetchLesser() throws Exception {
 		compareResourceEME("store/fetchLesser.pec");
 	}
@@ -109,6 +114,11 @@ public class TestStore extends BaseEParserTest {
 	@Test
 	public void testFetchLesserEqual() throws Exception {
 		compareResourceEME("store/fetchLesserEqual.pec");
+	}
+
+	@Test
+	public void testFetchManyInclude() throws Exception {
+		compareResourceEME("store/fetchManyInclude.pec");
 	}
 
 	@Test
@@ -129,6 +139,11 @@ public class TestStore extends BaseEParserTest {
 	@Test
 	public void testFetchNotIn() throws Exception {
 		compareResourceEME("store/fetchNotIn.pec");
+	}
+
+	@Test
+	public void testFetchOneInclude() throws Exception {
+		compareResourceEME("store/fetchOneInclude.pec");
 	}
 
 	@Test
