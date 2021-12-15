@@ -121,6 +121,27 @@ public class FetchOneExpression extends CodeSection implements IFetchExpression 
 	
 	@Override
 	public IType check(Context context) {
+		IType type = checkType(context);
+		checkPredicate(context);
+		checkInclude(context);
+		return type!=null ? type : AnyType.instance();
+	}
+	
+	protected void checkInclude(Context context) {
+		/*if(include != null) {
+			for(Identifier id : include)
+				checkAttribute(context, id);
+		}*/
+	}
+	
+	protected void checkPredicate(Context context) {
+		if(predicate instanceof IPredicateExpression)
+			((IPredicateExpression)predicate).checkQuery(context);
+		else
+			context.getProblemListener().reportIllegalPredicate(this, predicate);
+	}
+
+	protected IType checkType(Context context) {
 		if(type!=null) {
 			CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, type.getTypeNameId());
 			if(decl==null)
@@ -129,17 +150,9 @@ public class FetchOneExpression extends CodeSection implements IFetchExpression 
 				context.getProblemListener().reportNotStorable(this, type.getTypeName());
 			context = context.newInstanceContext(decl.getType(context), true);
 		}
-		if(predicate instanceof IPredicateExpression)
-			((IPredicateExpression)predicate).checkQuery(context);
-		else
-			context.getProblemListener().reportIllegalPredicate(this, predicate);
-		if(include != null) {
-			for(Identifier id : include)
-				checkAttribute(context, id);
-		}
 		return type!=null ? type : AnyType.instance();
 	}
-	
+
 	@Override
 	public Object fetchRaw(IStore store) {
 		IQuery query = buildFetchOneQuery(Context.newGlobalsContext(), store);

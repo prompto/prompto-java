@@ -181,6 +181,15 @@ public class FetchManyExpression extends FetchOneExpression {
 
 	@Override
 	public IType check(Context context) {
+		IType type = checkType(context);
+		checkPredicate(context);
+		checkInclude(context);
+		checkOrderBy(context);
+		checkSlice(context);
+		return type;
+	}
+	
+	protected IType checkType(Context context) {
 		IType type = this.type;
 		if(type==null)
 			type = AnyType.instance();
@@ -192,12 +201,18 @@ public class FetchManyExpression extends FetchOneExpression {
 				context.getProblemListener().reportNotStorable(this, type.getTypeName());
 			context = context.newInstanceContext(decl.getType(context), true);
 		}
-		checkPredicate(context);
-		checkOrderBy(context);
-		checkSlice(context);
 		return new CursorType(type);
 	}
 	
+	protected void checkPredicate(Context context) {
+		if(predicate==null)
+			return;
+		if(predicate instanceof IPredicateExpression)
+			((IPredicateExpression)predicate).checkQuery(context);
+		else
+			context.getProblemListener().reportIllegalPredicate(this, predicate);
+	}
+
 	private void checkSlice(Context context) {
 		// TODO Auto-generated method stub
 		
@@ -209,15 +224,6 @@ public class FetchManyExpression extends FetchOneExpression {
 		
 	}
 
-
-	private void checkPredicate(Context context) {
-		if(predicate==null)
-			return;
-		if(predicate instanceof IPredicateExpression)
-			((IPredicateExpression)predicate).checkQuery(context);
-		else
-			context.getProblemListener().reportIllegalPredicate(this, predicate);
-	}
 
 	@Override
 	public Object fetchRaw(IStore store) {
