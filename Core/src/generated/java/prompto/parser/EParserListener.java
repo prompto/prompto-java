@@ -1646,6 +1646,16 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitFetchManyAsync(EParser.FetchManyAsyncContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link EParser#include_list}.
+	 * @param ctx the parse tree
+	 */
+	void enterInclude_list(EParser.Include_listContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#include_list}.
+	 * @param ctx the parse tree
+	 */
+	void exitInclude_list(EParser.Include_listContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link EParser#then}.
 	 * @param ctx the parse tree
 	 */
@@ -3723,16 +3733,6 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitOrder_by(EParser.Order_byContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link EParser#include_list}.
-	 * @param ctx the parse tree
-	 */
-	void enterInclude_list(EParser.Include_listContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link EParser#include_list}.
-	 * @param ctx the parse tree
-	 */
-	void exitInclude_list(EParser.Include_listContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code OperatorPlus}
 	 * labeled alternative in {@link EParser#operator}.
