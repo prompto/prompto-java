@@ -143,6 +143,12 @@ public class DictType extends ContainerType {
 	}
 	
 	@Override
+	public void transpile(Transpiler transpiler) {
+		transpiler.append("Dictionary");
+	}
+
+	
+	@Override
 	public void declareAdd(Transpiler transpiler, IType other, boolean tryReverse, IExpression left, IExpression right, ICodeSection section) {
 	   if(other instanceof DictType && this.getItemType().equals(((DictType)other).getItemType())) {
 	        left.declare(transpiler);
