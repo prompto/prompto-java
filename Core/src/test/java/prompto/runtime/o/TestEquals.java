@@ -245,6 +245,21 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedIsADictionary() throws Exception {
+		checkInterpretedOutput("equals/isADictionary.poc");
+	}
+
+	@Test
+	public void testCompiledIsADictionary() throws Exception {
+		checkCompiledOutput("equals/isADictionary.poc");
+	}
+
+	@Test
+	public void testTranspiledIsADictionary() throws Exception {
+		checkTranspiledOutput("equals/isADictionary.poc");
+	}
+
+	@Test
 	public void testInterpretedIsBoolean() throws Exception {
 		checkInterpretedOutput("equals/isBoolean.poc");
 	}

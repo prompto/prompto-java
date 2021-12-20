@@ -82,6 +82,11 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testIsADictionary() throws Exception {
+		compareResourceOMO("equals/isADictionary.poc");
+	}
+
+	@Test
 	public void testIsBoolean() throws Exception {
 		compareResourceOMO("equals/isBoolean.poc");
 	}
