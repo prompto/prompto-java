@@ -27,6 +27,11 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testAsyncFetchOneNull() throws Exception {
+		compareResourceEOE("store/asyncFetchOneNull.pec");
+	}
+
+	@Test
 	public void testAsyncStore() throws Exception {
 		compareResourceEOE("store/asyncStore.pec");
 	}
