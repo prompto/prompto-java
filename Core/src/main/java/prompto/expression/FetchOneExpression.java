@@ -296,11 +296,12 @@ public class FetchOneExpression extends CodeSection implements IFetchExpression 
 	}
 
 	protected void transpileConvert(Transpiler transpiler, String varName) {
-	    transpiler.append("if($stored===null)").indent().append("return null;").dedent();
+		transpiler.append("var ").append(varName).append(" = null;").newLine();
+		transpiler.append("if($stored!==null) {").indent();
 	    transpiler.append("var $name = $stored.getData('category').slice(-1)[0];").newLine();
 	    transpiler.append("var $type = eval($name);").newLine();
-	    transpiler.append("var ").append(varName).append(" = new $type(null, {}, ").append(this.type!=null && this.type.isMutable()).append(");").newLine();
-	    transpiler.append(varName).append(".fromStored($stored);").newLine();
+	    transpiler.append(varName).append(" = new $type(null, {}, ").append(this.type!=null && this.type.isMutable()).append(");").newLine();
+	    transpiler.append(varName).append(".fromStored($stored);").dedent().append('}').newLine();
 	}
 
 	protected void transpileQuery(Transpiler transpiler) {
