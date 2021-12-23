@@ -112,6 +112,11 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
+	public void testListIndexOf() throws Exception {
+		compareResourceOMO("builtins/listIndexOf.poc");
+	}
+
+	@Test
 	public void testListJoin() throws Exception {
 		compareResourceOMO("builtins/listJoin.poc");
 	}

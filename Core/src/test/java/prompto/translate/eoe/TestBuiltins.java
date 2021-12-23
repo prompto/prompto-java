@@ -257,6 +257,11 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testListIndexOf() throws Exception {
+		compareResourceEOE("builtins/listIndexOf.pec");
+	}
+
+	@Test
 	public void testListJson() throws Exception {
 		compareResourceEOE("builtins/listJson.pec");
 	}

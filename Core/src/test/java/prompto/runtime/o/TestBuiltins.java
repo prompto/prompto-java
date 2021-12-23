@@ -305,6 +305,21 @@ public class TestBuiltins extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedListIndexOf() throws Exception {
+		checkInterpretedOutput("builtins/listIndexOf.poc");
+	}
+
+	@Test
+	public void testCompiledListIndexOf() throws Exception {
+		checkCompiledOutput("builtins/listIndexOf.poc");
+	}
+
+	@Test
+	public void testTranspiledListIndexOf() throws Exception {
+		checkTranspiledOutput("builtins/listIndexOf.poc");
+	}
+
+	@Test
 	public void testInterpretedListJoin() throws Exception {
 		checkInterpretedOutput("builtins/listJoin.poc");
 	}

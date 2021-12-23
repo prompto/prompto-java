@@ -740,6 +740,21 @@ public class TestBuiltins extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedListIndexOf() throws Exception {
+		checkInterpretedOutput("builtins/listIndexOf.pec");
+	}
+
+	@Test
+	public void testCompiledListIndexOf() throws Exception {
+		checkCompiledOutput("builtins/listIndexOf.pec");
+	}
+
+	@Test
+	public void testTranspiledListIndexOf() throws Exception {
+		checkTranspiledOutput("builtins/listIndexOf.pec");
+	}
+
+	@Test
 	public void testInterpretedListJson() throws Exception {
 		checkInterpretedOutput("builtins/listJson.pec");
 	}
