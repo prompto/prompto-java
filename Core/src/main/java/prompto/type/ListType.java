@@ -9,6 +9,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Descriptor;
 import prompto.compiler.Flags;
@@ -143,6 +144,8 @@ public class ListType extends ContainerType {
 		switch(id.toString()) {
 		case "toSet":
 			return new HashSet<>(Collections.singletonList(TO_SET_METHOD));
+		case "indexOf":
+			return new HashSet<>(Collections.singletonList(INDEX_OF_METHOD));
 		case "join":
 			return new HashSet<>(Collections.singletonList(JOIN_METHOD));
 		case "removeItem":
@@ -511,9 +514,52 @@ public class ListType extends ContainerType {
 
 	};
 
-	static IParameter ITEM_ARGUMENT = new CategoryParameter(IntegerType.instance(), new Identifier("item"));
+	static IParameter VALUE_PARAMETER = new CategoryParameter(AnyType.instance(), new Identifier("value"));
 
-	static final IMethodDeclaration REMOVE_ITEM_METHOD = new BuiltInMethodDeclaration("removeItem", ITEM_ARGUMENT) {
+	static final IMethodDeclaration INDEX_OF_METHOD = new BuiltInMethodDeclaration("indexOf", VALUE_PARAMETER) {
+		
+		@Override
+		public IValue interpret(Context context) throws PromptoError {
+			ListValue list = (ListValue)getValue(context);
+			IValue value = context.getValue(new Identifier("value"));
+			int idx = list.indexOf(value);
+			return idx < 0 ? NullValue.instance() : new IntegerValue(idx + 1);
+		};
+		
+		@Override
+		public IType check(Context context) {
+			return IntegerType.instance();
+		}
+		
+		@Override
+		public boolean hasCompileExactInstanceMember() {
+			return true;
+		}
+		
+		@Override
+		public ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
+			// push arguments on the stack
+			VALUE_PARAMETER.compileParameter(context, method, flags, arguments, true);
+			// call indexOf method
+			ClassConstant klass = new ClassConstant(PromptoList.class);
+			Descriptor.Method descriptor = new Descriptor.Method(new Type[] { Object.class }, Long.class);
+			MethodConstant iconstant = new MethodConstant(klass, "indexOfValue", descriptor);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, iconstant);
+			return new ResultInfo(Long.class);
+		}
+
+		@Override
+		public void transpileCall(Transpiler transpiler, ArgumentList arguments) {
+			transpiler.append("indexOfValue(");
+			arguments.getFirst().transpile(transpiler, this);
+			transpiler.append(")");
+		}
+					
+	};
+
+	static IParameter ITEM_PARAMETER = new CategoryParameter(IntegerType.instance(), new Identifier("item"));
+
+	static final IMethodDeclaration REMOVE_ITEM_METHOD = new BuiltInMethodDeclaration("removeItem", ITEM_PARAMETER) {
 		
 		@Override
 		public IValue interpret(Context context) throws PromptoError {
@@ -537,9 +583,7 @@ public class ListType extends ContainerType {
 					
 	};
 
-	static IParameter VALUE_ARGUMENT = new CategoryParameter(AnyType.instance(), new Identifier("value"));
-
-	static final IMethodDeclaration REMOVE_VALUE_METHOD = new BuiltInMethodDeclaration("removeValue", VALUE_ARGUMENT) {
+	static final IMethodDeclaration REMOVE_VALUE_METHOD = new BuiltInMethodDeclaration("removeValue", VALUE_PARAMETER) {
 
 		@Override
 		public IValue interpret(Context context) throws PromptoError {

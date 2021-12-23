@@ -21,12 +21,12 @@ public abstract class BuiltInMethodDeclaration extends BaseMethodDeclaration {
 		super(new Identifier(name), null, null);
 	}
 
-	public BuiltInMethodDeclaration(String name, IParameter argument) {
-		super(new Identifier(name), new ParameterList(argument), null);
+	public BuiltInMethodDeclaration(String name, IParameter parameter) {
+		super(new Identifier(name), new ParameterList(parameter), null);
 	}
 
-	public BuiltInMethodDeclaration(String name, IParameter ... arguments) {
-		super(new Identifier(name), new ParameterList(arguments), null);
+	public BuiltInMethodDeclaration(String name, IParameter ... parameters) {
+		super(new Identifier(name), new ParameterList(parameters), null);
 	}
 
 	@Override

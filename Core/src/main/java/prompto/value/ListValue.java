@@ -123,6 +123,10 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 		items.remove(value);
 	}
 
+	public int indexOf(IValue value) {
+		return items.indexOf(value);
+	}
+
 	@Override
 	public void setItem(Context context, IValue item, IValue value) {
 		if(!(item instanceof IntegerValue))

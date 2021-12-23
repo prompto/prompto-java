@@ -118,6 +118,14 @@ public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoLi
 			PromptoException.throwEnumeratedException("NOT_MUTABLE");
 		this.remove(value);
 	}
+	
+	public Long indexOfValue(V value) {
+		int idx = this.indexOf(value);
+		if(idx < 0)
+			return null;
+		else
+			return Long.valueOf(idx + 1);
+	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public PromptoList<V> sort(boolean descending) {
