@@ -43,7 +43,7 @@ public class DbIdType extends NativeType {
 	
 	@Override
 	public boolean isAssignableFrom(Context context, IType other) {
-		return other instanceof NativeType;
+		return super.isAssignableFrom(context, other) || other instanceof NativeType;
 	}
 	
 	@Override
