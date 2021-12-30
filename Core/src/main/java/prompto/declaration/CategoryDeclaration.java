@@ -221,7 +221,7 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 		IValue value = data==null ? NullValue.instance() : decl.getType().convertJavaValueToIValue(context, data);
 		if(value!=null) {
 			if(value instanceof BinaryValue)
-				((BinaryValue)value).setSource(instance.getStorable().getOrCreateDbId(), decl.getName());
+				((BinaryValue)value).setSource(null, instance.getStorable().getOrCreateDbId(), decl.getName());
 			instance.setMember(context, decl.getId(), value);
 		}
 	}

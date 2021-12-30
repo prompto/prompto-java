@@ -171,7 +171,7 @@ public final class MemStore implements IStore {
 	}
 	
 	@Override
-	public PromptoBinary fetchBinary(PromptoDbId dbId, String attr) {
+	public PromptoBinary fetchBinary(String table, PromptoDbId dbId, String attr) {
 		Object id = dbId.getValue();
 		if(!(id instanceof Long))
 			id = Long.decode(dbId.toString());

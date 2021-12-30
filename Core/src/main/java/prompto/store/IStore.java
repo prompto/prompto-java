@@ -70,7 +70,7 @@ public interface IStore extends Closeable {
 	}
 	void deleteAll() throws PromptoError; // for test purpose only
 
-	PromptoBinary fetchBinary(PromptoDbId dbId, String attr) throws PromptoError;
+	PromptoBinary fetchBinary(String table, PromptoDbId dbId, String attr) throws PromptoError;
 	IStored fetchUnique(PromptoDbId dbId) throws PromptoError;
 
 	IQueryBuilder newQueryBuilder();

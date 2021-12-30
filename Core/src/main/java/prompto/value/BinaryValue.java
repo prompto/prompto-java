@@ -52,8 +52,8 @@ public abstract class BinaryValue extends BaseValue {
 		this.data = data;
 	}
 
-	public void setSource(Object dbId, String attribute) {
-		data.setSource(dbId, attribute);
+	public void setSource(String tableName, Object dbId, String attribute) {
+		data.setSource(tableName, dbId, attribute);
 	}
 	
 	public String getSourceUrl() {
