@@ -1,19 +1,4 @@
 @Inlined
-define ClickEvent as native category with bindings:
-	
-	define category bindings as:
-		JavaScript: Event
-
-and methods:
-		
-	define stopPropagation as method doing:
-		JavaScript: this.stopPropagation();
-
-	define preventDefault as method doing:
-		JavaScript: this.preventDefault();
-		
-
-@Inlined
 define MouseEvent as native category with bindings:
 	
 	define category bindings as:
@@ -26,6 +11,18 @@ and methods:
 
 	define preventDefault as method doing:
 		JavaScript: this.preventDefault();
+
+	define altKey as method returning Boolean doing:
+		JavaScript: this.altKey;
+
+	define ctrlKey as method returning Boolean doing:
+		JavaScript: this.ctrlKey;
+
+	define shiftKey as method returning Boolean doing:
+		JavaScript: this.shiftKey;
+
+	define metaKey as method returning Boolean doing:
+		JavaScript: this.metaKey;
 		
 
 @Inlined
@@ -42,6 +39,18 @@ and methods:
 	define preventDefault as method doing:
 		JavaScript: this.preventDefault();
 		
+	define altKey as method returning Boolean doing:
+		JavaScript: this.altKey;
+
+	define ctrlKey as method returning Boolean doing:
+		JavaScript: this.ctrlKey;
+
+	define shiftKey as method returning Boolean doing:
+		JavaScript: this.shiftKey;
+
+	define metaKey as method returning Boolean doing:
+		JavaScript: this.metaKey;
+
 
 @Inlined
 define RadioChangedEvent as native category with bindings:
@@ -96,7 +105,8 @@ and methods:
 	define preventDefault as method doing:
 		JavaScript: this.preventDefault();
 
-define ClickEventCallback as abstract method receiving ClickEvent event
+// TODO kept for compatibility, but should be removed
+define ClickEventCallback as abstract method receiving MouseEvent event
 define MouseEventCallback as abstract method receiving MouseEvent event
 define KeyboardEventCallback as abstract method receiving KeyboardEvent event
 // TODO kept for compatibility, but should be removed
@@ -110,6 +120,7 @@ define DateChangedCallback as abstract method receiving Date value
 define ToggleChangedCallback as abstract method receiving Boolean value
 define ItemSelectedCallback as abstract method receiving Any value
 define PageSelectedCallback as abstract method receiving Integer value
+
 @Inlined
 define FileRef as native category with bindings:
 
@@ -172,7 +183,7 @@ define hideReactModal as native method doing:
 	JavaScript: ReactUtils.hideModal();
 
 
-define showReactContextMenu as native method receiving ClickEvent event and Html menu doing:
+define showReactContextMenu as native method receiving MouseEvent event and Html menu doing:
 	JavaScript: ReactUtils.showContextMenu(event, menu);
 
 
