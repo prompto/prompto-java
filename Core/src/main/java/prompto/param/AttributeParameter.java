@@ -130,28 +130,28 @@ public class AttributeParameter extends BaseParameter {
 	}
 	
 	@Override
-	public void compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
+	public ResultInfo compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
 		String instanceName = "%" + getName() + "%";
 		StackLocal local = method.getRegisteredLocal(instanceName);
 		if(local!=null)
-			CompilerUtils.compileALOAD(method, instanceName);
+			return CompilerUtils.compileALOAD(method, instanceName);
 		else
-			doCompileLocal(context, method, flags, assignments, isFirst);
+			return doCompileLocal(context, method, flags, assignments, isFirst);
 	}
 	
-	private void doCompileLocal(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
+	private ResultInfo doCompileLocal(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
 		Argument assign = makeArgument(assignments, isFirst);
 		IType itype = assign.getExpression().check(context.getCallingContext());
 		// if param is a category, assume it implements the required attribute interface
 		if(itype instanceof CategoryType)
-			assign.getExpression().compile(context.getCallingContext(), method, flags);
+			return assign.getExpression().compile(context.getCallingContext(), method, flags);
 		// if param is a value, wrap it into an attribute wrapper
 		else {
 			Type type = CompilerUtils.getAttributeConcreteType(id);
 			CompilerUtils.compileNewRawInstance(method, type);
 			method.addInstruction(Opcode.DUP);
 			ResultInfo info = assign.getExpression().compile(context.getCallingContext(), method, flags);
-			CompilerUtils.compileCallConstructor(method, type, info.getType());
+			return CompilerUtils.compileCallConstructor(method, type, info.getType());
 		}
 	}
 	

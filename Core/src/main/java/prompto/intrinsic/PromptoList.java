@@ -118,6 +118,24 @@ public class PromptoList<V> extends ArrayList<V> implements Filterable<PromptoLi
 			PromptoException.throwEnumeratedException("NOT_MUTABLE");
 		this.remove(value);
 	}
+
+	public void setValue(long index, V value) {
+		if(!mutable)
+			PromptoException.throwEnumeratedException("NOT_MUTABLE");
+		this.set((int)index, value);
+	}
+
+	public void addValue(V value) {
+		if(!mutable)
+			PromptoException.throwEnumeratedException("NOT_MUTABLE");
+		this.add(value);
+	}
+
+	public void insertValue(V value, long atIndex) {
+		if(!mutable)
+			PromptoException.throwEnumeratedException("NOT_MUTABLE");
+		this.add((int)atIndex - 1, value);
+	}
 	
 	public Long indexOfValue(V value) {
 		int idx = this.indexOf(value);

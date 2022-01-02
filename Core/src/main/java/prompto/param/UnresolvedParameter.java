@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.IDeclaration;
@@ -113,9 +114,9 @@ public class UnresolvedParameter extends BaseParameter {
 	}
 	
 	@Override
-	public void compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
+	public ResultInfo compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
 		resolve(context);
-		resolved.compileParameter(context, method, flags, assignments, isFirst);
+		return resolved.compileParameter(context, method, flags, assignments, isFirst);
 	}
 	
 	@Override

@@ -133,7 +133,7 @@ public class IteratorType extends IterableType {
 		}
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentList assignments) {
+		public ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentList assignments) {
 			// call replace method
 			Descriptor.Method descriptor = new Descriptor.Method(PromptoList.class);
 			InterfaceConstant constant = new InterfaceConstant(IterableWithCounts.class, "toList", descriptor);
@@ -181,7 +181,7 @@ public class IteratorType extends IterableType {
 		}
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentList assignments) {
+		public ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentList assignments) {
 			// call replace method
 			Descriptor.Method descriptor = new Descriptor.Method(PromptoSet.class);
 			InterfaceConstant constant = new InterfaceConstant(IterableWithCounts.class, "toSet", descriptor);

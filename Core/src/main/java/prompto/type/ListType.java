@@ -152,6 +152,10 @@ public class ListType extends ContainerType {
 			return new HashSet<>(Collections.singletonList(REMOVE_ITEM_METHOD));
 		case "removeValue":
 			return new HashSet<>(Collections.singletonList(REMOVE_VALUE_METHOD));
+		case "addValue":
+			return new HashSet<>(Collections.singletonList(ADD_VALUE_METHOD));
+		case "insertValue":
+			return new HashSet<>(Collections.singletonList(INSERT_VALUE_METHOD));
 		default:
 			return super.getMemberMethods(context, id);
 		}
@@ -607,6 +611,77 @@ public class ListType extends ContainerType {
 
 	};
 	
+	static final IMethodDeclaration ADD_VALUE_METHOD = new BuiltInMethodDeclaration("addValue", VALUE_PARAMETER) {
+
+		@Override
+		public IValue interpret(Context context) throws PromptoError {
+			ListValue list = (ListValue)getValue(context);
+			IValue value = context.getValue(new Identifier("value"));
+			list.addValue(value);
+			return null;
+		};
+		
+		@Override
+		public IType check(Context context) {
+			return VoidType.instance();
+		}
+		
+		@Override
+		public void transpileCall(Transpiler transpiler, ArgumentList arguments) {
+			transpiler.append("addValue(");
+			arguments.getFirst().transpile(transpiler, this);
+			transpiler.append(")");
+		}
+
+	};
+
+	static IParameter AT_INDEX_PARAMETER = new CategoryParameter(IntegerType.instance(), new Identifier("atIndex"));
+
+	static final IMethodDeclaration INSERT_VALUE_METHOD = new BuiltInMethodDeclaration("insertValue", VALUE_PARAMETER, AT_INDEX_PARAMETER) {
+
+		@Override
+		public IValue interpret(Context context) throws PromptoError {
+			ListValue list = (ListValue)getValue(context);
+			IValue value = context.getValue(new Identifier("value"));
+			Long atIndex = (Long)context.getValue(new Identifier("atIndex")).getStorableData();
+			list.insertValue(value, atIndex);
+			return null;
+		};
+		
+		@Override
+		public IType check(Context context) {
+			return VoidType.instance();
+		}
+		
+		@Override
+		public void transpileCall(Transpiler transpiler, ArgumentList arguments) {
+			transpiler.append("insertValue(");
+			arguments.getFirst().transpile(transpiler, this);
+			transpiler.append(", ");
+			arguments.get(1).transpile(transpiler, this);
+			transpiler.append(")");
+		}
+		
+		@Override
+		public boolean hasCompileExactInstanceMember() {
+			return true;
+		}
+		
+		@Override
+		public ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
+			// push arguments on the stack
+			VALUE_PARAMETER.compileParameter(context, method, flags, arguments, true);
+			ResultInfo itemInfo = AT_INDEX_PARAMETER.compileParameter(context, method, flags.withPrimitive(true), arguments, false);
+			// convert item to long
+			CompilerUtils.numberTolong(method, itemInfo);
+			// call insertValue method
+			IOperand oper = new MethodConstant(PromptoList.class, "insertValue", Object.class, long.class, void.class);
+			method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
+			return new ResultInfo(void.class);
+		}
+
+	};
+
 	final IMethodDeclaration TO_SET_METHOD = new BuiltInMethodDeclaration("toSet") {
 		
 		@Override
@@ -628,8 +703,8 @@ public class ListType extends ContainerType {
 		}
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentList assignments) {
-			// call replace method
+		public ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentList assignments) {
+			// call toSet method
 			Descriptor.Method descriptor = new Descriptor.Method(PromptoSet.class);
 			MethodConstant constant = new MethodConstant(PromptoList.class, "toSet", descriptor);
 			method.addInstruction(Opcode.INVOKEVIRTUAL, constant);

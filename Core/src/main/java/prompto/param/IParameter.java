@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
 import prompto.expression.DefaultExpression;
@@ -33,7 +34,7 @@ public interface IParameter extends INamedInstance {
 	Type getJavaType(Context context);
 	StackLocal registerLocal(Context context, MethodInfo method, Flags flags);
 	default void extractLocal(Context context, MethodInfo method, Flags flags) {}
-	void compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst);
+	ResultInfo compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst);
 	default void declare(Transpiler transpiler) { throw new UnsupportedOperationException("declare " + this.getClass().getName()); }
 	default void transpile(Transpiler transpiler) { throw new UnsupportedOperationException("transpile " + this.getClass().getName()); }
 	default String getTranspiledName(Context context) { throw new UnsupportedOperationException("getTranspiledName " + this.getClass().getName()); }

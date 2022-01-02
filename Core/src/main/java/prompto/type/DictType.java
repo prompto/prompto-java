@@ -338,7 +338,7 @@ public class DictType extends ContainerType {
 		}
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
+		public ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
 			this.compileParameters(context, method, flags, arguments);
 			// call replace method
@@ -380,7 +380,7 @@ public class DictType extends ContainerType {
 		}
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
+		public ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
 			this.compileParameters(context, method, flags, arguments);
 			// call remove method

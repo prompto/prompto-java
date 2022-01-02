@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
+import prompto.compiler.ResultInfo;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.ArrowExpression;
@@ -72,13 +73,13 @@ public class CategoryParameter extends BaseParameter implements ITypedParameter 
 	}
 	
 	@Override
-	public void compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
+	public ResultInfo compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
 		resolve(context);
 		if(resolved instanceof MethodType) {
 			Argument assign = makeArgument(assignments, isFirst);
-			assign.getExpression().compileReference(context.getCallingContext(), method, flags);
+			return assign.getExpression().compileReference(context.getCallingContext(), method, flags);
 		} else
-			super.compileParameter(context, method, flags, assignments, isFirst);
+			return super.compileParameter(context, method, flags, assignments, isFirst);
 	}
 	
 	

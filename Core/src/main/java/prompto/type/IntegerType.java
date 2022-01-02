@@ -192,7 +192,7 @@ public class IntegerType extends NativeType implements INumberType {
 		}
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
+		public ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
 			this.compileParameters(context, method, flags, arguments); // stack = Long/String
 			// create DecimalFormat instance

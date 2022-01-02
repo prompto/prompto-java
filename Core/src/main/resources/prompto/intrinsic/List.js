@@ -53,6 +53,15 @@ List.prototype.removeValue = function(value) {
 		this.splice(idx, 1);
 };
 
+List.prototype.addValue = function(value) {
+	this.push(value);
+};
+
+
+List.prototype.insertValue = function(value, atIndex) {
+	this.splice(atIndex - 1, 0, value);
+};
+
 
 List.prototype.indexOfValue = function(value) {
 	var idx = this.indexOf(value);

@@ -9,6 +9,7 @@ import prompto.compiler.Flags;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.declaration.AttributeDeclaration;
 import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.IDeclaration;
@@ -156,7 +157,7 @@ public class ExtendedParameter extends CategoryParameter {
 	}
 
 	@Override
-	public void compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
+	public ResultInfo compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
 		super.compileParameter(context, method, flags, assignments, isFirst);
 		// create a proxy to the required java type
 		ClassConstant c = new ClassConstant(getJavaType(context));
@@ -164,6 +165,7 @@ public class ExtendedParameter extends CategoryParameter {
 		MethodConstant m = new MethodConstant(PromptoProxy.class, "newProxy", Object.class, Class.class, Object.class);
 		method.addInstruction(Opcode.INVOKESTATIC, m);
 		method.addInstruction(Opcode.CHECKCAST, c);
+		return new ResultInfo(c.getType());
 	}
 
 }

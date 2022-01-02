@@ -116,11 +116,19 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	}
 	
 	public void setItem(int index, IValue element) {
-		items.set(index, element);
+		items.setValue(index, element);
 	}
 	
 	public void removeValue(IValue value) {
-		items.remove(value);
+		items.removeValue(value);
+	}
+
+	public void addValue(IValue value) {
+		items.addValue(value);
+	}
+
+	public void insertValue(IValue value, long atIndex) {
+		items.insertValue(value, atIndex);
 	}
 
 	public int indexOf(IValue value) {

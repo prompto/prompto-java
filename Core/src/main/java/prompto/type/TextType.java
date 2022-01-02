@@ -185,7 +185,7 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
+		public ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
 			this.compileParameters(context, method, flags, arguments);
 			// call replace method
@@ -231,7 +231,7 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
+		public ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
 			this.compileParameters(context, method, flags, arguments);
 			// call replace method
@@ -282,7 +282,7 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
+		public ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
 			this.compileParameters(context, method, flags, arguments);
 			// call split method
@@ -339,7 +339,7 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
+		public ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
 			this.compileParameters(context, method, flags, arguments);
 			// call static method
@@ -442,7 +442,7 @@ public class TextType extends NativeType {
 		};
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
+		public ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
 			this.compileParameters(context, method, flags, arguments);
 			// call replace method
@@ -486,7 +486,7 @@ public class TextType extends NativeType {
 		}
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
+		public ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
 			this.compileParameters(context, method, flags, arguments);
 			// call replace method
@@ -533,7 +533,7 @@ public class TextType extends NativeType {
 		};
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
+		public ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, ArgumentList arguments) {
 			// push arguments on the stack
 			this.compileParameters(context, method, flags, arguments);
 			CompilerUtils.LongTolong(method);

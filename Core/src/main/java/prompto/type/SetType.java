@@ -355,7 +355,7 @@ public class SetType extends ContainerType {
 		}
 		
 		@Override
-		public prompto.compiler.ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentList assignments) {
+		public ResultInfo compileExactInstanceMember(Context context, MethodInfo method, Flags flags, prompto.grammar.ArgumentList assignments) {
 			// call replace method
 			Descriptor.Method descriptor = new Descriptor.Method(PromptoList.class);
 			MethodConstant constant = new MethodConstant(PromptoSet.class, "toList", descriptor);

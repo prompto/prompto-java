@@ -15,6 +15,7 @@ import prompto.compiler.InterfaceType;
 import prompto.compiler.MethodConstant;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.Opcode;
+import prompto.compiler.ResultInfo;
 import prompto.compiler.NamedType;
 import prompto.compiler.StackLocal;
 import prompto.compiler.StringConstant;
@@ -120,17 +121,17 @@ public class MethodParameter extends BaseParameter {
 	}
 	
 	@Override
-	public void compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList arguments, boolean isFirst) {
+	public ResultInfo compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList arguments, boolean isFirst) {
 		// 1st parameter is method reference
 		Argument argument = makeArgument(arguments, isFirst);
 		IExpression expression = argument.getExpression();
 		if(expression instanceof ArrowExpression)
-			compileArrowArgument(context, method, flags, (ArrowExpression)expression);
+			return compileArrowArgument(context, method, flags, (ArrowExpression)expression);
 		else
-			compileMethodArgument(context, method, flags, expression);
+			return compileMethodArgument(context, method, flags, expression);
 	}
 	
-	private void compileMethodArgument(Context context, MethodInfo method, Flags flags, IExpression expression) {
+	private ResultInfo compileMethodArgument(Context context, MethodInfo method, Flags flags, IExpression expression) {
 		MethodType target = getType(context);
 		IMethodDeclaration decl = target.getMethod();
 		ParameterList parameters = decl.getParameters();
@@ -150,23 +151,24 @@ public class MethodParameter extends BaseParameter {
 		MethodConstant m = new MethodConstant(PromptoProxy.class, "newProxy", Object.class, Class.class, String.class, Class[].class, Object.class);
 		method.addInstruction(Opcode.INVOKESTATIC, m);
 		method.addInstruction(Opcode.CHECKCAST, dest);
+		return new ResultInfo(dest.getType());
 	}
 
-	private void compileArrowArgument(Context context, MethodInfo method, Flags flags, ArrowExpression expression) {
+	private ResultInfo compileArrowArgument(Context context, MethodInfo method, Flags flags, ArrowExpression expression) {
 		MethodType target = getType(context);
 		IMethodDeclaration decl = target.getMethod();
 		ParameterList parameters = decl.getParameters();
 		InterfaceType intf = new InterfaceType(parameters, decl.getReturnType());
 		// create an instance on which the method will be invoked
 		String innerClassName = compileArrowExpressionInnerClass(context, method.getClassFile(), intf, expression);
-		compileNewArrowExpressionInstance(context, method, flags, innerClassName, expression);
+		return compileNewArrowExpressionInstance(context, method, flags, innerClassName, expression);
 	}
 	
 	
-	private void compileNewArrowExpressionInstance(Context context, MethodInfo method, Flags flags, String innerClassName, ArrowExpression expression) {
+	private ResultInfo compileNewArrowExpressionInstance(Context context, MethodInfo method, Flags flags, String innerClassName, ArrowExpression expression) {
 		// TODO support closure (see ConcreteMethodDeclaration.compileClosureClass)
 		Type innerType = new NamedType(innerClassName); 
-		CompilerUtils.compileNewInstance(method, innerType); 
+		return CompilerUtils.compileNewInstance(method, innerType); 
 	}
 
 	private String compileArrowExpressionInnerClass(Context context, ClassFile parentClass, InterfaceType interfaceType, ArrowExpression expression) {

@@ -87,15 +87,17 @@ public abstract class BaseParameter extends CodeSection implements IParameter {
 	}
 
 	@Override
-	public void compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
+	public ResultInfo compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
 		Argument assign = makeArgument(assignments, isFirst);
 		ResultInfo valueInfo = assign.getExpression().compile(context.getCallingContext(), method, flags);
 		// cast if required
 		Type type = this.getJavaType(context);
 		if(type==Double.class)
-			CompilerUtils.numberToDouble(method, valueInfo);
+			return CompilerUtils.numberToDouble(method, valueInfo);
 		else if(type==Long.class)
-			CompilerUtils.numberToLong(method, valueInfo);
+			return CompilerUtils.numberToLong(method, valueInfo);
+		else
+			return new ResultInfo(type);
 		
 	}
 
