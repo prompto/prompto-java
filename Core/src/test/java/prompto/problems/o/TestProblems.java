@@ -107,6 +107,11 @@ public class TestProblems extends BaseOParserTest {
 	}
 
 	@Test
+	public void testUnknownIdentifier() throws Exception {
+		checkProblems("problems/unknownIdentifier.poc");
+	}
+
+	@Test
 	public void testUnknownItemType() throws Exception {
 		checkProblems("problems/unknownItemType.poc");
 	}
