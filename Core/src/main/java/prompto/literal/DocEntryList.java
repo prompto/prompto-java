@@ -3,6 +3,7 @@ package prompto.literal;
 import java.util.LinkedList;
 import java.util.List;
 
+import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 
@@ -42,6 +43,10 @@ public class DocEntryList extends LinkedList<DocEntry> {
 		writer.append('}');
 	}
 
+	public void check(Context context) {
+		this.forEach(entry->entry.check(context));
+	}
+
 	public void declare(Transpiler transpiler) {
 		this.forEach(entry->entry.declare(transpiler));
 	}
@@ -57,5 +62,7 @@ public class DocEntryList extends LinkedList<DocEntry> {
 	    }
 	    transpiler.append('}');
 	}
+
+
 	
 }

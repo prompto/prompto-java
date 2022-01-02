@@ -1,6 +1,7 @@
 package prompto.literal;
 
 import prompto.expression.IExpression;
+import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 
@@ -32,6 +33,12 @@ public class Entry<K extends Key> {
 		writer.append(':');
 		value.toDialect(writer);
 	}
+
+	public void check(Context context) {
+		this.key.check(context);
+		this.value.check(context);
+	}
+
 
 	public void declare(Transpiler transpiler) {
 		this.key.declare(transpiler);

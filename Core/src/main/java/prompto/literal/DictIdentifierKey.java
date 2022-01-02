@@ -4,9 +4,11 @@ import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
 import prompto.expression.InstanceExpression;
+import prompto.grammar.INamed;
 import prompto.grammar.Identifier;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
+import prompto.type.TextType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 import prompto.value.TextValue;
@@ -34,6 +36,15 @@ public class DictIdentifierKey extends DictKey {
 		return id;
 	}
 	
+	@Override
+	public void check(Context context) {
+		INamed named = context.getRegisteredValue(INamed.class, id);
+		if(named == null)
+			context.getProblemListener().reportUnknownIdentifier(id, id.toString());
+		else if(named.getType(context)!=TextType.instance())
+			context.getProblemListener().reportIllegalValue(id, "Expected a Text, got " + named.getType(context).getTypeName());
+	}
+
 	@Override
 	public TextValue interpret(Context context) {
 		IValue value = context.getValue(id);

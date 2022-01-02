@@ -46,6 +46,7 @@ public class DocumentLiteral extends Literal<DocumentValue> {
 	
 	@Override
 	public IType check(Context context) {
+		this.entries.check(context);
 		return DocumentType.instance(); 
 	}
 	

@@ -14,6 +14,7 @@ public abstract class Key extends CodeSection {
 
 	public abstract Identifier asIdentifier();
 	public abstract void toDialect(CodeWriter writer);
+	public abstract void check(Context context);
 	public abstract TextValue interpret(Context context);
 	public abstract void declare(Transpiler transpiler);
 	public abstract void transpile(Transpiler transpiler);

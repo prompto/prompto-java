@@ -36,6 +36,11 @@ public class DocIdentifierKey extends DocKey {
 	}
 	
 	@Override
+	public void check(Context context) {
+		// nothing to do
+	}
+
+	@Override
 	public TextValue interpret(Context context) {
 		return new TextLiteral(id.toString()).getValue();
 	}

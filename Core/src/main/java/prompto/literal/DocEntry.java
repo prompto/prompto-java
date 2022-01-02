@@ -8,5 +8,4 @@ public class DocEntry extends Entry<DocKey> {
 		super(key, value);
 	}
 
-
 }
