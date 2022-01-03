@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -454,6 +455,8 @@ public final class MemStore implements IStore {
 
 	}
 
+	static Set<String> NAMES_TO_FILTER = new HashSet<>(Arrays.asList("category", "dbId"));
+
 	class StoredDocument implements IStored {
 
 		final Map<String, Object> document;
@@ -524,12 +527,13 @@ public final class MemStore implements IStore {
 			return document.get(fieldName);
 		}
 		
+		
 		@Override
 		public Set<String> getNames() throws PromptoError {
-			Set<String> names = document.keySet();
-			names.remove("category");
-			names.remove("dbId");
-			return names;
+			return document.keySet()
+					.stream()
+					.filter(s->!NAMES_TO_FILTER.contains(s))
+					.collect(Collectors.toSet());
 		}
 		
 		public StoredDocument project(List<String> fieldNames) {
