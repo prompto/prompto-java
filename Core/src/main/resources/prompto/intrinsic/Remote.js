@@ -118,7 +118,7 @@ function writeJSONValue(value, useDbRefs, formData) {
 		var typeName = getTypeName(value);
 		switch(typeName) {
 		case "UUID":
-			return { type: "Uuid", value: value.hex };
+			return { type: "Uuid", value: value.toString() };
 		case "LocalDate":
 			return { type: "Date", value: value.toString() };
 		case "LocalTime":
@@ -149,7 +149,10 @@ function writeJSONValue(value, useDbRefs, formData) {
 					value.getAttributeNames().forEach(function(attr) {
 						result[attr] = writeJSONValue(value[attr], useDbRefs, formData);
 					});
-					result.dbId = value.getDbId();
+					var dbId = value.getDbId();
+					if(dbId) {
+						result.dbId = dbId.toString ? dbId.toString() : dbId;
+					}
 					return { type: typeName, value: result};
 				}
 			} else
