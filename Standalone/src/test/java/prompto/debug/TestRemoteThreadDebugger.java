@@ -10,6 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import prompto.compiler.PromptoClassLoader;
 import prompto.debug.event.ConnectedDebugEvent;
 import prompto.debug.java.JavaDebugEventAdapterFactory;
 import prompto.debug.java.JavaDebugRequestListenerFactory;
@@ -26,6 +27,7 @@ public class TestRemoteThreadDebugger extends TestDebuggerVariablesBase implemen
 	
 	@Before
 	public void before() {
+		PromptoClassLoader.uninitialize();
 		ProcessDebugger.reset();
 		output = null;
 		Out.init();
@@ -81,7 +83,7 @@ public class TestRemoteThreadDebugger extends TestDebuggerVariablesBase implemen
 			public void run() {
 				try {
 					String args[] = new String[] { 
-							/* "-runtimeMode", "UNITTEST", */
+							"-runtimeMode", "UNITTEST",
 							"-debugger-eventAdapter-factory", JavaDebugEventAdapterFactory.class.getName(),
 							"-debugger-eventAdapter-port", String.valueOf(port),
 							"-debugger-requestListener-factory", JavaDebugRequestListenerFactory.class.getName(),
