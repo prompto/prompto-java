@@ -81,7 +81,7 @@ public class TestRemoteThreadDebugger extends TestDebuggerVariablesBase implemen
 			public void run() {
 				try {
 					String args[] = new String[] { 
-							"-runtimeMode", "UNITTEST",
+							/* "-runtimeMode", "UNITTEST", */
 							"-debugger-eventAdapter-factory", JavaDebugEventAdapterFactory.class.getName(),
 							"-debugger-eventAdapter-port", String.valueOf(port),
 							"-debugger-requestListener-factory", JavaDebugRequestListenerFactory.class.getName(),

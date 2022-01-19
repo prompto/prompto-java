@@ -9,16 +9,14 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 
-import org.junit.BeforeClass;
-
-import prompto.runtime.Mode;
-
 public class BaseTest {
 
+	/*
 	@BeforeClass
 	public static void __before__class() {
 		Mode.set(Mode.UNITTEST);
 	}
+	*/
 	
 	public String getResourceAsString(String resourceName) throws Exception {
 		char[] data = new char[4096];
