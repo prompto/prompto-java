@@ -18,7 +18,7 @@ public class MissingAttributeProblem extends SyntaxProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return "Expected an attribute, got: " + actual;
+		return "Expected an attribute, found: " + actual;
 	}
 
 }

@@ -1375,8 +1375,10 @@ public class MPromptoBuilder extends MParserBaseListener {
 	@Override
 	public void exitExpressionAssignmentList(ExpressionAssignmentListContext ctx) {
 		IExpression exp = getNodeValue(ctx.exp);
-		ArgumentList items = new ArgumentList();
-		items.add(new Argument(null, exp));
+		Argument item = new Argument(null, exp);
+		if(exp instanceof ICodeSection)
+			item.setSection(((ICodeSection)exp).getSection());
+		ArgumentList items = new ArgumentList(Collections.singletonList(item));
 		setNodeValue(ctx, items);
 	}
 	

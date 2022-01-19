@@ -489,7 +489,8 @@ public class EPromptoBuilder extends EParserBaseListener {
 		if(items==null)
 			items = new ArgumentList();
 		Argument item = new Argument(null, exp);
-		populateSection(ctx, item);
+		if(exp instanceof ICodeSection)
+			item.setSection(((ICodeSection)exp).getSection());
 		items.add(0,item);
 		item = getNodeValue(ctx.item);
 		if(item!=null)

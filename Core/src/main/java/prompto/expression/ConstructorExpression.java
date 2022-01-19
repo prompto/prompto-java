@@ -188,10 +188,13 @@ public class ConstructorExpression extends CodeSection implements IExpression {
 		if(arguments!=null) {
 			context = context.newChildContext();
 			for(Argument argument : arguments) {
-				if(decl.hasAttribute(context, argument.getParameterId()))
+				Identifier id = argument.getParameterId();
+				if(id==null) {
+					context.getProblemListener().reportMissingAttribute(argument, argument.toString());
+				} else if(decl.hasAttribute(context, id))
 					argument.check(context);
 				else
-					context.getProblemListener().reportUnknownMember(argument, argument.getParameterId().toString());
+					context.getProblemListener().reportUnknownMember(argument, id.toString());
 			}
 		}
 	}

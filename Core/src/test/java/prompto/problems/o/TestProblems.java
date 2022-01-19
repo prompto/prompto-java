@@ -77,6 +77,11 @@ public class TestProblems extends BaseOParserTest {
 	}
 
 	@Test
+	public void testMissingAttribute() throws Exception {
+		checkProblems("problems/missingAttribute.poc");
+	}
+
+	@Test
 	public void testNoMatchingPrototype() throws Exception {
 		checkProblems("problems/noMatchingPrototype.poc");
 	}

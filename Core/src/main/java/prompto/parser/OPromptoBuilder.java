@@ -1390,6 +1390,8 @@ public class OPromptoBuilder extends OParserBaseListener {
 	public void exitExpressionAssignmentList(ExpressionAssignmentListContext ctx) {
 		IExpression exp = getNodeValue(ctx.exp);
 		Argument item = new Argument(null, exp);
+		if(exp instanceof ICodeSection)
+			item.setSection(((ICodeSection)exp).getSection());
 		ArgumentList items = new ArgumentList(Collections.singletonList(item));
 		setNodeValue(ctx, items);
 	}
