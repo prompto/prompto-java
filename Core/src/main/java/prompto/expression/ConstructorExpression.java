@@ -185,18 +185,20 @@ public class ConstructorExpression extends CodeSection implements IExpression {
 	}
 
 	private void checkArguments(Context context, CategoryDeclaration decl) {
-		if(arguments!=null) {
+		if(arguments!=null)
+			arguments.forEach(arg -> checkArgument(context, decl, arg));
+	}
+	
+	
+	private void checkArgument(Context context, CategoryDeclaration decl, Argument arg) {
+		Identifier id = arg.getParameterId();
+		if(id==null) {
+			context.getProblemListener().reportMissingAttribute(arg, arg.toString());
+		} else if(decl.hasAttribute(context, id)) {
 			context = context.newChildContext();
-			for(Argument argument : arguments) {
-				Identifier id = argument.getParameterId();
-				if(id==null) {
-					context.getProblemListener().reportMissingAttribute(argument, argument.toString());
-				} else if(decl.hasAttribute(context, id))
-					argument.check(context);
-				else
-					context.getProblemListener().reportUnknownMember(argument, id.toString());
-			}
-		}
+			arg.check(context);
+		} else
+			context.getProblemListener().reportUnknownMember(arg, id.toString());
 	}
 
 	@Override
