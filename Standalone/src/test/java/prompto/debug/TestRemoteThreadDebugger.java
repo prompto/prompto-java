@@ -8,8 +8,10 @@ import java.net.URL;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import prompto.compiler.PromptoClassLoader;
 import prompto.debug.event.ConnectedDebugEvent;
 import prompto.debug.java.JavaDebugEventAdapterFactory;
 import prompto.debug.java.JavaDebugRequestListenerFactory;
@@ -18,6 +20,7 @@ import prompto.runtime.Standalone;
 import prompto.runtime.utils.Out;
 import prompto.store.NullStoreFactory;
 
+@Ignore("Not used anymore")
 public class TestRemoteThreadDebugger extends TestDebuggerVariablesBase implements IDebugEventListener {
 
 	Thread thread;
@@ -26,6 +29,7 @@ public class TestRemoteThreadDebugger extends TestDebuggerVariablesBase implemen
 	
 	@Before
 	public void before() {
+		PromptoClassLoader.uninitialize();
 		ProcessDebugger.reset();
 		output = null;
 		Out.init();

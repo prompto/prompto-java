@@ -11,6 +11,13 @@ import java.net.URL;
 
 public class BaseTest {
 
+	/*
+	@BeforeClass
+	public static void __before__class() {
+		Mode.set(Mode.UNITTEST);
+	}
+	*/
+	
 	public String getResourceAsString(String resourceName) throws Exception {
 		char[] data = new char[4096];
 		InputStream stream = getResourceAsStream(resourceName);
