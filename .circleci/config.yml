@@ -14,10 +14,10 @@ jobs:
             git submodule update --init --recursive
       - run:
           name: Build
-          command: mvn -B -DskipTests clean package
+          command: mvn -B -q -DskipTests clean package
       - run:
           name: Test
-          command: mvn test
+          command: mvn -B -q test
 
 workflows:
   regular:
