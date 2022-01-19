@@ -1,6 +1,9 @@
 package prompto.type;
 
 import java.lang.reflect.Type;
+import java.util.Map;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.Flags;
@@ -73,5 +76,14 @@ public class DbIdType extends NativeType {
 		// nothing to do
 	}
 	
+	@Override
+	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
+		if(value.isNull())
+			return NullValue.instance();
+		else if(value.isValueNode())
+			return convertJavaValueToIValue(context, value.asText());
+		else 
+			return super.readJSONValue(context, value, parts);
+	}
 	
 }
