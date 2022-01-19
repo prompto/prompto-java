@@ -149,6 +149,7 @@ function writeJSONValue(value, useDbRefs, formData) {
 					value.getAttributeNames().forEach(function(attr) {
 						result[attr] = writeJSONValue(value[attr], useDbRefs, formData);
 					});
+					result.dbId = value.getDbId();
 					return { type: typeName, value: result};
 				}
 			} else
