@@ -9,7 +9,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Init git submodule
+          name: checkout git submodules
           command: |
             git submodule update --init --recursive
       - run:
