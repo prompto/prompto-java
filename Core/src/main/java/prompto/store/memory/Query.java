@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Stack;
 
+import prompto.intrinsic.PromptoDbId;
 import prompto.store.AttributeInfo;
 import prompto.store.IQuery;
 import prompto.store.IQueryBuilder.MatchOp;
@@ -51,8 +52,10 @@ public class Query implements IQuery {
 		orderBys.add(new OrderBy(attribute, descending));
 	}
 	
-	public <T> void verify(AttributeInfo info, MatchOp match, T fieldValue) {
-		predicates.push(new MatchesPredicate<T>(info, match, fieldValue));
+	public void verify(AttributeInfo info, MatchOp match, Object fieldValue) {
+		if(fieldValue instanceof PromptoDbId)
+			fieldValue = ((PromptoDbId)fieldValue).getValue();
+		predicates.push(new MatchesPredicate(info, match, fieldValue));
 	}
 
 	public void and() {

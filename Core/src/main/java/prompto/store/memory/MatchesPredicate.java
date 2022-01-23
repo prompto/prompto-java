@@ -6,13 +6,13 @@ import java.util.Map;
 import prompto.store.AttributeInfo;
 import prompto.store.IQueryBuilder.MatchOp;
 
-public class MatchesPredicate<T extends Object> implements IPredicate {
+public class MatchesPredicate implements IPredicate {
 
 	AttributeInfo info;
 	MatchOp match;
-	T value;
+	Object value;
 	
-	public MatchesPredicate(AttributeInfo info, MatchOp match, T value) {
+	public MatchesPredicate(AttributeInfo info, MatchOp match, Object value) {
 		this.info = info;
 		this.match = match;
 		this.value = value;
