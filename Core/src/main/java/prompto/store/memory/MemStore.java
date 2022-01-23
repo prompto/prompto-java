@@ -139,8 +139,17 @@ public final class MemStore implements IStore {
 			dbId = Long.valueOf(lastDbId.incrementAndGet());
 			storable.setData(dbIdName, dbId);
 		}
-		StoredDocument stored = new StoredDocument(storable.getCategories(), storable.getDocument());
-		StoredDocument previous = instances.put((Long)dbId, stored);
+		StoredDocument previous = instances.get((Long)dbId);
+		StoredDocument stored;
+		if(previous == null) {
+			stored = new StoredDocument(storable.getCategories(), storable.getDocument());
+		} else {
+			Map<String, Object> document = new HashMap<>();
+			document.putAll(previous.getDocument());
+			document.putAll(storable.getDocument());
+			stored = new StoredDocument(storable.getCategories(), document);
+		}
+		instances.put((Long)dbId, stored);
 		if(audit) {
 			AuditRecord audit = newAuditRecord(auditMeta);
 			audit.setInstanceDbId(this.convertToDbId(dbId));
@@ -467,6 +476,10 @@ public final class MemStore implements IStore {
 			this.document = document;
 		}
 		
+		Map<String, Object> getDocument() {
+			return document;
+		}
+
 		@Override
 		public boolean equals(Object obj) {
 			if(obj instanceof StoredDocument)
