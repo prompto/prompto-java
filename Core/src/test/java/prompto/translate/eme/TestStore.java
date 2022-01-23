@@ -182,6 +182,11 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testSimpleUpdate() throws Exception {
+		compareResourceEME("store/simpleUpdate.pec");
+	}
+
+	@Test
 	public void testSlicedRecords() throws Exception {
 		compareResourceEME("store/slicedRecords.pec");
 	}

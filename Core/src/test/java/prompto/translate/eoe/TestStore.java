@@ -182,6 +182,11 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testSimpleUpdate() throws Exception {
+		compareResourceEOE("store/simpleUpdate.pec");
+	}
+
+	@Test
 	public void testSlicedRecords() throws Exception {
 		compareResourceEOE("store/slicedRecords.pec");
 	}

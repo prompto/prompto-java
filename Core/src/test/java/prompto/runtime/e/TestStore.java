@@ -545,6 +545,21 @@ public class TestStore extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedSimpleUpdate() throws Exception {
+		checkInterpretedOutput("store/simpleUpdate.pec");
+	}
+
+	@Test
+	public void testCompiledSimpleUpdate() throws Exception {
+		checkCompiledOutput("store/simpleUpdate.pec");
+	}
+
+	@Test
+	public void testTranspiledSimpleUpdate() throws Exception {
+		checkTranspiledOutput("store/simpleUpdate.pec");
+	}
+
+	@Test
 	public void testInterpretedSlicedRecords() throws Exception {
 		checkInterpretedOutput("store/slicedRecords.pec");
 	}
