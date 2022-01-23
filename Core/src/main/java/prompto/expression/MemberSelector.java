@@ -138,10 +138,9 @@ public class MemberSelector extends SelectorExpression {
 			IType parentType = checkParent(context);
 			if(parentType!=null)
 				return parentType.checkMember(context, id);
-			else {
-				context.getProblemListener().reportError(this, "Cannot check " + this.toString());
+			else
+				// parent would have reported the root problem
 				return VoidType.instance();
-			}
 		}
 	}
 	

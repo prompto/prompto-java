@@ -82,6 +82,11 @@ public class TestProblems extends BaseOParserTest {
 	}
 
 	@Test
+	public void testMissingAttributeMember() throws Exception {
+		checkProblems("problems/missingAttributeMember.poc");
+	}
+
+	@Test
 	public void testMissingAttributeValue() throws Exception {
 		checkProblems("problems/missingAttributeValue.poc");
 	}
