@@ -641,7 +641,7 @@ public class ContainsExpression extends CodeSection implements IPredicateExpress
 	public void transpileQuery(Transpiler transpiler, String builderName) {
 		AttributeDeclaration decl = left.checkAttribute(transpiler.getContext(), this);
 		if(decl==null || !decl.isStorable(transpiler.getContext()))
-			throw new SyntaxError("Unable to compile predicate");
+			throw new SyntaxError("Unable to transpile predicate");
 	    AttributeInfo fieldInfo = decl.getAttributeInfo(transpiler.getContext());
 	    IType valueType = right.check(transpiler.getContext());
 	    FamilyInfo valueInfo = valueType.getFamilyInfo(transpiler.getContext());
