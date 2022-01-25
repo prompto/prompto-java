@@ -90,7 +90,10 @@ public class AttributeDeclaration extends BaseDeclaration {
 							.map((id)->id.toString())
 							.collect(Collectors.toList()));
 		FamilyInfo family = getFamilyInfo(context, locator);
-		return new AttributeInfo(getName(), family.getFamily(), family.isCollection(), list);
+		if(family == null)
+			return null;
+		else
+			return new AttributeInfo(getName(), family.getFamily(), family.isCollection(), list);
 	}
 	
 	private FamilyInfo getFamilyInfo(Context context, Function<Identifier, IDeclaration> locator) {
@@ -103,7 +106,10 @@ public class AttributeDeclaration extends BaseDeclaration {
 		} else {
 			Identifier typeName = type.getTypeNameId();
 			IDeclaration decl = locator.apply(typeName);
-			return decl.getType(null).getFamilyInfo(context);
+			if(decl==null)
+				return null;
+			else
+				return decl.getType(null).getFamilyInfo(context);
 		}
 	}
 

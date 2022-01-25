@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -349,7 +350,10 @@ public abstract class Standalone {
 			return decls.hasNext() ? decls.next() : null;
 		};
 		Context context = Context.newGlobalsContext();
-		List<AttributeInfo> infos = columns.values().stream().map((c)->c.getAttributeInfo(context, locator)).collect(Collectors.toList());
+		List<AttributeInfo> infos = columns.values().stream()
+				.map((c)->c.getAttributeInfo(context, locator))
+				.filter(Objects::nonNull)
+				.collect(Collectors.toList());
 		dataStore.createOrUpdateAttributes(infos);
 		logger.info(()->"Schema successfully initialized.");
 	}
