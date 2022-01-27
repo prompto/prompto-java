@@ -135,27 +135,16 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	
 	private IType checkParentType(Context context, boolean checkInstance) {
 		if(checkInstance)
-			return checkParentInstance(context);
+			return interpretParentInstance(context);
 		else 
 			return checkParent(context);
 	}
 
-	private IType checkParentInstance(Context context) {
-		Identifier id = null;
-		if(parent instanceof InstanceExpression)
-			id = ((InstanceExpression)parent).getId();
-		else if(parent instanceof UnresolvedIdentifier)
-			id = ((UnresolvedIdentifier)parent).getId();
-		if(id!=null) {
-			// don't get Singleton values
-			if(Character.isLowerCase(id.toString().charAt(0))) {
-				IValue value = context.getValue(id);
-				if(value!=null && value!=NullValue.instance())
-					return value.getType();
-			}
-		}
-		// TODO check result instance
-		return checkParent(context);
+	private IType interpretParentInstance(Context context) {
+		IValue value = parent.interpret(context);
+		if(value==null || value == NullValue.instance())
+			throw new NullReferenceError();
+		return value.getType();
 	}
 
 	public ResultInfo compileExact(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration, ArgumentList arguments) {
