@@ -101,15 +101,16 @@ public class AttributeDeclaration extends BaseDeclaration {
 			return null;
 		else if(type instanceof NativeType)
 			return type.getFamilyInfo(context);
-		else if(type instanceof IterableType)
-			return getFamilyInfo(context, ((IterableType)type).getItemType(), locator);
-		else {
+		else if(type instanceof IterableType) {
+			FamilyInfo info = getFamilyInfo(context, ((IterableType)type).getItemType(), locator);
+			return new FamilyInfo(info.getFamily(), true);
+		} else {
 			Identifier typeName = type.getTypeNameId();
 			IDeclaration decl = locator.apply(typeName);
 			if(decl==null)
 				return null;
 			else
-				return getFamilyInfo(context, decl.getType(context), locator);
+				return decl.getType(context).getFamilyInfo(context);
 		}
 	}
 
