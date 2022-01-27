@@ -274,9 +274,19 @@ public class EqualsExpression extends CodeSection implements IPredicateExpressio
 		if(result==BooleanValue.TRUE) 
 			return true;
 		String expected = buildExpectedMessage(context, test);
-		String actual = lval.toString() + " " + operator.toString(test.getDialect()) + " " + rval.toString();
+		String actual = buildActualMessage(context, test, lval, rval);
 		test.printFailedAssertion(context, expected, actual);
 		return false;
+	}
+
+	private String buildActualMessage(Context context, TestMethodDeclaration test, IValue lval, IValue rval) {
+		switch(operator) {
+			case IS_A:
+			case IS_NOT_A:
+				return lval.getType().toString() + " " + operator.toString(test.getDialect()) + " " + rval.toString();
+			default:
+				return lval.toString() + " " + operator.toString(test.getDialect()) + " " + rval.toString();
+		}
 	}
 
 	private String buildExpectedMessage(Context context, TestMethodDeclaration test) {
