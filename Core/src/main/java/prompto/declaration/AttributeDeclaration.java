@@ -33,9 +33,12 @@ import prompto.type.IterableType;
 import prompto.type.NativeType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
+import prompto.utils.Logger;
 import prompto.value.IValue;
 
 public class AttributeDeclaration extends BaseDeclaration {
+	
+	static Logger logger = new Logger();
 	
 	IType type;
 	IAttributeConstraint constraint;
@@ -106,11 +109,13 @@ public class AttributeDeclaration extends BaseDeclaration {
 			return new FamilyInfo(info.getFamily(), true);
 		} else {
 			Identifier typeName = type.getTypeNameId();
-			IDeclaration decl = locator.apply(typeName);
-			if(decl==null)
-				return null;
-			else
+			try {
+				IDeclaration decl = locator.apply(typeName);
 				return decl.getType(context).getFamilyInfo(context);
+			} catch (Throwable t) {
+				logger.error(()->"Could not locate type: " + typeName, t);
+				return null;
+			}
 		}
 	}
 
