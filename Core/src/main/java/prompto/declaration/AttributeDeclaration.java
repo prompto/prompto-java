@@ -89,27 +89,27 @@ public class AttributeDeclaration extends BaseDeclaration {
 						indexTypes.stream()
 							.map((id)->id.toString())
 							.collect(Collectors.toList()));
-		FamilyInfo family = getFamilyInfo(context, locator);
+		FamilyInfo family = getFamilyInfo(context, type, locator);
 		if(family == null)
 			return null;
 		else
 			return new AttributeInfo(getName(), family.getFamily(), family.isCollection(), list);
 	}
 	
-	private FamilyInfo getFamilyInfo(Context context, Function<Identifier, IDeclaration> locator) {
-		IType type = this.type;
-		if(type instanceof NativeType)
+	private FamilyInfo getFamilyInfo(Context context, IType type, Function<Identifier, IDeclaration> locator) {
+		if(type == null)
+			return null;
+		else if(type instanceof NativeType)
 			return type.getFamilyInfo(context);
-		if(type instanceof IterableType) {
-			FamilyInfo info = ((IterableType)type).getItemType().getFamilyInfo(context);
-			return new FamilyInfo(info.getFamily(), true);
-		} else {
+		else if(type instanceof IterableType)
+			return getFamilyInfo(context, ((IterableType)type).getItemType(), locator);
+		else {
 			Identifier typeName = type.getTypeNameId();
 			IDeclaration decl = locator.apply(typeName);
 			if(decl==null)
 				return null;
 			else
-				return decl.getType(null).getFamilyInfo(context);
+				return getFamilyInfo(context, decl.getType(context), locator);
 		}
 	}
 
