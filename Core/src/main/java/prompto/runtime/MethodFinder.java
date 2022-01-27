@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
-import prompto.expression.MethodSelector;
 import prompto.grammar.Argument;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Specificity;
@@ -44,8 +43,7 @@ public class MethodFinder {
 	}
 	
 	public Set<IMethodDeclaration> findCandidates(boolean checkInstance) {
-		MethodSelector selector = methodCall.getSelector();
-		return selector.getCandidates(context, checkInstance);
+		return methodCall.getSelector().getCandidates(context, checkInstance);
 	}
 	
 	public IMethodDeclaration findBest(boolean checkInstance) {
