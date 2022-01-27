@@ -144,7 +144,11 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 		IValue value = parent.interpret(context);
 		if(value==null || value == NullValue.instance())
 			throw new NullReferenceError();
-		return value.getType();
+		IType type = value.getType();
+		if(parent instanceof SuperExpression)
+			return ((CategoryType)type).getSuperType(this, context);
+		else
+			return type;
 	}
 
 	public ResultInfo compileExact(Context context, MethodInfo method, Flags flags, IMethodDeclaration declaration, ArgumentList arguments) {
