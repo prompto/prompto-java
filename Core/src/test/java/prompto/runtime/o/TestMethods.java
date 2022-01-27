@@ -35,6 +35,21 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedAbstractMemberItem() throws Exception {
+		checkInterpretedOutput("methods/abstractMemberItem.poc");
+	}
+
+	@Test
+	public void testCompiledAbstractMemberItem() throws Exception {
+		checkCompiledOutput("methods/abstractMemberItem.poc");
+	}
+
+	@Test
+	public void testTranspiledAbstractMemberItem() throws Exception {
+		checkTranspiledOutput("methods/abstractMemberItem.poc");
+	}
+
+	@Test
 	public void testInterpretedAnonymous() throws Exception {
 		checkInterpretedOutput("methods/anonymous.poc");
 	}

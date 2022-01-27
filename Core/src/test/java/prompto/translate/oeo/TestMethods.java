@@ -12,6 +12,11 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testAbstractMemberItem() throws Exception {
+		compareResourceOEO("methods/abstractMemberItem.poc");
+	}
+
+	@Test
 	public void testAnonymous() throws Exception {
 		compareResourceOEO("methods/anonymous.poc");
 	}
