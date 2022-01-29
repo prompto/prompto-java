@@ -290,48 +290,63 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
-	public void testInterpretedPolymorphic_abstract() throws Exception {
-		checkInterpretedOutput("methods/polymorphic_abstract.pec");
+	public void testInterpretedPolymorphicAbstract() throws Exception {
+		checkInterpretedOutput("methods/polymorphicAbstract.pec");
 	}
 
 	@Test
-	public void testCompiledPolymorphic_abstract() throws Exception {
-		checkCompiledOutput("methods/polymorphic_abstract.pec");
+	public void testCompiledPolymorphicAbstract() throws Exception {
+		checkCompiledOutput("methods/polymorphicAbstract.pec");
 	}
 
 	@Test
-	public void testTranspiledPolymorphic_abstract() throws Exception {
-		checkTranspiledOutput("methods/polymorphic_abstract.pec");
+	public void testTranspiledPolymorphicAbstract() throws Exception {
+		checkTranspiledOutput("methods/polymorphicAbstract.pec");
 	}
 
 	@Test
-	public void testInterpretedPolymorphic_named() throws Exception {
-		checkInterpretedOutput("methods/polymorphic_named.pec");
+	public void testInterpretedPolymorphicMember() throws Exception {
+		checkInterpretedOutput("methods/polymorphicMember.pec");
 	}
 
 	@Test
-	public void testCompiledPolymorphic_named() throws Exception {
-		checkCompiledOutput("methods/polymorphic_named.pec");
+	public void testCompiledPolymorphicMember() throws Exception {
+		checkCompiledOutput("methods/polymorphicMember.pec");
 	}
 
 	@Test
-	public void testTranspiledPolymorphic_named() throws Exception {
-		checkTranspiledOutput("methods/polymorphic_named.pec");
+	public void testTranspiledPolymorphicMember() throws Exception {
+		checkTranspiledOutput("methods/polymorphicMember.pec");
 	}
 
 	@Test
-	public void testInterpretedPolymorphic_runtime() throws Exception {
-		checkInterpretedOutput("methods/polymorphic_runtime.pec");
+	public void testInterpretedPolymorphicNamed() throws Exception {
+		checkInterpretedOutput("methods/polymorphicNamed.pec");
 	}
 
 	@Test
-	public void testCompiledPolymorphic_runtime() throws Exception {
-		checkCompiledOutput("methods/polymorphic_runtime.pec");
+	public void testCompiledPolymorphicNamed() throws Exception {
+		checkCompiledOutput("methods/polymorphicNamed.pec");
 	}
 
 	@Test
-	public void testTranspiledPolymorphic_runtime() throws Exception {
-		checkTranspiledOutput("methods/polymorphic_runtime.pec");
+	public void testTranspiledPolymorphicNamed() throws Exception {
+		checkTranspiledOutput("methods/polymorphicNamed.pec");
+	}
+
+	@Test
+	public void testInterpretedPolymorphicRuntime() throws Exception {
+		checkInterpretedOutput("methods/polymorphicRuntime.pec");
+	}
+
+	@Test
+	public void testCompiledPolymorphicRuntime() throws Exception {
+		checkCompiledOutput("methods/polymorphicRuntime.pec");
+	}
+
+	@Test
+	public void testTranspiledPolymorphicRuntime() throws Exception {
+		checkTranspiledOutput("methods/polymorphicRuntime.pec");
 	}
 
 	@Test

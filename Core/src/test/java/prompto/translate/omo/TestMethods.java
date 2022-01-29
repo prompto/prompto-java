@@ -97,18 +97,23 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
-	public void testPolymorphic_abstract() throws Exception {
-		compareResourceOMO("methods/polymorphic_abstract.poc");
+	public void testPolymorphicAbstract() throws Exception {
+		compareResourceOMO("methods/polymorphicAbstract.poc");
 	}
 
 	@Test
-	public void testPolymorphic_named() throws Exception {
-		compareResourceOMO("methods/polymorphic_named.poc");
+	public void testPolymorphicMember() throws Exception {
+		compareResourceOMO("methods/polymorphicMember.poc");
 	}
 
 	@Test
-	public void testPolymorphic_runtime() throws Exception {
-		compareResourceOMO("methods/polymorphic_runtime.poc");
+	public void testPolymorphicNamed() throws Exception {
+		compareResourceOMO("methods/polymorphicNamed.poc");
+	}
+
+	@Test
+	public void testPolymorphicRuntime() throws Exception {
+		compareResourceOMO("methods/polymorphicRuntime.poc");
 	}
 
 	@Test

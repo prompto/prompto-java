@@ -107,18 +107,23 @@ public class TestMethods extends BaseEParserTest {
 	}
 
 	@Test
-	public void testPolymorphic_abstract() throws Exception {
-		compareResourceEOE("methods/polymorphic_abstract.pec");
+	public void testPolymorphicAbstract() throws Exception {
+		compareResourceEOE("methods/polymorphicAbstract.pec");
 	}
 
 	@Test
-	public void testPolymorphic_named() throws Exception {
-		compareResourceEOE("methods/polymorphic_named.pec");
+	public void testPolymorphicMember() throws Exception {
+		compareResourceEOE("methods/polymorphicMember.pec");
 	}
 
 	@Test
-	public void testPolymorphic_runtime() throws Exception {
-		compareResourceEOE("methods/polymorphic_runtime.pec");
+	public void testPolymorphicNamed() throws Exception {
+		compareResourceEOE("methods/polymorphicNamed.pec");
+	}
+
+	@Test
+	public void testPolymorphicRuntime() throws Exception {
+		compareResourceEOE("methods/polymorphicRuntime.pec");
 	}
 
 	@Test
