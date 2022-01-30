@@ -160,7 +160,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			return declaration.getReturnType()!=null ? declaration.getReturnType() : VoidType.instance();
 		} else {
 			Context local = isLocalClosure(context) ? context : selector.newLocalCheckContext(context, declaration);
-			// don't bubble up problems if collecting
+			// don't bubble up problems when collecting
 			IProblemListener listener = local.getProblemListener();
 			if(listener instanceof ProblemCollector)
 				listener = new ProblemCollector();
@@ -303,7 +303,11 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
-		IMethodDeclaration declaration = findDeclaration(context, true);
+		MethodFinder finder = new MethodFinder(context, this);
+		IMethodDeclaration declaration = finder.findBest(true);
+		if(declaration == null)
+			context.getProblemListener().reportUnknownMethod(this, this.toString());
+		// IMethodDeclaration declaration = findDeclaration(context, true);
 		Context local = selector.newLocalContext(context, declaration);
 		local.enterMethod(declaration);
 		try {
