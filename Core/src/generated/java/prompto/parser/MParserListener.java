@@ -222,15 +222,25 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitNativeCategoryBindingList(MParser.NativeCategoryBindingListContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MParser#abstract_method_declaration}.
+	 * Enter a parse tree produced by {@link MParser#abstract_global_method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterAbstract_method_declaration(MParser.Abstract_method_declarationContext ctx);
+	void enterAbstract_global_method_declaration(MParser.Abstract_global_method_declarationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MParser#abstract_method_declaration}.
+	 * Exit a parse tree produced by {@link MParser#abstract_global_method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitAbstract_method_declaration(MParser.Abstract_method_declarationContext ctx);
+	void exitAbstract_global_method_declaration(MParser.Abstract_global_method_declarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MParser#abstract_member_method_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterAbstract_member_method_declaration(MParser.Abstract_member_method_declarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MParser#abstract_member_method_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitAbstract_member_method_declaration(MParser.Abstract_member_method_declarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MParser#concrete_method_declaration}.
 	 * @param ctx the parse tree

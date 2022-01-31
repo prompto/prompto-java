@@ -292,13 +292,25 @@ public class EParserBaseListener implements EParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAbstract_method_declaration(EParser.Abstract_method_declarationContext ctx) { }
+	@Override public void enterAbstract_global_method_declaration(EParser.Abstract_global_method_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAbstract_method_declaration(EParser.Abstract_method_declarationContext ctx) { }
+	@Override public void exitAbstract_global_method_declaration(EParser.Abstract_global_method_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAbstract_member_method_declaration(EParser.Abstract_member_method_declarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAbstract_member_method_declaration(EParser.Abstract_member_method_declarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

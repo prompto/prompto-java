@@ -353,7 +353,17 @@ public class OPromptoBuilder extends OParserBaseListener {
 	}
 
 	@Override
-	public void exitAbstract_method_declaration(Abstract_method_declarationContext ctx) {
+	public void exitAbstract_global_method_declaration(Abstract_global_method_declarationContext ctx) {
+		IType type = getNodeValue(ctx.typ);
+		if(type instanceof CategoryType)
+			((CategoryType)type).setMutable(ctx.MUTABLE()!=null);
+		Identifier name = getNodeValue(ctx.name);
+		ParameterList args = getNodeValue(ctx.args);
+		setNodeValue(ctx, new AbstractMethodDeclaration(name, args, type));
+	}
+	
+	@Override
+	public void exitAbstract_member_method_declaration(Abstract_member_method_declarationContext ctx) {
 		IType type = getNodeValue(ctx.typ);
 		if(type instanceof CategoryType)
 			((CategoryType)type).setMutable(ctx.MUTABLE()!=null);

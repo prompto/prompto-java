@@ -250,15 +250,25 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitNativeCategoryBindingList(OParser.NativeCategoryBindingListContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link OParser#abstract_method_declaration}.
+	 * Enter a parse tree produced by {@link OParser#abstract_global_method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterAbstract_method_declaration(OParser.Abstract_method_declarationContext ctx);
+	void enterAbstract_global_method_declaration(OParser.Abstract_global_method_declarationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link OParser#abstract_method_declaration}.
+	 * Exit a parse tree produced by {@link OParser#abstract_global_method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitAbstract_method_declaration(OParser.Abstract_method_declarationContext ctx);
+	void exitAbstract_global_method_declaration(OParser.Abstract_global_method_declarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#abstract_member_method_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterAbstract_member_method_declaration(OParser.Abstract_member_method_declarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#abstract_member_method_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitAbstract_member_method_declaration(OParser.Abstract_member_method_declarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#concrete_method_declaration}.
 	 * @param ctx the parse tree

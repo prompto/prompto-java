@@ -250,15 +250,25 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitAttributeListItem(EParser.AttributeListItemContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link EParser#abstract_method_declaration}.
+	 * Enter a parse tree produced by {@link EParser#abstract_global_method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void enterAbstract_method_declaration(EParser.Abstract_method_declarationContext ctx);
+	void enterAbstract_global_method_declaration(EParser.Abstract_global_method_declarationContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link EParser#abstract_method_declaration}.
+	 * Exit a parse tree produced by {@link EParser#abstract_global_method_declaration}.
 	 * @param ctx the parse tree
 	 */
-	void exitAbstract_method_declaration(EParser.Abstract_method_declarationContext ctx);
+	void exitAbstract_global_method_declaration(EParser.Abstract_global_method_declarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link EParser#abstract_member_method_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterAbstract_member_method_declaration(EParser.Abstract_member_method_declarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#abstract_member_method_declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitAbstract_member_method_declaration(EParser.Abstract_member_method_declarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link EParser#concrete_method_declaration}.
 	 * @param ctx the parse tree
