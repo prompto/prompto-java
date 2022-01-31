@@ -1,5 +1,6 @@
 package prompto.statement;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -166,7 +167,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 				listener = new ProblemCollector();
 			local.pushProblemListener(listener);
 			try {
-				return check(declaration, context, local);
+				return checkDeclaration(declaration, context, local);
 			} finally {
 				local.popProblemListener();
 			}
@@ -195,7 +196,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		return decl instanceof MethodDeclarationMap;
 	}
 
-	private IType check(IMethodDeclaration declaration, Context parent, Context local) {
+	private IType checkDeclaration(IMethodDeclaration declaration, Context parent, Context local) {
 		if (declaration.isTemplate())
 			return fullCheck((ConcreteMethodDeclaration) declaration, parent, local);
 		else
@@ -307,7 +308,6 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		IMethodDeclaration declaration = finder.findBest(true);
 		if(declaration == null)
 			context.getProblemListener().reportUnknownMethod(this, this.toString());
-		// IMethodDeclaration declaration = findDeclaration(context, true);
 		Context local = selector.newLocalContext(context, declaration);
 		local.enterMethod(declaration);
 		try {
@@ -441,6 +441,9 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	
 	private void doDeclare(Transpiler transpiler) {
 		MethodFinder finder = new MethodFinder(transpiler.getContext(), this);
+		IMethodDeclaration reference = finder.findBestReference(false, new ArrayList<>());
+		if(reference != null)
+			return; // already declared
 		Set<IMethodDeclaration> candidates = finder.findCandidates(false);
 		if(candidates.size()==0) {
 			transpiler.getContext().getProblemListener().reportUnknownMethod(getSelector().getId(), this.getName());
@@ -500,6 +503,12 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 		MethodFinder finder = new MethodFinder(transpiler.getContext(), this);
+		IMethodDeclaration reference = finder.findBestReference(false, new ArrayList<>());
+		if(reference != null) {
+	        transpileSelector(transpiler, reference);
+	        transpileArguments(transpiler, reference, false);
+			return false;
+		}
 		Set<IMethodDeclaration> candidates = finder.findCandidates(false);
 		if(candidates.size()==0) {
 			transpiler.getContext().getProblemListener().reportUnknownMethod(getSelector().getId(), this.getName());

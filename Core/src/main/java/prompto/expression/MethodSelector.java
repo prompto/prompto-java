@@ -4,10 +4,7 @@ import java.lang.invoke.CallSite;
 import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Type;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -31,7 +28,6 @@ import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.compiler.StackState;
 import prompto.declaration.BuiltInMethodDeclaration;
-import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.NativeMethodDeclaration;
@@ -39,14 +35,11 @@ import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.grammar.ArgumentList;
-import prompto.grammar.INamed;
-import prompto.grammar.INamedInstance;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoNativeSymbol;
 import prompto.java.JavaClassType;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
-import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.EnumeratedNativeType;
@@ -83,57 +76,8 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 			super.parentAndMemberToDialect(writer);
 	}
 	
-	public Set<IMethodDeclaration> getCandidates(Context context, boolean checkInstance) {
-		IMethodDeclaration decl = getMethodInstance(context);
-		if(decl!=null)
-			return Collections.singleton(decl);
-		else if(parent==null)
-			return getGlobalCandidates(context);
-		else
-			return getMemberCandidates(context, checkInstance);
-	}
 	
-	
-	private IMethodDeclaration getMethodInstance(Context context) {
-		INamed named = context.getRegistered(id);
-		if(named instanceof INamedInstance) {
-			IType type = named.getType(context);
-			if(type != null) {
-				type = type.resolve(context, null);
-				if(type instanceof prompto.type.MethodType) {
-					return ((prompto.type.MethodType)type).getMethod().asReference();
-				}
-			}
-		}
-		return null;
-	}
-	
-
-	private Set<IMethodDeclaration> getGlobalCandidates(Context context) {
-		Set<IMethodDeclaration> methods = new HashSet<>();
-		// if called from a member method, could be a member method called without this/self
-		InstanceContext instance = context.getClosestInstanceContext();
-		if(instance!=null) {
-			IType type = instance.getInstanceType();
-			ConcreteCategoryDeclaration cd = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, type.getTypeNameId());
-			if(cd!=null) {
-				MethodDeclarationMap members = cd.getMemberMethods(context, id, true);
-				if(members!=null)
-					methods.addAll(members.values());
-			}
-		}
-		MethodDeclarationMap globals = context.getRegisteredDeclaration(MethodDeclarationMap.class, id);
-		if(globals!=null)
-			methods.addAll(globals.values());
-		return methods;
-	}
-	
-	private Set<IMethodDeclaration> getMemberCandidates(Context context, boolean checkInstance) {
-		IType parentType = checkParentType(context, checkInstance);
-		return parentType != null ? parentType.getMemberMethods(context, id) : Collections.emptySet();
-	}
-	
-	private IType checkParentType(Context context, boolean checkInstance) {
+	public IType checkParentType(Context context, boolean checkInstance) {
 		if(checkInstance)
 			return interpretParentInstance(context);
 		else 
