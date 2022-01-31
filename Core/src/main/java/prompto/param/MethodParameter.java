@@ -42,10 +42,17 @@ import prompto.value.IValue;
 
 public class MethodParameter extends BaseParameter {
 	
+	MethodType resolved;
+	
 	public MethodParameter(Identifier id) {
-		super(id);
+		this(null, id);
 	}
 	
+	public MethodParameter(MethodType resolved, Identifier id) {
+		super(id);
+		this.resolved = resolved;
+	}
+
 	@Override
 	public String getSignature(Dialect dialect) {
 		return id.toString();
@@ -108,10 +115,17 @@ public class MethodParameter extends BaseParameter {
 
 	@Override
 	public MethodType getType(Context context) {
-		IMethodDeclaration actual = getDeclaration(context);
-		return new MethodType(actual);
+		resolve(context);
+		return resolved;
 	}
 	
+	private void resolve(Context context) {
+		if(resolved == null) {
+			IMethodDeclaration actual = getDeclaration(context);
+			resolved = new MethodType(actual);
+		}
+	}
+
 	private IMethodDeclaration getDeclaration(Context context) {
 		MethodDeclarationMap methods = context.getRegisteredDeclaration(MethodDeclarationMap.class, id);
 		if(methods!=null)
@@ -132,11 +146,11 @@ public class MethodParameter extends BaseParameter {
 	}
 	
 	private ResultInfo compileMethodArgument(Context context, MethodInfo method, Flags flags, IExpression expression) {
-		MethodType target = getType(context);
-		IMethodDeclaration decl = target.getMethod();
+		resolve(context);
+		IMethodDeclaration decl = resolved.getMethod();
 		ParameterList parameters = decl.getParameters();
 		// the JVM can only cast to declared types, so we need a proxy to convert the FunctionalInterface call into the concrete one
-		expression.compile(context.getCallingContext(), method, flags); // this would return a lambda
+		expression.compileReference(context.getCallingContext(), method, flags); // this would return a lambda
 		// what interface we are casting to
 		ClassConstant dest = new ClassConstant(getJavaType(context));
 		method.addInstruction(Opcode.LDC, dest);

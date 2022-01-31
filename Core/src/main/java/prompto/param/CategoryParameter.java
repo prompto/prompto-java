@@ -10,7 +10,6 @@ import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.ArrowExpression;
 import prompto.expression.IExpression;
-import prompto.grammar.Argument;
 import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
@@ -99,14 +98,12 @@ public class CategoryParameter extends BaseParameter implements ITypedParameter 
 	@Override
 	public ResultInfo compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
 		resolve(context);
-		if(resolved instanceof MethodType) {
-			Argument assign = makeArgument(assignments, isFirst);
-			return assign.getExpression().compileReference(context.getCallingContext(), method, flags);
-		} else
+		if(resolved instanceof MethodType)
+			return new MethodParameter((MethodType)resolved, id).compileParameter(context, method, flags, assignments, isFirst);
+		else
 			return super.compileParameter(context, method, flags, assignments, isFirst);
 	}
-	
-	
+
 	@Override
 	public void toDialect(CodeWriter writer) {
 		if(mutable)

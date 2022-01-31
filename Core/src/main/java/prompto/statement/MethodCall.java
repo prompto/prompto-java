@@ -244,14 +244,14 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		MethodFinder finder = new MethodFinder(context, this);
-		Collection<IMethodDeclaration> declarations = finder.findPotential();
-		switch(declarations.size()) {
+		Collection<IMethodDeclaration> potential = finder.findPotential();
+		switch(potential.size()) {
 		case 0:
 			throw new SyntaxError("No matching prototype for:" + this.toString()); 
 		case 1:
-			return compileExact(context, method, flags, declarations.iterator().next());
+			return compileExact(context, method, flags, potential.iterator().next());
 		default:
-			return compileDynamic(context, method, flags, finder.findLessSpecific(declarations));
+			return compileDynamic(context, method, flags, finder.findLessSpecific(potential));
 		}
 	}
 	
