@@ -5,6 +5,7 @@ import java.util.Objects;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
+import prompto.declaration.IMethodDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
 import prompto.expression.ArrowExpression;
@@ -14,12 +15,14 @@ import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
+import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.transpiler.Transpiler;
 import prompto.type.DecimalType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
 import prompto.type.MethodType;
 import prompto.utils.CodeWriter;
+import prompto.value.ArrowValue;
 import prompto.value.ContextualExpression;
 import prompto.value.IValue;
 
@@ -65,13 +68,34 @@ public class CategoryParameter extends BaseParameter implements ITypedParameter 
 	
 	@Override
 	public IValue checkValue(Context context, IExpression expression) throws PromptoError {
+		boolean isArrow = expression instanceof ContextualExpression && ((ContextualExpression)expression).getExpression() instanceof ArrowExpression;
+		if(isArrow)
+			return checkArrowValue(context, (ContextualExpression)expression);
+		else
+			return checkSimpleValue(context, expression);
+	}
+	
+	private IValue checkArrowValue(Context context, ContextualExpression expression) {
+		IMethodDeclaration decl = getAbstractMethodDeclaration(context);
+		return new ArrowValue (decl, expression.getCalling(), (ArrowExpression)expression.getExpression()); // TODO check
+	}
+
+	private IMethodDeclaration getAbstractMethodDeclaration(Context context) {
+		MethodDeclarationMap methods = context.getRegisteredDeclaration(MethodDeclarationMap.class, type.getTypeNameId());
+		if(methods!=null)
+			return methods.values().stream().filter(decl -> decl.isAbstract()).findFirst().orElse(null);
+		else
+			return null;
+	}
+
+	private IValue checkSimpleValue(Context context, IExpression expression) {
 		resolve(context);
 		if(resolved instanceof MethodType)
 			return expression.interpretReference(context);
 		else
 			return super.checkValue(context, expression);
 	}
-	
+
 	@Override
 	public ResultInfo compileParameter(Context context, MethodInfo method, Flags flags, ArgumentList assignments, boolean isFirst) {
 		resolve(context);

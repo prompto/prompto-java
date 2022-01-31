@@ -62,7 +62,10 @@ public class MethodFinder {
 		decl = findBestMethod(checkInstance, allCandidates);
 		if(decl!=null)
 			return decl;
-		context.getProblemListener().reportNoMatchingPrototype(methodCall, methodCall.toString(), allCandidates.stream().map(m->m.getSignature(Dialect.O)).collect(Collectors.toSet()));
+		if(allCandidates.isEmpty())
+			context.getProblemListener().reportUnknownMethod(methodCall.getSelector().getId(), methodCall.getName());
+		else	
+			context.getProblemListener().reportNoMatchingPrototype(methodCall, methodCall.toString(), allCandidates.stream().map(m->m.getSignature(Dialect.O)).collect(Collectors.toSet()));
 		return null;
 	}
 	
