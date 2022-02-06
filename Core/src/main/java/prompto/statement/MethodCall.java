@@ -506,7 +506,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		IMethodDeclaration reference = finder.findBestReference(false, new ArrayList<>());
 		if(reference != null) {
 	        transpileSelector(transpiler, reference);
-	        transpileArguments(transpiler, reference, false);
+	        transpileAssignments(transpiler, reference, false);
 			return false;
 		}
 		Set<IMethodDeclaration> candidates = finder.findCandidates(false);
@@ -514,13 +514,13 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			transpiler.getContext().getProblemListener().reportUnknownMethod(getSelector().getId(), this.getName());
 			return false;
 		}
-	    Set<IMethodDeclaration> compatible = finder.filterCompatible(candidates, false, true, spec -> spec!=Specificity.INCOMPATIBLE);
-	    if(compatible==null || compatible.isEmpty())
+	    Set<IMethodDeclaration> compatibles = finder.filterCompatible(candidates, false, true, spec -> spec!=Specificity.INCOMPATIBLE);
+	    if(compatibles==null || compatibles.isEmpty())
 	    	transpiler.getContext().getProblemListener().reportUnknownMethod(getSelector().getId(), this.getName());
-	    else if (compatible.size() == 1)
-	        transpileSingle(transpiler, compatible.iterator().next(), false);
+	    else if (compatibles.size() == 1)
+	        transpileSingle(transpiler, compatibles.iterator().next(), false);
 	    else
-	        transpileMultiple(transpiler, compatible);
+	        transpileMultiple(transpiler, compatibles);
 	    return false;
 	}
 
@@ -531,7 +531,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		   transpileInlinedMethodCall(transpiler, (NativeMethodDeclaration)declaration);
 	   else {
 	        transpileSelector(transpiler, declaration);
-	        transpileArguments(transpiler, declaration, allowDerived);
+	        transpileAssignments(transpiler, declaration, allowDerived);
 	    }
 	}
 
@@ -549,12 +549,12 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	}
 	
 	
-	private void transpileArguments(Transpiler transpiler, IMethodDeclaration declaration, boolean allowDerived) {
+	private void transpileAssignments(Transpiler transpiler, IMethodDeclaration declaration, boolean allowDerived) {
 		List<Argument> arguments = makeArguments(transpiler.getContext(), declaration);
-		transpileArguments(transpiler, arguments, declaration, allowDerived);
+		transpileAssignments(transpiler, arguments, declaration, allowDerived);
 	}
 	
-	public void transpileArguments(Transpiler transpiler, List<Argument> arguments, IMethodDeclaration declaration, boolean allowDerived) {
+	public void transpileAssignments(Transpiler transpiler, List<Argument> arguments, IMethodDeclaration declaration, boolean allowDerived) {
 	    arguments = arguments.stream().filter(argument->!(argument.getParameter() instanceof CodeParameter)).collect(Collectors.toList());
 	    if(!arguments.isEmpty()) {
 	        transpiler.append("(");
@@ -608,7 +608,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	        parent = new ThisExpression();
 	    MethodSelector selector = new MethodSelector(parent, new Identifier(name));
 	    selector.transpile(transpiler);
-	    this.transpileArguments(transpiler, this.dispatcher, false);
+	    this.transpileAssignments(transpiler, this.dispatcher, false);
 	}
 
 
