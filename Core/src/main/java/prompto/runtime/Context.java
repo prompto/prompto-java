@@ -789,8 +789,8 @@ public class Context implements IContext {
 	
 
 	public INamed getInstance(Identifier id, boolean includeParent) {
-		INamed named = (parent==null || !includeParent) ? null : parent.getInstance(id, true);
-		return named!=null ? named : instances.get(id);
+		INamed named = instances.get(id);
+		return named!=null ? named : (parent==null || !includeParent) ? null : parent.getInstance(id, true);
 	}
 
 	public boolean hasValue(Identifier id) {

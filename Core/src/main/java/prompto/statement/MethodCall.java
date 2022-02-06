@@ -449,7 +449,9 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			transpiler.getContext().getProblemListener().reportUnknownMethod(getSelector().getId(), this.getName());
 		} else {
 		    Set<IMethodDeclaration> compatibles = finder.filterCompatible(candidates, false, true, spec -> spec!=Specificity.INCOMPATIBLE);
-		    if(compatibles.size()==1 && compatibles.iterator().next() instanceof BuiltInMethodDeclaration) {
+		    if(compatibles==null || compatibles.isEmpty())
+		    	transpiler.getContext().getProblemListener().reportNoMatchingPrototype(this, this.toString(), candidates.stream().map(m->m.getSignature(Dialect.O)).collect(Collectors.toSet()));
+		    else if(compatibles.size()==1 && compatibles.iterator().next() instanceof BuiltInMethodDeclaration) {
 	            ((BuiltInMethodDeclaration)compatibles.iterator().next()).declareCall(transpiler);
 		    } else {
 	        	if(!this.isLocalClosure(transpiler.getContext())) {
@@ -511,13 +513,13 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 		}
 		Set<IMethodDeclaration> candidates = finder.findCandidates(false);
 		if(candidates.size()==0) {
-			transpiler.getContext().getProblemListener().reportUnknownMethod(getSelector().getId(), this.getName());
-			return false;
+	    	transpiler.getContext().getProblemListener().reportUnknownMethod(getSelector().getId(), this.getName());
+	    	return false;
 		}
 	    Set<IMethodDeclaration> compatibles = finder.filterCompatible(candidates, false, true, spec -> spec!=Specificity.INCOMPATIBLE);
 	    if(compatibles==null || compatibles.isEmpty())
-	    	transpiler.getContext().getProblemListener().reportUnknownMethod(getSelector().getId(), this.getName());
-	    else if (compatibles.size() == 1)
+	    	transpiler.getContext().getProblemListener().reportNoMatchingPrototype(this, this.toString(), candidates.stream().map(m->m.getSignature(Dialect.O)).collect(Collectors.toSet()));
+		else if (compatibles.size() == 1)
 	        transpileSingle(transpiler, compatibles.iterator().next(), false);
 	    else
 	        transpileMultiple(transpiler, compatibles);

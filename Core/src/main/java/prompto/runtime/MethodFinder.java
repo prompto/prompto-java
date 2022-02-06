@@ -91,10 +91,10 @@ public class MethodFinder {
 					return getArrowDeclaration((ArrowValue)value);
 			}
 		} else {
-			INamed named = context.getInstance(selector.getId(), false);
+			INamed named = context.getInstance(selector.getId(), true);
 			if(named==null)
 				return null;
-			IType type = named.getType(context);
+			IType type = named.getType(context).resolve(context, null);
 			if(type instanceof MethodType)
 				return ((MethodType)type).getMethod().asReference();
 		}
