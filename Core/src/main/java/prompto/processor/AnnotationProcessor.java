@@ -18,7 +18,7 @@ public abstract class AnnotationProcessor {
 			String fullName = AnnotationProcessor.class.getPackage().getName() + "." + simpleName;
 			try {
 				Class<?> klass = Class.forName(fullName);
-				return (AnnotationProcessor)klass.newInstance();
+				return (AnnotationProcessor)klass.getDeclaredConstructor().newInstance();
 			} catch(ClassNotFoundException e) {
 				return null;
 			} catch(Throwable t) {

@@ -17,7 +17,7 @@ public interface IDebugRequestListenerFactory {
 		Class<?> klass = Class.forName(factoryName, true, Thread.currentThread().getContextClassLoader());
 		if(!(IDebugRequestListenerFactory.class.isAssignableFrom(klass)))
 			throw new RuntimeException("Not a listener factory: " + factoryName);
-		return (IDebugRequestListenerFactory)klass.newInstance();
+		return (IDebugRequestListenerFactory)klass.getDeclaredConstructor().newInstance();
 	}
 
 

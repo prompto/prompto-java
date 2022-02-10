@@ -17,7 +17,7 @@ public interface IDebugEventAdapterFactory {
 		Class<?> klass = Class.forName(factoryName, true, Thread.currentThread().getContextClassLoader());
 		if(!(IDebugEventAdapterFactory.class.isAssignableFrom(klass)))
 			throw new RuntimeException("Not an adapter factory: " + factoryName);
-		return (IDebugEventAdapterFactory)klass.newInstance();
+		return (IDebugEventAdapterFactory)klass.getDeclaredConstructor().newInstance();
 	}
 
 

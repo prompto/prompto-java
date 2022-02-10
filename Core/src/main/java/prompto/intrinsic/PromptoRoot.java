@@ -228,8 +228,8 @@ public abstract class PromptoRoot extends PromptoStorableBase implements IMutabl
 	}
 
 	protected static Object getFieldValue(Object instance, Field field) {
-		boolean accessible = field.isAccessible();
-		return accessible ? getAccessibleFieldValue(instance, field) : getInaccessibleFieldValue(instance, field);
+		boolean canAccess = field.canAccess(instance);
+		return canAccess ? getAccessibleFieldValue(instance, field) : getInaccessibleFieldValue(instance, field);
 	}
 	
 	private static Object getInaccessibleFieldValue(Object instance, Field field) {

@@ -267,7 +267,7 @@ public final class MemStore implements IStore {
 		if(first==null || first<1)
 			first = 1L;
 		if(last==null || last>docs.size())
-			last = new Long(docs.size());
+			last = Long.valueOf(docs.size());
 		if(first > last)
 			return new ArrayList<StoredDocument>();
 		return docs.subList(first.intValue() - 1, last.intValue());

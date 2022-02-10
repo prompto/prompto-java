@@ -37,6 +37,7 @@ public abstract class PrintStreamLogger extends PrintStream {
 			}
 		}
 
+		@SuppressWarnings("deprecation")
 		protected void finalize() throws Throwable {
 			super.finalize();
 			String buffered = new String(toByteArray());

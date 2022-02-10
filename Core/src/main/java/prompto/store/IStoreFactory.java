@@ -20,7 +20,7 @@ public interface IStoreFactory {
 		Class<?> klass = Class.forName(factoryName, true, Thread.currentThread().getContextClassLoader());
 		if(!(IStoreFactory.class.isAssignableFrom(klass)))
 			throw new RuntimeException("Not a store factory: " + factoryName);
-		return (IStoreFactory)klass.newInstance();
+		return (IStoreFactory)klass.getDeclaredConstructor().newInstance();
 	}
 	
 	default IStoreConfiguration newConfiguration(IConfigurationReader reader) {

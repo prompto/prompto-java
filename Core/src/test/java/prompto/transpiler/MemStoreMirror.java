@@ -34,7 +34,7 @@ import prompto.store.IStoredIterable;
 import prompto.store.memory.MemStore;
 import prompto.store.memory.Query;
 
-@SuppressWarnings("restriction")
+@SuppressWarnings({ "removal" }) 
 public class MemStoreMirror {
 	
 	private static boolean isFunction(Object v) {

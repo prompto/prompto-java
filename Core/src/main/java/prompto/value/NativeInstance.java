@@ -125,7 +125,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 	private Object makeInstance(Context context) {
 		try {
 			Class<?> mapped = declaration.getBoundClass(true);
-			return mapped.newInstance();
+			return mapped.getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

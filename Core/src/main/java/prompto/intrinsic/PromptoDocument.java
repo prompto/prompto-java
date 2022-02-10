@@ -3,6 +3,7 @@ package prompto.intrinsic;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidParameterException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -67,10 +68,10 @@ public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable,
 		else if("text".equals(key))
 			return (V)this.toString();
 		else if(autoCreate!=null) try {
-			V v = autoCreate.newInstance();
+			V v = autoCreate.getDeclaredConstructor().newInstance();
 			super.put(key, v);
 			return v;
-		} catch(IllegalAccessException | InstantiationException e) {
+		} catch(IllegalAccessException | InstantiationException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			throw new RuntimeException(e);
 		} else
 			return null;
@@ -192,9 +193,9 @@ public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable,
 		else if(fieldData.isBoolean())
 			return Boolean.valueOf(fieldData.asBoolean());
 		else if(fieldData.isInt() || fieldData.isLong())
-			return new Long(fieldData.asLong());
+			return Long.valueOf(fieldData.asLong());
 		else if(fieldData.isFloat() || fieldData.isDouble())
-			return new Double(fieldData.asDouble());
+			return Double.valueOf(fieldData.asDouble());
 		else if(fieldData.isTextual())
 			return fieldData.asText();
 		else if(fieldData.isArray()) {

@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
-@SuppressWarnings("restriction")
+@SuppressWarnings({ "removal" })
 public class JSSet {
 
 	Set<Object> set = new HashSet<>();

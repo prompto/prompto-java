@@ -45,7 +45,7 @@ public interface IConfigurationReader {
 		else try {
 			@SuppressWarnings("unchecked")
 			Class<? extends IStoreFactory> klass = (Class<? extends IStoreFactory>) Class.forName(factoryName);
-			IStoreFactory factory = klass.newInstance();
+			IStoreFactory factory = klass.getDeclaredConstructor().newInstance();
 			return factory.newConfiguration(this);
 		} catch(Exception e) {
 			throw new RuntimeException(e);
@@ -62,7 +62,7 @@ public interface IConfigurationReader {
 		else try {
 			@SuppressWarnings("unchecked")
 			Class<? extends IKeyStoreFactory> klass = (Class<? extends IKeyStoreFactory>) Class.forName(factoryName);
-			IKeyStoreFactory factory = klass.newInstance();
+			IKeyStoreFactory factory = klass.getDeclaredConstructor().newInstance();
 			return factory.newConfiguration(child);
 		} catch(Exception e) {
 			throw new RuntimeException(e);
@@ -79,7 +79,7 @@ public interface IConfigurationReader {
 		else try {
 			@SuppressWarnings("unchecked")
 			Class<? extends ISecretKeyFactory> klass = (Class<? extends ISecretKeyFactory>) Class.forName(factoryName);
-			ISecretKeyFactory factory = klass.newInstance();
+			ISecretKeyFactory factory = klass.getDeclaredConstructor().newInstance();
 			return factory.newConfiguration(child);
 		} catch(Exception e) {
 			throw new RuntimeException(e);
@@ -96,7 +96,7 @@ public interface IConfigurationReader {
 		else try {
 			@SuppressWarnings("unchecked")
 			Class<? extends IDebugEventAdapterFactory> klass = (Class<? extends IDebugEventAdapterFactory>) Class.forName(factoryName);
-			IDebugEventAdapterFactory factory = klass.newInstance();
+			IDebugEventAdapterFactory factory = klass.getDeclaredConstructor().newInstance();
 			return factory.newConfiguration(child);
 		} catch(Exception e) {
 			throw new RuntimeException(e);
@@ -113,7 +113,7 @@ public interface IConfigurationReader {
 		else try {
 			@SuppressWarnings("unchecked")
 			Class<? extends IDebugRequestListenerFactory> klass = (Class<? extends IDebugRequestListenerFactory>) Class.forName(factoryName);
-			IDebugRequestListenerFactory factory = klass.newInstance();
+			IDebugRequestListenerFactory factory = klass.getDeclaredConstructor().newInstance();
 			return factory.newConfiguration(child);
 		} catch(Exception e) {
 			throw new RuntimeException(e);

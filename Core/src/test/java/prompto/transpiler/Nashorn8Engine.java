@@ -26,7 +26,7 @@ import prompto.utils.ResourceUtils;
 import com.coveo.nashorn_modules.Folder;
 import com.coveo.nashorn_modules.Require;
 
-@SuppressWarnings("restriction")
+@SuppressWarnings({ "removal" })
 public class Nashorn8Engine implements IJSEngine {
 
 	public static void executeTests(Context context) throws Exception {

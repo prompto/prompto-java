@@ -187,7 +187,7 @@ public class Serializer {
 	private static Object postDeserializeObject(Type type, ObjectNode node) throws Exception {
 		String typeName = node.get("type").asText();
 		Class<?> klass = getInstanceType(type, typeName); 
-		Object value = klass.newInstance();
+		Object value = klass.getDeclaredConstructor().newInstance();
 		JsonNode  data = node.get("value");
 		postDeserializeFields(klass, value, data);
 		return value;
@@ -240,7 +240,7 @@ public class Serializer {
 
 	private static Object postDeserializeList(Type type, ArrayNode array) throws Exception {
 		Type itemType = getListItemType(type);
-		List<Object> list = type instanceof Class ? ((Class<List<Object>>)type).newInstance() : new ArrayList<Object>();
+		List<Object> list = type instanceof Class ? ((Class<List<Object>>)type).getDeclaredConstructor().newInstance() : new ArrayList<Object>();
 		for(JsonNode item : array) {
 			Object value = postDeserialize(itemType, item);
 			list.add(value);
