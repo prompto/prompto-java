@@ -179,8 +179,12 @@ public class MemStoreMirror {
 		public Object fromJS(Object value) {
 			if(value instanceof ScriptObjectMirror)
 				value = fromScriptObjectMirror((ScriptObjectMirror)value);
-			if(value==null || value instanceof Boolean || value instanceof Integer || value instanceof Long || value instanceof Float || value instanceof Double || value instanceof String)
+			if(value==null || value instanceof Boolean || value instanceof Long || value instanceof Double || value instanceof String)
 				return value;
+			else if(value instanceof Integer)
+				return ((Integer)value).longValue();
+			else if(value instanceof Float)
+				return ((Float)value).doubleValue();
 			else if(value instanceof StorableMirror)
 				return ((StorableMirror)value).getStorable();
 			else if(value instanceof StoredMirror)

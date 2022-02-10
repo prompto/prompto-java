@@ -949,7 +949,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		if(decl instanceof IEnumeratedDeclaration) {
 			Type symbolType = decl instanceof EnumeratedNativeDeclaration ? CompilerUtils.getNativeEnumType(decl.getId()) : CompilerUtils.getCategoryEnumConcreteType(decl.getId());
 			method.addInstruction(Opcode.LDC, new ClassConstant(symbolType));
-			MethodConstant m = new MethodConstant(PromptoEnum.class, "getInstance", Object.class, Class.class, PromptoEnum.class);
+			InterfaceConstant m = new InterfaceConstant(PromptoEnum.class, "getInstance", Object.class, Class.class, PromptoEnum.class);
 			method.addInstruction(Opcode.INVOKESTATIC, m);
 		} else if(decl instanceof CategoryDeclaration) {
 			MethodConstant m = new MethodConstant(PromptoRoot.class, "newInstanceFromDbIdRef", Object.class, PromptoRoot.class);
