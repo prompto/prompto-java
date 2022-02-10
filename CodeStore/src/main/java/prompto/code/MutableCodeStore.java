@@ -197,7 +197,7 @@ public class MutableCodeStore extends BaseCodeStore {
 			IStored stored = fetchOneNamedInStore(type.getCategory(), version, name, false);
 			if(stored==null)
 				return null;
-			Module module = type.getModuleClass().newInstance();
+			Module module = type.getModuleClass().getDeclaredConstructor().newInstance();
 			module.fromStored(store, stored);
 			return (T)module;
 		} catch(Exception e) {
@@ -221,7 +221,7 @@ public class MutableCodeStore extends BaseCodeStore {
 		String[] categories = stored.getCategories();
 		String category = categories[categories.length-1];
 		ModuleType type = ModuleType.valueOf(category.toUpperCase());
-		Module module = type.getModuleClass().newInstance();
+		Module module = type.getModuleClass().getDeclaredConstructor().newInstance();
 		module.fromStored(store, stored);
 		return module;
 	}
