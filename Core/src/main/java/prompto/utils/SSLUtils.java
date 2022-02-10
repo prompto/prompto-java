@@ -1,15 +1,14 @@
 package prompto.utils;
 
-import java.io.IOException;
-import java.net.URL;
-import java.security.GeneralSecurityException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.function.Function;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
@@ -17,31 +16,16 @@ import javax.net.ssl.X509TrustManager;
 
 public abstract class SSLUtils {
 	
-	@FunctionalInterface
-	public interface ResultSupplier<T> {
-		T apply(HttpsURLConnection cnx) throws IOException;
-	}
-	
-	public static <T> T trustingAllCertificates(URL url, ResultSupplier<T> supplier) throws Exception {
-		HttpsURLConnection cnx = (HttpsURLConnection) url.openConnection();
-		try {
-			trustAllCertificates(cnx);
-			cnx.setHostnameVerifier(new HostnameVerifier() { @Override public boolean verify(String hostName, SSLSession session) { return true; } });
-			return supplier.apply(cnx);
-		} finally {
-			cnx.disconnect();
-		}
-	}
-	
-	public static void trustAllCertificates(HttpsURLConnection cnx) throws GeneralSecurityException {
-		// Install the all-trusting trust manager
+	public static <T> T trustingAllCertificates(HttpRequest request, Function<String, T> consumer) throws Exception {
 		SSLContext sc = SSLContext.getInstance("SSL");
 		sc.init(null, new TrustManager[] { new TrustAllCertificatesManager() }, new java.security.SecureRandom());
-		cnx.setSSLSocketFactory(sc.getSocketFactory());	
-		cnx.setHostnameVerifier(new HostnameVerifier() { @Override public boolean verify(String hostName, SSLSession session) { return true; } });
+		HttpClient client = HttpClient.newBuilder()
+				.sslContext(sc)
+				.build();
+		HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+		return consumer.apply(response.body());
 	}
-
-
+	
 	private static class TrustAllCertificatesManager implements X509TrustManager {
         @Override public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
         @Override public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
