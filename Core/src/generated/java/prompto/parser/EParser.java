@@ -7018,13 +7018,13 @@ public class EParser extends AbstractParser {
 	}
 
 	public static class Invocation_expressionContext extends ParserRuleContext {
-		public Variable_identifierContext name;
+		public Unresolved_expressionContext exp;
 		public TerminalNode INVOKE_COLON() { return getToken(EParser.INVOKE_COLON, 0); }
 		public Invocation_trailerContext invocation_trailer() {
 			return getRuleContext(Invocation_trailerContext.class,0);
 		}
-		public Variable_identifierContext variable_identifier() {
-			return getRuleContext(Variable_identifierContext.class,0);
+		public Unresolved_expressionContext unresolved_expression() {
+			return getRuleContext(Unresolved_expressionContext.class,0);
 		}
 		public Invocation_expressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -7049,7 +7049,7 @@ public class EParser extends AbstractParser {
 			setState(1384);
 			match(INVOKE_COLON);
 			setState(1385);
-			((Invocation_expressionContext)_localctx).name = variable_identifier();
+			((Invocation_expressionContext)_localctx).exp = unresolved_expression(0);
 			setState(1386);
 			invocation_trailer();
 			}
@@ -26527,7 +26527,7 @@ public class EParser extends AbstractParser {
 		"\2\2\u0562\u0565\3\2\2\2\u0563\u0561\3\2\2\2\u0563\u0564\3\2\2\2\u0564"+
 		"c\3\2\2\2\u0565\u0563\3\2\2\2\u0566\u0567\6\63\30\3\u0567\u0568\7\25\2"+
 		"\2\u0568\u0569\5\u00e4s\2\u0569e\3\2\2\2\u056a\u056b\7z\2\2\u056b\u056c"+
-		"\5\u00e8u\2\u056c\u056d\5h\65\2\u056dg\3\2\2\2\u056e\u056f\6\65\31\3\u056f"+
+		"\5b\62\2\u056c\u056d\5h\65\2\u056dg\3\2\2\2\u056e\u056f\6\65\31\3\u056f"+
 		"i\3\2\2\2\u0570\u0576\5\u0132\u009a\2\u0571\u0576\5\u0134\u009b\2\u0572"+
 		"\u0576\5\u00e4s\2\u0573\u0576\5\u012e\u0098\2\u0574\u0576\5\u0130\u0099"+
 		"\2\u0575\u0570\3\2\2\2\u0575\u0571\3\2\2\2\u0575\u0572\3\2\2\2\u0575\u0573"+
