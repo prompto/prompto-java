@@ -1,0 +1,48 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+ 	<modelVersion>4.0.0</modelVersion>
+  	<parent>
+		<groupId>org.prompto</groupId>
+		<artifactId>Parent-Core</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<artifactId>JarLoader</artifactId>
+	<version>1.0.0</version>
+	<packaging>jar</packaging>
+
+	<name>Core</name>
+	<url>https://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+  	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.9.0</version>
+				<configuration>
+					<source>11</source>
+					<target>11</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.2</version>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<Launcher-Agent-Class>prompto.utils.JarLoader</Launcher-Agent-Class>
+							<Agent-Class>prompto.utils.JarLoader</Agent-Class>
+							<Premain-Class>prompto.utils.JarLoader</Premain-Class>
+						</manifestEntries>
+					</archive>
+				</configuration>
+  			</plugin>
+  		</plugins>
+  						
+	</build>
+  		
+</project>
