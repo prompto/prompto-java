@@ -2,7 +2,6 @@ package prompto.library.e;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import prompto.parser.e.BaseEParserTest;
@@ -32,7 +31,6 @@ public class TestReader extends BaseEParserTest {
 		runCompiledTests("reader/csv.pec");
 	}
 
-	@Ignore("Pending migration to GraalVM")
 	@Test
 	public void testTranspiledCsv() throws Exception {
 		runTranspiledTests("reader/csv.pec");

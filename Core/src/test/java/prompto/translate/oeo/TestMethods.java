@@ -77,6 +77,11 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testLocalMember() throws Exception {
+		compareResourceOEO("methods/localMember.poc");
+	}
+
+	@Test
 	public void testMember() throws Exception {
 		compareResourceOEO("methods/member.poc");
 	}
