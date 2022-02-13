@@ -1678,9 +1678,9 @@ public class EPromptoBuilder extends EParserBaseListener {
 		IExpression expression = getNodeValue(ctx.exp);
 		if(expression instanceof UnresolvedIdentifier)
 			selector = new MethodSelector(((UnresolvedIdentifier)expression).getId());
-		else if(expression instanceof UnresolvedSelector) {
-			selector = new MethodSelector(((UnresolvedSelector)expression).getId());
-			selector.setParent(((UnresolvedSelector)expression).getParent());
+		else if(expression instanceof MemberSelector) {
+			selector = new MethodSelector(((MemberSelector)expression).getId());
+			selector.setParent(((MemberSelector)expression).getParent());
 		} 
 		if(selector!=null)
 			setNodeValue(ctx, new MethodCall(selector));
