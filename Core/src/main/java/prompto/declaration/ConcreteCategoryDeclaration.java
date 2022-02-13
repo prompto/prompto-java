@@ -429,7 +429,7 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 		if(!(actual instanceof MethodDeclarationMap))
 			throw new SyntaxError("Not a member method!");
 		for(IMethodDeclaration method : ((MethodDeclarationMap)actual).values()) {
-			if(allowAbstract || !(method instanceof AbstractMethodDeclaration))
+			if(allowAbstract || !method.isAbstract())
 				result.register(method, context, true);
 		}
 	}
