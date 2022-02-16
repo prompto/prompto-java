@@ -2,7 +2,7 @@
 <Configuration status="INFO">
     <Appenders>
     	<ScriptAppenderSelector name="PromptoFileOrConsole">
-    		<Script language="JavaScript"><![CDATA[
+    		<Script language="Nashorn"><![CDATA[
      			var System = Java.type("java.lang.System");
      			var logsFolder = System.getenv("LOGS_FOLDER") || "/logs";
     			var File = Java.type("java.io.File");
@@ -31,7 +31,7 @@
         	<AppenderRef ref="PromptoFileOrConsole"/>
         </Async>
      	<ScriptAppenderSelector name="OutFileOrConsole">
-    		<Script language="JavaScript"><![CDATA[
+    		<Script language="Nashorn"><![CDATA[
      			var System = Java.type("java.lang.System");
      			var logsFolder = System.getenv("LOGS_FOLDER") || "/logs";
     			var File = Java.type("java.io.File");
@@ -60,7 +60,7 @@
         	<AppenderRef ref="OutFileOrConsole"/>
         </Async>
      	<ScriptAppenderSelector name="ErrorFileOrConsole">
-    		<Script language="JavaScript"><![CDATA[
+    		<Script language="Nashorn"><![CDATA[
      			var System = Java.type("java.lang.System");
      			var logsFolder = System.getenv("LOGS_FOLDER") || "/logs";
     			var File = Java.type("java.io.File");
