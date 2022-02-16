@@ -8,9 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import org.openjdk.nashorn.api.scripting.ScriptObjectMirror;
 
-@SuppressWarnings({ "removal" })
 public class JSSet {
 
 	Set<Object> set = new HashSet<>();

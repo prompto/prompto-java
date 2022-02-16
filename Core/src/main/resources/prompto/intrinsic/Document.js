@@ -108,18 +108,16 @@ Document.prototype.$safe_setItem = function(item, value) {
     	this[item] = value;
 };
 
-var setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf : function(obj, proto) { obj.__proto__ = proto; };
-
 Document.prototype.$safe_add = function(other) {
     var result = Object.assign({}, this, other);
-    setPrototypeOf(result, Document.prototype);
+    Object.setPrototypeOf(result, Document.prototype);
     return result;
 };
 
 
 Document.prototype.toDocument = function() {
     var result = Object.assign({}, this);
-    setPrototypeOf(result, Document.prototype);
+    Object.setPrototypeOf(result, Document.prototype);
     return result;
 };
 

@@ -13,8 +13,8 @@ import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
-import jdk.nashorn.api.scripting.NashornScriptEngine;
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import org.openjdk.nashorn.api.scripting.NashornScriptEngine;
+import org.openjdk.nashorn.api.scripting.ScriptObjectMirror;
 import prompto.declaration.IMethodDeclaration;
 import prompto.declaration.TestMethodDeclaration;
 import prompto.grammar.Identifier;
@@ -26,7 +26,6 @@ import prompto.utils.ResourceUtils;
 import com.coveo.nashorn_modules.Folder;
 import com.coveo.nashorn_modules.Require;
 
-@SuppressWarnings({ "removal" })
 public class Nashorn8Engine implements IJSEngine {
 
 	public static void executeTests(Context context) throws Exception {

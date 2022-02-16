@@ -41,7 +41,7 @@ $Root.prototype.equals = function(other) {
 
 
 $Root.prototype.toMutable = function() {
-	var ctor = getPrototypeOf(this).constructor;
+	var ctor = Object.getPrototypeOf(this).constructor;
 	return new ctor(this, {}, true);
 };
 

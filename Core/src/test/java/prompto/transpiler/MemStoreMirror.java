@@ -16,7 +16,7 @@ import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import org.openjdk.nashorn.api.scripting.ScriptObjectMirror;
 import prompto.intrinsic.PromptoDbId;
 import prompto.intrinsic.PromptoDocument;
 import prompto.store.AttributeInfo;
@@ -34,7 +34,6 @@ import prompto.store.IStoredIterable;
 import prompto.store.memory.MemStore;
 import prompto.store.memory.Query;
 
-@SuppressWarnings({ "removal" }) 
 public class MemStoreMirror {
 	
 	private static boolean isFunction(Object v) {

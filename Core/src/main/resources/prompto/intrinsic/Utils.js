@@ -46,8 +46,11 @@ function ArrayOrNull(o) {
 	return o && o.toArray ? o.toArray() : null;
 }
 
-var setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf : function(obj, proto) { obj.__proto__ = proto; };
-var getPrototypeOf = Object.isPrototypeOf ? Object.getPrototypeOf : function(obj) { return obj.__proto__; };
+if(!Object.setPrototypeOf)
+	Object.setPrototypeOf = function(obj, proto) { obj.__proto__ = proto; };
+
+if(!Object.getPrototypeOf)
+	Object.getPrototypeOf = function(obj) { return obj.__proto__; };
 
 
 function equalObjects(o1, o2) {
