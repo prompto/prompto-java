@@ -5,7 +5,7 @@ version: 2.1
 jobs:
   build-and-test:
     docker:
-      - image: cimg/openjdk:16.0.2
+      - image: cimg/openjdk:16.0
     steps:
       - checkout
       - run:
