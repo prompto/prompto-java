@@ -542,6 +542,8 @@ public class CategoryType extends BaseType {
 
 	public IInstance newInstance(Context context) throws PromptoError {
 		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, typeNameId);
+		if(decl == null) // happens when decl has been renamed or deleted
+			return null; // TODO provide a means to delete this record
 		IInstance inst = decl.newInstance(context);
 		inst.setMutable(this.mutable);
 		return inst;
@@ -549,6 +551,8 @@ public class CategoryType extends BaseType {
 	
 	public IInstance newInstance(Context context, IStored stored) throws PromptoError {
 		CategoryDeclaration decl = context.getRegisteredDeclaration(CategoryDeclaration.class, typeNameId);
+		if(decl == null) // happens when decl has been renamed or deleted
+			return null; // TODO provide a means to delete this record
 		IInstance inst = decl.newInstance(context, stored);
 		inst.setMutable(this.mutable);
 		return inst;

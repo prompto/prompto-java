@@ -90,7 +90,19 @@ public class CursorValue extends BaseValue implements IIterable<IValue>, Iterabl
 				try {
 					IStored stored = iterator.next();
 					CategoryType itemType = readItemType(stored);
-					return itemType.newInstance(context, stored);
+					IValue value = itemType.newInstance(context, stored);
+					if(value!=null)
+						return value;
+					if(type!=null) {
+						itemType = (CategoryType)((IterableType)type).getItemType();
+						value = itemType.newInstance(context, stored);
+					}
+					if(value!=null)
+						return value;
+					else if(hasNext())
+						return next();
+					else
+						return NullValue.instance();
 				} catch (PromptoError e) {
 					throw new RuntimeException(e);
 				}
@@ -107,8 +119,10 @@ public class CursorValue extends BaseValue implements IIterable<IValue>, Iterabl
 			CategoryType type = new CategoryType(new Identifier(category));
 			type.setMutable(this.mutable);
 			return type;
-		} else
-			return (CategoryType) ((IterableType)type).getItemType();
+		} else if(type!=null)
+			return (CategoryType)((IterableType)type).getItemType();
+		else
+			return null;
 	}
 
 	@Override

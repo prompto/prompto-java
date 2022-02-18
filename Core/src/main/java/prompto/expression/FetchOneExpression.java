@@ -169,10 +169,18 @@ public class FetchOneExpression extends CodeSection implements IFetchExpression 
 			@SuppressWarnings("unchecked")
 			PromptoList<String> categories = ((PromptoList<String>)stored.getData("category"));
 			String actualTypeName = categories.getLast();
-			CategoryType type = new CategoryType(new Identifier(actualTypeName));
-			if(this.type!=null)
-				type.setMutable(this.type.isMutable());
-			return type.newInstance(context, stored);
+			CategoryType actualType = new CategoryType(new Identifier(actualTypeName));
+			if(type!=null)
+				actualType.setMutable(type.isMutable());
+			IValue value = actualType.newInstance(context, stored);
+			if(value!=null)
+				return null;
+			if(type!=null) 
+				value = type.newInstance(context, stored);
+			if(value!=null)
+				return null;
+			else
+				return NullValue.instance();
 		}
 	}
 	
