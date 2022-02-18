@@ -174,11 +174,11 @@ public class FetchOneExpression extends CodeSection implements IFetchExpression 
 				actualType.setMutable(type.isMutable());
 			IValue value = actualType.newInstance(context, stored);
 			if(value!=null)
-				return null;
+				return value;
 			if(type!=null) 
 				value = type.newInstance(context, stored);
 			if(value!=null)
-				return null;
+				return value;
 			else
 				return NullValue.instance();
 		}
