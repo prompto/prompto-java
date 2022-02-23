@@ -166,15 +166,15 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		return type.toJavaType(context);
 	}
 
+	@SuppressWarnings("resource")
 	public Method findMethod(Context context, Object instance) throws ClassNotFoundException, IOException {
-		try(var loader = PromptoClassLoader.getInstance()) {
-			if(instance instanceof NamedType)
-				instance = Class.forName(((NamedType)instance).getTypeName(), true, loader);
-			if(instance instanceof Class<?>)
-				return findMethod(context, (Class<?>)instance);
-			else
-				return findMethod(context, instance.getClass());
-		}
+		ClassLoader loader = PromptoClassLoader.getInstance();
+		if(instance instanceof NamedType)
+			instance = Class.forName(((NamedType)instance).getTypeName(), true, loader);
+		if(instance instanceof Class<?>)
+			return findMethod(context, (Class<?>)instance);
+		else
+			return findMethod(context, instance.getClass());
 	}
 	
 	public Method findMethod(Context context, Class<?> klass) {
