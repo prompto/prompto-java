@@ -17,7 +17,6 @@ public abstract class DataStore {
 		globalInstance.set(store);
 	}
 
-	@SuppressWarnings("resource")
 	public static void useGlobal() {
 		threadInstance.set(globalInstance.get());
 	}
