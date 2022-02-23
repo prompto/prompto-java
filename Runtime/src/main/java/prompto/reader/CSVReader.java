@@ -40,9 +40,8 @@ public abstract class CSVReader {
 	}
 	
 	public static CSVIterable iterator(String data, PromptoDict<String, String> columns, Character separator, Character encloser) throws IOException {
-		try(var reader = data==null ? null : new StringReader(data)) {
-			return iterator(reader, columns, separator, encloser);
-		}
+		var reader = data==null ? null : new StringReader(data);
+		return iterator(reader, columns, separator, encloser);
 	}
 	
 	public static CSVIterable iterator(final Reader _reader, PromptoDict<String, String> columns, Character separator, Character encloser) {
@@ -56,6 +55,16 @@ public abstract class CSVReader {
 			ArrayList<String> headers = null;
 			Integer peekedChar = null;
 			int nextChar = 0;
+			
+			@Override
+			public void finalize()
+			{
+				if(reader!=null) try {
+					reader.close();
+				} catch(IOException e) {
+					// absorb it
+				}
+			}
 			
 			@Override
 			public Iterator<PromptoDocument<String, Object>> iterator() {
