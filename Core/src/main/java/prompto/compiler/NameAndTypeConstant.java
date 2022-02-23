@@ -1,6 +1,7 @@
 package prompto.compiler;
 
 import java.lang.reflect.Type;
+import java.util.Objects;
 
 import prompto.compiler.IVerifierEntry.VerifierType;
 
@@ -38,6 +39,11 @@ public class NameAndTypeConstant implements ICodeConstant {
 	}
 		
 	@Override
+	public int hashCode() {
+		return Objects.hash(name, type);
+	}
+
+@Override
 	public boolean equals(Object obj) {
 		return obj instanceof NameAndTypeConstant
 				&& name.equals(((NameAndTypeConstant)obj).name)

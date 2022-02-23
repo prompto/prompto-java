@@ -43,6 +43,11 @@ public class InstallBreakpointsDebugRequest implements IDebugRequest {
 	}
 	
 	@Override
+	public int hashCode() {
+		return Objects.hash(sections);
+	}
+
+	@Override
 	public boolean equals(Object other) {
 		return other==this || (other instanceof InstallBreakpointsDebugRequest && ((InstallBreakpointsDebugRequest)other).equals(this));
 	}

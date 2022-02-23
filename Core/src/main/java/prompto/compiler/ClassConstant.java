@@ -1,5 +1,7 @@
 package prompto.compiler;
 
+import java.util.Objects;
+
 import prompto.compiler.IVerifierEntry.VerifierType;
 
 public class ClassConstant implements ICodeConstant, IValueConstant {
@@ -59,6 +61,11 @@ public class ClassConstant implements ICodeConstant, IValueConstant {
 	@Override
 	public String toString() {
 		return this.className.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(className);
 	}
 
 	@Override

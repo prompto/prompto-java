@@ -1,7 +1,6 @@
 package prompto.value;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -93,8 +92,7 @@ public abstract class BinaryValue extends BaseValue {
 	static {
 		extensionToMimeType = new HashMap<>();
 		mimeTypeToExtensions = new HashMap<>();
-		try {
-			InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream("mimeTypes.json");
+		try (var input = Thread.currentThread().getContextClassLoader().getResourceAsStream("mimeTypes.json")) {
 			JsonNode node = new ObjectMapper().readTree(input);
 			for(JsonNode mimeTypeNode : node) {
 				String mimeType = mimeTypeNode.get("mimeType").asText();

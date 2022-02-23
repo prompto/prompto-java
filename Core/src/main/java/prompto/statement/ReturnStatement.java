@@ -1,5 +1,7 @@
 package prompto.statement;
 
+import java.util.Objects;
+
 import prompto.compiler.ClassConstant;
 import prompto.compiler.CompilerUtils;
 import prompto.compiler.FieldConstant;
@@ -63,6 +65,11 @@ public class ReturnStatement extends SimpleStatement {
 		return "return " + (expression==null ? "" : expression.toString());
 	}
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(getExpression());
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if(obj==this)

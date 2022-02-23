@@ -1,5 +1,7 @@
 package prompto.verifier;
 
+import java.util.Objects;
+
 import prompto.compiler.IVerifierEntry;
 import prompto.compiler.IVerifierEntry.VerifierType;
 
@@ -154,6 +156,11 @@ public class VerificationType {
 	public VerificationType(String name) {
 		this._data = ~0x3;
 		this._name = name;
+	}
+
+	@Override
+	public int hashCode() {
+		return is_reference() ? Objects.hash(name()) : Objects.hash(_data);
 	}
 
 	@Override

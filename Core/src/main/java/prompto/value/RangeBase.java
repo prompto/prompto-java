@@ -1,6 +1,7 @@
 package prompto.value;
 
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.function.Function;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -49,6 +50,11 @@ public abstract class RangeBase<T extends IValue> extends BaseValue implements I
 		return range.getNativeCount();
 	}
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(range);
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		return obj instanceof RangeBase && range.equals(((RangeBase<?>)obj).range);

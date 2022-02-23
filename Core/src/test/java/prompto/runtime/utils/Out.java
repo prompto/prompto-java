@@ -24,8 +24,9 @@ public class Out {
 	public static void reset() {
 	}
 	
+	@SuppressWarnings("resource")
 	public static void restore() {
 		System.setOut(oldOut.get());
-		oldOut.set(null);
+		oldOut.remove();
 	}
 }

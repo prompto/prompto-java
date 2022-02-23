@@ -1,5 +1,6 @@
 package prompto.statement;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import prompto.compiler.ClassConstant;
@@ -64,6 +65,12 @@ public class AssignTupleStatement extends SimpleStatement {
 		return expression;
 	}
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(getNames(), getExpression());
+	}
+
+
 	@Override
 	public boolean equals(Object obj) {
 		if(obj==this)

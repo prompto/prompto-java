@@ -364,6 +364,12 @@ public final class MemStore implements IStore {
 
 		
 		@Override
+		public int hashCode() {
+			return Objects.hash(categories, document);
+		}
+
+
+		@Override
 		public boolean equals(Object obj) {
 			if(obj instanceof StoredDocument)
 				return equals((StoredDocument)obj);
@@ -478,6 +484,11 @@ public final class MemStore implements IStore {
 		
 		Map<String, Object> getDocument() {
 			return document;
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(categories, document);
 		}
 
 		@Override

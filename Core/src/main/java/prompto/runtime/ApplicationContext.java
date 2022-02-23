@@ -11,6 +11,7 @@ public abstract class ApplicationContext {
 		WorkerDebugger debugger = instance.getDebugger();
 		instance = Context.newGlobalsContext();
 		instance.setDebugger(debugger);
+		@SuppressWarnings("resource")
 		PromptoClassLoader loader = PromptoClassLoader.getInstance();
 		if(loader!=null)
 			loader.setContext(instance);

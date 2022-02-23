@@ -96,6 +96,11 @@ public class DeleteAndStoreStatement extends BaseStatement {
 	}
 	
 	@Override
+	public int hashCode() {
+		return Objects.hash(deletables, storables, metadata);
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if(obj==this)
 			return true;

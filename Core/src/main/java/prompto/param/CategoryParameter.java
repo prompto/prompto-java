@@ -156,6 +156,11 @@ public class CategoryParameter extends BaseParameter implements ITypedParameter 
 	}
 	
 	@Override
+	public int hashCode() {
+		return Objects.hash(getType(), getId());
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if(obj==this)
 			return true;

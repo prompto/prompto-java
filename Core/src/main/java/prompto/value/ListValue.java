@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -245,6 +246,11 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 		result.removeAll(items);
 		IType itemType = ((ContainerType)getType()).getItemType();
 		return new ListValue(itemType, result);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(items);
 	}
 
 	@Override

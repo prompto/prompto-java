@@ -23,6 +23,11 @@ public class StepOutDebugRequest extends WorkerRequest {
 	}
 	
 	@Override
+	public int hashCode() {
+		return this.getClass().hashCode();
+	}
+
+	@Override
 	public boolean equals(Object other) {
 		return other==this || (other instanceof StepOutDebugRequest && ((StepOutDebugRequest)other).equals(this));
 	}

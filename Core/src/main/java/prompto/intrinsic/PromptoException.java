@@ -38,6 +38,7 @@ public abstract class PromptoException {
 		}
 	}
 	
+	@SuppressWarnings("resource")
 	public static void throwEnumeratedException(String name) {
 		try {
 			String exceptionName = "π.ε.Error$%Error";
@@ -53,7 +54,7 @@ public abstract class PromptoException {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "resource" })
 	public static void throwEnumeratedException(String name, String message) {
 		try {
 			String exceptionName = "π.ε.Error$%Error$" + name;

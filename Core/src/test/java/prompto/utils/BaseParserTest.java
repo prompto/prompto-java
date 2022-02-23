@@ -332,16 +332,18 @@ public class BaseParserTest extends BaseTest {
 	}
 
 	public DeclarationList parseOResource(String resourceName) throws Exception {
-		InputStream input = getResourceAsStream(resourceName);
-		assertNotNull("resource not found:"+resourceName,input);
-		OCleverParser parser = new OCleverParser(input);
-		return parser.parse_declaration_list();
+		try(var input = getResourceAsStream(resourceName)) {
+			assertNotNull("resource not found:"+resourceName,input);
+			OCleverParser parser = new OCleverParser(input);
+			return parser.parse_declaration_list();
+		}
 	}
 
 	public DeclarationList parseOFile(File file) throws Exception {
-		InputStream input = new FileInputStream(file);
-		OCleverParser parser = new OCleverParser(file.getAbsolutePath(), input);
-		return parser.parse_declaration_list();
+		try(var input = new FileInputStream(file)) {
+			OCleverParser parser = new OCleverParser(file.getAbsolutePath(), input);
+			return parser.parse_declaration_list();
+		}
 	}
 
 	public DeclarationList parseEString(String code) throws Exception {
@@ -350,16 +352,18 @@ public class BaseParserTest extends BaseTest {
 	}
 
 	public DeclarationList parseEResource(String resourceName) throws Exception {
-		InputStream input = getResourceAsStream(resourceName);
-		assertNotNull("resource not found:" + resourceName, input);
-		ECleverParser parser = new ECleverParser(input);
-		return parser.parse_declaration_list();
+		try(var input = getResourceAsStream(resourceName)) {
+			assertNotNull("resource not found:" + resourceName, input);
+			ECleverParser parser = new ECleverParser(input);
+			return parser.parse_declaration_list();
+		}
 	}
 	
 	public DeclarationList parseEFile(File file) throws Exception {
-		InputStream input = new FileInputStream(file);
-		ECleverParser parser = new ECleverParser(file.getAbsolutePath(), input);
-		return parser.parse_declaration_list();
+		try(var input = new FileInputStream(file)) {
+			ECleverParser parser = new ECleverParser(file.getAbsolutePath(), input);
+			return parser.parse_declaration_list();
+		}
 	}
 
 
@@ -369,16 +373,18 @@ public class BaseParserTest extends BaseTest {
 	}
 
 	public DeclarationList parseMResource(String resourceName) throws Exception {
-		InputStream input = getResourceAsStream(resourceName);
-		assertNotNull("resource not found:" + resourceName, input);
-		MCleverParser parser = new MCleverParser(input);
-		return parser.parse_declaration_list();
+		try(var input = getResourceAsStream(resourceName)) {
+			assertNotNull("resource not found:" + resourceName, input);
+			MCleverParser parser = new MCleverParser(input);
+			return parser.parse_declaration_list();
+		}
 	}
 	
 	public DeclarationList parseMFile(File file) throws Exception {
-		InputStream input = new FileInputStream(file);
-		MCleverParser parser = new MCleverParser(file.getAbsolutePath(), input);
-		return parser.parse_declaration_list();
+		try(var  input = new FileInputStream(file)) {
+			MCleverParser parser = new MCleverParser(file.getAbsolutePath(), input);
+			return parser.parse_declaration_list();
+		}
 	}
 
 

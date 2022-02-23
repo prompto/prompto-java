@@ -1,5 +1,7 @@
 package prompto.debug.response;
 
+import java.util.Objects;
+
 public class IsSteppingDebugResponse implements IDebugResponse {
 
 	boolean stepping;
@@ -17,6 +19,11 @@ public class IsSteppingDebugResponse implements IDebugResponse {
 	
 	public void setStepping(boolean stepping) {
 		this.stepping = stepping;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(stepping);
 	}
 
 	@Override

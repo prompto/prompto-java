@@ -47,29 +47,31 @@ public class TestYamlUtils {
 
 	@SuppressWarnings("unchecked")
 	private void checkYamlEntries(File file) throws IOException {
-		YamlReader reader = new YamlReader(new FileReader(file));
-		Map<String, Object> data = (Map<String, Object>) reader.read();
-		assertEquals("true", data.get("boolean"));
-		assertEquals("some string", data.get("string"));
-		assertEquals("23456", data.get("integer"));
-		assertEquals(Arrays.asList("abc", "def"), data.get("array"));
-		Map<String, Object> child = (Map<String, Object>) data.get("codeStore");
-		assertEquals("stuff", child.get("stuff"));
-		List<Object> list = (List<Object>) data.get("objectsArray");
-		assertEquals(2, list.size());
-		child = (Map<String, Object>) list.get(0);
-		assertEquals("abc", child.get("key"));
-		assertEquals("def", child.get("value"));
-		child = (Map<String, Object>) data.get("simple");
-		assertEquals("some string", child.get("string"));
-		assertEquals("23456", child.get("integer"));
-		assertEquals(Arrays.asList("abc", "def"), child.get("array"));
-		assertNull(child.get("more"));
-		child = (Map<String, Object>) data.get("imported");
-		assertEquals("some string", child.get("string"));
-		assertEquals("23456", child.get("integer"));
-		assertEquals(Arrays.asList("abc", "def"), child.get("array"));
-		assertEquals("more", child.get("more"));
+		try(var fr = new FileReader(file)) {
+			YamlReader reader = new YamlReader(fr);
+			Map<String, Object> data = (Map<String, Object>) reader.read();
+			assertEquals("true", data.get("boolean"));
+			assertEquals("some string", data.get("string"));
+			assertEquals("23456", data.get("integer"));
+			assertEquals(Arrays.asList("abc", "def"), data.get("array"));
+			Map<String, Object> child = (Map<String, Object>) data.get("codeStore");
+			assertEquals("stuff", child.get("stuff"));
+			List<Object> list = (List<Object>) data.get("objectsArray");
+			assertEquals(2, list.size());
+			child = (Map<String, Object>) list.get(0);
+			assertEquals("abc", child.get("key"));
+			assertEquals("def", child.get("value"));
+			child = (Map<String, Object>) data.get("simple");
+			assertEquals("some string", child.get("string"));
+			assertEquals("23456", child.get("integer"));
+			assertEquals(Arrays.asList("abc", "def"), child.get("array"));
+			assertNull(child.get("more"));
+			child = (Map<String, Object>) data.get("imported");
+			assertEquals("some string", child.get("string"));
+			assertEquals("23456", child.get("integer"));
+			assertEquals(Arrays.asList("abc", "def"), child.get("array"));
+			assertEquals("more", child.get("more"));
+		}
 	}
 }
 /*

@@ -1,6 +1,6 @@
 package prompto.store;
 
-import java.io.Closeable;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -14,7 +14,7 @@ import prompto.intrinsic.PromptoList;
 import prompto.store.IStorable.IDbIdFactory;
 
 /* a mean to store and fetch data */
-public interface IStore extends Closeable {
+public interface IStore {
 	
 	public static final String dbIdName = "dbId";
 	
@@ -79,7 +79,7 @@ public interface IStore extends Closeable {
 	IStoredIterable fetchMany(IQuery query) throws PromptoError;
 	
 	void flush() throws PromptoError;
-
+	void close() throws IOException;
 	long nextSequenceValue(String name);
 
 	Map<String, Object> fetchConfiguration(String name);

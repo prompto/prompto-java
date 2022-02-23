@@ -69,6 +69,7 @@ public class BaseELexerTest extends BaseTest {
 		return new EIndentingLexer(stream);
 	}
 
+	@SuppressWarnings("resource")
 	public Lexer newTokenStreamFromResource(String resourceName) throws Exception {
 		InputStream input = getResourceAsStream(resourceName);
 		assertNotNull(input);

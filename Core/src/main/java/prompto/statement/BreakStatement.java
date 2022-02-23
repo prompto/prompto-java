@@ -34,6 +34,11 @@ public class BreakStatement extends SimpleStatement {
 	}
 	
 	@Override
+	public int hashCode() {
+		return this.getClass().hashCode();
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		return (obj instanceof BreakStatement);
 	}

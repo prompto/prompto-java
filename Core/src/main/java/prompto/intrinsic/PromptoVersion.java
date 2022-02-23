@@ -1,6 +1,7 @@
 package prompto.intrinsic;
 
 import java.security.InvalidParameterException;
+import java.util.Objects;
 
 public class PromptoVersion implements Comparable<PromptoVersion> {
 
@@ -134,6 +135,11 @@ public class PromptoVersion implements Comparable<PromptoVersion> {
 
 	public int asInt() {
 		return major << 24 & 0xFF000000 | minor << 16 & 0x00FF0000 | fix << 8 & 0x0000FF00 | qualifier & 0x000000FF;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(asInt());
 	}
 
 	@Override

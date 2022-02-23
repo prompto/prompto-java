@@ -1,5 +1,7 @@
 package prompto.compiler;
 
+import java.util.Objects;
+
 import prompto.compiler.IVerifierEntry.VerifierType;
 
 public class DoubleConstant implements IValueConstant {
@@ -32,6 +34,11 @@ public class DoubleConstant implements IValueConstant {
 		return 2;
 	}
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(value);
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		return obj instanceof DoubleConstant 

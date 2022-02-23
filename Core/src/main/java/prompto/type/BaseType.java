@@ -4,6 +4,7 @@ import java.security.InvalidParameterException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiFunction;
 
@@ -46,6 +47,11 @@ public abstract class BaseType extends CodeSection implements IType {
 			return new FamilyInfo(family, false);
 		else
 			return resolved.getFamilyInfo(context);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getTypeName());
 	}
 
 	@Override

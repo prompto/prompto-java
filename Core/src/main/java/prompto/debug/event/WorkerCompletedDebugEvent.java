@@ -18,7 +18,12 @@ public class WorkerCompletedDebugEvent extends WorkerDebugEvent {
 		IWorker worker = DebuggedWorker.parse(workerId);
 		listener.onWorkerStartedEvent(worker);
 	}
-	
+
+	@Override
+	public int hashCode() {
+		return this.getClass().hashCode();
+	}
+
 	@Override
 	public boolean equals(Object other) {
 		return other==this || (other instanceof WorkerCompletedDebugEvent && ((WorkerCompletedDebugEvent)other).equals(this));

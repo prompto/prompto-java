@@ -20,19 +20,21 @@ public class BaseTest {
 	
 	public String getResourceAsString(String resourceName) throws Exception {
 		char[] data = new char[4096];
-		InputStream stream = getResourceAsStream(resourceName);
-		Reader reader = new InputStreamReader(stream);
-		StringBuffer buffer = new StringBuffer();
-		for(;;) {
-			int read = reader.read(data);
-			if(read==-1)
-				break;
-			buffer.append(data, 0, read);
+		try(InputStream stream = getResourceAsStream(resourceName)) {
+			try(Reader reader = new InputStreamReader(stream)) {
+				StringBuffer buffer = new StringBuffer();
+				for(;;) {
+					int read = reader.read(data);
+					if(read==-1)
+						break;
+					buffer.append(data, 0, read);
+				}
+				return buffer.toString();
+			}
 		}
-		stream.close();
-		return buffer.toString();
 	}
 
+	@SuppressWarnings("resource")
 	public InputStream getResourceAsStream(String resourceName) throws Exception {
 		InputStream stream = tryLoadCoreResource(resourceName);
 		if(stream==null)

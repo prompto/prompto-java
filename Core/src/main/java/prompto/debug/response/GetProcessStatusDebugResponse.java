@@ -1,5 +1,7 @@
 package prompto.debug.response;
 
+import java.util.Objects;
+
 import prompto.debug.ProcessStatus;
 
 public class GetProcessStatusDebugResponse implements IDebugResponse {
@@ -20,6 +22,12 @@ public class GetProcessStatusDebugResponse implements IDebugResponse {
 	public void setProcessStatus(ProcessStatus status) {
 		this.processStatus = status;
 	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(processStatus);
+	}
+
 	
 	@Override
 	public boolean equals(Object other) {

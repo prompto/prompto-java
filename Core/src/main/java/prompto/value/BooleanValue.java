@@ -3,6 +3,7 @@ package prompto.value;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -78,6 +79,11 @@ public class BooleanValue extends BaseValue implements Comparable<BooleanValue> 
 	@Override
 	public String toString() {
 		return java.lang.Boolean.toString(value);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(value);
 	}
 
 	@Override

@@ -10,15 +10,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import prompto.error.PromptoError;
 import prompto.grammar.ArgumentList;
 import prompto.runtime.Context;
-
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SuppressWarnings("serial")
 public class RemoteArgumentList extends ArrayList<RemoteArgument> {
@@ -72,8 +71,9 @@ public class RemoteArgumentList extends ArrayList<RemoteArgument> {
 	private static JsonNode parseParams(String jsonParams) throws Exception {
 		if(jsonParams==null || jsonParams.isEmpty())
 			return null;
-		JsonParser parser = new ObjectMapper().getFactory().createParser(jsonParams);
-		return parser.readValueAsTree();
+		try(var parser = new ObjectMapper().getFactory().createParser(jsonParams)) {
+			return parser.readValueAsTree();
+		}
 	}
 
 	public static RemoteArgumentList read(Context context, JsonNode jsonParams, Map<String, byte[]> parts) throws Exception {

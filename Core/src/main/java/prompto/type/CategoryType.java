@@ -212,6 +212,11 @@ public class CategoryType extends BaseType {
 	}
 	
 	@Override
+	public int hashCode() {
+		return typeNameId.hashCode();
+	}
+	
+	@Override
 	public boolean equals(Object obj) {
 		if(obj==this)
 			return true;

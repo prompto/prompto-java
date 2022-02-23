@@ -1,5 +1,7 @@
 package prompto.parser;
 
+import java.util.Objects;
+
 import org.antlr.v4.runtime.Token;
 
 
@@ -70,6 +72,11 @@ public class Location implements ILocation {
 	@Override
 	public int getColumn() {
 		return column;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(column, line, tokenIndex);
 	}
 
 	@Override

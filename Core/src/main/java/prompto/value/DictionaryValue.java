@@ -5,6 +5,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Map.Entry;
 import java.util.function.Function;
 
@@ -159,6 +160,11 @@ public class DictionaryValue extends BaseValue implements IContainer<IValue> {
 
 	private Type getItemType(Type type) {
 		return type instanceof ParameterizedType ? ((ParameterizedType)type).getActualTypeArguments()[1] : Object.class;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(dict);
 	}
 
 	@Override

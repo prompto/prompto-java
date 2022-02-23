@@ -41,8 +41,7 @@ public class JavaDebugEventListener {
 				logger.debug(()->"DebugEventServer entering loop");
 				listening = true;
 				while(listening) {
-					try {
-						Socket client = server.accept();
+					try (var client = server.accept()) {
 						handleMessage(client);
 					} catch(SocketTimeoutException e) {
 						// nothing to do, just helps exit the loop
@@ -74,14 +73,16 @@ public class JavaDebugEventListener {
 	}
 
 	private void handleMessage(Socket client) throws Exception {
-		InputStream input = client.getInputStream();
-		OutputStream output = client.getOutputStream();
-		IDebugEvent event = readDebugEvent(input);
-		logger.debug(()->"DebugEventServer receives " + event.getClass().getName());
-		event.execute(listener);
-		logger.debug(()->"DebugEventServer sends " + event.getClass().getName());
-		sendAcknowledged(output);
-		output.flush();
+		try(var input = client.getInputStream()) {
+			try(var output = client.getOutputStream()) {
+				IDebugEvent event = readDebugEvent(input);
+				logger.debug(()->"DebugEventServer receives " + event.getClass().getName());
+				event.execute(listener);
+				logger.debug(()->"DebugEventServer sends " + event.getClass().getName());
+				sendAcknowledged(output);
+				output.flush();
+			}
+		}
 	}
 
 	

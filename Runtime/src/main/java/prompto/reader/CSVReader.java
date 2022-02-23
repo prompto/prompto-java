@@ -40,8 +40,9 @@ public abstract class CSVReader {
 	}
 	
 	public static CSVIterable iterator(String data, PromptoDict<String, String> columns, Character separator, Character encloser) throws IOException {
-		Reader reader = data==null ? null : new StringReader(data);
-		return iterator(reader, columns, separator, encloser);
+		try(var reader = data==null ? null : new StringReader(data)) {
+			return iterator(reader, columns, separator, encloser);
+		}
 	}
 	
 	public static CSVIterable iterator(final Reader _reader, PromptoDict<String, String> columns, Character separator, Character encloser) {

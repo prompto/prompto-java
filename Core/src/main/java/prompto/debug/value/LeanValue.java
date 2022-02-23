@@ -21,6 +21,11 @@ public class LeanValue extends ValueBase {
 	}
 	
 	@Override
+	public int hashCode() {
+		return this.getClass().hashCode();
+	}
+
+	@Override
 	public boolean equals(Object other) {
 		return this == other || (other instanceof LeanValue && ((LeanValue)other).equals(this));
 	}

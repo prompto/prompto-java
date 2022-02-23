@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Function;
@@ -157,6 +158,11 @@ public class DocumentValue extends BaseValue {
 		value.toJsonStream(null, generator, withType, binaries);
 	}
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(values);
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if(obj instanceof DocumentValue)

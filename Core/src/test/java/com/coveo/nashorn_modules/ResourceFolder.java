@@ -1,9 +1,8 @@
 package com.coveo.nashorn_modules;
 
-import prompto.utils.StreamUtils;
-
 import java.io.IOException;
-import java.io.InputStream;
+
+import prompto.utils.StreamUtils;
 
 public class ResourceFolder extends AbstractFolder {
   private ClassLoader loader;
@@ -12,15 +11,18 @@ public class ResourceFolder extends AbstractFolder {
 
   @Override
   public String getFile(String name) {
-    InputStream stream = loader.getResourceAsStream(resourcePath + "/" + name);
-    if (stream == null) {
-      return null;
-    }
-
-    try {
-      return StreamUtils.readString(stream); // IOUtils.toString(stream, encoding);
-    } catch (IOException ex) {
-      return null;
+    try(var stream = loader.getResourceAsStream(resourcePath + "/" + name)) {
+	    if (stream == null) {
+	      return null;
+	    }
+	
+	    try {
+	      return StreamUtils.readString(stream); // IOUtils.toString(stream, encoding);
+	    } catch (IOException ex) {
+	      return null;
+	    }
+    } catch(IOException e) {
+    	throw new RuntimeException(e);
     }
   }
 

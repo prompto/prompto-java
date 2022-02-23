@@ -41,6 +41,12 @@ public class WorkerSuspendedDebugEvent extends WorkerDebugEvent {
 	}
 
 	@Override
+	public int hashCode() {
+		return Objects.hash(suspendReason);
+	}
+
+
+	@Override
 	public boolean equals(Object other) {
 		return other==this || (other instanceof WorkerSuspendedDebugEvent && ((WorkerSuspendedDebugEvent)other).equals(this));
 	}

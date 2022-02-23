@@ -127,6 +127,11 @@ public final class Section implements ISection {
 	
 	
 	@Override
+	public int hashCode() {
+		return Objects.hash(isBreakpoint, dialect, startLocation, endLocation, path);
+	}
+
+	@Override
 	public boolean equals(Object other) {
 		return this == other || (other instanceof Section && ((Section)other).equals(this));
 	}

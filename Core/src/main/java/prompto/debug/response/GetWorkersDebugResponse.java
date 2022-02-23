@@ -27,6 +27,11 @@ public class GetWorkersDebugResponse implements IDebugResponse {
 	}
 	
 	@Override
+	public int hashCode() {
+		return Objects.hash(workers);
+	}
+
+	@Override
 	public boolean equals(Object other) {
 		return this == other || (other instanceof GetWorkersDebugResponse && ((GetWorkersDebugResponse)other).equals(this));
 	}

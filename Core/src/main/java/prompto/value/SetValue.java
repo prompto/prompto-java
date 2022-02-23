@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -114,6 +115,11 @@ public class SetValue extends BaseValue implements IContainer<IValue>, IFilterab
 				return items.iterator();
 			}
 		};
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(items);
 	}
 
 	@Override

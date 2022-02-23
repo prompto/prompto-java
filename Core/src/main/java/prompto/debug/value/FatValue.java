@@ -30,6 +30,11 @@ public class FatValue extends ValueBase {
 		return this;
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(valueData);
+	}
+
 	public boolean equals(Object other) {
 		return this == other || (other instanceof FatValue && ((FatValue)other).equals(this));
 	}

@@ -26,6 +26,11 @@ public class LeanVariable extends VariableBase {
 	}
 
 	@Override
+	public int hashCode() {
+		return Objects.hash(value);
+	}
+
+	@Override
 	public boolean equals(Object other) {
 		return this == other || (other instanceof LeanVariable && ((LeanVariable)other).equals(this));
 	}

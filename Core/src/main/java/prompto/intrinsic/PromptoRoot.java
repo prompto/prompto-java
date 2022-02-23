@@ -31,6 +31,7 @@ import prompto.store.InvalidValueError;
 
 public abstract class PromptoRoot extends PromptoStorableBase implements IMutable, IDocumentProducer, IDocumentValueProducer, IJsonNodeProducer {
 
+	@SuppressWarnings("resource")
 	public static PromptoRoot newInstance(IStored stored, boolean mutable) {
 		if(stored==null) // happens on an unsuccessful fetchOne
 			return null;
@@ -295,6 +296,16 @@ public abstract class PromptoRoot extends PromptoStorableBase implements IMutabl
 		return doc;
 	}
 	
+	@Override
+	public int hashCode() {
+		var values = collectFields().stream()
+				.map(field -> getFieldValue(this, field))
+				.collect(Collectors.toList())
+				.toArray(new Object[0]);
+		return Objects.hash(values);
+	}
+
+
 	@Override
 	public boolean equals(Object other) {
 		if(other==null || other.getClass()!=this.getClass())

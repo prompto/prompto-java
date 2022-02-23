@@ -2,6 +2,7 @@ package prompto.intrinsic;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Objects;
 
 
 public abstract class PromptoRange<T extends Object> implements IterableWithCounts<T> {
@@ -41,6 +42,12 @@ public abstract class PromptoRange<T extends Object> implements IterableWithCoun
 		return "[" + low.toString() + ".." + high.toString() + "]";
 	}
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(low, high);
+	}
+
+
 	@Override
 	public boolean equals(Object obj) {
 		return obj instanceof PromptoRange<?>

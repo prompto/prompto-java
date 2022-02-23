@@ -52,6 +52,7 @@ public class BaseOLexerTest {
 		return new OLexer(stream);
 	}
 
+	@SuppressWarnings("resource")
 	public Lexer newTokenStreamFromResource(String resourceName) {
 		InputStream input = ClassLoader.getSystemClassLoader().getResourceAsStream(resourceName);
 		assertNotNull(input);

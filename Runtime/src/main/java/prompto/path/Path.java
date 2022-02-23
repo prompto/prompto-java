@@ -33,9 +33,13 @@ public abstract class Path {
 	}
 	
 	static List<String> _listRoots() {
-		return StreamSupport.stream(FileSystems.getDefault().getRootDirectories().spliterator(), false)
-				.map(java.nio.file.Path::toString)
-				.collect(Collectors.toList());
+		try(var fs = FileSystems.getDefault()) {
+			return StreamSupport.stream(fs.getRootDirectories().spliterator(), false)
+					.map(java.nio.file.Path::toString)
+					.collect(Collectors.toList());
+		} catch(IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	

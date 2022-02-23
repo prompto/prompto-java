@@ -23,6 +23,11 @@ public class StepOverDebugRequest extends WorkerRequest {
 	}
 	
 	@Override
+	public int hashCode() {
+		return this.getClass().hashCode();
+	}
+
+	@Override
 	public boolean equals(Object other) {
 		return other==this || (other instanceof StepOverDebugRequest && ((StepOverDebugRequest)other).equals(this));
 	}

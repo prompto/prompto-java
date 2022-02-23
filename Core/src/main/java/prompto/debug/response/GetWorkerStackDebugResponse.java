@@ -26,6 +26,11 @@ public class GetWorkerStackDebugResponse implements IDebugResponse {
 	}
 	
 	@Override
+	public int hashCode() {
+		return Objects.hash(stack);
+	}
+
+	@Override
 	public boolean equals(Object other) {
 		return this == other || (other instanceof GetWorkerStackDebugResponse && ((GetWorkerStackDebugResponse)other).equals(this));
 	}

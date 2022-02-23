@@ -1,5 +1,7 @@
 package prompto.statement;
 
+import java.util.Objects;
+
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
@@ -67,6 +69,12 @@ public class AssignVariableStatement extends SimpleStatement {
 		return VoidType.instance();
 	}
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(variable.getId(), getExpression());
+	}
+
+
 	@Override
 	public boolean equals(Object obj) {
 		if(obj==this)

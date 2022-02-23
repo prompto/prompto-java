@@ -1,7 +1,5 @@
 package prompto.store;
 
-import java.util.function.Supplier;
-
 import prompto.store.memory.MemStore;
 import prompto.utils.ISingleton;
 
@@ -13,22 +11,23 @@ public abstract class DataStore {
 		@Override public IStore get() { return instance; }
 	};
 	
-	static ThreadLocal<Supplier<IStore>> threadInstance = ThreadLocal.withInitial(()->()->globalInstance.get());
+	static ThreadLocal<IStore> threadInstance = ThreadLocal.withInitial(globalInstance::get);
 	
 	public static void setGlobal(IStore store) {
 		globalInstance.set(store);
 	}
 
+	@SuppressWarnings("resource")
 	public static void useGlobal() {
-		threadInstance.set(()->globalInstance.get());
+		threadInstance.set(globalInstance.get());
 	}
 	
 	public static void setInstance(IStore store) {
-		threadInstance.set(()->store);
+		threadInstance.set(store);
 	}
 
 	public static IStore getInstance() {
-		return threadInstance.get().get();
+		return threadInstance.get();
 	}
 
 }

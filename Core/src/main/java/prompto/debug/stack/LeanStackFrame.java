@@ -1,6 +1,7 @@
 package prompto.debug.stack;
 
 import java.util.Collection;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -93,6 +94,11 @@ public class LeanStackFrame implements IStackFrame {
 	
 	public String toJson() {
 		return new ObjectMapper().valueToTree(this).toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(index);
 	}
 
 	@Override

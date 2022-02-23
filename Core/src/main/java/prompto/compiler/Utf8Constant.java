@@ -1,5 +1,7 @@
 package prompto.compiler;
 
+import java.util.Objects;
+
 public class Utf8Constant implements IInternalConstant {
 	
 	String value;
@@ -23,6 +25,11 @@ public class Utf8Constant implements IInternalConstant {
 		return value;
 	}
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(value);
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		return obj instanceof Utf8Constant 

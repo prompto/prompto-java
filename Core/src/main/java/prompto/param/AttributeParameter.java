@@ -60,6 +60,11 @@ public class AttributeParameter extends BaseParameter {
 	}
 	
 	@Override
+	public int hashCode() {
+		return Objects.hash(getId());
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if(obj==this)
 			return true;

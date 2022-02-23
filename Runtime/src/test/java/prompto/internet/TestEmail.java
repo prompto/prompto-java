@@ -1,6 +1,8 @@
 package prompto.internet;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import javax.mail.Address;
 import javax.mail.Folder;
@@ -17,7 +19,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.icegreen.greenmail.util.GreenMail;
-import com.sun.mail.imap.IMAPStore;
 
 import prompto.declaration.DeclarationList;
 import prompto.grammar.Identifier;
@@ -105,11 +106,13 @@ public class TestEmail extends BaseParserTest {
 	
 	private Message receiveEmail(String email) throws MessagingException {
 		greenMail.setUser(email, "password");
-		IMAPStore imapStore = greenMail.getImap().createStore();
-	    imapStore.connect(email, "password");
-	    Folder inbox = imapStore.getFolder("INBOX");
-	    inbox.open(Folder.READ_ONLY);
-	    return inbox.getMessage(1);	
+		try(var imapStore = greenMail.getImap().createStore()) {
+		    imapStore.connect(email, "password");
+		    try(var inbox = imapStore.getFolder("INBOX")) {
+			    inbox.open(Folder.READ_ONLY);
+			    return inbox.getMessage(1);	
+		    }
+		}
 	}
 
 	private Email newEmail() throws Exception {

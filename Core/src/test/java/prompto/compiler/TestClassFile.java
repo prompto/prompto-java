@@ -192,6 +192,7 @@ public class TestClassFile {
 		mm.invoke(null);
 	}
 	
+	@SuppressWarnings("resource")
 	@Test
 	public void testInterfaceWithInnerClass() throws Exception {
 		File dir = Files.createTempDirectory("prompto_").toFile();

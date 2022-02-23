@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -264,6 +265,11 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		if(value!=null && value instanceof IntegerValue && decl.getType()==DecimalType.instance())
 			value = new DecimalValue(((IntegerValue)value).doubleValue());
 		return value;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(values);
 	}
 
 	@Override

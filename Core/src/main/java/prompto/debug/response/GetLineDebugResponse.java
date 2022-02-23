@@ -1,5 +1,7 @@
 package prompto.debug.response;
 
+import java.util.Objects;
+
 public class GetLineDebugResponse implements IDebugResponse {
 
 	int lineInFile;
@@ -27,6 +29,11 @@ public class GetLineDebugResponse implements IDebugResponse {
 	
 	public void setLineInMethod(int lineInMethod) {
 		this.lineInMethod = lineInMethod;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(lineInFile, lineInMethod);
 	}
 
 	@Override

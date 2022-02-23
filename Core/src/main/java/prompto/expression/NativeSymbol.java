@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -64,6 +65,11 @@ public class NativeSymbol extends Symbol implements IExpression {
 		}
 	}
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(getId(), getExpression());
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if(obj==this)

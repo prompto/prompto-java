@@ -42,6 +42,11 @@ public class WorkerResumedDebugEvent extends WorkerDebugEvent {
 	}
 	
 	@Override
+	public int hashCode() {
+		return Objects.hash(resumeReason);
+	}
+
+	@Override
 	public boolean equals(Object other) {
 		return other==this || (other instanceof WorkerResumedDebugEvent && ((WorkerResumedDebugEvent)other).equals(this));
 	}

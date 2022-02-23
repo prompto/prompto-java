@@ -32,6 +32,11 @@ public class GetVariablesDebugResponse implements IDebugResponse {
 	}
 	
 	@Override
+	public int hashCode() {
+		return Objects.hash(variables);
+	}
+
+	@Override
 	public boolean equals(Object other) {
 		return this == other || (other instanceof GetVariablesDebugResponse && ((GetVariablesDebugResponse)other).equals(this));
 	}

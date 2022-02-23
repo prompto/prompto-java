@@ -1,6 +1,7 @@
 package prompto.grammar;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import prompto.declaration.IMethodDeclaration;
@@ -110,19 +111,24 @@ public class Argument extends CodeSection {
 			}
 		}
 	}
-	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(expression, parameter);
+	}
+
+
 	@Override
 	public boolean equals(Object obj) {
-		if(obj==this)
-			return true;
-		if(obj==null)
-			return false;
-		if(!(obj instanceof Argument))
-			return false;
-		Argument other = (Argument)obj;
+		return obj==this || (obj instanceof Argument && equals((Argument)obj));
+	}
+	
+	
+	public boolean equals(Argument other) {
 		return this.getParameter().equals(other.getParameter())
 				&& this.getExpression().equals(other.getExpression());
 	}
+	
 	
 	public IType check(Context context) {
 		IExpression expression = getExpression();

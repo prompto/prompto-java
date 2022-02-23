@@ -16,6 +16,11 @@ public class GetProcessStatusDebugRequest implements IDebugRequest {
 	}
 	
 	@Override
+	public int hashCode() {
+		return this.getClass().hashCode();
+	}
+
+	@Override
 	public boolean equals(Object other) {
 		return other==this || other instanceof GetProcessStatusDebugRequest;
 	}

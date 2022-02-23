@@ -59,6 +59,11 @@ public class GetVariableDebugRequest extends WorkerRequest {
 	}
 
 	@Override
+	public int hashCode() {
+		return Objects.hash(stackFrame);
+	}
+
+	@Override
 	public boolean equals(Object other) {
 		return other==this || (other instanceof GetVariableDebugRequest && ((GetVariableDebugRequest)other).equals(this));
 	}

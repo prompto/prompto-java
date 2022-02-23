@@ -54,6 +54,12 @@ public class WorkerStartedDebugEvent extends WorkerDebugEvent {
 	}
 
 	@Override
+	public int hashCode() {
+		return Objects.hash(name, workerStatus);
+	}
+
+
+	@Override
 	public boolean equals(Object other) {
 		return other==this || (other instanceof WorkerStartedDebugEvent && ((WorkerStartedDebugEvent)other).equals(this));
 	}

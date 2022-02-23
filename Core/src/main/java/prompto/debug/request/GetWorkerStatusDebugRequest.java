@@ -1,10 +1,10 @@
 package prompto.debug.request;
 
 import prompto.debug.IDebugger;
+import prompto.debug.ProcessDebugger.DebuggedWorker;
 import prompto.debug.WorkerStatus;
 import prompto.debug.response.GetWorkerStatusDebugResponse;
 import prompto.debug.worker.IWorker;
-import prompto.debug.ProcessDebugger.DebuggedWorker;
 
 public class GetWorkerStatusDebugRequest extends WorkerRequest {
 
@@ -21,6 +21,11 @@ public class GetWorkerStatusDebugRequest extends WorkerRequest {
 		return new GetWorkerStatusDebugResponse(status);
 	}
 	
+	@Override
+	public int hashCode() {
+		return this.getClass().hashCode();
+	}
+
 	@Override
 	public boolean equals(Object other) {
 		return other==this || (other instanceof GetWorkerStatusDebugRequest && ((GetWorkerStatusDebugRequest)other).equals(this));

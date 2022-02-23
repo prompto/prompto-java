@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.Collator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -91,7 +92,13 @@ public class CharacterValue extends BaseValue implements Comparable<CharacterVal
         return "" + value;
     }
 
-    @Override
+	@Override
+	public int hashCode() {
+		return Objects.hash(value);
+	}
+
+
+	@Override
     public boolean equals(Object obj) {
         if (obj instanceof CharacterValue)
             return value == ((CharacterValue)obj).value;

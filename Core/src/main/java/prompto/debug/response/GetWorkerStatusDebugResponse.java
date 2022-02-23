@@ -1,5 +1,7 @@
 package prompto.debug.response;
 
+import java.util.Objects;
+
 import prompto.debug.WorkerStatus;
 
 public class GetWorkerStatusDebugResponse implements IDebugResponse {
@@ -21,6 +23,11 @@ public class GetWorkerStatusDebugResponse implements IDebugResponse {
 		this.workerStatus = status;
 	}
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(workerStatus);
+	}
+
 	@Override
 	public boolean equals(Object other) {
 		return this == other || (other instanceof GetWorkerStatusDebugResponse && ((GetWorkerStatusDebugResponse)other).equals(this));

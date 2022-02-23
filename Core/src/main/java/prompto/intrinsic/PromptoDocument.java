@@ -12,6 +12,13 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.parser.ECleverParser;
@@ -20,14 +27,6 @@ import prompto.type.DateTimeType;
 import prompto.type.DocumentType;
 import prompto.type.IType;
 import prompto.utils.IOUtils;
-
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @SuppressWarnings("serial")
 public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable, IJsonNodeProducer {
@@ -227,8 +226,9 @@ public class PromptoDocument<K,V> extends HashMap<K,V> implements ISerializable,
 		byte[] data = parts.get("value.json");
 		if(data==null)
 			throw new InvalidParameterException("Expecting a 'value.json' part!");
-		JsonParser parser = new ObjectMapper().getFactory().createParser(data);
-		return parser.readValueAsTree();
+		try(var parser = new ObjectMapper().getFactory().createParser(data)) {
+			return parser.readValueAsTree();
+		}
 	}
 	
 	@Override

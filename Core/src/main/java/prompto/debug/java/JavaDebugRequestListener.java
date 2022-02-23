@@ -52,8 +52,7 @@ public class JavaDebugRequestListener implements IDebugRequestListener {
 				loop = true;
 				logger.debug(()->"DebugRequestServer entering loop");
 				while(loop) {
-					try {
-						Socket client = server.accept();
+					try (var client = server.accept()) {
 						handleMessage(client);
 					} catch(SocketTimeoutException e) {
 						// nothing to do, just helps exit the loop

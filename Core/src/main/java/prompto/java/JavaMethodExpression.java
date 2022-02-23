@@ -1,5 +1,6 @@
 package prompto.java;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -64,7 +65,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 				return VoidType.instance();
 			} else
 				return new JavaClassType(method.getGenericReturnType());
-		} catch(ClassNotFoundException e) {
+		} catch(ClassNotFoundException | IOException e) {
 			throw new SyntaxError(e.getMessage());
 		}
 	}
@@ -96,7 +97,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 					method.addInstruction(Opcode.INVOKEVIRTUAL, operand);
 			}
 			return new ResultInfo(toCall.getReturnType());
-		} catch(ClassNotFoundException e) {
+		} catch(ClassNotFoundException | IOException e) {
 			throw new CompilerException(e);
 		}
 	}
@@ -121,7 +122,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 			} catch (IllegalArgumentException | InvocationTargetException | IllegalAccessException e) {
 				throw new RuntimeException(e);
 			}
-		} catch(ClassNotFoundException e) {
+		} catch(ClassNotFoundException | IOException e) {
 			throw new InternalError(e);
 		}
 	}
@@ -145,7 +146,7 @@ public class JavaMethodExpression extends JavaSelectorExpression {
         return value;
     }
 
-	public Method findMethod(Context context) throws ClassNotFoundException {
+	public Method findMethod(Context context) throws ClassNotFoundException, IOException {
 		IType type = parent.check(context);
 		if(type==null) {
 			context.getProblemListener().reportUnknownIdentifier(parent, parent.toString());
@@ -165,13 +166,15 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		return type.toJavaType(context);
 	}
 
-	public Method findMethod(Context context, Object instance) throws ClassNotFoundException {
-		if(instance instanceof NamedType)
-			instance = Class.forName(((NamedType)instance).getTypeName(), true, PromptoClassLoader.getInstance());
-		if(instance instanceof Class<?>)
-			return findMethod(context, (Class<?>)instance);
-		else
-			return findMethod(context, instance.getClass());
+	public Method findMethod(Context context, Object instance) throws ClassNotFoundException, IOException {
+		try(var loader = PromptoClassLoader.getInstance()) {
+			if(instance instanceof NamedType)
+				instance = Class.forName(((NamedType)instance).getTypeName(), true, loader);
+			if(instance instanceof Class<?>)
+				return findMethod(context, (Class<?>)instance);
+			else
+				return findMethod(context, instance.getClass());
+		}
 	}
 	
 	public Method findMethod(Context context, Class<?> klass) {

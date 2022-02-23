@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -100,22 +99,23 @@ public abstract class ResourceUtils {
 	public static Collection<URL> listJarResourcesAt(URL url, Predicate<String> filter) throws IOException {
 		List<URL> urls = new ArrayList<>();
 		JarURLConnection cnx = (JarURLConnection) url.openConnection();
-		JarFile jar = cnx.getJarFile();
-		/* Search for the entries we care about. */
-		String external = url.toExternalForm();
-		String jarPart = external.substring(0, external.indexOf("!/") + 2);
-		String pathPart = external.substring(jarPart.length());
-		Enumeration<JarEntry> entries = jar.entries();
-		while (entries.hasMoreElements()) {
-			JarEntry entry = entries.nextElement();
-			String name = entry.getName();
-			if(!(name.startsWith(pathPart)) || name.endsWith("/"))
-				continue;
-			if(filter!=null && !filter.test(name))
-				continue;
-			urls.add(new URL(jarPart + name));
+		try(var jar = cnx.getJarFile()) {
+			/* Search for the entries we care about. */
+			String external = url.toExternalForm();
+			String jarPart = external.substring(0, external.indexOf("!/") + 2);
+			String pathPart = external.substring(jarPart.length());
+			Enumeration<JarEntry> entries = jar.entries();
+			while (entries.hasMoreElements()) {
+				JarEntry entry = entries.nextElement();
+				String name = entry.getName();
+				if(!(name.startsWith(pathPart)) || name.endsWith("/"))
+					continue;
+				if(filter!=null && !filter.test(name))
+					continue;
+				urls.add(new URL(jarPart + name));
+			}
+			return urls;
 		}
-		return urls;
 	}
 
 	public static byte[] getResourceAsBytes(String path) throws IOException {
