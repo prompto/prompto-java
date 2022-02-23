@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -32,14 +33,12 @@ public abstract class Path {
 		}
 	}
 	
+	@SuppressWarnings("resource")
 	static List<String> _listRoots() {
-		try(var fs = FileSystems.getDefault()) {
-			return StreamSupport.stream(fs.getRootDirectories().spliterator(), false)
-					.map(java.nio.file.Path::toString)
-					.collect(Collectors.toList());
-		} catch(IOException e) {
-			throw new RuntimeException(e);
-		}
+		FileSystem fs = FileSystems.getDefault();
+		return StreamSupport.stream(fs.getRootDirectories().spliterator(), false)
+						.map(java.nio.file.Path::toString)
+						.collect(Collectors.toList());
 	}
 
 	
