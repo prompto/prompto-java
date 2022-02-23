@@ -184,14 +184,14 @@ CSVIterator.prototype.parseValueUpTo = function(endChar, list) {
 };
 
 
-CSVIterator.prototype.handleOtherChar = function(chars, endChar, list) {
+CSVIterator.prototype.handleOtherChar = function(chars, _endChar, _list) {
     chars.push(this.nextChar);
     this.fetchChar();
     return false;
 };
 
 
-CSVIterator.prototype.handleEscape = function(chars, endChar, list) {
+CSVIterator.prototype.handleEscape = function(chars, _endChar, _list) {
     if(this.peekChar()!=-1) {
         chars.push(this.peekChar());
         this.fetchChar();
@@ -201,11 +201,11 @@ CSVIterator.prototype.handleEscape = function(chars, endChar, list) {
 };
 
 
-CSVIterator.prototype.handleEOF = function(chars, endChar, list) {
+CSVIterator.prototype.handleEOF = function(_chars, _endChar, _list) {
     return true;
 }
 
-CSVIterator.prototype.handleEndChar = function(chars, endChar, list) {
+CSVIterator.prototype.handleEndChar = function(chars, endChar, _list) {
     if(endChar==DQ && this.peekChar()==endChar) {
         chars.push(this.nextChar);
         this.fetchChar();
@@ -218,7 +218,7 @@ CSVIterator.prototype.handleEndChar = function(chars, endChar, list) {
 };
 
 
-CSVIterator.prototype.handleNewLine = function(chars, endChar, list) {
+CSVIterator.prototype.handleNewLine = function(chars, endChar, _list) {
     if(endChar==DQ) {
         chars.push(this.nextChar);
         this.fetchChar();
