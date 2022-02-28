@@ -1,3 +1,17 @@
+(function() {
+	var oldArrayIsArray = Array.isArray;
+	Array.isArray = function(obj) {
+	    return oldArrayIsArray(obj) || obj instanceof List;
+	}
+	
+	var oldArrayConcat = Array.prototype.concat;
+	Array.prototype.concat = function(obj) {
+	    if(obj instanceof List)
+	        obj = Array.from(obj);
+	    return oldArrayConcat.bind(this)(obj);
+	}
+})();
+
 function List(mutable, items) {
     Array.call(this);
     if(items)
@@ -10,7 +24,7 @@ List.prototype = Object.create(Array.prototype);
 List.prototype.constructor = List;
 
 List.prototype.toArray = function() {
-	return this;
+	return Array.from(this);
 };
 
 List.prototype.addItems = function(items) {
