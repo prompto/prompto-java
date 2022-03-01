@@ -152,6 +152,11 @@ public class TestProblems extends BaseOParserTest {
 	}
 
 	@Test
+	public void testUnknownSymbol() throws Exception {
+		checkProblems("problems/unknownSymbol.poc");
+	}
+
+	@Test
 	public void testUnknownType() throws Exception {
 		checkProblems("problems/unknownType.poc");
 	}
