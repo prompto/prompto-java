@@ -38,8 +38,8 @@ import prompto.declaration.EnumeratedNativeDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.IEnumeratedDeclaration;
 import prompto.declaration.IMethodDeclaration;
+import prompto.declaration.INativeDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
-import prompto.declaration.NativeWidgetDeclaration;
 import prompto.declaration.SingletonCategoryDeclaration;
 import prompto.error.PromptoError;
 import prompto.error.SyntaxError;
@@ -744,15 +744,15 @@ public class CategoryType extends BaseType {
 	
 	@Override
 	public void transpile(Transpiler transpiler) {
-		NativeWidgetDeclaration widget = null;
+		INativeDeclaration idecl = null;
 		IType type = resolve(transpiler.getContext(), null);
 		if(type instanceof CategoryType) {
 			IDeclaration decl = ((CategoryType)type).getDeclaration(transpiler.getContext());
-			if(decl instanceof NativeWidgetDeclaration)
-				widget = (NativeWidgetDeclaration)decl;
+			if(decl instanceof INativeDeclaration)
+				idecl = (INativeDeclaration)decl;
 		}
-		if(widget!=null)
-			widget.transpileTypename(transpiler);
+		if(idecl!=null)
+			idecl.transpileTypename(transpiler);
 		else
 			transpiler.append(this.getTypeName());
 	}

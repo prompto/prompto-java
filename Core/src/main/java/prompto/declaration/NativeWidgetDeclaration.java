@@ -9,7 +9,7 @@ import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.utils.CodeWriter;
 
-public class NativeWidgetDeclaration extends NativeCategoryDeclaration implements IWidgetDeclaration {
+public class NativeWidgetDeclaration extends NativeCategoryDeclaration implements IWidgetDeclaration, INativeDeclaration {
 	
 	PropertyMap properties;
 	
@@ -65,11 +65,10 @@ public class NativeWidgetDeclaration extends NativeCategoryDeclaration implement
 	    return true;
 	}
 
+	@Override
 	public void transpileTypename(Transpiler transpiler) {
 		JavaScriptNativeCategoryBinding binding = this.getJavaScriptBinding(true);
 	    binding.transpileTypename(transpiler);
 	}
-
-
 	
 }

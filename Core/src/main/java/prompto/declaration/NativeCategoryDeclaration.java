@@ -18,7 +18,7 @@ import prompto.utils.IdentifierList;
 import prompto.value.IInstance;
 import prompto.value.NativeInstance;
 
-public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
+public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration implements INativeDeclaration {
 	
 	NativeCategoryBindingList categoryBindings;
 	NativeAttributeBindingListMap attributeMappings;
@@ -202,5 +202,13 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 	    return binding.getBoundName();
 	}
 
-	
+	@Override
+	public void transpileTypename(Transpiler transpiler) {
+		/* TODO if(hasAnnotation(transpiler.getContext(), "Inlined")) {
+			JavaScriptNativeCategoryBinding binding = this.getJavaScriptBinding(true);
+		    binding.transpileTypename(transpiler);
+		} else */
+			transpiler.append(this.getName());
+	}
+
 }
