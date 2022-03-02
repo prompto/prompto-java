@@ -113,14 +113,14 @@ public class CastExpression extends CodeSection implements IExpression {
 		IValue value = expression.interpret(context);
 		if(value!=null && value!=NullValue.instance()) {
 			IType target = getTargetType(context);
-			if(target.equals(value.getType()))
-				return value;
-			else if(target==DecimalType.instance() && value instanceof IntegerValue)
-				value = new DecimalValue(((IntegerValue)value).doubleValue());
-			else if(target==IntegerType.instance() && value instanceof DecimalValue)
-				value = new IntegerValue(((DecimalValue)value).longValue());
-			else if(target.isMoreSpecificThan(context, value.getType()))
-				value.setType(target);
+			if(!target.equals(value.getType())) {
+				if(target==DecimalType.instance() && value instanceof IntegerValue)
+					value = new DecimalValue(((IntegerValue)value).doubleValue());
+				else if(target==IntegerType.instance() && value instanceof DecimalValue)
+					value = new IntegerValue(((DecimalValue)value).longValue());
+				else if(target.isMoreSpecificThan(context, value.getType()))
+					value.setType(target);
+			}
 		}
 		return value;
 	}
