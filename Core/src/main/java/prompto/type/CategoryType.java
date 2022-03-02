@@ -617,15 +617,19 @@ public class CategoryType extends BaseType {
 
 	private IType readJSONFieldType(Context context, Identifier fieldId, JsonNode fieldData) {
 		AttributeDeclaration attribute = context.getRegisteredDeclaration(AttributeDeclaration.class, fieldId);
-		IType fieldType = attribute.getType(context);
+		IType fieldType = attribute.getType(context).resolve(context, null);
 		return checkDerivedType(context, fieldType, fieldData);
 	}
 
 	private IType checkDerivedType(Context context, IType fieldType, JsonNode fieldData) {
 		if(fieldType instanceof CategoryType) {
-			if(fieldData.isObject() && fieldData.has("type"))
-				return new CategoryType(new Identifier(fieldData.get("type").asText()));
-			else {
+			if(fieldData.isObject() && fieldData.has("type")) {
+				String typeName = fieldData.get("type").asText();
+				if(typeName.equals(fieldType.getTypeName()))
+					return fieldType;
+				else
+					return new CategoryType(new Identifier(typeName)).resolve(context, null);
+			} else {
 				IDeclaration declaration = getDeclaration(context, fieldType.getTypeNameId());
 				return declaration.getType(context);
 			}

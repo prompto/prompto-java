@@ -66,6 +66,13 @@ public class ContextualExpression extends BaseValue implements IExpression {
 		return expression.compile(this.calling, method, flags);
 	}
 	
+	
+	@Override
+	public void declare(Transpiler transpiler) {
+		transpiler = transpiler.newChildTranspiler(this.calling);
+	    this.expression.declare(transpiler);
+	}
+	
 	@Override
 	public boolean transpile(Transpiler transpiler) {
 		transpiler = transpiler.newChildTranspiler(this.calling);

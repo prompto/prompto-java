@@ -173,6 +173,12 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 			}
 		}
 	}
+	
+	public ArgumentList makeArguments(Context context) {
+		MethodFinder finder = new MethodFinder(context, this);
+		IMethodDeclaration declaration = finder.findBest(false);
+		return makeArguments(context, declaration);
+	}
 
 	private void checkAbstractOnly(Context context, IMethodDeclaration declaration) {
 		if(declaration.isReference()) // parameter or variable populated from a method call
