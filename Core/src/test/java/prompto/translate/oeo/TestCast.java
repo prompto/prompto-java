@@ -42,6 +42,11 @@ public class TestCast extends BaseOParserTest {
 	}
 
 	@Test
+	public void testCastParent() throws Exception {
+		compareResourceOEO("cast/castParent.poc");
+	}
+
+	@Test
 	public void testIsAChild() throws Exception {
 		compareResourceOEO("cast/isAChild.poc");
 	}

@@ -125,6 +125,21 @@ public class TestCast extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedCastParent() throws Exception {
+		checkInterpretedOutput("cast/castParent.poc");
+	}
+
+	@Test
+	public void testCompiledCastParent() throws Exception {
+		checkCompiledOutput("cast/castParent.poc");
+	}
+
+	@Test
+	public void testTranspiledCastParent() throws Exception {
+		checkTranspiledOutput("cast/castParent.poc");
+	}
+
+	@Test
 	public void testInterpretedIsAChild() throws Exception {
 		checkInterpretedOutput("cast/isAChild.poc");
 	}
