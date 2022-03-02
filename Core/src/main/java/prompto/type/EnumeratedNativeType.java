@@ -157,7 +157,7 @@ public class EnumeratedNativeType extends BaseType {
 	
 	@Override
 	public boolean isMoreSpecificThan(Context context, IType other) {
-		throw new UnsupportedOperationException(); // TODO
+		return false;
 	}
 
 	@Override
