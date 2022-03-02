@@ -311,8 +311,8 @@ public class TestParserAtoms {
 		CodeWriter writer = new CodeWriter(Dialect.E, Context.newGlobalsContext());
 		mc.getCaller().toDialect(writer);
 		assertEquals("print",writer.toString());
-		assertNotNull(mc.getAssignments());
-		Argument as = mc.getAssignments().get(0);
+		assertNotNull(mc.getArguments());
+		Argument as = mc.getArguments().get(0);
 		assertEquals("value",as.getParameterId().toString());
 		IExpression exp = as.getExpression();
 		assertTrue(exp instanceof PlusExpression);

@@ -225,8 +225,8 @@ public class TestParserAtoms {
 		UnresolvedCall mc = parser.parse_method_call_statement();
 		assertNotNull(mc);
 		assertEquals("print",mc.getCaller().toString());
-		assertNotNull(mc.getAssignments());
-		Argument as = mc.getAssignments().get(0);
+		assertNotNull(mc.getArguments());
+		Argument as = mc.getArguments().get(0);
 		assertEquals("value",as.getParameterId().toString());
 		IExpression exp = as.getExpression();
 		assertTrue(exp instanceof PlusExpression);

@@ -73,7 +73,7 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 		return caller;
 	}
 	
-	public ArgumentList getAssignments() {
+	public ArgumentList getArguments() {
 		return arguments;
 	}
 	
