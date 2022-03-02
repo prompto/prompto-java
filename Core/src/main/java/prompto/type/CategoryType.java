@@ -121,6 +121,8 @@ public class CategoryType extends BaseType {
 	public IType anyfy() {
 		if("Any".equals(getTypeName()))
 			return AnyType.instance();	
+		else if("Missing".equals(getTypeName()))
+			return MissingType.instance();	
 		else
 			return this;
 	}
