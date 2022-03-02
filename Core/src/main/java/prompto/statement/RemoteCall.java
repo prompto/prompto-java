@@ -64,10 +64,12 @@ public class RemoteCall extends UnresolvedCall {
 		IType type = resolveAndCheck(context);
 		if(!(resolved instanceof MethodCall))
 			context.getProblemListener().reportIllegalRemoteCall(this, resolved.toString());
-		context = context.newChildContext();
+		final Context local = context.newChildContext();
 		if(resultName!=null)
-			context.registerValue(new Variable(resultName, type));
-		andThen.check(context, VoidType.instance());
+			local.registerValue(new Variable(resultName, type));
+		if(arguments!=null)
+			arguments.forEach(arg -> arg.check(context));
+		andThen.check(local, VoidType.instance());
 		return VoidType.instance();
 	}
 	
@@ -106,13 +108,15 @@ public class RemoteCall extends UnresolvedCall {
 		else
 			transpiler.require("Remote");
 		transpiler.require("RemoteRunner");
-	    transpiler = transpiler.newChildTranspiler();
+		final Transpiler local = transpiler.newChildTranspiler();
 		if(resultName!=null) {
-			IType type = resolveAndCheck(transpiler.getContext());
-			type.declare(transpiler);
-			transpiler.getContext().registerValue(new Variable(resultName, type));
+			IType type = resolveAndCheck(local.getContext());
+			type.declare(local);
+			local.getContext().registerValue(new Variable(resultName, type));
 		}
-		andThen.declare(transpiler);
+        if(arguments!=null)
+			arguments.forEach(arg -> arg.declare(local, null));
+		andThen.declare(local);
 	}
 
 	@Override
