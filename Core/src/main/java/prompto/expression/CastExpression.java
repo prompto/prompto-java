@@ -118,9 +118,9 @@ public class CastExpression extends CodeSection implements IExpression {
 					value = new DecimalValue(((IntegerValue)value).doubleValue());
 				else if(target==IntegerType.instance() && value instanceof DecimalValue)
 					value = new IntegerValue(((DecimalValue)value).longValue());
-				else if(target.isMoreSpecificThan(context, value.getType()))
+				else if(target.isAssignableFrom(context, value.getType()))
 					value.setType(target);
-				else if(!value.getType().isMoreSpecificThan(context, target))
+				else if(!value.getType().isAssignableFrom(context, target))
 					context.getProblemListener().reportIncompatibleTypes(this, value.getType(), target);
 			}
 		}
