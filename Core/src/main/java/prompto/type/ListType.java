@@ -62,7 +62,7 @@ public class ListType extends ContainerType {
 	@Override
 	public IType resolve(Context context, Consumer<IType> onError) {
 		IType resolvedItemType = itemType.resolve(context, onError);
-		if(resolvedItemType==itemType)
+		if(resolvedItemType==null || resolvedItemType==itemType)
 			return this;
 		else
 			return new ListType(resolvedItemType);
