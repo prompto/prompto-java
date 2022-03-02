@@ -120,6 +120,8 @@ public class CastExpression extends CodeSection implements IExpression {
 					value = new IntegerValue(((DecimalValue)value).longValue());
 				else if(target.isMoreSpecificThan(context, value.getType()))
 					value.setType(target);
+				else if(!value.getType().isMoreSpecificThan(context, target))
+					context.getProblemListener().reportIncompatibleTypes(this, value.getType(), target);
 			}
 		}
 		return value;
