@@ -81,7 +81,7 @@ public abstract class NativeType extends BaseType {
 	
 	@Override
 	public boolean isMoreSpecificThan(Context context, IType other) {
-		return false;
+		return other == MissingType.instance() || other == AnyType.instance();
 	}
 	
 	@Override
