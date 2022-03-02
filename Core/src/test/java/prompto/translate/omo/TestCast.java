@@ -22,6 +22,11 @@ public class TestCast extends BaseOParserTest {
 	}
 
 	@Test
+	public void testCastEnum() throws Exception {
+		compareResourceOMO("cast/castEnum.poc");
+	}
+
+	@Test
 	public void testCastMethod() throws Exception {
 		compareResourceOMO("cast/castMethod.poc");
 	}

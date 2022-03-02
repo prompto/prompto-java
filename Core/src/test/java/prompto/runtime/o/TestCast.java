@@ -65,6 +65,21 @@ public class TestCast extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedCastEnum() throws Exception {
+		checkInterpretedOutput("cast/castEnum.poc");
+	}
+
+	@Test
+	public void testCompiledCastEnum() throws Exception {
+		checkCompiledOutput("cast/castEnum.poc");
+	}
+
+	@Test
+	public void testTranspiledCastEnum() throws Exception {
+		checkTranspiledOutput("cast/castEnum.poc");
+	}
+
+	@Test
 	public void testInterpretedCastMethod() throws Exception {
 		checkInterpretedOutput("cast/castMethod.poc");
 	}
