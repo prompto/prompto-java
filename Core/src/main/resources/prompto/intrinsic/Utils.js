@@ -38,6 +38,13 @@ function isAMethod(o, params, result) {
     return params.length === countParams(o);
 }
 
+function isAnEnum(o) {
+	if(typeof o !== 'object')
+    	return false;
+	var proto = Object.getPrototypeOf(o);
+	return proto && proto.constructor && proto.constructor.symbolOf && proto.constructor.symbols;
+}
+
 function StringOrNull(o) {
 	return o && o.toString ? o.toString() : null;
 }

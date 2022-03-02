@@ -21,7 +21,7 @@ import prompto.value.IValue;
 import prompto.value.NullValue;
 
 
-public class EnumeratedCategoryType extends CategoryType {
+public class EnumeratedCategoryType extends CategoryType implements IEnumeratedType {
 
 	public EnumeratedCategoryType(Identifier id) {
 		super(Family.ENUMERATED, id); 

@@ -189,7 +189,10 @@ public class ListType extends ContainerType {
 				case STRING:
 					return new TextValue(node.asText());
 				case OBJECT:
-					return readJSONObject(context, parts, node);
+					if(itemType instanceof IEnumeratedType)
+						return itemType.readJSONValue(context, node, parts);
+					else 
+						return readJSONObject(context, parts, node);
 				default:
 					throw new ReadWriteError("Unsupported " + node.getNodeType().name() + " node for " + itemType.toString());
 			} 

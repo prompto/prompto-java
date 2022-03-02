@@ -32,7 +32,7 @@ import prompto.store.Family;
 import prompto.transpiler.Transpiler;
 import prompto.value.IValue;
 
-public class EnumeratedNativeType extends BaseType {
+public class EnumeratedNativeType extends BaseType implements IEnumeratedType {
 
 	NativeType derivedFrom;
 	Identifier typeNameId;
