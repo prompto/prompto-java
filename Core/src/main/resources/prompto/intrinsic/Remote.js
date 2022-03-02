@@ -156,7 +156,7 @@ function writeJSONValue(value, useDbRefs, formData) {
 					return { type: typeName, value: result};
 				}
 			} else if(isAnEnum(value)) {
-				return { type: typeName, value: value.name };
+				return { type: typeName, name: value.name };
 			} else
 				return value;
 		}

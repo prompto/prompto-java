@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -58,6 +59,14 @@ public class ListType extends ContainerType {
 		return new ListType(itemType);
 	}
 	
+	@Override
+	public IType resolve(Context context, Consumer<IType> onError) {
+		IType resolvedItemType = itemType.resolve(context, onError);
+		if(resolvedItemType==itemType)
+			return this;
+		else
+			return new ListType(resolvedItemType);
+	}
 	
 	@Override
 	public Type toJavaType(Context context) {

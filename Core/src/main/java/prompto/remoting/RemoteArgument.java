@@ -36,16 +36,18 @@ public class RemoteArgument {
 		if(IStore.dbIdName.equals(param.getName()))
 			param.setType(TypeUtils.typeToIType(DataStore.getInstance().getNativeDbIdClass()));
 		else {
+			IType type;
 			field = jsonParam.get("type");
 			if(field!=null)
-				param.setType(IType.fromTypeName(context, field.asText()));
+				type = IType.fromTypeName(context, field.asText());
 			else {	
 				AttributeDeclaration decl = context.findAttribute(param.getName());
 				if(decl==null)
 					throw new InvalidParameterException("Expecting a 'type' field!");
 				else
-					param.setType(decl.getType());
+					type = decl.getType();
 			}
+			param.setType(type.resolve(context, null));
 		}
 		field = jsonParam.get("value");
 		if(field==null)
