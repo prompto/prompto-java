@@ -260,6 +260,36 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedIsAParentInstance() throws Exception {
+		checkInterpretedOutput("equals/isAParentInstance.poc");
+	}
+
+	@Test
+	public void testCompiledIsAParentInstance() throws Exception {
+		checkCompiledOutput("equals/isAParentInstance.poc");
+	}
+
+	@Test
+	public void testTranspiledIsAParentInstance() throws Exception {
+		checkTranspiledOutput("equals/isAParentInstance.poc");
+	}
+
+	@Test
+	public void testInterpretedIsAnInstance() throws Exception {
+		checkInterpretedOutput("equals/isAnInstance.poc");
+	}
+
+	@Test
+	public void testCompiledIsAnInstance() throws Exception {
+		checkCompiledOutput("equals/isAnInstance.poc");
+	}
+
+	@Test
+	public void testTranspiledIsAnInstance() throws Exception {
+		checkTranspiledOutput("equals/isAnInstance.poc");
+	}
+
+	@Test
 	public void testInterpretedIsBoolean() throws Exception {
 		checkInterpretedOutput("equals/isBoolean.poc");
 	}

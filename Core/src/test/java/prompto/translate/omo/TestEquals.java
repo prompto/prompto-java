@@ -87,6 +87,16 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testIsAParentInstance() throws Exception {
+		compareResourceOMO("equals/isAParentInstance.poc");
+	}
+
+	@Test
+	public void testIsAnInstance() throws Exception {
+		compareResourceOMO("equals/isAnInstance.poc");
+	}
+
+	@Test
 	public void testIsBoolean() throws Exception {
 		compareResourceOMO("equals/isBoolean.poc");
 	}
