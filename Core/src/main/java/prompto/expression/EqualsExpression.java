@@ -54,6 +54,7 @@ import prompto.store.IStore;
 import prompto.transpiler.Transpiler;
 import prompto.type.AnyType;
 import prompto.type.BooleanType;
+import prompto.type.CategoryType;
 import prompto.type.CharacterType;
 import prompto.type.ContainerType;
 import prompto.type.DateTimeType;
@@ -691,8 +692,14 @@ public class EqualsExpression extends CodeSection implements IPredicateExpressio
 	        transpiler.append(", ");
 	        ((MethodType)type).transpileMethodType(transpiler);
 	        transpiler.append(")");
+	    } else if(type instanceof CategoryType) {
+	    	transpiler.append("isInstanceOf(");
+	    	this.left.transpile(transpiler);
+	        transpiler.append(", ");
+	        this.right.transpile(transpiler);
+	        transpiler.append(")");
 	    } else {
-	        this.left.transpile(transpiler);
+	    	this.left.transpile(transpiler);
 	        transpiler.append(" instanceof ");
 	        this.right.transpile(transpiler);
 	    }

@@ -45,6 +45,10 @@ function isAnEnum(o) {
 	return proto && proto.constructor && proto.constructor.symbolOf && proto.constructor.symbols;
 }
 
+function isInstanceOf(obj, type) {
+	return obj instanceof type || (obj instanceof $Root && obj.$categories.indexOf(type)>=0);
+}
+
 function StringOrNull(o) {
 	return o && o.toString ? o.toString() : null;
 }
