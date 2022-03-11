@@ -260,6 +260,21 @@ public class TestNative extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedReturnNullValue() throws Exception {
+		checkInterpretedOutput("native/returnNullValue.poc");
+	}
+
+	@Test
+	public void testCompiledReturnNullValue() throws Exception {
+		checkCompiledOutput("native/returnNullValue.poc");
+	}
+
+	@Test
+	public void testTranspiledReturnNullValue() throws Exception {
+		checkTranspiledOutput("native/returnNullValue.poc");
+	}
+
+	@Test
 	public void testInterpretedReturnStringLiteral() throws Exception {
 		checkInterpretedOutput("native/returnStringLiteral.poc");
 	}

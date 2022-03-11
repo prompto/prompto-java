@@ -92,6 +92,11 @@ public class TestNative extends BaseOParserTest {
 	}
 
 	@Test
+	public void testReturnNullValue() throws Exception {
+		compareResourceOMO("native/returnNullValue.poc");
+	}
+
+	@Test
 	public void testReturnStringLiteral() throws Exception {
 		compareResourceOMO("native/returnStringLiteral.poc");
 	}
