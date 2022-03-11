@@ -108,6 +108,10 @@ public class JavaIdentifierExpression extends CodeSection implements JavaExpress
 	}
 
 	private ResultInfo compile_instance(Context context, MethodInfo method) {
+		if("null".equals(name)) {
+			method.addInstruction(Opcode.ACONST_NULL);
+			return new ResultInfo(Object.class);
+		}
 		INamed named = context.getRegisteredValue(INamed.class, new Identifier(name));
 		if(named==null)
 			return null;
@@ -191,7 +195,9 @@ public class JavaIdentifierExpression extends CodeSection implements JavaExpress
 	}
 
 	Object interpret_instance(Context context) throws PromptoError {
-		try {
+		if("null".equals(name))
+			return null;
+		else try {
 			return context.getValue(new Identifier(name)); 
 		} catch (PromptoError e) {
 			return null;
