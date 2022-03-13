@@ -39,6 +39,7 @@ import prompto.type.ListType;
 import prompto.type.NativeType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
+import prompto.value.NullValue;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -158,6 +159,8 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 	}
 
 	public IValue readJSONValue(Context context, JsonNode value) throws PromptoError {
+		if(value.isNull())
+			return NullValue.instance();
 		if(value.isObject() && value.has("name"))
 			value = value.get("name");
 		String name = value.asText();
