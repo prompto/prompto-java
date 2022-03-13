@@ -569,17 +569,13 @@ public class CategoryType extends BaseType {
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
 		if(value.isNull())
 			return NullValue.instance();
-		try {
-			IDeclaration declaration = getDeclaration(context);
-			if(declaration instanceof CategoryDeclaration) 
-				return readJSONInstance(context, (CategoryDeclaration)declaration, value, parts);
-			else if(declaration instanceof EnumeratedNativeDeclaration)
-				return ((EnumeratedNativeDeclaration)declaration).readJSONValue(context, value);
-			else
-				throw new InvalidParameterException(); 
-		} catch (PromptoError e) {
-			throw new RuntimeException(e);
-		} 
+		IDeclaration declaration = getDeclaration(context);
+		if(declaration instanceof CategoryDeclaration) 
+			return readJSONInstance(context, (CategoryDeclaration)declaration, value, parts);
+		else if(declaration instanceof EnumeratedNativeDeclaration)
+			return ((EnumeratedNativeDeclaration)declaration).readJSONValue(context, value);
+		else
+			throw new InvalidParameterException();  
 	}
 
 	private IValue readJSONInstance(Context context, CategoryDeclaration declaration, JsonNode value, Map<String, byte[]> parts) throws PromptoError {

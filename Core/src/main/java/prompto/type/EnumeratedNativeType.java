@@ -162,12 +162,8 @@ public class EnumeratedNativeType extends BaseType implements IEnumeratedType {
 
 	@Override
 	public IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts) {
-		try {
-			EnumeratedNativeDeclaration decl = context.getRegisteredDeclaration(EnumeratedNativeDeclaration.class, typeNameId);
-			return decl.readJSONValue(context, value);
-		} catch (PromptoError e) {
-			throw new RuntimeException(e);
-		} 
+		EnumeratedNativeDeclaration decl = context.getRegisteredDeclaration(EnumeratedNativeDeclaration.class, typeNameId);
+		return decl.readJSONValue(context, value);
 	}
 	
 	@Override
