@@ -161,14 +161,14 @@ public class EnumeratedNativeDeclaration extends BaseDeclaration
 	public IValue readJSONValue(Context context, JsonNode value) throws PromptoError {
 		if(value.isNull())
 			return NullValue.instance();
-		if(value.isObject() && value.has("name"))
+		else if(value.isObject() && value.has("name"))
 			value = value.get("name");
 		String name = value.asText();
 		for(Symbol symbol : symbolsList) {
 			if(name.equals(symbol.getName()))
 				return symbol.interpret(context);
 		}
-		throw new InvalidSymbolError(name = " is not a valid " + this.getName() + " symbol.");
+		throw new InvalidSymbolError(name + " is not a valid " + this.getName() + " symbol.");
 	}
 
 	public ClassFile compile(Context context, String fullName) {
