@@ -52,6 +52,21 @@ public class TestReader extends BaseEParserTest {
 	}
 
 	@Test
+	public void testInterpretedXml() throws Exception {
+		runInterpretedTests("reader/xml.pec");
+	}
+
+	@Test
+	public void testCompiledXml() throws Exception {
+		runCompiledTests("reader/xml.pec");
+	}
+
+	@Test
+	public void testTranspiledXml() throws Exception {
+		runTranspiledTests("reader/xml.pec");
+	}
+
+	@Test
 	public void testInterpretedYaml() throws Exception {
 		runInterpretedTests("reader/yaml.pec");
 	}

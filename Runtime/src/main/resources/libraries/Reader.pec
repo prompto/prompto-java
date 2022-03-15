@@ -123,6 +123,37 @@ and verifying:
 	o[1].field = 122
 
 
+define readXml as native method receiving text, Boolean keepNamespaces = false and Boolean keepAttributes = false returning Document doing:
+	Java: return prompto.reader.XMLReader.read(text, keepNamespaces, keepAttributes);
+	C#: return prompto.reader.XMLReader.read(text, keepNamespaces, keepAttributes); 
+	Python2: return xmlRead(text, keepNamespaces, keepAttributes) from module: prompto.reader.XMLReader
+	Python3: return xmlRead(text, keepNamespaces, keepAttributes) from module: prompto.reader.XMLReader
+	JavaScript: return xmlRead(text, keepNamespaces, keepAttributes); from module: prompto/reader/XMLReader.js
+
+
+define "readXml returns a Document" as test method doing:
+    xml = "<a><b>abc</b></a>"
+	o = readXml xml
+and verifying:
+	o is a Document
+	o.a.b = "abc"
+
+
+define writeXml as native method receiving Document doc returning Text doing:
+	Java: return prompto.writer.XMLWriter.write(doc);
+	C#: return prompto.writer.XMLWriter.write(doc); 
+	Python2: return xmlWrite(doc) from module: prompto.writer.XMLWriter
+	Python3: return xmlWrite(doc) from module: prompto.writer.XMLWriter
+	JavaScript: return xmlWrite(doc); from module: prompto/writer/XMLWriter.js
+
+
+define "writeXml writes a Document" as test method doing:
+	src = { a: { b: "abc" } }
+	xml = writeXml src
+    dst = readXml xml
+and verifying:
+	dst is a Document
+	dst = src
 define readYaml as native method receiving text returning Document[] doing:
 	Java: return prompto.reader.YAMLReader.read(text);
 	C#: return prompto.reader.YAMLReader.read(text); 
