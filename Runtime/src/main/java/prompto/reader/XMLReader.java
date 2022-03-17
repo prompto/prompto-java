@@ -44,8 +44,7 @@ public class XMLReader {
 
 	private PromptoDocument<String, Object> convertDocument(Document doc) {
 		PromptoDocument<String, Object> result = new PromptoDocument<>();
-		Element root = doc.getDocumentElement();
-		convertElement(result, root);
+		convertElement(result, doc.getDocumentElement());
 		return result;
 	}
 

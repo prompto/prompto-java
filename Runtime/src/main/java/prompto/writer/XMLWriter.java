@@ -70,9 +70,9 @@ public class XMLWriter {
 		if(value==null)
 			return;
 		else if(value instanceof PromptoList)
-			((PromptoList<Object>)value).forEach(item -> convertValue(parent, value));
+			((PromptoList<Object>)value).forEach(item -> convertValue(parent, item));
 		else if(value instanceof PromptoSet)
-			((PromptoSet<Object>)value).forEach(item -> convertValue(parent, value));
+			((PromptoSet<Object>)value).forEach(item -> convertValue(parent, item));
 		else if(value instanceof PromptoDict)
 			convertDict(parent, (PromptoDict<String, Object>)value);
 		else if(value instanceof PromptoDocument)
