@@ -32,6 +32,7 @@ import prompto.intrinsic.PromptoAny;
 import prompto.intrinsic.PromptoDate;
 import prompto.intrinsic.PromptoDateTime;
 import prompto.intrinsic.PromptoDict;
+import prompto.intrinsic.PromptoDocument;
 import prompto.intrinsic.PromptoList;
 import prompto.intrinsic.PromptoPeriod;
 import prompto.intrinsic.PromptoProxy;
@@ -60,6 +61,7 @@ import prompto.type.ContainerType;
 import prompto.type.DateTimeType;
 import prompto.type.DateType;
 import prompto.type.DecimalType;
+import prompto.type.DocumentType;
 import prompto.type.DictType;
 import prompto.type.IType;
 import prompto.type.IntegerType;
@@ -454,6 +456,7 @@ public class EqualsExpression extends CodeSection implements IPredicateExpressio
 		map.put(PromptoPeriod.class, PeriodType::compileEquals); 
 		map.put(PromptoVersion.class, VersionType::compileEquals); 
 		map.put(PromptoDict.class, DictType::compileEquals);
+		map.put(PromptoDocument.class, DocumentType::compileEquals);
 		map.put(PromptoSet.class, SetType::compileEquals);  /*
 		map.put(PromptoTuple.class, TupleValue::compileEquals); */
 		map.put(PromptoList.class, ListType::compileEquals); 
