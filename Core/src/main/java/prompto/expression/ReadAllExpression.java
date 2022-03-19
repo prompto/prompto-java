@@ -12,6 +12,7 @@ import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
+import prompto.intrinsic.IResource;
 import prompto.parser.CodeSection;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
@@ -19,7 +20,6 @@ import prompto.type.IType;
 import prompto.type.ResourceType;
 import prompto.type.TextType;
 import prompto.utils.CodeWriter;
-import prompto.value.IResource;
 import prompto.value.IValue;
 import prompto.value.TextValue;
 

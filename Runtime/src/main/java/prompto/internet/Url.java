@@ -11,8 +11,8 @@ import java.net.URLConnection;
 import java.util.List;
 import java.util.function.Consumer;
 
+import prompto.intrinsic.IResource;
 import prompto.intrinsic.PromptoBinary;
-import prompto.value.IResource;
 
 public class Url implements IResource {
 	
@@ -103,6 +103,11 @@ public class Url implements IResource {
 		}
 	}
 	
+	@Override
+	public void readFully(Consumer<String> thenWith) throws IOException {
+		throw new UnsupportedOperationException();
+	}
+
 	private String readStringFully(InputStream input) throws IOException {
 		ByteArrayOutputStream data = readBytesFully(input);
 		return data.toString(encoding);
@@ -131,10 +136,16 @@ public class Url implements IResource {
 	}
 
 	@Override
-	public String readLine() throws IOException {
+	public BufferedReader asReader() throws IOException {
 		if(reader==null)
 			reader = new BufferedReader(new InputStreamReader(url.openStream()));
-		return reader.readLine();
+		return reader;
+	}
+
+	@SuppressWarnings("resource")
+	@Override
+	public String readLine() throws IOException {
+		return asReader().readLine();
 	}
 	
 	@Override

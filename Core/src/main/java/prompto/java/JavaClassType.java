@@ -35,7 +35,7 @@ import prompto.value.DocumentValue;
 import prompto.value.IValue;
 import prompto.value.IteratorValue;
 import prompto.value.ListValue;
-import prompto.value.NativeInstance;
+import prompto.value.NativeCategory;
 import prompto.value.SetValue;
 import prompto.value.TextValue;
 
@@ -153,7 +153,7 @@ public class JavaClassType extends BaseType {
     	if(val!=null)
     		return val;
     	if(returnType==AnyType.instance())
-	    	return new NativeInstance(AnyNativeCategoryDeclaration.getInstance(), value);
+	    	return new NativeCategory(AnyNativeCategoryDeclaration.getInstance(), value);
 	    else
 	        throw new InternalError("Unable to convert:" + value.getClass().getSimpleName());
     }
@@ -172,7 +172,7 @@ public class JavaClassType extends BaseType {
 		// ensure the underlying declaration is loaded
 		context.getRegisteredDeclaration(IDeclaration.class, returnType.getTypeNameId());
  		NativeCategoryDeclaration decl = context.getNativeBinding(type);
-		return decl!=null ? new NativeInstance(decl, value) : null;
+		return decl!=null ? new NativeCategory(decl, value) : null;
 	}
 
 	private static IValue convertDocument(Context context, Object value, Type type, IType returnType) {

@@ -179,7 +179,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 	
 	protected IValue getCategory(Context context) {
 		NativeCategoryDeclaration decl = context.getRegisteredDeclaration(NativeCategoryDeclaration.class, new Identifier("Category"));
-		return new NativeInstance(decl, declaration);
+		return new NativeCategory(decl, declaration);
 	}
 
 	protected IValue getMemberAllowGetter(Context context, Identifier id, boolean allowGetter) throws PromptoError {

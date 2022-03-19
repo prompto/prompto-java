@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+import prompto.intrinsic.IResource;
 import prompto.intrinsic.PromptoBinary;
-import prompto.value.IResource;
 
 public class MyResource implements IResource {
 
@@ -77,13 +77,20 @@ public class MyResource implements IResource {
 	}
 
 	@Override
-	public String readLine() throws IOException {
+	public BufferedReader asReader() throws IOException {
 		if(reader==null) {
 			if(getContent()==null)
 				return null;
 			reader = new BufferedReader(new StringReader(getContent()));
 		}
-		return reader.readLine();
+		return reader;
+	}
+
+
+	@SuppressWarnings("resource")
+	@Override
+	public String readLine() throws IOException {
+		return asReader().readLine();
 	}
 	
 	@Override
@@ -92,6 +99,11 @@ public class MyResource implements IResource {
 		if(content.length()>0)
 			content += "\n";
 		setContent(content + data);
+	}
+
+	@Override
+	public void readFully(Consumer<String> thenWith) throws IOException {
+		thenWith.accept(getContent());
 	}
 
 }

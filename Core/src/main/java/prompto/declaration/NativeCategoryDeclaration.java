@@ -16,7 +16,7 @@ import prompto.type.CategoryType;
 import prompto.utils.CodeWriter;
 import prompto.utils.IdentifierList;
 import prompto.value.IInstance;
-import prompto.value.NativeInstance;
+import prompto.value.NativeCategory;
 
 public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 	
@@ -43,7 +43,7 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 	
 	@Override
 	protected void setDbId(Context context, IInstance instance, PromptoDbId dbId) {
-		((NativeInstance)instance).setDbId(dbId);
+		((NativeCategory)instance).setDbId(dbId);
 	}
 	
 	@Override
@@ -118,7 +118,7 @@ public class NativeCategoryDeclaration extends ConcreteCategoryDeclaration {
 
 	@Override
 	public IInstance newInstance(Context context) throws PromptoError {
-		return new NativeInstance(context, this);
+		return new NativeCategory(context, this);
 	}
 
 	public String getBoundClassName() {

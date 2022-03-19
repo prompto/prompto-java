@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.function.Consumer;
 
+import prompto.intrinsic.IResource;
 import prompto.intrinsic.PromptoBinary;
-import prompto.value.IResource;
 
 public class Buffer implements IResource {
 	
@@ -35,10 +35,16 @@ public class Buffer implements IResource {
 	}
 	
 	@Override
-	public String readLine() throws IOException {
+	public BufferedReader asReader() throws IOException {
 		if(reader==null)
 			reader = new BufferedReader(new StringReader(buffer.toString()));
-		return reader.readLine();
+		return reader;
+	}
+
+	@SuppressWarnings("resource")
+	@Override
+	public String readLine() throws IOException {
+		return asReader().readLine();
 	}
 	
 	@Override
@@ -52,6 +58,11 @@ public class Buffer implements IResource {
 		return buffer.toString();
 	}
 	
+	@Override
+	public void readFully(Consumer<String> thenWith) throws IOException {
+		thenWith.accept(readFully());
+	}
+
 	@Override
 	public PromptoBinary readBlob() throws IOException {
 		byte[] bytes = readFully().getBytes();
@@ -72,6 +83,5 @@ public class Buffer implements IResource {
 	public String getText() {
 		return buffer.toString();
 	}
-
 	
 }

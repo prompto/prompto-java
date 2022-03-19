@@ -34,14 +34,14 @@ import prompto.store.IStore;
 import prompto.type.CategoryType;
 import prompto.type.NativeCategoryType;
 
-public class NativeInstance extends BaseValue implements IInstance {
+public abstract class NativeInstance<T extends Object> extends BaseValue implements IInstance {
 	
 	NativeCategoryDeclaration declaration;
-	Object instance = null;
+	T instance = null;
 	IStorable storable = null;
 	boolean mutable = false;
 	
-	public NativeInstance(Context context, NativeCategoryDeclaration declaration) {
+	protected NativeInstance(Context context, NativeCategoryDeclaration declaration) {
 		super(new NativeCategoryType(declaration));
 		this.declaration = declaration;
 		this.instance = makeInstance(context);
@@ -51,7 +51,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 		}
 	}
 	
-	public NativeInstance(NativeCategoryDeclaration declaration, Object instance) {
+	protected NativeInstance(NativeCategoryDeclaration declaration, T instance) {
 		super(new NativeCategoryType(declaration));
 		this.declaration = declaration;
 		this.instance = instance;
@@ -122,9 +122,10 @@ public class NativeInstance extends BaseValue implements IInstance {
 		return instance;
 	}
 	
-	private Object makeInstance(Context context) {
+	@SuppressWarnings("unchecked")
+	private T makeInstance(Context context) {
 		try {
-			Class<?> mapped = declaration.getBoundClass(true);
+			Class<T> mapped = (Class<T>) declaration.getBoundClass(true);
 			return mapped.getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -170,7 +171,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 
 	private IValue getCategory(Context context) {
 		NativeCategoryDeclaration decl = context.getRegisteredDeclaration(NativeCategoryDeclaration.class, new Identifier("Category"));
-		return new NativeInstance(decl, declaration);
+		return new NativeCategory(decl, declaration);
 	}
 
 	public IValue getMemberAllowGetter(Context context, Identifier attrName, boolean allowGetter) throws PromptoError {
@@ -321,7 +322,7 @@ public class NativeInstance extends BaseValue implements IInstance {
 	}
 	
 	@Override
-	public NativeInstance toMutable() {
+	public IInstance toMutable() {
 		throw new UnsupportedOperationException();
 	}
 }

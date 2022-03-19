@@ -1,13 +1,15 @@
 package prompto.value;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.util.function.Consumer;
 
 import prompto.declaration.NativeResourceDeclaration;
+import prompto.intrinsic.IResource;
 import prompto.intrinsic.PromptoBinary;
 import prompto.runtime.Context;
 
-public class NativeResource extends NativeInstance implements IResource {
+public class NativeResource extends NativeInstance<IResource> implements IResource {
 
 	public NativeResource(Context context, NativeResourceDeclaration declaration) {
 		super(context, declaration);
@@ -58,6 +60,18 @@ public class NativeResource extends NativeInstance implements IResource {
 	@Override
 	public void close() {
 		((IResource)instance).close();
+	}
+
+	@Override
+	public Reader asReader() throws IOException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void readFully(Consumer<String> thenWith) throws IOException {
+		// TODO Auto-generated method stub
+		
 	}
 
 

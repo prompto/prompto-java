@@ -8,11 +8,11 @@ import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StackLocal;
 import prompto.error.PromptoError;
+import prompto.intrinsic.IResource;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.IResource;
 import prompto.value.IValue;
 
 public class WithResourceStatement extends BaseStatement {

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import prompto.error.ReadWriteError;
+import prompto.intrinsic.IResource;
 import prompto.intrinsic.PromptoDict;
 import prompto.intrinsic.PromptoDocument;
 import prompto.intrinsic.PromptoList;
@@ -44,6 +45,12 @@ public abstract class CSVReader {
 		return iterator(reader, columns, separator, encloser);
 	}
 	
+	public static CSVIterable iterator(IResource resource, PromptoDict<String, String> columns, Character separator, Character encloser) throws IOException {
+		try(var reader = resource==null ? null : resource.asReader()) {
+			return iterator(reader, columns, separator, encloser);
+		}
+	}
+
 	public static CSVIterable iterator(final Reader _reader, PromptoDict<String, String> columns, Character separator, Character encloser) {
 		
 		char sep = separator==null ? ',' : separator.charValue();

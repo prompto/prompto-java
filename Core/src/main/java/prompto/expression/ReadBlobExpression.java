@@ -12,6 +12,7 @@ import prompto.error.NullReferenceError;
 import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.error.SyntaxError;
+import prompto.intrinsic.IResource;
 import prompto.intrinsic.PromptoBinary;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
@@ -20,7 +21,6 @@ import prompto.type.IType;
 import prompto.type.ResourceType;
 import prompto.utils.CodeWriter;
 import prompto.value.BlobValue;
-import prompto.value.IResource;
 import prompto.value.IValue;
 
 public class ReadBlobExpression implements IExpression {

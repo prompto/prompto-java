@@ -28,7 +28,7 @@ import prompto.type.MethodType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
-import prompto.value.NativeInstance;
+import prompto.value.NativeCategory;
 
 
 public class JavaMethodExpression extends JavaSelectorExpression {
@@ -107,8 +107,8 @@ public class JavaMethodExpression extends JavaSelectorExpression {
 		Object instance = parent.interpret(context);
 		if(instance==null)
 			throw new SyntaxError("Could not locate: " + parent.toString());
-		if(instance instanceof NativeInstance)
-			instance = ((NativeInstance)instance).getInstance();
+		if(instance instanceof NativeCategory)
+			instance = ((NativeCategory)instance).getInstance();
 		try {
 			Method method = findMethod(context, instance);
 			if(method==null)

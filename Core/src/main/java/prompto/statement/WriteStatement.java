@@ -23,6 +23,7 @@ import prompto.error.PromptoError;
 import prompto.error.ReadWriteError;
 import prompto.expression.IExpression;
 import prompto.grammar.ThenWith;
+import prompto.intrinsic.IResource;
 import prompto.runtime.Context;
 import prompto.runtime.Context.ResourceContext;
 import prompto.runtime.Variable;
@@ -32,7 +33,6 @@ import prompto.type.ResourceType;
 import prompto.type.TextType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
-import prompto.value.IResource;
 import prompto.value.IValue;
 import prompto.value.TextValue;
 
