@@ -30,7 +30,7 @@ public abstract class PrintStreamLogger extends PrintStream {
 				if (lines.length > 0) {
 					int lineCount = lines.length - (logLastLine ? 0 : 1);
 					for (int i = 0; i < lineCount; i++)
-						logger.info(lines[i]);
+						logger.info(lines[i] + "\n");
 				}
 				if (!logLastLine)
 					write(lines[lines.length - 1].getBytes());
