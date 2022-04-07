@@ -21,39 +21,43 @@ import prompto.store.IStore;
 import prompto.type.IType;
 import prompto.utils.TypeUtils;
 import prompto.value.IValue;
+import prompto.value.NullValue;
 
 public class RemoteArgument {
 
 	public static RemoteArgument read(Context context, JsonNode jsonParam, Map<String, byte[]> parts) throws Exception {
 		if(!jsonParam.isObject())
 			throw new InvalidParameterException("Expecting a JSON object!");
-		RemoteArgument param = new RemoteArgument();
+		RemoteArgument remote = new RemoteArgument();
 		JsonNode field = jsonParam.get("name");
 		if(field==null)
 			throw new InvalidParameterException("Expecting a 'name' field!");
-		param.setName(field.asText());
+		remote.setName(field.asText());
 		// dbId type resolves to Any category, when it's actually a value, need a hack for this one
-		if(IStore.dbIdName.equals(param.getName()))
-			param.setType(TypeUtils.typeToIType(DataStore.getInstance().getNativeDbIdClass()));
+		if(IStore.dbIdName.equals(remote.getName()))
+			remote.setType(TypeUtils.typeToIType(DataStore.getInstance().getNativeDbIdClass()));
 		else {
 			IType type;
 			field = jsonParam.get("type");
 			if(field!=null)
 				type = IType.fromTypeName(context, field.asText());
 			else {	
-				AttributeDeclaration decl = context.findAttribute(param.getName());
+				AttributeDeclaration decl = context.findAttribute(remote.getName());
 				if(decl==null)
 					throw new InvalidParameterException("Expecting a 'type' field!");
 				else
 					type = decl.getType();
 			}
-			param.setType(type.resolve(context, null));
+			remote.setType(type.resolve(context, null));
 		}
 		field = jsonParam.get("value");
 		if(field==null)
 			throw new InvalidParameterException("Expecting a 'value' field!");
-		param.setValue(new ValueExpression(param.getType(), param.getType().readJSONValue(context, field, parts)));
-		return param;
+		if(field.isNull())
+			remote.setValue(NullValue.instance());
+		else
+			remote.setValue(new ValueExpression(remote.getType(), remote.getType().readJSONValue(context, field, parts)));
+		return remote;
 	}
 
 
