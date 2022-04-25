@@ -274,11 +274,16 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof ConcreteInstance))
+		return this==obj || (obj instanceof ConcreteInstance && equals((ConcreteInstance)obj));
+	}
+	
+	public boolean equals(ConcreteInstance obj) {
+		if(declaration != obj.declaration)
 			return false;
-		if(declaration != ((ConcreteInstance)obj).declaration)
-			return false;
-		return this.values.equals(((ConcreteInstance)obj).values);
+		if(!this.isMutable() && !obj.isMutable() && this.getDbId()!=null && this.getDbId().equals(obj.getDbId()))
+			return true;
+		else
+			return this.values.equals(((ConcreteInstance)obj).values);
 	}
 	
 	@Override
