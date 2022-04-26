@@ -59,11 +59,9 @@ public class TernaryExpression extends CodeSection implements IExpression {
 			context.getProblemListener().reportIllegalPredicate(this, condition );
 		if(condition instanceof EqualsExpression)
 			context = ((EqualsExpression)condition).downcastForCheck(context);
-		IType trueType = whenTrue.check(context);
-		IType falseType = whenFalse.check(context);
 		TypeMap types = new TypeMap();
-		types.add(trueType);
-		types.add(falseType);
+		types.add(whenTrue.check(context));
+		types.add(whenFalse.check(context));
 		return types.inferType(context, this);
 	}
 	
