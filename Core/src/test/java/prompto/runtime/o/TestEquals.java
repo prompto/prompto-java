@@ -290,6 +290,21 @@ public class TestEquals extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedIsAnInstanceTernary() throws Exception {
+		checkInterpretedOutput("equals/isAnInstanceTernary.poc");
+	}
+
+	@Test
+	public void testCompiledIsAnInstanceTernary() throws Exception {
+		checkCompiledOutput("equals/isAnInstanceTernary.poc");
+	}
+
+	@Test
+	public void testTranspiledIsAnInstanceTernary() throws Exception {
+		checkTranspiledOutput("equals/isAnInstanceTernary.poc");
+	}
+
+	@Test
 	public void testInterpretedIsBoolean() throws Exception {
 		checkInterpretedOutput("equals/isBoolean.poc");
 	}
