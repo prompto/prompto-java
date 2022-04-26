@@ -12,7 +12,6 @@ import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
 import prompto.compiler.StackState;
 import prompto.error.PromptoError;
-import prompto.error.SyntaxError;
 import prompto.parser.CodeSection;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
@@ -58,6 +57,8 @@ public class TernaryExpression extends CodeSection implements IExpression {
 		IType type = condition.check(context);
 		if(!(type instanceof BooleanType))
 			context.getProblemListener().reportIllegalPredicate(this, condition );
+		if(condition instanceof EqualsExpression)
+			context = ((EqualsExpression)condition).downcastForCheck(context);
 		IType trueType = whenTrue.check(context);
 		IType falseType = whenFalse.check(context);
 		TypeMap types = new TypeMap();
@@ -69,6 +70,8 @@ public class TernaryExpression extends CodeSection implements IExpression {
 	@Override
 	public IValue interpret(Context context) throws PromptoError {
 		Object test = condition.interpret(context);
+		if(condition instanceof EqualsExpression)
+			context = ((EqualsExpression)condition).downcastForInterpret(context);
 		if(test == BooleanValue.TRUE)
 			return whenTrue.interpret(context);
 		else
@@ -82,6 +85,8 @@ public class TernaryExpression extends CodeSection implements IExpression {
 		ResultInfo li = condition.compile(context, method, flags.withPrimitive(true));
 		if(BooleanValue.class==li.getType())
 			CompilerUtils.BooleanToboolean(method);
+		if(condition instanceof EqualsExpression)
+			context = ((EqualsExpression)condition).downcastForCheck(context);
 		IInstructionListener branchListener = method.addOffsetListener(new OffsetListenerConstant());
 		method.activateOffsetListener(branchListener);
 		method.addInstruction(Opcode.IFEQ, branchListener);
@@ -105,10 +110,10 @@ public class TernaryExpression extends CodeSection implements IExpression {
 	private ResultInfo compileDowncastIfRequired(Context context, MethodInfo method, ResultInfo result, Type required) {
 		if(result.getType()==required)
 			return result;
-		if(!(required instanceof Class<?> && result.getType() instanceof Class<?>))
-			throw new SyntaxError("Cannot convert " + result.getType() + " to " + required);
-		if(((Class<?>)required).isAssignableFrom((Class<?>)result.getType()))
+		if(required instanceof Class<?> && result.getType() instanceof Class<?>) {
+			if(((Class<?>)required).isAssignableFrom((Class<?>)result.getType()))
 				return result;
+		}
 		ClassConstant c = new ClassConstant(required);
 		method.addInstruction(Opcode.CHECKCAST, c);
 		return new ResultInfo(required);
@@ -117,7 +122,9 @@ public class TernaryExpression extends CodeSection implements IExpression {
 	@Override
 	public void declare(Transpiler transpiler) {
 	    this.condition.declare(transpiler);
-	    this.whenTrue.declare(transpiler);
+		if(condition instanceof EqualsExpression)
+			transpiler = transpiler.newChildTranspiler(((EqualsExpression)condition).downcastForCheck(transpiler.getContext()));
+		this.whenTrue.declare(transpiler);
 	    this.whenFalse.declare(transpiler);
 	}
 	
@@ -126,10 +133,13 @@ public class TernaryExpression extends CodeSection implements IExpression {
 	    transpiler.append("(");
 	    this.condition.transpile(transpiler);
 	    transpiler.append(" ? ");
+		if(condition instanceof EqualsExpression)
+			transpiler = transpiler.newChildTranspiler(((EqualsExpression)condition).downcastForCheck(transpiler.getContext()));
 	    this.whenTrue.transpile(transpiler);
 	    transpiler.append(" : ");
 	    this.whenFalse.transpile(transpiler);
 	    transpiler.append(")");
+	    transpiler.flush();
 		return false;
 	}
 }
