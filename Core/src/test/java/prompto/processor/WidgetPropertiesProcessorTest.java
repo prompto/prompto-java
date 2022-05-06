@@ -2,6 +2,7 @@ package prompto.processor;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -151,6 +152,8 @@ public class WidgetPropertiesProcessorTest extends BaseOParserTest {
 				output.write(js.getBytes());
 			}
 			assertTrue(js.contains("some stuff"));
+		} catch(Throwable t) {
+			fail();
 		} finally {
 			assertNotNull(warning.get());
 			assertTrue(warning.get().contains("invalid"));
@@ -290,7 +293,7 @@ public class WidgetPropertiesProcessorTest extends BaseOParserTest {
 			output.write(js.getBytes());
 		}
 		assertTrue(js.contains("stuff"));
-		assertTrue(js.contains("function(click)"));
+		assertTrue(js.contains("function(event)"));
 		assertTrue(js.contains("this.props.callback(7)"));
 	}
 
