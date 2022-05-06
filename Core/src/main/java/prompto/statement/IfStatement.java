@@ -149,9 +149,9 @@ public class IfStatement extends BaseStatement {
 
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
-		IType result = check(context);
+		IType resultType = check(context);
 		compileIfElements(context, method, flags);
-		return new ResultInfo(result.toJavaType(context));
+		return new ResultInfo(resultType.toJavaType(context));
 	}
 
 	static class IfElementBranch {

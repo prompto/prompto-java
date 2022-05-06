@@ -42,6 +42,7 @@ import prompto.runtime.Context;
 import prompto.statement.DeclarationStatement;
 import prompto.statement.StatementList;
 import prompto.transpiler.Transpiler;
+import prompto.type.AnyType;
 import prompto.type.DictType;
 import prompto.type.IType;
 import prompto.type.MethodType;
@@ -57,6 +58,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	StatementList statements;
 	DeclarationStatement<IMethodDeclaration> declarationOf;
 	Map<Identifier, ValuedCodeParameter> codeParameters;
+	boolean beingChecked;
 	
 	public ConcreteMethodDeclaration(Identifier name, ParameterList parameters, IType returnType, StatementList statements) {
 		super(name, parameters, returnType);
@@ -167,9 +169,9 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	@Override
 	public IType check(Context context, boolean isStart) {
 		if(canBeChecked(context, isStart))
-			return fullCheck(context, isStart);
+			return recursiveCheck(context, isStart);
 		else
-			return VoidType.instance();
+			return AnyType.instance();
 	}
 	
 	private boolean canBeChecked(Context context, boolean isStart) {
@@ -187,7 +189,25 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 		else
 			return parameters.stream().anyMatch(param -> param instanceof CodeParameter);
 	}
-
+	
+	private IType recursiveCheck(Context context, boolean isStart) {
+		if(beingChecked) {
+			if(returnType != null)
+				return returnType;
+			else {
+				context.getProblemListener().reportUntypedRecursiveMethod(this.id, this.getName(), this.getProto());
+				return AnyType.instance();
+			}
+		} else {
+			beingChecked = true;
+			try {
+				return fullCheck(context, isStart);
+			} finally {
+				beingChecked = false;
+			}
+		}
+	}
+	
 	private IType fullCheck(Context context, boolean isStart) {
 		IProblemListener listener = context.getProblemListener();
 		listener.pushDeclaration(this);

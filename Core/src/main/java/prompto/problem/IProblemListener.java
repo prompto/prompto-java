@@ -47,6 +47,7 @@ public interface IProblemListener {
 	void reportIllegalAbstractWidget(ICodeSection section, String name, String missingPrototype);
 	void reportIllegalAbstractMethodCall(ICodeSection section, String methodSignature);
 	void reportInconsistentHierarchy(ICodeSection section, String category, String culprit);
+	void reportUntypedRecursiveMethod(ICodeSection section, String name, String prototype);
 	
 	void reportIncompatibleTypes(ICodeSection section, IType first, IType second);
 	void reportNoSuperType(ICodeSection section, IType actual);

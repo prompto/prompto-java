@@ -276,6 +276,11 @@ public abstract class ProblemListener implements ANTLRErrorListener, IProblemLis
 	}
 	
 	@Override
+	public void reportUntypedRecursiveMethod(ICodeSection section, String name, String prototype) {
+		addProblem(new UntypedRecursiveMethodProblem(section, name, prototype));
+	}
+
+	@Override
 	public void reportNoSuperType(ICodeSection section, IType actual) {
 		addProblem(new NoSuperCategoryProblem(section, actual));
 	}
