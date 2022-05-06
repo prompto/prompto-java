@@ -295,7 +295,7 @@ public abstract class JsxElementBase extends CodeSection implements IJsxExpressi
 	    + "onKeyDown: KeyboardEventCallback,\n"
 	    + "onKeyUp: KeyboardEventCallback,\n"
 		+ "onSubmit: SubmitEventCallback,\n"
-		+ "onChange: InputChangedCallback,\n"
+		+ "onChange: InputChangedEventCallback,\n"
 		+ "key: Any\n"
 		+ "}"; // TODO: 'key' is for React only
 
