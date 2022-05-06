@@ -1,5 +1,6 @@
 package prompto.problems.o;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import prompto.parser.o.BaseOParserTest;
@@ -159,6 +160,12 @@ public class TestProblems extends BaseOParserTest {
 	@Test
 	public void testUnknownType() throws Exception {
 		checkProblems("problems/unknownType.poc");
+	}
+
+	@Ignore("No time to fix!")
+	@Test
+	public void testUntypedRecursiveMethod() throws Exception {
+		checkProblems("problems/untypedRecursiveMethod.poc");
 	}
 
 }
