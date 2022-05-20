@@ -417,6 +417,12 @@ public class MutableCodeStore extends BaseCodeStore {
 	
 	@Override
 	public Collection<CategoryDeclaration> fetchDerivedCategoryDeclarations(Identifier id) {
+		Stream<CategoryDeclaration> stream1 = super.fetchDerivedCategoryDeclarations(id).stream();
+		Stream<CategoryDeclaration> stream2 = doFetchDerivedCategoryDeclarations(id).stream();
+		return Stream.concat(stream1, stream2).collect(Collectors.toList());
+	}
+	
+	Collection<CategoryDeclaration> doFetchDerivedCategoryDeclarations(Identifier id) {
 		IQueryBuilder builder = store.newQueryBuilder()
 				.verify(AttributeInfo.CATEGORY, MatchOp.HAS, "CategoryDeclaration")
 				.verify(AttributeInfo.DERIVED_FROM, MatchOp.HAS, id.toString())
