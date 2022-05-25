@@ -2,7 +2,6 @@ package prompto.runtime.o;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import prompto.parser.o.BaseOParserTest;
@@ -25,7 +24,6 @@ public class TestRecursive extends BaseOParserTest {
 		checkInterpretedOutput("recursive/mutuallyRecursive.poc");
 	}
 
-	@Ignore("No time to fix!")
 	@Test
 	public void testCompiledMutuallyRecursive() throws Exception {
 		checkCompiledOutput("recursive/mutuallyRecursive.poc");
@@ -41,7 +39,6 @@ public class TestRecursive extends BaseOParserTest {
 		checkInterpretedOutput("recursive/recursive.poc");
 	}
 
-	@Ignore("No time to fix!")
 	@Test
 	public void testCompiledRecursive() throws Exception {
 		checkCompiledOutput("recursive/recursive.poc");

@@ -50,18 +50,33 @@ public class TestCondition extends BaseEParserTest {
 	}
 
 	@Test
-	public void testInterpretedReturnIf() throws Exception {
-		checkInterpretedOutput("condition/returnIf.pec");
+	public void testInterpretedReturnTextIf() throws Exception {
+		checkInterpretedOutput("condition/returnTextIf.pec");
 	}
 
 	@Test
-	public void testCompiledReturnIf() throws Exception {
-		checkCompiledOutput("condition/returnIf.pec");
+	public void testCompiledReturnTextIf() throws Exception {
+		checkCompiledOutput("condition/returnTextIf.pec");
 	}
 
 	@Test
-	public void testTranspiledReturnIf() throws Exception {
-		checkTranspiledOutput("condition/returnIf.pec");
+	public void testTranspiledReturnTextIf() throws Exception {
+		checkTranspiledOutput("condition/returnTextIf.pec");
+	}
+
+	@Test
+	public void testInterpretedReturnVoidIf() throws Exception {
+		checkInterpretedOutput("condition/returnVoidIf.pec");
+	}
+
+	@Test
+	public void testCompiledReturnVoidIf() throws Exception {
+		checkCompiledOutput("condition/returnVoidIf.pec");
+	}
+
+	@Test
+	public void testTranspiledReturnVoidIf() throws Exception {
+		checkTranspiledOutput("condition/returnVoidIf.pec");
 	}
 
 	@Test

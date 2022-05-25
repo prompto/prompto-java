@@ -17,8 +17,13 @@ public class TestCondition extends BaseEParserTest {
 	}
 
 	@Test
-	public void testReturnIf() throws Exception {
-		compareResourceEOE("condition/returnIf.pec");
+	public void testReturnTextIf() throws Exception {
+		compareResourceEOE("condition/returnTextIf.pec");
+	}
+
+	@Test
+	public void testReturnVoidIf() throws Exception {
+		compareResourceEOE("condition/returnVoidIf.pec");
 	}
 
 	@Test

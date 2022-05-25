@@ -65,18 +65,33 @@ public class TestCondition extends BaseOParserTest {
 	}
 
 	@Test
-	public void testInterpretedReturnIf() throws Exception {
-		checkInterpretedOutput("condition/returnIf.poc");
+	public void testInterpretedReturnTextIf() throws Exception {
+		checkInterpretedOutput("condition/returnTextIf.poc");
 	}
 
 	@Test
-	public void testCompiledReturnIf() throws Exception {
-		checkCompiledOutput("condition/returnIf.poc");
+	public void testCompiledReturnTextIf() throws Exception {
+		checkCompiledOutput("condition/returnTextIf.poc");
 	}
 
 	@Test
-	public void testTranspiledReturnIf() throws Exception {
-		checkTranspiledOutput("condition/returnIf.poc");
+	public void testTranspiledReturnTextIf() throws Exception {
+		checkTranspiledOutput("condition/returnTextIf.poc");
+	}
+
+	@Test
+	public void testInterpretedReturnVoidIf() throws Exception {
+		checkInterpretedOutput("condition/returnVoidIf.poc");
+	}
+
+	@Test
+	public void testCompiledReturnVoidIf() throws Exception {
+		checkCompiledOutput("condition/returnVoidIf.poc");
+	}
+
+	@Test
+	public void testTranspiledReturnVoidIf() throws Exception {
+		checkTranspiledOutput("condition/returnVoidIf.poc");
 	}
 
 	@Test

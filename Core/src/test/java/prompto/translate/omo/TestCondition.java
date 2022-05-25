@@ -22,8 +22,13 @@ public class TestCondition extends BaseOParserTest {
 	}
 
 	@Test
-	public void testReturnIf() throws Exception {
-		compareResourceOMO("condition/returnIf.poc");
+	public void testReturnTextIf() throws Exception {
+		compareResourceOMO("condition/returnTextIf.poc");
+	}
+
+	@Test
+	public void testReturnVoidIf() throws Exception {
+		compareResourceOMO("condition/returnVoidIf.poc");
 	}
 
 	@Test
