@@ -1,7 +1,10 @@
 package prompto.expression;
 
 import java.security.InvalidParameterException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -30,6 +33,7 @@ import prompto.value.NullValue;
 public class DocumentExpression implements IExpression {
 
 	private static Logger logger = new Logger();
+	private static Set<String> ZIP_MIME_TYPES = new HashSet<>(Arrays.asList("application/zip", "application/x-zip-compressed"));
 	
 	IExpression source;
 	
@@ -67,7 +71,7 @@ public class DocumentExpression implements IExpression {
 	}
 		
 	private DocumentValue documentFromBlob(Context context, BlobValue blob) {
-		if(!"application/zip".equals(blob.getMimeType()))
+		if(!ZIP_MIME_TYPES.contains(blob.getMimeType()))
 			throw new UnsupportedOperationException("Unsupported mime type: " + blob.getMimeType());
 		try {
 			Map<String, byte[]> parts = PromptoDocument.readParts(blob.getData());
