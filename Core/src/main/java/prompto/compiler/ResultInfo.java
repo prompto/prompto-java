@@ -29,30 +29,35 @@ public class ResultInfo {
 	public ResultInfo(Type type, Flag ...flags) {
 		this.type = type;
 		for(Flag flag : flags)
-			setFlag(flag);
+			setFlag(flag, true);
 	}
 	
 	public ResultInfo withFlag(Flag flag) {
-		setFlag(flag);
+		return withFlag(flag, true);
+	}
+	
+	
+	public ResultInfo withFlag(Flag flag, boolean set) {
+		setFlag(flag, set);
 		return this;
 	}
 
-	private void setFlag(Flag flag) {
+	private void setFlag(Flag flag, boolean set) {
 		switch(flag) {
 		case RETURN:
-			isReturn = true;
+			isReturn = set;
 			break;
 		case BREAK:
-			isBreak = true;
+			isBreak = set;
 			break;
 		case THROW:
-			isThrow = true;
+			isThrow = set;
 			break;
 		case STATIC:
-			isStatic = true;
+			isStatic = set;
 			break;
 		case SUPER:
-			isSuper = true;
+			isSuper = set;
 			break;
 		}
 	}

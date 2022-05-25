@@ -11,6 +11,7 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.OffsetListenerConstant;
 import prompto.compiler.Opcode;
 import prompto.compiler.ResultInfo;
+import prompto.compiler.ResultInfo.Flag;
 import prompto.compiler.StackState;
 import prompto.error.PromptoError;
 import prompto.expression.EqualsExpression;
@@ -151,7 +152,7 @@ public class IfStatement extends BaseStatement {
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		IType resultType = check(context);
 		compileIfElements(context, method, flags);
-		return new ResultInfo(resultType.toJavaType(context));
+		return new ResultInfo(resultType.toJavaType(context)).withFlag(Flag.RETURN, resultType!=VoidType.instance());
 	}
 
 	static class IfElementBranch {
