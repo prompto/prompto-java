@@ -573,7 +573,7 @@ public class TextType extends NativeType {
        if (value instanceof TextValue)
             return value;
         else
-            return super.convertJavaValueToIValue(context, value);
+            return super.convertIValueToIValue(context, value);
 	}
 	
 	

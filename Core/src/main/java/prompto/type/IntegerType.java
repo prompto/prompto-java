@@ -256,7 +256,7 @@ public class IntegerType extends NativeType implements INumberType {
 		else if (value instanceof TextValue)
             return IntegerValue.Parse(value.toString());
         else
-            return super.convertJavaValueToIValue(context, value);
+            return super.convertIValueToIValue(context, value);
 	}
 	
 	@Override

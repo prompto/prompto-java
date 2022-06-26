@@ -32,17 +32,15 @@ import prompto.param.AttributeParameter;
 import prompto.parser.CodeSection;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
-import prompto.store.IStore;
 import prompto.transpiler.ITranspilable;
 import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.DocumentType;
 import prompto.type.IType;
 import prompto.utils.CodeWriter;
-import prompto.value.DocumentValue;
+import prompto.utils.InstanceUtils;
 import prompto.value.IInstance;
 import prompto.value.IValue;
-import prompto.value.NullValue;
 
 public class ConstructorExpression extends CodeSection implements IExpression {
 	
@@ -210,38 +208,8 @@ public class ConstructorExpression extends CodeSection implements IExpression {
 		IInstance instance = type.newInstance(context);
 		instance.setMutable(true);
 		try {
-			if(copyFrom!=null) {
-				Object copyObj = copyFrom.interpret(context);
-				if(copyObj instanceof IInstance) {
-					IInstance copyFrom = (IInstance)copyObj;
-					for(Identifier id : copyFrom.getMemberIds()) {
-						if(IStore.dbIdName.equals(id.toString()))
-							continue;	
-						if(cd.hasAttribute(context, id)) {
-							IValue value = copyFrom.getMember(context, id, false);
-							if(value!=null && value.isMutable() && !type.isMutable())
-								throw new NotMutableError();
-							instance.setMember(context, id, value);
-						}
-					}
-				} else if (copyObj instanceof DocumentValue) {
-					DocumentValue copyFrom = (DocumentValue)copyObj;
-					for(Identifier id : copyFrom.getMemberIds()) {
-						if(IStore.dbIdName.equals(id.toString()))
-							continue;	
-						if(cd.hasAttribute(context, id)) {
-							IValue value = copyFrom.getMember(context, id, false);
-							if(value!=null && value.isMutable() && !type.isMutable())
-								throw new NotMutableError();
-							if(value!=NullValue.instance()) {
-								AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
-								value = decl.getType(context).convertIValueToIValue(context, value);
-							}
-							instance.setMember(context, id, value);
-						}
-					}
-				}
-			}
+			if(copyFrom!=null)
+				InstanceUtils.copyFrom(context, cd, instance, copyFrom);
 			if(arguments!=null) {
 				for(Argument argument : arguments) {
 					Identifier argId = argument.getParameterId();

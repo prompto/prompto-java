@@ -109,7 +109,7 @@ public interface IType extends ICodeSection {
 	IValue readJSONValue(Context context, JsonNode value, Map<String, byte[]> parts);
 	
 	default IValue convertIValueToIValue(Context context, IValue value) {
-		throw new UnsupportedOperationException("Cannot convertIValueToPromptoValue for " + this.getClass());
+		return value;
 	}
 
 	default IValue convertJavaValueToIValue(Context context, Object value) {
