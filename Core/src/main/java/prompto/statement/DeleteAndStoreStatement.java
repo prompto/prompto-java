@@ -271,7 +271,7 @@ public class DeleteAndStoreStatement extends BaseStatement {
 	            transpiler.append(".collectDbIds(idsToDelete);").newLine();
 	        });
 	        transpiler.append("return Array.from(idsToDelete);").newLine();
-	        transpiler.dedent().append("})()");
+	        transpiler.dedent().append("}).bind(this)()");
 	    }
 	}
 
@@ -288,7 +288,7 @@ public class DeleteAndStoreStatement extends BaseStatement {
 	            transpiler.append(".collectStorables(storablesToAdd);").newLine();
 	        });
 	        transpiler.append("return Array.from(storablesToAdd);").newLine();
-	        transpiler.dedent().append("})()");
+	        transpiler.dedent().append("}).bind(this)()");
 	    }
 	}
 
@@ -302,9 +302,9 @@ public class DeleteAndStoreStatement extends BaseStatement {
 
 	private void transpileFuture(Transpiler transpiler) {
 	    if(andThen!=null) {
-	    	transpiler.append(", function() {").indent();
+	    	transpiler.append(", (function() {").indent();
 	    	andThen.transpile(transpiler);
-	    	transpiler.dedent().append("}.bind(this)");
+	    	transpiler.dedent().append("}).bind(this)");
 	    } 
 	}
 

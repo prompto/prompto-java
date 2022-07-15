@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import prompto.declaration.AnyNativeCategoryDeclaration;
+import prompto.declaration.ConcreteCategoryDeclaration;
 import prompto.declaration.IDeclaration;
 import prompto.declaration.NativeCategoryDeclaration;
 import prompto.intrinsic.IDocumentProducer;
@@ -20,6 +21,7 @@ import prompto.runtime.Context;
 import prompto.store.Family;
 import prompto.type.AnyType;
 import prompto.type.BaseType;
+import prompto.type.CategoryType;
 import prompto.type.ContainerType;
 import prompto.type.DictType;
 import prompto.type.DocumentType;
@@ -28,10 +30,12 @@ import prompto.type.IteratorType;
 import prompto.type.ListType;
 import prompto.type.SetType;
 import prompto.type.TextType;
+import prompto.utils.InstanceUtils;
 import prompto.utils.TypeUtils;
 import prompto.value.BinaryValue;
 import prompto.value.DictionaryValue;
 import prompto.value.DocumentValue;
+import prompto.value.IInstance;
 import prompto.value.IValue;
 import prompto.value.IteratorValue;
 import prompto.value.ListValue;
@@ -128,7 +132,7 @@ public class JavaClassType extends BaseType {
     	IValue val = convertIValue(value);
     	if(val!=null)
     		return val;
-    	val = convertNative(context, value, type);
+    	val = convertNativeValue(context, value, type);
     	if(val!=null)
     		return val;
     	val = convertDocument(context, value, type, returnType);
@@ -149,7 +153,10 @@ public class JavaClassType extends BaseType {
     	val = convertBinary(context, value, type, returnType);
     	if(val!=null)
     		return val;
-    	val = convertCategory(context, value, type, returnType);
+    	val = convertNativeCategory(context, value, type, returnType);
+    	if(val!=null)
+    		return val;
+    	val = convertPromptoCategory(context, value, type, returnType);
     	if(val!=null)
     		return val;
     	if(returnType==AnyType.instance())
@@ -162,13 +169,13 @@ public class JavaClassType extends BaseType {
 	    return value instanceof IValue ? (IValue)value : null;
 	}
 
-	private static IValue convertNative(Context context, Object value, Type type) {
+	private static IValue convertNativeValue(Context context, Object value, Type type) {
         IType itype = TypeUtils.typeToIType(type);
         return itype != null ? itype.convertJavaValueToIValue(context, value) : null;
 	}
 
 
-	private static IValue convertCategory(Context context, Object value, Type type, IType returnType) {
+	private static IValue convertNativeCategory(Context context, Object value, Type type, IType returnType) {
 		// ensure the underlying declaration is loaded
 		context.getRegisteredDeclaration(IDeclaration.class, returnType.getTypeNameId());
  		NativeCategoryDeclaration decl = context.getNativeBinding(type);
@@ -181,6 +188,22 @@ public class JavaClassType extends BaseType {
 				if(value instanceof IDocumentProducer)
 					value = ((IDocumentProducer)value).toDocument();
 				return new DocumentValue(context, (PromptoDocument<?,?>)value, true);
+			}
+		}
+		return null;
+	}
+
+	private static IValue convertPromptoCategory(Context context, Object value, Type type, IType returnType) {
+		if(value instanceof Map<?,?>) {
+			if(returnType instanceof CategoryType) {
+				IDeclaration decl = context.getRegisteredDeclaration(IDeclaration.class, returnType.getTypeNameId());
+				if(decl instanceof ConcreteCategoryDeclaration) {
+					IInstance instance = ((ConcreteCategoryDeclaration)decl).newInstance(context);
+					instance.setMutable(true);
+					InstanceUtils.copyFrom(context, (ConcreteCategoryDeclaration)decl, instance, value);
+					instance.setMutable(false);
+					return instance;
+				}
 			}
 		}
 		return null;

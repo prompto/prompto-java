@@ -1,5 +1,7 @@
 package prompto.type;
 
-public interface IEnumeratedType {
+import prompto.grammar.Identifier;
 
+public interface IEnumeratedType {
+	Identifier getTypeNameId();
 }
