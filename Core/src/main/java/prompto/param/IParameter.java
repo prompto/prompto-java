@@ -15,6 +15,7 @@ import prompto.grammar.Identifier;
 import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
+import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
@@ -25,8 +26,8 @@ public interface IParameter extends INamedInstance {
 	String getProto();
 	String getSignature(Dialect dialect);
 	void register(Context context);
-	void check(Context context);
-	IValue checkValue(Context context,IExpression value) throws PromptoError;
+	IType check(Context context);
+	IValue checkValue(Context context, IExpression value) throws PromptoError;
 	void toDialect(CodeWriter writer);
 	DefaultExpression getDefaultExpression();
 	boolean setMutable(boolean set);

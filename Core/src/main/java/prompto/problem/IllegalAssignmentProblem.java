@@ -2,6 +2,7 @@ package prompto.problem;
 
 import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import prompto.parser.ICodeSection;
 import prompto.type.IType;
@@ -30,7 +31,11 @@ public class IllegalAssignmentProblem extends SyntaxProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return "Illegal expression type, expected: " +  expected.toString() + ", got:" + actual.getTypeName();
+		return "Illegal expression type, expected: " +  expectedToString() + ", got: " + actual.getTypeName();
+	}
+
+	private String expectedToString() {
+		return expected.size() == 1 ? expected.stream().map(Object::toString).collect(Collectors.joining("")) : expected.toString();
 	}
 
 }

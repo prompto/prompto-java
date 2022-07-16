@@ -62,6 +62,11 @@ public class TestProblems extends BaseOParserTest {
 	}
 
 	@Test
+	public void testIllegalAttributeType() throws Exception {
+		checkProblems("problems/illegalAttributeType.poc");
+	}
+
+	@Test
 	public void testIllegalComparison() throws Exception {
 		checkProblems("problems/illegalComparison.poc");
 	}
@@ -77,13 +82,13 @@ public class TestProblems extends BaseOParserTest {
 	}
 
 	@Test
-	public void testMissingAttribute() throws Exception {
-		checkProblems("problems/missingAttribute.poc");
+	public void testMissingAttributeMember() throws Exception {
+		checkProblems("problems/missingAttributeMember.poc");
 	}
 
 	@Test
-	public void testMissingAttributeMember() throws Exception {
-		checkProblems("problems/missingAttributeMember.poc");
+	public void testMissingAttributeName() throws Exception {
+		checkProblems("problems/missingAttributeName.poc");
 	}
 
 	@Test
@@ -99,6 +104,11 @@ public class TestProblems extends BaseOParserTest {
 	@Test
 	public void testSetReactState() throws Exception {
 		checkProblems("problems/setReactState.poc");
+	}
+
+	@Test
+	public void testUnknownAttribute() throws Exception {
+		checkProblems("problems/unknownAttribute.poc");
 	}
 
 	@Test
@@ -124,6 +134,11 @@ public class TestProblems extends BaseOParserTest {
 	@Test
 	public void testUnknownIdentifier() throws Exception {
 		checkProblems("problems/unknownIdentifier.poc");
+	}
+
+	@Test
+	public void testUnknownIdentifierMember() throws Exception {
+		checkProblems("problems/unknownIdentifierMember.poc");
 	}
 
 	@Test

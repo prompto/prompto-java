@@ -196,9 +196,10 @@ public class CategoryParameter extends BaseParameter implements ITypedParameter 
 	}
 	
 	@Override
-	public void check(Context context) {
+	public IType check(Context context) {
 		resolve(context);
 		resolved.checkExists(context);
+		return resolved;
 	}
 	
 	private void resolve(Context context) {

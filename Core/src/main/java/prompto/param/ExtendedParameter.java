@@ -136,13 +136,14 @@ public class ExtendedParameter extends CategoryParameter {
 	}
 	
 	@Override
-	public void check(Context context) {
+	public IType check(Context context) {
 		type.checkExists(context);
 		for(Identifier attribute : attributes) {
 			AttributeDeclaration actual = context.getRegisteredDeclaration(AttributeDeclaration.class, attribute);
 			if(actual==null)
 				throw new SyntaxError("Unknown attribute: \"" + attribute + "\"");
 		}
+		return type;
 	}
 	
 	@Override

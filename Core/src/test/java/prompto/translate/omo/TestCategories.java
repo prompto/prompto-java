@@ -7,6 +7,11 @@ import prompto.parser.o.BaseOParserTest;
 public class TestCategories extends BaseOParserTest {
 
 	@Test
+	public void testAttributeConstructor() throws Exception {
+		compareResourceOMO("categories/attributeConstructor.poc");
+	}
+
+	@Test
 	public void testCopyFromAscendant() throws Exception {
 		compareResourceOMO("categories/copyFromAscendant.poc");
 	}
@@ -37,8 +42,18 @@ public class TestCategories extends BaseOParserTest {
 	}
 
 	@Test
+	public void testEmptyConstructor() throws Exception {
+		compareResourceOMO("categories/emptyConstructor.poc");
+	}
+
+	@Test
 	public void testEquals() throws Exception {
 		compareResourceOMO("categories/equals.poc");
+	}
+
+	@Test
+	public void testLiteralConstructor() throws Exception {
+		compareResourceOMO("categories/literalConstructor.poc");
 	}
 
 	@Test
@@ -49,6 +64,16 @@ public class TestCategories extends BaseOParserTest {
 	@Test
 	public void testResourceAttribute() throws Exception {
 		compareResourceOMO("categories/resourceAttribute.poc");
+	}
+
+	@Test
+	public void testSynonymConstructor() throws Exception {
+		compareResourceOMO("categories/synonymConstructor.poc");
+	}
+
+	@Test
+	public void testValueConstructor() throws Exception {
+		compareResourceOMO("categories/valueConstructor.poc");
 	}
 
 }

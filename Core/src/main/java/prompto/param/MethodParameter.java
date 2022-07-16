@@ -33,6 +33,7 @@ import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.MethodDeclarationMap;
 import prompto.transpiler.Transpiler;
+import prompto.type.IType;
 import prompto.type.MethodType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
@@ -100,10 +101,12 @@ public class MethodParameter extends BaseParameter {
 	}
 	
 	@Override
-	public void check(Context context) {
+	public IType check(Context context) {
 		IMethodDeclaration actual = getDeclaration(context);
-		if(actual==null)
-			throw new SyntaxError("Unknown method: \"" + id + "\"");
+		if(actual!=null)
+			return actual.check(context);
+		context.getProblemListener().reportUnknownMethod(id, id.toString());
+		return null;
 	}
 	
 	@Override

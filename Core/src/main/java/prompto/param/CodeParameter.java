@@ -70,7 +70,8 @@ public class CodeParameter extends BaseParameter implements ITypedParameter {
 	}
 	
 	@Override
-	public void check(Context context) {
+	public IType check(Context context) {
+		return CodeType.instance();
 	}
 	
 	@Override

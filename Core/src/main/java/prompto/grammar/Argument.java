@@ -130,19 +130,30 @@ public class Argument extends CodeSection {
 	}
 	
 	
-	public IType check(Context context) {
-		IExpression expression = getExpression();
-		INamed actual = context.getRegisteredValue(INamed.class, parameter.getId());
-		if(actual==null) {
-			IType actualType = expression.check(context);
-			context.registerValue(new Variable(parameter.getId(), actualType));
-		} else {
-			// need to check type compatibility
-			IType actualType = actual.getType(context);
-			IType newType = expression.check(context);
-			actualType.checkAssignableFrom(context, newType, this);
+	public void check(Context context) {
+		if(expression==null)
+			checkParameterOnly(context);
+		else
+			checkParameterAndExpression(context);
+	}
+	
+	
+	private void checkParameterOnly(Context context) {
+		INamed registered = context.getRegisteredValue(INamed.class, parameter.getId());
+		if(registered == null)
+			context.getProblemListener().reportUnknownIdentifier(this, parameter.getId().toString());
+		else {
+			IType requiredType = this.parameter.check(context);
+			IType actualType = registered.getType(context);
+			requiredType.checkAssignableFrom(context, actualType, this);
 		}
-		return VoidType.instance();
+	}
+
+
+	private void checkParameterAndExpression(Context context) {
+		IType requiredType = this.parameter.check(context);
+		IType actualType = getExpression().check(context);
+		requiredType.checkAssignableFrom(context, actualType, this);
 	}
 	
 	public IExpression resolve(Context context, IMethodDeclaration methodDeclaration, boolean checkInstance, boolean allowDerived) throws PromptoError {

@@ -87,16 +87,18 @@ public class AttributeParameter extends BaseParameter {
 	}
 	
 	@Override
-	public void check(Context context) {
-		AttributeDeclaration actual = context.getRegisteredDeclaration(AttributeDeclaration.class,id);
-		if(actual==null)
-			throw new SyntaxError("Unknown attribute: \"" + id + "\"");
+	public IType check(Context context) {
+		AttributeDeclaration actual = context.getRegisteredDeclaration(AttributeDeclaration.class, id);
+		if(actual!=null)
+			return actual.getType();
+		context.getProblemListener().reportUnknownAttribute(id, id.toString());
+		return null;
 	}
 	
 	@Override
 	public IType getType(Context context) {
 		IDeclaration named = context.getRegisteredDeclaration(IDeclaration.class, id);
-		return named.getType(context);
+		return named==null ? null : named.getType(context);
 	}
 	
 	@Override

@@ -20,6 +20,21 @@ public class TestCategories extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedAttributeConstructor() throws Exception {
+		checkInterpretedOutput("categories/attributeConstructor.poc");
+	}
+
+	@Test
+	public void testCompiledAttributeConstructor() throws Exception {
+		checkCompiledOutput("categories/attributeConstructor.poc");
+	}
+
+	@Test
+	public void testTranspiledAttributeConstructor() throws Exception {
+		checkTranspiledOutput("categories/attributeConstructor.poc");
+	}
+
+	@Test
 	public void testInterpretedCopyFromAscendant() throws Exception {
 		checkInterpretedOutput("categories/copyFromAscendant.poc");
 	}
@@ -110,6 +125,21 @@ public class TestCategories extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedEmptyConstructor() throws Exception {
+		checkInterpretedOutput("categories/emptyConstructor.poc");
+	}
+
+	@Test
+	public void testCompiledEmptyConstructor() throws Exception {
+		checkCompiledOutput("categories/emptyConstructor.poc");
+	}
+
+	@Test
+	public void testTranspiledEmptyConstructor() throws Exception {
+		checkTranspiledOutput("categories/emptyConstructor.poc");
+	}
+
+	@Test
 	public void testInterpretedEquals() throws Exception {
 		checkInterpretedOutput("categories/equals.poc");
 	}
@@ -122,6 +152,21 @@ public class TestCategories extends BaseOParserTest {
 	@Test
 	public void testTranspiledEquals() throws Exception {
 		checkTranspiledOutput("categories/equals.poc");
+	}
+
+	@Test
+	public void testInterpretedLiteralConstructor() throws Exception {
+		checkInterpretedOutput("categories/literalConstructor.poc");
+	}
+
+	@Test
+	public void testCompiledLiteralConstructor() throws Exception {
+		checkCompiledOutput("categories/literalConstructor.poc");
+	}
+
+	@Test
+	public void testTranspiledLiteralConstructor() throws Exception {
+		checkTranspiledOutput("categories/literalConstructor.poc");
 	}
 
 	@Test
@@ -152,6 +197,36 @@ public class TestCategories extends BaseOParserTest {
 	@Test
 	public void testTranspiledResourceAttribute() throws Exception {
 		checkTranspiledOutput("categories/resourceAttribute.poc");
+	}
+
+	@Test
+	public void testInterpretedSynonymConstructor() throws Exception {
+		checkInterpretedOutput("categories/synonymConstructor.poc");
+	}
+
+	@Test
+	public void testCompiledSynonymConstructor() throws Exception {
+		checkCompiledOutput("categories/synonymConstructor.poc");
+	}
+
+	@Test
+	public void testTranspiledSynonymConstructor() throws Exception {
+		checkTranspiledOutput("categories/synonymConstructor.poc");
+	}
+
+	@Test
+	public void testInterpretedValueConstructor() throws Exception {
+		checkInterpretedOutput("categories/valueConstructor.poc");
+	}
+
+	@Test
+	public void testCompiledValueConstructor() throws Exception {
+		checkCompiledOutput("categories/valueConstructor.poc");
+	}
+
+	@Test
+	public void testTranspiledValueConstructor() throws Exception {
+		checkTranspiledOutput("categories/valueConstructor.poc");
 	}
 
 }

@@ -53,10 +53,9 @@ public class UnresolvedParameter extends BaseParameter {
 	}
 	
 	@Override
-	public void check(Context context) {
+	public IType check(Context context) {
 		resolve(context);
-		if(resolved!=null)
-			resolved.check(context);
+		return resolved == null ? null : resolved.check(context);
 	}
 	
 	@Override
