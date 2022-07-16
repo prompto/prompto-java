@@ -31,7 +31,7 @@ public class IllegalAssignmentProblem extends SyntaxProblemBase {
 	
 	@Override
 	public String getMessage() {
-		return "Illegal expression type, expected: " +  expectedToString() + ", got: " + actual.getTypeName();
+		return "Type " +  actual.getTypeName() + " is not compatible with " + expectedToString();
 	}
 
 	private String expectedToString() {
