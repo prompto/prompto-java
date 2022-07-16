@@ -273,6 +273,12 @@ public class CodeAttribute implements IAttribute {
 	}
 
 	byte[] createOpcodes() {
+		byte[] opcodes = doCreateOpcodes();
+		stackMapTable.clearUnusedLabels(opcodes.length);
+		return opcodes;
+	}
+	
+	byte[] doCreateOpcodes() {
 		ByteArrayOutputStream o = new ByteArrayOutputStream();
 		ByteWriter w = new ByteWriter(o);
 		instructions.forEach((i)-> {
@@ -305,6 +311,8 @@ public class CodeAttribute implements IAttribute {
 	}
 	
 	public byte[] getOpcodes() {
+		if(opcodes==null)
+			opcodes = createOpcodes();
 		return opcodes;
 	}
 	

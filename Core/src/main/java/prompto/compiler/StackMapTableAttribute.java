@@ -3,6 +3,7 @@ package prompto.compiler;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StackMapTableAttribute implements IAttribute {
 
@@ -81,6 +82,12 @@ public class StackMapTableAttribute implements IAttribute {
 		return state.popLocal();
 	}
 
+
+	public void clearUnusedLabels(int codeLength) {
+		labels = labels.stream()
+					.filter(label -> label.getRealOffset() < codeLength)
+					.collect(Collectors.toList());
+	}
 
 	@Override
 	public int lengthWithoutHeader() {
