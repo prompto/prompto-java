@@ -16,7 +16,6 @@ import prompto.param.IParameter;
 import prompto.param.ParameterList;
 import prompto.parser.CodeSection;
 import prompto.runtime.Context;
-import prompto.runtime.Variable;
 import prompto.statement.UnresolvedCall;
 import prompto.transpiler.ITranspilable;
 import prompto.transpiler.Transpiler;
