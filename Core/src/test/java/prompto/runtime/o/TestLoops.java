@@ -380,6 +380,21 @@ public class TestLoops extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedForEachTextCharacter() throws Exception {
+		checkInterpretedOutput("loops/forEachTextCharacter.poc");
+	}
+
+	@Test
+	public void testCompiledForEachTextCharacter() throws Exception {
+		checkCompiledOutput("loops/forEachTextCharacter.poc");
+	}
+
+	@Test
+	public void testTranspiledForEachTextCharacter() throws Exception {
+		checkTranspiledOutput("loops/forEachTextCharacter.poc");
+	}
+
+	@Test
 	public void testInterpretedForEachTimeRange() throws Exception {
 		checkInterpretedOutput("loops/forEachTimeRange.poc");
 	}

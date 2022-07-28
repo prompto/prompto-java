@@ -127,6 +127,11 @@ public class TestLoops extends BaseOParserTest {
 	}
 
 	@Test
+	public void testForEachTextCharacter() throws Exception {
+		compareResourceOMO("loops/forEachTextCharacter.poc");
+	}
+
+	@Test
 	public void testForEachTimeRange() throws Exception {
 		compareResourceOMO("loops/forEachTimeRange.poc");
 	}
