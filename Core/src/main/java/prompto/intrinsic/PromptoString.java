@@ -1,6 +1,7 @@
 package prompto.intrinsic;
 
 import java.util.Collection;
+import java.util.Iterator;
 
 public abstract class PromptoString {
 
@@ -81,6 +82,32 @@ public abstract class PromptoString {
 	public static long indexOf(String s, String v, long i) {
 		int r = s.indexOf(v, (int)i -1);
 		return r + 1;
+	}
+	
+	public static Iterable<Character> iterable(String s) {
+
+		return new Iterable<Character>() {
+
+			@Override
+			public Iterator<Character> iterator() {
+				
+				return new Iterator<Character>() {
+					
+					int i = 0;
+					
+					@Override
+					public boolean hasNext() {
+						return i < s.length();
+					}
+
+					@Override
+					public Character next() {
+						return s.charAt(i++);
+					}
+					
+				};
+			}
+		};
 	}
 
 

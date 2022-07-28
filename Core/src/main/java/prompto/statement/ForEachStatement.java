@@ -21,6 +21,7 @@ import prompto.compiler.StackState;
 import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.grammar.Identifier;
+import prompto.intrinsic.PromptoString;
 import prompto.parser.ICodeSection;
 import prompto.parser.ISection;
 import prompto.runtime.BreakResult;
@@ -341,9 +342,13 @@ public class ForEachStatement extends BaseStatement {
 	}
 
 	private StackLocal compileIterator(Context context, MethodInfo method, Flags flags) {
-		source.compile(context, method, flags);
-		InterfaceConstant m = new InterfaceConstant(Iterable.class, "iterator", Iterator.class);
-		method.addInstruction(Opcode.INVOKEINTERFACE, m);
+		ResultInfo info = source.compile(context, method, flags);
+		if(info.getType() == String.class) {
+			MethodConstant mc = new MethodConstant(PromptoString.class, "iterable", String.class, Iterable.class);
+			method.addInstruction(Opcode.INVOKESTATIC, mc);
+		}
+		InterfaceConstant ic = new InterfaceConstant(Iterable.class, "iterator", Iterator.class);
+		method.addInstruction(Opcode.INVOKEINTERFACE, ic);
 		String iterName = method.nextTransientName("iter");
 		StackLocal iterLocal = method.registerLocal(iterName, VerifierType.ITEM_Object, new ClassConstant(Iterator.class));
 		method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)iterLocal.getIndex()), new ClassConstant(Iterator.class));

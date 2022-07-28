@@ -208,6 +208,16 @@ String.prototype.equals = function(value) {
     // use == because === fails in Nashorn
 	return this == value;
 };
+
+String.prototype.iterator = function() {
+	var s = this;
+	return {
+		idx: 0,
+		hasNext: function() { return this.idx < s.length; },
+		next: function() { return s[this.idx++]; }
+	};
+};
+
 var intrinsic = {};
 
 if(typeof(window)==="object" && window.document) {

@@ -131,6 +131,12 @@ public class TextType extends NativeType {
 	}
 	
 	@Override
+	public IType checkIterator(Context context) {
+		return CharacterType.instance();
+	}
+	
+	
+	@Override
 	public Set<IMethodDeclaration> getMemberMethods(Context context, Identifier id) throws PromptoError {
 		switch(id.toString()) {
 		case "startsWith":
