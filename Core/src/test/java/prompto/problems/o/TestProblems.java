@@ -62,6 +62,11 @@ public class TestProblems extends BaseOParserTest {
 	}
 
 	@Test
+	public void testEmptyPropertyValue() throws Exception {
+		checkProblems("problems/emptyPropertyValue.poc");
+	}
+
+	@Test
 	public void testIllegalAttributeType() throws Exception {
 		checkProblems("problems/illegalAttributeType.poc");
 	}
