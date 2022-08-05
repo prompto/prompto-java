@@ -11,6 +11,7 @@ import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
 import prompto.type.IType;
 import prompto.type.MethodType;
+import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.ContextualExpression;
 
@@ -29,26 +30,29 @@ public class JsxExpression implements IJsxValue, IJsxExpression {
 	
 	@Override
 	public String toString() {
-		return expression.toString();
+		return expression == null ? "" : expression.toString();
 	}
 	
 	@Override
 	public IType check(Context context) {
-		return expression.check(context);
+		return expression == null ? VoidType.instance() : expression.check(context);
 	}
 	
 	@Override
 	public IType checkProto(Context context, MethodType expected) {
 		if(expression instanceof ArrowExpression)
 			return expected.checkArrowExpression(context, (ArrowExpression)expression);
-		else
+		else if(expression != null)
 			return expression.check(context);
+		else 
+			return VoidType.instance();
 	}
 
 	@Override
 	public void toDialect(CodeWriter writer) {
 		writer.append("{");
-		expression.toDialect(writer);
+		if(expression!=null)
+				expression.toDialect(writer);
 		writer.append("}");
 	}
 	
@@ -59,7 +63,7 @@ public class JsxExpression implements IJsxValue, IJsxExpression {
 
 	@Override
 	public void declare(Transpiler transpiler, Property property) {
-		if(!declareArrowExpressionCall(transpiler, expression, property))
+		if(!declareArrowExpressionCall(transpiler, expression, property) && expression != null)
 			expression.declare(transpiler);
 	}
 	
@@ -85,7 +89,7 @@ public class JsxExpression implements IJsxValue, IJsxExpression {
 	
 	@Override
 	public boolean transpile(Transpiler transpiler, Property property) {
-		if(!transpileArrowExpressionCall(transpiler, expression, property))
+		if(!transpileArrowExpressionCall(transpiler, expression, property) && expression != null)
 			expression.transpileProperty(transpiler, property);
 		return false;
 	}
