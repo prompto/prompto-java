@@ -41,6 +41,7 @@ import prompto.transpiler.Transpiler;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.type.MethodType;
+import prompto.type.NullType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.value.ClosureValue;
@@ -136,7 +137,7 @@ public class MemberSelector extends SelectorExpression {
 			return instance.getInstanceType();
 		} else {
 			IType parentType = checkParent(context);
-			if(parentType!=null)
+			if(parentType != null && parentType != NullType.instance())
 				return parentType.checkMember(context, id);
 			else
 				// parent would have reported the root problem

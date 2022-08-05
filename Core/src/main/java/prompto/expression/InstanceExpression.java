@@ -37,6 +37,7 @@ import prompto.type.BooleanType;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.type.MethodType;
+import prompto.type.NullType;
 import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.utils.StoreUtils;
@@ -112,9 +113,12 @@ public class InstanceExpression extends CodeSection implements IPredicateExpress
 		else if(named instanceof MethodDeclarationMap) { // global method or closure
 			IMethodDeclaration decl = ((MethodDeclarationMap)named).values().iterator().next();
 			return new MethodType(decl);
+		} else if(named != null) {
+			context.getProblemListener().reportIllegalValue(id, id.toString());
+			return VoidType.instance();
 		} else {
 			context.getProblemListener().reportUnknownIdentifier(id, id.toString());
-			return VoidType.instance();
+			return NullType.instance();
 		}
 	}
 	
