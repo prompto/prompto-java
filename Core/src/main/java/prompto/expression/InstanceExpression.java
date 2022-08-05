@@ -37,6 +37,7 @@ import prompto.type.BooleanType;
 import prompto.type.CategoryType;
 import prompto.type.IType;
 import prompto.type.MethodType;
+import prompto.type.VoidType;
 import prompto.utils.CodeWriter;
 import prompto.utils.StoreUtils;
 import prompto.value.ClosureValue;
@@ -102,11 +103,7 @@ public class InstanceExpression extends CodeSection implements IPredicateExpress
 		INamed named = context.getRegistered(id);
 		if(named==null) 
 			named = context.getRegisteredDeclaration(IDeclaration.class, id, true);
-		if(named==null) {
-			context.getProblemListener().reportUnknownIdentifier(id, id.toString());
-			return null;
-		}
-		else if(named instanceof Variable // local variable
+		if(named instanceof Variable // local variable
 				|| named instanceof LinkedVariable // local variable with downcast
 				|| named instanceof IParameter // named argument
 				|| named instanceof CategoryDeclaration // any p with x
@@ -115,8 +112,10 @@ public class InstanceExpression extends CodeSection implements IPredicateExpress
 		else if(named instanceof MethodDeclarationMap) { // global method or closure
 			IMethodDeclaration decl = ((MethodDeclarationMap)named).values().iterator().next();
 			return new MethodType(decl);
-		} else
-			throw new SyntaxError(id + "  is not a value or method:" + named.getClass().getSimpleName()); // TODO use pb listener
+		} else {
+			context.getProblemListener().reportUnknownIdentifier(id, id.toString());
+			return VoidType.instance();
+		}
 	}
 	
 	@Override
