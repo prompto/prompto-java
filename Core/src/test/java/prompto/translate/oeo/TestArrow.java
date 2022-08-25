@@ -12,6 +12,11 @@ public class TestArrow extends BaseOParserTest {
 	}
 
 	@Test
+	public void testCallbackWithLocalArg() throws Exception {
+		compareResourceOEO("arrow/callbackWithLocalArg.poc");
+	}
+
+	@Test
 	public void testFilterFromList() throws Exception {
 		compareResourceOEO("arrow/filterFromList.poc");
 	}

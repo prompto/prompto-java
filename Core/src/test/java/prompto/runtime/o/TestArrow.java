@@ -35,6 +35,21 @@ public class TestArrow extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedCallbackWithLocalArg() throws Exception {
+		checkInterpretedOutput("arrow/callbackWithLocalArg.poc");
+	}
+
+	@Test
+	public void testCompiledCallbackWithLocalArg() throws Exception {
+		checkCompiledOutput("arrow/callbackWithLocalArg.poc");
+	}
+
+	@Test
+	public void testTranspiledCallbackWithLocalArg() throws Exception {
+		checkTranspiledOutput("arrow/callbackWithLocalArg.poc");
+	}
+
+	@Test
 	public void testInterpretedFilterFromList() throws Exception {
 		checkInterpretedOutput("arrow/filterFromList.poc");
 	}
