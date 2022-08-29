@@ -469,8 +469,10 @@ public abstract class CategoryDeclaration extends BaseDeclaration {
 	
 	public void collectLocalMethods(Context context, Map<String, MethodDeclarationMap> maps) {
 		getLocalMethods().forEach(m -> {
-			MethodDeclarationMap current = maps.computeIfAbsent(m.getNameAsKey(), key -> new MethodDeclarationMap(m.getId()));
-			current.put(m.getProto(), m);
+			MethodDeclarationMap currentMap = maps.computeIfAbsent(m.getNameAsKey(), key -> new MethodDeclarationMap(m.getId()));
+			IMethodDeclaration currentDecl = currentMap.get(m.getProto());
+			if(currentDecl==null || (currentDecl.isAbstract() && !m.isAbstract()))
+				currentMap.put(m.getProto(), m);
 		});
 	}
 
