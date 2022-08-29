@@ -32,6 +32,11 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testDiamond() throws Exception {
+		compareResourceOMO("methods/diamond.poc");
+	}
+
+	@Test
 	public void testE_as_e_bug() throws Exception {
 		compareResourceOMO("methods/e_as_e_bug.poc");
 	}

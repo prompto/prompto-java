@@ -95,6 +95,21 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedDiamond() throws Exception {
+		checkInterpretedOutput("methods/diamond.poc");
+	}
+
+	@Test
+	public void testCompiledDiamond() throws Exception {
+		checkCompiledOutput("methods/diamond.poc");
+	}
+
+	@Test
+	public void testTranspiledDiamond() throws Exception {
+		checkTranspiledOutput("methods/diamond.poc");
+	}
+
+	@Test
 	public void testInterpretedE_as_e_bug() throws Exception {
 		checkInterpretedOutput("methods/e_as_e_bug.poc");
 	}
