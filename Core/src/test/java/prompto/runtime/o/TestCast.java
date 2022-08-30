@@ -170,6 +170,36 @@ public class TestCast extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedMutableEntity() throws Exception {
+		checkInterpretedOutput("cast/mutableEntity.poc");
+	}
+
+	@Test
+	public void testCompiledMutableEntity() throws Exception {
+		checkCompiledOutput("cast/mutableEntity.poc");
+	}
+
+	@Test
+	public void testTranspiledMutableEntity() throws Exception {
+		checkTranspiledOutput("cast/mutableEntity.poc");
+	}
+
+	@Test
+	public void testInterpretedMutableList() throws Exception {
+		checkInterpretedOutput("cast/mutableList.poc");
+	}
+
+	@Test
+	public void testCompiledMutableList() throws Exception {
+		checkCompiledOutput("cast/mutableList.poc");
+	}
+
+	@Test
+	public void testTranspiledMutableList() throws Exception {
+		checkTranspiledOutput("cast/mutableList.poc");
+	}
+
+	@Test
 	public void testInterpretedNullIsNotAText() throws Exception {
 		checkInterpretedOutput("cast/nullIsNotAText.poc");
 	}

@@ -57,6 +57,16 @@ public class TestCast extends BaseOParserTest {
 	}
 
 	@Test
+	public void testMutableEntity() throws Exception {
+		compareResourceOEO("cast/mutableEntity.poc");
+	}
+
+	@Test
+	public void testMutableList() throws Exception {
+		compareResourceOEO("cast/mutableList.poc");
+	}
+
+	@Test
 	public void testNullIsNotAText() throws Exception {
 		compareResourceOEO("cast/nullIsNotAText.poc");
 	}
