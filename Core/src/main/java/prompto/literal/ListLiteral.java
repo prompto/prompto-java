@@ -28,11 +28,11 @@ public class ListLiteral extends ContainerLiteral<ListValue> {
 	}
 	
 	public ListLiteral(boolean mutable) {
-		super(()->getText(null, mutable), new ListValue(MissingType.instance()), null, mutable);
+		super(()->getText(null, mutable), new ListValue(MissingType.instance(), new PromptoList<IValue>(mutable), mutable), null, mutable);
 	}
 	
 	public ListLiteral(ExpressionList expressions, boolean mutable) {
-		super(()->getText(expressions, mutable), new ListValue(MissingType.instance()), expressions, mutable);
+		super(()->getText(expressions, mutable), new ListValue(MissingType.instance(), null, mutable), expressions, mutable);
 	}
 	
 	@Override
@@ -42,7 +42,7 @@ public class ListLiteral extends ContainerLiteral<ListValue> {
 	
 	@Override
 	protected IType newType(IType itemType) {
-		return new ListType(itemType);
+		return new ListType(itemType, false);
 	}
 	
 	@Override

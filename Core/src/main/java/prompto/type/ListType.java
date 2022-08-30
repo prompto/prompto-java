@@ -49,23 +49,38 @@ import prompto.value.TextValue;
 public class ListType extends ContainerType {
 	
 	public static Logger logger = new Logger();
+
+	boolean mutable = false;
 	
 	public ListType(IType itemType) {
+		this(itemType, false);
+	}
+
+	public ListType(IType itemType, boolean mutable) {
 		super(Family.LIST, itemType, itemType.getTypeName() + "[]");
+		this.mutable = mutable;
 	}
 	
 	@Override
-	public IterableType withItemType(IType itemType) {
-		return new ListType(itemType);
+	public ListType withItemType(IType itemType) {
+		return new ListType(itemType, mutable);
 	}
 	
+	@Override
+	public ListType asMutable(Context context, boolean mutable) {
+		if(mutable == this.mutable)
+			return this;
+		else
+			return new ListType(itemType, mutable);
+	}
+
 	@Override
 	public IType resolve(Context context, Consumer<IType> onError) {
 		IType resolvedItemType = itemType.resolve(context, onError);
 		if(resolvedItemType==null || resolvedItemType==itemType)
 			return this;
 		else
-			return new ListType(resolvedItemType);
+			return new ListType(resolvedItemType, mutable);
 	}
 	
 	@Override

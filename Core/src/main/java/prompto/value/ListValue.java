@@ -43,27 +43,24 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
 	List<Object> storables;
 	
 	public ListValue(IType itemType) {
-		super(new ListType(itemType));
-		this.items = new PromptoList<>(false);
+		this(itemType, new PromptoList<>(false));
 	}
 	
 	public ListValue(IType itemType, PromptoList<IValue> items) {
-		super(new ListType(itemType));
-		this.items = items;
+		this(itemType, items, items.isMutable());
 	}
 
 	public ListValue(IType itemType, Collection<? extends IValue> items) {
-		super(new ListType(itemType));
-		this.items = new PromptoList<>(items, false);
+		this(itemType, new PromptoList<>(items, false), false);
 	}
 	
 	public ListValue(IType itemType, Collection<? extends IValue> items, boolean mutable) {
-		super(new ListType(itemType));
-		this.items = new PromptoList<>(items, mutable);
+		super(new ListType(itemType, mutable));
+		this.items = items == null ? new PromptoList<>(mutable) : new PromptoList<>(items, mutable);
 	}
 
 	public ListValue(Context context, PromptoList<?> list) {
-		super(new ListType(AnyType.instance()));
+		super(new ListType(AnyType.instance(), list.isMutable()));
 		List<IValue> items = list.stream()
 				.map((item)->JavaClassType.convertJavaValueToPromptoValue(context, item, item.getClass(), AnyType.instance()))
 				.collect(Collectors.toList());
@@ -221,7 +218,7 @@ public class ListValue extends BaseValue implements IContainer<IValue>, ISliceab
     }
 	
 	protected ListValue merge(Collection<? extends IValue> items) {
-		PromptoList<IValue> result = new PromptoList<IValue>(false);
+		PromptoList<IValue> result = new PromptoList<IValue>(this.isMutable());
 		result.addAll(this.items);
 		result.addAll(items);
 		IType itemType = ((ContainerType)getType()).getItemType();
