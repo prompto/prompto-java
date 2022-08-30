@@ -177,6 +177,7 @@ public class ItemInstance extends CodeSection implements IAssignableSelector {
 	
 	@Override
 	public void declareAssign(Transpiler transpiler, IExpression expression) {
+		transpiler.require("NativeError");
 	    this.parent.declare(transpiler);
 	    this.item.declare(transpiler);
 	    expression.declare(transpiler);

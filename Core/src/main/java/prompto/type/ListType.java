@@ -496,23 +496,24 @@ public class ListType extends ContainerType {
 	public static ResultInfo compilePlus(Context context, MethodInfo method, Flags flags, 
 			ResultInfo left, IExpression exp) {
 		// TODO: return left if right is empty (or right if left is empty and is a list)
+		// read mutable flag
+		method.addInstruction(Opcode.DUP); // get a copy of left
+		IOperand oper = new MethodConstant(PromptoList.class, "isMutable", boolean.class);
+		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		// create result
-		ResultInfo info = CompilerUtils.compileNewRawInstance(method, PromptoList.class);
-		method.addInstruction(Opcode.DUP);
-		method.addInstruction(Opcode.ICONST_0); // not mutable
+		ResultInfo info = CompilerUtils.compileNewRawInstance(method, PromptoList.class); // stack is left, mutable, result
+		method.addInstruction(Opcode.DUP_X1); // stack is: left, result, mutable, result
+		method.addInstruction(Opcode.SWAP); // stack is: left, result, result, mutable
 		CompilerUtils.compileCallConstructor(method, PromptoList.class, boolean.class);
 		// add left, current stack is: left, result, we need: result, result, left
 		method.addInstruction(Opcode.DUP_X1); // stack is: result, left, result
 		method.addInstruction(Opcode.SWAP); // stack is: result, result, left
-		IOperand oper = new MethodConstant(PromptoList.class, "addAll", 
-				Collection.class, boolean.class);
+		oper = new MethodConstant(PromptoList.class, "addAll", Collection.class, boolean.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		method.addInstruction(Opcode.POP); // consume returned boolean
 		// add right, current stack is: result, we need: result, result, right
 		method.addInstruction(Opcode.DUP); // stack is: result, result 
 		exp.compile(context, method, flags); // stack is: result, result, right
-		oper = new MethodConstant(PromptoList.class, "addAll", 
-				Collection.class, boolean.class);
 		method.addInstruction(Opcode.INVOKEVIRTUAL, oper);
 		method.addInstruction(Opcode.POP); // consume returned boolean
 		return info;
