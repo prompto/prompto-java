@@ -200,6 +200,21 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedInheritedMember() throws Exception {
+		checkInterpretedOutput("methods/inheritedMember.poc");
+	}
+
+	@Test
+	public void testCompiledInheritedMember() throws Exception {
+		checkCompiledOutput("methods/inheritedMember.poc");
+	}
+
+	@Test
+	public void testTranspiledInheritedMember() throws Exception {
+		checkTranspiledOutput("methods/inheritedMember.poc");
+	}
+
+	@Test
 	public void testInterpretedLocalMember() throws Exception {
 		checkInterpretedOutput("methods/localMember.poc");
 	}

@@ -77,6 +77,11 @@ public class TestMethods extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInheritedMember() throws Exception {
+		compareResourceOMO("methods/inheritedMember.poc");
+	}
+
+	@Test
 	public void testLocalMember() throws Exception {
 		compareResourceOMO("methods/localMember.poc");
 	}
