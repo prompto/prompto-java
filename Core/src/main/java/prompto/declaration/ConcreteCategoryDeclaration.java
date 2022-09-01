@@ -1148,9 +1148,10 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    transpiler.append("this.$mutable = mutable;").newLine();
 	    transpiler.append("return this;").dedent().append("}").newLine();
 	    List<Identifier> parents = (derivedFrom!=null && derivedFrom.size()>0) ? derivedFrom : Collections.singletonList(new Identifier("$Root"));
+	    transpiler.append(getName()).append(".prototype = Object.create(").append(parents.get(0).toString()).append(".prototype);").newLine();
 	    parents = parents.subList(0, parents.size());
-	    Collections.reverse(parents);
-	    transpiler.append(getName()).append(".prototype = Object.assign({}");
+	    Collections.reverse(parents); // fulfill MRO
+	    transpiler.append(getName()).append(".prototype = Object.assign(").append(getName()).append(".prototype");
 	    parents.forEach(p -> transpiler.append(", ").append(p.toString()).append(".prototype"));
 	    transpiler.append(");").newLine();
 	    transpiler.append(getName()).append(".prototype.constructor = ").append(getName()).append(";").newLine();
