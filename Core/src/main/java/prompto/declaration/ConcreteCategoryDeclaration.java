@@ -3,6 +3,7 @@ package prompto.declaration;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -96,10 +97,6 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	@Override
 	public IdentifierList getDerivedFrom() {
 		return derivedFrom;
-	}
-	
-	public MethodDeclarationList getMethods() {
-		return methods;
 	}
 	
 	@Override
@@ -998,15 +995,41 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	}
 
 	protected void compileMethods(Context context, ClassFile classFile, Flags flags) {
-		for(IMethodDeclaration method : methods) {
-			if(	method instanceof GetterMethodDeclaration || method instanceof SetterMethodDeclaration)
-				continue;
-			context = context.newMemberContext(getType(context));
-			method.registerParameters(context);
-			method.compile(context, false, classFile);
-		}
+		compileMethods(context, classFile, flags, new HashSet<>());
 	}
 	
+	private void compileMethods(Context context, ClassFile classFile, Flags flags, Set<String> registry) {
+		compileLocalMethods(context, classFile, flags, registry);
+		compileInheritedMethods(context, classFile, flags, registry);
+	}
+
+	private void compileInheritedMethods(Context context, ClassFile classFile, Flags flags, Set<String> registry) {
+		if(derivedFrom==null || derivedFrom.size()==1)
+			return;
+		// skip base class since we automatically inherit methods from it
+		for(int i=1; i<derivedFrom.size(); i++) {
+			ConcreteCategoryDeclaration decl = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, derivedFrom.get(i));
+			if(decl == null)
+				throw new SyntaxError("Should never get there!");
+			decl.compileMethods(context, classFile, flags, registry);
+		}
+	}
+
+	private void compileLocalMethods(Context context, ClassFile classFile, Flags flags, Set<String> registry) {
+		methods.stream()
+			.filter(m -> !(m instanceof GetterMethodDeclaration))
+			.filter(m -> !(m instanceof SetterMethodDeclaration))
+			.filter(m -> !m.isAbstract())
+			.filter(m -> registry.add(m.getId().toString() + ":" + m.getProto()))
+			.forEach(m -> compileMethod(context, m, classFile, flags));
+	}
+
+	private void compileMethod(Context context, IMethodDeclaration method, ClassFile classFile, Flags flags) {
+		context = context.newMemberContext(getType(context));
+		method.registerParameters(context);
+		method.compile(context, false, classFile);
+	}
+
 	@Override
 	public void ensureDeclarationOrder(Context context, List<ITranspilable> list, Set<ITranspilable> set) {
 	    if(set.contains(this))
@@ -1124,11 +1147,12 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	    transpileLocalAttributes(transpiler);
 	    transpiler.append("this.$mutable = mutable;").newLine();
 	    transpiler.append("return this;").dedent().append("}").newLine();
-	    Identifier parent = derivedFrom!=null && derivedFrom.size()>0 ? derivedFrom.get(0) : null;
-	    if(parent!=null)
-	        transpiler.append(getName()).append(".prototype = Object.create(").append(parent.toString()).append(".prototype);").newLine();
-	    else
-	        transpiler.append(getName()).append(".prototype = Object.create($Root.prototype);").newLine();
+	    List<Identifier> parents = (derivedFrom!=null && derivedFrom.size()>0) ? derivedFrom : Collections.singletonList(new Identifier("$Root"));
+	    parents = parents.subList(0, parents.size());
+	    Collections.reverse(parents);
+	    transpiler.append(getName()).append(".prototype = Object.assign({}");
+	    parents.forEach(p -> transpiler.append(", ").append(p.toString()).append(".prototype"));
+	    transpiler.append(");").newLine();
 	    transpiler.append(getName()).append(".prototype.constructor = ").append(getName()).append(";").newLine();
 	}
 
