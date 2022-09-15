@@ -1,5 +1,6 @@
 package prompto.parser;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.antlr.v4.runtime.BufferedTokenStream;
@@ -40,15 +41,14 @@ public abstract class AbstractParser extends Parser {
 	}
 
 	public boolean willBe(int type) {
-		int la = getTokenStream().LA(1);
-		if(this instanceof EParser && type==EParser.LF)
-			return la==type || la==EParser.DEDENT;
-		else if(this instanceof MParser && type==MParser.LF)
-			return la==type || la==MParser.DEDENT;
-		else	
-			return la==type;
+		return getTokenStream().LA(1) == type;
 	}
 	
+	@SuppressWarnings("unlikely-arg-type")
+	public boolean willBeIn(int ... types) {
+		return Arrays.asList(types).contains(getTokenStream().LA(1));
+	}
+
 	public boolean willNotBe(int type) {
 		return !willBe(type);
 	}
