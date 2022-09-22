@@ -19,10 +19,10 @@ import prompto.compiler.StringConstant;
 import prompto.error.ExecutionError;
 import prompto.error.NativeError;
 import prompto.error.PromptoError;
+import prompto.expression.IAssertion;
 import prompto.expression.SymbolExpression;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoException;
-import prompto.parser.Assertion;
 import prompto.runtime.Context;
 import prompto.statement.DeclarationStatement;
 import prompto.statement.IStatement;
@@ -79,8 +79,8 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		for(IStatement statement : statements)
 			checkStatement(context, statement);
 		if(assertions!=null) {
-			for(Assertion assertion : assertions)
-				context = assertion.check(context);
+			for(IAssertion assertion : assertions)
+				context = assertion.checkAssert(context);
 		}
 		return VoidType.instance();
 	}
@@ -120,8 +120,8 @@ public class TestMethodDeclaration extends BaseDeclaration {
 		context.enterTest(this);
 		try {
 			boolean success = true;
-			for(Assertion assertion : assertions)
-				success &= assertion.interpret(context, this);
+			for(IAssertion assertion : assertions)
+				success &= assertion.interpretAssert(context, this);
 			if(success)
 				printSuccess(context);
 		} finally {
@@ -288,7 +288,7 @@ public class TestMethodDeclaration extends BaseDeclaration {
 			s.compile(context, method, flags));
 		method.addInstruction(Opcode.ICONST_0); // failures counter
 		assertions.forEach((a)->
-			a.compile(context, method, flags, this));
+			a.compileAssert(context, method, flags, this));
 		compileCheckSuccess(context, method, flags);
 		method.addInstruction(Opcode.RETURN);
 	}

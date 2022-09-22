@@ -82,7 +82,7 @@ import prompto.value.IValue;
 import prompto.value.NullValue;
 import prompto.value.TypeValue;
 
-public class EqualsExpression extends CodeSection implements IPredicateExpression, IAssertion {
+public class EqualsExpression extends CodeSection implements IPredicate, IAssertion {
 
 	IExpression left;
 	EqOp operator;
@@ -132,6 +132,14 @@ public class EqualsExpression extends CodeSection implements IPredicateExpressio
 			default:	
 				return BooleanType.instance(); // can compare all objects
 		}
+	}
+	
+	@Override
+	public Context checkAssert(Context context) {
+		check(context);
+		// need to optionally auto-downcast
+		context = downcastForCheck(context);
+		return context;
 	}
 	
 	@Override
@@ -802,4 +810,5 @@ public class EqualsExpression extends CodeSection implements IPredicateExpressio
 	    transpiler.append(")");
 	}
 
+	
 }

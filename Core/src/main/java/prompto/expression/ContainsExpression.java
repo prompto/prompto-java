@@ -53,7 +53,7 @@ import prompto.value.IIterable;
 import prompto.value.IValue;
 import prompto.value.NullValue;
 
-public class ContainsExpression extends CodeSection implements IPredicateExpression, IAssertion {
+public class ContainsExpression extends CodeSection implements IPredicate, IAssertion {
 
 	IExpression left;
 	ContOp operator;
@@ -635,6 +635,11 @@ public class ContainsExpression extends CodeSection implements IPredicateExpress
 	        default:
 	            throw new UnsupportedOperationException("Unsupported " + this.operator);
 	    }
+	}
+	
+	@Override
+	public void declareQuery(Transpiler transpiler) {
+		declare(transpiler);
 	}
 	
 	@Override

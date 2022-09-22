@@ -111,7 +111,6 @@ import prompto.expression.UnresolvedSelector;
 import prompto.grammar.Annotation;
 import prompto.grammar.Argument;
 import prompto.grammar.ArgumentList;
-import prompto.grammar.ThenWith;
 import prompto.grammar.CategorySymbolList;
 import prompto.grammar.CmpOp;
 import prompto.grammar.ContOp;
@@ -124,6 +123,7 @@ import prompto.grammar.NativeSymbolList;
 import prompto.grammar.Operator;
 import prompto.grammar.OrderByClause;
 import prompto.grammar.OrderByClauseList;
+import prompto.grammar.ThenWith;
 import prompto.instance.IAssignableInstance;
 import prompto.instance.IAssignableSelector;
 import prompto.instance.ItemInstance;
@@ -164,13 +164,13 @@ import prompto.javascript.JavaScriptTextLiteral;
 import prompto.javascript.JavaScriptThisExpression;
 import prompto.jsx.IJsxExpression;
 import prompto.jsx.IJsxValue;
-import prompto.jsx.JsxProperty;
 import prompto.jsx.JsxClosing;
 import prompto.jsx.JsxCode;
 import prompto.jsx.JsxElement;
 import prompto.jsx.JsxExpression;
 import prompto.jsx.JsxFragment;
 import prompto.jsx.JsxLiteral;
+import prompto.jsx.JsxProperty;
 import prompto.jsx.JsxSelfClosing;
 import prompto.jsx.JsxText;
 import prompto.literal.BooleanLiteral;
@@ -242,6 +242,7 @@ import prompto.statement.BreakStatement;
 import prompto.statement.CollectionSwitchCase;
 import prompto.statement.CommentStatement;
 import prompto.statement.DeclarationStatement;
+import prompto.statement.DeleteAndStoreStatement;
 import prompto.statement.DoWhileStatement;
 import prompto.statement.FetchManyStatement;
 import prompto.statement.FetchOneStatement;
@@ -257,7 +258,6 @@ import prompto.statement.ReadStatement;
 import prompto.statement.RemoteCall;
 import prompto.statement.ReturnStatement;
 import prompto.statement.StatementList;
-import prompto.statement.DeleteAndStoreStatement;
 import prompto.statement.SwitchCase;
 import prompto.statement.SwitchErrorStatement;
 import prompto.statement.SwitchStatement;
@@ -578,16 +578,14 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitAssertion(AssertionContext ctx) {
-		IExpression exp = getNodeValue(ctx.exp);
-		setNodeValue(ctx, new Assertion(exp));
+		setNodeValue(ctx, getNodeValue(ctx.exp));
 	}
 	
 	@Override
 	public void exitAssertion_list(Assertion_listContext ctx) {
 		AssertionList items = new AssertionList();
 		ctx.assertion().forEach((a)->{
-			Assertion item = getNodeValue(a);
-			items.add(item);
+			items.add(getNodeValue(a));
 		});
 		setNodeValue(ctx, items);
 	}

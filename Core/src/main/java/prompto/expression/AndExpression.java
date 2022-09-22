@@ -30,7 +30,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.BooleanValue;
 import prompto.value.IValue;
 
-public class AndExpression extends CodeSection implements IPredicateExpression, IAssertion {
+public class AndExpression extends CodeSection implements IPredicate, IAssertion {
 
 	IExpression left;
 	IExpression right;
@@ -85,12 +85,12 @@ public class AndExpression extends CodeSection implements IPredicateExpression, 
 	
 	@Override
 	public void checkQuery(Context context) throws PromptoError {
-		if(!(left instanceof IPredicateExpression))
+		if(!(left instanceof IPredicate))
 			context.getProblemListener().reportIllegalPredicate(this,left);
-		((IPredicateExpression)left).checkQuery(context);
-		if(!(right instanceof IPredicateExpression))
+		((IPredicate)left).checkQuery(context);
+		if(!(right instanceof IPredicate))
 			context.getProblemListener().reportIllegalPredicate(this, right);
-		((IPredicateExpression)right).checkQuery(context);
+		((IPredicate)right).checkQuery(context);
 	}
 	
 	@Override
@@ -135,8 +135,8 @@ public class AndExpression extends CodeSection implements IPredicateExpression, 
 	
 	@Override
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {
-		((IPredicateExpression)left).compileQuery(context, method, flags);
-		((IPredicateExpression)right).compileQuery(context, method, flags);
+		((IPredicate)left).compileQuery(context, method, flags);
+		((IPredicate)right).compileQuery(context, method, flags);
 		InterfaceConstant m = new InterfaceConstant(IQueryBuilder.class, "and", IQueryBuilder.class);
 		method.addInstruction(Opcode.INVOKEINTERFACE, m);
 	}
@@ -163,12 +163,12 @@ public class AndExpression extends CodeSection implements IPredicateExpression, 
 	
 	@Override
 	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
-		if(!(left instanceof IPredicateExpression))
+		if(!(left instanceof IPredicate))
 			throw new SyntaxError("Not a predicate: " + left.toString());
-		((IPredicateExpression)left).interpretQuery(context, query, store);
-		if(!(right instanceof IPredicateExpression))
+		((IPredicate)left).interpretQuery(context, query, store);
+		if(!(right instanceof IPredicate))
 			throw new SyntaxError("Not a predicate: " + left.toString());
-		((IPredicateExpression)right).interpretQuery(context, query, store);
+		((IPredicate)right).interpretQuery(context, query, store);
 		query.and();
 	}
 
@@ -258,14 +258,26 @@ public class AndExpression extends CodeSection implements IPredicateExpression, 
 	
 	@Override
 	public void declareQuery(Transpiler transpiler) {
-	    this.left.declare(transpiler);
-	    this.right.declare(transpiler);
+	    if(left instanceof IPredicate)
+	    	((IPredicate)left).declareQuery(transpiler);
+	    else
+	    	transpiler.getContext().getProblemListener().reportIllegalPredicate(this, left);
+	    if(right instanceof IPredicate)
+	    	((IPredicate)right).declareQuery(transpiler);
+	    else
+	    	transpiler.getContext().getProblemListener().reportIllegalPredicate(this, right);
 	}
 	
 	@Override
 	public void transpileQuery(Transpiler transpiler, String builderName) {
-	    this.left.transpileQuery(transpiler, builderName);
-	    this.right.transpileQuery(transpiler, builderName);
+	    if(left instanceof IPredicate)
+	    	((IPredicate)left).transpileQuery(transpiler, builderName);
+	    else
+	    	transpiler.getContext().getProblemListener().reportIllegalPredicate(this, left);
+	    if(right instanceof IPredicate)
+	    	((IPredicate)right).transpileQuery(transpiler, builderName);
+	    else
+	    	transpiler.getContext().getProblemListener().reportIllegalPredicate(this, right);
 	    transpiler.append(builderName).append(".and();").newLine();
 	}
 

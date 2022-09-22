@@ -207,8 +207,8 @@ public class FetchManyExpression extends FetchOneExpression {
 	protected void checkPredicate(Context context) {
 		if(predicate==null)
 			return;
-		if(predicate instanceof IPredicateExpression)
-			((IPredicateExpression)predicate).checkQuery(context);
+		if(predicate instanceof IPredicate)
+			((IPredicate)predicate).checkQuery(context);
 		else
 			context.getProblemListener().reportIllegalPredicate(this, predicate);
 	}
@@ -246,8 +246,8 @@ public class FetchManyExpression extends FetchOneExpression {
 			builder.verify(info, MatchOp.HAS, type.getTypeName());
 		}
 		if(predicate!=null) {
-			if(predicate instanceof IPredicateExpression)
-				((IPredicateExpression)predicate).interpretQuery(context, builder, store);
+			if(predicate instanceof IPredicate)
+				((IPredicate)predicate).interpretQuery(context, builder, store);
 			else
 				context.getProblemListener().reportIllegalPredicate(this, predicate);
 		}
@@ -350,11 +350,11 @@ public class FetchManyExpression extends FetchOneExpression {
 	@Override
 	protected void transpileQuery(Transpiler transpiler) {
 	    transpiler.append("var builder = $DataStore.instance.newQueryBuilder();").newLine();
-	    if (this.type != null)
+	    if (type != null)
 	        transpiler.append("builder.verify(new AttributeInfo('category', TypeFamily.TEXT, true, null), MatchOp.HAS, '").append(this.type.getTypeName()).append("');").newLine();
-	    if (this.predicate != null)
-	        this.predicate.transpileQuery(transpiler, "builder");
-	    if (this.type != null && this.predicate != null)
+	    if (predicate instanceof IPredicate)
+	        ((IPredicate)predicate).transpileQuery(transpiler, "builder");
+	    if (type != null && predicate instanceof IPredicate)
 	        transpiler.append("builder.and();").newLine();
 	    if (this.first  != null) {
 	        transpiler.append("builder.setFirst(");

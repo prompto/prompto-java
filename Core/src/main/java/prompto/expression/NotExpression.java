@@ -26,7 +26,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.BooleanValue;
 import prompto.value.IValue;
 
-public class NotExpression extends CodeSection implements IUnaryExpression, IPredicateExpression, IAssertion {
+public class NotExpression extends CodeSection implements IUnaryExpression, IPredicate, IAssertion {
 
 	IExpression expression;
 	
@@ -68,8 +68,8 @@ public class NotExpression extends CodeSection implements IUnaryExpression, IPre
 	
 	@Override
 	public void checkQuery(Context context) throws PromptoError {
-		if(expression instanceof IPredicateExpression)
-			((IPredicateExpression)expression).checkQuery(context);
+		if(expression instanceof IPredicate)
+			((IPredicate)expression).checkQuery(context);
 		else
 			context.getProblemListener().reportIllegalPredicate(this, expression);
 	}
@@ -168,30 +168,39 @@ public class NotExpression extends CodeSection implements IUnaryExpression, IPre
 
 	@Override
 	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
-		if(!(expression instanceof IPredicateExpression))
-			throw new SyntaxError("Not a predicate: " + expression.toString());
-		((IPredicateExpression)expression).interpretQuery(context, query, store);
-		query.not();
+		if(expression instanceof IPredicate) {
+			((IPredicate)expression).interpretQuery(context, query, store);
+			query.not();
+		} else
+			context.getProblemListener().reportIllegalPredicate(this, expression);
 	}
 
 	@Override
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {
-		if(!(expression instanceof IPredicateExpression))
-			throw new SyntaxError("Not a predicate: " + expression.toString());
-		((IPredicateExpression)expression).compileQuery(context, method, flags);
-		InterfaceConstant m = new InterfaceConstant(IQueryBuilder.class, "not", IQueryBuilder.class);
-		method.addInstruction(Opcode.INVOKEINTERFACE, m);
+		if(expression instanceof IPredicate) {
+			((IPredicate)expression).compileQuery(context, method, flags);
+			InterfaceConstant m = new InterfaceConstant(IQueryBuilder.class, "not", IQueryBuilder.class);
+			method.addInstruction(Opcode.INVOKEINTERFACE, m);
+		} else
+			context.getProblemListener().reportIllegalPredicate(this, expression);
 	}
 
 
 	@Override
 	public void declareQuery(Transpiler transpiler) {
-	    this.expression.declare(transpiler);
+		if(expression instanceof IPredicate)
+			((IPredicate)expression).declareQuery(transpiler);
+		else
+			transpiler.getContext().getProblemListener().reportIllegalPredicate(this, expression);
 	}
 	
 	@Override
 	public void transpileQuery(Transpiler transpiler, String builderName) {
-	    this.expression.transpileQuery(transpiler, builderName);
-	    transpiler.append(builderName).append(".not();").newLine();
+		if(expression instanceof IPredicate) {
+			((IPredicate)expression).transpileQuery(transpiler, builderName);
+		    transpiler.append(builderName).append(".not();").newLine();
+		} else
+			transpiler.getContext().getProblemListener().reportIllegalPredicate(this, expression);
 	}
+
 }

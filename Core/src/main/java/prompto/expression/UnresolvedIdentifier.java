@@ -29,7 +29,7 @@ import prompto.utils.CodeWriter;
 import prompto.utils.StoreUtils;
 import prompto.value.IValue;
 
-public class UnresolvedIdentifier extends CodeSection implements IPredicateExpression {
+public class UnresolvedIdentifier extends CodeSection implements IPredicate {
 
 	Identifier id;
 	IExpression resolved;
@@ -94,8 +94,8 @@ public class UnresolvedIdentifier extends CodeSection implements IPredicateExpre
 	@Override
 	public void checkQuery(Context context) throws PromptoError {
 		resolveAndCheck(context, false);
-		if(resolved instanceof IPredicateExpression)
-			((IPredicateExpression)resolved).checkQuery(context);
+		if(resolved instanceof IPredicate)
+			((IPredicate)resolved).checkQuery(context);
 		else
 			context.getProblemListener().reportIllegalPredicate(this, this);
 	}
@@ -120,8 +120,8 @@ public class UnresolvedIdentifier extends CodeSection implements IPredicateExpre
 	@Override
 	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
 		resolveAndCheck(context, false);
-		if(resolved instanceof IPredicateExpression)
-			((IPredicateExpression)resolved).interpretQuery(context, query, store);
+		if(resolved instanceof IPredicate)
+			((IPredicate)resolved).interpretQuery(context, query, store);
 		else
 			throw new SyntaxError("Filtering expression must be a predicate !");
 	}
@@ -145,10 +145,10 @@ public class UnresolvedIdentifier extends CodeSection implements IPredicateExpre
 	@Override
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {
 		resolveAndCheck(context, false);
-		if(resolved instanceof IPredicateExpression)
-			((IPredicateExpression)resolved).compileQuery(context, method, flags);
+		if(resolved instanceof IPredicate)
+			((IPredicate)resolved).compileQuery(context, method, flags);
 		else
-			IPredicateExpression.super.compileQuery(context, method, flags);
+			IPredicate.super.compileQuery(context, method, flags);
 	}
 	
 	private IType resolveAndCheck(Context context, boolean forMember) {
@@ -260,12 +260,18 @@ public class UnresolvedIdentifier extends CodeSection implements IPredicateExpre
 	@Override
 	public void declareQuery(Transpiler transpiler) {
 	    resolve(transpiler.getContext(), false, true);
-	    resolved.declareQuery(transpiler);
+	    if(resolved instanceof IPredicate)
+	    	((IPredicate)resolved).declareQuery(transpiler);
+	    else
+	    	transpiler.getContext().getProblemListener().reportIllegalPredicate(id, this);
 	}
 	
 	@Override
 	public void transpileQuery(Transpiler transpiler, String builderName) {
 	    resolve(transpiler.getContext(), false, true);
-	    resolved.transpileQuery(transpiler, builderName);
+	    if(resolved instanceof IPredicate)
+	    	((IPredicate)resolved).transpileQuery(transpiler, builderName);
+	    else
+	    	transpiler.getContext().getProblemListener().reportIllegalPredicate(id, this);
 	}
 }

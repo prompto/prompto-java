@@ -53,7 +53,7 @@ import prompto.value.BooleanValue;
 import prompto.value.IInstance;
 import prompto.value.IValue;
 
-public class CompareExpression extends CodeSection implements IPredicateExpression, IAssertion {
+public class CompareExpression extends CodeSection implements IPredicate, IAssertion {
 
 	IExpression left;
 	CmpOp operator;
@@ -328,22 +328,24 @@ public class CompareExpression extends CodeSection implements IPredicateExpressi
 	}
 	
 	@Override
+	public void declareQuery(Transpiler transpiler) {
+	    this.left.declare(transpiler);
+	    this.right.declare(transpiler);
+	    IType lt = this.left.check(transpiler.getContext());
+	    IType rt = this.right.check(transpiler.getContext());
+	    lt.declareCompare(transpiler, rt);
+	}
+
+	@Override
 	public void transpileQuery(Transpiler transpiler, String builderName) {
-	    String name = null;
-	    IExpression value = null;
-	    if (this.left instanceof UnresolvedIdentifier || this.left instanceof InstanceExpression || this.left instanceof MemberSelector) {
-	        name = this.left.toString();
-	        value = this.right;
-	    } else if (this.right instanceof UnresolvedIdentifier || this.right instanceof InstanceExpression || this.right instanceof MemberSelector) {
-	        name = this.right.toString();
-	        value = this.left;
-	    }
-	    AttributeDeclaration decl = transpiler.getContext().findAttribute(name);
+	    if(!(left instanceof UnresolvedIdentifier || left instanceof InstanceExpression || left instanceof MemberSelector))
+	    	transpiler.getContext().getProblemListener().reportError(this, "Expected an attribute");
+	    AttributeDeclaration decl = transpiler.getContext().findAttribute(left.toString());
 	    AttributeInfo info = decl == null ? null : decl.getAttributeInfo(transpiler.getContext());
 	    MatchOp matchOp = this.getMatchOp();
 	    // TODO check for dbId field of instance value
 	    transpiler.append(builderName).append(".verify(").append(info.toTranspiled()).append(", MatchOp.").append(matchOp.name()).append(", ");
-	    value.transpile(transpiler);
+	    right.transpile(transpiler);
 	    transpiler.append(");").newLine();
 	    if (this.operator == CmpOp.GTE || this.operator==CmpOp.LTE)
 	        transpiler.append(builderName).append(".not();").newLine();

@@ -44,7 +44,7 @@ import prompto.utils.StoreUtils;
 import prompto.value.ClosureValue;
 import prompto.value.IValue;
 
-public class InstanceExpression extends CodeSection implements IPredicateExpression {
+public class InstanceExpression extends CodeSection implements IPredicate {
 
 	Identifier id;
 	
@@ -258,7 +258,7 @@ public class InstanceExpression extends CodeSection implements IPredicateExpress
 
 	@Override
 	public void checkQuery(Context context) throws PromptoError {
-		IPredicateExpression predicate = toPredicate(context);
+		IPredicate predicate = toPredicate(context);
 		if(predicate!=null)
 			predicate.checkQuery(context);
 	}
@@ -266,14 +266,14 @@ public class InstanceExpression extends CodeSection implements IPredicateExpress
 	
 	@Override
 	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
-		IPredicateExpression predicate = toPredicate(context);
+		IPredicate predicate = toPredicate(context);
 		if(predicate!=null)
 			predicate.interpretQuery(context, query, store);
 	}
 	
 	@Override
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {
-		IPredicateExpression predicate = toPredicate(context);
+		IPredicate predicate = toPredicate(context);
 		if(predicate!=null)
 			predicate.compileQuery(context, method, flags);
 	}
@@ -281,14 +281,14 @@ public class InstanceExpression extends CodeSection implements IPredicateExpress
 
 	@Override
 	public void declareQuery(Transpiler transpiler) {
-		IPredicateExpression predicate = toPredicate(transpiler.getContext());
+		IPredicate predicate = toPredicate(transpiler.getContext());
 		if(predicate!=null)
 			predicate.declareQuery(transpiler);
 	}
 	
 	@Override
 	public void transpileQuery(Transpiler transpiler, String builderName) {
-		IPredicateExpression predicate = toPredicate(transpiler.getContext());
+		IPredicate predicate = toPredicate(transpiler.getContext());
 		if(predicate!=null)
 			predicate.transpileQuery(transpiler, builderName);
 	}

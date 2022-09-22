@@ -1,20 +1,20 @@
 package prompto.utils;
 
-import prompto.parser.Assertion;
+import prompto.expression.IAssertion;
 import prompto.transpiler.Transpiler;
 
 @SuppressWarnings("serial")
-public class AssertionList extends ObjectList<Assertion>{
+public class AssertionList extends ObjectList<IAssertion> {
 
 	public AssertionList() {
 	}
 	
-	public AssertionList(Assertion item) {
+	public AssertionList(IAssertion item) {
 		this.add(item);
 	}
 
 	public void toDialect(CodeWriter writer) {
-		for(Assertion exp : this) {
+		for(IAssertion exp : this) {
 			exp.toDialect(writer);
 			switch(writer.getDialect()) {
 			case O:

@@ -14,7 +14,7 @@ import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
-public class ParenthesisExpression extends CodeSection implements IPredicateExpression {
+public class ParenthesisExpression extends CodeSection implements IPredicate {
 
 	IExpression expression;
 
@@ -45,8 +45,8 @@ public class ParenthesisExpression extends CodeSection implements IPredicateExpr
 	
 	@Override
 	public void checkQuery(Context context) throws PromptoError {
-		if(expression instanceof IPredicateExpression)
-			((IPredicateExpression)expression).checkQuery(context);
+		if(expression instanceof IPredicate)
+			((IPredicate)expression).checkQuery(context);
 		else
 			context.getProblemListener().reportIllegalPredicate(this, expression);
 	}
@@ -58,8 +58,8 @@ public class ParenthesisExpression extends CodeSection implements IPredicateExpr
 	
 	@Override
 	public void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError {
-		if(expression instanceof IPredicateExpression)
-			((IPredicateExpression)expression).interpretQuery(context, query, store);
+		if(expression instanceof IPredicate)
+			((IPredicate)expression).interpretQuery(context, query, store);
 		else
 			throw new SyntaxError("Not a predicate: " + expression.toString());
 	}
@@ -71,8 +71,8 @@ public class ParenthesisExpression extends CodeSection implements IPredicateExpr
 	
 	@Override
 	public void compileQuery(Context context, MethodInfo method, Flags flags) {
-		if(expression instanceof IPredicateExpression)
-			((IPredicateExpression)expression).compileQuery(context, method, flags);
+		if(expression instanceof IPredicate)
+			((IPredicate)expression).compileQuery(context, method, flags);
 		else
 			throw new SyntaxError("Not a predicate: " + expression.toString());
 	}
@@ -84,8 +84,8 @@ public class ParenthesisExpression extends CodeSection implements IPredicateExpr
 	
 	@Override
 	public void declareQuery(Transpiler transpiler) {
-		if(expression instanceof IPredicateExpression)
-			((IPredicateExpression)expression).declareQuery(transpiler);
+		if(expression instanceof IPredicate)
+			((IPredicate)expression).declareQuery(transpiler);
 		else
 			throw new SyntaxError("Not a predicate: " + expression.toString());
 	}
@@ -100,8 +100,8 @@ public class ParenthesisExpression extends CodeSection implements IPredicateExpr
 	
 	@Override
 	public void transpileQuery(Transpiler transpiler, String builderName) {
-		if(expression instanceof IPredicateExpression)
-			((IPredicateExpression)expression).transpileQuery(transpiler, builderName);
+		if(expression instanceof IPredicate)
+			((IPredicate)expression).transpileQuery(transpiler, builderName);
 		else
 			throw new SyntaxError("Not a predicate: " + expression.toString());
 	}

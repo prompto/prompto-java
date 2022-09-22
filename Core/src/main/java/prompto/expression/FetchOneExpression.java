@@ -64,11 +64,11 @@ public class FetchOneExpression extends CodeSection implements IFetchExpression 
 		return type;
 	}
 	
-	public IPredicateExpression getPredicate(Context context) {
+	public IPredicate getPredicate(Context context) {
 		IExpression predicate = this.predicate;
 		if(predicate instanceof UnresolvedCall)
 			predicate = ((UnresolvedCall)predicate).resolve(context);
-		return (IPredicateExpression)predicate; // assume this was checked earlier
+		return (IPredicate)predicate; // assume this was checked earlier
 	}
 
 	@Override
@@ -135,8 +135,8 @@ public class FetchOneExpression extends CodeSection implements IFetchExpression 
 	}
 	
 	protected void checkPredicate(Context context) {
-		if(predicate instanceof IPredicateExpression)
-			((IPredicateExpression)predicate).checkQuery(context);
+		if(predicate instanceof IPredicate)
+			((IPredicate)predicate).checkQuery(context);
 		else
 			context.getProblemListener().reportIllegalPredicate(this, predicate);
 	}
@@ -190,9 +190,9 @@ public class FetchOneExpression extends CodeSection implements IFetchExpression 
 			builder.verify(AttributeInfo.CATEGORY, MatchOp.HAS, type.getTypeName());
 		}
 		if(predicate!=null) {
-			if(!(predicate instanceof IPredicateExpression))
+			if(!(predicate instanceof IPredicate))
 				throw new SyntaxError("Filtering expression must be a predicate !");
-			((IPredicateExpression)predicate).interpretQuery(context, builder, store);
+			((IPredicate)predicate).interpretQuery(context, builder, store);
 		}
 		if(type!=null && predicate!=null)
 			builder.and();
@@ -245,7 +245,7 @@ public class FetchOneExpression extends CodeSection implements IFetchExpression 
 			method.addInstruction(Opcode.INVOKEINTERFACE, i);
 		}
 		if(predicate!=null)
-			((IPredicateExpression)predicate).compileQuery(context, method, flags);
+			((IPredicate)predicate).compileQuery(context, method, flags);
 		if(type!=null && predicate!=null) {
 			InterfaceConstant i = new InterfaceConstant(IQueryBuilder.class, "and", IQueryBuilder.class);
 			method.addInstruction(Opcode.INVOKEINTERFACE, i);
@@ -286,10 +286,10 @@ public class FetchOneExpression extends CodeSection implements IFetchExpression 
 	    transpiler.require("AttributeInfo");
 	    transpiler.require("TypeFamily");
 	    transpiler.require("NativeError"); // for NotMutableError
-	    if (this.type != null)
-	        this.type.declare(transpiler);
-	    if (this.predicate != null)
-	        this.predicate.declareQuery(transpiler);
+	    if (type != null)
+	        type.declare(transpiler);
+	    if (predicate instanceof IPredicate)
+	        ((IPredicate)predicate).declareQuery(transpiler);
 	}
 	
 	@Override
@@ -314,17 +314,17 @@ public class FetchOneExpression extends CodeSection implements IFetchExpression 
 
 	protected void transpileQuery(Transpiler transpiler) {
 	    transpiler.append("var builder = $DataStore.instance.newQueryBuilder();").newLine();
-	    if (this.type != null)
+	    if (type != null)
 	        transpiler.append("builder.verify(new AttributeInfo('category', TypeFamily.TEXT, true, null), MatchOp.HAS, '").append(this.type.getTypeName()).append("');").newLine();
-	    if (this.predicate != null)
-	        this.predicate.transpileQuery(transpiler, "builder");
-	    if (this.include != null) {
+	    if (predicate instanceof IPredicate)
+	        ((IPredicate)predicate).transpileQuery(transpiler, "builder");
+	    if (include != null) {
 	    	transpiler.append("builder.project([");
-	    	this.include.forEach(id->transpiler.append('"').append(id.toString()).append('"').append(", "));
+	    	include.forEach(id->transpiler.append('"').append(id.toString()).append('"').append(", "));
 	    	transpiler.trimLast(", ".length());
 	    	transpiler.append("]);").newLine();
 	    }
-	    if (this.type != null && this.predicate != null)
+	    if (type != null && predicate instanceof IPredicate)
 	        transpiler.append("builder.and();").newLine();
 	}
 

@@ -544,8 +544,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 
 	@Override
 	public void exitAssertion(AssertionContext ctx) {
-		IExpression exp = getNodeValue(ctx.exp);
-		setNodeValue(ctx, new Assertion(exp));
+		setNodeValue(ctx, getNodeValue(ctx.exp));
 	}
 	
 	
@@ -553,8 +552,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	public void exitAssertion_list(Assertion_listContext ctx) {
 		AssertionList items = new AssertionList();
 		ctx.assertion().forEach((a)->{
-			Assertion item = getNodeValue(a);
-			items.add(item);
+			items.add(getNodeValue(a));
 		});
 		setNodeValue(ctx, items);
 	}

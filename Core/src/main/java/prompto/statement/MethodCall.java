@@ -619,6 +619,15 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	    this.transpileAssignments(transpiler, this.dispatcher, false);
 	}
 
+	@Override
+	public void transpileFound(Transpiler transpiler, Dialect dialect) {
+		CodeWriter writer = new CodeWriter(dialect, transpiler.getContext());
+		this.toDialect(writer);
+		transpiler.append(writer.toString());
+	}
+	
+	
+
 
 
 }

@@ -5,7 +5,6 @@ import prompto.compiler.MethodInfo;
 import prompto.compiler.ResultInfo;
 import prompto.declaration.AttributeDeclaration;
 import prompto.error.PromptoError;
-import prompto.parser.Dialect;
 import prompto.parser.ICodeSection;
 import prompto.property.Property;
 import prompto.runtime.Context;
@@ -66,15 +65,6 @@ public interface IExpression {
 	}
 	default boolean transpileMethodReference(Transpiler transpiler, MethodType methodType) {
 		return transpile(transpiler);
-	}
-	default void declareQuery(Transpiler transpiler) {
-		throw new UnsupportedOperationException("declareQuery " + this.getClass().getName());
-	}
-	default void transpileQuery(Transpiler transpiler, String builderName) {
-		throw new UnsupportedOperationException("transpileQuery " + this.getClass().getName());
-	}
-	default void transpileFound(Transpiler transpiler, Dialect dialect) {
-		throw new UnsupportedOperationException("transpileFound " + this.getClass().getName());
 	}
 	default AttributeDeclaration checkAttribute(Context context, ICodeSection section) {
 		context.getProblemListener().reportMissingAttribute(section, this.toString());

@@ -3,12 +3,12 @@ package prompto.expression;
 import prompto.compiler.Flags;
 import prompto.compiler.MethodInfo;
 import prompto.error.PromptoError;
-import prompto.parser.ICodeSection;
 import prompto.runtime.Context;
 import prompto.store.IQueryBuilder;
 import prompto.store.IStore;
+import prompto.transpiler.Transpiler;
 
-public interface IPredicateExpression extends IExpression, ICodeSection {
+public interface IPredicate extends IExpression {
 
 	void checkQuery(Context context) throws PromptoError;
 	void interpretQuery(Context context, IQueryBuilder query, IStore store) throws PromptoError;
@@ -16,5 +16,7 @@ public interface IPredicateExpression extends IExpression, ICodeSection {
 		System.err.println("Need to implement compileQuery for " + this.getClass().getName());
 		throw new UnsupportedOperationException();
 	}
+	void declareQuery(Transpiler transpiler);
+	void transpileQuery(Transpiler transpiler, String builderName);
 
 }
