@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -88,7 +89,7 @@ public class Context implements IContext {
 	
 	Map<Identifier,IDeclaration> declarations = new HashMap<>();
 	Map<Identifier,TestMethodDeclaration> tests = new HashMap<>();
-	Map<Identifier,INamed> instances = new HashMap<>();
+	Map<Identifier,INamed> instances = new LinkedHashMap<>(); // remember insertion order for debugger
 	Map<Identifier,IValue> values = new HashMap<>();
 	Map<Type, NativeCategoryDeclaration> nativeBindings = new HashMap<>();
 	
