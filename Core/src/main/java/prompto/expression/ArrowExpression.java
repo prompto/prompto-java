@@ -119,7 +119,7 @@ public class ArrowExpression extends PredicateExpression implements IExpression 
 		IType sourceType = source.check(writer.getContext());
 		IType itemType = ((IterableType)sourceType).getItemType();
 		writer = writer.newChildWriter();
-		writer.getContext().registerValue(new Variable(args.get(0), itemType));
+		writer.getContext().registerInstance(new Variable(args.get(0), itemType));
 		switch(writer.getDialect()) {
 		case E:
 		case M:
@@ -220,7 +220,7 @@ public class ArrowExpression extends PredicateExpression implements IExpression 
 		if(args==null || args.size()!=1)
 			throw new SyntaxError("Expecting 1 parameter only!");
 		context = context.newChildContext();
-		context.registerValue(new Variable(args.get(0), itemType));
+		context.registerInstance(new Variable(args.get(0), itemType));
 	    return this.statements.check(context, null);
 	}
 
@@ -229,7 +229,7 @@ public class ArrowExpression extends PredicateExpression implements IExpression 
 		if(args==null || args.size()!=1)
 			throw new SyntaxError("Expecting 1 parameter only!");
 	    transpiler = transpiler.newChildTranspiler();
-	    transpiler.getContext().registerValue(new Variable(args.get(0), itemType));
+	    transpiler.getContext().registerInstance(new Variable(args.get(0), itemType));
 	    this.statements.declare(transpiler);
 	}
 
@@ -238,7 +238,7 @@ public class ArrowExpression extends PredicateExpression implements IExpression 
 		if(args==null || args.size()!=1)
 			throw new SyntaxError("Expecting 1 parameter only!");
 	    transpiler = transpiler.newChildTranspiler();
-		transpiler.getContext().registerValue(new Variable(args.get(0), itemType));
+		transpiler.getContext().registerInstance(new Variable(args.get(0), itemType));
     	transpiler.append("function(").append(args.get(0)).append(") { ");
     	statements.transpile(transpiler);
     	transpiler.append(" }");
@@ -249,7 +249,7 @@ public class ArrowExpression extends PredicateExpression implements IExpression 
 		if(args==null || args.size()!=1)
 			throw new SyntaxError("Expecting 1 parameter only!");
 		context = context.newChildContext();
-		context.registerValue(new Variable(args.get(0), paramIType));
+		context.registerInstance(new Variable(args.get(0), paramIType));
 		Descriptor.Method proto = new Descriptor.Method(paramType, boolean.class);
 		MethodInfo method = classFile.newMethod("test", proto);
 		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
@@ -297,7 +297,7 @@ public class ArrowExpression extends PredicateExpression implements IExpression 
 	private Context registerArrowArgs(Context context, IType itemType) {
 		if(args!=null) args.forEach(arg->{
 			Variable param = new Variable(arg, itemType);
-			context.registerValue(param);
+			context.registerInstance(param);
 		});
 		return context;
 	}
@@ -363,15 +363,15 @@ public class ArrowExpression extends PredicateExpression implements IExpression 
 		MethodInfo method = classFile.newMethod("getKey", proto);
 		method.registerLocal("this", VerifierType.ITEM_Object, classFile.getThisClass());
 		context = context.newChildContext();
-		context.registerValue(new Variable(arg, paramIType));
+		context.registerInstance(new Variable(arg, paramIType));
 		method.registerLocal(arg.toString(), VerifierType.ITEM_Object, new ClassConstant(paramType));
 		statements.compile(context, method, new Flags());
 	}
 	
 	public void compileComparatorMethodBody(Context context, MethodInfo method, IType paramIType) {
 		context = context.newChildContext();
-		context.registerValue(new Variable(args.get(0), paramIType));
-		context.registerValue(new Variable(args.get(1), paramIType));
+		context.registerInstance(new Variable(args.get(0), paramIType));
+		context.registerInstance(new Variable(args.get(1), paramIType));
 		statements.compile(context, method, new Flags().withReturnType(int.class));
 	}
 

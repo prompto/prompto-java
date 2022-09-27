@@ -129,7 +129,7 @@ public class SwitchStatement extends BaseSwitchStatement {
 	private StackLocal compileSwitchValue(Context context, MethodInfo method, Flags flags) {
 		context = context.newChildContext();
 		String valueName = method.nextTransientName("value");
-		context.registerValue(new Variable(new Identifier(valueName), expression.check(context)));
+		context.registerInstance(new Variable(new Identifier(valueName), expression.check(context)));
 		ResultInfo info = expression.compile(context, method, flags);
 		StackLocal value = method.registerLocal(valueName, VerifierType.ITEM_Object, new ClassConstant(info.getType()));
 		CompilerUtils.compileASTORE(method, value);

@@ -182,11 +182,11 @@ public class CategoryParameter extends BaseParameter implements ITypedParameter 
 		if(resolved==null)
 			context.getProblemListener().reportUnknownCategory(this, id.toString());
 		else if(resolved==type)
-			context.registerValue(this);
+			context.registerInstance(this);
 		else {
 			CategoryParameter param = new CategoryParameter(resolved, id);
 			param.setMutable(mutable);
-			context.registerValue(param);
+			context.registerInstance(param);
 		}
 		if(defaultExpression!=null) try {
 			context.setValue(id, defaultExpression.interpret(context));

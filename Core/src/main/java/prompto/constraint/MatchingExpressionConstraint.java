@@ -35,7 +35,7 @@ public class MatchingExpressionConstraint extends MatchingConstraintBase {
 	@Override
 	public void checkValue(Context context, IValue value) throws PromptoError {
 		Context child = context.newChildContext();
-		child.registerValue(new Variable(new Identifier("value"), AnyType.instance()));
+		child.registerInstance(new Variable(new Identifier("value"), AnyType.instance()));
 		child.setValue(new Identifier("value"), value);
 		Object test = expression.interpret(child);
 		if(!BooleanValue.TRUE.equals(test))
@@ -57,7 +57,7 @@ public class MatchingExpressionConstraint extends MatchingConstraintBase {
 	@Override
 	public void compile(Context context, MethodInfo method, Flags flags) {
 		Context child = context.newChildContext();
-		child.registerValue(new Variable(new Identifier("value"), AnyType.instance()));
+		child.registerInstance(new Variable(new Identifier("value"), AnyType.instance()));
 		ResultInfo info = expression.compile(child, method, flags.withPrimitive(true));
 		if(BooleanValue.class==info.getType())
 			CompilerUtils.BooleanToboolean(method);
@@ -87,7 +87,7 @@ public class MatchingExpressionConstraint extends MatchingConstraintBase {
 	public void declare(Transpiler transpiler, String name, IType type) {
 	    transpiler = transpiler.newChildTranspiler();
 	    Identifier id = new Identifier("value");
-	    transpiler.getContext().registerValue(new Variable(id, type));
+	    transpiler.getContext().registerInstance(new Variable(id, type));
 	    this.expression.declare(transpiler);
 	    this.transpileFunction = t -> this.transpileChecker(t, name, type);
 	    transpiler.declare(this);
@@ -97,7 +97,7 @@ public class MatchingExpressionConstraint extends MatchingConstraintBase {
 	    transpiler.append("function $check_").append(name).append("(value) {").indent();
 	    transpiler = transpiler.newChildTranspiler();
 	    Identifier id = new Identifier("value");
-	    transpiler.getContext().registerValue(new Variable(id, type));
+	    transpiler.getContext().registerInstance(new Variable(id, type));
 	    transpiler.append("if(");
 	    this.expression.transpile(transpiler);
 	    transpiler.append(")").indent();

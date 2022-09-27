@@ -84,7 +84,7 @@ public class MatchingCollectionConstraint extends MatchingConstraintBase {
 	public void declare(Transpiler transpiler, String name, IType type) {
 	    transpiler = transpiler.newChildTranspiler();
 	    Identifier id = new Identifier("value");
-	    transpiler.getContext().registerValue(new Variable(id, type));
+	    transpiler.getContext().registerInstance(new Variable(id, type));
 	    this.collection.declare(transpiler);
 	    this.transpileFunction = t -> this.transpileChecker(t, name, type);
 	    transpiler.declare(this);
@@ -95,7 +95,7 @@ public class MatchingCollectionConstraint extends MatchingConstraintBase {
 	    transpiler.append("function $check_").append(name).append("(value) {").indent();
 	    transpiler = transpiler.newChildTranspiler();
 	    Identifier id = new Identifier("value");
-	    transpiler.getContext().registerValue(new Variable(id, type));
+	    transpiler.getContext().registerInstance(new Variable(id, type));
 	    transpiler.append("if(");
 	    this.collection.transpile(transpiler);
 	    transpiler.append(".has(value))").indent();

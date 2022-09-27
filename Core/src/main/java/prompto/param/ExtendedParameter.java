@@ -127,7 +127,7 @@ public class ExtendedParameter extends CategoryParameter {
 				new ConcreteCategoryDeclaration(id, attributes,
 						new IdentifierList(type.getTypeNameId()), null);
 		context.registerDeclaration(declaration);
-		context.registerValue(this);
+		context.registerInstance(this);
 		if(defaultExpression!=null) try {
 			context.setValue(id, defaultExpression.interpret(context));
 		} catch(PromptoError error) {

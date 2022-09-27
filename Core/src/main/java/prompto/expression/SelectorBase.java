@@ -8,14 +8,14 @@ import prompto.runtime.Context;
 import prompto.type.IType;
 
 
-public abstract class SelectorExpression extends CodeSection implements IExpression {
+public abstract class SelectorBase extends CodeSection implements IExpression {
 
 	IExpression parent;
 	
-	public SelectorExpression() {
+	public SelectorBase() {
 	}
 	
-	public SelectorExpression(IExpression parent) {
+	public SelectorBase(IExpression parent) {
 		this.parent = parent;
 	}
 	

@@ -71,9 +71,9 @@ public class ForEachStatement extends BaseStatement {
 		IType srcType = source.check(writer.getContext());
 		IType elemType = srcType.checkIterator(writer.getContext());
 		Identifier itemName = v2 == null ? v1 : v2;
-		writer.getContext().registerValue(new Variable(itemName, elemType));
+		writer.getContext().registerInstance(new Variable(itemName, elemType));
 		if (v2 != null)
-			writer.getContext().registerValue(new Variable(v1, IntegerType.instance()));
+			writer.getContext().registerInstance(new Variable(v1, IntegerType.instance()));
 		switch(writer.getDialect()) {
 		case E:
 			toEDialect(writer);
@@ -136,9 +136,9 @@ public class ForEachStatement extends BaseStatement {
 	private IType checkItemIterator(IType elemType, Context context) {
 		Context child = context.newChildContext();
 		Identifier itemName = v2 == null ? v1 : v2;
-		context.registerValue(new Variable(itemName, elemType));
+		context.registerInstance(new Variable(itemName, elemType));
 		if (v2 != null)
-			context.registerValue(new Variable(v1, IntegerType.instance()));
+			context.registerInstance(new Variable(v1, IntegerType.instance()));
 		return statements.check(child, null);
 	}
 
@@ -161,7 +161,7 @@ public class ForEachStatement extends BaseStatement {
 		Iterator<IValue> iterator = getIterator(context, src);
 		while (iterator.hasNext()) {
 			Context child = context.newChildContext();
-			child.registerValue(new Variable(v1, elemType));
+			child.registerInstance(new Variable(v1, elemType));
 			child.setValue(v1, iterator.next());
 			IValue value = statements.interpret(child);
 			if ( value == BreakResult.instance() )
@@ -178,9 +178,9 @@ public class ForEachStatement extends BaseStatement {
 		long index = 0L;
 		while (iterator.hasNext()) {
 			Context child = context.newChildContext();
-			child.registerValue(new Variable(v2, elemType));
+			child.registerInstance(new Variable(v2, elemType));
 			child.setValue(v2, iterator.next());
-			child.registerValue(new Variable(v1, IntegerType.instance()));
+			child.registerInstance(new Variable(v1, IntegerType.instance()));
 			child.setValue(v1, new IntegerValue(++index));
 			IValue value = statements.interpret(child);
 			if (value != null)
@@ -236,8 +236,8 @@ public class ForEachStatement extends BaseStatement {
 		compileIncrementCounter(method, v1Local);
 		// compile statements
 		context = context.newChildContext();
-		context.registerValue(new Variable(v1, IntegerType.instance()));
-		context.registerValue(new Variable(v2, itemType));
+		context.registerInstance(new Variable(v1, IntegerType.instance()));
+		context.registerInstance(new Variable(v2, itemType));
 		statements.compile(context, method, flags);
 		// done inner loop
 		method.unregisterLocal(v2Local);
@@ -314,7 +314,7 @@ public class ForEachStatement extends BaseStatement {
 		method.addInstruction(Opcode.ASTORE, new ByteOperand((byte)v1Local.getIndex()));
 		// compile statements
 		context = context.newChildContext();
-		context.registerValue(new Variable(v1, itemType));
+		context.registerInstance(new Variable(v1, itemType));
 		statements.compile(context, method, flags);
 		// done inner loop
 		method.unregisterLocal(v1Local);
@@ -364,10 +364,10 @@ public class ForEachStatement extends BaseStatement {
 	    this.source.declare(transpiler);
 	    transpiler = transpiler.newChildTranspiler();
 	    if(this.v2!=null) {
-	        transpiler.getContext().registerValue(new Variable(this.v1, IntegerType.instance()));
-	        transpiler.getContext().registerValue(new Variable(this.v2, elemType));
+	        transpiler.getContext().registerInstance(new Variable(this.v1, IntegerType.instance()));
+	        transpiler.getContext().registerInstance(new Variable(this.v2, elemType));
 	    } else
-	        transpiler.getContext().registerValue(new Variable(this.v1, elemType));
+	        transpiler.getContext().registerInstance(new Variable(this.v1, elemType));
 	    this.statements.declare(transpiler);
 	}
 	
@@ -399,7 +399,7 @@ public class ForEachStatement extends BaseStatement {
 	    transpiler.append("while(").append(iterName).append(".hasNext()) {");
 	    Transpiler child = transpiler.newChildTranspiler();
 	    child.indent();
-	    child.getContext().registerValue(new Variable(this.v1, elemType));
+	    child.getContext().registerInstance(new Variable(this.v1, elemType));
 	    child.append("var ").append(this.v1.toString()).append(" = ").append(iterName).append(".next();");
 	    child.newLine();
 	    this.statements.transpile(child);
@@ -420,7 +420,7 @@ public class ForEachStatement extends BaseStatement {
 	    transpiler.append("for(var ").append(idxName).append(" = 0; ").append(idxName).append(" < ").append(itemsName).append(".length; ").append(idxName).append("++) {");
 	    Transpiler child = transpiler.newChildTranspiler();
 	    child.indent();
-	    child.getContext().registerValue(new Variable(this.v1, elemType));
+	    child.getContext().registerInstance(new Variable(this.v1, elemType));
 	    child.append("var ").append(this.v1.toString()).append(" = ").append(itemsName).append("[").append(idxName).append("];").newLine();
 	    this.statements.transpile(child);
 	    child.dedent();
@@ -449,8 +449,8 @@ public class ForEachStatement extends BaseStatement {
 	    transpiler.append("while(").append(iterName).append(".hasNext()) {");
 	    Transpiler child = transpiler.newChildTranspiler();
 	    child.indent();
-	    child.getContext().registerValue(new Variable(this.v1, IntegerType.instance()));
-	    child.getContext().registerValue(new Variable(this.v2, elemType));
+	    child.getContext().registerInstance(new Variable(this.v1, IntegerType.instance()));
+	    child.getContext().registerInstance(new Variable(this.v2, elemType));
 	    child.append("var ").append(this.v2.toString()).append(" = ").append(iterName).append(".next();").newLine();
 	    this.statements.transpile(child);
 	    child.append(this.v1.toString()).append("++;").newLine();
@@ -470,8 +470,8 @@ public class ForEachStatement extends BaseStatement {
 	    transpiler.append("for(var ").append(this.v1.toString()).append(" = 1; ").append(this.v1.toString()).append(" <= ").append(itemsName).append(".length; ").append(this.v1.toString()).append("++) {");
 	    Transpiler child = transpiler.newChildTranspiler();
 	    child.indent();
-	    child.getContext().registerValue(new Variable(this.v1, IntegerType.instance()));
-	    child.getContext().registerValue(new Variable(this.v2, elemType));
+	    child.getContext().registerInstance(new Variable(this.v1, IntegerType.instance()));
+	    child.getContext().registerInstance(new Variable(this.v2, elemType));
 	    child.append("var ").append(this.v2.toString()).append(" = ").append(itemsName).append("[").append(this.v1.toString()).append("-1];").newLine();
 	    this.statements.transpile(child);
 	    child.dedent();

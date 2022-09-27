@@ -61,7 +61,7 @@ public class DeclarationStatement<T extends IDeclaration> extends BaseStatement 
 			IMethodDeclaration decl = (IMethodDeclaration)declaration;
 			context.registerDeclarationIfMissing(decl);
 			MethodType type = new MethodType(decl);
-			context.registerValue(new Variable(decl.getId(), type)); 
+			context.registerInstance(new Variable(decl.getId(), type)); 
 			context.setValue(decl.getId(), new ClosureValue(context, type));
 			return null;
 		} else

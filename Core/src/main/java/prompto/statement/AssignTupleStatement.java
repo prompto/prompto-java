@@ -92,7 +92,7 @@ public class AssignTupleStatement extends SimpleStatement {
 		for(Identifier name : names) {
 			INamed actual = context.getRegistered(name);
 			if(actual==null)
-				context.registerValue(new Variable(name, AnyType.instance()));
+				context.registerInstance(new Variable(name, AnyType.instance()));
 			else {
 				// need to check type compatibility
 				IType actualType = actual.getType(context);
@@ -112,7 +112,7 @@ public class AssignTupleStatement extends SimpleStatement {
 			Identifier name = names.get(i);
 			IValue value = tuple.getItem(context, new IntegerValue(i+1));
 			if(context.getRegisteredValue(INamed.class, name)==null)
-				context.registerValue(new Variable(name, value.getType()));
+				context.registerInstance(new Variable(name, value.getType()));
 			context.setValue(name, value);
 		}
 		return null;
@@ -142,7 +142,7 @@ public class AssignTupleStatement extends SimpleStatement {
 		StackLocal local = method.registerLocal(name.toString(), VerifierType.ITEM_Object, new ClassConstant(Object.class));
 		CompilerUtils.compileASTORE(method, local);
 		if(context.getRegisteredValue(INamed.class, name)==null)
-			context.registerValue(new Variable(name, AnyType.instance()));
+			context.registerInstance(new Variable(name, AnyType.instance()));
 	}
 	
 	@Override
@@ -151,7 +151,7 @@ public class AssignTupleStatement extends SimpleStatement {
 	    this.names.forEach(name -> {
 	        INamed actual = transpiler.getContext().getRegistered(name);
 	        if(actual==null)
-	            transpiler.getContext().registerValue(new Variable(name, AnyType.instance()));
+	            transpiler.getContext().registerInstance(new Variable(name, AnyType.instance()));
 	     });
 	}
 	
@@ -163,7 +163,7 @@ public class AssignTupleStatement extends SimpleStatement {
 		        transpiler.append(name.toString()).append(", ");
 		        INamed actual = transpiler.getContext().getRegistered(name);
 		        if(actual==null)
-		            transpiler.getContext().registerValue(new Variable(name, AnyType.instance()));
+		            transpiler.getContext().registerInstance(new Variable(name, AnyType.instance()));
 		    });
 		    transpiler.trimLast(2);
 		    transpiler.append("] = ");
@@ -178,7 +178,7 @@ public class AssignTupleStatement extends SimpleStatement {
 				transpiler.append(name.toString()).append(" = $tuple[").append(String.valueOf(idx.getAndIncrement())).append("];").newLine();
 				INamed actual = transpiler.getContext().getRegistered(name);
 		        if(actual==null)
-		            transpiler.getContext().registerValue(new Variable(name, AnyType.instance()));
+		            transpiler.getContext().registerInstance(new Variable(name, AnyType.instance()));
 		    });
 		}
 	    return false;

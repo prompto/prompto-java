@@ -227,7 +227,7 @@ public class ConcreteInstance extends BaseValue implements IInstance, IMultiplya
 		if(setter!=null) {
 			// use attribute name as parameter name for incoming value
 			context = context.newInstanceContext(this, false).newChildContext(); // mimic method call
-			context.registerValue(new Variable(attrName, decl.getType())); 
+			context.registerInstance(new Variable(attrName, decl.getType())); 
 			context.setValue(attrName, value);
 			value = setter.interpret(context);
 		}

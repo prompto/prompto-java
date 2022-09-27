@@ -69,7 +69,7 @@ public class FetchManyStatement extends FetchManyExpression implements IStatemen
 	    	.append(") {")
 	    	.indent();
 	    transpiler = transpiler.newChildTranspiler(transpiler.getContext());
-		transpiler.getContext().registerValue(new Variable(thenWith.getName(), new CursorType(type)));
+		transpiler.getContext().registerInstance(new Variable(thenWith.getName(), new CursorType(type)));
 		thenWith.getStatements().transpile(transpiler);
 		transpiler.dedent().append("}.bind(this));").dedent().append("}).bind(this)()");
 		transpiler.flush();

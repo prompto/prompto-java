@@ -49,7 +49,7 @@ import prompto.value.IInstance;
 import prompto.value.IValue;
 import prompto.value.NullValue;
 
-public class MemberSelector extends SelectorExpression {
+public class MemberSelector extends SelectorBase {
 
 	Identifier id;
 	

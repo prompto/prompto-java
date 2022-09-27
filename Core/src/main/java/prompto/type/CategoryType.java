@@ -47,7 +47,7 @@ import prompto.expression.ArrowExpression;
 import prompto.expression.IExpression;
 import prompto.expression.InstanceExpression;
 import prompto.expression.MethodSelector;
-import prompto.expression.SelectorExpression;
+import prompto.expression.SelectorBase;
 import prompto.expression.UnresolvedIdentifier;
 import prompto.expression.ValueExpression;
 import prompto.grammar.Argument;
@@ -782,7 +782,7 @@ public class CategoryType extends BaseType {
  	}
 	
 	private Identifier getKeyIdentifier(IExpression key) {
-		if(key instanceof SelectorExpression && ((SelectorExpression)key).getParent()!=null)
+		if(key instanceof SelectorBase && ((SelectorBase)key).getParent()!=null)
 			return null;
 		if(key instanceof InstanceExpression)
 			return ((InstanceExpression)key).getId();
@@ -1279,7 +1279,7 @@ public class CategoryType extends BaseType {
 		}
 
 		private ResultInfo compileValue(Context context, MethodInfo method, Type paramType, String paramName) {
-			context.registerValue(new Variable(new Identifier(paramName), CategoryType.this));
+			context.registerInstance(new Variable(new Identifier(paramName), CategoryType.this));
 			Argument argument = call.getArguments().getFirst();
 			Identifier paramId = new Identifier(paramName);
 			paramId.setSectionFrom(argument);

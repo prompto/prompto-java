@@ -235,7 +235,7 @@ public class EqualsExpression extends CodeSection implements IPredicate, IAssert
 						targetType = targetType.asMutable(context, true);
 					value = new LinkedVariable(targetType, value);
 					Context local = context.newChildContext();
-					local.registerValue(value, false);
+					local.registerInstance(value, false);
 					if(setValue)
 						local.setValue(name, new LinkedValue(context, targetType));
 					context = local;
@@ -324,9 +324,9 @@ public class EqualsExpression extends CodeSection implements IPredicate, IAssert
 		CompilerUtils.compileASTORE(method, right);
 		// call regular compile
 		IExpression newLeft = new InstanceExpression(new Identifier(leftName));
-		context.registerValue(new Variable(new Identifier(leftName), leftType));
+		context.registerInstance(new Variable(new Identifier(leftName), leftType));
 		IExpression newRight = this.right instanceof TypeExpression ? this.right : new InstanceExpression(new Identifier(rightName));
-		context.registerValue(new Variable(new Identifier(rightName), rightType));
+		context.registerInstance(new Variable(new Identifier(rightName), rightType));
 		EqualsExpression newExp = new EqualsExpression(newLeft, this.operator, newRight);
 		ResultInfo info = newExp.compile(context, method, flags.withPrimitive(true));
 		if(BooleanValue.class==info.getType())

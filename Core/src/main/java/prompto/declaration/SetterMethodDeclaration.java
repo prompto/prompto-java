@@ -86,7 +86,7 @@ public class SetterMethodDeclaration extends ConcreteMethodDeclaration implement
 		AttributeDeclaration decl = context.getRegisteredDeclaration(AttributeDeclaration.class, getId());
 		method.registerLocal(getName(), VerifierType.ITEM_Object, new ClassConstant(field.getType()));
 		context = context.newInstanceContext(type, false).newChildContext();
-		context.registerValue(new Variable(getId(), decl.getType()));
+		context.registerInstance(new Variable(getId(), decl.getType()));
 		for(IStatement stmt : statements)
 			stmt.compile(context, method, flags.withMember(true).withInline(true).withSetter(field));
 	}

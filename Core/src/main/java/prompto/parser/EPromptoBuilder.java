@@ -97,8 +97,8 @@ import prompto.expression.PredicateExpression;
 import prompto.expression.ReadAllExpression;
 import prompto.expression.ReadBlobExpression;
 import prompto.expression.ReadOneExpression;
-import prompto.expression.SelectorExpression;
-import prompto.expression.SliceSelector;
+import prompto.expression.SelectorBase;
+import prompto.expression.SliceExpression;
 import prompto.expression.SortedExpression;
 import prompto.expression.SubtractExpression;
 import prompto.expression.SuperExpression;
@@ -2414,7 +2414,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitMutableSelectorExpression(MutableSelectorExpressionContext ctx) {
 		IExpression parent = getNodeValue(ctx.parent);
-		SelectorExpression selector = getNodeValue(ctx.selector);
+		SelectorBase selector = getNodeValue(ctx.selector);
 		selector.setParent(parent);
 		setNodeValue(ctx, selector);
 	}
@@ -3014,7 +3014,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitSelectorExpression(SelectorExpressionContext ctx) {
 		IExpression parent = getNodeValue(ctx.parent);
-		SelectorExpression selector = getNodeValue(ctx.selector);
+		SelectorBase selector = getNodeValue(ctx.selector);
 		selector.setParent(parent);
 		setNodeValue(ctx, selector);
 	}
@@ -3058,19 +3058,19 @@ public class EPromptoBuilder extends EParserBaseListener {
 	public void exitSliceFirstAndLast(SliceFirstAndLastContext ctx) {
 		IExpression first = getNodeValue(ctx.first);
 		IExpression last = getNodeValue(ctx.last);
-		setNodeValue(ctx, new SliceSelector(first, last));
+		setNodeValue(ctx, new SliceExpression(first, last));
 	}
 	
 	@Override
 	public void exitSliceFirstOnly(SliceFirstOnlyContext ctx) {
 		IExpression first = getNodeValue(ctx.first);
-		setNodeValue(ctx, new SliceSelector(first, null));
+		setNodeValue(ctx, new SliceExpression(first, null));
 	}
 	
 	@Override
 	public void exitSliceLastOnly(SliceLastOnlyContext ctx) {
 		IExpression last = getNodeValue(ctx.last);
-		setNodeValue(ctx, new SliceSelector(null, last));
+		setNodeValue(ctx, new SliceExpression(null, last));
 	}
 	
 	@Override
@@ -3327,7 +3327,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	@Override
 	public void exitUnresolvedSelector(UnresolvedSelectorContext ctx) {
 		IExpression parent = getNodeValue(ctx.parent);
-		SelectorExpression selector = getNodeValue(ctx.selector);
+		SelectorBase selector = getNodeValue(ctx.selector);
 		selector.setParent(parent);
 		setNodeValue(ctx, selector);
 	}

@@ -17,7 +17,7 @@ import prompto.type.IType;
 import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 
-public class UnresolvedSelector extends SelectorExpression {
+public class UnresolvedSelector extends SelectorBase {
 
 	Identifier id;
 	IExpression resolved;

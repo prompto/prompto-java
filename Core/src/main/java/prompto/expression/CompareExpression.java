@@ -272,9 +272,9 @@ public class CompareExpression extends CodeSection implements IPredicate, IAsser
 		CompilerUtils.compileASTORE(method, right);
 		// call regular compile
 		IExpression newLeft = new InstanceExpression(new Identifier(leftName));
-		context.registerValue(new Variable(new Identifier(leftName), leftType));
+		context.registerInstance(new Variable(new Identifier(leftName), leftType));
 		IExpression newRight = new InstanceExpression(new Identifier(rightName));
-		context.registerValue(new Variable(new Identifier(rightName), rightType));
+		context.registerInstance(new Variable(new Identifier(rightName), rightType));
 		CompareExpression newExp = new CompareExpression(newLeft, this.operator, newRight);
 		ResultInfo info = newExp.compile(context, method, flags.withPrimitive(true));
 		if(BooleanValue.class==info.getType())

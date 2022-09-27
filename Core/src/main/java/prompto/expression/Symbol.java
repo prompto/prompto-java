@@ -60,7 +60,7 @@ public abstract class Symbol extends CodeSection implements IExpression, INamed,
 	}
 	
 	public void register(Context context) {
-		context.registerValue(this);
+		context.registerInstance(this);
 	}
 
 	@Override

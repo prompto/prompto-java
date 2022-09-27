@@ -60,7 +60,7 @@ public class AssignVariableStatement extends SimpleStatement {
 			throw new SyntaxError("Not a resource!");
 		INamed actual = context.getRegisteredValue(INamed.class, variable.getId());
 		if(actual==null)
-			context.registerValue(new Variable(variable.getId(), type));
+			context.registerInstance(new Variable(variable.getId(), type));
 		else {
 			// need to check type compatibility
 			IType actualType = actual.getType(context);
@@ -93,7 +93,7 @@ public class AssignVariableStatement extends SimpleStatement {
 		INamed actual = context.getRegisteredValue(INamed.class, variable.getId());
 		if(actual==null) {
 			IType actualType = expression.check(context);
-			context.registerValue(new Variable(variable.getId(), actualType));
+			context.registerInstance(new Variable(variable.getId(), actualType));
 		} else {
 			// need to check type compatibility
 			IType actualType = actual.getType(context);
@@ -108,7 +108,7 @@ public class AssignVariableStatement extends SimpleStatement {
 		INamed actual = context.getRegisteredValue(INamed.class, variable.getId());
 		if(actual==null) {
 			IType actualType = expression.check(context);
-			context.registerValue(new Variable(variable.getId(), actualType));
+			context.registerInstance(new Variable(variable.getId(), actualType));
 		}
 		context.setValue(variable.getId(), expression.interpret(context));
 		return null;
@@ -119,7 +119,7 @@ public class AssignVariableStatement extends SimpleStatement {
 		INamed actual = context.getRegisteredValue(INamed.class, variable.getId());
 		if(actual==null) {
 			IType actualType = expression.check(context);
-			context.registerValue(new Variable(variable.getId(), actualType));
+			context.registerInstance(new Variable(variable.getId(), actualType));
 		}
 		return variable.compileAssign(context, method, flags, expression);
 	}
@@ -130,7 +130,7 @@ public class AssignVariableStatement extends SimpleStatement {
 	    INamed actual = transpiler.getContext().getRegisteredValue(INamed.class, variable.getId());
 	    if(actual==null) {
 	        IType actualType = this.expression.check(transpiler.getContext());
-	        transpiler.getContext().registerValue(new Variable(variable.getId(), actualType));
+	        transpiler.getContext().registerInstance(new Variable(variable.getId(), actualType));
 	    }
 	    this.expression.declare(transpiler);
 	}
@@ -140,7 +140,7 @@ public class AssignVariableStatement extends SimpleStatement {
 	    INamed actual = transpiler.getContext().getRegisteredValue(INamed.class, variable.getId());
 	    if(actual==null) {
 	        IType actualType = this.expression.check(transpiler.getContext());
-	        transpiler.getContext().registerValue(new Variable(variable.getId(), actualType));
+	        transpiler.getContext().registerInstance(new Variable(variable.getId(), actualType));
 	        transpiler.append("var ");
 	    }
 	    transpiler.append(variable.getName()).append(" = ");

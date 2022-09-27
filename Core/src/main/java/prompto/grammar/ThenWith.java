@@ -40,14 +40,14 @@ public class ThenWith {
 	}
 
 	public IType check(Context context, IType type) {
-		context.registerValue(new Variable(name, type));
+		context.registerInstance(new Variable(name, type));
 		statements.check(context, VoidType.instance());
 		return VoidType.instance();
 	}
 
 	public IValue interpret(Context context, IValue value) {
 		context = context.newChildContext();
-		context.registerValue(new Variable(name, value.getType()));
+		context.registerInstance(new Variable(name, value.getType()));
 		context.setValue(name, value);
 		statements.interpret(context);
 		return null;
@@ -62,14 +62,14 @@ public class ThenWith {
 
 	public void declare(Transpiler transpiler, IType type) {
 		transpiler = transpiler.newChildTranspiler(transpiler.getContext());
-		transpiler.getContext().registerValue(new Variable(name, type));
+		transpiler.getContext().registerInstance(new Variable(name, type));
 		statements.declare(transpiler);
 	}
 
 	public void transpile(Transpiler transpiler, IType type) {
 	    transpiler.append("function(").append(name).append(") {").indent();
 	    transpiler = transpiler.newChildTranspiler(transpiler.getContext());
-		transpiler.getContext().registerValue(new Variable(name, type));
+		transpiler.getContext().registerInstance(new Variable(name, type));
 		statements.transpile(transpiler);
 		transpiler.dedent().append("}.bind(this)");
 		transpiler.flush();
@@ -82,7 +82,7 @@ public class ThenWith {
 		else
 			writer.append(":");
 		writer = writer.newChildWriter();
-		writer.getContext().registerValue(new Variable(name, type));
+		writer.getContext().registerInstance(new Variable(name, type));
 		writer.newLine().indent();
 		statements.toDialect(writer);
 		writer.dedent();

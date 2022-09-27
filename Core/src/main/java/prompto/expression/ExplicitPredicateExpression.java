@@ -40,7 +40,7 @@ public class ExplicitPredicateExpression extends PredicateExpression implements 
 		writer = writer.newChildWriter();
 		IType sourceType = source.check(writer.getContext());
 		IType itemType = ((IterableType)sourceType).getItemType();
-		writer.getContext().registerValue(new Variable(itemId, itemType));
+		writer.getContext().registerInstance(new Variable(itemId, itemType));
 		switch(writer.getDialect()) {
 		case E:
 		case M:
@@ -86,7 +86,7 @@ public class ExplicitPredicateExpression extends PredicateExpression implements 
 	@Override
 	IType checkFilter(Context context, IType itemType) {
 		Context child = context.newChildContext();
-		child.registerValue(new Variable(itemId, itemType));
+		child.registerInstance(new Variable(itemId, itemType));
 		return predicate.check(child);
 	}
 

@@ -78,7 +78,7 @@ public class AttributeParameter extends BaseParameter {
 
 	@Override
 	public void register(Context context) {
-		context.registerValue(this, true);
+		context.registerInstance(this, true);
 		if(defaultExpression!=null) try {
 			context.setValue(id, defaultExpression.interpret(context));
 		} catch(PromptoError error) {

@@ -57,7 +57,7 @@ public class IteratorExpression extends CodeSection implements IExpression {
 	public IteratorType check(Context context) {
 		IType srcType = source.check(context).checkIterator(context);
 		Context child = context.newChildContext();
-		child.registerValue(new Variable(id, srcType));
+		child.registerInstance(new Variable(id, srcType));
 		IType resultType = expression.check(child);
 		return new IteratorType(resultType);
 	}
@@ -66,7 +66,7 @@ public class IteratorExpression extends CodeSection implements IExpression {
 	public IValue interpret(Context context) throws PromptoError {
 		IType srcType = source.check(context).checkIterator(context);
 		Context child = context.newChildContext();
-		child.registerValue(new Variable(id, srcType));
+		child.registerInstance(new Variable(id, srcType));
 		IType resultType = expression.check(child);
 		IValue items = source.interpret(context);
 		IterableWithCounts<IValue> iterable = getIterable(context, items);
@@ -129,7 +129,7 @@ public class IteratorExpression extends CodeSection implements IExpression {
 	private void compileInnerClassExpression(Context context, ClassFile classFile) {
 		IType paramIType = source.check(context).checkIterator(context);
 		context = context.newChildContext();
-		context.registerValue(new Variable(id, paramIType));
+		context.registerInstance(new Variable(id, paramIType));
 		Type paramType = paramIType.toJavaType(context);
 		Type resultType = expression.check(context).toJavaType(context);
 		compileInnerClassBridgeMethod(classFile, paramType, resultType);
@@ -176,7 +176,7 @@ public class IteratorExpression extends CodeSection implements IExpression {
 	public void toDialect(CodeWriter writer) {
 		IType srcType = source.check(writer.getContext()).checkIterator(writer.getContext());
 		writer = writer.newChildWriter();
-		writer.getContext().registerValue(new Variable(id, srcType));
+		writer.getContext().registerInstance(new Variable(id, srcType));
 		switch(writer.getDialect()) {
 		case E:
 			toEDialect(writer);

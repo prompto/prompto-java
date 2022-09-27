@@ -24,17 +24,17 @@ import prompto.value.ISliceable;
 import prompto.value.IValue;
 import prompto.value.IntegerValue;
 
-public class SliceSelector extends SelectorExpression {
+public class SliceExpression extends SelectorBase {
 
 	IExpression first;
 	IExpression last;
 	
-	public SliceSelector(IExpression first, IExpression last) {
+	public SliceExpression(IExpression first, IExpression last) {
 		this.first = first;
 		this.last = last;
 	}
 	
-	public SliceSelector(IExpression parent, IExpression first, IExpression last) {
+	public SliceExpression(IExpression parent, IExpression first, IExpression last) {
 		super(parent);
 		this.first = first;
 		this.last = last;

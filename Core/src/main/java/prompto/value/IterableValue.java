@@ -83,7 +83,7 @@ public class IterableValue extends BaseValue implements IIterable<IValue>, Itera
 			public IValue next() {
 				try {
 					Context child = context.newChildContext();
-					child.registerValue(new Variable(name, sourceType));
+					child.registerInstance(new Variable(name, sourceType));
 					child.setValue(name, iterator.next());
 					return expression.interpret(child);
 				} catch (PromptoError e) {

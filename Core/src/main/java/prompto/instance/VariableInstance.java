@@ -124,7 +124,7 @@ public class VariableInstance implements IAssignableInstance {
 			IType type = expression.check(writer.getContext());
 			INamed actual = writer.getContext().getRegisteredValue(INamed.class,id);
 			if(actual==null)
-				writer.getContext().registerValue(new Variable(id, type));
+				writer.getContext().registerInstance(new Variable(id, type));
 		} catch(SyntaxError e) {
 			// TODO warning
 		}
@@ -136,7 +136,7 @@ public class VariableInstance implements IAssignableInstance {
 		// called for a=x
 		INamed actual = context.getRegisteredValue(INamed.class, id);
 		if(actual==null)
-			context.registerValue(new Variable(id, valueType));
+			context.registerInstance(new Variable(id, valueType));
 		else {
 			// need to check type compatibility
 			IType actualType = actual.getType(context);
@@ -184,7 +184,7 @@ public class VariableInstance implements IAssignableInstance {
  		IValue value = expression.interpret(context);
 		if(context.getRegisteredValue(INamed.class,id)==null) {
 			IType type = expression.check(context);
-			context.registerValue(new Variable(id, type)); 
+			context.registerInstance(new Variable(id, type)); 
 		}
 		context.setValue(id, value);
 	}
@@ -215,7 +215,7 @@ public class VariableInstance implements IAssignableInstance {
 		Context context = transpiler.getContext();
 	   if(context.getRegisteredValue(INamed.class, this.getId())==null) {
 	        IType valueType = expression.check(context);
-	        context.registerValue(new Variable(this.id, valueType));
+	        context.registerInstance(new Variable(this.id, valueType));
 	        // Code expressions need to be interpreted as part of full check
 	        if (valueType == CodeType.instance()) {
 	            context.setValue(this.id, expression.interpret(context));
@@ -230,7 +230,7 @@ public class VariableInstance implements IAssignableInstance {
 		Context context = transpiler.getContext();
 	    if(context.getRegisteredValue(INamed.class, this.id)==null) {
 	        IType type = expression.check(context);
-	        context.registerValue(new Variable(this.id, type));
+	        context.registerInstance(new Variable(this.id, type));
 	        transpiler.append("var ");
 	    }
 	    context = context.contextForValue(this.id);

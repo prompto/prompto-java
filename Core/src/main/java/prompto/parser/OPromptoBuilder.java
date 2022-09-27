@@ -93,8 +93,8 @@ import prompto.expression.PredicateExpression;
 import prompto.expression.ReadAllExpression;
 import prompto.expression.ReadBlobExpression;
 import prompto.expression.ReadOneExpression;
-import prompto.expression.SelectorExpression;
-import prompto.expression.SliceSelector;
+import prompto.expression.SelectorBase;
+import prompto.expression.SliceExpression;
 import prompto.expression.SortedExpression;
 import prompto.expression.SubtractExpression;
 import prompto.expression.SuperExpression;
@@ -2381,7 +2381,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 	@Override
 	public void exitMutableSelectorExpression(MutableSelectorExpressionContext ctx) {
 		IExpression parent = getNodeValue(ctx.parent);
-		SelectorExpression selector = getNodeValue(ctx.selector);
+		SelectorBase selector = getNodeValue(ctx.selector);
 		selector.setParent(parent);
 		setNodeValue(ctx, selector);
 	}
@@ -2966,8 +2966,8 @@ public class OPromptoBuilder extends OParserBaseListener {
 	public void exitSelectorExpression(SelectorExpressionContext ctx) {
 		IExpression parent = getNodeValue(ctx.parent);
 		IExpression selector = getNodeValue(ctx.selector);
-		if(selector instanceof SelectorExpression)
-			((SelectorExpression)selector).setParent(parent);
+		if(selector instanceof SelectorBase)
+			((SelectorBase)selector).setParent(parent);
 		else if(selector instanceof UnresolvedCall)
 			((UnresolvedCall)selector).setParent(parent);
 		setNodeValue(ctx, selector);
@@ -3019,19 +3019,19 @@ public class OPromptoBuilder extends OParserBaseListener {
 	public void exitSliceFirstAndLast(SliceFirstAndLastContext ctx) {
 		IExpression first = getNodeValue(ctx.first);
 		IExpression last = getNodeValue(ctx.last);
-		setNodeValue(ctx, new SliceSelector(first, last));
+		setNodeValue(ctx, new SliceExpression(first, last));
 	}
 	
 	@Override
 	public void exitSliceFirstOnly(SliceFirstOnlyContext ctx) {
 		IExpression first = getNodeValue(ctx.first);
-		setNodeValue(ctx, new SliceSelector(first, null));
+		setNodeValue(ctx, new SliceExpression(first, null));
 	}
 	
 	@Override
 	public void exitSliceLastOnly(SliceLastOnlyContext ctx) {
 		IExpression last = getNodeValue(ctx.last);
-		setNodeValue(ctx, new SliceSelector(null, last));
+		setNodeValue(ctx, new SliceExpression(null, last));
 	}
 	
 	@Override

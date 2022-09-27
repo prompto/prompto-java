@@ -68,7 +68,7 @@ public class RemoteCall extends UnresolvedCall {
 		arguments.forEach(arg -> arg.check(context));
 		Context local = context.newChildContext();
 		if(resultName!=null)
-			local.registerValue(new Variable(resultName, type));
+			local.registerInstance(new Variable(resultName, type));
 		andThen.check(local, VoidType.instance());
 		return VoidType.instance();
 	}
@@ -79,7 +79,7 @@ public class RemoteCall extends UnresolvedCall {
 		IValue result = resolved.interpret(context);
 		context = context.newChildContext();
 		if(resultName!=null) {
-			context.registerValue(new Variable(resultName, type));
+			context.registerInstance(new Variable(resultName, type));
 			context.setValue(resultName, result);
 		}
 		andThen.interpret(context);
@@ -116,7 +116,7 @@ public class RemoteCall extends UnresolvedCall {
 		final Transpiler local = transpiler.newChildTranspiler();
 		if(resultName!=null) {
 			type.declare(local);
-			local.getContext().registerValue(new Variable(resultName, type));
+			local.getContext().registerInstance(new Variable(resultName, type));
 		}
 		andThen.declare(local);
 	}
@@ -143,7 +143,7 @@ public class RemoteCall extends UnresolvedCall {
 	    transpiler = transpiler.newChildTranspiler();
 		if(resultName!=null) {
 			IType type = resolveAndCheck(transpiler.getContext());
-			transpiler.getContext().registerValue(new Variable(resultName, type));
+			transpiler.getContext().registerInstance(new Variable(resultName, type));
 		}
 		this.andThen.transpile(transpiler);
 	    transpiler.dedent().append("}, this)").flush();
@@ -160,7 +160,7 @@ public class RemoteCall extends UnresolvedCall {
 	    transpiler = transpiler.newChildTranspiler();
 		if(resultName!=null) {
 			IType type = resolveAndCheck(transpiler.getContext());
-			transpiler.getContext().registerValue(new Variable(resultName, type));
+			transpiler.getContext().registerInstance(new Variable(resultName, type));
 		}
 		this.andThen.transpile(transpiler);
 	    transpiler.dedent().append("}, this)").flush();

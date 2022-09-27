@@ -63,7 +63,7 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 	@Override
 	public void toDialect(CodeWriter writer) {
 		writer = writer.newLocalWriter();
-		writer.getContext().registerValue(new ErrorVariable(errorId));
+		writer.getContext().registerInstance(new ErrorVariable(errorId));
 		super.toDialect(writer);
 	}
 	
@@ -146,7 +146,7 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 	@Override
 	protected void checkSwitchCasesType(Context context) {
 		Context child = context.newChildContext();
-		child.registerValue(new ErrorVariable(errorId));
+		child.registerInstance(new ErrorVariable(errorId));
 		super.checkSwitchCasesType(child);
 	}
 	
@@ -161,7 +161,7 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 		if(type!=VoidType.instance())
 			types.add(type);
 		Context child = context.newChildContext();
-		child.registerValue(new ErrorVariable(errorId));
+		child.registerInstance(new ErrorVariable(errorId));
 		super.collectReturnTypes(child, types);
 		if(finallyStatements!=null) {
 			type = finallyStatements.check(context, null);
@@ -235,7 +235,7 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 				VerifierType.ITEM_Object, new ClassConstant(exception));
 		CompilerUtils.compileASTORE(method, error);
 		Context child = context.newChildContext();
-		child.registerValue(new ErrorVariable(errorId));
+		child.registerInstance(new ErrorVariable(errorId));
 		ResultInfo result = switchCase!=null ? 
 				switchCase.statements.compile(child, method, flags) :
 				defaultCase.compile(context, method, flags);
@@ -359,7 +359,7 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 		transpiler.require("NativeError");
 	    this.statements.declare(transpiler);
 	    Transpiler child = transpiler.newChildTranspiler();
-	    child.getContext().registerValue(new ErrorVariable(this.errorId));
+	    child.getContext().registerInstance(new ErrorVariable(this.errorId));
 	    this.declareSwitch(child);
 	}
 	
@@ -369,7 +369,7 @@ public class SwitchErrorStatement extends BaseSwitchStatement {
 	    this.statements.transpile(transpiler);
 	    transpiler.dedent().append("} catch(").append(this.errorId.toString()).append(") {").indent();
 	    Transpiler child = transpiler.newChildTranspiler();
-	    child.getContext().registerValue(new ErrorVariable(this.errorId));
+	    child.getContext().registerInstance(new ErrorVariable(this.errorId));
 	    child.append("switch(translateError(").append(this.errorId.toString()).append(")) {").indent();
 	    this.switchCases.forEach(switchCase -> {
 	        switchCase.transpileError(child);

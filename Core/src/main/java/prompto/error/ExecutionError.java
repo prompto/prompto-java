@@ -39,7 +39,7 @@ public abstract class ExecutionError extends PromptoError {
 			exp = new ConstructorExpression( new CategoryType(new Identifier("Error")), null, args);
 		}
 		if(context.getRegisteredValue(INamed.class, errorName)==null)
-			context.registerValue(new ErrorVariable(errorName));
+			context.registerInstance(new ErrorVariable(errorName));
 		IValue error = exp.interpret(context);
 		context.setValue(errorName, error);
 		return error;

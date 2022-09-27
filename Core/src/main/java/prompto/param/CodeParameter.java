@@ -66,7 +66,7 @@ public class CodeParameter extends BaseParameter implements ITypedParameter {
 		INamed actual = context.getRegisteredValue(INamed.class, id);
 		if(actual!=null)
 			throw new SyntaxError("Duplicate argument: \"" + id + "\"");
-		context.registerValue(this);
+		context.registerInstance(this);
 	}
 	
 	@Override

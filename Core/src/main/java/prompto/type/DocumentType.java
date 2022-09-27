@@ -525,7 +525,7 @@ public class DocumentType extends NativeType {
 		}
 
 		private ResultInfo compileValue(Context context, MethodInfo method, Type paramType, String paramName) {
-			context.registerValue(new Variable(new Identifier(paramName), DocumentType.instance()));
+			context.registerInstance(new Variable(new Identifier(paramName), DocumentType.instance()));
 			Argument argument = call.getArguments().getFirst();
 			argument.setExpression(new UnresolvedIdentifier(new Identifier(paramName)));
 			return call.compile(context, method, new Flags());

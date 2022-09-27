@@ -74,7 +74,7 @@ public class SortedExpression implements IExpression {
 			if(keyExp instanceof ArrowExpression) {
 				((ArrowExpression)keyExp).getArgs().forEach(arg->{
 					Variable param = new Variable(arg, itemType);
-					local.getContext().registerValue(param);
+					local.getContext().registerInstance(param);
 				});
 				keyExp.toDialect(local);
 			} else if(keyExp instanceof InstanceExpression)

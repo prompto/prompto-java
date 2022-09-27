@@ -35,7 +35,7 @@ import prompto.utils.CodeWriter;
 import prompto.value.IValue;
 import prompto.value.NullValue;
 
-public class ItemSelector extends SelectorExpression {
+public class ItemSelector extends SelectorBase {
 
 	IExpression item;
 	

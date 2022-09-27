@@ -62,7 +62,7 @@ public class FetchOneStatement extends FetchOneExpression implements IStatement 
 	    transpiler.append("$DataStore.instance.fetchOneAsync(builder.build(), function($stored) {").indent();
 	    transpileConvert(transpiler, thenWith.getName().toString());
 		transpiler = transpiler.newChildTranspiler(transpiler.getContext());
-		transpiler.getContext().registerValue(new Variable(thenWith.getName(), type));
+		transpiler.getContext().registerInstance(new Variable(thenWith.getName(), type));
 		thenWith.getStatements().transpile(transpiler);
 		transpiler.dedent().append("}.bind(this));").dedent().append("}).bind(this)()");
 		transpiler.flush();

@@ -97,7 +97,7 @@ public class MethodParameter extends BaseParameter {
 		INamed actual = context.getRegisteredValue(INamed.class,id);
 		if(actual!=null)
 			throw new SyntaxError("Duplicate parameter: \"" + id + "\"");
-		context.registerValue(this);
+		context.registerInstance(this);
 	}
 	
 	@Override

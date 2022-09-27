@@ -14,7 +14,7 @@ import prompto.expression.IAssertion;
 import prompto.expression.IExpression;
 import prompto.expression.MemberSelector;
 import prompto.expression.MethodSelector;
-import prompto.expression.SelectorExpression;
+import prompto.expression.SelectorBase;
 import prompto.expression.UnresolvedIdentifier;
 import prompto.expression.UnresolvedSelector;
 import prompto.grammar.ArgumentList;
@@ -48,8 +48,8 @@ public class UnresolvedCall extends BaseStatement implements IAssertion {
 		if(parent!=null) {
 			if(caller instanceof UnresolvedIdentifier)
 				caller = new MethodSelector(parent, ((UnresolvedIdentifier)caller).getId());
-			else if(caller instanceof SelectorExpression)
-				((SelectorExpression)caller).setParent(parent);
+			else if(caller instanceof SelectorBase)
+				((SelectorBase)caller).setParent(parent);
 			else
 				throw new IllegalStateException("Should never happen!");
 		}

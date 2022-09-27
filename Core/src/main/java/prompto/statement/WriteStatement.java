@@ -172,7 +172,7 @@ public class WriteStatement extends BaseStatement {
 		method.registerLocal("$this", VerifierType.ITEM_Object, classFile.getThisClass());
 		method.registerLocal(thenWith.getName().toString(), VerifierType.ITEM_Object, new ClassConstant(String.class));
 		context = context.newLocalContext();
-		context.registerValue(new Variable(thenWith.getName(), TextType.instance()));
+		context.registerInstance(new Variable(thenWith.getName(), TextType.instance()));
 		thenWith.getStatements().compile(context, method, new Flags());
 		method.addInstruction(Opcode.RETURN);
 	}

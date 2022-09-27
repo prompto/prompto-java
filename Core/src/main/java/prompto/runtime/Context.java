@@ -88,49 +88,10 @@ public class Context implements IContext {
 	
 	Map<Identifier,IDeclaration> declarations = new HashMap<>();
 	Map<Identifier,TestMethodDeclaration> tests = new HashMap<>();
-	Instances instances = new Instances();
+	Map<Identifier,INamed> instances = new HashMap<>();
 	Map<Identifier,IValue> values = new HashMap<>();
 	Map<Type, NativeCategoryDeclaration> nativeBindings = new HashMap<>();
 	
-	static class Instances {
-		
-		Map<Identifier,INamed> map = new HashMap<Identifier, INamed>();
-		List<INamed> list = new ArrayList<>();
-		
-		
-		@Override
-		public String toString() {
-			return list.toString();
-		}
-		
-		public boolean isEmpty() {
-			return map.isEmpty();
-		}
-
-		public Set<Identifier> keySet() {
-			return map.keySet();
-		}
-
-		public void remove(Identifier id) {
-			INamed named = map.remove(id);
-			list.remove(named);
-		}
-
-		public INamed get(Identifier name) {
-			return map.get(name);
-		}
-
-		public void put(Identifier id, INamed value) {
-			INamed previous = map.put(id, value);
-			if(previous!=null)
-				list.remove(previous);
-			list.add(value);
-		}
-
-		public Collection<INamed> values() {
-			return list;
-		}
-	}
 	
 	protected Context() {
 	}
@@ -751,10 +712,10 @@ public class Context implements IContext {
 		if(context==null)
 			return null;
 		else
-			return context.readRegisteredValue(klass, name);
+			return context.readRegisteredInstance(klass, name);
 	}
 	
-	protected <T extends INamed> T readRegisteredValue(Class<T> klass, Identifier name) {
+	protected <T extends INamed> T readRegisteredInstance(Class<T> klass, Identifier name) {
 		INamed actual = instances.get(name);
 		if(actual!=null)
 			return ObjectUtils.downcast(klass,actual);
@@ -762,11 +723,11 @@ public class Context implements IContext {
 			return null;
 	}
 	
-	public void registerValue(INamed value) {
-		registerValue(value, true);
+	public void registerInstance(INamed value) {
+		registerInstance(value, true);
 	}
 	
-	public void registerValue(INamed value, boolean checkDuplicate) {
+	public void registerInstance(INamed value, boolean checkDuplicate) {
 		if(checkDuplicate) {
 			// only explore current context
 			if(instances.get(value.getId())!=null)
@@ -1231,7 +1192,7 @@ public class Context implements IContext {
 		
 		
 		@Override
-		protected <T extends INamed> T readRegisteredValue(Class<T> klass, Identifier name) {
+		protected <T extends INamed> T readRegisteredInstance(Class<T> klass, Identifier name) {
 			INamed actual = instances.get(name);
 			// not very pure, but avoids a lot of complexity when registering a value
 			if(actual==null) {
