@@ -3339,7 +3339,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 		Identifier resultName = getNodeValue(ctx.name);
 		StatementList stmts = getNodeValue(ctx.stmts);
 		if(resultName!=null || stmts!=null)
-			setNodeValue(ctx, new RemoteCall(exp, args, resultName, stmts));
+			setNodeValue(ctx, new RemoteCall(exp, args, new ThenWith(resultName, stmts)));
 		else	
 			setNodeValue(ctx, new UnresolvedCall(exp, args));
 	}

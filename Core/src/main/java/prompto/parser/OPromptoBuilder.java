@@ -2285,7 +2285,7 @@ public class OPromptoBuilder extends OParserBaseListener {
 		Identifier resultName = getNodeValue(ctx.name);
 		StatementList stmts = getNodeValue(ctx.stmts);
 		if(resultName!=null || stmts!=null)
-			setNodeValue(ctx, new RemoteCall(call, resultName, stmts));
+			setNodeValue(ctx, new RemoteCall(call, new ThenWith(resultName, stmts)));
 		else
 			setNodeValue(ctx, call);
 	}

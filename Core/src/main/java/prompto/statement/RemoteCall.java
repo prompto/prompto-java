@@ -9,7 +9,7 @@ import prompto.error.PromptoError;
 import prompto.expression.IExpression;
 import prompto.grammar.Argument;
 import prompto.grammar.ArgumentList;
-import prompto.grammar.Identifier;
+import prompto.grammar.ThenWith;
 import prompto.instance.VariableInstance;
 import prompto.param.IParameter;
 import prompto.parser.Dialect;
@@ -24,17 +24,15 @@ import prompto.value.IValue;
 
 public class RemoteCall extends UnresolvedCall {
 
-	Identifier resultName;
-	StatementList andThen;
+	ThenWith thenWith;
 
-	public RemoteCall(UnresolvedCall call, Identifier resultName, StatementList andThen) {
-		this(call.caller, call.arguments, resultName, andThen);
+	public RemoteCall(UnresolvedCall call, ThenWith thenWith) {
+		this(call.caller, call.arguments, thenWith);
 	}
 
-	public RemoteCall(IExpression caller, ArgumentList assignments, Identifier resultName, StatementList andThen) {
+	public RemoteCall(IExpression caller, ArgumentList assignments, ThenWith thenWith) {
 		super(caller, assignments);
-		this.resultName = resultName;
-		this.andThen = andThen;
+		this.thenWith = thenWith;
 	}
 	
 	@Override
@@ -46,14 +44,14 @@ public class RemoteCall extends UnresolvedCall {
 	public void toDialect(CodeWriter writer) {
 		super.toDialect(writer);
 		writer.append(" then");
-		if(resultName!=null)
-			writer.append(" with ").append(resultName.toString());
+		if(thenWith.getName()!=null)
+			writer.append(" with ").append(thenWith.getName().toString());
 		if(writer.getDialect()==Dialect.O)
 			writer.append(" {");
 		else
 			writer.append(":");
 		writer = writer.newLine().indent();
-		andThen.toDialect(writer);
+		thenWith.getStatements().toDialect(writer);
 		writer.dedent();
 		if(writer.getDialect()==Dialect.O)
 			writer.append("}");
@@ -67,9 +65,9 @@ public class RemoteCall extends UnresolvedCall {
 		ArgumentList arguments = ((MethodCall)resolved).makeArguments(context);
 		arguments.forEach(arg -> arg.check(context));
 		Context local = context.newChildContext();
-		if(resultName!=null)
-			local.registerInstance(new Variable(resultName, type));
-		andThen.check(local, VoidType.instance());
+		if(thenWith.getName()!=null)
+			local.registerInstance(new Variable(thenWith.getName(), type));
+		thenWith.getStatements().check(local, VoidType.instance());
 		return VoidType.instance();
 	}
 	
@@ -78,26 +76,26 @@ public class RemoteCall extends UnresolvedCall {
 		IType type = resolveAndCheck(context);
 		IValue result = resolved.interpret(context);
 		context = context.newChildContext();
-		if(resultName!=null) {
-			context.registerInstance(new Variable(resultName, type));
-			context.setValue(resultName, result);
+		if(thenWith.getName()!=null) {
+			context.registerInstance(new Variable(thenWith.getName(), type));
+			context.setValue(thenWith.getName(), result);
 		}
-		andThen.interpret(context);
+		thenWith.getStatements().interpret(context);
 		return VoidResult.instance();
 	}
 	
 	@Override
 	public ResultInfo compile(Context context, MethodInfo method, Flags flags) {
 		resolveAndCheck(context);
-		if(resultName!=null) {
-			AssignInstanceStatement assign = new AssignInstanceStatement(new VariableInstance(resultName), new UnresolvedCall(caller, arguments));
+		if(thenWith.getName()!=null) {
+			AssignInstanceStatement assign = new AssignInstanceStatement(new VariableInstance(thenWith.getName()), new UnresolvedCall(caller, arguments));
 			assign.compile(context, method, flags);
 		} else {
 			ResultInfo result = resolved.compile(context, method, flags);
 			if(result.getType()!=void.class)
 				method.addInstruction(Opcode.POP);
 		}
-		andThen.compile(context, method, flags);
+		thenWith.getStatements().compile(context, method, flags);
 		return new ResultInfo(void.class);
 	}
 	
@@ -114,11 +112,11 @@ public class RemoteCall extends UnresolvedCall {
 		ArgumentList arguments = ((MethodCall)resolved).makeArguments(transpiler.getContext());
 		arguments.forEach(arg -> arg.declare(transpiler, null));
 		final Transpiler local = transpiler.newChildTranspiler();
-		if(resultName!=null) {
+		if(thenWith.getName()!=null) {
 			type.declare(local);
-			local.getContext().registerInstance(new Variable(resultName, type));
+			local.getContext().registerInstance(new Variable(thenWith.getName(), type));
 		}
-		andThen.declare(local);
+		thenWith.getStatements().declare(local);
 	}
 	
 	@Override
@@ -137,15 +135,15 @@ public class RemoteCall extends UnresolvedCall {
 		transpiler = transpiler.append("RemoteRunner.run(function() {").indent().append("return ");
 	    this.resolved.transpile(transpiler);
 	    transpiler.dedent().append("}, function(");
-	    if(resultName!=null)
-	    	transpiler.append(resultName.toString());
+	    if(thenWith.getName()!=null)
+	    	transpiler.append(thenWith.getName().toString());
 	    transpiler.append(") {").indent();
 	    transpiler = transpiler.newChildTranspiler();
-		if(resultName!=null) {
+		if(thenWith.getName()!=null) {
 			IType type = resolveAndCheck(transpiler.getContext());
-			transpiler.getContext().registerInstance(new Variable(resultName, type));
+			transpiler.getContext().registerInstance(new Variable(thenWith.getName(), type));
 		}
-		this.andThen.transpile(transpiler);
+		thenWith.getStatements().transpile(transpiler);
 	    transpiler.dedent().append("}, this)").flush();
 	}
 
@@ -154,15 +152,15 @@ public class RemoteCall extends UnresolvedCall {
 		transpiler.append("RemoteRunner.run('").append(call.getSelector().toString()).append("', ");
 		transpileAssignments(transpiler, call);
 	    transpiler.append(", function(");
-	    if(resultName!=null)
-	    	transpiler.append(resultName.toString());
+	    if(thenWith.getName()!=null)
+	    	transpiler.append(thenWith.getName().toString());
 	    transpiler.append(") {").indent();
 	    transpiler = transpiler.newChildTranspiler();
-		if(resultName!=null) {
+		if(thenWith.getName()!=null) {
 			IType type = resolveAndCheck(transpiler.getContext());
-			transpiler.getContext().registerInstance(new Variable(resultName, type));
+			transpiler.getContext().registerInstance(new Variable(thenWith.getName(), type));
 		}
-		this.andThen.transpile(transpiler);
+		thenWith.getStatements().transpile(transpiler);
 	    transpiler.dedent().append("}, this)").flush();
 	}
 
