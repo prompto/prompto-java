@@ -18,7 +18,7 @@ and verifying:
 	"other content" in content
 
 // a wrapper around native console printing
-define printNative as native method receiving any value and NativeWriter writer doing:
+define printNative as native method receiving any value and NativeWriter writer returning Void doing:
 	Java: writer.print(value);
 	C#: writer.Write(value);
 	Python2: print(objects=str(value), end="", file=writer)
@@ -73,20 +73,20 @@ define TextWriter as Writer with attribute text, and methods:
 			text = text + value
 
 // now the interesting methods  
-define print as method receiving any value doing:
+define print as method receiving any value returning Void doing:
 	out = invoke: stdout
 	printNative value with out as writer
 	
-define printLine as method receiving any value doing:
+define printLine as method receiving any value returning Void doing:
 	out = invoke: stdout
 	value = "" + value + "\n" 
 	printNative value with out as writer
 
 
-define print as method receiving any value and Writer writer doing:
+define print as method receiving any value and Writer writer returning Void doing:
 	writer.print with value as value
 
-define printLine as method receiving any value and Writer writer doing:
+define printLine as method receiving any value and Writer writer returning Void doing:
 	print value with writer as writer
 	print '\n' with writer as writer
 
