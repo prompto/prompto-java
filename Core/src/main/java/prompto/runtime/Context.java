@@ -1175,7 +1175,7 @@ public class Context implements IContext {
 		@SuppressWarnings("unchecked")
 		@Override
 		public <T extends IDeclaration> T getRegisteredDeclaration(Class<T> klass, Identifier id, boolean lookInStore) {
-			if(klass==MethodDeclarationMap.class) {
+			if(klass==MethodDeclarationMap.class || klass==IDeclaration.class) {
 				CategoryDeclaration decl = getDeclaration();
 				if(decl!=null) {
 					MethodDeclarationMap methods = decl.getMemberMethods(this, id, true);

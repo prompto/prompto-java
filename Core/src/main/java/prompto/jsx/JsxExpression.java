@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import prompto.expression.ArrowExpression;
 import prompto.expression.IExpression;
 import prompto.literal.Literal;
+import prompto.literal.TypeLiteral;
 import prompto.property.Property;
 import prompto.runtime.Context;
 import prompto.transpiler.Transpiler;
@@ -42,12 +43,15 @@ public class JsxExpression implements IJsxValue, IJsxExpression {
 	public IType checkProto(Context context, MethodType expected) {
 		if(expression instanceof ArrowExpression)
 			return expected.checkArrowExpression(context, (ArrowExpression)expression);
+		else if(expression instanceof TypeLiteral)
+			return ((TypeLiteral)expression).getType().resolve(context, null);
 		else if(expression != null)
 			return expression.check(context);
 		else 
 			return VoidType.instance();
 	}
-
+	
+	
 	@Override
 	public void toDialect(CodeWriter writer) {
 		writer.append("{");
