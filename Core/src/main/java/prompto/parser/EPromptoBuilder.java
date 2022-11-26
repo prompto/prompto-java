@@ -2353,7 +2353,7 @@ public class EPromptoBuilder extends EParserBaseListener {
 	
 	@Override
 	public void exitMethod_identifier(Method_identifierContext ctx) {
-		setNodeValue(ctx, (Object)getNodeValue(ctx.getChild(0)));
+		setNodeValue(ctx, new Identifier(ctx.getText()));
 	}
 	
 	@Override
