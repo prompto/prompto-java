@@ -53,7 +53,7 @@ public class TestRuntime extends BaseEParserTest {
 	}
 
 	@Test
-	public void testReturn() throws Exception {
+	public void testInterpretedReturn() throws Exception {
 		interpretResource("native/return.pec", false);
 		assertEquals(System.getProperty("os.name"), Out.read());
 	}
