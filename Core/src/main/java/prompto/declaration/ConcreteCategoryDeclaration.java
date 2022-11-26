@@ -409,12 +409,11 @@ public class ConcreteCategoryDeclaration extends CategoryDeclaration {
 	
 
 	private void collectInheritedMemberMethods(Identifier ancestor, Context context, MethodDeclarationMap result, boolean allowAbstract) {
-		IDeclaration actual = context.getRegisteredDeclaration(IDeclaration.class, ancestor);
-		if(actual==null || !(actual instanceof ConcreteCategoryDeclaration))
+		ConcreteCategoryDeclaration decl = context.getRegisteredDeclaration(ConcreteCategoryDeclaration.class, ancestor);
+		if(decl==null)
 			return;
-		ConcreteCategoryDeclaration cd = (ConcreteCategoryDeclaration)actual;
-		cd.registerMethods(context);
-		cd.collectMemberMethods(context, result, allowAbstract);
+		decl.registerMethods(context);
+		decl.collectMemberMethods(context, result, allowAbstract);
 	}
 
 	private void collectThisMemberMethods(Context context, MethodDeclarationMap result, boolean allowAbstract) {
