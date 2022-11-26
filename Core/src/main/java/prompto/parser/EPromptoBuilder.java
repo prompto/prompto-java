@@ -2339,6 +2339,11 @@ public class EPromptoBuilder extends EParserBaseListener {
 		setNodeValue(ctx, new UnresolvedSelector(name));
 	}
 	
+	@Override
+	public void exitMethodSelector(MethodSelectorContext ctx) {
+		Identifier name = getNodeValue(ctx.name);
+		setNodeValue(ctx, new MethodSelector(name));
+	}
 	
 	@Override
 	public void exitMethod_declaration(Method_declarationContext ctx) {

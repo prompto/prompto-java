@@ -79,6 +79,7 @@ import prompto.expression.IntDivideExpression;
 import prompto.expression.ItemSelector;
 import prompto.expression.IteratorExpression;
 import prompto.expression.MemberSelector;
+import prompto.expression.MethodSelector;
 import prompto.expression.MinusExpression;
 import prompto.expression.ModuloExpression;
 import prompto.expression.MultiplyExpression;
@@ -2293,8 +2294,7 @@ public class MPromptoBuilder extends MParserBaseListener {
 	
 	@Override
 	public void exitMethod_identifier(Method_identifierContext ctx) {
-		Object id = getNodeValue(ctx.getChild(0));
-		setNodeValue(ctx, id);
+		setNodeValue(ctx, new Identifier(ctx.getText()));
 	}
 	
 	@Override
@@ -2310,7 +2310,13 @@ public class MPromptoBuilder extends MParserBaseListener {
 	}
 				
 	@Override
-	public void exitMethodSelector(MethodSelectorContext ctx) {
+	public void exitMethodRefSelector(MethodRefSelectorContext ctx) {
+		Identifier name = getNodeValue(ctx.name);
+		setNodeValue(ctx, new MethodSelector(name));
+	}
+	
+	@Override
+	public void exitMethodCallSelector(MethodCallSelectorContext ctx) {
 		UnresolvedCall call = getNodeValue(ctx.method);
 		if(call.getCaller() instanceof UnresolvedIdentifier) {
 			Identifier id = ((UnresolvedIdentifier)call.getCaller()).getId();
