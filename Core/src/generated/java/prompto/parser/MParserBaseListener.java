@@ -1396,13 +1396,25 @@ public class MParserBaseListener implements MParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMethodSelector(MParser.MethodSelectorContext ctx) { }
+	@Override public void enterMethodRefSelector(MParser.MethodRefSelectorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMethodSelector(MParser.MethodSelectorContext ctx) { }
+	@Override public void exitMethodRefSelector(MParser.MethodRefSelectorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMethodCallSelector(MParser.MethodCallSelectorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMethodCallSelector(MParser.MethodCallSelectorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2512,18 +2524,6 @@ public class MParserBaseListener implements MParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMethod_identifier(MParser.Method_identifierContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMethod_identifier(MParser.Method_identifierContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterIdentifier_or_keyword(MParser.Identifier_or_keywordContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2603,6 +2603,18 @@ public class MParserBaseListener implements MParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMember_identifier(MParser.Member_identifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMethod_identifier(MParser.Method_identifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMethod_identifier(MParser.Method_identifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

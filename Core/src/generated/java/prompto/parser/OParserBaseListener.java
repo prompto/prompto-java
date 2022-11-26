@@ -1600,13 +1600,25 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMethodSelector(OParser.MethodSelectorContext ctx) { }
+	@Override public void enterMethodRefSelector(OParser.MethodRefSelectorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMethodSelector(OParser.MethodSelectorContext ctx) { }
+	@Override public void exitMethodRefSelector(OParser.MethodRefSelectorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMethodCallSelector(OParser.MethodCallSelectorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMethodCallSelector(OParser.MethodCallSelectorContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -2524,18 +2536,6 @@ public class OParserBaseListener implements OParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMethod_identifier(OParser.Method_identifierContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitMethod_identifier(OParser.Method_identifierContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterIdentifier_or_keyword(OParser.Identifier_or_keywordContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -2615,6 +2615,18 @@ public class OParserBaseListener implements OParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMember_identifier(OParser.Member_identifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMethod_identifier(OParser.Method_identifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMethod_identifier(OParser.Method_identifierContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

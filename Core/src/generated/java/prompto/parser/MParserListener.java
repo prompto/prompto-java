@@ -1302,17 +1302,29 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitMemberSelector(MParser.MemberSelectorContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code MethodSelector}
+	 * Enter a parse tree produced by the {@code MethodRefSelector}
 	 * labeled alternative in {@link MParser#instance_selector}.
 	 * @param ctx the parse tree
 	 */
-	void enterMethodSelector(MParser.MethodSelectorContext ctx);
+	void enterMethodRefSelector(MParser.MethodRefSelectorContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code MethodSelector}
+	 * Exit a parse tree produced by the {@code MethodRefSelector}
 	 * labeled alternative in {@link MParser#instance_selector}.
 	 * @param ctx the parse tree
 	 */
-	void exitMethodSelector(MParser.MethodSelectorContext ctx);
+	void exitMethodRefSelector(MParser.MethodRefSelectorContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code MethodCallSelector}
+	 * labeled alternative in {@link MParser#instance_selector}.
+	 * @param ctx the parse tree
+	 */
+	void enterMethodCallSelector(MParser.MethodCallSelectorContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code MethodCallSelector}
+	 * labeled alternative in {@link MParser#instance_selector}.
+	 * @param ctx the parse tree
+	 */
+	void exitMethodCallSelector(MParser.MethodCallSelectorContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code SliceSelector}
 	 * labeled alternative in {@link MParser#instance_selector}.
@@ -2340,16 +2352,6 @@ public interface MParserListener extends ParseTreeListener {
 	 */
 	void exitType_identifier_list(MParser.Type_identifier_listContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MParser#method_identifier}.
-	 * @param ctx the parse tree
-	 */
-	void enterMethod_identifier(MParser.Method_identifierContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MParser#method_identifier}.
-	 * @param ctx the parse tree
-	 */
-	void exitMethod_identifier(MParser.Method_identifierContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link MParser#identifier_or_keyword}.
 	 * @param ctx the parse tree
 	 */
@@ -2425,6 +2427,16 @@ public interface MParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMember_identifier(MParser.Member_identifierContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MParser#method_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterMethod_identifier(MParser.Method_identifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MParser#method_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitMethod_identifier(MParser.Method_identifierContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MParser#variable_identifier}.
 	 * @param ctx the parse tree

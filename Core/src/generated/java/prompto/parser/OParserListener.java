@@ -1492,17 +1492,29 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitMemberSelector(OParser.MemberSelectorContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code MethodSelector}
+	 * Enter a parse tree produced by the {@code MethodRefSelector}
 	 * labeled alternative in {@link OParser#instance_selector}.
 	 * @param ctx the parse tree
 	 */
-	void enterMethodSelector(OParser.MethodSelectorContext ctx);
+	void enterMethodRefSelector(OParser.MethodRefSelectorContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code MethodSelector}
+	 * Exit a parse tree produced by the {@code MethodRefSelector}
 	 * labeled alternative in {@link OParser#instance_selector}.
 	 * @param ctx the parse tree
 	 */
-	void exitMethodSelector(OParser.MethodSelectorContext ctx);
+	void exitMethodRefSelector(OParser.MethodRefSelectorContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code MethodCallSelector}
+	 * labeled alternative in {@link OParser#instance_selector}.
+	 * @param ctx the parse tree
+	 */
+	void enterMethodCallSelector(OParser.MethodCallSelectorContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code MethodCallSelector}
+	 * labeled alternative in {@link OParser#instance_selector}.
+	 * @param ctx the parse tree
+	 */
+	void exitMethodCallSelector(OParser.MethodCallSelectorContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ItemSelector}
 	 * labeled alternative in {@link OParser#instance_selector}.
@@ -2362,16 +2374,6 @@ public interface OParserListener extends ParseTreeListener {
 	 */
 	void exitType_identifier_list(OParser.Type_identifier_listContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link OParser#method_identifier}.
-	 * @param ctx the parse tree
-	 */
-	void enterMethod_identifier(OParser.Method_identifierContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link OParser#method_identifier}.
-	 * @param ctx the parse tree
-	 */
-	void exitMethod_identifier(OParser.Method_identifierContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link OParser#identifier_or_keyword}.
 	 * @param ctx the parse tree
 	 */
@@ -2447,6 +2449,16 @@ public interface OParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMember_identifier(OParser.Member_identifierContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link OParser#method_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterMethod_identifier(OParser.Method_identifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link OParser#method_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitMethod_identifier(OParser.Method_identifierContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link OParser#variable_identifier}.
 	 * @param ctx the parse tree

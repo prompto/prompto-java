@@ -1486,6 +1486,18 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitMemberSelector(EParser.MemberSelectorContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code MethodSelector}
+	 * labeled alternative in {@link EParser#instance_selector}.
+	 * @param ctx the parse tree
+	 */
+	void enterMethodSelector(EParser.MethodSelectorContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code MethodSelector}
+	 * labeled alternative in {@link EParser#instance_selector}.
+	 * @param ctx the parse tree
+	 */
+	void exitMethodSelector(EParser.MethodSelectorContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code SliceSelector}
 	 * labeled alternative in {@link EParser#instance_selector}.
 	 * @param ctx the parse tree
@@ -2548,16 +2560,6 @@ public interface EParserListener extends ParseTreeListener {
 	 */
 	void exitType_identifier_list(EParser.Type_identifier_listContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link EParser#method_identifier}.
-	 * @param ctx the parse tree
-	 */
-	void enterMethod_identifier(EParser.Method_identifierContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link EParser#method_identifier}.
-	 * @param ctx the parse tree
-	 */
-	void exitMethod_identifier(EParser.Method_identifierContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link EParser#identifier_or_keyword}.
 	 * @param ctx the parse tree
 	 */
@@ -2633,6 +2635,16 @@ public interface EParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMember_identifier(EParser.Member_identifierContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link EParser#method_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void enterMethod_identifier(EParser.Method_identifierContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link EParser#method_identifier}.
+	 * @param ctx the parse tree
+	 */
+	void exitMethod_identifier(EParser.Method_identifierContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link EParser#variable_identifier}.
 	 * @param ctx the parse tree
