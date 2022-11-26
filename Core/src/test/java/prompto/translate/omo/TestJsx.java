@@ -52,6 +52,16 @@ public class TestJsx extends BaseOParserTest {
 	}
 
 	@Test
+	public void testMethodCall() throws Exception {
+		compareResourceOMO("jsx/methodCall.poc");
+	}
+
+	@Test
+	public void testMethodRef() throws Exception {
+		compareResourceOMO("jsx/methodRef.poc");
+	}
+
+	@Test
 	public void testNonAsciiTextElement() throws Exception {
 		compareResourceOMO("jsx/nonAsciiTextElement.poc");
 	}
@@ -69,6 +79,21 @@ public class TestJsx extends BaseOParserTest {
 	@Test
 	public void testTextElement() throws Exception {
 		compareResourceOMO("jsx/textElement.poc");
+	}
+
+	@Test
+	public void testThisLowerMethodRef() throws Exception {
+		compareResourceOMO("jsx/thisLowerMethodRef.poc");
+	}
+
+	@Test
+	public void testThisMethodCall() throws Exception {
+		compareResourceOMO("jsx/thisMethodCall.poc");
+	}
+
+	@Test
+	public void testThisUpperMethodRef() throws Exception {
+		compareResourceOMO("jsx/thisUpperMethodRef.poc");
 	}
 
 }

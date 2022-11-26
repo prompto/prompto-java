@@ -140,6 +140,36 @@ public class TestJsx extends BaseOParserTest {
 	}
 
 	@Test
+	public void testInterpretedMethodCall() throws Exception {
+		checkInterpretedOutput("jsx/methodCall.poc");
+	}
+
+	@Test
+	public void testCompiledMethodCall() throws Exception {
+		checkCompiledOutput("jsx/methodCall.poc");
+	}
+
+	@Test
+	public void testTranspiledMethodCall() throws Exception {
+		checkTranspiledOutput("jsx/methodCall.poc");
+	}
+
+	@Test
+	public void testInterpretedMethodRef() throws Exception {
+		checkInterpretedOutput("jsx/methodRef.poc");
+	}
+
+	@Test
+	public void testCompiledMethodRef() throws Exception {
+		checkCompiledOutput("jsx/methodRef.poc");
+	}
+
+	@Test
+	public void testTranspiledMethodRef() throws Exception {
+		checkTranspiledOutput("jsx/methodRef.poc");
+	}
+
+	@Test
 	public void testInterpretedNonAsciiTextElement() throws Exception {
 		checkInterpretedOutput("jsx/nonAsciiTextElement.poc");
 	}
@@ -197,6 +227,51 @@ public class TestJsx extends BaseOParserTest {
 	@Test
 	public void testTranspiledTextElement() throws Exception {
 		checkTranspiledOutput("jsx/textElement.poc");
+	}
+
+	@Test
+	public void testInterpretedThisLowerMethodRef() throws Exception {
+		checkInterpretedOutput("jsx/thisLowerMethodRef.poc");
+	}
+
+	@Test
+	public void testCompiledThisLowerMethodRef() throws Exception {
+		checkCompiledOutput("jsx/thisLowerMethodRef.poc");
+	}
+
+	@Test
+	public void testTranspiledThisLowerMethodRef() throws Exception {
+		checkTranspiledOutput("jsx/thisLowerMethodRef.poc");
+	}
+
+	@Test
+	public void testInterpretedThisMethodCall() throws Exception {
+		checkInterpretedOutput("jsx/thisMethodCall.poc");
+	}
+
+	@Test
+	public void testCompiledThisMethodCall() throws Exception {
+		checkCompiledOutput("jsx/thisMethodCall.poc");
+	}
+
+	@Test
+	public void testTranspiledThisMethodCall() throws Exception {
+		checkTranspiledOutput("jsx/thisMethodCall.poc");
+	}
+
+	@Test
+	public void testInterpretedThisUpperMethodRef() throws Exception {
+		checkInterpretedOutput("jsx/thisUpperMethodRef.poc");
+	}
+
+	@Test
+	public void testCompiledThisUpperMethodRef() throws Exception {
+		checkCompiledOutput("jsx/thisUpperMethodRef.poc");
+	}
+
+	@Test
+	public void testTranspiledThisUpperMethodRef() throws Exception {
+		checkTranspiledOutput("jsx/thisUpperMethodRef.poc");
 	}
 
 }
