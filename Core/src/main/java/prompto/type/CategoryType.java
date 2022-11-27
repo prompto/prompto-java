@@ -119,7 +119,9 @@ public class CategoryType extends BaseType {
 	
 	@Override
 	public IType anyfy() {
-		if("Any".equals(getTypeName()))
+		if("Void".equals(getTypeName()))
+			return VoidType.instance();	
+		else if("Any".equals(getTypeName()))
 			return AnyType.instance();	
 		else if("Missing".equals(getTypeName()))
 			return MissingType.instance();	

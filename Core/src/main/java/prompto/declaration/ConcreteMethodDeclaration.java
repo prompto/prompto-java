@@ -193,7 +193,7 @@ public class ConcreteMethodDeclaration extends BaseMethodDeclaration implements 
 	private IType recursiveCheck(Context context, boolean isStart) {
 		if(beingChecked) {
 			if(returnType != null)
-				return returnType;
+				return returnType.resolve(context, null);
 			else {
 				context.getProblemListener().reportUntypedRecursiveMethod(this.id, this.getName(), this.getProto());
 				return AnyType.instance();

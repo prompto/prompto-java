@@ -53,6 +53,8 @@ public class StatementList extends LinkedList<IStatement> {
 	}
 	
 	public IType check(Context context, IType returnType) {
+		if(returnType != null)
+			returnType = returnType.resolve(context, null);
 		if(returnType==VoidType.instance()) {
 			for(IStatement statement : this) {
 				IType type = statement.check(context);
