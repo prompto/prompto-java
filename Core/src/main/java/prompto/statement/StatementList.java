@@ -58,6 +58,8 @@ public class StatementList extends LinkedList<IStatement> {
 		if(returnType==VoidType.instance()) {
 			for(IStatement statement : this) {
 				IType type = statement.check(context);
+				if(type!=null)
+					type = type.resolve(context, null);
 				if(type!=null && type!=VoidType.instance())
 					context.getProblemListener().reportIllegalReturn(statement);
 			}
@@ -71,6 +73,8 @@ public class StatementList extends LinkedList<IStatement> {
 				IType type = statement.check(context);
 				if(!statement.canReturn())
 					type = VoidType.instance();
+				if(type!=null)
+					type = type.resolve(context, null);
 				if(type!=null && type!=VoidType.instance()) { // null indicates error
 					types.add(type);
 					section = statement;
@@ -85,12 +89,16 @@ public class StatementList extends LinkedList<IStatement> {
 	}
 
 	public IType checkNative(Context context, IType returnType) {
+		if(returnType != null)
+			returnType = returnType.resolve(context, null);
 		if(returnType==VoidType.instance()) {
 			// don't check return type
 			for(IStatement statement : this) {
 				if(!(statement instanceof JavaNativeCall))
 					continue;
 				IType type = ((JavaNativeCall)statement).checkNative(context, returnType);
+				if(type!=null)
+					type = type.resolve(context, null);
 				// TODO: remove the below workaround for unregistered native categories
 				if(type==null)
 					type = returnType;
@@ -108,6 +116,8 @@ public class StatementList extends LinkedList<IStatement> {
 					continue;
 				// TODO: ensure returnType is registered prior to the below 
 				IType type = ((JavaNativeCall)statement).checkNative(context, returnType);
+				if(type!=null)
+					type = type.resolve(context, null);
 				// TODO: remove the below workaround for unregistered native categories
 				if(type==null)
 					type = returnType;
