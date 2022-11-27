@@ -38,6 +38,7 @@ import prompto.grammar.ArgumentList;
 import prompto.grammar.Identifier;
 import prompto.intrinsic.PromptoNativeSymbol;
 import prompto.java.JavaClassType;
+import prompto.parser.Dialect;
 import prompto.runtime.Context;
 import prompto.runtime.Context.InstanceContext;
 import prompto.transpiler.Transpiler;
@@ -70,6 +71,12 @@ public class MethodSelector extends MemberSelector implements IMethodSelector {
 	
 	@Override
 	public void toDialect(CodeWriter writer) {
+		toDialect(writer, true);
+	}
+	
+	public void toDialect(CodeWriter writer, boolean asRef) {
+		if(asRef && writer.getDialect() == Dialect.E)
+			writer.append("Method: ");
 		if(parent==null)
 			writer.append(id);
 		else

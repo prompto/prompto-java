@@ -95,7 +95,7 @@ public class MethodCall extends SimpleStatement implements IAssertion {
 	public void toDialect(CodeWriter writer) {
 		if (requiresInvoke(writer))
 			writer.append("invoke: ");
-		selector.toDialect(writer);
+		selector.toDialect(writer, false);
 		if (arguments != null)
 			arguments.toDialect(writer);
 		else if (writer.getDialect() != Dialect.E)
