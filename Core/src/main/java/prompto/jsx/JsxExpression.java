@@ -56,7 +56,7 @@ public class JsxExpression implements IJsxValue, IJsxExpression {
 	public void toDialect(CodeWriter writer) {
 		writer.append("{");
 		if(expression!=null)
-				expression.toDialect(writer);
+			expression.toDialect(writer);
 		writer.append("}");
 	}
 	
