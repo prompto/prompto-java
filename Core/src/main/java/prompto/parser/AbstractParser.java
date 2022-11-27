@@ -1,7 +1,7 @@
 package prompto.parser;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.Parser;
@@ -44,9 +44,18 @@ public abstract class AbstractParser extends Parser {
 		return getTokenStream().LA(1) == type;
 	}
 	
-	@SuppressWarnings("unlikely-arg-type")
 	public boolean willBeIn(int ... types) {
-		return Arrays.asList(types).contains(getTokenStream().LA(1));
+		int next = getTokenStream().LA(1);
+		return IntStream.of(types).anyMatch(i -> i==next);
+	}
+
+	public boolean afterWillBeIn(int skipType, int ... types) {
+		int idx = 1;
+		int next = getTokenStream().LA(idx);
+		while(next == skipType)
+			next = getTokenStream().LA(++idx);
+		final int last = next;
+		return IntStream.of(types).anyMatch(i -> i == last);
 	}
 
 	public boolean willNotBe(int type) {
