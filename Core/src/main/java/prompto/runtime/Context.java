@@ -370,18 +370,16 @@ public class Context implements IContext {
 	public <T extends IDeclaration> T getRegisteredDeclaration(Class<T> klass, Identifier id, boolean lookInStore) {
 		// resolve upwards, since local names override global ones
 		IDeclaration actual = declarations.get(id);
-		if(actual!=null)
-			return ObjectUtils.downcast(klass, actual);
-		else if(parent!=null)
-			actual = parent.getRegisteredDeclaration(klass, id, lookInStore);
-		if(actual!=null)
-			return ObjectUtils.downcast(klass, actual);
-		else if(globals!=this)
-			actual = globals.getRegisteredDeclaration(klass, id, lookInStore);
-		if(actual!=null)
-			return ObjectUtils.downcast(klass, actual);
-		else if(lookInStore && globals==this)
-			actual = fetchAndRegisterDeclaration(id);
+		if(actual == null) {
+			if(parent!=null)
+				return parent.getRegisteredDeclaration(klass, id, lookInStore);
+			else {
+				if(globals!=this)
+					return globals.getRegisteredDeclaration(klass, id, lookInStore);
+				else if(lookInStore)
+					actual = fetchAndRegisterDeclaration(id);
+			}
+		}
 		if(actual!=null)
 			return ObjectUtils.downcast(klass, actual);
 		else
